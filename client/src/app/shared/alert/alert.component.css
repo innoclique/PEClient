@@ -1,0 +1,26 @@
+.task-header {
+    background-color: #3f51b5;
+    padding: 0 5px;
+     height: 40px;
+}
+.fx-spacer {
+    flex: 1 1 auto;
+}
+
+.mat-dialog-container {
+    padding-top: 2 !important;
+}
+
+dialog-overview-example-dialog.ng-star-inserted > div {
+    margin-right: -24px;
+    margin-left: -24px;
+}
+
+.mat-dialog-actions {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+.mat-dialog-title {
+  margin-top: 15px !important;
+}
