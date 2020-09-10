@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from '../AppConstants';
 import { NotificationService } from '../../services/notification.service';
 @Component({
-  selector: 'app-reset-password',
+  selector: 'app-dashboard',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css']
 })

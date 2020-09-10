@@ -8,7 +8,7 @@ import { Constants } from '../AppConstants';
 import { NotificationService } from '../../services/notification.service';
 // import { NotificationService } from 'src/app/services/notification.service';
 @Component({
-  selector: 'app-forgot-password',
+  selector: 'app-dashboard',
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.css']
 })
@@ -24,7 +24,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.forgotPswForm = this.fb.group({
-      email: ['', Validators.email],
+      email: ['',[Validators.required, Validators.email]],
     });
   }
 

@@ -19,7 +19,7 @@ export const routes: Routes = [
   { path: 'resetPassword', component: ResetPasswordComponent, data: { title: '' }},
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {

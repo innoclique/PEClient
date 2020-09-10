@@ -13,7 +13,7 @@ import { PerfAppService } from '../../services/perf-app.service'
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-dashboard',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -41,11 +41,10 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      // username: ['', Validators.required,Validators.email],
-      // password: ['', Validators.required,Validators.minLength(8)]
+      username: ['', [Validators.required,Validators.email]],
+      password: ['', [Validators.required,Validators.minLength(8)]]
 
-      username: ['', Validators.email],
-      password: ['', Validators.required]
+     
     });
     this.alert = new AlertDialog();
   }
