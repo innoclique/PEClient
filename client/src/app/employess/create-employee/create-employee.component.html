@@ -1,0 +1,250 @@
+
+            <form [formGroup]="empForm"  novalidate="" class="ng-untouched ng-pristine ng-valid">
+              
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text redStar">First Name</span>
+                              </div>
+                              <input max="200"  class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.FirstName.touched  &&  f.FirstName.invalid }"
+                              formControlName="FirstName"  name="FirstName" required  >
+                           
+                              <div *ngIf="f.FirstName.touched && f.FirstName.invalid" class="invalid-feedback">
+                                <div *ngIf="f.FirstName.errors.required">First Name is required</div>
+                                <div *ngIf="f.FirstName.errors.minlength">First Name must be at least 3 characters  </div>
+                                <div *ngIf="f.FirstName.errors.hasFirstCharNum">First character should be character  </div>
+                                <div *ngIf="f.FirstName.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)   </div>
+                            </div>
+                           
+                            </div>
+                          </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">Middle Name</span>
+                              </div>
+                              <input max="200" class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Last Name </span>
+                              </div>
+                              <input max="200" class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.LastName.touched  &&  f.LastName.invalid }"
+                              formControlName="LastName"  name="LastName" required >
+
+                              <div *ngIf="f.LastName.touched && f.LastName.invalid" class="invalid-feedback">
+                                <div *ngIf="f.LastName.errors.required">Last Name is required</div>
+                                <div *ngIf="f.LastName.errors.minlength">Last Name must be at least 1 characters  </div>
+                                <div *ngIf="f.LastName.errors.hasFirstCharNum">First character should be character  </div>
+                                <div *ngIf="f.LastName.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)   </div>
+                            </div>
+                            </div>
+                          </div>
+                    </div>
+                    
+                </div>
+              
+
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Address</span>
+                              </div>
+                              <textarea maxlength="500" class="form-control" id="username3" name="username3" cols="" rows="4"
+                              [ngClass]="{ 'is-invalid': f.Address.touched  &&  f.Address.invalid }"
+                              formControlName="Address"  name="Address" required >  </textarea>
+
+                              <div *ngIf="f.Address.touched && f.Address.invalid" class="invalid-feedback">
+                                <div *ngIf="f.Address.errors.required">Address is required</div>
+                                <div *ngIf="f.Address.errors.hasAddressSplChars">Allowed special characters are (.,-,(,),&,#,:,/)  </div>
+                            </div>
+
+                            </div>
+                          </div>
+                    </div>
+
+                    <div class="col-md-4 ">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Phone</span>
+                              </div>
+                              <input class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Email</span>
+                              </div>
+                              <input class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">Alt. Phone</span>
+                              </div>
+                              <input class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">Title</span>
+                              </div>
+                              <input class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+                    </div>
+                    
+                    
+                </div>
+
+                      
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Job/Role</span>
+                              </div>
+                              <select class="form-control" id="select1" name="select1">
+                                <option value="0" ng-reflect-value="0">Please select</option>
+                                <option value="1" ng-reflect-value="1">Option #1</option>
+                                <option value="2" ng-reflect-value="2">Option #2</option>
+                                <option value="3" ng-reflect-value="3">Option #3</option>
+                              </select>
+                            </div>
+                          </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text ">Direct Report(s)</span>
+                              </div>
+                              <input class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text  redStar">Department</span>
+                              </div>
+                              <input class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+                    </div>
+                    
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">Copies to</span>
+                              </div>
+                              <select class="form-control" id="select1" name="select1">
+                                <option value="0" ng-reflect-value="0">Please select</option>
+                                <option value="1" ng-reflect-value="1">Option #1</option>
+                                <option value="2" ng-reflect-value="2">Option #2</option>
+                                <option value="3" ng-reflect-value="3">Option #3</option>
+                              </select>
+                            </div>
+                          </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Job Level</span>
+                              </div>
+                              <input class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Application Role(s)           </span>
+                              </div>
+                              <input class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+                    </div>
+                    
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Joining Date</span>
+                              </div>
+                              <select class="form-control" id="select1" name="select1">
+                                <option value="0" ng-reflect-value="0">Please select</option>
+                                <option value="1" ng-reflect-value="1">Option #1</option>
+                                <option value="2" ng-reflect-value="2">Option #2</option>
+                                <option value="3" ng-reflect-value="3">Option #3</option>
+                              </select>
+                            </div>
+                          </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text ">Third Signatory</span>
+                              </div>
+                              <input class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">Active  </span>
+                              </div>
+                              <input class="form-control" id="username3" name="username3" type="text">
+                            </div>
+                          </div>
+                    </div>
+                    
+                </div>
+                   
+              
+                <div class="form-group form-actions pull-right">
+                  <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                </div>
+              </form>
+
+
+              
+        

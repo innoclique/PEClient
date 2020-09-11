@@ -89,6 +89,10 @@ export const routes: Routes = [
         path: 'widgets',
         loadChildren: () => import('./views/widgets/widgets.module').then(m => m.WidgetsModule)
       }
+      , {
+        path: 'employees',
+        loadChildren: () => import('./employess/employess.module').then(m => m.EmployessModule)
+      }
     ]
   },
   { path: '**', component: P404Component }
