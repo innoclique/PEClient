@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ChartsModule } from 'ng2-charts';
+//import { ChartsModule } from 'ng2-charts/valor-software-ng2-charts';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
@@ -11,7 +11,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
   imports: [
     FormsModule,
     DashboardRoutingModule,
-    ChartsModule,
+    //ChartsModule,
     BsDropdownModule,
     ButtonsModule.forRoot()
   ],

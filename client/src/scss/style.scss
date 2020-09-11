@@ -13,3 +13,37 @@
   .error-snackbar {
     background:rgb(173,35,0);
   }
+
+
+  /* You can add global styles to this file, and also import other style files */
+// @import './app/material-theme.scss';
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// html, body {
+//     margin: 0;
+//     height: 100%;
+//   }
+
+.success-snackbar {
+  background:rgb(166, 201, 181);
+}
+.error-snackbar {
+  background:rgb(173,35,0);
+}
+@media only screen and (max-width: 600px)  {
+  html {
+    font-size: 80%;
+  }
+}
+.cdk-overlay-container {
+  position: fixed;
+  z-index: 1000;
+}
+.cdk-overlay-container, .cdk-global-overlay-wrapper {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}

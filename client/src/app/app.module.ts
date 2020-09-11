@@ -58,8 +58,7 @@ import { CustomMaterialModule } from './custom-material/custom-material.module';
     AppSidebarModule,
     PerfectScrollbarModule,
     BsDropdownModule.forRoot(),
-    TabsModule.forRoot(),
-    ChartsModule,
+    TabsModule.forRoot(),    
     SharedModule,
     CustomMaterialModule
   ],

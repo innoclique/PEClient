@@ -1,0 +1,12 @@
+{
+    "Login": {
+        "UserName": "UserName",
+        "Password": "Password",
+        "Login": "Login",
+        "ForgotPassword": "Forgot Password",
+        "InvalidCredentials":"Invalid Credentials"
+    },
+    "Footer":{
+        
+    }
+}

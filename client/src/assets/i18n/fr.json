@@ -1,0 +1,12 @@
+{
+    "Login": {
+        "UserName": "Nom d'utilisateur",
+        "Password": "Mot de passe",
+        "Login": "S'identifier",
+        "ForgotPassword": "mot de passe oublié?",
+        "InvalidCredentials":"Les informations d'identification invalides"
+    },
+    "Footer":{
+        
+    }
+}
