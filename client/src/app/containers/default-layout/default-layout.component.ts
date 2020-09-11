@@ -22,12 +22,13 @@ export class DefaultLayoutComponent {
   toggleMinimize(e) {
     this.sidebarMinimized = e;
   }
-  logout(){    
-    debugger
+  public logout(){    
+    
     this.authService.LogOut()
      this.router.navigate(['login'])
   }
   callme(ff){
-    debugger
+    
+    
   }
 }

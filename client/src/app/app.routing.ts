@@ -73,7 +73,7 @@ export const routes: Routes = [
       },
       {
         path: 'a',
-        loadChildren: () => import('./views/psa/psa.module').then(m => m.PSAModule)
+        loadChildren:()=>import('./views/psa/psa.module').then(m=>m.PSAModule)
       }
     ]
   },

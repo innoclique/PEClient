@@ -17,9 +17,8 @@ export const navItems: INavData[] = [
 
   },
   {name:'Logout',
-
 icon: 'icon-lock',
-attributes: { onclick: 'logout()' },
+attributes: { onclick: 'logout()' }
 }
   // {
   //   title: true,
