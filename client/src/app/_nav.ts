@@ -11,11 +11,17 @@ export const navItems: INavData[] = [
     }
   },
   {
-  name:'SetupClient',
+  name:'Setup Client',
   url:'/a',
   icon: 'icon-star',
 
   },
+  {
+    name:'Setup Employee',
+    url:'/employee',
+    icon: 'icon-user',
+  
+    },
   {name:'Logout',
 icon: 'icon-lock',
 attributes: { onclick: 'logout()' }

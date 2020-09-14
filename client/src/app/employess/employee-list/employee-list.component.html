@@ -3,8 +3,12 @@
     <div class="row">
         <div class="col-md-12">
           <div class="card">
-            <div class="card-header">
+            <div class="card-header" data-toggle="modal" (click)="addClient.show()">
                 Set up Employees
+            
+            <div class="form-group form-actions pull-right">
+              <button class="btn btn-sm btn-primary" type="submit">Create</button>
+            </div>
             </div>
             <div class="card-body">
               <!-- <div class="row"> -->
@@ -21,3 +25,25 @@
       </div><!--/.row-->
     </div>
     
+
+    <div bsModal #addClient="bs-modal"  [config]="{backdrop: 'static'}" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Create a new Client</h4>
+        <button type="button" class="close" (click)="addClient.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <app-create-employee> </app-create-employee>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="addClient.hide()">Close</button>
+        <button type="button" (click)="createClient()" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

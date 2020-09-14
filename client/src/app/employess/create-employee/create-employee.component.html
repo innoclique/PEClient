@@ -14,7 +14,7 @@
                            
                               <div *ngIf="f.FirstName.touched && f.FirstName.invalid" class="invalid-feedback">
                                 <div *ngIf="f.FirstName.errors.required">First Name is required</div>
-                                <div *ngIf="f.FirstName.errors.minlength">First Name must be at least 3 characters  </div>
+                                <div *ngIf="f.FirstName.errors.minlength">First Name must be at least 2 characters  </div>
                                 <div *ngIf="f.FirstName.errors.hasFirstCharNum">First character should be character  </div>
                                 <div *ngIf="f.FirstName.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)   </div>
                             </div>
@@ -29,7 +29,15 @@
                               <div class="input-group-prepend">
                                 <span class="input-group-text">Middle Name</span>
                               </div>
-                              <input max="200" class="form-control" id="username3" name="username3" type="text">
+                              <input max="200" class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.MiddleName.touched  &&  f.MiddleName.invalid }"
+                              formControlName="MiddleName"  name="MiddleName"  >
+
+                              <div *ngIf="f.MiddleName.touched && f.MiddleName.invalid" class="invalid-feedback">
+                                <div *ngIf="f.MiddleName.errors.hasFirstCharNum">First character should be character  </div>
+                                <div *ngIf="f.MiddleName.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)   </div>
+                            </div>
+
                             </div>
                           </div>
                     </div>
@@ -69,6 +77,7 @@
 
                               <div *ngIf="f.Address.touched && f.Address.invalid" class="invalid-feedback">
                                 <div *ngIf="f.Address.errors.required">Address is required</div>
+                                <div *ngIf="f.Address.errors.minlength">First Name must be at least 4 characters  </div>
                                 <div *ngIf="f.Address.errors.hasAddressSplChars">Allowed special characters are (.,-,(,),&,#,:,/)  </div>
                             </div>
 
@@ -82,40 +91,120 @@
                               <div class="input-group-prepend">
                                 <span class="input-group-text redStar">Phone</span>
                               </div>
-                              <input class="form-control" id="username3" name="username3" type="text">
+                              <input maxlength="12"  type="text" class="form-control" id="username3" name="username3" 
+                              [ngClass]="{ 'is-invalid': f.PhoneNumber.touched  &&  f.PhoneNumber.invalid }"
+                              formControlName="PhoneNumber"  name="PhoneNumber" required 
+                              >
+
+                              <div *ngIf="f.PhoneNumber.touched && f.PhoneNumber.invalid" class="invalid-feedback">
+                                <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div>
+                                <div *ngIf="f.PhoneNumber.errors.minlength">Phone Number must be at least 6 characters  </div>
+                                <div *ngIf="f.PhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
+
+                            </div>
                             </div>
                           </div>
 
                           <div class="form-group">
                             <div class="input-group">
                               <div class="input-group-prepend">
-                                <span class="input-group-text redStar">Email</span>
+                                <span class="input-group-text">Alt. Phone</span>
                               </div>
-                              <input class="form-control" id="username3" name="username3" type="text">
+                              <input maxlength="12"  class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.AltPhoneNumber.touched  &&  f.AltPhoneNumber.invalid }"
+                              formControlName="AltPhoneNumber"  name="AltPhoneNumber"  >
+                              <div *ngIf="f.AltPhoneNumber.touched && f.AltPhoneNumber.invalid" class="invalid-feedback">
+                                <div *ngIf="f.AltPhoneNumber.errors.minlength">Alt. Phone must be at least 6 characters  </div>
+                                <div *ngIf="f.AltPhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
                             </div>
+                            
+                            </div>
+                            
                           </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <div class="input-group">
                               <div class="input-group-prepend">
-                                <span class="input-group-text">Alt. Phone</span>
+                                <span class="input-group-text">Ext.</span>
                               </div>
-                              <input class="form-control" id="username3" name="username3" type="text">
+                              <input max="5" class="form-control" id="username3" name="username3" type="text">
                             </div>
                           </div>
                           <div class="form-group">
                             <div class="input-group">
                               <div class="input-group-prepend">
-                                <span class="input-group-text">Title</span>
+                                <span class="input-group-text">Mobile</span>
                               </div>
-                              <input class="form-control" id="username3" name="username3" type="text">
+                              <input maxlength="12"  class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.MobileNumber.touched  &&  f.MobileNumber.invalid }"
+                              formControlName="MobileNumber"  name="MobileNumber"           >
+                            
+                            
+                              <div *ngIf="f.MobileNumber.touched && f.MobileNumber.invalid" class="invalid-feedback">
+                                <div *ngIf="f.MobileNumber.errors.minlength">Mobile Number must be at least 10 characters  </div>
+                                <div *ngIf="f.MobileNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
+                            </div>
+                           
                             </div>
                           </div>
                     </div>
                     
                     
                 </div>
+
+                <div class="form-group row">
+                 
+
+                    <div class="col-md-4">
+
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text redStar">Email</span>
+                          </div>
+                          <input class="form-control" id="username3" name="username3" type="text"
+                          [ngClass]="{ 'is-invalid': f.Email.touched  &&  f.Email.invalid }"
+                          formControlName="Email"  name="Email" required >
+                        
+                          <div *ngIf="f.Email.touched && f.Email.invalid" class="invalid-feedback">
+                            <div *ngIf="f.Email.errors.required">Email is required</div>
+                            <div *ngIf="f.Email.errors.email">Email Must be a valid email address </div>
+                        </div>
+                        </div>
+                      </div>
+                      </div>
+
+                      <div class="col-md-4">
+
+                        <div class="form-group">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">Title</span>
+                            </div>
+                            <input class="form-control" id="username3" name="username3" type="text">
+                          </div>
+                        </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group">
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text redStar">Job/Role</span>
+                                </div>
+                                <select class="form-control" id="select1" name="select1">
+                                  <option value="0" ng-reflect-value="0">Please select</option>
+                                  <option value="1" ng-reflect-value="1">Option #1</option>
+                                  <option value="2" ng-reflect-value="2">Option #2</option>
+                                  <option value="3" ng-reflect-value="3">Option #3</option>
+                                </select>
+                              </div>
+                            </div>
+                      </div>
+
+                </div>
+
 
                       
                 <div class="form-group row">
@@ -226,15 +315,20 @@
                             </div>
                           </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text">Active  </span>
-                              </div>
-                              <input class="form-control" id="username3" name="username3" type="text">
-                            </div>
-                          </div>
+                    
+
+                    <!-- <div class="form-group row"> -->
+                      <div class="col-md-4">
+                      <label class="col-md-4 col-form-label" for="inline-radios">Active</label>
+                      <div class="col-md-9 col-form-label pull-left">
+                        <div class="form-check form-check-inline mr-1" id="inline-radios"><input class="form-check-input" id="inlineRadio1"
+                            name="inline-radios" type="radio" value="option1"><label class="form-check-label" for="inlineRadio1">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline mr-1"><input class="form-check-input" id="inlineRadio2"
+                            name="inline-radios" type="radio" value="option2"><label class="form-check-label" for="inlineRadio2">No</label>
+                        </div>
+                        
+                      </div>
                     </div>
                     
                 </div>

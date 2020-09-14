@@ -72,6 +72,10 @@ export const routes: Routes = [
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {
+        path: 'employee',
+        loadChildren: () => import('./employess/employess.module').then(m => m.EmployessModule)
+      },
+      {
         path: 'a',
         loadChildren:()=>import('./views/psa/psa.module').then(m=>m.PSAModule)
       }

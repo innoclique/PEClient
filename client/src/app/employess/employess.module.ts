@@ -7,6 +7,7 @@ import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 @NgModule({
@@ -17,6 +18,10 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     ReactiveFormsModule,    
     RouterModule,
-  ]
+    ModalModule.forRoot()
+  ],
+  exports: [
+    ModalModule
+]
 })
 export class EmployessModule { }

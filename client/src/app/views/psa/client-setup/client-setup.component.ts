@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 
 import { MatDialog } from '@angular/material/dialog';
 import { PerfAppService } from '../../../services/perf-app.service';
+import { CustomValidators } from '../../../shared/custom-validators';
 @Component({
   selector: 'app-client-setup',
   templateUrl: './client-setup.component.html',
@@ -18,22 +19,57 @@ export class ClientSetupComponent implements OnInit {
   ngOnInit(): void {
     this.getClients();
     this.clientForm = this.formBuilder.group({
-      name: new FormControl('', [Validators.required, Validators.maxLength(60)]),
-      phone: new FormControl('', [Validators.required, Validators.maxLength(10)]),
-      dateOfBirth: new FormControl(new Date()),
-      address: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      contactPerson:new FormControl('', [Validators.required, Validators.maxLength(60)]),
-      contactname: new FormControl('', [Validators.required, Validators.maxLength(60)]),
-      contactphone: new FormControl('', [Validators.required, Validators.maxLength(10)]),
-      contactemail: new FormControl('', [Validators.required, Validators.maxLength(10)]),
-      coachingRequired: new FormControl('', [Validators.required]),
-      coachingphone: new FormControl('', [Validators.required, Validators.maxLength(10)]),
-      coachingemail: new FormControl('', [Validators.required, Validators.maxLength(10)]),
-      selectmodelRequired: new FormControl('', [Validators.required]),
-      evaluationRequired: new FormControl('', [Validators.required]),
+      Email: ['', [Validators.required, Validators.email]],
+      AdminEmail: ['', [Validators.required, Validators.email]],
+      ContactEmail: ['', [Validators.required, Validators.email]],
+      AdminName: [null, Validators.compose([
+        Validators.required,
+        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+        Validators.minLength(2)])
+      ],
 
+      Name: [null, Validators.compose([
+        Validators.required,
+        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+
+        Validators.minLength(2)])
+      ],
+
+
+      Address: [null, Validators.compose([
+        Validators.required, Validators.minLength(4),
+        CustomValidators.patternValidator(/(?=.*[#)&.(-:/])/, { hasAddressSplChars: true }, 'hasAddressSplChars'),
+      ])
+      ],
+
+      PhoneNumber: [null, Validators.compose([
+        Validators.required, Validators.minLength(6),
+        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      ])],
+      ContactPhone: [null, Validators.compose([
+        Validators.required, Validators.minLength(6),
+        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      ])],
+      AdminPhone: [null, Validators.compose([
+        Validators.required, Validators.minLength(6),
+        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      ])],
+      ExtNumber: [null, Validators.compose([
+        Validators.minLength(6),
+        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      ])],
+      AltPhoneNumber: [null, Validators.compose([
+        Validators.minLength(6),
+        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      ])],
 
     });
+  }
+
+  get f() {
+    return this.clientForm.controls;
   }
 
   public hasError = (controlName: string, errorName: string) =>{

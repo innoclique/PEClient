@@ -29,7 +29,7 @@
 
 
 <div bsModal #addClient="bs-modal"  [config]="{backdrop: 'static'}" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-primary modal-lg" role="document">
+  <div class="modal-dialog modal-primary modal-xlg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Create a new Client</h4>
@@ -39,130 +39,430 @@
       </div>
       <div class="modal-body">
         
+        <form [formGroup]="clientForm" novalidate="" class="ng-untouched ng-pristine ng-valid">
+
+          <div class="form-group row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Organization Name</span>
+                          </div>
+                          <input max="200" class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.Name.touched  &&  f.Name.invalid }" formControlName="Name"
+                              name="Name" required>
+      
+                          <div *ngIf="f.Name.touched && f.Name.invalid" class="invalid-feedback">
+                              <div *ngIf="f.Name.errors.required">Organization Name is required</div>
+                              <div *ngIf="f.Name.errors.minlength">Organization Name must be at least 2 characters </div>
+                              <div *ngIf="f.Name.errors.hasFirstCharNum">First character should be character </div>
+                              <div *ngIf="f.Name.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:) </div>
+                          </div>
+      
+                      </div>
+                  </div>
+              </div>
+      
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text">Select Industry</span>
+                          </div>
+                          <select class="form-control" id="select1" name="select1">
+                              <option value="0" ng-reflect-value="0">Please select</option>
+                              <option value="1" ng-reflect-value="1">Option #1</option>
+                              <option value="2" ng-reflect-value="2">Option #2</option>
+                              <option value="3" ng-reflect-value="3">Option #3</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+      
+      
+          </div>
+      
+      
+          <div class="form-group row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Address</span>
+                          </div>
+                          <textarea maxlength="500" class="form-control" id="username3" name="username3" cols="" rows="4"
+                              [ngClass]="{ 'is-invalid': f.Address.touched  &&  f.Address.invalid }" formControlName="Address"
+                              name="Address" required>  </textarea>
+      
+                          <div *ngIf="f.Address.touched && f.Address.invalid" class="invalid-feedback">
+                              <div *ngIf="f.Address.errors.required">Address is required</div>
+                              <div *ngIf="f.Address.errors.minlength">First Name must be at least 4 characters </div>
+                              <div *ngIf="f.Address.errors.hasAddressSplChars">Allowed special characters are
+                                  (.,-,(,),&,#,:,/) </div>
+                          </div>
+      
+                      </div>
+                  </div>
+              </div>
+      
+              <div class="col-md-4 ">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Phone</span>
+                          </div>
+                          <input maxlength="12" type="text" class="form-control" id="username3" name="username3"
+                              [ngClass]="{ 'is-invalid': f.PhoneNumber.touched  &&  f.PhoneNumber.invalid }"
+                              formControlName="PhoneNumber" name="PhoneNumber" required>
+      
+                          <div *ngIf="f.PhoneNumber.touched && f.PhoneNumber.invalid" class="invalid-feedback">
+                              <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div>
+                              <div *ngIf="f.PhoneNumber.errors.minlength">Phone Number must be at least 6 characters </div>
+                              <div *ngIf="f.PhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( -
+                                  )</div>
+      
+                          </div>
+                      </div>
+                  </div>
+      
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text">Alt. Phone</span>
+                          </div>
+                          <input maxlength="12" class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.AltPhoneNumber.touched  &&  f.AltPhoneNumber.invalid }"
+                              formControlName="AltPhoneNumber" name="AltPhoneNumber">
+                          <div *ngIf="f.AltPhoneNumber.touched && f.AltPhoneNumber.invalid" class="invalid-feedback">
+                              <div *ngIf="f.AltPhoneNumber.errors.minlength">Alt. Phone must be at least 6 characters </div>
+                              <div *ngIf="f.AltPhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and (
+                                  - )</div>
+                          </div>
+      
+                      </div>
+      
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text">Ext.</span>
+                          </div>
+                          <input max="5" class="form-control" id="username3" name="username3" type="text">
+                      </div>
+                  </div>
+      
+      
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Email</span>
+                          </div>
+                          <input class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.Email.touched  &&  f.Email.invalid }" formControlName="Email"
+                              name="Email" required>
+      
+                          <div *ngIf="f.Email.touched && f.Email.invalid" class="invalid-feedback">
+                              <div *ngIf="f.Email.errors.required">Email is required</div>
+                              <div *ngIf="f.Email.errors.email">Email Must be a valid email address </div>
+                          </div>
+                      </div>
+                  </div>
+      
+              </div>
+      
+      
+          </div>
+      
+          <div class="form-group row">
+      
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Contact Person</span>
+                          </div>
+                          <input max="200" class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.Name.touched  &&  f.Name.invalid }" formControlName="Name"
+                              name="Name" required>
+      
+                          <div *ngIf="f.Name.touched && f.Name.invalid" class="invalid-feedback">
+                              <div *ngIf="f.Name.errors.required">First Name is required</div>
+                              <div *ngIf="f.Name.errors.minlength">First Name must be at least 2 characters </div>
+                              <div *ngIf="f.Name.errors.hasFirstCharNum">First character should be character </div>
+                              <div *ngIf="f.Name.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:) </div>
+                          </div>
+      
+                      </div>
+                  </div>
+              </div>
+      
+              <div class="col-md-4">
+      
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Phone</span>
+                          </div>
+                          <input maxlength="12" type="text" class="form-control" id="username3" name="username3"
+                              [ngClass]="{ 'is-invalid': f.ContactPhone.touched  &&  f.ContactPhone.invalid }"
+                              formControlName="ContactPhone" name="ContactPhone" required>
+      
+                          <div *ngIf="f.ContactPhone.touched && f.ContactPhone.invalid" class="invalid-feedback">
+                              <div *ngIf="f.ContactPhone.errors.required">Contact Phone Number is required</div>
+                              <div *ngIf="f.ContactPhone.errors.minlength">Contact Phone Number must be at least 6 characters
+                              </div>
+                              <div *ngIf="f.ContactPhone.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( -
+                                  )</div>
+      
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      
+      
+              <div class="col-md-4">
+      
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Email</span>
+                          </div>
+                          <input class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.ContactEmail.touched  &&  f.ContactEmail.invalid }"
+                              formControlName="ContactEmail" name="ContactEmail" required>
+      
+                          <div *ngIf="f.ContactEmail.touched && f.ContactEmail.invalid" class="invalid-feedback">
+                              <div *ngIf="f.ContactEmail.errors.required">Contact Email is required</div>
+                              <div *ngIf="f.ContactEmail.errors.ContactEmail">Contact Email Must be a valid email address
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      
+      
+      
+          </div>
+      
+      <hr>
+      
+          <div class="form-group row">
+              <div class="col-md-2">
+                  <label class=" col-form-label" for="inline-radios">Account Administrator</label>
+      
+              </div>
+              <div class="col-md-4">
+                  <!-- <label class="col-md-5 col-form-label" for="inline-radios">Same as Contact person</label> -->
+                  <div class="col-md-9 col-form-label pull-left">
+      
+                      <div class="form-check form-check-inline mr-1"><input class="form-check-input" id="inline-checkbox1"
+                              type="checkbox" value="option1"><label class="form-check-label" for="inline-checkbox1">Same as
+                              Contact person</label></div>
+                  </div>
+              </div>
+      
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text ">Admin Name</span>
+                          </div>
+                          <input max="200" class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.AdminName.touched  &&  f.AdminName.invalid }"
+                              formControlName="AdminName" name="AdminName" required>
+      
+                          <div *ngIf="f.AdminName.touched && f.AdminName.invalid" class="invalid-feedback">
+                              <div *ngIf="f.AdminName.errors.required">Admin Name is required</div>
+                              <div *ngIf="f.AdminName.errors.minlength">Admin Name must be at least 2 characters </div>
+                              <div *ngIf="f.AdminName.errors.hasFirstCharNum">First character should be character </div>
+                              <div *ngIf="f.AdminName.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      
+      
+          </div>
+      
+          <div class="form-group row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text">Coaching Reminder</span>
+                          </div>
+                          <select class="form-control" id="select1" name="select1">
+                              <option value="0" ng-reflect-value="0">Please select</option>
+                              <option value="1" ng-reflect-value="1">Option #1</option>
+                              <option value="2" ng-reflect-value="2">Option #2</option>
+                              <option value="3" ng-reflect-value="3">Option #3</option>
+                          </select>
+      
+                          <div class="input-group-append">
+                              <span class="input-group-text">days</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      
+              <div class="col-md-4 ">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Phone</span>
+                          </div>
+                          <input maxlength="12" type="text" class="form-control" id="username3" name="username3"
+                              [ngClass]="{ 'is-invalid': f.AdminPhone.touched  &&  f.AdminPhone.invalid }"
+                              formControlName="AdminPhone" name="AdminPhone" required>
+      
+                          <div *ngIf="f.AdminPhone.touched && f.AdminPhone.invalid" class="invalid-feedback">
+                              <div *ngIf="f.AdminPhone.errors.required">Admin Phone Number is required</div>
+                              <div *ngIf="f.AdminPhone.errors.minlength">Admin Phone Number must be at least 6 characters
+                              </div>
+                              <div *ngIf="f.AdminPhone.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )
+                              </div>
+      
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      
+              <div class="col-md-4 ">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Email</span>
+                          </div>
+                          <input class="form-control" id="username3" name="username3" type="text"
+                              [ngClass]="{ 'is-invalid': f.AdminEmail.touched  &&  f.AdminEmail.invalid }"
+                              formControlName="AdminEmail" name="AdminEmail" required>
+      
+                          <div *ngIf="f.AdminEmail.touched && f.AdminEmail.invalid" class="invalid-feedback">
+                              <div *ngIf="f.AdminEmail.errors.required">Admin Email is required</div>
+                              <div *ngIf="f.AdminEmail.errors.AdminEmail">Admin Email Must be a valid email address </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      
+      
+      
+      
+          </div>
+      
+      
+          <div class="form-group row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Select Model</span>
+                          </div>
+                          <select class="form-control" id="select1" name="select1">
+                              <option value="0" ng-reflect-value="0">Please select</option>
+                              <option value="1" ng-reflect-value="1">Option #1</option>
+                              <option value="2" ng-reflect-value="2">Option #2</option>
+                              <option value="3" ng-reflect-value="3">Option #3</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+      
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text">Evaluation Duration</span>
+                          </div>
+                          <select class="form-control" id="select1" name="select1">
+                              <option value="0" ng-reflect-value="0">Please select</option>
+                              <option value="1" ng-reflect-value="1">Option #1</option>
+                              <option value="2" ng-reflect-value="2">Option #2</option>
+                              <option value="3" ng-reflect-value="3">Option #3</option>
+                          </select>
+      
+                          <div class="input-group-append">
+                              <span class="input-group-text">days</span>
+                          </div>
+      
+                          <select class="form-control" id="select1" name="select1">
+                              <option value="0" ng-reflect-value="0">maximum</option>
+      
+                          </select>
+                      </div>
+                  </div>
+              </div>
+      
+      
+      
+      
+          </div>
+      
+      
+          <div class="form-group row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text redStar">Evaluation Period</span>
+                          </div>
+                          <select class="form-control" id="select1" name="select1">
+                              <option value="0" ng-reflect-value="0">Please select</option>
+                              <option value="1" ng-reflect-value="1">Option #1</option>
+                              <option value="2" ng-reflect-value="2">Option #2</option>
+                              <option value="3" ng-reflect-value="3">Option #3</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+      
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span class="input-group-text">Evaluation Duration</span>
+                          </div>
+                          <select class="form-control" id="select1" name="select1">
+                              <option value="0" ng-reflect-value="0">Please select</option>
+                              <option value="1" ng-reflect-value="1">Option #1</option>
+                              <option value="2" ng-reflect-value="2">Option #2</option>
+                              <option value="3" ng-reflect-value="3">Option #3</option>
+                          </select>
+      
+                          <div class="input-group-append">
+                              <span class="input-group-text">days</span>
+                          </div>
+      
+      
+                      </div>
+                  </div>
+              </div>
+      
+      
+              <!-- <div class="form-group row"> -->
+              <div class="col-md-4">
+                  <label class="col-md-4 col-form-label" for="inline-radios">Active</label>
+                  <div class="col-md-9 col-form-label pull-left">
+                      <div class="form-check form-check-inline mr-1" id="inline-radios"><input class="form-check-input"
+                              id="inlineRadio1" name="inline-radios" type="radio" value="option1"><label
+                              class="form-check-label" for="inlineRadio1">Yes</label>
+                      </div>
+                      <div class="form-check form-check-inline mr-1"><input class="form-check-input" id="inlineRadio2"
+                              name="inline-radios" type="radio" value="option2"><label class="form-check-label"
+                              for="inlineRadio2">No</label>
+                      </div>
+      
+                  </div>
+              </div>
+      
+          </div>
+      
+      
           
-          <form [formGroup]="clientForm" autocomplete="off" novalidate (ngSubmit)="createClient()" fxLayout="column wrap"
-            fxLayoutAlign="center center" fxLayoutGap="10px">
-  
-  
-            <mat-card-content>
-              <mat-form-field>
-                <input matInput type="text" placeholder="Organization Name" formControlName="name" id="name">
-                <mat-hint align="end">Not more then 60 characters long.</mat-hint>
-                <mat-error *ngIf="hasError('name', 'required')">Organization Name is required</mat-error>
-                <mat-error *ngIf="hasError('name', 'maxlength')">You have more than 60 characters</mat-error>
-              </mat-form-field>
-  
-              <mat-form-field>
-                <input matInput [matDatepicker]="picker" placeholder="Choose a date of birth"
-                  formControlName="dateOfBirth" id="dateOfBirth" readonly (click)="picker.open()">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-  
-              <mat-form-field>
-                <textarea matInput cdkTextareaAutosize placeholder="Owner's address" cdkAutosizeMinRows="1"
-                  cdkAutosizeMaxRows="5" formControlName="address"></textarea>
-  
-  
-                <mat-hint align="end">Not more then 100 characters long.</mat-hint>
-                <mat-error *ngIf="hasError('address', 'required')">Address is required</mat-error>
-                <mat-error *ngIf="hasError('address', 'maxlength')">You have more than 100 characters</mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Select Industry</mat-label>
-                <mat-select #fontSize value="16px">
-                  <mat-option value="10px">10px</mat-option>
-                  <mat-option value="12px">12px</mat-option>
-                  <mat-option value="14px">14px</mat-option>
-                  <mat-option value="16px">16px</mat-option>
-                  <mat-option value="18px">18px</mat-option>
-                  <mat-option value="20px">20px</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="text" placeholder="Phone" formControlName="phone" id="phone">
-                <mat-hint align="end">Not more then 60 characters long.</mat-hint>
-                <mat-error *ngIf="hasError('phone', 'required')">Phone Number is required</mat-error>
-                <mat-error *ngIf="hasError('phone', 'maxlength')">Please enter valid phone number</mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="text" placeholder="Contact Person" formControlName="phone" id="phone">
-                <mat-hint align="end">Not more then 60 characters long.</mat-hint>
-                <mat-error *ngIf="hasError('phone', 'required')">Contact Person is required</mat-error>
-                <mat-error *ngIf="hasError('phone', 'maxlength')">Please enter valid ContactPerson name</mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="text" placeholder="ConatctPhone" formControlName="phone" id="phone">
-                <mat-hint align="end">Not more then 60 characters long.</mat-hint>
-                <mat-error *ngIf="hasError('phone', 'required')">Conatct Phone Number is required</mat-error>
-                <mat-error *ngIf="hasError('phone', 'maxlength')">Please enter valid Conatct Phone number</mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="text" placeholder="Conatct Email" formControlName="phone" id="phone">
-                <mat-hint align="end">Not more then 60 characters long.</mat-hint>
-                <mat-error *ngIf="hasError('phone', 'required')">Conatct Email is required</mat-error>
-                <mat-error *ngIf="hasError('phone', 'maxlength')">Please enter valid Conatct Email</mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="text" placeholder="Admin Name" formControlName="phone" id="phone">
-                <mat-hint align="end">Not more then 60 characters long.</mat-hint>
-                <mat-error *ngIf="hasError('phone', 'required')">Admin Name is required</mat-error>
-                <mat-error *ngIf="hasError('phone', 'maxlength')">Please enter valid Admin Name</mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Coaching Remainder</mat-label>
-                <mat-select #fontSize value="16px">
-                  <mat-option value="10px">10px</mat-option>
-                  <mat-option value="12px">12px</mat-option>
-                  <mat-option value="14px">14px</mat-option>
-                  <mat-option value="16px">16px</mat-option>
-                  <mat-option value="18px">18px</mat-option>
-                  <mat-option value="20px">20px</mat-option>
-                </mat-select>
-              </mat-form-field>
-  
-              <mat-form-field>
-                <input matInput type="text" placeholder="CoachingPhone" formControlName="phone" id="phone">
-                <mat-hint align="end">Not more then 60 characters long.</mat-hint>
-                <mat-error *ngIf="hasError('phone', 'required')">Coaching Phone Number is required</mat-error>
-                <mat-error *ngIf="hasError('phone', 'maxlength')">Please enter valid coaching Phone number</mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput type="text" placeholder="Coaching Email" formControlName="phone" id="phone">
-                <mat-hint align="end">Not more then 60 characters long.</mat-hint>
-                <mat-error *ngIf="hasError('phone', 'required')">Coaching Email is required</mat-error>
-                <mat-error *ngIf="hasError('phone', 'maxlength')">Please enter valid Coaching Email</mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Select Model</mat-label>
-                <mat-select #fontSize value="16px">
-                  <mat-option value="10px">10px</mat-option>
-                  <mat-option value="12px">12px</mat-option>
-                  <mat-option value="14px">14px</mat-option>
-                  <mat-option value="16px">16px</mat-option>
-                  <mat-option value="18px">18px</mat-option>
-                  <mat-option value="20px">20px</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Select Evaluation Duaration</mat-label>
-                <mat-select #fontSize value="16px">
-                  <mat-option value="10px">10px</mat-option>
-                  <mat-option value="12px">12px</mat-option>
-                  <mat-option value="14px">14px</mat-option>
-                  <mat-option value="16px">16px</mat-option>
-                  <mat-option value="18px">18px</mat-option>
-                  <mat-option value="20px">20px</mat-option>
-                </mat-select>
-              </mat-form-field>
-  
-            </mat-card-content>
-  
-            <mat-card-actions>
-              <button mat-raised-button color="primary" [disabled]="!clientForm.valid">Create</button>
-              <button type="button" mat-raised-button color="warn" (click)="closeForm()">Cancel</button>
-            </mat-card-actions>
-          </form>
+      </form>
         
       </div>
       <div class="modal-footer">
