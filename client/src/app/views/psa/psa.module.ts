@@ -4,6 +4,9 @@ import { Routes, RouterModule } from '@angular/router';
 import {ClientSetupComponent} from './client-setup/client-setup.component'
 import { CustomMaterialModule } from '../../custom-material/custom-material.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { AgGridModule } from 'ag-grid-angular';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
 export const projectRoutes: Routes = [
 
   
@@ -21,6 +24,8 @@ export const projectRoutes: Routes = [
     ReactiveFormsModule,
     CustomMaterialModule,
     RouterModule.forChild(projectRoutes),
+    AgGridModule.withComponents([]),
+    ModalModule.forRoot()
   ]
 })
 export class PSAModule {

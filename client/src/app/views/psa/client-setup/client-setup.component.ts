@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { MatDialog } from '@angular/material/dialog';
+import { PerfAppService } from '../../../services/perf-app.service';
 @Component({
   selector: 'app-client-setup',
   templateUrl: './client-setup.component.html',
@@ -10,9 +11,12 @@ import { MatDialog } from '@angular/material/dialog';
 export class ClientSetupComponent implements OnInit {
   public clientForm: FormGroup;
   constructor(private dialog: MatDialog,    
-    private formBuilder: FormBuilder,) { }
+    private formBuilder: FormBuilder,
+    private perfApp: PerfAppService,
+    ) { }
 
   ngOnInit(): void {
+    this.getClients();
     this.clientForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.maxLength(60)]),
       phone: new FormControl('', [Validators.required, Validators.maxLength(10)]),
@@ -38,12 +42,52 @@ export class ClientSetupComponent implements OnInit {
 
   public createClient = () => {
     if (!this.clientForm.valid) {
-      return;
-     
+      return;    
     }
+    this.saveClient();
   }
   closeForm(){
 
   }
- 
+
+  public columnDefs = [
+    {headerName: 'Client', field: 'Name', sortable: true, filter: true},
+    {headerName: 'Type', field: 'OrganizationType', sortable: true, filter: true },
+    {headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
+    {headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
+    {headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true }
+];
+
+public clientData :any
+getClients(){
+  this.perfApp.route="app";
+  this.perfApp.method="GetAllOrganizations",
+  this.perfApp.requestBody={'id':'5f5929f56c16e542d823247b'}
+  this.perfApp.CallAPI().subscribe(c=>{
+    debugger
+    console.log('lients data',c);
+    if(c && c.length>0){
+      
+    }
+    //this.clientData=c;
+    //this.clientData.push()
+    this.clientData=c.map(function (row) {
+      
+     return  {Name:row.Name
+        ,OrganizationType:row.OrganizationType
+        ,Industry:row.Industry
+        ,UsageType:row.UsageType
+        ,ContactName:row.ContactName
+        ,RowData:row
+      }
+    }
+    )
+  })
+}
+saveClient(){
+  this.perfApp.route="app";
+  this.perfApp.method="CreateOrganization",
+  this.perfApp.requestBody=this.clientForm.value; //fill body object with form 
+  this.perfApp.CallAPI().subscribe(c=>{});  
+}
 }
