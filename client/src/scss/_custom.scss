@@ -16,4 +16,10 @@
     max-width: 950px;
 }
 
+.redStar:after
+{
+    color: red;
+    content: " *";
+}
+
 

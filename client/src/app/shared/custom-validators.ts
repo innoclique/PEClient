@@ -10,7 +10,7 @@ export class CustomValidators {
         return null;
       }
       var valid;
-      debugger
+      
       if (name === 'hasAlphaNum') {
         valid = !regex.test(control.value)
         return valid ? null : error;

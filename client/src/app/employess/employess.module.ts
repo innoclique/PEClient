@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { AgGridModule } from 'ag-grid-angular';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     HttpClientModule,
     ReactiveFormsModule,    
     RouterModule,
+    AgGridModule.withComponents([]),
     ModalModule.forRoot()
   ],
   exports: [

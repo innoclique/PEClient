@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
       this.loginInvalid = true;
       return false;
     }
-    debugger
+    
     try {
       this.showSpinner = true;
       const email = this.loginForm.get('username').value;
@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
 
       await this.authService.login(LoginModel).subscribe(x => {
 
-        if (!x.IsPswChangedOnFirstLogin) {
+        if (!x.User.IsPswChangedOnFirstLogin) {
           this.router.navigate(['resetPassword']);
         } else {
           this.router.navigate(['dashboard']);
