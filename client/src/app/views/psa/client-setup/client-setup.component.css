@@ -16,3 +16,7 @@ mat-card-title{
     .example-full-width{
         width:100%
     }
+
+    .invalid-feedback {
+        display: block;
+      }

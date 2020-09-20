@@ -26,10 +26,12 @@
 //   }
 
 .success-snackbar {
-  background:rgb(166, 201, 181);
+  background:rgb(3, 87, 39);
+  color: white;
 }
 .error-snackbar {
   background:rgb(173,35,0);
+  
 }
 @media only screen and (max-width: 600px)  {
   html {

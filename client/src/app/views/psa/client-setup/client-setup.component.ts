@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { MatDialog } from '@angular/material/dialog';
+import { BsModalService } from 'ngx-bootstrap/modal';
+
+import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { CustomValidators } from '../../../shared/custom-validators';
 @Component({
@@ -11,119 +14,273 @@ import { CustomValidators } from '../../../shared/custom-validators';
 })
 export class ClientSetupComponent implements OnInit {
   public clientForm: FormGroup;
-  constructor(private dialog: MatDialog,    
+  public contactPersonForm: FormGroup;
+  public isFormSubmitted = false;
+  errorOnSave = false;
+  errorMessage: string = "";
+  @ViewChild('closeModal') closeModal: ElementRef
+
+
+  constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
-    ) { }
+    private notification: NotificationService
+  ) {
+
+
+  }
 
   ngOnInit(): void {
     this.getClients();
     this.clientForm = this.formBuilder.group({
-      Email: ['', [Validators.required, Validators.email]],
-      AdminEmail: ['', [Validators.required, Validators.email]],
-      ContactEmail: ['', [Validators.required, Validators.email]],
-      AdminName: [null, Validators.compose([
-        Validators.required,
-        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-        Validators.minLength(2)])
-      ],
-
       Name: [null, Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
         CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-
         Validators.minLength(2)])
       ],
-
-
+      Industry: ['', [Validators.required]],
       Address: [null, Validators.compose([
         Validators.required, Validators.minLength(4),
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/])/, { hasAddressSplChars: true }, 'hasAddressSplChars'),
-      ])
+      ])],
+      Phone: [null, Validators.compose([
+        Validators.required, Validators.minLength(10),
+        Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+        
+      ])],
+      PhoneExt: [null, []],
+      Email: ['', [Validators.required, Validators.email]],
+      Country: ['', [Validators.required]],
+      State: ['', [Validators.required]],
+      City: ['', [Validators.required]],
+      ZipCode: ['', [Validators.required]],
+      ClientType: ['', [Validators.required]],
+      UsageType: ['', [Validators.required]],
+      UsageCount: ['', [Validators.required]],
+      AdminFirstName: [null, Validators.compose([
+        Validators.required,
+        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+        Validators.minLength(2)])
       ],
-
-      PhoneNumber: [null, Validators.compose([
-        Validators.required, Validators.minLength(6),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
-      ])],
-      ContactPhone: [null, Validators.compose([
-        Validators.required, Validators.minLength(6),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
-      ])],
+      AdminLastName: ['', Validators.compose([
+        Validators.required,
+        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+        Validators.minLength(2)])
+      ],
+      AdminMiddleName: ['', []],
+      AdminEmail: ['', [Validators.required, Validators.email]],
       AdminPhone: [null, Validators.compose([
-        Validators.required, Validators.minLength(6),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+        Validators.required, Validators.minLength(10),
+        Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
       ])],
-      ExtNumber: [null, Validators.compose([
-        Validators.minLength(6),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
-      ])],
-      AltPhoneNumber: [null, Validators.compose([
-        Validators.minLength(6),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
-      ])],
+      SameAsAdmin: [false, []],
+      contactPersonForm: this.formBuilder.group({
+
+        ContactPersonFirstName: [null, Validators.compose([
+          Validators.required,
+          CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+          CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+          Validators.minLength(2)])
+        ],
+        ContactPersonLastName: [null, Validators.compose([
+          Validators.required,
+          CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+          CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+          Validators.minLength(2)])
+        ],
+        ContactPersonMiddleName: ['', []],
+        ContactPersonEmail: ['', [Validators.required, Validators.email]],
+        ContactPersonPhone: [null, Validators.compose([
+          Validators.required, Validators.minLength(10),
+          Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+        ])]
+      }),
+      CoachingReminder: ['', []],
+      EvaluationModels: ['', [Validators.required]],
+      EvaluationPeriod: ['', [Validators.required]],
+      EvaluationDuration: ['', [Validators.required]],
+      EvaluationMaximumDays: ['', []],
+      EmployeeBufferCount: ['', []],
+      DownloadBufferDays: ['', []],
+      IsActive: ['', []]
 
     });
+    this.sameAsContactChange()
   }
 
   get f() {
     return this.clientForm.controls;
   }
+  get a() {
+    return (this.clientForm.controls['contactPersonForm'] as FormGroup).controls;
+  }
 
-  public hasError = (controlName: string, errorName: string) =>{
+  public hasError = (controlName: string, errorName: string) => {
     return this.clientForm.controls[controlName].hasError(errorName);
   }
 
   public createClient = () => {
+    
+    this.isFormSubmitted = true;
     if (!this.clientForm.valid) {
-      return;    
+      return;
     }
     this.saveClient();
   }
-  closeForm(){
+
+
+  closeForm() {
 
   }
 
   public columnDefs = [
-    {headerName: 'Client', field: 'Name', sortable: true, filter: true},
-    {headerName: 'Type', field: 'OrganizationType', sortable: true, filter: true },
-    {headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
-    {headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
-    {headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true }
-];
+    { headerName: 'Client', field: 'Name', sortable: true, filter: true },
+    { headerName: 'Type', field: 'OrganizationType', sortable: true, filter: true },
+    { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
+    { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
+    { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true }
+  ];
 
-public clientData :any
-getClients(){
-  this.perfApp.route="app";
-  this.perfApp.method="GetAllOrganizations",
-  this.perfApp.requestBody={'id':'5f5929f56c16e542d823247b'}
-  this.perfApp.CallAPI().subscribe(c=>{
-    debugger
-    console.log('lients data',c);
-    if(c && c.length>0){
-      
-    }
-    //this.clientData=c;
-    //this.clientData.push()
-    this.clientData=c.map(function (row) {
-      
-     return  {Name:row.Name
-        ,OrganizationType:row.OrganizationType
-        ,Industry:row.Industry
-        ,UsageType:row.UsageType
-        ,ContactName:row.ContactName
-        ,RowData:row
+  public clientData: any
+  getClients() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetAllOrganizations",
+      this.perfApp.requestBody = { 'id': '5f5929f56c16e542d823247b' }
+    this.perfApp.CallAPI().subscribe(c => {
+      debugger
+      console.log('lients data', c);
+      if (c && c.length > 0) {
+
       }
+      //this.clientData=c;
+      //this.clientData.push()
+      this.clientData = c.map(function (row) {
+
+        return {
+          Name: row.Name
+          , OrganizationType: row.OrganizationType
+          , Industry: row.Industry
+          , UsageType: row.UsageType
+          , ContactName: row.ContactName
+          , RowData: row
+        }
+      }
+      )
+    })
+  }
+  saveClient() {
+    
+    var organization = this.clientForm.value;
+
+    if (this.clientForm.get('SameAsAdmin').value) {
+      organization.ContactPersonFirstName = organization.AdminLastName;
+      organization.ContactPersonMiddleName = organization.AdminMiddleName;
+      organization.ContactPersonLastName = organization.AdminLastName;
+      organization.ContactPersonPhone = organization.AdminPhone;
+      organization.ContactPersonEmail = organization.AdminEmail;
+    } else {
+      organization.ContactPersonFirstName = this.contactPersonForm.value.ContactPersonLastName;
+      organization.ContactPersonMiddleName = this.contactPersonForm.value.ContactPersonMiddleName;
+      organization.ContactPersonLastName = this.contactPersonForm.value.ContactPersonLastName;
+      organization.ContactPersonPhone = this.contactPersonForm.value.ContactPersonPhone;
+      organization.ContactPersonEmail = this.contactPersonForm.value.ContactPersonEmail;
     }
-    )
-  })
-}
-saveClient(){
-  this.perfApp.route="app";
-  this.perfApp.method="CreateOrganization",
-  this.perfApp.requestBody=this.clientForm.value; //fill body object with form 
-  this.perfApp.CallAPI().subscribe(c=>{});  
-}
+    organization.IsActive = true;
+    this.perfApp.route = "app";
+    this.perfApp.method = "AddOrganization",
+      this.perfApp.requestBody = organization; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+      this.resetForm();
+      this.notification.success('Organization Addedd Successfully.')
+      this.errorOnSave = false;
+      this.errorMessage = "";
+    }, error => {
+
+      this.errorOnSave = true;
+      this.errorMessage = error.error ? error.error.message : error.message;
+      //this.notification.error(error.error.message)
+    });
+  }
+
+  sameAsContactChange() {
+    this.clientForm.get('SameAsAdmin').valueChanges
+      .subscribe(value => {
+        if (value === null || value === undefined) {
+          return;
+        }
+        var contactForm = (this.clientForm.controls['contactPersonForm'] as FormGroup)
+        if (value) {
+          this.removeValidators(contactForm);
+          this.disableFields(contactForm);
+          this.setContactPersonFields(contactForm)
+        }
+        else {
+          this.enableFields(contactForm);
+          this.addValidators(contactForm);
+        }
+      });
+  }
+
+  public removeValidators(form: FormGroup) {
+    for (const key in form.controls) {
+      form.get(key).clearValidators();
+      form.get(key).updateValueAndValidity();
+    }
+  }
+  public addValidators(form: FormGroup) {
+    for (const key in form.controls) {      
+      form.get(key).setValidators(this.validationType[key]);      
+    }
+  }
+  public disableFields(form: FormGroup) {
+    for (const key in form.controls) {
+      form.get(key).reset();
+      form.get(key).disable();
+    }
+  }
+  public enableFields(form: FormGroup) {
+    for (const key in form.controls) {
+      form.get(key).enable();
+    }
+  }
+  public setContactPersonFields(form: FormGroup) {
+    form.controls["ContactPersonFirstName"].setValue(this.clientForm.get('AdminFirstName').value)
+    form.controls["ContactPersonMiddleName"].setValue(this.clientForm.get('AdminMiddleName').value)
+    form.controls["ContactPersonLastName"].setValue(this.clientForm.get('AdminLastName').value)
+    form.controls["ContactPersonPhone"].setValue(this.clientForm.get('AdminPhone').value)
+    form.controls["ContactPersonEmail"].setValue(this.clientForm.get('AdminEmail').value)
+  }
+
+
+
+  validationType = {
+    ContactPersonFirstName: ['', Validators.compose([
+      Validators.required,
+      CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+      CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+      Validators.minLength(2)])
+    ],
+    ContactPersonLastName: ['', Validators.compose([
+      Validators.required,
+      CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+      CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+      Validators.minLength(2)])
+    ],
+    ContactPersonMiddleName: ['', []],
+    ContactPersonEmail: ['', [Validators.required, Validators.email]],
+    ContactPersonPhone: ['', Validators.compose([
+      Validators.required, Validators.minLength(10),
+      CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+    ])]
+  }
+  resetForm() {
+    
+    this.isFormSubmitted = false;
+    this.clientForm.reset();
+    this.clientForm.setErrors(null);
+    this.closeModal.nativeElement.click()
+  }
 }
