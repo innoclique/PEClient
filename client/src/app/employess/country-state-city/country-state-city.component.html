@@ -1,0 +1,69 @@
+<div class="form-group row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text redStar">Country</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Search for a Country" 
+                [formControl]="f.Country" [matAutocomplete]="auto"
+                formControlName="Country" name="Country"
+                [ngClass]="{ 'is-invalid': f.Country.touched  &&  f.Country.invalid }" required>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCountrySelected($event)" [displayWith]="displayFn">
+                    <mat-option *ngFor="let country of filteredCountries | async" [value]="country">
+                        {{country.name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <div *ngIf="f.Country.touched && f.Country.invalid" class="invalid-feedback">
+                    <div *ngIf="f.Country.errors.required">Country is required</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text redStar">State</span>
+                </div>
+                <input type="text" class="form-control" [readonly]="f.Country.invalid?true:false"  placeholder="Search for a State" 
+                [formControl]="f.State" [matAutocomplete]="auto1"
+                formControlName="State" name="State"
+                [ngClass]="{ 'is-invalid': f.State.touched  &&  f.State.invalid }" required>
+                <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="onStateSelected($event)" [displayWith]="displayFn">
+                    <mat-option *ngFor="let state of filteredStates | async" [value]="state">
+                        {{state.name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <div *ngIf="f.State.touched && f.State.invalid" class="invalid-feedback">
+                    <div *ngIf="f.State.errors.required">State is required</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text redStar">City</span>
+                </div>
+                <input type="text" class="form-control" [readonly]="f.State.invalid?true:false"  placeholder="Search for a City" 
+                [formControl]="f.City" [matAutocomplete]="auto2"
+                formControlName="City" name="City"
+                [ngClass]="{ 'is-invalid': f.City.touched  &&  f.City.invalid }" required>
+                <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="onCitySelected($event)" [displayWith]="displayFn">
+                    <mat-option *ngFor="let country of filteredCitys | async" [value]="country">
+                        {{country.name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <div *ngIf="f.City.touched && f.City.invalid" class="invalid-feedback">
+                    <div *ngIf="f.City.errors.required">City is required</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

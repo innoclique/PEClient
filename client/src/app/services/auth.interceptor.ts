@@ -79,7 +79,7 @@ constructor(private authService:AuthService) {
   private addAuthenticationToken(request: HttpRequest<any>): HttpRequest<any> {
     // If we do not have a token yet then we should not set the header.
     // Here we could first retrieve the token from where we store it.
-    debugger
+    
     var authToken=localStorage.getItem('token')
     if (!authToken) {
       return request;

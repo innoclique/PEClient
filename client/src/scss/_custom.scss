@@ -22,4 +22,20 @@
     content: " *";
 }
 
+.autoc-border {
+    border: 1px solid #ddd !important;
+    width: 62%;
+}
+.autoc-border:focus,.mat-focus-indicator:focus {
+    outline:none
+    
+}
+
+.mat-datepicker-toggle {
+
+    position: absolute;
+    right: 1px;
+    top: -3px;
+}
+
 

@@ -6,7 +6,7 @@
             <div class="card-header">
                 Set up Employees
             
-            <div class="form-group form-actions pull-right">
+            <div class="form-group form-actions pull-right m-0">
               <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="addEmployee.show()">Add New Employee</button>
             </div>
             </div>
@@ -52,7 +52,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">First Name</span>
                         </div>
-                        <input max="200"  class="form-control" id="username3" name="username3" type="text"
+                        <input max="200" maxlength="200"  class="form-control" id="username3" name="username3" type="text"
                         [ngClass]="{ 'is-invalid': f.FirstName.touched  &&  f.FirstName.invalid }"
                         formControlName="FirstName"  name="FirstName" required  >
                      
@@ -73,7 +73,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text">Middle Name</span>
                         </div>
-                        <input max="200" class="form-control" id="username3" name="username3" type="text"
+                        <input max="200" maxlength="200" class="form-control" id="username3" name="username3" type="text"
                         [ngClass]="{ 'is-invalid': f.MiddleName.touched  &&  f.MiddleName.invalid }"
                         formControlName="MiddleName"  name="MiddleName"  >
 
@@ -91,7 +91,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">Last Name </span>
                         </div>
-                        <input max="200" class="form-control" id="username3" name="username3" type="text"
+                        <input max="200" maxlength="200" class="form-control" id="username3" name="username3" type="text"
                         [ngClass]="{ 'is-invalid': f.LastName.touched  &&  f.LastName.invalid }"
                         formControlName="LastName"  name="LastName" required >
 
@@ -107,6 +107,9 @@
               
           </div>
         
+          <app-country-state-city (onSelect)="onCSCSelect($event)" >
+            
+          </app-country-state-city>
 
           <div class="form-group row">
               <div class="col-md-4">
@@ -172,12 +175,12 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text">Ext.</span>
                         </div>
-                        <input max="5" class="form-control" id="username3" name="username3" type="text"
+                        <input max="5" maxlength="5" class="form-control" id="username3" name="username3" type="text"
                         [ngClass]="{ 'is-invalid': f.ExtNumber.touched  &&  f.ExtNumber.invalid }"
                         formControlName="ExtNumber"  name="ExtNumber"  >
 
                         <div *ngIf="f.ExtNumber.touched && f.ExtNumber.invalid" class="invalid-feedback">
-                          <div *ngIf="f.ExtNumber.errors.minlength">Extension Phone must be at least 6 characters  </div>
+                          <div *ngIf="f.ExtNumber.errors.minlength">Extension Phone must be at least 2 characters  </div>
                           <div *ngIf="f.ExtNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
                       </div>
                       </div>
@@ -206,6 +209,26 @@
 
           <div class="form-group row">
            
+            <div class="col-md-4">
+              <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Pin/Zip Code</span>
+                    </div>
+                    <input max="8" maxlength="8" class="form-control" id="username3" name="username3" type="text"
+                    [ngClass]="{ 'is-invalid': f.ZipCode.touched  &&  f.ZipCode.invalid }"
+                    formControlName="ZipCode"  name="ZipCode" required  >
+                 
+                    <div *ngIf="f.ZipCode.touched && f.ZipCode.invalid" class="invalid-feedback">
+                      <div *ngIf="f.ZipCode.errors.required">Zip Code Name is required</div>
+                     <div *ngIf="f.ZipCode.errors.minlength">Zip Code Name must be at least 6 characters  </div>
+                    <!--  <div *ngIf="f.ZipCode.errors.hasFirstCharNum">First character should be character  </div>
+                      <div *ngIf="f.ZipCode.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)   </div> -->
+                  </div>
+                 
+                  </div>
+                </div>
+          </div>
 
               <div class="col-md-4">
 
@@ -231,27 +254,22 @@
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text">Title</span>
+                        <span class="input-group-text redStar">Title</span>
                       </div>
-                      <input class="form-control" id="username3" name="username3" type="text">
+                      <input max="200" maxlength="200" class="form-control" id="username3" name="username3" type="text"
+                        [ngClass]="{ 'is-invalid': f.Title.touched  &&  f.Title.invalid }"
+                        formControlName="Title"  name="Title" required  >
+                     
+                        <div *ngIf="f.Title.touched && f.Title.invalid" class="invalid-feedback">
+                          <div *ngIf="f.Title.errors.required">Title is required</div>
+                          <div *ngIf="f.Title.errors.minlength">Title must be at least 2 characters  </div>
+                         
+                      </div>
                     </div>
                   </div>
                   </div>
 
-                  <div class="col-md-4">
-                    <div class="form-group">
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text redStar">Job Role</span>
-                          </div>
-                          <select  formControlName="JobRole"  class="form-control"  id="select1" name="select1">
-                            <option >Please select</option>
-                            <option *ngFor="let e of jobRoles" [value]="e._id" >{{e.JobRoleName}}</option>
-                            
-                          </select>
-                        </div>
-                      </div>
-                </div>
+                 
 
           </div>
 
@@ -260,17 +278,42 @@
           <div class="form-group row">
              
 
+            <div class="col-md-4">
+              <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Job Role</span>
+                    </div>
+                    <select  class="form-control"  
+                    [ngClass]="{ 'is-invalid': f.JobRole.touched  &&  f.JobRole.invalid }"
+                    formControlName="JobRole"  name="JobRole" required >
+                      <option value="" disabled >Please select</option>
+                      <option *ngFor="let e of jobRoles" [value]="e._id" >{{e.JobRoleName}}</option>
+                      
+                    </select>
+                    <div *ngIf="f.JobRole.touched && f.JobRole.invalid" class="invalid-feedback">
+                      <div *ngIf="f.JobRole.errors.required">Job Role is required</div>
+                  </div>
+                  </div>
+                </div>
+          </div>
+
               <div class="col-md-4">
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Job Level</span>
                     </div>
-                    <select  formControlName="JobLevel" class="form-control"  id="select1" name="select1">
-                      <option >Please select</option>
+                    <select  class="form-control"  
+                    [ngClass]="{ 'is-invalid': f.JobLevel.touched  &&  f.JobLevel.invalid }"
+                    formControlName="JobLevel"  name="JobLevel" required>
+                      <option value="" disabled >Please select</option>
                       <option *ngFor="let e of jobLevels" [value]="e._id" >{{e.JobLevelName}}</option>
                       
                     </select>
+                    <div *ngIf="f.JobLevel.touched && f.JobLevel.invalid" class="invalid-feedback">
+                      <div *ngIf="f.JobLevel.errors.required">Job Level is required</div>
+                  </div>
                   </div>
                 </div>
                  
@@ -281,43 +324,76 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text  redStar">Department</span>
                         </div>
-                        <select  formControlName="Department" class="form-control"  id="select1" name="select1">
-                          <option >Please select</option>
+                        <select   class="form-control" 
+                        [ngClass]="{ 'is-invalid': f.Department.touched  &&  f.Department.invalid }"
+                    formControlName="Department"  name="Department" required >
+                          <option value=""  disabled>Please select</option>
                           <option *ngFor="let e of departments" [value]="e._id" >{{e.DepartmentName}}</option>
                           
                         </select>
+                        <div *ngIf="f.Department.touched && f.Department.invalid" class="invalid-feedback">
+                          <div *ngIf="f.Department.errors.required">Department is required</div>
+                      </div>
                       </div>
                     </div>
               </div>
 
-              <div class="col-md-4">
-
-
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text ">Direct Report(s)</span>
-                    </div>
-                    <input class="form-control" id="username3" name="username3" type="text">
-                  </div>
-                </div>
-              </div>
+            
               
           </div>
 
           <div class="form-group row">
+
+            <div class="col-md-4">
+
+
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text ">Direct Report(s)</span>
+                  </div>
+                  <input type="text" class="autoc-border form-control"
+                  placeholder="Search for a Direct Report(s)"
+                 
+                  [matAutocomplete]="auto3"
+                     formControlName="DirectReports" name="DirectReports"
+                      [formControl]="f.DirectReports" 
+                      >
+           <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn" >
+            <mat-option *ngFor="let option of filteredOptionsDR | async" [value]="option">
+              {{option.UserName}}
+            </mat-option>
+           </mat-autocomplete>
+
+          
+                </div>
+              </div>
+            </div>
+
               <div class="col-md-4">
                   <div class="form-group">
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text">Copies to</span>
                         </div>
-                        <select class="form-control" id="select1" name="select1">
-                          <option value="0" ng-reflect-value="0">Please select</option>
-                          <option value="1" ng-reflect-value="1">Option #1</option>
-                          <option value="2" ng-reflect-value="2">Option #2</option>
-                          <option value="3" ng-reflect-value="3">Option #3</option>
-                        </select>
+                        <input type="text" class="autoc-border form-control"
+                        placeholder="Search for a Copies to"
+                        formControlName="CopiesTo" name="CopiesTo"
+                        [formControl]="f.CopiesTo"
+                        
+                        [matAutocomplete]="auto1"
+                        
+                        >
+                 <mat-autocomplete  
+                  #auto1="matAutocomplete" 
+                  [displayWith]="displayFn">
+                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option.UserName}}
+                  </mat-option>
+                 </mat-autocomplete>
+                 <!-- <div *ngIf="f.CopiesTo.touched && f.CopiesTo.invalid" class="invalid-feedback">
+                  <div *ngIf="f.CopiesTo.errors.required">Copies To is required</div>
+                </div> -->
                       </div>
                     </div>
               </div>
@@ -327,13 +403,18 @@
                   <div class="form-group">
                       <div class="input-group">
                         <div class="input-group-prepend">
-                          <span class="input-group-text redStar">Application Role(s)           </span>
+                          <span class="input-group-text redStar">Application Role</span>
                         </div>
-                        <select  formControlName="ApplicationRole" class="form-control"  id="select1" name="select1">
-                          <option >Please select</option>
+                        <select class="form-control"
+                        [ngClass]="{ 'is-invalid': f.ApplicationRole.touched  &&  f.ApplicationRole.invalid }"
+                        formControlName="ApplicationRole"  name="ApplicationRole" required   >
+                          <option value="" disabled >Please select</option>
                           <option *ngFor="let e of appRoles" [value]="e._id" >{{e.ApplicationRoleName}}</option>
                           
                         </select>
+                        <div *ngIf="f.ApplicationRole.touched && f.ApplicationRole.invalid" class="invalid-feedback">
+                          <div *ngIf="f.ApplicationRole.errors.required">Application Role is required</div>
+                      </div>
                       </div>
                     </div>
               </div>
@@ -346,14 +427,11 @@
                   <div class="form-group">
                       <div class="input-group">
                         <div class="input-group-prepend">
-                          <span class="input-group-text redStar">Joining Date</span>
+                          <span class="input-group-text redStar">Start Date  &nbsp; &nbsp; </span>
                         </div>
-                        <select class="form-control" id="select1" name="select1">
-                          <option value="0" ng-reflect-value="0">Please select</option>
-                          <option value="1" ng-reflect-value="1">Option #1</option>
-                          <option value="2" ng-reflect-value="2">Option #2</option>
-                          <option value="3" ng-reflect-value="3">Option #3</option>
-                        </select>
+                        <input class="autoc-border" matInput  [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
                       </div>
                     </div>
               </div>
@@ -364,16 +442,26 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text ">Third Signatory</span>
                         </div>
-                        <input class="form-control" id="username3" name="username3" type="text">
-                      </div>
+                        <input type="text" class="autoc-border form-control"
+                        placeholder="Search for a Third Signatory"
+                        formControlName="ThirdSignatory" name="ThirdSignatory"
+                        [formControl]="f.ThirdSignatory" 
+                        
+                        [matAutocomplete]="auto2">
+                 <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn" >
+                  <mat-option *ngFor="let option of filteredOptionsTS | async" [value]="option">
+                    {{option.UserName}}
+                  </mat-option>
+                 </mat-autocomplete>
+                       </div>
                     </div>
               </div>
               
 
               <!-- <div class="form-group row"> -->
                 <div class="col-md-4">
-                <label class="col-md-4 col-form-label" for="inline-radios">Active</label>
-                <div class="col-md-9 col-form-label pull-left">
+                <label class="col-md-4 col-form-label pull-left" for="inline-radios">Active</label>
+                <div class="col-md-9 col-form-label ">
                   <div class="form-check form-check-inline mr-1" id="inline-radios"><input class="form-check-input" id="inlineRadio1"
                       name="IsActive" formControlName="IsActive"  type="radio" value="yes"><label class="form-check-label" for="inlineRadio1">Yes</label>
                   </div>
@@ -397,8 +485,9 @@
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="addEmployee.hide()">Close</button>
+        <button type="button" class="btn btn-secondary" (click)="addEmployee.hide()">Cancel</button>
         <button type="button" (click)="createEmployee()" class="btn btn-primary">Save changes</button>
+        <button type="button" (click)="submitCreateEmployee()" class="btn btn-primary">Submit</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
