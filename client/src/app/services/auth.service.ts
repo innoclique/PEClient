@@ -96,9 +96,10 @@ export class AuthService {
 
 /**Logout API Calling */
   LogOut() {    
-    debugger
+    
     if (!this.currentUser) {
-      this.getUser();
+      localStorage.clear();
+      return 
     }
     let m = { email: this.currentUser.Email };
     // let headers = new HttpHeaders();

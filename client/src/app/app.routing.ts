@@ -9,6 +9,8 @@ import { RegisterComponent } from './views/register/register.component';
 import { ForgotPasswordComponent } from './shared/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './shared/reset-password/reset-password.component';
 import { LoginComponent } from './shared/login/login.component';
+import {LogoutComponent} from './shared/logout/logout.component'
+import { AuthGuardService } from './services/auth-guard.service';
 
 export const routes: Routes = [
   // { path: '', component: AppComponent, data: { title: 'First Component' } },
@@ -42,6 +44,13 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'logout',
+    component: LogoutComponent,
+    data: {
+      title: 'Logout Page'
+    }
+  },
+  {
     path: 'register',
     component: RegisterComponent,
     data: {
@@ -51,6 +60,7 @@ export const routes: Routes = [
   {
     path: '',
     component: DefaultLayoutComponent,
+    canActivate: [AuthGuardService] ,
     data: {
       title: 'Home'
     },
@@ -77,7 +87,8 @@ export const routes: Routes = [
       },
       {
         path: 'a',
-        loadChildren:()=>import('./views/psa/psa.module').then(m=>m.PSAModule)
+        loadChildren:()=>import('./views/psa/psa.module').then(m=>m.PSAModule),
+        
       }
     ]
   },

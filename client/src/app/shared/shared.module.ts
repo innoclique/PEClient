@@ -15,6 +15,7 @@ import { MatSpinnerOverlayComponent } from './mat-spinner-overlay/mat-spinner-ov
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { LogoutComponent } from './logout/logout.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     ForgotPasswordComponent, 
     ResetPasswordComponent,
     AlertComponent,
-    MatSpinnerOverlayComponent
+    MatSpinnerOverlayComponent,
+    LogoutComponent
     ],
   imports: [    
     CommonModule,
