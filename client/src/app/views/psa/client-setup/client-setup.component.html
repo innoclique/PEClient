@@ -63,7 +63,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Select Industry</span>
+                    <span class="input-group-text redStar">Select Industry</span>
                   </div>
                   <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Industry.errors }" formControlName="Industry"
                     class="form-control">
@@ -105,7 +105,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Country</span>
+                    <span class="input-group-text redStar">Country</span>
                   </div>
                   <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Country.errors }" formControlName="Country"
                     class="form-control">
@@ -124,7 +124,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">City</span>
+                    <span class="input-group-text redStar">City</span>
                   </div>
                   <select [ngClass]="{ 'is-invalid': isFormSubmitted &&  f.City.errors }" formControlName="City"
                     class="form-control">
@@ -144,7 +144,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">State</span>
+                    <span class="input-group-text redStar">State</span>
                   </div>
                   <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.State.errors }" formControlName="State"
                     class="form-control">
@@ -162,7 +162,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Zip Code</span>
+                    <span class="input-group-text redStar">Zip Code</span>
                   </div>
                   <input maxlength="8" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.ZipCode.errors }"
                     formControlName="ZipCode" class="form-control">
@@ -200,7 +200,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">ExtNumber</span>
+                    <span class="input-group-text">ExtNumber</span>
                   </div>
                   <input type="text" class="form-control" formControlName="PhoneExt">
                 </div>
@@ -227,7 +227,7 @@
 
           <div class="form-group row">
             <div class="form-group col-md-4 ">
-              <label class="col-form-label" for="inline-radios">Client Type:</label>
+              <label class="col-form-label redStar" for="inline-radios">Client Type:</label>
 
               <label class="radio-inline">
                 <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.ClientType.invalid }"
@@ -245,7 +245,7 @@
             </div>
 
             <div class="col-md-4">
-              <label class="col-form-label" for="inline-radios">Usage Type</label>
+              <label class="col-form-label redStar" for="inline-radios">Usage Type</label>
               <div class=" col-form-label">
                 <div class="form-check form-check-inline mr-1" id="inline-radios">
                   <input formControlName="UsageType" class="form-check-input" name="UsageType"
@@ -371,7 +371,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">First Name</span>
+                    <span class="input-group-text ">First Name</span>
                   </div>
                   <input maxlength="12" type="text" class="form-control"
                     [ngClass]="{ 'is-invalid': !f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonFirstName.errors }"
@@ -397,7 +397,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Last Name</span>
+                    <span class="input-group-text ">Last Name</span>
                   </div>
                   <input class="form-control" type="text"
                     [ngClass]="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonLastName.errors "
@@ -413,7 +413,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Phone</span>
+                    <span class="input-group-text ">Phone</span>
                   </div>
                   <input class="form-control" type="text"
                     [ngClass]="{ 'is-invalid': !f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors}"
@@ -430,7 +430,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Email</span>
+                    <span class="input-group-text ">Email</span>
                   </div>
                   <input class="form-control" type="text"
                     [ngClass]="{ 'is-invalid': (!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonEmail.errors )}"
@@ -515,7 +515,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Evaluation Duration</span>
+                    <span class="input-group-text redStar">Evaluation Duration</span>
                   </div>
                   <select [ngClass]="{ 'is-invalid':isFormSubmitted  &&  f.EvaluationDuration.invalid }"
                     formControlName="EvaluationDuration" class="form-control" id="select1" name="select1">
@@ -577,7 +577,6 @@
                     <option value="2">Option #2</option>
                     <option value="3">Option #3</option>
                   </select>
-
                 </div>
               </div>
             </div>
