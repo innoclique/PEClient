@@ -22,13 +22,12 @@ export class DefaultLayoutComponent {
   toggleMinimize(e) {
     this.sidebarMinimized = e;
   }
-  public logout(){    
-    
+  public logout(){        
     this.authService.LogOut()
      this.router.navigate(['login'])
   }
-  callme(ff){
-    
-    
+  
+  switchLang(lang: string) {    
+    this.translate.use(lang);
   }
 }

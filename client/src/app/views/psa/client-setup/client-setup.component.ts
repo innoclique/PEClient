@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { MatDialog } from '@angular/material/dialog';
-import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
@@ -19,12 +19,19 @@ export class ClientSetupComponent implements OnInit {
   errorOnSave = false;
   errorMessage: string = "";
   @ViewChild('closeModal') closeModal: ElementRef
+  currentRowItem: any;
+  orgViewRef: BsModalRef;
+  @ViewChild('orgView') orgView: TemplateRef<any>;
+  config = {
+    backdrop: true,
+    ignoreBackdropClick: true,
 
-
+  };
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
-    private notification: NotificationService
+    private notification: NotificationService,
+    private modalService: BsModalService,
   ) {
 
 
@@ -32,6 +39,12 @@ export class ClientSetupComponent implements OnInit {
 
   ngOnInit(): void {
     this.getClients();
+
+    this.initForm();
+
+    this.sameAsContactChange()
+  }
+  initForm() {
     this.clientForm = this.formBuilder.group({
       Name: [null, Validators.compose([
         Validators.required,
@@ -47,7 +60,7 @@ export class ClientSetupComponent implements OnInit {
       Phone: [null, Validators.compose([
         Validators.required, Validators.minLength(10),
         Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
-        
+
       ])],
       PhoneExt: [null, []],
       Email: ['', [Validators.required, Validators.email]],
@@ -108,9 +121,7 @@ export class ClientSetupComponent implements OnInit {
       IsActive: ['', []]
 
     });
-    this.sameAsContactChange()
   }
-
   get f() {
     return this.clientForm.controls;
   }
@@ -123,7 +134,6 @@ export class ClientSetupComponent implements OnInit {
   }
 
   public createClient = () => {
-    
     this.isFormSubmitted = true;
     if (!this.clientForm.valid) {
       return;
@@ -137,7 +147,11 @@ export class ClientSetupComponent implements OnInit {
   }
 
   public columnDefs = [
-    { headerName: 'Client', field: 'Name', sortable: true, filter: true },
+    {
+      headerName: 'Client', field: 'Name', sortable: true, filter: true,
+
+      cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
+    },
     { headerName: 'Type', field: 'OrganizationType', sortable: true, filter: true },
     { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
     { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
@@ -172,7 +186,7 @@ export class ClientSetupComponent implements OnInit {
     })
   }
   saveClient() {
-    
+
     var organization = this.clientForm.value;
 
     if (this.clientForm.get('SameAsAdmin').value) {
@@ -231,8 +245,8 @@ export class ClientSetupComponent implements OnInit {
     }
   }
   public addValidators(form: FormGroup) {
-    for (const key in form.controls) {      
-      form.get(key).setValidators(this.validationType[key]);      
+    for (const key in form.controls) {
+      form.get(key).setValidators(this.validationType[key]);
     }
   }
   public disableFields(form: FormGroup) {
@@ -244,6 +258,19 @@ export class ClientSetupComponent implements OnInit {
   public enableFields(form: FormGroup) {
     for (const key in form.controls) {
       form.get(key).enable();
+    }
+  }
+  public setValues(form: FormGroup, rowdata: any) {
+    for (const key in form.controls) {
+      const f = form.controls[key];
+      //for child forms
+      if (f && f instanceof FormGroup) {
+        this.setValues(f, rowdata);
+      } else {
+        form.get(key).setValue(rowdata[key]);
+
+      }
+
     }
   }
   public setContactPersonFields(form: FormGroup) {
@@ -277,10 +304,40 @@ export class ClientSetupComponent implements OnInit {
     ])]
   }
   resetForm() {
-    
     this.isFormSubmitted = false;
     this.clientForm.reset();
     this.clientForm.setErrors(null);
     this.closeModal.nativeElement.click()
+  }
+
+  public onRowClicked(e) {
+    if (e.event.target !== undefined) {
+      let data = e.data;
+      this.currentRowItem = data.RowData;
+
+      let actionType = e.event.target.getAttribute("data-action-type");
+      switch (actionType) {
+        case "orgView":
+          return this.openOrgView();
+        case "approveRequest":
+        // return this.approveRequest(data);
+        case "rejectRequest":
+        //return this.rejectRequest(data);
+      }
+    }
+  }
+  openOrgView() {
+    debugger
+    this.orgViewRef = this.modalService.show(this.orgView, this.config);
+    this.orgViewRef.setClass('modal-xlg');
+    const cr = this.currentRowItem;
+    this.setValues(this.clientForm, cr);
+    //this.setValues(this.contactPersonForm,cr)
+    // this.clientForm.patchValue({
+    //   Name:cr.Name
+    //   });
+  }
+  hideorgView() {
+    this.orgViewRef.hide();
   }
 }

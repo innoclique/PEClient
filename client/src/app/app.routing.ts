@@ -87,6 +87,9 @@ export const routes: Routes = [
       },
       {
         path: 'a',
+        data: {
+          title: 'Clients'
+        },
         loadChildren:()=>import('./views/psa/psa.module').then(m=>m.PSAModule),
         
       }

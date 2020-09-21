@@ -8,11 +8,22 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 export const projectRoutes: Routes = [
-
   
-  {path:'',redirectTo:'clientsetup'},
-  { path: 'clientsetup', component: ClientSetupComponent }
-  
+  {path: '',
+  data: {
+    title: 'Clients'
+  },
+  children: [
+    {
+      path: '',
+      redirectTo: 'clientsetup'
+    },
+    { path: 'clientsetup', component: ClientSetupComponent,data: {
+      title: 'View All'
+    }
+  }
+  ]
+},
   
 ];
 
