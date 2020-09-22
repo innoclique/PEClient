@@ -211,8 +211,7 @@ public onEmpGridRowClick(e) {
   }
 }
 
-openEmpForm(data) {
-
+openEmpForm() {
   this.empForm.reset();
   this.countyFormReset=true;
   this.currentAction='create'

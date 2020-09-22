@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 
 import { MatDialog } from '@angular/material/dialog';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { AuthService } from '../../../services/auth.service';
 
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
@@ -33,6 +34,7 @@ export class ClientSetupComponent implements OnInit {
     private perfApp: PerfAppService,
     private notification: NotificationService,
     private modalService: BsModalService,
+    public authService: AuthService,
   ) {
 
 
@@ -156,7 +158,22 @@ export class ClientSetupComponent implements OnInit {
     { headerName: 'Type', field: 'OrganizationType', sortable: true, filter: true },
     { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
     { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
-    { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true }
+    { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
+    {
+      headerName: "Actions",
+      suppressMenu: true,
+      Sorting: false,
+      //width: 170,
+      cellRenderer: (data) => {
+        console.log('column data', data)
+        //if (data.data.ApprovalRecord.status === 'ACTIVE') {
+        return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
+  font-size: 17px;"   data-action-type="suspendorg" ></i>`
+        //}
+      }
+
+
+    }
   ];
 
   public clientData: any
@@ -187,23 +204,7 @@ export class ClientSetupComponent implements OnInit {
     })
   }
   saveClient() {
-
-    var organization = this.clientForm.value;
-
-    if (this.clientForm.get('SameAsAdmin').value) {
-      organization.ContactPersonFirstName = organization.AdminLastName;
-      organization.ContactPersonMiddleName = organization.AdminMiddleName;
-      organization.ContactPersonLastName = organization.AdminLastName;
-      organization.ContactPersonPhone = organization.AdminPhone;
-      organization.ContactPersonEmail = organization.AdminEmail;
-    } else {
-      organization.ContactPersonFirstName = this.contactPersonForm.value.ContactPersonLastName;
-      organization.ContactPersonMiddleName = this.contactPersonForm.value.ContactPersonMiddleName;
-      organization.ContactPersonLastName = this.contactPersonForm.value.ContactPersonLastName;
-      organization.ContactPersonPhone = this.contactPersonForm.value.ContactPersonPhone;
-      organization.ContactPersonEmail = this.contactPersonForm.value.ContactPersonEmail;
-    }
-    organization.IsActive = true;
+    const organization=this.prepareOrgData('Create');
     this.perfApp.route = "app";
     this.perfApp.method = "AddOrganization",
       this.perfApp.requestBody = organization; //fill body object with form 
@@ -305,18 +306,20 @@ export class ClientSetupComponent implements OnInit {
     ])]
   }
   resetForm() {
+    this.closeModal.nativeElement.click()    
+    this.orgViewRef.hide();
     this.isFormSubmitted = false;
     this.clientForm.reset();
     this.clientForm.setErrors(null);
-    this.closeModal.nativeElement.click()
     this.emptyForm(this.clientForm)
+    
   }
   public emptyForm(form: FormGroup) {
     for (const key in form.controls) {
       const f = form.controls[key];
       //for child forms
       if (f && f instanceof FormGroup) {
-        this.setValues(f, null);
+        this.emptyForm(f);
       } else {
         form.get(key).setValue(null);
 
@@ -341,18 +344,15 @@ export class ClientSetupComponent implements OnInit {
     }
   }
   openOrgView() {
-    debugger
     this.orgViewRef = this.modalService.show(this.orgView, this.config);
     this.orgViewRef.setClass('modal-xlg');
     const cr = this.currentRowItem;
     this.setValues(this.clientForm, cr);
-    //this.setValues(this.contactPersonForm,cr)
-    // this.clientForm.patchValue({
-    //   Name:cr.Name
-    //   });
+
   }
   hideorgView() {
     this.orgViewRef.hide();
+    this.emptyForm(this.clientForm);
   }
 
   getIndustries() {
@@ -361,10 +361,67 @@ export class ClientSetupComponent implements OnInit {
       this.perfApp.requestBody = {}; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.industries = c;
+      console.table(c);
     }, error => {
 
 
       //this.notification.error(error.error.message)
     });
   }
+  //#region  update client related
+  public updateClient() {
+    if (this.clientForm.invalid) {
+      return;
+    }
+    const organization=this.prepareOrgData('Update');
+    this.perfApp.route = "app";
+    this.perfApp.method = "UpdateOrganization",
+      this.perfApp.requestBody = organization; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+      debugger
+      console.log('updated',c)
+this.resetForm();
+
+    }, error => {
+debugger
+console.log('eror while updating orgnaizartion :', error)
+
+      //this.notification.error(error.error.message)
+    });
+  }
+  //#endregion
+
+  prepareOrgData(action) {
+    var organization = this.clientForm.value;
+    if (action === 'Create') {
+      organization.IsActive = true;
+      organization.CreatedBy=this.authService.getCurrentUser()._id;
+      organization.CreatedOn=new Date();
+    } else {
+      debugger
+      organization.id = this.currentRowItem._id;
+      organization.UpdatedBy=this.authService.getCurrentUser()._id;
+      organization.UpdatedOn=new Date();     
+    }
+    organization = this.setContactPersonData(organization);
+return organization;
+  }
+
+  setContactPersonData(organization) {
+    if (this.clientForm.get('SameAsAdmin').value) {
+      organization.ContactPersonFirstName = organization.AdminLastName;
+      organization.ContactPersonMiddleName = organization.AdminMiddleName;
+      organization.ContactPersonLastName = organization.AdminLastName;
+      organization.ContactPersonPhone = organization.AdminPhone;
+      organization.ContactPersonEmail = organization.AdminEmail;
+    } else {
+      organization.ContactPersonFirstName = this.contactPersonForm.value.ContactPersonLastName;
+      organization.ContactPersonMiddleName = this.contactPersonForm.value.ContactPersonMiddleName;
+      organization.ContactPersonLastName = this.contactPersonForm.value.ContactPersonLastName;
+      organization.ContactPersonPhone = this.contactPersonForm.value.ContactPersonPhone;
+      organization.ContactPersonEmail = this.contactPersonForm.value.ContactPersonEmail;
+    }
+    return organization;
+  }
+  
 }

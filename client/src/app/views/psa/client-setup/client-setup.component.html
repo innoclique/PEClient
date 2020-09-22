@@ -49,8 +49,8 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text redStar">Organization Name</span>
                   </div>
-                  <input max="500" class="form-control" type="text"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted &&  f.Name.errors}" formControlName="Name" name="Name"
+                  <input  max="500" class="form-control" type="text"
+                    formControlName="Name" name="Name"
                     required>
                   <div *ngIf=" isFormSubmitted  && f.Name.errors" class="invalid-feedback">
                     <div *ngIf="f.Name.errors.required">Organization Name is required</div>
@@ -72,8 +72,7 @@
                   <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Industry.errors }" formControlName="Industry"
                     class="form-control">
                     <option value="" disabled selected>Select Industry</option>
-                    <option *ngFor="let i of industries" [value]="i.code">{{i.Name}}</option>
-                    
+                    <option *ngFor="let i of industries" [value]="i.Code">{{i.Name}}</option>
                   </select>
                   <div *ngIf=" isFormSubmitted &&   f.Industry.errors" class="invalid-feedback">
                     <div *ngIf="f.Industry.errors.required">Industry is required</div>
@@ -187,7 +186,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text redStar">Phone</span>
                   </div>
-                  <input maxlength="12" type="text" class="form-control"
+                  <input  maxlength="12" type="text" class="form-control"
                     [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Phone.errors }" formControlName="Phone" required>
                   <div *ngIf="isFormSubmitted  && f.Phone.errors" class="invalid-feedback">
                     <div *ngIf="f.Phone.errors.required">Phone Number is required</div>
@@ -216,7 +215,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text redStar">Email</span>
                   </div>
-                  <input class="form-control" type="text" [ngClass]="{ 'is-invalid':isFormSubmitted && f.Email.errors}"
+                  <input  class="form-control" type="text" [ngClass]="{ 'is-invalid':isFormSubmitted && f.Email.errors}"
                     formControlName="Email" name="Email" required>
                   <div *ngIf="isFormSubmitted   && f.Email.errors" class="invalid-feedback">
                     <div *ngIf="f.Email.errors.required">Email is required</div>
@@ -246,25 +245,23 @@
               </div>
 
             </div>
+            <div class="form-group col-md-4 ">
+              <label class="col-form-label redStar" for="inline-radios">Usage Type:</label>
 
-            <div class="col-md-4">
-              <label class="col-form-label redStar" for="inline-radios">Usage Type</label>
-              <div class=" col-form-label">
-                <div class="form-check form-check-inline mr-1" id="inline-radios">
-                  <input formControlName="UsageType" class="form-check-input" name="UsageType"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="license">
-                  <label class="form-check-label" for="inlineRadio1">License</label>
-                </div>
-                <div class="form-check form-check-inline mr-1">
-                  <input formControlName="UsageType" class="form-check-input" name="UsageType"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
-                    value="countofEmployees">
-                  <label class="form-check-label" for="usageType"># of Employees</label>
-                </div>
-                <div *ngIf="isFormSubmitted && f.UsageType.errors" class="invalid-feedback">
-                  <div *ngIf="f.UsageType.errors.required">Usage Type Required</div>
-                </div>
+              <label class="radio-inline">
+                <input formControlName="UsageType"  name="UsageType"
+                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="license"> License
+              </label>
+              <label class="form-control" class="radio-inline">
+                <input formControlName="UsageType"  name="UsageType"
+                [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
+                value="countofEmployees"> # of Employees
+              </label>
+
+              <div *ngIf="isFormSubmitted && f.UsageType.errors" class="invalid-feedback">
+                <div *ngIf="f.UsageType.errors.required">Usage Type Required</div>
               </div>
+
             </div>
 
             <div class="col-md-4">
@@ -306,7 +303,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Middle Name</span>
+                    <span class="input-group-text ">Middle Name</span>
                   </div>
                   <input type="text" class="form-control" formControlName="AdminMiddleName">
                 </div>
@@ -390,7 +387,7 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Middle Name</span>
+                    <span class="input-group-text ">Middle Name</span>
                   </div>
                   <input type="text" class="form-control" formControlName="ContactPersonMiddleName">
                 </div>
@@ -583,19 +580,22 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <label class="col-md-4 col-form-label" for="inline-radios">Active</label>
-              <div class="col-md-9 col-form-label pull-left">
-                <div class="form-check form-check-inline mr-1" id="inline-radios"><input class="form-check-input"
-                    id="inlineRadio1" name="inline-radios" type="radio" value="option1"><label class="form-check-label"
-                    for="inlineRadio1">Yes</label>
-                </div>
-                <div class="form-check form-check-inline mr-1"><input class="form-check-input" id="inlineRadio2"
-                    name="inline-radios" type="radio" value="option2"><label class="form-check-label"
-                    for="inlineRadio2">No</label>
-                </div>
+            <div class="form-group col-md-4 ">
+              <label class="col-form-label redStar" for="inline-radios">Ative:</label>
 
-              </div>
+              <label class="radio-inline">
+                <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
+                  formControlName="IsActive" type="radio" name="IsActive" [value]="true"> Yes
+              </label>
+              <label class="form-control" class="radio-inline">
+                <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
+                  formControlName="IsActive" type="radio" name="IsActive" [value]="false"> No
+              </label>
+
+              <!-- <div *ngIf="isFormSubmitted && f.IsActive.errors" class="invalid-feedback">
+                <div *ngIf="f.IsActive.errors.required">Client Type is required</div>
+              </div> -->
+
             </div>
           </div>
 
@@ -618,7 +618,6 @@
         </div>
       </div>
       <div class="modal-footer">
-
         <button type="button" class="btn btn-secondary" #closeModal
           (click)="addClient.hide();resetForm()">Close</button>
         <button type="button" (click)="createClient()" class="btn btn-primary">Submit</button>
@@ -670,10 +669,9 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                   </div>
                   <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Industry.errors }" formControlName="Industry"
                     class="form-control">
-                    <option value="0">Please select</option>
-                    <option value="1">Option #1</option>
-                    <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
+                    <!-- <option value="" disabled selected>Select Industry</option> -->
+                    <option *ngFor="let i of industries" [value]="i.Code">{{i.Name}}</option>
+                    
                   </select>
                   <div *ngIf=" isFormSubmitted &&   f.Industry.errors" class="invalid-feedback">
                     <div *ngIf="f.Industry.errors.required">Industry is required</div>
@@ -846,25 +844,23 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               </div>
 
             </div>
+            <div class="form-group col-md-4 ">
+              <label class="col-form-label redStar" for="inline-radios">Usage Type:</label>
 
-            <div class="col-md-4">
-              <label class="col-form-label redStar" for="inline-radios">Usage Type</label>
-              <div class=" col-form-label">
-                <div class="form-check form-check-inline mr-1" id="inline-radios">
-                  <input formControlName="UsageType" class="form-check-input" name="UsageType"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="license">
-                  <label class="form-check-label" for="inlineRadio1">License</label>
-                </div>
-                <div class="form-check form-check-inline mr-1">
-                  <input formControlName="UsageType" class="form-check-input" name="UsageType"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
-                    value="countofEmployees">
-                  <label class="form-check-label" for="usageType"># of Employees</label>
-                </div>
-                <div *ngIf="isFormSubmitted && f.UsageType.errors" class="invalid-feedback">
-                  <div *ngIf="f.UsageType.errors.required">Usage Type Required</div>
-                </div>
+              <label class="radio-inline">
+                <input formControlName="UsageType"  name="UsageType"
+                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="license"> License
+              </label>
+              <label class="form-control" class="radio-inline">
+                <input formControlName="UsageType"  name="UsageType"
+                [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
+                value="countofEmployees"> # of Employees
+              </label>
+
+              <div *ngIf="isFormSubmitted && f.UsageType.errors" class="invalid-feedback">
+                <div *ngIf="f.UsageType.errors.required">Usage Type Required</div>
               </div>
+
             </div>
 
             <div class="col-md-4">
@@ -1183,19 +1179,22 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <label class="col-md-4 col-form-label" for="inline-radios">Active</label>
-              <div class="col-md-9 col-form-label pull-left">
-                <div class="form-check form-check-inline mr-1" id="inline-radios"><input class="form-check-input"
-                    id="inlineRadio1" name="inline-radios" type="radio" value="option1"><label class="form-check-label"
-                    for="inlineRadio1">Yes</label>
-                </div>
-                <div class="form-check form-check-inline mr-1"><input class="form-check-input" id="inlineRadio2"
-                    name="inline-radios" type="radio" value="option2"><label class="form-check-label"
-                    for="inlineRadio2">No</label>
-                </div>
+            <div class="form-group col-md-4 ">
+              <label class="col-form-label redStar" for="inline-radios">Ative:</label>
 
-              </div>
+              <label class="radio-inline">
+                <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
+                  formControlName="IsActive" type="radio" name="IsActive" [value]="true"> Yes
+              </label>
+              <label class="form-control" class="radio-inline">
+                <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
+                  formControlName="IsActive" type="radio" name="IsActive" [value]="false"> No
+              </label>
+
+              <!-- <div *ngIf="isFormSubmitted && f.IsActive.errors" class="invalid-feedback">
+                <div *ngIf="f.IsActive.errors.required">Client Type is required</div>
+              </div> -->
+
             </div>
           </div>
 
@@ -1221,7 +1220,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
 
         <button type="button" class="btn btn-secondary" #closeModal
           (click)="hideorgView()">Close</button>
-        <button type="button" (click)="createClient()" class="btn btn-primary">Submit</button>
+        <button type="button" (click)="updateClient()" class="btn btn-primary">Update</button>
       </div>
     </div>
   </div>

@@ -146,13 +146,7 @@ export class AuthService {
     else { return true; }
   }
 getCurrentUser(){
-  if(!this.currentUser.Email){
-    const _user=this.getLSObject('User')
-    if(_user){
-      this.currentUser=_user;
-    }
-  }
-  return this.currentUser;
+  return this.getLSObject('User')
 }
 
   errorHandle(error) {
