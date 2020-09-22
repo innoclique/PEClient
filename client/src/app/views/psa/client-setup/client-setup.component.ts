@@ -27,6 +27,7 @@ export class ClientSetupComponent implements OnInit {
     ignoreBackdropClick: true,
 
   };
+  industries: any;
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -41,7 +42,7 @@ export class ClientSetupComponent implements OnInit {
     this.getClients();
 
     this.initForm();
-
+    this.getIndustries();
     this.sameAsContactChange()
   }
   initForm() {
@@ -308,8 +309,21 @@ export class ClientSetupComponent implements OnInit {
     this.clientForm.reset();
     this.clientForm.setErrors(null);
     this.closeModal.nativeElement.click()
+    this.emptyForm(this.clientForm)
   }
+  public emptyForm(form: FormGroup) {
+    for (const key in form.controls) {
+      const f = form.controls[key];
+      //for child forms
+      if (f && f instanceof FormGroup) {
+        this.setValues(f, null);
+      } else {
+        form.get(key).setValue(null);
 
+      }
+
+    }
+  }
   public onRowClicked(e) {
     if (e.event.target !== undefined) {
       let data = e.data;
@@ -339,5 +353,18 @@ export class ClientSetupComponent implements OnInit {
   }
   hideorgView() {
     this.orgViewRef.hide();
+  }
+
+  getIndustries() {
+    this.perfApp.route = "shared";
+    this.perfApp.method = "GetIndustries",
+      this.perfApp.requestBody = {}; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+      this.industries = c;
+    }, error => {
+
+
+      //this.notification.error(error.error.message)
+    });
   }
 }

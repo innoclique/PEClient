@@ -35,7 +35,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Create a new Client</h4>
-        <button type="button" class="close btn btn-primary" (click)="addClient.hide()" aria-label="Close">
+        <button type="button" class="close btn btn-primary" (click)="addClient.hide();resetForm();" aria-label="Close">
           X
         </button>
       </div>
@@ -71,10 +71,9 @@
                   </div>
                   <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Industry.errors }" formControlName="Industry"
                     class="form-control">
-                    <option value="0">Please select</option>
-                    <option value="1">Option #1</option>
-                    <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
+                    <option value="" disabled selected>Select Industry</option>
+                    <option *ngFor="let i of industries" [value]="i.code">{{i.Name}}</option>
+                    
                   </select>
                   <div *ngIf=" isFormSubmitted &&   f.Industry.errors" class="invalid-feedback">
                     <div *ngIf="f.Industry.errors.required">Industry is required</div>
