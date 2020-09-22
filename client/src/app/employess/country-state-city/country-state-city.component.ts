@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs';
@@ -14,10 +14,55 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './country-state-city.component.html',
   styleUrls: ['./country-state-city.component.css']
 })
-export class CountryStateCityComponent implements OnInit {
+export class CountryStateCityComponent implements OnInit,OnChanges {
  
+
+
+
+@Input() set reset(value: boolean) {
+ if (value) {
+   this.countryForm.reset();
+   this.countryForm.patchValue({Country:''});
+ }
+}
+
+
+
+@Input() set CSCData(value) {
+ 
+  if (value &&value.Country) {
+
+    let country=this.countries.filter(e=>e.name==value.Country)[0];
+    this.countryForm.patchValue({Country:country});
+
+    this.states=this.states.filter(s => s.country_code==country.iso2);
+
+    this.filteredStates = this.countryForm.controls['State'].valueChanges.pipe(
+     startWith(''),
+     map(value => this.state_filter(value))
+   );
+    this.countryForm.patchValue({State:this.masterStates.filter(e=>e.name==value.State)[0]});
+  
+  
+    this.sHttp.get<any>(`assets/sgcitys${this.getFileByCountryId(country.id)}.ts`).subscribe((data)=>{
+
+      const citys = data;
+      this.countryForm.patchValue({City:citys.filter(e=>e.name==value.City)[0]});
+
+    } )
+  
+  }
+ }
+
   constructor( private fb: FormBuilder,
-    private sHttp: HttpClient){} 
+    private sHttp: HttpClient){
+
+
+
+    } 
+  ngOnChanges(changes: SimpleChanges): void {
+  
+  }
 
    countries: any[] = countriesData;
     
@@ -52,11 +97,7 @@ export class CountryStateCityComponent implements OnInit {
       map(value => this._filter(value))
     );
 
-    // this.filteredCitys = this.countryForm.controls['City'].valueChanges.pipe(
-    //   startWith(''),
-    //   map(value => this.city_filter(value))
-    // ); 
-
+    
   
 
   }

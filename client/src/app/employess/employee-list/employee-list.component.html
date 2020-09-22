@@ -7,7 +7,7 @@
                 Set up Employees
             
             <div class="form-group form-actions pull-right m-0">
-              <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="addEmployee.show()">Add New Employee</button>
+              <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="addEmployee.show();openEmpForm()">Add New Employee</button>
             </div>
             </div>
             <div class="card-body">
@@ -16,7 +16,10 @@
 
               <ag-grid-angular style="width: auto; height: 500px;" 
               class="ag-theme-alpine" [rowData]="employeeData"
-                [columnDefs]="columnDefs" >
+                [columnDefs]="columnDefs"
+                [pagination]="true"
+                [paginationPageSize]="10"
+                 (rowClicked)="onEmpGridRowClick($event)" >
               </ag-grid-angular>
     
     
@@ -35,8 +38,9 @@
   <div class="modal-dialog modal-primary modal-xlg" role="document">
     <div class="modal-content">
       <div class="modal-header pt-1 pr-1">
-        <h5 class="modal-title">Create a new Employee</h5>
-        <button type="button" class="close" (click)="addEmployee.hide()" aria-label="Close">
+        <h5 *ngIf="currentAction != 'view'" class="modal-title"> {{currentAction == 'create'?'Create a new Employee':'Update Employee'}}</h5>
+        <h5 *ngIf="currentAction == 'view'" class="modal-title"> Employee</h5>
+        <button type="button" class="close" (click)="addEmployee.hide();closeForm()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -52,7 +56,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">First Name</span>
                         </div>
-                        <input max="200" maxlength="200"  class="form-control" id="username3" name="username3" type="text"
+                        <input max="200" maxlength="200"  class="form-control"  type="text"
                         [ngClass]="{ 'is-invalid': f.FirstName.touched  &&  f.FirstName.invalid }"
                         formControlName="FirstName"  name="FirstName" required  >
                      
@@ -73,7 +77,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text">Middle Name</span>
                         </div>
-                        <input max="200" maxlength="200" class="form-control" id="username3" name="username3" type="text"
+                        <input max="200" maxlength="200" class="form-control"  type="text"
                         [ngClass]="{ 'is-invalid': f.MiddleName.touched  &&  f.MiddleName.invalid }"
                         formControlName="MiddleName"  name="MiddleName"  >
 
@@ -91,7 +95,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">Last Name </span>
                         </div>
-                        <input max="200" maxlength="200" class="form-control" id="username3" name="username3" type="text"
+                        <input max="200" maxlength="200" class="form-control"  type="text"
                         [ngClass]="{ 'is-invalid': f.LastName.touched  &&  f.LastName.invalid }"
                         formControlName="LastName"  name="LastName" required >
 
@@ -107,7 +111,7 @@
               
           </div>
         
-          <app-country-state-city (onSelect)="onCSCSelect($event)" >
+          <app-country-state-city [reset]="countyFormReset" [CSCData]='cscData' (onSelect)="onCSCSelect($event)" >
             
           </app-country-state-city>
 
@@ -118,7 +122,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">Address</span>
                         </div>
-                        <textarea maxlength="500" class="form-control" id="username3" name="username3" cols="" rows="4"
+                        <textarea maxlength="500" class="form-control"  cols="" rows="4"
                         [ngClass]="{ 'is-invalid': f.Address.touched  &&  f.Address.invalid }"
                         formControlName="Address"  name="Address" required >  </textarea>
 
@@ -138,7 +142,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">Phone</span>
                         </div>
-                        <input maxlength="12"  type="text" class="form-control" id="username3" name="username3" 
+                        <input maxlength="12"  type="text" class="form-control"  
                         [ngClass]="{ 'is-invalid': f.PhoneNumber.touched  &&  f.PhoneNumber.invalid }"
                         formControlName="PhoneNumber"  name="PhoneNumber" required 
                         >
@@ -157,7 +161,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text">Alt. Phone</span>
                         </div>
-                        <input maxlength="12"  class="form-control" id="username3" name="username3" type="text"
+                        <input maxlength="12"  class="form-control"  type="text"
                         [ngClass]="{ 'is-invalid': f.AltPhoneNumber.touched  &&  f.AltPhoneNumber.invalid }"
                         formControlName="AltPhoneNumber"  name="AltPhoneNumber"  >
                         <div *ngIf="f.AltPhoneNumber.touched && f.AltPhoneNumber.invalid" class="invalid-feedback">
@@ -175,7 +179,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text">Ext.</span>
                         </div>
-                        <input max="5" maxlength="5" class="form-control" id="username3" name="username3" type="text"
+                        <input max="5" maxlength="5" class="form-control"  type="text"
                         [ngClass]="{ 'is-invalid': f.ExtNumber.touched  &&  f.ExtNumber.invalid }"
                         formControlName="ExtNumber"  name="ExtNumber"  >
 
@@ -190,7 +194,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text">Mobile</span>
                         </div>
-                        <input maxlength="12"  class="form-control" id="username3" name="username3" type="text"
+                        <input maxlength="12"  class="form-control"  type="text"
                         [ngClass]="{ 'is-invalid': f.MobileNumber.touched  &&  f.MobileNumber.invalid }"
                         formControlName="MobileNumber"  name="MobileNumber"           >
                       
@@ -215,13 +219,13 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Pin/Zip Code</span>
                     </div>
-                    <input max="8" maxlength="8" class="form-control" id="username3" name="username3" type="text"
+                    <input max="8" maxlength="8" class="form-control"  type="text"
                     [ngClass]="{ 'is-invalid': f.ZipCode.touched  &&  f.ZipCode.invalid }"
                     formControlName="ZipCode"  name="ZipCode" required  >
                  
                     <div *ngIf="f.ZipCode.touched && f.ZipCode.invalid" class="invalid-feedback">
-                      <div *ngIf="f.ZipCode.errors.required">Zip Code Name is required</div>
-                     <div *ngIf="f.ZipCode.errors.minlength">Zip Code Name must be at least 6 characters  </div>
+                      <div *ngIf="f.ZipCode.errors.required">Zip Code is required</div>
+                     <div *ngIf="f.ZipCode.errors.minlength">Zip Code must be at least 5 characters  </div>
                     <!--  <div *ngIf="f.ZipCode.errors.hasFirstCharNum">First character should be character  </div>
                       <div *ngIf="f.ZipCode.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)   </div> -->
                   </div>
@@ -237,7 +241,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Email</span>
                     </div>
-                    <input class="form-control" id="username3" name="username3" type="text"
+                    <input class="form-control"  [readonly]="currentAction == 'edit'" type="text"
                     [ngClass]="{ 'is-invalid': f.Email.touched  &&  f.Email.invalid }"
                     formControlName="Email"  name="Email" required >
                   
@@ -256,7 +260,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text redStar">Title</span>
                       </div>
-                      <input max="200" maxlength="200" class="form-control" id="username3" name="username3" type="text"
+                      <input max="200" maxlength="200" class="form-control"  type="text"
                         [ngClass]="{ 'is-invalid': f.Title.touched  &&  f.Title.invalid }"
                         formControlName="Title"  name="Title" required  >
                      
@@ -429,9 +433,15 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">Start Date  &nbsp; &nbsp; </span>
                         </div>
-                        <input class="autoc-border" matInput  [matDatepicker]="picker">
+                        <input class="autoc-border  form-control" readonly matInput  [matDatepicker]="picker"
+                        formControlName="JoiningDate" name="JoiningDate"
+                        [ngClass]="{ 'is-invalid': f.JoiningDate.touched  &&  f.JoiningDate.invalid }" required >
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
+
+                        <div *ngIf="f.JoiningDate.touched && f.JoiningDate.invalid" class="invalid-feedback">
+                          <div *ngIf="f.JoiningDate.errors.required">Start Date is required</div>
+                      </div>
                       </div>
                     </div>
               </div>
@@ -463,10 +473,10 @@
                 <label class="col-md-4 col-form-label pull-left" for="inline-radios">Active</label>
                 <div class="col-md-9 col-form-label ">
                   <div class="form-check form-check-inline mr-1" id="inline-radios"><input class="form-check-input" id="inlineRadio1"
-                      name="IsActive" formControlName="IsActive"  type="radio" value="yes"><label class="form-check-label" for="inlineRadio1">Yes</label>
+                      name="IsActive" formControlName="IsActive"  type="radio" value="true"><label class="form-check-label" for="inlineRadio1">Yes</label>
                   </div>
                   <div class="form-check form-check-inline mr-1"><input class="form-check-input" id="inlineRadio2"
-                      name="IsActive"  formControlName="IsActive" type="radio" value="no"><label class="form-check-label" for="inlineRadio2">No</label>
+                      name="IsActive"  formControlName="IsActive" type="radio" value="false"><label class="form-check-label" for="inlineRadio2">No</label>
                   </div>
                   
                 </div>
@@ -484,10 +494,11 @@
      
         
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="addEmployee.hide()">Cancel</button>
-        <button type="button" (click)="createEmployee()" class="btn btn-primary">Save changes</button>
-        <button type="button" (click)="submitCreateEmployee()" class="btn btn-primary">Submit</button>
+      <div *ngIf="currentAction != 'view'" class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="addEmployee.hide();closeForm()">Cancel</button>
+        <button *ngIf="!currentRowItem?.IsSubmit" type="button" (click)="createEmployee()" class="btn btn-primary">Save changes</button>
+        <button type="button" [disabled]="!empForm.valid" (click)="submitCreateEmployee()" class="btn btn-primary">
+          {{currentAction == 'create'?'Submit':'Update'}}</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
