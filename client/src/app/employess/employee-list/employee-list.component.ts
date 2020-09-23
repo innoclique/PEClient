@@ -42,6 +42,7 @@ export class EmployeeListComponent implements OnInit {
   @ViewChild("addEmployee", { static: true }) emoModal: ModalDirective;
   viewEmpFormRef: BsModalRef;
   countyFormReset: boolean;
+  isRoleChanged: boolean;
   empDetails: any={}
   currentAction='create';
   cscData:any=undefined;
@@ -145,11 +146,10 @@ export class EmployeeListComponent implements OnInit {
       State: [this.empDetails.State?this.empDetails.State:'',],
       City: [this.empDetails.City?this.empDetails.City:'',],
       JoiningDate: [this.empDetails.JoiningDate?new Date (this.empDetails.JoiningDate):'',[Validators.required]],
+      RoleEffFrom: [''],
       ZipCode: [this.empDetails.ZipCode?this.empDetails.ZipCode:'', Validators.compose([
         Validators.required,
-        // CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        // CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-
+        CustomValidators.patternValidator(/[^A-Za-z0-9\s]+/g, { isInValidZip: true }, 'isInValidZip'),
         Validators.minLength(5)
       ])
       ],
@@ -221,6 +221,7 @@ public onEmpGridRowClick(e) {
 openEmpForm() {
   this.empForm.reset();
   this.countyFormReset=true;
+  this.isRoleChanged=false;
   this.currentAction='create'
   this.currentRowItem={IsSubmit:false}
   this.empDetails={IsActive:'true'};
@@ -302,7 +303,7 @@ public employeeDirReportData :any[]=[]
 getEmployees(){
   this.perfApp.route="app";
   this.perfApp.method="GetAllEmployees",
-  this.perfApp.requestBody={'id':'5f5929f56c16e542d823247b'}
+  this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
   this.perfApp.CallAPI().subscribe(c=>{
     
     console.log('lients data',c);
@@ -387,6 +388,7 @@ saveEmployee(){
     this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
     this.perfApp.requestBody.ParentUser=this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id;
     this.perfApp.requestBody.IgnoreEvalAdminCreated=false;
+    this.perfApp.requestBody.RoleEffFrom= this.perfApp.requestBody.JoiningDate;
   }
   
   this.callEmpApi();
@@ -451,6 +453,21 @@ if(!this.perfApp.requestBody.DirectReports) delete this.perfApp.requestBody.Dire
      
    }
   })
+}
+
+
+onJobRole(event){
+
+  if (this.currentAction=='create') return;
+  let val = event.target.value;
+  if (this.currentRowItem.JobRole !=val) {
+    this.isRoleChanged=true;
+    // this.empForm.controls['RoleEffFrom'].setErrors({'required': true})
+    this.hasError('RoleEffFrom','required');
+  }else{
+    this.isRoleChanged=false;
+    this.empForm.controls['RoleEffFrom'].setErrors(null);
+  }
 }
 
 getAllDepartments(){

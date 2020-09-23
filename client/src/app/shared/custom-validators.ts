@@ -48,6 +48,13 @@ export class CustomValidators {
 
       }
 
+      if (name === 'isInValidZip') {
+
+        valid = !regex.test(control.value);
+        return valid ? null : error;
+
+      }
+
 
 
       // test the value of the control against the regexp supplied
