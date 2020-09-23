@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
@@ -12,6 +12,8 @@ import { Observable } from 'rxjs';
 import {startWith, map} from 'rxjs/operators';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { Constants } from '../../shared/AppConstants';
+import { AlertDialog } from '../../Models/AlertDialog';
+import { AlertComponent } from '../../shared/alert/alert.component';
 
 @Component({
   selector: 'app-employee-list',
@@ -25,6 +27,7 @@ export class EmployeeListComponent implements OnInit {
   jobRoles=[];
   appRoles: any;
   jobLevels: any;
+  loginUser: any;
 
   filteredOptions: Observable<any[]>;
   filteredOptionsTS: Observable<any[]>;
@@ -42,6 +45,8 @@ export class EmployeeListComponent implements OnInit {
   empDetails: any={}
   currentAction='create';
   cscData:any=undefined;
+
+  public alert: AlertDialog;
   
 
   constructor(private fb: FormBuilder,
@@ -64,11 +69,13 @@ export class EmployeeListComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.loginUser=this.authService.getCurrentUser();
    this.getAllDepartments();
    this.getEmployees();
 
    this.initEmpForm()
 
+   this.alert = new AlertDialog();
   
   }
 
@@ -176,7 +183,7 @@ export class EmployeeListComponent implements OnInit {
     {headerName: 'Title', field: 'Title', sortable: true, filter: true },
     // {headerName: 'Department', field: 'Department', sortable: true, filter: true },
     {headerName: 'Phone', field: 'PhoneNumber', sortable: true, filter: true },
-    {headerName: 'IsDraft', field: 'IsDraft',  width: 120, sortable: true, filter: true },
+    // {headerName: 'IsDraft', field: 'IsDraft',  width: 120, sortable: true, filter: true },
     {headerName: 'IsActive', field: 'IsActive',  width: 120, sortable: true, filter: true },
     {
       headerName: 'Action', field: '', width: 80, autoHeight: true, suppressSizeToFit: true,
@@ -215,7 +222,7 @@ openEmpForm() {
   this.empForm.reset();
   this.countyFormReset=true;
   this.currentAction='create'
-  this.currentRowItem.IsSubmit=false;
+  this.currentRowItem={IsSubmit:false}
   this.empDetails={IsActive:'true'};
   this.initEmpForm();
     this.emoModal.show();
@@ -250,24 +257,24 @@ private _normalizeValue(value: string): string {
 
 
 displayFn(user: any): string {
-  return user && user.UserName ? user.UserName : '';
+  return user && user.FirstName ? user.FirstName : '';
 }
 
 private _filter(name: string): any[] {
   const filterValue = this._normalizeValue(name);
 
-  return this.employeeDropDownData.filter(option => this._normalizeValue(option.UserName).includes(filterValue) );
+  return this.employeeDropDownData.filter(option => this._normalizeValue(option.FirstName).includes(filterValue) );
 }
 
 private _filterDR(name: string): any[] {
   const filterValue = this._normalizeValue(name);
 
-  return this.employeeDirReportData.filter(option => this._normalizeValue(option.UserName).includes(filterValue) );
+  return this.employeeDirReportData.filter(option => this._normalizeValue(option.FirstName).includes(filterValue) );
 } 
 private _filterTD(name: string): any[] {
   const filterValue = this._normalizeValue(name);
 
-  return this.employeeThirdSigData.filter(option => this._normalizeValue(option.UserName).includes(filterValue) );
+  return this.employeeThirdSigData.filter(option => this._normalizeValue(option.FirstName).includes(filterValue) );
 }
 
 
@@ -311,28 +318,28 @@ getEmployees(){
      this.filteredOptionsTS = this.empForm.controls['ThirdSignatory'].valueChanges
      .pipe(
        startWith(''),
-       map(value => typeof value === 'string' ? value : value? value.UserName:""),
+       map(value => typeof value === 'string' ? value : value? value.FirstName:""),
        map(name => name ? this._filterTD(name) : this.employeeThirdSigData.slice())
      );
 
      this.filteredOptionsDR = this.empForm.controls['DirectReports'].valueChanges
      .pipe(
        startWith(''),
-       map(value => typeof value === 'string' ? value :  value? value.UserName:""),
+       map(value => typeof value === 'string' ? value :  value? value.FirstName:""),
        map(name => name ? this._filterDR(name) : this.employeeDirReportData.slice())
      );
 
      this.filteredOptions = this.empForm.controls['CopiesTo'].valueChanges
      .pipe(
        startWith(''),
-       map(value => typeof value === 'string' ? value :  value? value.UserName:""),
+       map(value => typeof value === 'string' ? value :  value? value.FirstName:""),
        map(name => name ? this._filter(name) : this.employeeDropDownData.slice())
      );
     
     this.employeeData=c.map(function (row) {
       
      
-     return  {Name:row.UserName
+     return  {Name:row.FirstName+' '+row.LastName
         ,Title:row.Title
         ,PhoneNumber:row.PhoneNumber
         ,IsActive:row.IsActive==true?"Yes":"No"
@@ -347,6 +354,10 @@ getEmployees(){
 
 
 submitCreateEmployee(){
+
+  if (!this.empForm.valid) {
+      return;    
+    }
 
   this.empForm.patchValue({IsSubmit: 'true' });
   this.saveEmployee();
@@ -370,32 +381,77 @@ saveEmployee(){
   
   if (this.currentAction=='edit') {
     this.perfApp.requestBody._id=this.currentRowItem._id; 
-    this.perfApp.requestBody.UpdatedBy='5f5929f56c16e542d823247b'
+    this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
   }else{
-    this.perfApp.requestBody.CreatedBy='5f5929f56c16e542d823247b'
-    this.perfApp.requestBody.UpdatedBy='5f5929f56c16e542d823247b'
-    this.perfApp.requestBody.ParentUser='5f5929f56c16e542d823247b'
+    this.perfApp.requestBody.CreatedBy=this.loginUser._id;
+    this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
+    this.perfApp.requestBody.ParentUser=this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id;
+    this.perfApp.requestBody.IgnoreEvalAdminCreated=false;
   }
   
-  
+  this.callEmpApi();
+ 
+}
+
+callEmpApi(){
+
+if(!this.perfApp.requestBody.ThirdSignatory) delete this.perfApp.requestBody.ThirdSignatory;
+if(!this.perfApp.requestBody.CopiesTo) delete this.perfApp.requestBody.CopiesTo;
+if(!this.perfApp.requestBody.DirectReports) delete this.perfApp.requestBody.DirectReports;
+
   this.perfApp.CallAPI().subscribe(c=>{
 
-if (c.message==Constants.SuccessText) {
-  
-  this.snack.success(this.translate.instant(`Employee ${this.currentAction=='create'?'Added':'Updated'}  Succeesfully`));
-  this.getEmployees();
-  this.closeForm();
-  // this.showSpinner = false;
+    if (c.message==Constants.SuccessText) {
+      
+      this.snack.success(this.translate.instant(`Employee ${this.currentAction=='create'?'Added':'Updated'}  Succeesfully`));
+      this.getEmployees();
+      this.closeForm();
+      // this.showSpinner = false;
+    }
+    
+      }, error => {
+        if (error.error.message === Constants.EvaluationAdminNotFound) {
+          this.openEvaluationAdminNotFoundDialog()
+        }else{
+          this.snack.error(this.translate.instant(error.error.message));
+    
+        } 
+    
+    
+      });  
+
 }
 
-  }, error => {
-    if (error.error.message === Constants.PhoneAlreadyExist) {
-      this.snack.error(this.translate.instant(Constants.PhoneAlreadyExist));
-     // this.openDuplicateSessionDialog()
-    } 
-  });  
-}
 
+ /**To alert user for duplicate sessions */
+ openEvaluationAdminNotFoundDialog() {
+  this.alert.Title = "Secure Alert";
+  this.alert.Content = "We found that Evaluation Administrator not created. Do you want to continue ?";
+  this.alert.ShowCancelButton = true;
+  this.alert.ShowConfirmButton = true;
+  this.alert.CancelButtonText = "Cancel";
+  this.alert.ConfirmButtonText = "Continue";
+
+
+  const dialogConfig = new MatDialogConfig()
+  dialogConfig.disableClose = true;
+  dialogConfig.autoFocus = true;
+  dialogConfig.data = this.alert;
+  dialogConfig.height = "300px";
+  dialogConfig.maxWidth = '40%';
+  dialogConfig.minWidth = '40%';
+
+
+  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+  dialogRef.afterClosed().subscribe(resp => {
+   if (resp=='yes') {
+    this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+    this.callEmpApi();
+   } else {
+     
+   }
+  })
+}
 
 getAllDepartments(){
   this.perfApp.route="app";

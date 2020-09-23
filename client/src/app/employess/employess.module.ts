@@ -13,6 +13,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { CountryStateCityComponent } from './country-state-city/country-state-city.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 
 
@@ -25,6 +26,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     ReactiveFormsModule,    
     MatAutocompleteModule,
     MatDatepickerModule,
+    TooltipModule.forRoot(),
       MatInputModule,
       HttpClientModule,
             FormsModule,

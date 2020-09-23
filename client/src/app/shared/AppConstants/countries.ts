@@ -2,6 +2,33 @@ export const countriesData =
 
 [
     {
+        "id": 39,
+        "name": "Canada",
+        "iso3": "CAN",
+        "iso2": "CA",
+        "phone_code": "1",
+        "capital": "Ottawa",
+        "currency": "CAD",
+        "native": "Canada",
+        "emoji": "🇨🇦",
+        "emojiU": "U+1F1E8 U+1F1E6"
+    },
+
+    {
+        "id": 233,
+        "name": "United States",
+        "iso3": "USA",
+        "iso2": "US",
+        "phone_code": "1",
+        "capital": "Washington",
+        "currency": "USD",
+        "native": "United States",
+        "emoji": "🇺🇸",
+        "emojiU": "U+1F1FA U+1F1F8"
+    },
+    
+    
+    {
         "id": 1,
         "name": "Afghanistan",
         "iso3": "AFG",
@@ -457,18 +484,7 @@ export const countriesData =
         "emoji": "🇨🇲",
         "emojiU": "U+1F1E8 U+1F1F2"
     },
-    {
-        "id": 39,
-        "name": "Canada",
-        "iso3": "CAN",
-        "iso2": "CA",
-        "phone_code": "1",
-        "capital": "Ottawa",
-        "currency": "CAD",
-        "native": "Canada",
-        "emoji": "🇨🇦",
-        "emojiU": "U+1F1E8 U+1F1E6"
-    },
+   
     {
         "id": 40,
         "name": "Cape Verde",
@@ -2797,18 +2813,7 @@ export const countriesData =
         "emoji": "🇬🇧",
         "emojiU": "U+1F1EC U+1F1E7"
     },
-    {
-        "id": 233,
-        "name": "United States",
-        "iso3": "USA",
-        "iso2": "US",
-        "phone_code": "1",
-        "capital": "Washington",
-        "currency": "USD",
-        "native": "United States",
-        "emoji": "🇺🇸",
-        "emojiU": "U+1F1FA U+1F1F8"
-    },
+   
     {
         "id": 234,
         "name": "United States Minor Outlying Islands",

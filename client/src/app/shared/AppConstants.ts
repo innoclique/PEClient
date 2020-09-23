@@ -5,4 +5,5 @@ export const Constants = {
     InvalidCredentials:"Invalid Credentials",
     SuccessText:"Success",
     PhoneAlreadyExist:"Employee Phone Number Already Exist",
+    EvaluationAdminNotFound:"Evaluation Administrator Not Found",
   };

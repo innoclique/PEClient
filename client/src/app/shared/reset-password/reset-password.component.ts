@@ -139,15 +139,15 @@ export class ResetPasswordComponent implements OnInit {
     }
     try {
       this.showSpinner = true;
-      const user = this.authService.getLSObject('user');
+      const user = this.authService.getCurrentUser();
 
       const password = this.resetForm.get('password').value;
       const oldPassword = this.resetForm.get('oldPassword').value;
-      const resetModel = {userId : user.ID, password: password,oldPassword:oldPassword};
+      const resetModel = {userId : user._id, password: password,oldPassword:oldPassword};
       await this.authService.updatePassword(resetModel).subscribe(x => {
         
         this.snack.success("Password updated successfully.")
-        this.router.navigate(['first']);
+        this.router.navigate(['dashboard']);
       }, error => {
         if (error.error.message === Constants.InvalidOldPassword) {
          this.snack.error(error.error.message)

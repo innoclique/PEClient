@@ -8,7 +8,7 @@
 }
 
 .mat-dialog-container {
-    padding-top: 2 !important;
+    padding: 0 !important;
 }
 
 dialog-overview-example-dialog.ng-star-inserted > div {
@@ -19,8 +19,14 @@ dialog-overview-example-dialog.ng-star-inserted > div {
 .mat-dialog-actions {
     margin-right: 0 !important;
     margin-left: 0 !important;
+
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+
 }
 
-.mat-dialog-title {
-  margin-top: 15px !important;
-}
+ .mat-dialog-title {
+  margin-top: 0px !important;
+} 

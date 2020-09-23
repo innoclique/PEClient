@@ -365,7 +365,7 @@
                       >
            <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn" >
             <mat-option *ngFor="let option of filteredOptionsDR | async" [value]="option">
-              {{option.UserName}}
+              {{option.FirstName}}
             </mat-option>
            </mat-autocomplete>
 
@@ -392,7 +392,7 @@
                   #auto1="matAutocomplete" 
                   [displayWith]="displayFn">
                   <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                    {{option.UserName}}
+                    {{option.FirstName}}
                   </mat-option>
                  </mat-autocomplete>
                  <!-- <div *ngIf="f.CopiesTo.touched && f.CopiesTo.invalid" class="invalid-feedback">
@@ -405,7 +405,7 @@
              
               <div class="col-md-4">
                   <div class="form-group">
-                      <div class="input-group">
+                      <div class="input-group"  tooltip="Application Role. tooltip">
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">Application Role</span>
                         </div>
@@ -460,7 +460,7 @@
                         [matAutocomplete]="auto2">
                  <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn" >
                   <mat-option *ngFor="let option of filteredOptionsTS | async" [value]="option">
-                    {{option.UserName}}
+                    {{option.FirstName}}
                   </mat-option>
                  </mat-autocomplete>
                        </div>
@@ -496,7 +496,7 @@
       </div>
       <div *ngIf="currentAction != 'view'" class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="addEmployee.hide();closeForm()">Cancel</button>
-        <button *ngIf="!currentRowItem?.IsSubmit" type="button" (click)="createEmployee()" class="btn btn-primary">Save changes</button>
+        <!-- <button *ngIf="!currentRowItem?.IsSubmit" type="button" (click)="createEmployee()" class="btn btn-primary">Save changes</button> -->
         <button type="button" [disabled]="!empForm.valid" (click)="submitCreateEmployee()" class="btn btn-primary">
           {{currentAction == 'create'?'Submit':'Update'}}</button>
       </div>
