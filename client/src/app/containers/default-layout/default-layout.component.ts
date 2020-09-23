@@ -16,6 +16,7 @@ export class DefaultLayoutComponent {
     private router: Router,
     
     public translate: TranslateService) {
+      this.navItems=JSON.parse( localStorage.getItem('NavigationMenu'));
       translate.addLangs(['en', 'fr']);
       translate.setDefaultLang('en'); 
      }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { logging } from 'protractor';
-import { Observable, throwError, of } from 'rxjs';
+import { Observable, throwError, of, BehaviorSubject } from 'rxjs';
 // import { environment } from 'src/environments/environment';
 import { map, retry, catchError, tap, mapTo } from 'rxjs/operators';
 import { UserModel } from '../Models/User';
@@ -14,6 +14,8 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
   currentUser: any ;
+  navigationMenu:any;
+  isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
   constructor(private Http: HttpClient) { }
   FindEmail(Email): Observable<UserModel> {
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/GetUserByEmail', { Email })
@@ -45,8 +47,10 @@ export class AuthService {
         if (UserModel && UserModel.AccessToken) {          
           localStorage.setItem('UserName', UserModel.UserName);
           localStorage.setItem('RefreshToken', UserModel.RefreshToken);
-          localStorage.setItem('role', UserModel.Role);
+          localStorage.setItem('Role', UserModel.Role);
           localStorage.setItem("User", JSON.stringify(UserModel.User));
+          localStorage.setItem("NavigationMenu", JSON.stringify(UserModel.NavigationMenu));
+          localStorage.setItem("Permissions", JSON.stringify(UserModel.Permissions));
           this.setToken(UserModel.AccessToken);
           this.currentUser = UserModel;
         }
@@ -163,4 +167,15 @@ getCurrentUser(){
     return throwError(errormgs);
   }
 
+  public logout() {
+    this.isLoginSubject.next(false);
+  }
+  public hasToken() {
+    return !!localStorage.getItem('USER');
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.isLoginSubject.asObservable();
+  }
+  
 }
