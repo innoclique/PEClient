@@ -29,7 +29,7 @@ export class ClientSetupComponent implements OnInit {
 
   };
   industries: any;
-  constructor(private dialog: MatDialog,
+  constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
     private notification: NotificationService,

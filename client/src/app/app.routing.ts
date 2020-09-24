@@ -86,6 +86,10 @@ export const routes: Routes = [
         loadChildren: () => import('./employess/employess.module').then(m => m.EmployessModule)
       },
       {
+        path: 'ea',
+        loadChildren: () => import('./views/evaluationadmin/evaluationadmin.module').then(m => m.EvaluationadminModule)
+      },
+      {
         path: 'a',
         data: {
           title: 'Clients'

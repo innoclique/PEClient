@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { EmployessRoutingModule } from './employess-routing.module';
-import { CreateEmployeeComponent } from './create-employee/create-employee.component';
+
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,24 +18,24 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 
 @NgModule({
-  declarations: [CreateEmployeeComponent, EmployeeListComponent, CountryStateCityComponent],
+  declarations: [ EmployeeListComponent, CountryStateCityComponent],
   imports: [
     CommonModule,
     EmployessRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule,    
+    ReactiveFormsModule,
     MatAutocompleteModule,
     MatDatepickerModule,
     TooltipModule.forRoot(),
-      MatInputModule,
-      HttpClientModule,
-            FormsModule,
+    MatInputModule,
+    HttpClientModule,
+    FormsModule,
     RouterModule,
     AgGridModule.withComponents([]),
     ModalModule.forRoot()
   ],
   exports: [
     ModalModule
-]
+  ]
 })
 export class EmployessModule { }

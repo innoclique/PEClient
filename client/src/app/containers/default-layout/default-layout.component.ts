@@ -13,8 +13,7 @@ export class DefaultLayoutComponent {
   public sidebarMinimized = false;
   public navItems = navItems;
   constructor(public authService: AuthService,
-    private router: Router,
-    
+    private router: Router,    
     public translate: TranslateService) {
       this.navItems=JSON.parse( localStorage.getItem('NavigationMenu'));
       translate.addLangs(['en', 'fr']);

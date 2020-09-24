@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { ThemeService } from '../../services/theme.service';
-import { NotificationService } from '../../services/notification.service';
-import { PerfAppService } from '../../services/perf-app.service';
+import { ThemeService } from '../../../services/theme.service';
+import { NotificationService } from '../../../services/notification.service';
+import { PerfAppService } from '../../../services/perf-app.service';
 import { TranslateService } from '@ngx-translate/core';
-import { CustomValidators } from '../../shared/custom-validators';
+import { CustomValidators } from '../../../shared/custom-validators';
 
 @Component({
-  selector: 'app-create-employee1',
+  selector: 'app-create-employee',
   templateUrl: './create-employee.component.html',
   styleUrls: ['./create-employee.component.css']
 })
-export class CreateEmployee1Component implements OnInit {
+export class CreateEmployeeComponent implements OnInit {
 
 
   public empForm: FormGroup;
