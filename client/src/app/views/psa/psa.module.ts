@@ -8,6 +8,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CreateClientComponent } from './create-client/create-client.component';
 import { EmployessModule } from '../../employess/employess.module';
+import { EvalCommonModule } from '../common/common.module';
 
 export const projectRoutes: Routes = [
   
@@ -44,7 +45,7 @@ export const projectRoutes: Routes = [
     RouterModule.forChild(projectRoutes),
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
-    EmployessModule
+    EvalCommonModule
   ]
 })
 export class PSAModule {

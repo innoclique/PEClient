@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -43,6 +43,8 @@ export class CreateClientComponent implements OnInit {
 
 
   }
+  public monthList=["January","February","March","April","May","June","July",
+  "August","September","October","November","December"]
   countyFormReset: boolean;
   cscData:any=null;
   onCSCSelect(data){
@@ -61,7 +63,9 @@ export class CreateClientComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.getIndustries();
-    this.sameAsContactChange()
+    this.sameAsContactChange();
+    this.mandateStartMonth();
+    this.setEndMonth();
   }
   initForm() {
     this.clientForm = this.formBuilder.group({
@@ -133,14 +137,16 @@ export class CreateClientComponent implements OnInit {
       CoachingReminder: ['', []],
       EvaluationModels: ['', [Validators.required]],
       EvaluationPeriod: ['', [Validators.required]],
-      EvaluationDuration: ['', [Validators.required]],
-      EvaluationMaximumDays: ['', []],
+           
       EmployeeBufferCount: ['', []],
       DownloadBufferDays: ['', []],
-      IsActive: ['', []]
+      IsActive: ['', []],
+      StartMonth:['', []],
+      EndMonth:['',[]]
 
     });
   }
+   
   get f() {
     return this.clientForm.controls;
   }
@@ -152,7 +158,7 @@ export class CreateClientComponent implements OnInit {
     return this.clientForm.controls[controlName].hasError(errorName);
   }
 
-  public createClient = () => {
+  public createClient = () => {    
     this.isFormSubmitted = true;
     if (!this.clientForm.valid) {
       return;
@@ -194,6 +200,46 @@ export class CreateClientComponent implements OnInit {
           this.enableFields(contactForm);
           this.addValidators(contactForm);
         }
+      });
+  }
+  mandateStartMonth() {
+    this.clientForm.get('EvaluationPeriod').valueChanges
+      .subscribe(value => {
+        debugger
+        if (value === null || value === undefined) {
+          return;
+        }
+       
+        if (value==='FiscalYear') {
+         this.clientForm.controls['StartMonth'].setValidators(Validators.required)
+         
+          this.clientForm.controls['EndMonth'].setValue('')
+          this.clientForm.controls['StartMonth'].enable()
+        }
+        else {
+          this.clientForm.controls['StartMonth'].setValidators(null)
+          this.clientForm.controls['StartMonth'].disable()
+          this.clientForm.controls['StartMonth'].setValue('1')
+          
+          this.clientForm.controls['EndMonth'].setValue('December')
+        }
+      });
+  }
+  setEndMonth() {
+    this.clientForm.get('StartMonth').valueChanges
+      .subscribe(value => {        
+        if (value === null || value === undefined) {
+          return;
+        }
+       if(value==="1"){
+        const monthName=this.monthList[11];
+        this.clientForm.controls['EndMonth'].setValue(monthName);
+       }else{
+        const monthName=this.monthList[value-2];
+        this.clientForm.controls['EndMonth'].setValue(monthName);
+       }
+          
+        
       });
   }
 

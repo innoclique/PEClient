@@ -666,6 +666,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-body">
         <form [formGroup]="clientForm" novalidate="" class="ng-untouched ng-pristine ng-valid">
 
+
           <div class="form-group row">
             <div class="col-md-6">
               <div class="form-group">
@@ -673,9 +674,8 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                   <div class="input-group-prepend">
                     <span class="input-group-text redStar">Organization Name</span>
                   </div>
-                  <input readonly max="500" class="form-control" type="text"
-                    formControlName="Name" name="Name"
-                    required>
+                  <input max="500" class="form-control" type="text" formControlName="Name" name="Name"
+                    [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Name.errors }" required>
                   <div *ngIf=" isFormSubmitted  && f.Name.errors" class="invalid-feedback">
                     <div *ngIf="f.Name.errors.required">Organization Name is required</div>
                     <div *ngIf="f.Name.errors.minlength">Organization Name must be at least 2 characters </div>
@@ -693,11 +693,10 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                   <div class="input-group-prepend">
                     <span class="input-group-text redStar">Select Industry</span>
                   </div>
-                  <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Industry.errors }" formControlName="Industry"
-                    class="form-control">
-                    <!-- <option value="" disabled selected>Select Industry</option> -->
+                  <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Industry.errors }"
+                    formControlName="Industry" class="form-control">
+                    <option value="" disabled selected>Select Industry</option>
                     <option *ngFor="let i of industries" [value]="i.Code">{{i.Name}}</option>
-                    
                   </select>
                   <div *ngIf=" isFormSubmitted &&   f.Industry.errors" class="invalid-feedback">
                     <div *ngIf="f.Industry.errors.required">Industry is required</div>
@@ -729,62 +728,6 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               </div>
             </div>
             <div class="col-md-4">
-              <div class="form-group">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Country</span>
-                  </div>
-                  <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Country.errors }" formControlName="Country"
-                    class="form-control">
-                    <option value="0">Please select</option>
-                    <option value="1">Canada</option>
-                    <option value="2">USA</option>
-                    <option value="3">Option #3</option>
-                  </select>
-                  <div *ngIf=" isFormSubmitted &&  f.Country.errors" class="invalid-feedback">
-                    <div *ngIf="f.Country.errors.required">Country is required</div>
-
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text redStar">City</span>
-                  </div>
-                  <select [ngClass]="{ 'is-invalid': isFormSubmitted &&  f.City.errors }" formControlName="City"
-                    class="form-control">
-                    <option value="0">Please select</option>
-                    <option value="1">Option #1</option>
-                    <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
-                  </select>
-                  <div *ngIf=" isFormSubmitted && f.City.errors" class="invalid-feedback">
-                    <div *ngIf="f.City.errors.required">City is required</div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text redStar">State</span>
-                  </div>
-                  <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.State.errors }" formControlName="State"
-                    class="form-control">
-                    <option value="0">Please select</option>
-                    <option value="1">Option #1</option>
-                    <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
-                  </select>
-                  <div *ngIf=" isFormSubmitted && f.State.errors" class="invalid-feedback">
-                    <div *ngIf="f.State.errors.required">State is required</div>
-                  </div>
-                </div>
-              </div>
 
               <div class="form-group">
                 <div class="input-group">
@@ -801,6 +744,14 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                 </div>
               </div>
             </div>
+          </div>
+          <div class="form-group row">
+
+            <div class="col-md-12">
+              <app-csc [reset]="countyFormReset" [CSCData]='cscData' (onSelect)="onCSCSelect($event)">
+              </app-csc>
+            </div>
+
 
 
           </div>
@@ -811,13 +762,13 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                   <div class="input-group-prepend">
                     <span class="input-group-text redStar">Phone</span>
                   </div>
-                  <input readonly maxlength="12" type="text" class="form-control"
+                  <input maxlength="12" type="text" class="form-control"
                     [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Phone.errors }" formControlName="Phone" required>
                   <div *ngIf="isFormSubmitted  && f.Phone.errors" class="invalid-feedback">
                     <div *ngIf="f.Phone.errors.required">Phone Number is required</div>
-                    
+
                     <div *ngIf="f.Phone.errors.pattern">Phone Number must be 10 digit Number.</div>
-                    
+
 
                   </div>
                 </div>
@@ -840,8 +791,9 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                   <div class="input-group-prepend">
                     <span class="input-group-text redStar">Email</span>
                   </div>
-                  <input readonly class="form-control" type="text" [ngClass]="{ 'is-invalid':isFormSubmitted && f.Email.errors}"
-                    formControlName="Email" name="Email" required>
+                  <input class="form-control" type="text"
+                    [ngClass]="{ 'is-invalid':isFormSubmitted && f.Email.errors}" formControlName="Email" name="Email"
+                    required>
                   <div *ngIf="isFormSubmitted   && f.Email.errors" class="invalid-feedback">
                     <div *ngIf="f.Email.errors.required">Email is required</div>
                     <div *ngIf="f.Email.errors.email">Email Must be a valid email address </div>
@@ -874,13 +826,14 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               <label class="col-form-label redStar" for="inline-radios">Usage Type:</label>
 
               <label class="radio-inline">
-                <input formControlName="UsageType"  name="UsageType"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="license"> License
+                <input formControlName="UsageType" name="UsageType"
+                  [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="license">
+                License
               </label>
               <label class="form-control" class="radio-inline">
-                <input formControlName="UsageType"  name="UsageType"
-                [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
-                value="countofEmployees"> # of Employees
+                <input formControlName="UsageType" name="UsageType"
+                  [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
+                  value="countofEmployees"> # of Employees
               </label>
 
               <div *ngIf="isFormSubmitted && f.UsageType.errors" class="invalid-feedback">
@@ -928,7 +881,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Middle Name</span>
+                    <span class="input-group-text ">Middle Name</span>
                   </div>
                   <input type="text" class="form-control" formControlName="AdminMiddleName">
                 </div>
@@ -956,7 +909,8 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                     <span class="input-group-text redStar">Phone</span>
                   </div>
                   <input maxlength="12" class="form-control" type="text"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.AdminPhone.errors }" formControlName="AdminPhone">
+                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.AdminPhone.errors }"
+                    formControlName="AdminPhone">
                   <div *ngIf="isFormSubmitted && f.AdminPhone.errors" class="invalid-feedback">
                     <div *ngIf="f.AdminPhone.errors.required">Admin Phone is required</div>
                     <div *ngIf="f.AdminPhone.errors.pattern">Admin Phone Number must be 10 digit Number.</div>
@@ -971,7 +925,8 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                     <span class="input-group-text redStar">Email</span>
                   </div>
                   <input class="form-control" type="text"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted &&  f.AdminEmail.errors }" formControlName="AdminEmail">
+                    [ngClass]="{ 'is-invalid': isFormSubmitted &&  f.AdminEmail.errors }"
+                    formControlName="AdminEmail">
                   <div *ngIf="isFormSubmitted && f.AdminEmail.errors" class="invalid-feedback">
                     <div *ngIf="f.AdminEmail.errors.required">Admin Email is required</div>
                   </div>
@@ -1012,7 +967,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Middle Name</span>
+                    <span class="input-group-text ">Middle Name</span>
                   </div>
                   <input type="text" class="form-control" formControlName="ContactPersonMiddleName">
                 </div>
@@ -1046,7 +1001,8 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                   <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors"
                     class="invalid-feedback">
                     <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is required</div>
-                    <div *ngIf="f.ContactPersonPhone.errors.pattern">Contact Person Phone Number must be 10 digit Number.</div>
+                    <div *ngIf="a.ContactPersonPhone.errors.pattern">Contact Person Phone Number must be 10 digit
+                      Number.</div>
                   </div>
                 </div>
               </div>
@@ -1083,14 +1039,14 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                     <span class="input-group-text">Coaching Reminder</span>
                   </div>
                   <select formControlName="CoachingReminder" class="form-control">
-                    <option value="" disabled selected>Coaching Remainder</option> 
-                    
+                    <option value="" disabled selected>Coaching Remainder</option>
+
                     <option value="30">30</option>
                     <option value="45">45</option>
                     <option value="60">60</option>
                     <option value="75">75</option>
                     <option value="90">90</option>
-                  </select>                 
+                  </select>
 
                   <div class="input-group-append">
                     <span class="input-group-text">days</span>
@@ -1098,33 +1054,15 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Evaluation Period</span>
-                  </div>
-                  <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.EvaluationPeriod.errors }"
-                    formControlName="EvaluationPeriod" class="form-control" class="form-control">
-                    <option value="0">Please select</option>
-                    <option value="1">Option #1</option>
-                    <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
-                  </select>
-                  <div *ngIf="isFormSubmitted && f.EvaluationPeriod.errors" class="invalid-feedback">
-                    <div *ngIf="f.EvaluationPeriod.errors.required">Evalution Period is required</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
             <div class="col-md-4">
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text redStar">Select Model</span>
                   </div>
-                  <select [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }" class="form-control"
-                    formControlName="EvaluationModels">
+                  <select [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }"
+                    class="form-control" formControlName="EvaluationModels">
                     <option value="0">Please select</option>
                     <option value="1">Option #1</option>
                     <option value="2">Option #2</option>
@@ -1139,40 +1077,65 @@ aria-labelledby="myModalLabel" aria-hidden="true">
           </div>
 
           <div class="form-group row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Evaluation Duration</span>
+                    <span class="input-group-text redStar">Evaluation Period</span>
                   </div>
-                  <select [ngClass]="{ 'is-invalid':isFormSubmitted  &&  f.EvaluationDuration.invalid }"
-                    formControlName="EvaluationDuration" class="form-control" id="select1" name="select1">
-                    <option value="0">Please select</option>
-                    <option value="1">Option #1</option>
-                    <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
+                  <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.EvaluationPeriod.errors }"
+                    formControlName="EvaluationPeriod" class="form-control" class="form-control">
+
+                    <option value="FiscalYear">Fiscal Year</option>
+                    <option value="CalendarYear">Calendar Year</option>
+
                   </select>
-                  <div *ngIf="isFormSubmitted && f.EvaluationDuration.errors" class="invalid-feedback">
-                    <div *ngIf="f.EvaluationDuration.errors.required">Evalution Duration is required</div>
+                  <div *ngIf="isFormSubmitted && f.EvaluationPeriod.errors" class="invalid-feedback">
+                    <div *ngIf="f.EvaluationPeriod.errors.required">Evalution Period is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text redStar">Start Month</span>
+                  </div>
+                  <select [disabled]="f.EvaluationPeriod.value==='CalendarYear'" [ngClass]="{ 'is-invalid':isFormSubmitted  &&  f.StartMonth.invalid }"
+                    formControlName="StartMonth" class="form-control" id="StartMonth" name="StartMonth">
+                   
+                    <option  value='1'>Janaury</option>
+                    <option value='2'>February</option>
+                    <option value='3'>March</option>
+                    <option value='4'>April</option>
+                    <option value='5'>May</option>
+                    <option value='6'>June</option>
+                    <option value='7'>July</option>
+                    <option value='8'>August</option>
+                    <option value='9'>September</option>
+                    <option value='10'>October</option>
+                    <option value='11'>November</option>
+                    <option value='12'>December</option>
+                  </select>
+                  <div *ngIf="isFormSubmitted && f.StartMonth.errors" class="invalid-feedback">
+                    <div *ngIf="f.StartMonth.errors.required">Start Month is required</div>
                   </div>
 
                 </div>
               </div>
             </div>
+
             <div class="col-md-4">
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Days</span>
+                    <span class="input-group-text redStar">End Month</span>
                   </div>
-                  <select formControlName="EvaluationMaximumDays" class="form-control" id="select1" name="select1">
-                    <option value="0">maximum</option>
-                  </select>
-
-
+                  <input readonly formControlName="EndMonth">
                 </div>
               </div>
-
             </div>
 
           </div>
@@ -1185,9 +1148,20 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                   </div>
                   <select formControlName="EmployeeBufferCount" class="form-control" class="form-control">
                     <option value="0">Please select</option>
-                    <option value="1">Option #1</option>
-                    <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                    <option value="45">45</option>
+                    <option value="50">50</option>
                   </select>
 
                 </div>
@@ -1201,9 +1175,12 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                   </div>
                   <select formControlName="DownloadBufferDays" class="form-control" class="form-control">
                     <option value="0">Please select</option>
-                    <option value="1">Option #1</option>
-                    <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
                   </select>
                 </div>
               </div>
@@ -1212,7 +1189,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               <label class="col-form-label redStar" for="inline-radios">Ative:</label>
 
               <label class="radio-inline">
-                <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
+                <input [checked]="true" [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
                   formControlName="IsActive" type="radio" name="IsActive" [value]="true"> Yes
               </label>
               <label class="form-control" class="radio-inline">
@@ -1221,8 +1198,8 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               </label>
 
               <!-- <div *ngIf="isFormSubmitted && f.IsActive.errors" class="invalid-feedback">
-                <div *ngIf="f.IsActive.errors.required">Client Type is required</div>
-              </div> -->
+        <div *ngIf="f.IsActive.errors.required">Client Type is required</div>
+      </div> -->
 
             </div>
           </div>
