@@ -90,7 +90,7 @@ export const routes: Routes = [
         loadChildren: () => import('./views/evaluationadmin/evaluationadmin.module').then(m => m.EvaluationadminModule)
       },
       {
-        path: 'a',
+        path: 'psa',
         data: {
           title: 'Clients'
         },

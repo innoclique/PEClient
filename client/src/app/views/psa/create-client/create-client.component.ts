@@ -9,12 +9,14 @@ import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { CustomValidators } from '../../../shared/custom-validators';
+
 @Component({
-  selector: 'app-client-setup',
-  templateUrl: './client-setup.component.html',
-  styleUrls: ['./client-setup.component.css']
+  selector: 'app-create-client',
+  templateUrl: './create-client.component.html',
+  styleUrls: ['./create-client.component.css']
 })
-export class ClientSetupComponent implements OnInit {
+export class CreateClientComponent implements OnInit {
+
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
@@ -30,7 +32,7 @@ export class ClientSetupComponent implements OnInit {
 
   };
   industries: any;
-  constructor(
+  constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
     private notification: NotificationService,
@@ -41,12 +43,22 @@ export class ClientSetupComponent implements OnInit {
 
 
   }
-  gotoCreate(){
-    this.router.navigate(['/client-setup'])
-  }
+  countyFormReset: boolean;
+  cscData:any=null;
+  onCSCSelect(data){
+    this.clientForm.patchValue({City:data.City.name});
+    this.clientForm.patchValue({Country:data.Country.name});
+    this.clientForm.patchValue({State:data.State.name});
+    var add=""
+     add= `${data.City.name?data.City.name+",":""}
+     ${data.State.name?data.State.name+",":""}
+      ${data.Country.name?data.Country.name:""}
+     `
+    //  if(data.City.name)
+    this.clientForm.patchValue({Address:add});
+    
+    }
   ngOnInit(): void {
-    this.getClients();
-
     this.initForm();
     this.getIndustries();
     this.sameAsContactChange()
@@ -148,62 +160,7 @@ export class ClientSetupComponent implements OnInit {
     this.saveClient();
   }
 
-
-
-  public columnDefs = [
-    {
-      headerName: 'Client', field: 'Name', sortable: true, filter: true,
-
-      cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
-    },
-    { headerName: 'Type', field: 'OrganizationType', sortable: true, filter: true },
-    { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
-    { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
-    { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
-    {
-      headerName: "Actions",
-      suppressMenu: true,
-      Sorting: false,
-      //width: 170,
-      cellRenderer: (data) => {
-        console.log('column data', data)
-        //if (data.data.ApprovalRecord.status === 'ACTIVE') {
-        return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-  font-size: 17px;"   data-action-type="suspendorg" ></i>`
-        //}
-      }
-
-
-    }
-  ];
-
-  public clientData: any
-  getClients() {
-    this.perfApp.route = "app";
-    this.perfApp.method = "GetAllOrganizations",
-      this.perfApp.requestBody = { 'id': '5f5929f56c16e542d823247b' }
-    this.perfApp.CallAPI().subscribe(c => {
-      debugger
-      console.log('lients data', c);
-      if (c && c.length > 0) {
-
-      }
-      //this.clientData=c;
-      //this.clientData.push()
-      this.clientData = c.map(function (row) {
-
-        return {
-          Name: row.Name
-          , OrganizationType: row.OrganizationType
-          , Industry: row.Industry
-          , UsageType: row.UsageType
-          , ContactName: row.ContactName
-          , RowData: row
-        }
-      }
-      )
-    })
-  }
+  
   saveClient() {
     const organization=this.prepareOrgData('Create');
     this.perfApp.route = "app";
@@ -215,7 +172,6 @@ export class ClientSetupComponent implements OnInit {
       this.errorOnSave = false;
       this.errorMessage = "";
     }, error => {
-
       this.errorOnSave = true;
       this.errorMessage = error.error ? error.error.message : error.message;
       //this.notification.error(error.error.message)
@@ -307,8 +263,8 @@ export class ClientSetupComponent implements OnInit {
     ])]
   }
   resetForm() {
-    this.closeModal.nativeElement.click()    
-    this.orgViewRef.hide();
+    //this.closeModal.nativeElement.click()    
+    //this.orgViewRef.hide();
     this.isFormSubmitted = false;
     this.clientForm.reset();
     this.clientForm.setErrors(null);
@@ -328,37 +284,8 @@ export class ClientSetupComponent implements OnInit {
 
     }
   }
-  public onRowClicked(e) {
-    if (e.event.target !== undefined) {
-      let data = e.data;
-      this.currentRowItem = data.RowData;
-
-      let actionType = e.event.target.getAttribute("data-action-type");
-      switch (actionType) {
-        case "orgView":
-          return this.openOrgView();
-        case "suspendorg":
-        return this.suspendOrg();
-        case "rejectRequest":
-        //return this.rejectRequest(data);
-      }
-    }
-  }
-  suspendOrg(){
-    
-  }
-  openOrgView() {
-    this.orgViewRef = this.modalService.show(this.orgView, this.config);
-    this.orgViewRef.setClass('modal-xlg');
-    const cr = this.currentRowItem;
-    this.setValues(this.clientForm, cr);
-
-  }
-  hideorgView() {
-    this.orgViewRef.hide();
-    this.emptyForm(this.clientForm);
-  }
-
+ 
+ 
   getIndustries() {
     this.perfApp.route = "shared";
     this.perfApp.method = "GetIndustries",
@@ -427,5 +354,5 @@ return organization;
     }
     return organization;
   }
-  
+
 }

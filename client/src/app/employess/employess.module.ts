@@ -14,12 +14,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { EvalCommonModule } from '../views/common/common.module';
-import { CreateEmployee1Component } from './create-employee/create-employee.component';
+//import { CreateEmployee1Component } from './create-employee/create-employee.component';
 
 
 
 @NgModule({
-  declarations: [ EmployeeListComponent,CreateEmployee1Component],
+  declarations: [ EmployeeListComponent],
   imports: [
     CommonModule,
     EmployessRoutingModule,
@@ -38,6 +38,6 @@ import { CreateEmployee1Component } from './create-employee/create-employee.comp
   ],
   exports: [
     ModalModule
-  ]
+]
 })
 export class EmployessModule { }

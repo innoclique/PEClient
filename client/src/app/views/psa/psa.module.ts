@@ -6,6 +6,8 @@ import { CustomMaterialModule } from '../../custom-material/custom-material.modu
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AgGridModule } from 'ag-grid-angular';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { CreateClientComponent } from './create-client/create-client.component';
+import { EmployessModule } from '../../employess/employess.module';
 
 export const projectRoutes: Routes = [
   
@@ -16,19 +18,24 @@ export const projectRoutes: Routes = [
   children: [
     {
       path: '',
-      redirectTo: 'clientsetup'
+      redirectTo: 'list'
     },
-    { path: 'clientsetup', component: ClientSetupComponent,data: {
+    { path: 'list', component: ClientSetupComponent,data: {
       title: 'View All'
+    }},
+    {
+      path:'client-setup',
+      component:CreateClientComponent,
+      data:{title:'Create'}
     }
-  }
+  
   ]
 },
   
 ];
 
 @NgModule({
-  declarations: [ClientSetupComponent],
+  declarations: [ClientSetupComponent, CreateClientComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -36,7 +43,8 @@ export const projectRoutes: Routes = [
     CustomMaterialModule,
     RouterModule.forChild(projectRoutes),
     AgGridModule.withComponents([]),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    EmployessModule
   ]
 })
 export class PSAModule {
