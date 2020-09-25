@@ -12,10 +12,12 @@ import { TranslateService } from '@ngx-translate/core';
 export class DefaultLayoutComponent {
   public sidebarMinimized = false;
   public navItems = navItems;
+  public user:any;
   constructor(public authService: AuthService,
     private router: Router,    
     public translate: TranslateService) {
       this.navItems=JSON.parse( localStorage.getItem('NavigationMenu'));
+      this.user=JSON.parse( localStorage.getItem('User'));
       translate.addLangs(['en', 'fr']);
       translate.setDefaultLang('en'); 
      }

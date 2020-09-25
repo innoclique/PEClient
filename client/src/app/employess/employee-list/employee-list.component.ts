@@ -118,7 +118,7 @@ export class EmployeeListComponent implements OnInit {
       ],
 
       PhoneNumber: [this.empDetails.PhoneNumber?this.empDetails.PhoneNumber:'', Validators.compose([
-        Validators.required, Validators.minLength(6),
+         Validators.minLength(6),
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       ExtNumber: [this.empDetails.ExtNumber?this.empDetails.ExtNumber:'', Validators.compose([
@@ -186,7 +186,7 @@ export class EmployeeListComponent implements OnInit {
     // {headerName: 'IsDraft', field: 'IsDraft',  width: 120, sortable: true, filter: true },
     {headerName: 'IsActive', field: 'IsActive',  width: 120, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width: 80, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -360,6 +360,12 @@ submitCreateEmployee(){
 
   if (!this.empForm.valid) {
       return;    
+    }else{
+      if (!this.empForm.get('PhoneNumber').value &&  !this.empForm.get('AltPhoneNumber').value
+       && !this.empForm.get('MobileNumber').value) {
+        this.snack.error(this.translate.instant('Please provide at least one contact (PhoneNumber, AltPhoneNumber, MobileNumber )'));
+        return;    
+      }
     }
 
   this.empForm.patchValue({IsSubmit: 'true' });

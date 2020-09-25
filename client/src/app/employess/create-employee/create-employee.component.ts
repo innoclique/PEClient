@@ -108,7 +108,7 @@ export class CreateEmployee1Component implements OnInit {
       ],
 
       PhoneNumber: [this.empDetails.PhoneNumber?this.empDetails.PhoneNumber:'', Validators.compose([
-        Validators.required, Validators.minLength(6),
+         Validators.minLength(6),
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       ExtNumber: [this.empDetails.ExtNumber?this.empDetails.ExtNumber:'', Validators.compose([
@@ -157,6 +157,12 @@ export class CreateEmployee1Component implements OnInit {
 
     if (!this.empForm.valid) {
         return;    
+      }else{
+        if (!this.empForm.get('PhoneNumber').value &&  !this.empForm.get('AltPhoneNumber').value
+         && !this.empForm.get('MobileNumber').value) {
+          this.snack.error(this.translate.instant('Please provide at least one contact (PhoneNumber, AltPhoneNumber, MobileNumber )'));
+          return;    
+        }
       }
   
     this.empForm.patchValue({IsSubmit: 'true' });

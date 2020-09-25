@@ -44,3 +44,20 @@
 }
 
 
+.view-only {
+ pointer-events: none !important;
+
+}
+.user-info {
+    max-width: 100px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    vertical-align: top;
+    line-height: 15px;
+    position: relative;
+}
+
+

@@ -47,7 +47,8 @@
       <div class="modal-body">
         
        
-        <form [formGroup]="empForm"  novalidate="" class="ng-untouched ng-pristine ng-valid">
+        <form [formGroup]="empForm"   [ngClass]="{ 'view-only': currentAction == 'view' }"
+         novalidate="" class="ng-untouched ng-pristine ng-valid">
               
           <div class="form-group row">
               <div class="col-md-4">
@@ -144,11 +145,11 @@
                         </div>
                         <input maxlength="12"  type="text" class="form-control"  
                         [ngClass]="{ 'is-invalid': f.PhoneNumber.touched  &&  f.PhoneNumber.invalid }"
-                        formControlName="PhoneNumber"  name="PhoneNumber" required 
+                        formControlName="PhoneNumber"  name="PhoneNumber"  
                         >
 
                         <div *ngIf="f.PhoneNumber.touched && f.PhoneNumber.invalid" class="invalid-feedback">
-                          <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div>
+                          <!-- <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div> -->
                           <div *ngIf="f.PhoneNumber.errors.minlength">Phone Number must be at least 6 characters  </div>
                           <div *ngIf="f.PhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
 
@@ -432,7 +433,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">Start Date  &nbsp; &nbsp; </span>
                         </div>
-                        <input class="autoc-border  form-control" readonly matInput  [matDatepicker]="picker"
+                        <input class="autoc-border  form-control" readonly (click)="picker.open()"  matInput  [matDatepicker]="picker"
                         formControlName="JoiningDate" name="JoiningDate"
                         [ngClass]="{ 'is-invalid': f.JoiningDate.touched  &&  f.JoiningDate.invalid }" required >
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -490,7 +491,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text redStar">Role Effective From</span>
                       </div>
-                      <input class="autoc-border  form-control" readonly matInput  [matDatepicker]="RoleEffpicker"
+                      <input class="autoc-border  form-control" (click)="RoleEffpicker.open()"  readonly matInput  [matDatepicker]="RoleEffpicker"
                       formControlName="RoleEffFrom" name="RoleEffFrom"
                       [ngClass]="{ 'is-invalid': f.RoleEffFrom.touched  &&  f.RoleEffFrom.invalid }"  >
                       <mat-datepicker-toggle matSuffix [for]="RoleEffpicker"></mat-datepicker-toggle>
