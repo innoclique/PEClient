@@ -30,6 +30,8 @@ export class ClientSetupComponent implements OnInit {
 
   };
   industries: any;
+  public monthList=["January","February","March","April","May","June","July",
+  "August","September","October","November","December"]
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -125,7 +127,9 @@ export class ClientSetupComponent implements OnInit {
       EvaluationMaximumDays: ['', []],
       EmployeeBufferCount: ['', []],
       DownloadBufferDays: ['', []],
-      IsActive: ['', []]
+      IsActive: ['', []],
+      StartMonth:['', []],
+      EndMonth:['',[]]
 
     });
   }
@@ -238,6 +242,46 @@ export class ClientSetupComponent implements OnInit {
           this.enableFields(contactForm);
           this.addValidators(contactForm);
         }
+      });
+  }
+  mandateStartMonth() {
+    this.clientForm.get('EvaluationPeriod').valueChanges
+      .subscribe(value => {
+        debugger
+        if (value === null || value === undefined) {
+          return;
+        }
+       
+        if (value==='FiscalYear') {
+         this.clientForm.controls['StartMonth'].setValidators(Validators.required)
+         
+          this.clientForm.controls['EndMonth'].setValue('')
+          this.clientForm.controls['StartMonth'].enable()
+        }
+        else {
+          this.clientForm.controls['StartMonth'].setValidators(null)
+          this.clientForm.controls['StartMonth'].disable()
+          this.clientForm.controls['StartMonth'].setValue('1')
+          
+          this.clientForm.controls['EndMonth'].setValue('December')
+        }
+      });
+  }
+  setEndMonth() {
+    this.clientForm.get('StartMonth').valueChanges
+      .subscribe(value => {        
+        if (value === null || value === undefined) {
+          return;
+        }
+       if(value==="1"){
+        const monthName=this.monthList[11];
+        this.clientForm.controls['EndMonth'].setValue(monthName);
+       }else{
+        const monthName=this.monthList[value-2];
+        this.clientForm.controls['EndMonth'].setValue(monthName);
+       }
+          
+        
       });
   }
 
