@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CountryStateCityComponent } from './country-state-city.component';
+import { CSCComponent } from './csc.component';
 
-describe('CountryStateCityComponent', () => {
-  let component: CountryStateCityComponent;
-  let fixture: ComponentFixture<CountryStateCityComponent>;
+describe('CSCComponent', () => {
+  let component: CSCComponent;
+  let fixture: ComponentFixture<CSCComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CountryStateCityComponent ]
+      declarations: [ CSCComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CountryStateCityComponent);
+    fixture = TestBed.createComponent(CSCComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -219,14 +219,16 @@ public onEmpGridRowClick(e) {
 }
 
 openEmpForm() {
-  this.empForm.reset();
-  this.countyFormReset=true;
-  this.isRoleChanged=false;
-  this.currentAction='create'
-  this.currentRowItem={IsSubmit:false}
-  this.empDetails={IsActive:'true'};
-  this.initEmpForm();
-    this.emoModal.show();
+  // this.empForm.reset();
+  // this.countyFormReset=true;
+  // this.isRoleChanged=false;
+  // this.currentAction='create'
+  // this.currentRowItem={IsSubmit:false}
+  // this.empDetails={IsActive:'true'};
+  // this.initEmpForm();
+  //   this.emoModal.show();
+
+    this.router.navigate(['employee/create']);
 }
 
   editEmpForm(data) {
@@ -462,11 +464,11 @@ onJobRole(event){
   let val = event.target.value;
   if (this.currentRowItem.JobRole !=val) {
     this.isRoleChanged=true;
-    // this.empForm.controls['RoleEffFrom'].setErrors({'required': true})
-    this.hasError('RoleEffFrom','required');
+    this.empForm.controls['RoleEffFrom'].setValidators([Validators.required])
   }else{
+    
+    this.empForm.controls['RoleEffFrom'].clearValidators()
     this.isRoleChanged=false;
-    this.empForm.controls['RoleEffFrom'].setErrors(null);
   }
 }
 

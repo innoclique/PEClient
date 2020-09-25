@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { CreateEmployee1Component } from './create-employee/create-employee.component';
 //import { CreateEmployeeComponent } from './create-employee/create-employee.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 
@@ -14,11 +15,19 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'create'
+        redirectTo: 'setup'
       },
       {
-        path: 'create',
+        path: 'setup',
         component: EmployeeListComponent,
+        data: {
+          title: 'Setup'
+        }
+      },
+
+      {
+        path: 'create',
+        component: CreateEmployee1Component,
         data: {
           title: 'Create'
         }

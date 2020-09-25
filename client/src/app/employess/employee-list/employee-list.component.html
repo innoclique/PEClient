@@ -7,7 +7,7 @@
                 Set up Employees
             
             <div class="form-group form-actions pull-right m-0">
-              <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="addEmployee.show();openEmpForm()">Add New Employee</button>
+              <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="openEmpForm()">Add New Employee</button>
             </div>
             </div>
             <div class="card-body">
@@ -111,9 +111,9 @@
               
           </div>
         
-          <app-country-state-city [reset]="countyFormReset" [CSCData]='cscData' (onSelect)="onCSCSelect($event)" >
+          <app-csc [reset]="countyFormReset" [CSCData]='cscData' (onSelect)="onCSCSelect($event)" >
             
-          </app-country-state-city>
+          </app-csc>
 
           <div class="form-group row">
               <div class="col-md-4">
@@ -279,6 +279,26 @@
                 
           <div class="form-group row">
              
+            <div class="col-md-4">
+              <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text  redStar">Department</span>
+                    </div>
+                    <select   class="form-control" 
+                    [ngClass]="{ 'is-invalid': f.Department.touched  &&  f.Department.invalid }"
+                formControlName="Department"  name="Department" required >
+                      <option value=""  disabled>Please select</option>
+                      <option *ngFor="let e of departments" [value]="e._id" >{{e.DepartmentName}}</option>
+                      
+                    </select>
+                    <div *ngIf="f.Department.touched && f.Department.invalid" class="invalid-feedback">
+                      <div *ngIf="f.Department.errors.required">Department is required</div>
+                  </div>
+                  </div>
+                </div>
+          </div>
+
 
             <div class="col-md-4">
               <div class="form-group">
@@ -319,25 +339,6 @@
                   </div>
                 </div>
                  
-              </div>
-              <div class="col-md-4">
-                  <div class="form-group">
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text  redStar">Department</span>
-                        </div>
-                        <select   class="form-control" 
-                        [ngClass]="{ 'is-invalid': f.Department.touched  &&  f.Department.invalid }"
-                    formControlName="Department"  name="Department" required >
-                          <option value=""  disabled>Please select</option>
-                          <option *ngFor="let e of departments" [value]="e._id" >{{e.DepartmentName}}</option>
-                          
-                        </select>
-                        <div *ngIf="f.Department.touched && f.Department.invalid" class="invalid-feedback">
-                          <div *ngIf="f.Department.errors.required">Department is required</div>
-                      </div>
-                      </div>
-                    </div>
               </div>
 
             
@@ -411,7 +412,7 @@
                         [ngClass]="{ 'is-invalid': f.ApplicationRole.touched  &&  f.ApplicationRole.invalid }"
                         formControlName="ApplicationRole"  name="ApplicationRole" required   >
                           <option value="" disabled >Please select</option>
-                          <option *ngFor="let e of appRoles" [value]="e._id" >{{e.ApplicationRoleName}}</option>
+                          <option *ngFor="let e of appRoles" [value]="e._id" >{{e.RoleName}}</option>
                           
                         </select>
                         <div *ngIf="f.ApplicationRole.touched && f.ApplicationRole.invalid" class="invalid-feedback">

@@ -1,20 +1,21 @@
+
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-import { countriesData } from '../../shared/AppConstants/countries';
-import { stateData } from '../../shared/AppConstants/states';
 import { HttpClient } from '@angular/common/http';
+import { countriesData } from '../../../shared/AppConstants/countries';
+import { stateData } from '../../../shared/AppConstants/states';
 
 
 
 @Component({
-  selector: 'app-country-state-city',
-  templateUrl: './country-state-city.component.html',
-  styleUrls: ['./country-state-city.component.css']
+  selector: 'app-csc',
+  templateUrl: './csc.component.html',
+  styleUrls: ['./csc.component.css']
 })
-export class CountryStateCityComponent implements OnInit,OnChanges {
+export class CSCComponent implements OnInit,OnChanges {
  
 
 
@@ -211,3 +212,4 @@ const fileNo= this.getFileByCountryId(event.option.value.country_id);
    }
 
 }
+
