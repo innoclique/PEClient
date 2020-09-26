@@ -30,21 +30,26 @@ export class ClientSetupComponent implements OnInit {
 
   };
   industries: any;
-  public monthList=["January","February","March","April","May","June","July",
-  "August","September","October","November","December"]
+  public resellerList: any=[];
+  public clientData: any=[]
+  public monthList = ["January", "February", "March", "April", "May", "June", "July",
+    "August", "September", "October", "November", "December"]
+    private resellerGridApi;
+    private clientGridApi;
+    gridOptions={}
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
     private notification: NotificationService,
     private modalService: BsModalService,
     public authService: AuthService,
-    public router:Router
+    public router: Router
   ) {
 
 
   }
-  gotoCreate(){
-    this.router.navigate(['/client-setup'])
+  gotoCreate() {
+    this.router.navigate(['/psa/client-setup'])
   }
   ngOnInit(): void {
     this.getClients();
@@ -128,8 +133,8 @@ export class ClientSetupComponent implements OnInit {
       EmployeeBufferCount: ['', []],
       DownloadBufferDays: ['', []],
       IsActive: ['', []],
-      StartMonth:['', []],
-      EndMonth:['',[]]
+      StartMonth: ['', []],
+      EndMonth: ['', []]
 
     });
   }
@@ -152,7 +157,12 @@ export class ClientSetupComponent implements OnInit {
     this.saveClient();
   }
 
-
+  onClientGridReady(params) {
+    this.clientGridApi = params.api; // To access the grids API
+  }
+  onResellerGridReady(params) {
+    this.resellerGridApi = params.api; // To access the grids API
+  }
 
   public columnDefs = [
     {
@@ -160,7 +170,7 @@ export class ClientSetupComponent implements OnInit {
 
       cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
     },
-    { headerName: 'Type', field: 'OrganizationType', sortable: true, filter: true },
+    
     { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
     { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
     { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
@@ -181,38 +191,52 @@ export class ClientSetupComponent implements OnInit {
     }
   ];
 
-  public clientData: any
+
   getClients() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllOrganizations",
       this.perfApp.requestBody = { 'id': '5f5929f56c16e542d823247b' }
     this.perfApp.CallAPI().subscribe(c => {
-      debugger
+      
       console.log('lients data', c);
       if (c && c.length > 0) {
-
+        
+        c.map(row=>{
+          
+          if(row.ClientType==='Client'){
+            
+            this.clientData.push({
+              Name: row.Name
+              , OrganizationType: row.OrganizationType
+              , Industry: row.Industry
+              , UsageType: row.UsageType
+              , ContactName: row.ContactName
+              , RowData: row
+            })
+          }
+          if(row.ClientType==='Reseller'){
+            this.resellerList.push({
+              Name: row.Name
+              , OrganizationType: row.OrganizationType
+              , Industry: row.Industry
+              , UsageType: row.UsageType
+              , ContactName: row.ContactName
+              , RowData: row
+            })
+          }        
+        });
       }
-      //this.clientData=c;
-      //this.clientData.push()
-      this.clientData = c.map(function (row) {
-
-        return {
-          Name: row.Name
-          , OrganizationType: row.OrganizationType
-          , Industry: row.Industry
-          , UsageType: row.UsageType
-          , ContactName: row.ContactName
-          , RowData: row
-        }
-      }
-      )
+      this.clientGridApi.setRowData(this.clientData);
+      this.resellerGridApi.setRowData(this.resellerList);
+      
     })
   }
   saveClient() {
-    const organization=this.prepareOrgData('Create');
+    const organization = this.prepareOrgData('Create');
     this.perfApp.route = "app";
     this.perfApp.method = "AddOrganization",
       this.perfApp.requestBody = organization; //fill body object with form 
+      
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Organization Addedd Successfully.')
@@ -247,14 +271,14 @@ export class ClientSetupComponent implements OnInit {
   mandateStartMonth() {
     this.clientForm.get('EvaluationPeriod').valueChanges
       .subscribe(value => {
-        debugger
+        
         if (value === null || value === undefined) {
           return;
         }
-       
-        if (value==='FiscalYear') {
-         this.clientForm.controls['StartMonth'].setValidators(Validators.required)
-         
+
+        if (value === 'FiscalYear') {
+          this.clientForm.controls['StartMonth'].setValidators(Validators.required)
+
           this.clientForm.controls['EndMonth'].setValue('')
           this.clientForm.controls['StartMonth'].enable()
         }
@@ -262,26 +286,26 @@ export class ClientSetupComponent implements OnInit {
           this.clientForm.controls['StartMonth'].setValidators(null)
           this.clientForm.controls['StartMonth'].disable()
           this.clientForm.controls['StartMonth'].setValue('1')
-          
+
           this.clientForm.controls['EndMonth'].setValue('December')
         }
       });
   }
   setEndMonth() {
     this.clientForm.get('StartMonth').valueChanges
-      .subscribe(value => {        
+      .subscribe(value => {
         if (value === null || value === undefined) {
           return;
         }
-       if(value==="1"){
-        const monthName=this.monthList[11];
-        this.clientForm.controls['EndMonth'].setValue(monthName);
-       }else{
-        const monthName=this.monthList[value-2];
-        this.clientForm.controls['EndMonth'].setValue(monthName);
-       }
-          
-        
+        if (value === "1") {
+          const monthName = this.monthList[11];
+          this.clientForm.controls['EndMonth'].setValue(monthName);
+        } else {
+          const monthName = this.monthList[value - 2];
+          this.clientForm.controls['EndMonth'].setValue(monthName);
+        }
+
+
       });
   }
 
@@ -308,6 +332,7 @@ export class ClientSetupComponent implements OnInit {
     }
   }
   public setValues(form: FormGroup, rowdata: any) {
+    
     for (const key in form.controls) {
       const f = form.controls[key];
       //for child forms
@@ -351,13 +376,13 @@ export class ClientSetupComponent implements OnInit {
     ])]
   }
   resetForm() {
-    this.closeModal.nativeElement.click()    
+    this.closeModal.nativeElement.click()
     this.orgViewRef.hide();
     this.isFormSubmitted = false;
     this.clientForm.reset();
     this.clientForm.setErrors(null);
     this.emptyForm(this.clientForm)
-    
+
   }
   public emptyForm(form: FormGroup) {
     for (const key in form.controls) {
@@ -382,14 +407,30 @@ export class ClientSetupComponent implements OnInit {
         case "orgView":
           return this.openOrgView();
         case "suspendorg":
-        return this.suspendOrg();
+          return this.suspendOrg();
         case "rejectRequest":
         //return this.rejectRequest(data);
       }
     }
   }
-  suspendOrg(){
-    
+  public onResellerRowClicked(e){
+    if (e.event.target !== undefined) {
+      let data = e.data;
+      this.currentRowItem = data.RowData;
+
+      let actionType = e.event.target.getAttribute("data-action-type");
+      switch (actionType) {
+        case "orgView":
+          return this.openOrgView();
+        case "suspendorg":
+          return this.suspendOrg();
+        case "rejectRequest":
+        //return this.rejectRequest(data);
+      }
+    }
+  }
+  suspendOrg() {
+
   }
   openOrgView() {
     this.orgViewRef = this.modalService.show(this.orgView, this.config);
@@ -421,18 +462,18 @@ export class ClientSetupComponent implements OnInit {
     if (this.clientForm.invalid) {
       return;
     }
-    const organization=this.prepareOrgData('Update');
+    const organization = this.prepareOrgData('Update');
     this.perfApp.route = "app";
     this.perfApp.method = "UpdateOrganization",
       this.perfApp.requestBody = organization; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
-      debugger
-      console.log('updated',c)
-this.resetForm();
+      
+      console.log('updated', c)
+      this.resetForm();
 
     }, error => {
-debugger
-console.log('eror while updating orgnaizartion :', error)
+      
+      console.log('eror while updating orgnaizartion :', error)
 
       //this.notification.error(error.error.message)
     });
@@ -443,16 +484,16 @@ console.log('eror while updating orgnaizartion :', error)
     var organization = this.clientForm.value;
     if (action === 'Create') {
       organization.IsActive = true;
-      organization.CreatedBy=this.authService.getCurrentUser()._id;
-      organization.CreatedOn=new Date();
+      organization.CreatedBy = this.authService.getCurrentUser()._id;
+      organization.CreatedOn = new Date();
     } else {
-      debugger
+      
       organization.id = this.currentRowItem._id;
-      organization.UpdatedBy=this.authService.getCurrentUser()._id;
-      organization.UpdatedOn=new Date();     
+      organization.UpdatedBy = this.authService.getCurrentUser()._id;
+      organization.UpdatedOn = new Date();
     }
     organization = this.setContactPersonData(organization);
-return organization;
+    return organization;
   }
 
   setContactPersonData(organization) {
@@ -471,5 +512,5 @@ return organization;
     }
     return organization;
   }
-  
+
 }

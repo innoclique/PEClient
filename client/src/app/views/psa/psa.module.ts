@@ -9,7 +9,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { CreateClientComponent } from './create-client/create-client.component';
 import { EmployessModule } from '../../employess/employess.module';
 import { EvalCommonModule } from '../common/common.module';
-
+import { TabsModule } from 'ngx-bootstrap/tabs';
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -45,7 +45,8 @@ export const projectRoutes: Routes = [
     RouterModule.forChild(projectRoutes),
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
-    EvalCommonModule
+    EvalCommonModule,
+    TabsModule
   ]
 })
 export class PSAModule {

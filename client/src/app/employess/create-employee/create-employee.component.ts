@@ -18,7 +18,7 @@ import { Constants } from '../../shared/AppConstants';
 @Component({
   selector: 'app-create-employee1',
   templateUrl: './create-employee.component.html',
-  styleUrls: ['./create-employee.component.css']
+  styleUrls: []
 })
 export class CreateEmployee1Component implements OnInit {
 

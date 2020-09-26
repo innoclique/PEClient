@@ -47,6 +47,7 @@ export class CreateClientComponent implements OnInit {
   "August","September","October","November","December"]
   countyFormReset: boolean;
   cscData:any=null;
+  currentUser:any;
   onCSCSelect(data){
     this.clientForm.patchValue({City:data.City.name});
     this.clientForm.patchValue({Country:data.Country.name});
@@ -66,6 +67,8 @@ export class CreateClientComponent implements OnInit {
     this.sameAsContactChange();
     this.mandateStartMonth();
     this.setEndMonth();
+this.currentUser=this.authService.getCurrentUser();
+this.disableUsageType()
   }
   initForm() {
     this.clientForm = this.formBuilder.group({
@@ -242,7 +245,21 @@ export class CreateClientComponent implements OnInit {
         
       });
   }
-
+  disableUsageType() {
+    this.clientForm.get('ClientType').valueChanges
+      .subscribe(value => {        
+        if (value === null || value === undefined) {
+          return;
+        }
+       if(this.currentUser.Role==='RSA' ||  value==="Reseller"){        
+        this.clientForm.controls['UsageType'].setValue('License');
+       }else{
+        
+       }
+          
+        
+      });
+  }
   public removeValidators(form: FormGroup) {
     for (const key in form.controls) {
       form.get(key).clearValidators();
@@ -309,8 +326,6 @@ export class CreateClientComponent implements OnInit {
     ])]
   }
   resetForm() {
-    //this.closeModal.nativeElement.click()    
-    //this.orgViewRef.hide();
     this.isFormSubmitted = false;
     this.clientForm.reset();
     this.clientForm.setErrors(null);
