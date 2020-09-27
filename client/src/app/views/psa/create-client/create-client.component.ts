@@ -32,6 +32,7 @@ export class CreateClientComponent implements OnInit {
 
   };
   industries: any;
+  evaluationPeriods: any;
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -69,6 +70,7 @@ export class CreateClientComponent implements OnInit {
     this.setEndMonth();
 this.currentUser=this.authService.getCurrentUser();
 this.disableUsageType()
+this.getEvaluationCategories();
   }
   initForm() {
     this.clientForm = this.formBuilder.group({
@@ -360,6 +362,21 @@ this.disableUsageType()
       //this.notification.error(error.error.message)
     });
   }
+  
+  getEvaluationCategories() {
+    this.perfApp.route = "shared";
+    this.perfApp.method = "GetEvaluationCategories",
+      this.perfApp.requestBody = {}; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+      this.evaluationPeriods = c;
+      console.table('eval periods',c);
+    }, error => {
+
+
+      //this.notification.error(error.error.message)
+    });
+  }
+  
   //#region  update client related
   public updateClient() {
     if (this.clientForm.invalid) {

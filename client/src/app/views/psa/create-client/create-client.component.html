@@ -431,9 +431,11 @@
                     </div>
                     <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.EvaluationPeriod.errors }"
                       formControlName="EvaluationPeriod" class="form-control" class="form-control">
+                      <option value="" disabled selected>Select Period</option>
+                      <option *ngFor="let i of evaluationPeriods" [value]="i.Code">{{i.Name}}</option>
 
-                      <option value="FiscalYear">Fiscal Year</option>
-                      <option value="CalendarYear">Calendar Year</option>
+                      <!-- <option value="FiscalYear">Fiscal Year</option>
+                      <option value="CalendarYear">Calendar Year</option> -->
 
                     </select>
                     <div *ngIf="isFormSubmitted && f.EvaluationPeriod.errors" class="invalid-feedback">
