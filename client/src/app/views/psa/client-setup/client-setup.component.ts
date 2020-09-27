@@ -37,6 +37,7 @@ export class ClientSetupComponent implements OnInit {
     private resellerGridApi;
     private clientGridApi;
     gridOptions={}
+    currentUser:any;
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -57,6 +58,7 @@ export class ClientSetupComponent implements OnInit {
     this.initForm();
     this.getIndustries();
     this.sameAsContactChange()
+    this.currentUser=this.authService.getCurrentUser();
   }
   initForm() {
     this.clientForm = this.formBuilder.group({

@@ -13,7 +13,7 @@
         </div>
         <div class="card-body">
           <tabset #staticTabs class="pro-tabs">
-            <tab>
+            <tab [hidden]="(f.ClientType.value === 'Reseller' || currentUser.Role === 'RSA')">
   
               <ng-template tabHeading><i class="icon-user"></i> Client</ng-template>
               <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine" 
@@ -27,7 +27,7 @@
             >
           </ag-grid-angular>
             </tab>
-            <tab>
+            <tab >
   
               <ng-template tabHeading><i class="icon-people"></i> Reseller</ng-template>
               <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine" [rowData]="resellerList"
