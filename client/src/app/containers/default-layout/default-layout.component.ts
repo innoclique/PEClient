@@ -24,7 +24,8 @@ export class DefaultLayoutComponent {
   toggleMinimize(e) {
     this.sidebarMinimized = e;
   }
-  public logout(){        
+  public logout(){       
+    debugger 
     this.authService.LogOut()
      this.router.navigate(['login'])
   }

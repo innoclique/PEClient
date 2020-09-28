@@ -21,7 +21,6 @@ constructor(private authService:AuthService) {
     
 }
   intercept(req: HttpRequest<any>, next: HttpHandler): any {
-
     if (!req.headers.has('Content-Type')) {
       req = req.clone({
         headers: req.headers.set('Content-Type', 'application/json')
@@ -77,6 +76,7 @@ constructor(private authService:AuthService) {
   }
 
   private addAuthenticationToken(request: HttpRequest<any>): HttpRequest<any> {
+    
     // If we do not have a token yet then we should not set the header.
     // Here we could first retrieve the token from where we store it.
     

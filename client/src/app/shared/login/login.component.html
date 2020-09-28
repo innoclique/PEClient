@@ -1,122 +1,94 @@
-<!-- <mat-card class="example-card">
-    <mat-card-header>
-      <mat-card-title> {{'Login.Login' | translate }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="loginForm" class="example-form">
-        <table class="example-full-width" cellspacing="0">
-          <tr>
-            <td>
-              <mat-form-field class="example-full-width">
-              <input matInput placeholder="{{'Login.UserName' | translate }}" formControlName="username"  name="username" required>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-          <td><mat-form-field class="example-full-width">
-            <input matInput placeholder="{{'Login.Password' | translate }}"  formControlName="password" type="password" name="password" required>
-          </mat-form-field>
-          <a class="forgot-password"  routerLink='/forgotPassword'> Forgot
-            Password? </a>
-        </td>
-        </tr>
-      </table>
-      </form>
-      <app-spinner [style.display]="showSpinner ? 'block' : 'none'" overlay="true"></app-spinner>
-      
-    </mat-card-content>
-    <mat-card-actions>        
-      <button [disabled]="!loginForm.valid"   mat-raised-button (click)="onSubmit()" color="primary">{{'Login.Login' | translate }}</button>
-    </mat-card-actions>
-  </mat-card>
-
-
-
-   -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   <div class="app-body">
-    <main class="main d-flex align-items-center">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8 mx-auto">
-            <div class="card-group">
-              <div class="card p-4">
-                <div class="card-body">
-                  <form [formGroup]="loginForm">
-                    <h1>Login</h1>
-                    <p class="text-muted">Sign In to your account</p>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="icon-user"></i></span>
-                      </div>
-                      <input class="form-control"  [ngClass]="{ 'is-invalid': f.username.touched  &&  f.username.invalid }"
+<div class="app-body">
+  <main class="main d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <div class="card-group">
+            <div class="card p-4">
+              <div class="card-body">
+                <form [formGroup]="loginForm">
+                  <h1>Login</h1>
+                  <p class="text-muted">Sign In to your account</p>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-user"></i></span>
+                    </div>
+                    <input class="form-control" [ngClass]="{ 'is-invalid': f.username.touched  &&  f.username.invalid }"
                       type="text" class="form-control" placeholder="Username" autocomplete="username"
-                      formControlName="username"  name="username" required >
+                      formControlName="username" name="username" required>
 
-                      <div *ngIf="f.username.touched && f.username.invalid" class="invalid-feedback">
-                        <div *ngIf="f.username.errors.required">Username is required</div>
-                        <div *ngIf="f.username.errors.email">Username must be a valid email address</div>
+                    <div *ngIf="f.username.touched && f.username.invalid" class="invalid-feedback">
+                      <div *ngIf="f.username.errors.required">Username is required</div>
+                      <div *ngIf="f.username.errors.email">Username must be a valid email address</div>
                     </div>
 
 
 
 
-                    </div>
-                    <div class="input-group mb-4">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="icon-lock"></i></span>
-                      </div>
-                      <input type="password" class="form-control" [ngClass]="{ 'is-invalid': f.password.touched  &&  f.password.invalid }"
-                       placeholder="Password" autocomplete="current-password"
-                      
-                      formControlName="password"  name="password" required>
-                      <div *ngIf=" f.password.invalid"  class="invalid-feedback">
-                        <div *ngIf="f.password.errors.required">Password is required</div>
-                        <div *ngIf="f.password.errors.minlength">Password must be at least 8 characters</div>
-                      </div>
-                      
-                    </div>
-                    <div class="row">
-                      <div class="col-6">
-                        <button [disabled]="!loginForm.valid" (click)="onSubmit()" type="button" class="btn btn-primary px-4">Login</button>
-                      </div>
-                      <div class="col-6 text-right">
-                        <button type="button"  routerLink='/forgotPassword' class="btn btn-link px-0">Forgot password?</button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
-                <div class="card-body text-center">
-                  <div>
-                    <h2>OA - Performance Evaluation</h2>
-                    <img src="../../../assets/img/ev2.png" class="img-avatar" />
-                    <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <button type="button" class="btn btn-primary active mt-3">Register Now!</button> -->
                   </div>
+                  <div class="input-group mb-4">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-lock"></i></span>
+                    </div>
+                    <input type="password" class="form-control"
+                      [ngClass]="{ 'is-invalid': f.password.touched  &&  f.password.invalid }" placeholder="Password"
+                      autocomplete="current-password" formControlName="password" name="password" required>
+                    <div *ngIf=" f.password.invalid" class="invalid-feedback">
+                      <div *ngIf="f.password.errors.required">Password is required</div>
+                      <div *ngIf="f.password.errors.minlength">Password must be at least 8 characters</div>
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <button [disabled]="!loginForm.valid" (click)="onSubmit()" type="button"
+                        class="btn btn-primary px-4">Login</button>
+                    </div>
+                    <div class="col-6 text-right">
+                      <button type="button" routerLink='/forgotPassword' class="btn btn-link px-0">Forgot
+                        password?</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+              <div class="card-body text-center">
+                <div>
+                  <h2>OA - Performance Evaluation</h2>
+                  <img src="../../../assets/img/ev2.png" class="img-avatar" />
+                  <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <button type="button" class="btn btn-primary active mt-3">Register Now!</button> -->
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </main>
-  </div>
-  
+    </div>
+  </main>
+</div>
+
+<ng-template #tncModal class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Terms & Conditions</h4>
+
+      </div>
+      <div class="modal-body">
+        <div class="form-group row">
+          <div class="col-md-12">
+            Terms and OCnditions wil go here
+          </div>
+
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="acceptTnC()" class="btn btn-primary">Accept & Continue</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</ng-template><!-- /.modal -->
