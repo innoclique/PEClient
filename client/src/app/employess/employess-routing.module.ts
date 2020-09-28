@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CreateEmployeeComponent } from '../views/common/create-employee/create-employee.component';
+import {  SetupEmployeeComponent} from '../views/common/setup-employee/setup-employee.component';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 
 
@@ -26,7 +26,7 @@ const routes: Routes = [
 
       {
         path: 'create',
-        component: CreateEmployeeComponent,
+        component: SetupEmployeeComponent,
         data: {
           title: 'Create'
         }

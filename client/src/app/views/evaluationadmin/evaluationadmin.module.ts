@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { EmployessModule } from '../../employess/employess.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomMaterialModule } from '../../custom-material/custom-material.module';
-import { CreateEmployeeComponent } from '../common/create-employee/create-employee.component';
+
 import { EadashboardComponent } from './eadashboard/eadashboard.component';
 import { EvalCommonModule } from '../common/common.module';
 import { AgGridModule } from 'ag-grid-angular';
@@ -31,13 +31,7 @@ const routes: Routes = [
           title: 'Dashboard'
         }
       },
-      {
-        path: 'create-employee',
-        component: CreateEmployeeComponent,
-        data: {
-          title: 'Create Employee'
-        }
-      },
+      
       {
         path: 'setup-employee',
         component: SetupEmployeeComponent,
