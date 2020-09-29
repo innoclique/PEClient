@@ -10,11 +10,12 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { SetupEmployeeComponent } from './setup-employee/setup-employee.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { CreateEmployeeComponent } from './create-employee/create-employee.component';
 
 
 
 @NgModule({
-  declarations: [ CSCComponent, SetupEmployeeComponent ],
+  declarations: [ CSCComponent, SetupEmployeeComponent, CreateEmployeeComponent ],
   imports: [
     CommonModule,
     FormsModule,

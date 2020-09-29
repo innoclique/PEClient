@@ -11,6 +11,7 @@ import { EvalCommonModule } from '../common/common.module';
 import { AgGridModule } from 'ag-grid-angular';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SetupEmployeeComponent } from '../common/setup-employee/setup-employee.component';
+import { CreateEmployeeComponent } from '../common/create-employee/create-employee.component';
 
 
 const routes: Routes = [
@@ -37,6 +38,13 @@ const routes: Routes = [
         component: SetupEmployeeComponent,
         data: {
           title: 'Setup Employee'
+        }
+      },
+      {
+        path: 'create-employee',
+        component: CreateEmployeeComponent,
+        data: {
+          title: 'Create Employee'
         }
       },
       {

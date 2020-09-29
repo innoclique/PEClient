@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { EmployessRoutingModule } from './employess-routing.module';
 
-import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -14,12 +13,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { EvalCommonModule } from '../views/common/common.module';
-
+import { KpiSettingsComponent } from './kpi-settings/kpi-settings.component';
 
 
 
 @NgModule({
-  declarations: [ EmployeeListComponent],
+  declarations: [KpiSettingsComponent],
   imports: [
     CommonModule,
     EmployessRoutingModule,
