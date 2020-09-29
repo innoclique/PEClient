@@ -71,8 +71,11 @@ export class LoginComponent implements OnInit {
       const password = this.loginForm.get('password').value;
       const LoginModel = { Email: email, Password: password };
 
-      await this.authService.login(LoginModel).subscribe(x => {
-        debugger
+      await this.authService.login(LoginModel).subscribe(x => {        
+        if (x.Error === Constants.DuplicateSession) {
+          this.openDuplicateSessionDialog()
+          return 
+        }
         console.log('user ....',x)
         if(!x.User.TnCAccepted){
           this.openTnCDialog();
