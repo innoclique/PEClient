@@ -1,0 +1,29 @@
+<div class="animated fadeIn">
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            Evaluations
+  
+            <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal" (click)="addClient.show()">
+              Rollout New Evaluation
+            </button>
+          </div>
+          <div class="card-body">
+            <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine" [rowData]="evaluationsList"
+              [columnDefs]="columnDefs"
+              [pagination]="true"
+              [paginationPageSize]="10"
+              (rowClicked)="onRowClicked($event)"
+              >
+            </ag-grid-angular>
+          </div>
+        </div>
+      </div>
+      <!--/.col-->
+    </div>
+    <!--/.row-->
+  </div>
+  

@@ -10,6 +10,7 @@ import { EadashboardComponent } from './eadashboard/eadashboard.component';
 import { EvalCommonModule } from '../common/common.module';
 import { AgGridModule } from 'ag-grid-angular';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { EvaluationslistComponent } from './evaluationslist/evaluationslist.component';
 
 
 const routes: Routes = [
@@ -44,13 +45,20 @@ const routes: Routes = [
           title: 'Rollout'
         }
       },
+      {
+        path: 'evaluation-list',
+        component: EvaluationslistComponent,
+        data: {
+          title: 'Evaluation'
+        }
+      },
     ]
 }
 
 ]
 
 @NgModule({
-  declarations: [RollevaluationComponent,EadashboardComponent],
+  declarations: [RollevaluationComponent,EadashboardComponent, EvaluationslistComponent],
   imports: [
     CommonModule,
     EvalCommonModule,

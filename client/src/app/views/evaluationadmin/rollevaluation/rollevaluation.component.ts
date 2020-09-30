@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 
 import { MatDialog } from '@angular/material/dialog';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { retry } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
 
 import { NotificationService } from '../../../services/notification.service';
@@ -42,23 +43,49 @@ export class RollevaluationComponent implements OnInit {
   }
   initForm() {
     this.evaluationForm = this.formBuilder.group({
-      Employees: [null, [Validators.required]],
+      Employees: [[], [Validators.required]],
       EvaluationPeriod: ['', [Validators.required]],
       EvaluationDuration: ['', [Validators.required]],
       Model: ['', [Validators.required]],
       PeerRatingNeeded: ['', [Validators.required]],
-      Peers: ['', [Validators.required]],
+      Peers: ['', []],
       PeerCompetency: ['', [Validators.required]],
-      PeerComptencyMessage: ['', [Validators.required]],
-      DirectReportRateNeeded: ['', [Validators.required]],
-      DirectReports: ['', [Validators.required]],
+      PeerComptencyMessage: ['', []],
+      DirectReportRateNeeded: ['', []],
+      DirectReports: ['', []],
       DirectReportsCompetency: ['', [Validators.required]],
-      DirectReportMessage: ['', [Validators.required]],
-      ActivateKPI: [null, [Validators.required]],
-      ActivateActionPlan: [null, [Validators.required]],
+      DirectReportMessage: ['', []],
+      ActivateKPI: [false, []],
+      ActivateActionPlan: [false, []],
     });
   }
   get f(){
     return this.evaluationForm.controls;
+  }
+
+  submitEvaluation(){
+    this.isFormSubmitted=true;
+    debugger
+if(this.evaluationForm.invalid)
+return;
+console.log('evaluation form',this.evaluationForm.value);
+this.perfApp.method="CreateEvaluation";
+this.perfApp.requestBody=this.evaluationForm.value;
+this.perfApp.route="evaluation"
+this.perfApp.CallAPI().subscribe(x=>{
+  debugger
+  console.log('added evaluation',x)
+  this.notification.success('Evaluation Created Successfully.')
+},error=>{
+  debugger
+  console.log('error while adding eval',error)
+  this.notification.error(error.error.message)
+})
+
+  }
+  reset(){
+    this.evaluationForm.reset();
+    this.isFormSubmitted=false;
+
   }
 }
