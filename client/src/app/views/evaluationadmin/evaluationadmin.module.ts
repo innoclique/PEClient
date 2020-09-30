@@ -5,12 +5,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { EmployessModule } from '../../employess/employess.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomMaterialModule } from '../../custom-material/custom-material.module';
-import { CreateEmployeeComponent } from '../common/create-employee/create-employee.component';
+
 import { EadashboardComponent } from './eadashboard/eadashboard.component';
 import { EvalCommonModule } from '../common/common.module';
 import { AgGridModule } from 'ag-grid-angular';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { EvaluationslistComponent } from './evaluationslist/evaluationslist.component';
+import { SetupEmployeeComponent } from '../common/setup-employee/setup-employee.component';
+import { CreateEmployeeComponent } from '../common/create-employee/create-employee.component';
 
 
 const routes: Routes = [
@@ -29,6 +31,14 @@ const routes: Routes = [
         component: EadashboardComponent,
         data: {
           title: 'Dashboard'
+        }
+      },
+      
+      {
+        path: 'setup-employee',
+        component: SetupEmployeeComponent,
+        data: {
+          title: 'Setup Employee'
         }
       },
       {

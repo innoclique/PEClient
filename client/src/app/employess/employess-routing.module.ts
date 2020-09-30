@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-//import { CreateEmployeeComponent } from './create-employee/create-employee.component';
-import { EmployeeListComponent } from './employee-list/employee-list.component';
+import { KpiSettingsComponent } from './kpi-settings/kpi-settings.component';
 
 
 
@@ -9,20 +8,23 @@ const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Employees'
+      title: 'Employee'
     },
     children: [
       {
         path: '',
-        redirectTo: 'create'
+        redirectTo: 'kpi-setting'
       },
+     
       {
-        path: 'create',
-        component: EmployeeListComponent,
+        path: 'kpi-setting',
+        component: KpiSettingsComponent,
         data: {
-          title: 'Create'
+          title: 'KPI Setting'
         }
       },
+
+     
     ]
 }
 

@@ -3,22 +3,22 @@ import { CommonModule } from '@angular/common';
 
 import { EmployessRoutingModule } from './employess-routing.module';
 
-import { EmployeeListComponent } from './employee-list/employee-list.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AgGridModule } from 'ag-grid-angular';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
-import { CountryStateCityComponent } from './country-state-city/country-state-city.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { EvalCommonModule } from '../views/common/common.module';
+import { KpiSettingsComponent } from './kpi-settings/kpi-settings.component';
 
 
 
 @NgModule({
-  declarations: [ EmployeeListComponent, CountryStateCityComponent],
+  declarations: [KpiSettingsComponent],
   imports: [
     CommonModule,
     EmployessRoutingModule,
@@ -31,11 +31,12 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     HttpClientModule,
     FormsModule,
     RouterModule,
+    EvalCommonModule,
     AgGridModule.withComponents([]),
     ModalModule.forRoot()
   ],
   exports: [
     ModalModule
-  ]
+]
 })
 export class EmployessModule { }

@@ -1,26 +1,28 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ThemeService } from '../../services/theme.service';
-import { NotificationService } from '../../services/notification.service';
-import { PerfAppService } from '../../services/perf-app.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { CustomValidators } from '../../shared/custom-validators';
+import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
-import {startWith, map} from 'rxjs/operators';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
-import { Constants } from '../../shared/AppConstants';
-import { AlertDialog } from '../../Models/AlertDialog';
-import { AlertComponent } from '../../shared/alert/alert.component';
+import { startWith, map } from 'rxjs/operators';
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../services/notification.service';
+import { PerfAppService } from '../../../services/perf-app.service';
+import { ThemeService } from '../../../services/theme.service';
+import { AlertComponent } from '../../../shared/alert/alert.component';
+import { Constants } from '../../../shared/AppConstants';
+import { CustomValidators } from '../../../shared/custom-validators';
 
 @Component({
-  selector: 'app-employee-list',
-  templateUrl: './employee-list.component.html',
-  styleUrls: ['./employee-list.component.css']
+  selector: 'app-setup-employee',
+  templateUrl: './setup-employee.component.html',
+  styleUrls: ['./setup-employee.component.css']
 })
-export class EmployeeListComponent implements OnInit {
+export class SetupEmployeeComponent implements OnInit {
+
+ 
 
   public empForm: FormGroup;
   departments=[];
@@ -118,7 +120,7 @@ export class EmployeeListComponent implements OnInit {
       ],
 
       PhoneNumber: [this.empDetails.PhoneNumber?this.empDetails.PhoneNumber:'', Validators.compose([
-        Validators.required, Validators.minLength(6),
+         Validators.minLength(6),
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       ExtNumber: [this.empDetails.ExtNumber?this.empDetails.ExtNumber:'', Validators.compose([
@@ -186,7 +188,7 @@ export class EmployeeListComponent implements OnInit {
     // {headerName: 'IsDraft', field: 'IsDraft',  width: 120, sortable: true, filter: true },
     {headerName: 'IsActive', field: 'IsActive',  width: 120, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width: 80, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -219,14 +221,16 @@ public onEmpGridRowClick(e) {
 }
 
 openEmpForm() {
-  this.empForm.reset();
-  this.countyFormReset=true;
-  this.isRoleChanged=false;
-  this.currentAction='create'
-  this.currentRowItem={IsSubmit:false}
-  this.empDetails={IsActive:'true'};
-  this.initEmpForm();
-    this.emoModal.show();
+  // this.empForm.reset();
+  // this.countyFormReset=true;
+  // this.isRoleChanged=false;
+  // this.currentAction='create'
+  // this.currentRowItem={IsSubmit:false}
+  // this.empDetails={IsActive:'true'};
+  // this.initEmpForm();
+  //   this.emoModal.show();
+
+    this.router.navigate(['ea/create-employee']);
 }
 
   editEmpForm(data) {
@@ -236,6 +240,11 @@ openEmpForm() {
     this.currentAction='edit'
     this.cscData={Country:data.Country,State:data.State,City:data.City};
     this.empDetails=data;
+
+    var depts= this.departments.filter(f=>f.DeptName==data.Department )[0];
+    this.jobRoles=depts.JobRoles;
+
+
     this.initEmpForm();
       this.emoModal.show();
   }
@@ -247,6 +256,9 @@ openEmpForm() {
     this.currentAction='view'
     this.cscData={Country:data.Country,State:data.State,City:data.City};
     this.empDetails=data;
+    var depts= this.departments.filter(f=>f.DeptName==data.Department )[0];
+    this.jobRoles=depts.JobRoles;
+
     this.initEmpForm();
     // this.empForm.disable();
       this.emoModal.show();
@@ -358,6 +370,12 @@ submitCreateEmployee(){
 
   if (!this.empForm.valid) {
       return;    
+    }else{
+      if (!this.empForm.get('PhoneNumber').value &&  !this.empForm.get('AltPhoneNumber').value
+       && !this.empForm.get('MobileNumber').value) {
+        this.snack.error(this.translate.instant('Please provide at least one contact (PhoneNumber, AltPhoneNumber, MobileNumber )'));
+        return;    
+      }
     }
 
   this.empForm.patchValue({IsSubmit: 'true' });
@@ -462,13 +480,19 @@ onJobRole(event){
   let val = event.target.value;
   if (this.currentRowItem.JobRole !=val) {
     this.isRoleChanged=true;
-    // this.empForm.controls['RoleEffFrom'].setErrors({'required': true})
-    this.hasError('RoleEffFrom','required');
+    this.empForm.controls['RoleEffFrom'].setValidators([Validators.required])
   }else{
+    
+    this.empForm.controls['RoleEffFrom'].clearValidators()
     this.isRoleChanged=false;
-    this.empForm.controls['RoleEffFrom'].setErrors(null);
   }
 }
+onDepartmentChange(event){
+
+  var depts= this.departments.filter(f=>f.DeptName== event.target.value)[0];
+this.jobRoles=depts.JobRoles;
+}
+
 
 getAllDepartments(){
   this.perfApp.route="app";
@@ -478,13 +502,15 @@ getAllDepartments(){
     
     console.log('lients data',c);
     if(c){
-      this.departments=c.Departments;
-      this.jobRoles=c.JobRoles;
+     
+      this.departments=c.Industries.Department;
       this.appRoles=c.AppRoles;
       this.jobLevels=c.JobLevels;
       console.log('lients data snnn',this.jobRoles);
     }
   })
 }
+
+
 
 }

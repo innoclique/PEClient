@@ -16,6 +16,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LogoutComponent } from './logout/logout.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { LogoutComponent } from './logout/logout.component';
         deps: [HttpClient]
       }
     }),
-    CustomMaterialModule
+    CustomMaterialModule,
+    ModalModule.forRoot()
   ],
   entryComponents:[AlertComponent],
   exports:[AlertComponent]

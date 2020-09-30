@@ -7,7 +7,7 @@
                 Set up Employees
             
             <div class="form-group form-actions pull-right m-0">
-              <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="addEmployee.show();openEmpForm()">Add New Employee</button>
+              <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="openEmpForm()">Add New Employee</button>
             </div>
             </div>
             <div class="card-body">
@@ -47,7 +47,8 @@
       <div class="modal-body">
         
        
-        <form [formGroup]="empForm"  novalidate="" class="ng-untouched ng-pristine ng-valid">
+        <form [formGroup]="empForm"   [ngClass]="{ 'view-only': currentAction == 'view' }"
+         novalidate="" class="ng-untouched ng-pristine ng-valid">
               
           <div class="form-group row">
               <div class="col-md-4">
@@ -111,9 +112,9 @@
               
           </div>
         
-          <app-country-state-city [reset]="countyFormReset" [CSCData]='cscData' (onSelect)="onCSCSelect($event)" >
+          <app-csc [reset]="countyFormReset" [CSCData]='cscData' (onSelect)="onCSCSelect($event)" >
             
-          </app-country-state-city>
+          </app-csc>
 
           <div class="form-group row">
               <div class="col-md-4">
@@ -144,11 +145,11 @@
                         </div>
                         <input maxlength="12"  type="text" class="form-control"  
                         [ngClass]="{ 'is-invalid': f.PhoneNumber.touched  &&  f.PhoneNumber.invalid }"
-                        formControlName="PhoneNumber"  name="PhoneNumber" required 
+                        formControlName="PhoneNumber"  name="PhoneNumber"  
                         >
 
                         <div *ngIf="f.PhoneNumber.touched && f.PhoneNumber.invalid" class="invalid-feedback">
-                          <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div>
+                          <!-- <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div> -->
                           <div *ngIf="f.PhoneNumber.errors.minlength">Phone Number must be at least 6 characters  </div>
                           <div *ngIf="f.PhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
 
@@ -279,6 +280,26 @@
                 
           <div class="form-group row">
              
+            <div class="col-md-4">
+              <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text  redStar">Department</span>
+                    </div>
+                    <select   class="form-control" (change)="onDepartmentChange($event)"
+                    [ngClass]="{ 'is-invalid': f.Department.touched  &&  f.Department.invalid }"
+                formControlName="Department"  name="Department" required >
+                      <option value=""  disabled>Please select</option>
+                      <option *ngFor="let e of departments" [value]="e.DeptName" >{{e.DeptName}}</option>
+                      
+                    </select>
+                    <div *ngIf="f.Department.touched && f.Department.invalid" class="invalid-feedback">
+                      <div *ngIf="f.Department.errors.required">Department is required</div>
+                  </div>
+                  </div>
+                </div>
+          </div>
+
 
             <div class="col-md-4">
               <div class="form-group">
@@ -286,13 +307,21 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Job Role</span>
                     </div>
-                    <select  class="form-control"  (change)="onJobRole($event)"
-                    [ngClass]="{ 'is-invalid': f.JobRole.touched  &&  f.JobRole.invalid }"
-                    formControlName="JobRole"  name="JobRole" required >
-                      <option value="" disabled >Please select</option>
-                      <option *ngFor="let e of jobRoles" [value]="e._id" >{{e.JobRoleName}}</option>
-                      
-                    </select>
+                    <select  *ngIf="f.Department.invalid" class="form-control"    [attr.disabled]="true"
+                        [ngClass]="{ 'is-invalid': f.JobRole.touched  &&  f.JobRole.invalid }"
+                        formControlName="JobRole"  name="JobRole" required >
+                          <option value="" disabled >Please select department first</option>
+                          <option *ngFor="let e of jobRoles" [value]="e" >{{e}}</option>
+                          
+                        </select>
+
+                        <select  *ngIf="f.Department.valid" class="form-control"   (change)="onJobRole($event)"
+                        [ngClass]="{ 'is-invalid': f.JobRole.touched  &&  f.JobRole.invalid }"
+                        formControlName="JobRole"  name="JobRole" required >
+                          <option value="" disabled >Please select</option>
+                          <option *ngFor="let e of jobRoles" [value]="e" >{{e}}</option>
+                          
+                        </select>
                     <div *ngIf="f.JobRole.touched && f.JobRole.invalid" class="invalid-feedback">
                       <div *ngIf="f.JobRole.errors.required">Job Role is required</div>
                   </div>
@@ -319,25 +348,6 @@
                   </div>
                 </div>
                  
-              </div>
-              <div class="col-md-4">
-                  <div class="form-group">
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text  redStar">Department</span>
-                        </div>
-                        <select   class="form-control" 
-                        [ngClass]="{ 'is-invalid': f.Department.touched  &&  f.Department.invalid }"
-                    formControlName="Department"  name="Department" required >
-                          <option value=""  disabled>Please select</option>
-                          <option *ngFor="let e of departments" [value]="e._id" >{{e.DepartmentName}}</option>
-                          
-                        </select>
-                        <div *ngIf="f.Department.touched && f.Department.invalid" class="invalid-feedback">
-                          <div *ngIf="f.Department.errors.required">Department is required</div>
-                      </div>
-                      </div>
-                    </div>
               </div>
 
             
@@ -411,7 +421,7 @@
                         [ngClass]="{ 'is-invalid': f.ApplicationRole.touched  &&  f.ApplicationRole.invalid }"
                         formControlName="ApplicationRole"  name="ApplicationRole" required   >
                           <option value="" disabled >Please select</option>
-                          <option *ngFor="let e of appRoles" [value]="e._id" >{{e.ApplicationRoleName}}</option>
+                          <option *ngFor="let e of appRoles" [value]="e._id" >{{e.RoleName}}</option>
                           
                         </select>
                         <div *ngIf="f.ApplicationRole.touched && f.ApplicationRole.invalid" class="invalid-feedback">
@@ -431,7 +441,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">Start Date  &nbsp; &nbsp; </span>
                         </div>
-                        <input class="autoc-border  form-control" readonly matInput  [matDatepicker]="picker"
+                        <input class="autoc-border  form-control" readonly (click)="picker.open()"  matInput  [matDatepicker]="picker"
                         formControlName="JoiningDate" name="JoiningDate"
                         [ngClass]="{ 'is-invalid': f.JoiningDate.touched  &&  f.JoiningDate.invalid }" required >
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -489,7 +499,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text redStar">Role Effective From</span>
                       </div>
-                      <input class="autoc-border  form-control" readonly matInput  [matDatepicker]="RoleEffpicker"
+                      <input class="autoc-border  form-control" (click)="RoleEffpicker.open()"  readonly matInput  [matDatepicker]="RoleEffpicker"
                       formControlName="RoleEffFrom" name="RoleEffFrom"
                       [ngClass]="{ 'is-invalid': f.RoleEffFrom.touched  &&  f.RoleEffFrom.invalid }"  >
                       <mat-datepicker-toggle matSuffix [for]="RoleEffpicker"></mat-datepicker-toggle>
