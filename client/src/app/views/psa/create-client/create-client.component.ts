@@ -2,8 +2,9 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/
 import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../../services/auth.service';
 
 import { NotificationService } from '../../../services/notification.service';
@@ -33,45 +34,74 @@ export class CreateClientComponent implements OnInit {
   };
   industries: any;
   evaluationPeriods: any;
+  clientFormData: any = {};
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
     private notification: NotificationService,
     private modalService: BsModalService,
     public authService: AuthService,
-    public router:Router
+    public router: Router,
+    public activatedRoute: ActivatedRoute
   ) {
 
 
   }
-  public monthList=["January","February","March","April","May","June","July",
-  "August","September","October","November","December"]
+  public monthList = ["January", "February", "March", "April", "May", "June", "July",
+    "August", "September", "October", "November", "December"]
   countyFormReset: boolean;
-  cscData:any=null;
-  currentUser:any;
-  onCSCSelect(data){
-    this.clientForm.patchValue({City:data.City.name});
-    this.clientForm.patchValue({Country:data.Country.name});
-    this.clientForm.patchValue({State:data.State.name});
-    var add=""
-     add= `${data.City.name?data.City.name+",":""}
-     ${data.State.name?data.State.name+",":""}
-      ${data.Country.name?data.Country.name:""}
+  cscData: any = null;
+  currentUser: any;
+  subscription: Subscription = new Subscription();
+  currentRecord: any = {};
+  onCSCSelect(data) {
+    this.clientForm.patchValue({ City: data.City.name });
+    this.clientForm.patchValue({ Country: data.Country.name });
+    this.clientForm.patchValue({ State: data.State.name });
+    var add = ""
+    add = `${data.City.name ? data.City.name + "," : ""}
+     ${data.State.name ? data.State.name + "," : ""}
+      ${data.Country.name ? data.Country.name : ""}
      `
     //  if(data.City.name)
-    this.clientForm.patchValue({Address:add});
-    
-    }
+   // this.clientForm.patchValue({ Address: add });
+
+  }
   ngOnInit(): void {
+    this.subscription.add(this.activatedRoute.params.subscribe(params => {
+      
+      if(params['id']){
+        this.currentRecord.id = params['id'];
+      this.getClientDataById();
+      }
+
+    }));
+
     this.initForm();
     this.getIndustries();
     this.sameAsContactChange();
     this.mandateStartMonth();
     this.setEndMonth();
-this.currentUser=this.authService.getCurrentUser();
-this.disableUsageType()
-this.getEvaluationCategories();
+    this.currentUser = this.authService.getCurrentUser();
+    this.disableUsageType()
+    this.getEvaluationCategories();
   }
+  getClientDataById() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetOrganizationDataById",
+      this.perfApp.requestBody = { id: this.currentRecord.id }; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+      this.currentRecord = c;
+      console.info('client record', c);
+      this.setValues(this.clientForm, c);
+    }, error => {
+      this.notification.error('something went wrong')
+      console.error(error);
+
+      //this.notification.error(error.error.message)
+    });
+  }
+
   initForm() {
     this.clientForm = this.formBuilder.group({
       Name: [null, Validators.compose([
@@ -142,16 +172,16 @@ this.getEvaluationCategories();
       CoachingReminder: ['', []],
       EvaluationModels: ['', [Validators.required]],
       EvaluationPeriod: ['', [Validators.required]],
-           
+
       EmployeeBufferCount: ['', []],
       DownloadBufferDays: ['', []],
       IsActive: ['', []],
-      StartMonth:['', []],
-      EndMonth:['',[]]
+      StartMonth: ['', []],
+      EndMonth: ['', []]
 
     });
   }
-   
+
   get f() {
     return this.clientForm.controls;
   }
@@ -163,20 +193,26 @@ this.getEvaluationCategories();
     return this.clientForm.controls[controlName].hasError(errorName);
   }
 
-  public createClient = () => {    
+  public createClient = () => {
+    this.clientFormData.IsDraft = false;
     this.isFormSubmitted = true;
     if (!this.clientForm.valid) {
       return;
     }
-    this.saveClient();
+    if(this.currentRecord && this.currentRecord._id){
+      this.updateClient();
+    }else{
+      this.saveClient();
+    }
+    
   }
 
-  
+
   saveClient() {
-    const organization=this.prepareOrgData('Create');
+    this.clientFormData = Object.assign(this.clientFormData, this.prepareOrgData());
     this.perfApp.route = "app";
     this.perfApp.method = "AddOrganization",
-      this.perfApp.requestBody = organization; //fill body object with form 
+      this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Organization Addedd Successfully.')
@@ -214,52 +250,53 @@ this.getEvaluationCategories();
         if (value === null || value === undefined) {
           return;
         }
-       
-        if (value==='FiscalYear') {
-         this.clientForm.controls['StartMonth'].setValidators(Validators.required)
-         
+
+        if (value === 'FiscalYear') {
+          this.clientForm.controls['StartMonth'].setValidators(Validators.required)
+
           this.clientForm.controls['EndMonth'].setValue('')
           this.clientForm.controls['StartMonth'].enable()
         }
         else {
           this.clientForm.controls['StartMonth'].setValidators(null)
           this.clientForm.controls['StartMonth'].disable()
+          this.clientForm.controls['StartMonth'].patchValue('1')
           this.clientForm.controls['StartMonth'].setValue('1')
-          
+
           this.clientForm.controls['EndMonth'].setValue('December')
         }
       });
   }
   setEndMonth() {
     this.clientForm.get('StartMonth').valueChanges
-      .subscribe(value => {        
+      .subscribe(value => {
         if (value === null || value === undefined) {
           return;
         }
-       if(value==="1"){
-        const monthName=this.monthList[11];
-        this.clientForm.controls['EndMonth'].setValue(monthName);
-       }else{
-        const monthName=this.monthList[value-2];
-        this.clientForm.controls['EndMonth'].setValue(monthName);
-       }
-          
-        
+        if (value === "1") {
+          const monthName = this.monthList[11];
+          this.clientForm.controls['EndMonth'].setValue(monthName);
+        } else {
+          const monthName = this.monthList[value - 2];
+          this.clientForm.controls['EndMonth'].setValue(monthName);
+        }
+
+
       });
   }
   disableUsageType() {
     this.clientForm.get('ClientType').valueChanges
-      .subscribe(value => {        
+      .subscribe(value => {
         if (value === null || value === undefined) {
           return;
         }
-       if(this.currentUser.Role==='RSA' ||  value==="Reseller"){        
-        this.clientForm.controls['UsageType'].setValue('License');
-       }else{
-        
-       }
-          
-        
+        if (this.currentUser.Role === 'RSA' || value === "Reseller") {
+          this.clientForm.controls['UsageType'].setValue('License');
+        } else {
+
+        }
+
+
       });
   }
   public removeValidators(form: FormGroup) {
@@ -332,7 +369,7 @@ this.getEvaluationCategories();
     this.clientForm.reset();
     this.clientForm.setErrors(null);
     this.emptyForm(this.clientForm)
-    
+
   }
   public emptyForm(form: FormGroup) {
     for (const key in form.controls) {
@@ -347,8 +384,8 @@ this.getEvaluationCategories();
 
     }
   }
- 
- 
+
+
   getIndustries() {
     this.perfApp.route = "shared";
     this.perfApp.method = "GetIndustries",
@@ -362,58 +399,64 @@ this.getEvaluationCategories();
       //this.notification.error(error.error.message)
     });
   }
-  
+
   getEvaluationCategories() {
     this.perfApp.route = "shared";
     this.perfApp.method = "GetEvaluationCategories",
       this.perfApp.requestBody = {}; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.evaluationPeriods = c;
-      console.table('eval periods',c);
+      console.table('eval periods', c);
     }, error => {
 
 
       //this.notification.error(error.error.message)
     });
   }
-  
+
   //#region  update client related
   public updateClient() {
     if (this.clientForm.invalid) {
       return;
     }
-    const organization=this.prepareOrgData('Update');
+    const organization = this.prepareOrgData();
+    console.log('updating client',organization)
     this.perfApp.route = "app";
     this.perfApp.method = "UpdateOrganization",
       this.perfApp.requestBody = organization; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       debugger
-      console.log('updated',c)
-this.resetForm();
+      console.log('updated', c)
+      this.resetForm();
 
     }, error => {
-debugger
-console.log('eror while updating orgnaizartion :', error)
+      debugger
+      console.log('eror while updating orgnaizartion :', error)
 
       //this.notification.error(error.error.message)
     });
   }
   //#endregion
 
-  prepareOrgData(action) {
-    var organization = this.clientForm.value;
+  prepareOrgData() {
+    var organization = this.clientForm.getRawValue();
+    var action='Create';
+    if(this.currentRecord && this.currentRecord._id){
+action='Update'
+    }
     if (action === 'Create') {
       organization.IsActive = true;
-      organization.CreatedBy=this.authService.getCurrentUser()._id;
-      organization.CreatedOn=new Date();
-    } else {
-      debugger
-      organization.id = this.currentRowItem._id;
-      organization.UpdatedBy=this.authService.getCurrentUser()._id;
-      organization.UpdatedOn=new Date();     
+      organization.CreatedBy = this.authService.getCurrentUser()._id;
+      organization.CreatedOn = new Date();
+    } else {      
+      organization.id = this.currentRecord._id;
+      organization.UpdatedBy = this.authService.getCurrentUser()._id;
+      organization.UpdatedOn = new Date();
+      organization.IsDraft=false;
     }
     organization = this.setContactPersonData(organization);
-return organization;
+    delete organization.contactPersonForm;
+    return organization;
   }
 
   setContactPersonData(organization) {
@@ -424,13 +467,20 @@ return organization;
       organization.ContactPersonPhone = organization.AdminPhone;
       organization.ContactPersonEmail = organization.AdminEmail;
     } else {
-      organization.ContactPersonFirstName = this.contactPersonForm.value.ContactPersonLastName;
-      organization.ContactPersonMiddleName = this.contactPersonForm.value.ContactPersonMiddleName;
-      organization.ContactPersonLastName = this.contactPersonForm.value.ContactPersonLastName;
-      organization.ContactPersonPhone = this.contactPersonForm.value.ContactPersonPhone;
-      organization.ContactPersonEmail = this.contactPersonForm.value.ContactPersonEmail;
+      organization.ContactPersonFirstName = organization.ContactPersonLastName;
+      organization.ContactPersonMiddleName = organization.ContactPersonMiddleName;
+      organization.ContactPersonLastName = organization.ContactPersonLastName;
+      organization.ContactPersonPhone = organization.ContactPersonPhone;
+      organization.ContactPersonEmail = organization.ContactPersonEmail;
     }
     return organization;
   }
-
+  saveAsDraft() {
+    this.clientFormData.IsDraft = true;
+    this.isFormSubmitted = true;
+    if (!this.clientForm.valid) {
+      return;
+    }
+    this.saveClient();
+  }
 }

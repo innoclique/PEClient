@@ -25,7 +25,12 @@ export const projectRoutes: Routes = [
       title: 'View All'
     }},
     {
-      path:'client-setup',
+      path:'setup-clients/:id',
+      component:CreateClientComponent,
+      data:{title:'Create'}
+    },
+    {
+      path:'setup-clients',
       component:CreateClientComponent,
       data:{title:'Create'}
     }

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { GridOptions } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AuthService } from '../../../services/auth.service';
 
@@ -34,9 +35,14 @@ export class ClientSetupComponent implements OnInit {
   public clientData: any=[]
   public monthList = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"]
-    private resellerGridApi;
-    private clientGridApi;
-    gridOptions={}
+    public resellerGridApi:any;
+    
+    public clientGridOptions: GridOptions = {
+      columnDefs: this.getColDef()      
+    }
+    public resellerGridOptions: GridOptions = {
+      columnDefs: this.getColDef()      
+    }
     currentUser:any;
   constructor(
     private formBuilder: FormBuilder,
@@ -49,8 +55,40 @@ export class ClientSetupComponent implements OnInit {
 
 
   }
+  getColDef(){
+    return  [
+      {
+        headerName: 'Client', field: 'Name', sortable: true, filter: true,
+  
+        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
+      },
+      
+      { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
+      { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
+      { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
+      {
+        headerName: "Actions",
+        suppressMenu: true,
+        Sorting: false,
+        //width: 170,
+        cellRenderer: (data) => {
+          console.log('column data', data)
+          //if (data.data.ApprovalRecord.status === 'ACTIVE') {
+          return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
+    font-size: 17px;"   data-action-type="suspendorg" title="Deactivate Client"></i>
+    <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+    font-size: 17px;"   data-action-type="edit" title="Edit Client" ></i>
+    `
+          //}
+        }
+  
+  
+      }
+    ];
+  
+  }
   gotoCreate() {
-    this.router.navigate(['/psa/client-setup'])
+    this.router.navigate(['/psa/setup-clients'])
   }
   ngOnInit(): void {
     this.getClients();
@@ -160,44 +198,18 @@ export class ClientSetupComponent implements OnInit {
   }
 
   onClientGridReady(params) {
-    this.clientGridApi = params.api; // To access the grids API
+    this.clientGridOptions.api = params.api; // To access the grids API
   }
   onResellerGridReady(params) {
-    this.resellerGridApi = params.api; // To access the grids API
+    this.resellerGridOptions.api = params.api; // To access the grids API
   }
 
-  public columnDefs = [
-    {
-      headerName: 'Client', field: 'Name', sortable: true, filter: true,
-
-      cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
-    },
-    
-    { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
-    { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
-    { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
-    {
-      headerName: "Actions",
-      suppressMenu: true,
-      Sorting: false,
-      //width: 170,
-      cellRenderer: (data) => {
-        console.log('column data', data)
-        //if (data.data.ApprovalRecord.status === 'ACTIVE') {
-        return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-  font-size: 17px;"   data-action-type="suspendorg" ></i>`
-        //}
-      }
-
-
-    }
-  ];
 
 
   getClients() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllOrganizations",
-      this.perfApp.requestBody = { 'id': '5f5929f56c16e542d823247b' }
+    this.perfApp.requestBody = { 'id': '5f5929f56c16e542d823247b' }
     this.perfApp.CallAPI().subscribe(c => {
       
       console.log('lients data', c);
@@ -227,9 +239,12 @@ export class ClientSetupComponent implements OnInit {
             })
           }        
         });
+        debugger
+        this.clientGridOptions.api.setRowData(this.clientData);
+       
+        this.resellerGridOptions.api.setRowData(this.resellerList);
+      
       }
-      this.clientGridApi.setRowData(this.clientData);
-      this.resellerGridApi.setRowData(this.resellerList);
       
     })
   }
@@ -347,6 +362,21 @@ export class ClientSetupComponent implements OnInit {
 
     }
   }
+  public disableForm(form: FormGroup) {
+    
+    for (const key in form.controls) {
+      
+      const f = form.controls[key];
+      //for child forms
+      if (f && f instanceof FormGroup) {
+        this.disableForm(f);
+      } else {
+        form.controls[key].disable();
+
+      }
+
+    }
+  }
   public setContactPersonFields(form: FormGroup) {
     form.controls["ContactPersonFirstName"].setValue(this.clientForm.get('AdminFirstName').value)
     form.controls["ContactPersonMiddleName"].setValue(this.clientForm.get('AdminMiddleName').value)
@@ -410,8 +440,8 @@ export class ClientSetupComponent implements OnInit {
           return this.openOrgView();
         case "suspendorg":
           return this.suspendOrg();
-        case "rejectRequest":
-        //return this.rejectRequest(data);
+        case "edit":
+        return this.editClient();
       }
     }
   }
@@ -426,19 +456,34 @@ export class ClientSetupComponent implements OnInit {
           return this.openOrgView();
         case "suspendorg":
           return this.suspendOrg();
-        case "rejectRequest":
-        //return this.rejectRequest(data);
+        case "edit":
+        return this.editClient();
       }
     }
   }
   suspendOrg() {
 
   }
-  openOrgView() {
-    this.orgViewRef = this.modalService.show(this.orgView, this.config);
-    this.orgViewRef.setClass('modal-xlg');
+  editClient(){
     const cr = this.currentRowItem;
-    this.setValues(this.clientForm, cr);
+    
+      this.router.navigate(['/psa/setup-clients/'+cr._id])
+      return;
+    
+  }
+  openOrgView() {
+    debugger
+    const cr = this.currentRowItem;
+    if(cr.IsDraft){
+      this.router.navigate(['/psa/setup-clients/'+cr._id])
+      return;
+    }else{
+      this.orgViewRef = this.modalService.show(this.orgView, this.config);
+      this.orgViewRef.setClass('modal-xlg');      
+      this.setValues(this.clientForm, cr);
+      this.disableForm(this.clientForm);
+    }
+    
 
   }
   hideorgView() {

@@ -96,6 +96,14 @@ export const routes: Routes = [
         },
         loadChildren:()=>import('./views/psa/psa.module').then(m=>m.PSAModule),
         
+      },
+      {
+        path: 'rsa',
+        data: {
+          title: 'Clients'
+        },
+        loadChildren:()=>import('./views/rsa/rsa.module').then(m=>m.RsaModule),
+        
       }
     ]
   },

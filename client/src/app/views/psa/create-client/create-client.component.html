@@ -126,7 +126,7 @@
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">ExtNumber</span>
+                      <span class="input-group-text">Ext Number</span>
                     </div>
                     <input type="text" class="form-control" formControlName="PhoneExt">
                   </div>
@@ -154,7 +154,7 @@
 
             <div class="form-group row">
               <div [hidden]="(currentUser.Role === 'RSA')" class="form-group col-md-4 ">
-                <label class="col-form-label redStar" for="inline-radios">Client Type:</label>                
+                <label class="col-form-label redStar" for="inline-radios">Client Type</label>                
                 <label class="form-control" class="radio-inline">
                   <input [checked]="true" [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.ClientType.invalid }"
                     formControlName="ClientType" type="radio" name="ClientType" value="Client"> Client
@@ -170,7 +170,7 @@
               </div>
               <div class="form-group col-md-4 ">
                 <div class="field-group">
-                <label class="col-form-label redStar" for="inline-radios">Usage Type:</label>
+                <label class="col-form-label redStar" for="inline-radios">Usage Type</label>
                 <label class="radio-inline">
                   <input [checked]="(f.ClientType.value === 'Reseller' || currentUser.Role === 'RSA')" formControlName="UsageType" name="UsageType"
                     [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="License">
@@ -451,7 +451,8 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Start Month</span>
                     </div>
-                    <select [disabled]="f.EvaluationPeriod.value==='CalendarYear'" [ngClass]="{ 'is-invalid':isFormSubmitted  &&  f.StartMonth.invalid }"
+                    <select [disabled]="f.EvaluationPeriod.value==='CalendarYear'" 
+                    [ngClass]="{ 'is-invalid':isFormSubmitted  &&  f.StartMonth.invalid }"
                       formControlName="StartMonth" class="form-control" id="StartMonth" name="StartMonth">
                      
                       <option  value='1'>Janaury</option>
@@ -534,7 +535,7 @@
                 </div>
               </div>
               <div class="form-group col-md-4 ">
-                <label class="col-form-label redStar" for="inline-radios">Ative:</label>
+                <label class="col-form-label redStar" for="inline-radios">Active</label>
 
                 <label class="radio-inline">
                   <input [checked]="true" [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
@@ -573,6 +574,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" #closeModal
               (click)="router.navigate(['psa/list'])">Close</button>
+              <button *ngIf="this.currentRecord" type="button" (click)="saveAsDraft()" class="btn btn-primary">Save as Draft</button>
             <button type="button" (click)="createClient()" class="btn btn-primary">Submit</button>
           </div>
         </div>
