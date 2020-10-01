@@ -35,6 +35,7 @@ export class CreateEmployeeComponent implements OnInit {
   appRoles: any=[];
   jobLevels: any;
   loginUser: any;
+  countyFormReset: boolean;
   isRoleChanged: boolean;
   public alert: AlertDialog;
   
