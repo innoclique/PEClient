@@ -35,6 +35,7 @@ export class CreateEmployeeComponent implements OnInit {
   appRoles: any=[];
   jobLevels: any;
   loginUser: any;
+  isRoleChanged: boolean;
   public alert: AlertDialog;
   
   filteredOptions: Observable<any[]>;
