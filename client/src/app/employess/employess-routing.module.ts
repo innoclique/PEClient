@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { KpiSettingsComponent } from './kpi-settings/kpi-settings.component';
+import { KpiSetupComponent } from './kpi-setup/kpi-setup.component';
 
 
 
@@ -13,7 +14,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'kpi-setting'
+        redirectTo: 'kpi-setup'
       },
      
       {
@@ -21,6 +22,14 @@ const routes: Routes = [
         component: KpiSettingsComponent,
         data: {
           title: 'KPI Setting'
+        }
+      },
+
+      {
+        path: 'kpi-setup',
+        component: KpiSetupComponent,
+        data: {
+          title: 'KPI Setup'
         }
       },
 

@@ -16,9 +16,19 @@
      .col-3, .col-2, .col-1 {
          padding-left: 5px !important;
          padding-right: 5px !important;
+         float: left !important;
 }
 
-span {
+/* span {
     float: left !important;
     display: inherit;
+} */
+
+.mea-cri-sel {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 175px;
+    overflow: hidden;
+    vertical-align: top;
+    display: block;
 }

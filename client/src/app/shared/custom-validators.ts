@@ -34,6 +34,17 @@ export class CustomValidators {
         return valid ? null : error;
       }
 
+      if (name === 'hasKPISplChars') {
+        if((typeof control.value) == "object") return
+        if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`]+/.test(control.value)) {
+          valid = true;
+          return valid ? null : error;
+        }
+        valid = !/[!@$%^*_+\=\[\]{};'"\\|<>`]+/.test(control.value)
+        return valid ? null : error;
+      }
+      
+
       if (name === 'hasPhoneSplChars') {
 
         if (/^[0-9]*$/.test(control.value)) {
