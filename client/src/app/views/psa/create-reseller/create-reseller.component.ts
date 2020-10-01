@@ -201,8 +201,7 @@ export class CreateResellerComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Reseller Addedd Successfully.')
-      this.errorOnSave = false;
-      this.errorMessage = "";
+      this.router.navigate(['/psa/list'])
     }, error => {
       this.errorOnSave = true;
       this.errorMessage = error.error ? error.error.message : error.message;
@@ -356,13 +355,12 @@ export class CreateResellerComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
       debugger
       console.log('updated', c)
-      this.resetForm();
+      this.notification.success('Reseller details updated successfully')
+      this.router.navigate(['/psa/list'])
 
-    }, error => {
-      debugger
-      console.log('eror while updating orgnaizartion :', error)
-
-      //this.notification.error(error.error.message)
+    }, error => {      
+      console.log('eror while updating reseller :', error)
+      this.notification.error(error.error.message)
     });
   }
   //#endregion

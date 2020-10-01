@@ -82,7 +82,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text redStar">Zip Code</span>
                       </div>
-                      <input maxlength="8" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.ZipCode.errors }"
+                      <input numbersOnly maxlength="8" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.ZipCode.errors }"
                         formControlName="ZipCode" class="form-control">
   
   

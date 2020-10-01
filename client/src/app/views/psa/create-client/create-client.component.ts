@@ -55,6 +55,7 @@ export class CreateClientComponent implements OnInit {
   currentUser: any;
   subscription: Subscription = new Subscription();
   currentRecord: any = {};
+  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
   onCSCSelect(data) {
     this.clientForm.patchValue({ City: data.City.name });
     this.clientForm.patchValue({ Country: data.Country.name });
@@ -85,7 +86,7 @@ export class CreateClientComponent implements OnInit {
     this.mandateStartMonth();
     this.setEndMonth();
     this.currentUser = this.authService.getCurrentUser();
-    this.disableUsageType()
+    this.mandateUsageCount()
     this.getEvaluationCategories();
   }
   getClientDataById() {
@@ -128,7 +129,7 @@ export class CreateClientComponent implements OnInit {
       State: ['', [Validators.required]],
       City: ['', [Validators.required]],
       ZipCode: ['', [Validators.required]],
-      ClientType: ['', [Validators.required]],
+      ClientType: ['Client',[]],
       UsageType: ['License', [Validators.required]],
       UsageCount: ['', [Validators.required]],
       AdminFirstName: [null, Validators.compose([
@@ -196,6 +197,7 @@ export class CreateClientComponent implements OnInit {
   }
 
   public createClient = () => {
+    debugger
     this.clientFormData.IsDraft = false;
     this.isFormSubmitted = true;
     if (!this.clientForm.valid) {
@@ -218,6 +220,7 @@ export class CreateClientComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Organization Addedd Successfully.')
+      this.router.navigate(['/psa/list'])
       this.errorOnSave = false;
       this.errorMessage = "";
     }, error => {
@@ -286,16 +289,18 @@ export class CreateClientComponent implements OnInit {
 
       });
   }
-  disableUsageType() {
-    this.clientForm.get('ClientType').valueChanges
+  mandateUsageCount() {
+    this.clientForm.get('UsageType').valueChanges
       .subscribe(value => {
         if (value === null || value === undefined) {
           return;
         }
-        if (this.currentUser.Role === 'RSA' || value === "Reseller") {
-          this.clientForm.controls['UsageType'].setValue('License');
-        } else {
-
+        if (value==='License') {
+          this.clientForm.controls['UsageCount'].reset();
+          this.clientForm.controls['UsageCount'].clearValidators();
+          this.clientForm.controls['UsageCount'].setValue(0);
+        } else {         
+          this.clientForm.controls['UsageCount'].setValidators(Validators.required);
         }
 
 
@@ -426,16 +431,14 @@ export class CreateClientComponent implements OnInit {
     this.perfApp.route = "app";
     this.perfApp.method = "UpdateOrganization",
       this.perfApp.requestBody = organization; //fill body object with form 
-    this.perfApp.CallAPI().subscribe(c => {
-      debugger
+    this.perfApp.CallAPI().subscribe(c => {      
       console.log('updated', c)
-      this.resetForm();
+      this.notification.success('Client details updated successfully')
+      this.router.navigate(['/psa/list'])
 
-    }, error => {
-      debugger
+    }, error => {      
       console.log('eror while updating orgnaizartion :', error)
-
-      //this.notification.error(error.error.message)
+      this.notification.error(error.error.message)
     });
   }
   //#endregion
