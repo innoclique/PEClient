@@ -11,18 +11,21 @@ import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { CustomValidators } from '../../../shared/custom-validators';
 
-@Component({
-  selector: 'app-create-client',
-  templateUrl: './create-client.component.html',
-  styleUrls: ['./create-client.component.css']
-})
-export class CreateClientComponent implements OnInit {
 
+@Component({
+  selector: 'app-create-reseller',
+  templateUrl: './create-reseller.component.html',
+  styleUrls: ['./create-reseller.component.css']
+})
+export class CreateResellerComponent implements OnInit {
+
+ 
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
   errorOnSave = false;
   errorMessage: string = "";
+  isCreate:Boolean=true;
   @ViewChild('closeModal') closeModal: ElementRef
   currentRowItem: any;
   orgViewRef: BsModalRef;
@@ -35,7 +38,6 @@ export class CreateClientComponent implements OnInit {
   industries: any;
   evaluationPeriods: any;
   clientFormData: any = {};
-  isCreate:Boolean=true;
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -48,8 +50,6 @@ export class CreateClientComponent implements OnInit {
 
 
   }
-  public monthList = ["January", "February", "March", "April", "May", "June", "July",
-    "August", "September", "October", "November", "December"]
   countyFormReset: boolean;
   cscData: any = null;
   currentUser: any;
@@ -59,22 +59,14 @@ export class CreateClientComponent implements OnInit {
     this.clientForm.patchValue({ City: data.City.name });
     this.clientForm.patchValue({ Country: data.Country.name });
     this.clientForm.patchValue({ State: data.State.name });
-    var add = ""
-    add = `${data.City.name ? data.City.name + "," : ""}
-     ${data.State.name ? data.State.name + "," : ""}
-      ${data.Country.name ? data.Country.name : ""}
-     `
-    //  if(data.City.name)
-   // this.clientForm.patchValue({ Address: add });
-
+   
   }
   ngOnInit(): void {
-    this.subscription.add(this.activatedRoute.params.subscribe(params => {
-      
+    this.subscription.add(this.activatedRoute.params.subscribe(params => {      
       if(params['id']){
         this.currentRecord.id = params['id'];
+        this.isCreate=false;
       this.getClientDataById();
-      this.isCreate=false;
       }
 
     }));
@@ -82,10 +74,7 @@ export class CreateClientComponent implements OnInit {
     this.initForm();
     this.getIndustries();
     this.sameAsContactChange();
-    this.mandateStartMonth();
-    this.setEndMonth();
-    this.currentUser = this.authService.getCurrentUser();
-    this.disableUsageType()
+    this.currentUser = this.authService.getCurrentUser();    
     this.getEvaluationCategories();
   }
   getClientDataById() {
@@ -118,19 +107,20 @@ export class CreateClientComponent implements OnInit {
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/])/, { hasAddressSplChars: true }, 'hasAddressSplChars'),
       ])],
       Phone: [null, Validators.compose([
-        Validators.required, Validators.minLength(10),
-        Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
-
+        Validators.required, 
+        Validators.minLength(10),        
+        Validators.pattern(/[^0-9]*/g),        
       ])],
-      PhoneExt: [null, []],
+      PhoneExt: [null, Validators.compose([
+        Validators.pattern("^[0-9]*$"),        
+      ])],
       Email: ['', [Validators.required, Validators.email]],
       Country: ['', [Validators.required]],
       State: ['', [Validators.required]],
       City: ['', [Validators.required]],
       ZipCode: ['', [Validators.required]],
-      ClientType: ['', [Validators.required]],
-      UsageType: ['License', [Validators.required]],
-      UsageCount: ['', [Validators.required]],
+      ClientType: ['Reseller', [Validators.required]],
+      
       AdminFirstName: [null, Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
@@ -146,8 +136,9 @@ export class CreateClientComponent implements OnInit {
       AdminMiddleName: ['', []],
       AdminEmail: ['', [Validators.required, Validators.email]],
       AdminPhone: [null, Validators.compose([
-        Validators.required, Validators.minLength(10),
-        Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+        Validators.required, 
+        Validators.minLength(10),        
+        Validators.pattern("^[0-9]*$")
       ])],
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
@@ -167,19 +158,12 @@ export class CreateClientComponent implements OnInit {
         ContactPersonMiddleName: ['', []],
         ContactPersonEmail: ['', [Validators.required, Validators.email]],
         ContactPersonPhone: [null, Validators.compose([
-          Validators.required, Validators.minLength(10),
-          Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+          Validators.required, 
+          Validators.minLength(10),        
+          Validators.pattern("^[0-9]*$")
         ])]
       }),
-      CoachingReminder: ['', []],
-      EvaluationModels: ['', [Validators.required]],
-      EvaluationPeriod: ['', [Validators.required]],
-
-      EmployeeBufferCount: ['', []],
-      DownloadBufferDays: ['', []],
-      IsActive: ['', []],
-      StartMonth: ['', []],
-      EndMonth: ['', []]
+      IsActive: ['', []]
 
     });
   }
@@ -191,11 +175,10 @@ export class CreateClientComponent implements OnInit {
     return (this.clientForm.controls['contactPersonForm'] as FormGroup).controls;
   }
 
-  public hasError = (controlName: string, errorName: string) => {
-    return this.clientForm.controls[controlName].hasError(errorName);
-  }
+  
 
   public createClient = () => {
+    debugger
     this.clientFormData.IsDraft = false;
     this.isFormSubmitted = true;
     if (!this.clientForm.valid) {
@@ -213,11 +196,11 @@ export class CreateClientComponent implements OnInit {
   saveClient() {
     this.clientFormData = Object.assign(this.clientFormData, this.prepareOrgData());
     this.perfApp.route = "app";
-    this.perfApp.method = "AddOrganization",
+    this.perfApp.method = "AddReseller",
       this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
-      this.notification.success('Organization Addedd Successfully.')
+      this.notification.success('Reseller Addedd Successfully.')
       this.errorOnSave = false;
       this.errorMessage = "";
     }, error => {
@@ -243,62 +226,6 @@ export class CreateClientComponent implements OnInit {
           this.enableFields(contactForm);
           this.addValidators(contactForm);
         }
-      });
-  }
-  mandateStartMonth() {
-    this.clientForm.get('EvaluationPeriod').valueChanges
-      .subscribe(value => {
-        debugger
-        if (value === null || value === undefined) {
-          return;
-        }
-
-        if (value === 'FiscalYear') {
-          this.clientForm.controls['StartMonth'].setValidators(Validators.required)
-
-          this.clientForm.controls['EndMonth'].setValue('')
-          this.clientForm.controls['StartMonth'].enable()
-        }
-        else {
-          this.clientForm.controls['StartMonth'].setValidators(null)
-          this.clientForm.controls['StartMonth'].disable()
-          this.clientForm.controls['StartMonth'].patchValue('1')
-          this.clientForm.controls['StartMonth'].setValue('1')
-
-          this.clientForm.controls['EndMonth'].setValue('December')
-        }
-      });
-  }
-  setEndMonth() {
-    this.clientForm.get('StartMonth').valueChanges
-      .subscribe(value => {
-        if (value === null || value === undefined) {
-          return;
-        }
-        if (value === "1") {
-          const monthName = this.monthList[11];
-          this.clientForm.controls['EndMonth'].setValue(monthName);
-        } else {
-          const monthName = this.monthList[value - 2];
-          this.clientForm.controls['EndMonth'].setValue(monthName);
-        }
-
-
-      });
-  }
-  disableUsageType() {
-    this.clientForm.get('ClientType').valueChanges
-      .subscribe(value => {
-        if (value === null || value === undefined) {
-          return;
-        }
-        if (this.currentUser.Role === 'RSA' || value === "Reseller") {
-          this.clientForm.controls['UsageType'].setValue('License');
-        } else {
-
-        }
-
-
       });
   }
   public removeValidators(form: FormGroup) {
@@ -424,7 +351,7 @@ export class CreateClientComponent implements OnInit {
     const organization = this.prepareOrgData();
     console.log('updating client',organization)
     this.perfApp.route = "app";
-    this.perfApp.method = "UpdateOrganization",
+    this.perfApp.method = "UpdateReseller",
       this.perfApp.requestBody = organization; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       debugger

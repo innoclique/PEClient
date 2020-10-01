@@ -25,6 +25,7 @@ export class ClientSetupComponent implements OnInit {
   currentRowItem: any;
   orgViewRef: BsModalRef;
   @ViewChild('orgView') orgView: TemplateRef<any>;
+  @ViewChild('resellerView') resellerView: TemplateRef<any>;
   config = {
     backdrop: true,
     ignoreBackdropClick: true,
@@ -58,22 +59,19 @@ export class ClientSetupComponent implements OnInit {
   getColDef(){
     return  [
       {
-        headerName: 'Client', field: 'Name', sortable: true, filter: true,
-  
+        headerName: 'Client', field: 'Name', sortable: true, filter: true,  
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
-      },
-      
+      },      
       { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
       { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
       { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
       {
         headerName: "Actions",
         suppressMenu: true,
-        Sorting: false,
-        //width: 170,
+        Sorting: false,        
         cellRenderer: (data) => {
-          console.log('column data', data)
-          //if (data.data.ApprovalRecord.status === 'ACTIVE') {
+        console.log('column data', data)
+          
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
     font-size: 17px;"   data-action-type="suspendorg" title="Deactivate Client"></i>
     <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -90,9 +88,11 @@ export class ClientSetupComponent implements OnInit {
   gotoCreate() {
     this.router.navigate(['/psa/setup-clients'])
   }
+  gotoResellerCreate(){
+    this.router.navigate(['/psa/setup-reseller'])
+  }
   ngOnInit(): void {
     this.getClients();
-
     this.initForm();
     this.getIndustries();
     this.sameAsContactChange()
@@ -453,11 +453,11 @@ export class ClientSetupComponent implements OnInit {
       let actionType = e.event.target.getAttribute("data-action-type");
       switch (actionType) {
         case "orgView":
-          return this.openOrgView();
+          return this.openResellerview();
         case "suspendorg":
           return this.suspendOrg();
         case "edit":
-        return this.editClient();
+        return this.editReseller();
       }
     }
   }
@@ -469,6 +469,25 @@ export class ClientSetupComponent implements OnInit {
     
       this.router.navigate(['/psa/setup-clients/'+cr._id])
       return;
+    
+  }
+  editReseller(){
+    const cr = this.currentRowItem;    
+      this.router.navigate(['/psa/setup-reseller/'+cr._id])
+      return;    
+  }
+  openResellerview(){
+    debugger
+    const cr = this.currentRowItem;
+    if(cr.IsDraft){
+      this.router.navigate(['/psa/setup-reseller/'+cr._id])
+      return;
+    }else{
+      this.orgViewRef = this.modalService.show(this.orgView, this.config);
+      this.orgViewRef.setClass('modal-xlg');      
+      this.setValues(this.clientForm, cr);
+      this.disableForm(this.clientForm);
+    }
     
   }
   openOrgView() {

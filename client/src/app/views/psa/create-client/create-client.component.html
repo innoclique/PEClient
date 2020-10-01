@@ -22,7 +22,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Organization Name</span>
                     </div>
-                    <input max="500" class="form-control" type="text" formControlName="Name" name="Name"
+                    <input [readonly]="!isCreate" max="500" class="form-control" type="text" formControlName="Name" name="Name"
                       [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Name.errors }" required>
                     <div *ngIf=" isFormSubmitted  && f.Name.errors" class="invalid-feedback">
                       <div *ngIf="f.Name.errors.required">Organization Name is required</div>
@@ -110,7 +110,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Phone</span>
                     </div>
-                    <input maxlength="12" type="text" class="form-control"
+                    <input numbersOnly maxlength="12" type="text" class="form-control"
                       [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Phone.errors }" formControlName="Phone" required>
                     <div *ngIf="isFormSubmitted  && f.Phone.errors" class="invalid-feedback">
                       <div *ngIf="f.Phone.errors.required">Phone Number is required</div>
@@ -128,7 +128,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text">Ext Number</span>
                     </div>
-                    <input type="text" class="form-control" formControlName="PhoneExt">
+                    <input numbersOnly type="text" class="form-control" formControlName="PhoneExt">
                   </div>
                 </div>
 
@@ -153,30 +153,16 @@
             </div>
 
             <div class="form-group row">
-              <div [hidden]="(currentUser.Role === 'RSA')" class="form-group col-md-4 ">
-                <label class="col-form-label redStar" for="inline-radios">Client Type</label>                
-                <label class="form-control" class="radio-inline">
-                  <input [checked]="true" [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.ClientType.invalid }"
-                    formControlName="ClientType" type="radio" name="ClientType" value="Client"> Client
-                </label>
-                <label class="radio-inline">
-                  <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.ClientType.invalid }"
-                    formControlName="ClientType" type="radio" name="ClientType" value="Reseller"> Reseller
-                </label>
-                <div *ngIf="isFormSubmitted && f.ClientType.errors" class="invalid-feedback">
-                  <div *ngIf="f.ClientType.errors.required">Client Type is required</div>
-                </div>
-
-              </div>
+              
               <div class="form-group col-md-4 ">
                 <div class="field-group">
                 <label class="col-form-label redStar" for="inline-radios">Usage Type</label>
                 <label class="radio-inline">
-                  <input [checked]="(f.ClientType.value === 'Reseller' || currentUser.Role === 'RSA')" formControlName="UsageType" name="UsageType"
+                  <input [checked]  formControlName="UsageType" name="UsageType"
                     [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="License">
                   License
                 </label>
-                <label [hidden]="(f.ClientType.value === 'Reseller' || currentUser.Role === 'RSA')" *ngIf="currentUser.Role!=='RSA'"  class="form-control" class="radio-inline">
+                <label   class="form-control" class="radio-inline">
                   <input  formControlName="UsageType" name="UsageType"
                     [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
                     value="Employees"> # of Employees
@@ -188,13 +174,13 @@
               </div>
               </div>
 
-              <div class="col-md-4">
+              <div *ngIf="f.UsageType.value==='Employees'" class="col-md-4">
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Count</span>
                     </div>
-                    <input type="number" class="form-control" min="0"
+                    <input  type="number" class="form-control" min="0"
                       [ngClass]="{ 'is-invalid': isFormSubmitted  && f.UsageCount.errors}" formControlName="UsageCount"
                       name="UsageCount">
 
@@ -254,7 +240,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Phone</span>
                     </div>
-                    <input maxlength="12" class="form-control" type="text"
+                    <input numbersOnly maxlength="12" class="form-control" type="text"
                       [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.AdminPhone.errors }"
                       formControlName="AdminPhone">
                     <div *ngIf="isFormSubmitted && f.AdminPhone.errors" class="invalid-feedback">
@@ -341,7 +327,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text ">Phone</span>
                     </div>
-                    <input class="form-control" type="text"
+                    <input numbersOnly class="form-control" type="text"
                       [ngClass]="{ 'is-invalid': !f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors}"
                       formControlName="ContactPersonPhone">
                     <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors"
@@ -573,9 +559,9 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" #closeModal
-              (click)="router.navigate(['psa/list'])">Close</button>
-              <button *ngIf="this.currentRecord" type="button" (click)="saveAsDraft()" class="btn btn-primary">Save as Draft</button>
-            <button type="button" (click)="createClient()" class="btn btn-primary">Submit</button>
+              (click)="router.navigate(['psa/list'])">Back To List</button>
+              <button *ngIf="isCreate" type="button" (click)="saveAsDraft()" class="btn btn-primary">Save as Draft</button>
+            <button type="button" (click)="createClient()" class="btn btn-primary">{{isCreate?'Create':'Update'}}</button>
           </div>
         </div>
       </div>

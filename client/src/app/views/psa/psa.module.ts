@@ -10,6 +10,8 @@ import { CreateClientComponent } from './create-client/create-client.component';
 import { EmployessModule } from '../../employess/employess.module';
 import { EvalCommonModule } from '../common/common.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { CreateResellerComponent } from './create-reseller/create-reseller.component';
+import {NumberDirective} from '../../directives/numbersonly'
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -27,11 +29,21 @@ export const projectRoutes: Routes = [
     {
       path:'setup-clients/:id',
       component:CreateClientComponent,
-      data:{title:'Create'}
+      data:{title:'Update'}
     },
     {
       path:'setup-clients',
       component:CreateClientComponent,
+      data:{title:'Create'}
+    },
+    {
+      path:'setup-reseller/:id',
+      component:CreateResellerComponent,
+      data:{title:'Update'}
+    },
+    {
+      path:'setup-reseller',
+      component:CreateResellerComponent,
       data:{title:'Create'}
     }
   
@@ -41,7 +53,9 @@ export const projectRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ClientSetupComponent, CreateClientComponent],
+  declarations: [ClientSetupComponent, CreateClientComponent, CreateResellerComponent,
+    NumberDirective
+  ],
   imports: [
     CommonModule,
     FormsModule,
