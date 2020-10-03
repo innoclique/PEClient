@@ -1,0 +1,10 @@
+.kpi-for-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+  }
+  
+  .kpi-radio-button {
+    margin: 5px;
+  }
+  

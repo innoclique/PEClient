@@ -22,8 +22,8 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Organization Name</span>
                     </div>
-                    <input [readonly]="!isCreate" max="500" class="form-control" type="text" formControlName="Name" name="Name"
-                      [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Name.errors }" required>
+                    <input [readonly]="!isCreate" max="500" class="form-control" type="text" formControlName="Name"
+                      name="Name" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Name.errors }" required>
                     <div *ngIf=" isFormSubmitted  && f.Name.errors" class="invalid-feedback">
                       <div *ngIf="f.Name.errors.required">Organization Name is required</div>
                       <div *ngIf="f.Name.errors.minlength">Organization Name must be at least 2 characters </div>
@@ -41,7 +41,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Select Industry</span>
                     </div>
-                    <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Industry.errors }"
+                    <select (change)="onIndustryChange($event)" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Industry.errors }"
                       formControlName="Industry" class="form-control">
                       <option value="" disabled selected>Select Industry</option>
                       <option *ngFor="let i of industries" [value]="i.Code">{{i.Name}}</option>
@@ -153,26 +153,26 @@
             </div>
 
             <div class="form-group row">
-              
+
               <div class="form-group col-md-4 ">
                 <div class="field-group">
-                <label class="col-form-label redStar" for="inline-radios">Usage Type</label>
-                <label class="radio-inline">
-                  <input [checked]  formControlName="UsageType" name="UsageType"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" 
-                    type="radio" value="License">
-                  License
-                </label>
-                <label   class="form-control" class="radio-inline">
-                  <input  formControlName="UsageType" name="UsageType"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
-                    value="Employees"> # of Employees
-                </label>
+                  <label class="col-form-label redStar" for="inline-radios">Usage Type</label>
+                  <label class="radio-inline">
+                    <input [checked] formControlName="UsageType" name="UsageType"
+                      [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
+                      value="License">
+                    License
+                  </label>
+                  <label class="form-control" class="radio-inline">
+                    <input formControlName="UsageType" name="UsageType"
+                      [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
+                      value="Employees"> # of Employees
+                  </label>
 
-                <div *ngIf="isFormSubmitted && f.UsageType.errors" class="invalid-feedback">
-                  <div *ngIf="f.UsageType.errors.required">Usage Type Required</div>
+                  <div *ngIf="isFormSubmitted && f.UsageType.errors" class="invalid-feedback">
+                    <div *ngIf="f.UsageType.errors.required">Usage Type Required</div>
+                  </div>
                 </div>
-              </div>
               </div>
 
               <div *ngIf="f.UsageType.value==='Employees'" class="col-md-4">
@@ -181,7 +181,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Count</span>
                     </div>
-                    <input  type="number" class="form-control" min="0"
+                    <input type="number" class="form-control" min="0"
                       [ngClass]="{ 'is-invalid': isFormSubmitted  && f.UsageCount.errors}" formControlName="UsageCount"
                       name="UsageCount">
 
@@ -394,12 +394,13 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Select Model</span>
                     </div>
-                    
-  <mat-select formControlName="EvaluationModels" [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }"
-  class="form-control" multiple>
-    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-  </mat-select>
-                    
+
+                    <mat-select formControlName="EvaluationModels"
+                      [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }" class="form-control"
+                      multiple>
+                      <mat-option *ngFor="let topping of models" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+
                     <div *ngIf="isFormSubmitted && f.EvaluationModels.errors" class="invalid-feedback">
                       <div *ngIf="f.EvaluationModels.errors.required">Evaluation Model is required</div>
                     </div>
@@ -437,11 +438,11 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Start Month</span>
                     </div>
-                    <select [disabled]="f.EvaluationPeriod.value==='CalendarYear'" 
-                    [ngClass]="{ 'is-invalid':isFormSubmitted  &&  f.StartMonth.invalid }"
+                    <select [disabled]="f.EvaluationPeriod.value==='CalendarYear'"
+                      [ngClass]="{ 'is-invalid':isFormSubmitted  &&  f.StartMonth.invalid }"
                       formControlName="StartMonth" class="form-control" id="StartMonth" name="StartMonth">
-                     
-                      <option  value='1'>Janaury</option>
+
+                      <option value='1'>Janaury</option>
                       <option value='2'>February</option>
                       <option value='3'>March</option>
                       <option value='4'>April</option>
@@ -558,10 +559,12 @@
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" #closeModal
-              (click)="router.navigate(['psa/list'])">Back To List</button>
-              <button *ngIf="isCreate" type="button" (click)="saveAsDraft()" class="btn btn-primary">Save as Draft</button>
-            <button type="button" (click)="createClient()" class="btn btn-primary">{{isCreate?'Create':'Update'}}</button>
+            <button type="button" class="btn btn-secondary" #closeModal (click)="router.navigate(['psa/list'])">Back To
+              List</button>
+            <button *ngIf="isCreate" type="button" (click)="saveAsDraft()" class="btn btn-primary">Save as
+              Draft</button>
+            <button type="button" (click)="createClient()"
+              class="btn btn-primary">{{isCreate?'Create':'Update'}}</button>
           </div>
         </div>
       </div>

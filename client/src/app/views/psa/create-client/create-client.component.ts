@@ -36,6 +36,7 @@ export class CreateClientComponent implements OnInit {
   evaluationPeriods: any;
   clientFormData: any = {};
   isCreate:Boolean=true;
+  models:any=[];
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -76,6 +77,7 @@ export class CreateClientComponent implements OnInit {
         this.currentRecord.id = params['id'];
       this.getClientDataById();
       this.isCreate=false;
+      
       }
 
     }));
@@ -97,6 +99,7 @@ export class CreateClientComponent implements OnInit {
       this.currentRecord = c;
       console.info('client record', c);
       this.setValues(this.clientForm, c);
+      this.models=c.EvaluationModels
     }, error => {
       this.notification.error('something went wrong')
       console.error(error);
@@ -131,7 +134,7 @@ export class CreateClientComponent implements OnInit {
       ZipCode: ['', [Validators.required]],
       ClientType: ['Client',[]],
       UsageType: ['License', [Validators.required]],
-      UsageCount: ['', [Validators.required]],
+      UsageCount: [null, []],
       AdminFirstName: [null, Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
@@ -391,8 +394,23 @@ export class CreateClientComponent implements OnInit {
 
     }
   }
-
-
+  getModels(){
+    this.perfApp.route = "shared";
+    this.perfApp.method = "GetModelsByIndustry",
+      this.perfApp.requestBody ={id: this.clientForm.controls["Industry"].value}; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+      this.models=c.map(x=>x.Name)
+    }, error => {
+      debugger
+      console.log('models error ',error)
+      this.notification.error(error.error.message)
+    });
+  }
+  onIndustryChange(value){
+    
+    console.log('industru chamhe',value);
+    this.getModels()
+  }
   getIndustries() {
     this.perfApp.route = "shared";
     this.perfApp.method = "GetIndustries",

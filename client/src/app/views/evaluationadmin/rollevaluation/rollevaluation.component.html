@@ -1,7 +1,26 @@
 <div class="animated fadeIn">
     <form [formGroup]="evaluationForm">
-
         <div class="form-group row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text  redStar">Department</span>
+                        </div>
+                        <select class="form-control" (change)="onDepartmentChange($event)"
+                            
+                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.Department.errors }"
+                            formControlName="Department" name="Department" required>
+                            <option value="" disabled>Please select</option>
+                            <option *ngFor="let e of departments" [value]="e.DeptName">{{e.DeptName}}</option>
+
+                        </select>
+                        <div *ngIf="isFormSubmitted && f.Department.errors" class="invalid-feedback">
+                            <div *ngIf="f.Department.errors.required">Department is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="col-md-4">
                 <div class="form-group">
@@ -9,10 +28,16 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text redStar">Select Employee(s)</span>
                         </div>
-                        <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Employees.errors }"
-                            formControlName="Employees" class="form-control">
-                            <option value="f">Employee 1</option>
-                        </select>
+
+                        <mat-select formControlName="Employees" name="Employees"
+                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.Employees.errors }"
+                            class="form-control" multiple>
+                            <mat-option *ngFor="let option of employeesList$ " [value]="option._id">
+                                {{option.FirstName}}
+                            </mat-option>
+                        </mat-select>
+
+
                         <div *ngIf=" isFormSubmitted &&   f.Employees.errors" class="invalid-feedback">
                             <div *ngIf="f.Employees.errors.required">must select at least one employee</div>
                         </div>
@@ -22,12 +47,13 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <div class="form-check">
-                        <input formControlName="ActivateKPI" class="form-check-input" type="checkbox" id="ActivateKPI">
+                        <input (change)="onChangeKPIFor($event)" formControlName="ActivateKPI" class="form-check-input"
+                            type="checkbox" id="ActivateKPI">
                         <label class="form-check-label" for="ActivateKPI">
                             Activate KPI Setting Form
                         </label>
                     </div>
-                    
+
                 </div>
                 <div class="form-group">
                     <div class="form-check">
@@ -40,6 +66,25 @@
                 </div>
             </div>
         </div>
+        <div *ngIf="enableKPIFor" class="form-group row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label id="kpi-for-group">KPI For</label>
+                    <mat-radio-group aria-labelledby="kpi-for-group" class="example-radio-group"
+                        formControlName="KPIFor">
+                        <mat-radio-button class="kpi-radio-button" *ngFor="let kpifor of kpiForList" [value]="kpifor">
+                            {{kpifor}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    
+                    <div *ngIf=" isFormSubmitted &&   f.KPIFor.errors" class="invalid-feedback">
+                        <div *ngIf="f.KPIFor.errors.required">must select KPI For</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
         <!--Evaluation Details Begin-->
         <div class="form-group row">
 
@@ -72,7 +117,7 @@
                             <option value="60">60</option>
                             <option value="75">75</option>
                             <option value="90">90</option>
-                            
+
                         </select>
                         <div *ngIf="isFormSubmitted &&   f.EvaluationDuration.errors" class="invalid-feedback">
                             <div *ngIf="f.EvaluationDuration.errors.required">must select evaluation duration</div>
@@ -83,91 +128,89 @@
 
         </div>
         <!--Evaluation Details End-->
-<div class="form-group row">
-    <div class="col-md-6">
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Select Model</span>
-                </div>
-                <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Model.errors }"
-                    formControlName="Model" class="form-control">
-                    <option value="f">model 1</option>
-                </select>
-                <div *ngIf="isFormSubmitted &&   f.Model.errors" class="invalid-feedback">
-                    <div *ngIf="f.Model.errors.required">must select Model</div>
+        <div class="form-group row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text redStar">Select Model</span>
+                        </div>
+                        <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Model.errors }" formControlName="Model"
+                            class="form-control">
+                            <option value="f">model 1</option>
+                        </select>
+                        <div *ngIf="isFormSubmitted &&   f.Model.errors" class="invalid-feedback">
+                            <div *ngIf="f.Model.errors.required">must select Model</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
         <!--Peer Rating Model Begin-->
         <div class="form-group row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <input type="checkbox" formControlName="PeerRatingNeeded"> Peer Rating Needed
+                    <input type="checkbox" (change)="enablePeerRating($event)" formControlName="PeerRatingNeeded"> Peer
+                    Rating Needed
                 </div>
             </div>
         </div>
         <h2>Peer Rating Needed</h2>
         <div class="form-group row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Peers(s)</span>
-                        </div>
-                        <select formControlName="Peers" class="form-control">
-                            <option value="0">Please select</option>
-                            <option value="1">Option #1</option>
-                            <option value="2">Option #2</option>
-                            <option value="3">Option #3</option>
-                        </select>
-                        <div *ngIf="isFormSubmitted && f.Peers.errors" class="invalid-feedback">
-                            <div *ngIf="f.Peers.errors.required">Peers is required</div>
-                        </div>
+            
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Peers(s)</span>
+                            </div>
+                            <select [disabled]="enablePeersRating" formControlName="Peers" class="form-control">
+                                <option value="0">Please select</option>
+                                <option value="1">Option #1</option>
+                                <option value="2">Option #2</option>
+                                <option value="3">Option #3</option>
+                            </select>
+                            <div *ngIf="isFormSubmitted && f.Peers.errors" class="invalid-feedback">
+                                <div *ngIf="f.Peers.errors.required">Peers is required</div>
+                            </div>
 
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text redStar">Competency</span>
-                        </div>
-                        <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.PeerCompetency.errors }"
-                            formControlName="PeerCompetency" class="form-control" class="form-control">
-                            <option value="0">Please select</option>
-                            <option value="1">Option #1</option>
-                            <option value="2">Option #2</option>
-                            <option value="3">Option #3</option>
-                        </select>
-                        <div *ngIf="isFormSubmitted && f.PeerCompetency.errors" class="invalid-feedback">
-                            <div *ngIf="f.PeerCompetency.errors.required">Peer Comptency is required</div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text redStar">Message</span>
-                        </div>
-                        <select [ngClass]="{ 'is-invalid':isFormSubmitted && f.PeerComptencyMessage.errors }"
-                            class="form-control" formControlName="PeerComptencyMessage">
-                            <option value="0">Please select</option>
-                            <option value="1">Option #1</option>
-                            <option value="2">Option #2</option>
-                            <option value="3">Option #3</option>
-                        </select>
-                        <div *ngIf="isFormSubmitted && f.PeerComptencyMessage.errors" class="invalid-feedback">
-                            <div *ngIf="f.PeerComptencyMessage.errors.required">Message is required</div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Competency</span>
+                            </div>
+                            <select [disabled]="enablePeersRating" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.PeerCompetency.errors }"
+                                formControlName="PeerCompetency" class="form-control" class="form-control">
+                                <option value="0">Please select</option>
+                                <option value="1">Option #1</option>
+                                <option value="2">Option #2</option>
+                                <option value="3">Option #3</option>
+                            </select>
+                            <div *ngIf="isFormSubmitted && f.PeerCompetency.errors" class="invalid-feedback">
+                                <div *ngIf="f.PeerCompetency.errors.required">Peer Comptency is required</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Message</span>
+                            </div>
+                            <textarea [disabled]="enablePeersRating" formControlName="PeerComptencyMessage"></textarea>
+                            <div *ngIf="isFormSubmitted && f.PeerComptencyMessage.errors" class="invalid-feedback">
+                                <div *ngIf="f.PeerComptencyMessage.errors.required">Message is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
         </div>
         <!--Peer Rating Model End-->
 
@@ -175,71 +218,78 @@
         <div class="form-group row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <input type="checkbox" formControlName="DirectReportRateNeeded"> Direct Report Rating Needed
+                    <input type="checkbox" (change)="enableDirectReporting($event)"
+                        formControlName="DirectReportRateNeeded"> Direct Report Rating Needed
                 </div>
             </div>
         </div>
 
         <div class="form-group row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Direct Reportees</span>
-                        </div>
-                        <select formControlName="DirectReports" class="form-control">
-                            <option value="0">Please select</option>
-                            <option value="1">Option #1</option>
-                            <option value="2">Option #2</option>
-                            <option value="3">Option #3</option>
-                        </select>
 
-                        <div *ngIf="isFormSubmitted && f.DirectReports.errors" class="invalid-feedback">
-                            <div *ngIf="f.DirectReports.errors.required">DirectReports is required</div>
+            
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Direct Reportees</span>
+                            </div>
+                            <select  formControlName="DirectReports" class="form-control">
+                                <option value="0">Please select</option>
+                                <option value="1">Option #1</option>
+                                <option value="2">Option #2</option>
+                                <option value="3">Option #3</option>
+                            </select>
+                            <div *ngIf="isFormSubmitted && f.DirectReports.errors" class="invalid-feedback">
+                                <div *ngIf="f.DirectReports.errors.required">DirectReports is required</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text redStar">Competency</span>
-                        </div>
-                        <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.DirectReportsCompetency.errors }"
-                            formControlName="DirectReportsCompetency" class="form-control" class="form-control">
-                            <option value="0">Please select</option>
-                            <option value="1">Option #1</option>
-                            <option value="2">Option #2</option>
-                            <option value="3">Option #3</option>
-                        </select>
-                        <div *ngIf="isFormSubmitted && f.DirectReportsCompetency.errors" class="invalid-feedback">
-                            <div *ngIf="f.DirectReportsCompetency.errors.required">Direct Comptency is required</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text redStar">Message</span>
-                        </div>
-                        <textarea formControlName="DirectReportMessage"></textarea>
-                        <div *ngIf="isFormSubmitted && f.DirectReportMessage.errors" class="invalid-feedback">
-                            <div *ngIf="f.DirectReportMessage.errors.required">Message is required</div>
+            
+            
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Competency</span>
+                            </div>
+                            <select  [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.DirectReportsCompetency.errors }"
+                                formControlName="DirectReportsCompetency" class="form-control" class="form-control">
+                                <option value="0">Please select</option>
+                                <option value="1">Option #1</option>
+                                <option value="2">Option #2</option>
+                                <option value="3">Option #3</option>
+                            </select>
+                            <div *ngIf="isFormSubmitted && f.DirectReportsCompetency.errors" class="invalid-feedback">
+                                <div *ngIf="f.DirectReportsCompetency.errors.required">Direct Comptency is required
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            
+            
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text redStar">Message</span>
+                            </div>
+                            <textarea  formControlName="DirectReportMessage"></textarea>
+                            <div *ngIf="isFormSubmitted && f.DirectReportMessage.errors" class="invalid-feedback">
+                                <div *ngIf="f.DirectReportMessage.errors.required">Message is required</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
         </div>
         <!--Direct Report Rating Model End-->
         <div class="modal-footer">
 
-            <button type="button" class="btn btn-secondary" 
-              (click)="reset()">Reset</button>
+            <button type="button" class="btn btn-secondary" (click)="reset()">Reset</button>
             <button type="button" (click)="submitEvaluation()" class="btn btn-primary">Submit</button>
-          </div>
+        </div>
     </form>
 
 </div>

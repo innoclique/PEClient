@@ -76,7 +76,9 @@ export class CreateResellerComponent implements OnInit {
     this.sameAsContactChange();
     this.currentUser = this.authService.getCurrentUser();    
     this.getEvaluationCategories();
+    
   }
+  
   getClientDataById() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetOrganizationDataById",
