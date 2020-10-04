@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AuthService } from '../../../services/auth.service';
 
@@ -16,8 +17,8 @@ export class EvaluationslistComponent implements OnInit {
 
   @ViewChild('closeModal') closeModal: ElementRef
   currentRowItem: any;
-  orgViewRef: BsModalRef;
-  @ViewChild('orgView') orgView: TemplateRef<any>;
+  evaluationViewRef: BsModalRef;
+  @ViewChild('evaluationView') evaluationView: TemplateRef<any>;
   config = {
     backdrop: true,
     ignoreBackdropClick: true,
@@ -30,27 +31,30 @@ export class EvaluationslistComponent implements OnInit {
     private notification: NotificationService,
     private modalService: BsModalService,
     public authService: AuthService,
+    public router:Router
   ) {
 
 
   }
 
   ngOnInit(): void {
-    this.getClients();    
-    this.getIndustries();
+    this.getEvaluationList();    
+//    this.getIndustries();
     
   }
-  
+  gotoCreateEvaluation(){
+    this.router.navigate(['/ea/rollout'])
+  }
   public columnDefs = [
     {
-      headerName: 'Client', field: 'Name', sortable: true, filter: true,
+      headerName: 'Department', field: 'Department', sortable: true, filter: true,
 
       cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
     },
-    { headerName: 'Employee', field: 'Employees', sortable: true, filter: true },
-    { headerName: 'Title', field: 'Industry', sortable: true, filter: true },
-    { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
-    { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
+    { headerName: 'Evaluation Period', field: 'EvaluationPeriod', sortable: true, filter: true },
+    { headerName: 'Evaluation Duration', field: 'EvaluationDuration', sortable: true, filter: true },
+    
+    { headerName: 'Employees', field: 'Employees', sortable: true, filter: true },    
     {
       headerName: "Actions",
       suppressMenu: true,
@@ -69,27 +73,31 @@ export class EvaluationslistComponent implements OnInit {
   ];
 
   public evaluationsList: any
-  getClients() {
-    this.perfApp.route = "app";
+  getEvaluationList() {
+    this.perfApp.route = "evaluation";
     this.perfApp.method = "GetEvaluations",
-      this.perfApp.requestBody = { }
+      this.perfApp.requestBody = { clientId:this.authService.getOrganization()._id}
     this.perfApp.CallAPI().subscribe(c => {
       
-      console.log('lients data', c);
+      console.log('evaluationList data', c);
       if (c && c.length > 0) {
 
-      }
+   
       //this.clientData=c;
       //this.clientData.push()
       this.evaluationsList = c.map(function (row) {
 
         return {
+          Department:row.Department,
+          EvaluationPeriod:row.EvaluationPeriod,
+          EvaluationDuration:row.EvaluationDuration,
          
            RowData: row
         }
-      }
-      )
+      })
+    }
     })
+  
   }
   public onRowClicked(e) {
     if (e.event.target !== undefined) {
@@ -108,16 +116,13 @@ export class EvaluationslistComponent implements OnInit {
     }
   }
   openOrgView() {
-    this.orgViewRef = this.modalService.show(this.orgView, this.config);
-    this.orgViewRef.setClass('modal-xlg');
+    this.evaluationViewRef = this.modalService.show(this.evaluationView, this.config);
+    this.evaluationViewRef.setClass('modal-xlg');
     const cr = this.currentRowItem;
     
 
   }
-  hideorgView() {
-    this.orgViewRef.hide();
-   
-  }
+  
 
   getIndustries() {
     this.perfApp.route = "shared";

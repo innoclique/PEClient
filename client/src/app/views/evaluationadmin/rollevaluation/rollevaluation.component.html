@@ -1,4 +1,20 @@
-<div class="animated fadeIn">
+
+  <div class="animated fadeIn">
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            Create New Evaluation
+  
+            <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal"
+            (click)="router.navigate(['ea/evaluation-list'])">
+            Back to list
+          </button>
+                  </div>
+          <div class="card-body">
+  
     <form [formGroup]="evaluationForm">
         <div class="form-group row">
             <div class="col-md-4">
@@ -129,22 +145,26 @@
         </div>
         <!--Evaluation Details End-->
         <div class="form-group row">
-            <div class="col-md-6">
+            
+            <div class="col-md-4">
                 <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text redStar">Select Model</span>
-                        </div>
-                        <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Model.errors }" formControlName="Model"
-                            class="form-control">
-                            <option value="f">model 1</option>
-                        </select>
-                        <div *ngIf="isFormSubmitted &&   f.Model.errors" class="invalid-feedback">
-                            <div *ngIf="f.Model.errors.required">must select Model</div>
-                        </div>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Select Model</span>
                     </div>
+
+                    <mat-select formControlName="Model"
+                      [ngClass]="{ 'is-invalid':isFormSubmitted && f.Model.errors }" class="form-control"
+                      multiple>
+                      <mat-option *ngFor="let model of modelsList" [value]="model._id">{{model.Name}}</mat-option>
+                    </mat-select>
+
+                    <div *ngIf="isFormSubmitted && f.Model.errors" class="invalid-feedback">
+                      <div *ngIf="f.Model.errors.required">Evaluation Model is required</div>
+                    </div>
+                  </div>
                 </div>
-            </div>
+              </div>
         </div>
         <!--Peer Rating Model Begin-->
         <div class="form-group row">
@@ -164,12 +184,14 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Peers(s)</span>
                             </div>
-                            <select [disabled]="enablePeersRating" formControlName="Peers" class="form-control">
-                                <option value="0">Please select</option>
-                                <option value="1">Option #1</option>
-                                <option value="2">Option #2</option>
-                                <option value="3">Option #3</option>
-                            </select>
+                            <mat-select formControlName="Peers" name="Peers"
+                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.Peers.errors }"
+                            class="form-control" multiple>
+                            <mat-option *ngFor="let option of employeesList$ " [value]="option._id">
+                                {{option.FirstName}}
+                            </mat-option>
+                        </mat-select>
+
                             <div *ngIf="isFormSubmitted && f.Peers.errors" class="invalid-feedback">
                                 <div *ngIf="f.Peers.errors.required">Peers is required</div>
                             </div>
@@ -183,15 +205,16 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text redStar">Competency</span>
                             </div>
-                            <select [disabled]="enablePeersRating" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.PeerCompetency.errors }"
-                                formControlName="PeerCompetency" class="form-control" class="form-control">
-                                <option value="0">Please select</option>
-                                <option value="1">Option #1</option>
-                                <option value="2">Option #2</option>
-                                <option value="3">Option #3</option>
-                            </select>
-                            <div *ngIf="isFormSubmitted && f.PeerCompetency.errors" class="invalid-feedback">
-                                <div *ngIf="f.PeerCompetency.errors.required">Peer Comptency is required</div>
+                            
+                            <mat-select formControlName="PeersCompetency" name="PeersCompetency"
+                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.PeersCompetency.errors }"
+                            class="form-control" multiple>
+                            <mat-option *ngFor="let option of competencyList " [value]="option._id">
+                                {{option.Name}}
+                            </mat-option>
+                        </mat-select>
+                            <div *ngIf="isFormSubmitted && f.PeersCompetency.errors" class="invalid-feedback">
+                                <div *ngIf="f.PeersCompetency.errors.required">Peer Comptency is required</div>
                             </div>
                         </div>
                     </div>
@@ -201,11 +224,11 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text redStar">Message</span>
+                                <span class="input-group-text ">Message</span>
                             </div>
-                            <textarea [disabled]="enablePeersRating" formControlName="PeerComptencyMessage"></textarea>
-                            <div *ngIf="isFormSubmitted && f.PeerComptencyMessage.errors" class="invalid-feedback">
-                                <div *ngIf="f.PeerComptencyMessage.errors.required">Message is required</div>
+                            <textarea [disabled]="enablePeersRating" formControlName="PeersComptencyMessage"></textarea>
+                            <div *ngIf="isFormSubmitted && f.PeersComptencyMessage.errors" class="invalid-feedback">
+                                <div *ngIf="f.PeersComptencyMessage.errors.required">Message is required</div>
                             </div>
                         </div>
                     </div>
@@ -233,12 +256,13 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Direct Reportees</span>
                             </div>
-                            <select  formControlName="DirectReports" class="form-control">
-                                <option value="0">Please select</option>
-                                <option value="1">Option #1</option>
-                                <option value="2">Option #2</option>
-                                <option value="3">Option #3</option>
-                            </select>
+                            <mat-select formControlName="DirectReports" name="DirectReports"
+                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.DirectReports.errors }"
+                            class="form-control" multiple>
+                            <mat-option *ngFor="let option of employeesList$ " [value]="option._id">
+                                {{option.FirstName}}
+                            </mat-option>
+                        </mat-select>
                             <div *ngIf="isFormSubmitted && f.DirectReports.errors" class="invalid-feedback">
                                 <div *ngIf="f.DirectReports.errors.required">DirectReports is required</div>
                             </div>
@@ -253,13 +277,14 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text redStar">Competency</span>
                             </div>
-                            <select  [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.DirectReportsCompetency.errors }"
-                                formControlName="DirectReportsCompetency" class="form-control" class="form-control">
-                                <option value="0">Please select</option>
-                                <option value="1">Option #1</option>
-                                <option value="2">Option #2</option>
-                                <option value="3">Option #3</option>
-                            </select>
+                            
+                            <mat-select formControlName="DirectReportsCompetency" name="DirectReportsCompetency"
+                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.DirectReportsCompetency.errors }"
+                            class="form-control" multiple>
+                            <mat-option *ngFor="let option of competencyList " [value]="option._id">
+                                {{option.Name}}
+                            </mat-option>
+                        </mat-select>
                             <div *ngIf="isFormSubmitted && f.DirectReportsCompetency.errors" class="invalid-feedback">
                                 <div *ngIf="f.DirectReportsCompetency.errors.required">Direct Comptency is required
                                 </div>
@@ -273,7 +298,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text redStar">Message</span>
+                                <span class="input-group-text ">Message</span>
                             </div>
                             <textarea  formControlName="DirectReportMessage"></textarea>
                             <div *ngIf="isFormSubmitted && f.DirectReportMessage.errors" class="invalid-feedback">
@@ -291,5 +316,9 @@
             <button type="button" (click)="submitEvaluation()" class="btn btn-primary">Submit</button>
         </div>
     </form>
-
-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -7,12 +7,13 @@
           <div class="card-header">
             Evaluations
   
-            <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal" (click)="addClient.show()">
+            <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal" (click)="gotoCreateEvaluation()">
               Rollout New Evaluation
             </button>
           </div>
           <div class="card-body">
-            <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine" [rowData]="evaluationsList"
+            <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine" 
+            [rowData]="evaluationsList"
               [columnDefs]="columnDefs"
               [pagination]="true"
               [paginationPageSize]="10"
@@ -26,4 +27,4 @@
     </div>
     <!--/.row-->
   </div>
-  
+  <!--evaluationView-->

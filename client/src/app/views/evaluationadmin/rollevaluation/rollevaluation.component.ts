@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { retry } from 'rxjs/operators';
@@ -32,15 +33,19 @@ export class RollevaluationComponent implements OnInit {
   evaluationDuration: any[];
   peersCompetency: any[];
   directReporteeCompetency: any[];
+  currentOrganization:any;
   currentUser: any;
   departments: any[];
   kpiForList:string[] = ['Employee', 'Manager', 'EA'];
+  modelsList:any[];
+  competencyList:any[];
   constructor(private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
     private notification: NotificationService,
     private modalService: BsModalService,
-    public authService: AuthService) {
-    console.log('cmmmmmmmmmmmmmmmmmmmmmm')
+    public authService: AuthService,
+    public router:Router) {
+    
   }
 
   ngOnInit(): void {
@@ -48,6 +53,9 @@ export class RollevaluationComponent implements OnInit {
     this.initForm();
     this.getAllDepartments();
     this.disablePeerDirectReportes();
+    this.currentOrganization=this.authService.getOrganization();
+    this.getModels();
+    this.getCompetencyList();
   }
   initForm() {
     this.evaluationForm = this.formBuilder.group({
@@ -57,8 +65,8 @@ export class RollevaluationComponent implements OnInit {
       Model: ['', [Validators.required]],
       PeerRatingNeeded: [false, [Validators.required]],
       Peers: ['', []],
-      PeerCompetency: ['', [Validators.required]],
-      PeerComptencyMessage: ['', []],
+      PeersCompetency: ['', [Validators.required]],
+      PeersComptencyMessage: ['', []],
       DirectReportRateNeeded: [false, []],
       DirectReports: ['', []],
       DirectReportsCompetency: ['', [Validators.required]],
@@ -66,7 +74,9 @@ export class RollevaluationComponent implements OnInit {
       ActivateKPI: [false, []],
       ActivateActionPlan: [false, []],
       Department: ['', [Validators.required]],
-      KPIFor: ["Employee", []]
+      KPIFor: ["Employee", []],
+      CreatedBy:['',[]],
+      Company:['',[]]
     });
   }
   get f() {
@@ -91,7 +101,11 @@ export class RollevaluationComponent implements OnInit {
     if (this.evaluationForm.invalid)
       return;
       
+      
+      this.evaluationForm.value.CreatedBy=this.currentUser._id;
+      this.evaluationForm.value.Company=this.currentOrganization._id;
     this.setEmployeeIds();
+    this.setModelIds();
     console.log('evaluation form', this.evaluationForm.value);
     this.perfApp.method = "CreateEvaluation";
     this.perfApp.requestBody = this.evaluationForm.value;
@@ -100,6 +114,7 @@ export class RollevaluationComponent implements OnInit {
       debugger
       console.log('added evaluation', x)
       this.notification.success('Evaluation Created Successfully.')
+      this.router.navigate(['ea/evaluation-list'])
     }, error => {
       debugger
       console.log('error while adding eval', error)
@@ -114,19 +129,30 @@ export class RollevaluationComponent implements OnInit {
   }
 
 
-  // getModels(){
-  //   this.perfApp.route = "shared";
-  //   this.perfApp.method = "GetModelsByIndustry",
-  //     this.perfApp.requestBody ={id: this.clientForm.controls["Industry"].value}; //fill body object with form 
-  //   this.perfApp.CallAPI().subscribe(c => {
-  //     this.models=c.map(x=>x.Name)
-  //   }, error => {
-  //     debugger
-  //     console.log('models error ',error)
-  //     this.notification.error(error.error.message)
-  //   });
-  // }
-
+  getModels(){
+    this.perfApp.route = "shared";
+    this.perfApp.method = "GetModelsByIndustry",
+      this.perfApp.requestBody ={id: this.currentOrganization.Industry}; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+      this.modelsList=c;
+    }, error => {
+      debugger
+      console.log('models error ',error)
+      this.notification.error(error.error.message)
+    });
+  }
+  getCompetencyList(){
+    this.perfApp.route = "shared";
+    this.perfApp.method = "GetCompetencyList",
+      this.perfApp.requestBody ={id: this.currentOrganization._id}; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+      this.competencyList=c;
+    }, error => {
+      debugger
+      console.log('competencyList error ',error)
+      this.notification.error(error.error.message)
+    });
+  }
   public displayFn(user: any): string {
     return user && user.FirstName ? user.FirstName : '';
   }
@@ -166,13 +192,13 @@ export class RollevaluationComponent implements OnInit {
   enablePeerRating(value){
     this.enablePeersRating = value.target.checked; 
     if(!this.enablePeersRating){
-      this.evaluationForm.controls['PeerComptencyMessage'].disable();
-      this.evaluationForm.controls['PeerCompetency'].disable();
+      this.evaluationForm.controls['PeersComptencyMessage'].disable();
+      this.evaluationForm.controls['PeersCompetency'].disable();
       this.evaluationForm.controls['Peers'].disable();    
   }else{
 
-    this.evaluationForm.controls['PeerComptencyMessage'].enable();
-    this.evaluationForm.controls['PeerCompetency'].enable();
+    this.evaluationForm.controls['PeersComptencyMessage'].enable();
+    this.evaluationForm.controls['PeersCompetency'].enable();
     this.evaluationForm.controls['Peers'].enable();
   }
   }
@@ -194,15 +220,20 @@ export class RollevaluationComponent implements OnInit {
     this.evaluationForm.controls['DirectReportsCompetency'].disable();
     this.evaluationForm.controls['DirectReportMessage'].disable();
     this.evaluationForm.controls['DirectReports'].disable();     
-    this.evaluationForm.controls['PeerComptencyMessage'].disable();
-      this.evaluationForm.controls['PeerCompetency'].disable();
+    this.evaluationForm.controls['PeersComptencyMessage'].disable();
+      this.evaluationForm.controls['PeersCompetency'].disable();
       this.evaluationForm.controls['Peers'].disable();    
   }
-  setEmployeeIds(){
-    
+  setEmployeeIds(){    
     var _curArray=this.evaluationForm.value.Employees
     this.evaluationForm.value.Employees=_curArray.map(x=>{return {_id:x}});
     console.log('after settings ids',this.evaluationForm.value.Employees)
+    
+  }
+  setModelIds(){    
+    var _curArray=this.evaluationForm.value.Model
+    this.evaluationForm.value.Model=_curArray.map(x=>{return {_id:x}});
+    console.log('after settings Model ids',this.evaluationForm.value.Model)
     
   }
 }
