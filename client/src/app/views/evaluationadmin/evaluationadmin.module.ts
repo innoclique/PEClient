@@ -13,7 +13,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { EvaluationslistComponent } from './evaluationslist/evaluationslist.component';
 import { SetupEmployeeComponent } from '../common/setup-employee/setup-employee.component';
 import { CreateEmployeeComponent } from '../common/create-employee/create-employee.component';
-
+import {SetingsComponent} from '../evaluationadmin/setings/setings.component'
+import{ReportsComponent} from '../evaluationadmin/reports/reports.component';
+import { ProfileComponent } from './profile/profile.component'
 
 const routes: Routes = [
   {
@@ -62,13 +64,34 @@ const routes: Routes = [
           title: 'Evaluation'
         }
       },
+      {
+        path: 'settings',
+        component: SetingsComponent,
+        data: {
+          title: 'Backend Settings'
+        }
+      },
+      {
+        path: 'reports',
+        component: ReportsComponent,
+        data: {
+          title: 'Reports'
+        }
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        data: {
+          title: 'Profile'
+        }
+      },
     ]
 }
 
 ]
 
 @NgModule({
-  declarations: [RollevaluationComponent,EadashboardComponent, EvaluationslistComponent],
+  declarations: [RollevaluationComponent,EadashboardComponent, EvaluationslistComponent,SetingsComponent,ReportsComponent, ProfileComponent],
   imports: [
     CommonModule,
     EvalCommonModule,

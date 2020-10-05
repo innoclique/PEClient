@@ -29,6 +29,10 @@ export class DefaultLayoutComponent {
     this.authService.LogOut()
      this.router.navigate(['login'])
   }
+  public gotoProfile(){
+    const _role=this.authService.getCurrentUser().Role||""
+     this.router.navigate([_role.toLowerCase() +'/profile'])
+  }
   
   switchLang(lang: string) {    
     this.translate.use(lang);
