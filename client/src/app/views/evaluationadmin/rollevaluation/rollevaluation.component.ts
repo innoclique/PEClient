@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Observable } from 'rxjs';
-import { retry } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
 
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
-import { CustomValidators } from '../../../shared/custom-validators';
+
 
 @Component({
   selector: 'app-rollevaluation',
@@ -33,27 +29,28 @@ export class RollevaluationComponent implements OnInit {
   evaluationDuration: any[];
   peersCompetency: any[];
   directReporteeCompetency: any[];
-  currentOrganization:any;
+  public currentOrganization: any;
   currentUser: any;
   departments: any[];
-  kpiForList:string[] = ['Employee', 'Manager', 'EA'];
-  modelsList:any[];
-  competencyList:any[];
+  kpiForList: string[] = ['Employee', 'Manager', 'EA'];
+  modelsList: any[];
+  competencyList: any[];
   constructor(private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
     private notification: NotificationService,
     private modalService: BsModalService,
     public authService: AuthService,
-    public router:Router) {
-    
+    public router: Router) {
+
   }
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
     this.initForm();
     this.getAllDepartments();
     this.disablePeerDirectReportes();
-    this.currentOrganization=this.authService.getOrganization();
+   
     this.getModels();
     this.getCompetencyList();
   }
@@ -62,7 +59,7 @@ export class RollevaluationComponent implements OnInit {
       Employees: [[], [Validators.required]],
       EvaluationPeriod: ['', [Validators.required]],
       EvaluationDuration: ['', [Validators.required]],
-      Model: ['', [Validators.required]],
+      Model: [null, [Validators.required]],
       PeerRatingNeeded: [false, [Validators.required]],
       Peers: ['', []],
       PeersCompetency: ['', [Validators.required]],
@@ -75,8 +72,8 @@ export class RollevaluationComponent implements OnInit {
       ActivateActionPlan: [false, []],
       Department: ['', [Validators.required]],
       KPIFor: ["Employee", []],
-      CreatedBy:['',[]],
-      Company:['',[]]
+      CreatedBy: ['', []],
+      Company: ['', []]
     });
   }
   get f() {
@@ -92,8 +89,8 @@ export class RollevaluationComponent implements OnInit {
       console.log('lients data', c);
       if (c && c.length > 0) {
         this.employeesList$ = c
-        this.directReportees=c;
-        this.peersList=c;
+        this.directReportees = c;
+        this.peersList = c;
       }
     })
   }
@@ -102,10 +99,9 @@ export class RollevaluationComponent implements OnInit {
     debugger
     if (this.evaluationForm.invalid)
       return;
-      
-      
-      this.evaluationForm.value.CreatedBy=this.currentUser._id;
-      this.evaluationForm.value.Company=this.currentOrganization._id;
+
+    this.evaluationForm.value.CreatedBy = this.currentUser._id;
+    this.evaluationForm.value.Company = this.currentOrganization._id;
     this.setEmployeeIds();
     this.setModelIds();
     console.log('evaluation form', this.evaluationForm.value);
@@ -131,27 +127,27 @@ export class RollevaluationComponent implements OnInit {
   }
 
 
-  getModels(){
+  getModels() {
     this.perfApp.route = "shared";
     this.perfApp.method = "GetModelsByIndustry",
-      this.perfApp.requestBody ={id: this.currentOrganization.Industry}; //fill body object with form 
+      this.perfApp.requestBody = { id: this.currentOrganization.Industry }; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
-      this.modelsList=c;
+      this.modelsList = c;
     }, error => {
       debugger
-      console.log('models error ',error)
+      console.log('models error ', error)
       this.notification.error(error.error.message)
     });
   }
-  getCompetencyList(){
+  getCompetencyList() {
     this.perfApp.route = "shared";
     this.perfApp.method = "GetCompetencyList",
-      this.perfApp.requestBody ={id: this.currentOrganization._id}; //fill body object with form 
+      this.perfApp.requestBody = { id: this.currentOrganization._id,modelId:this.evaluationForm.controls["Model"].value }; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
-      this.competencyList=c;
+      this.competencyList = c;
     }, error => {
       debugger
-      console.log('competencyList error ',error)
+      console.log('competencyList error ', error)
       this.notification.error(error.error.message)
     });
   }
@@ -181,120 +177,145 @@ export class RollevaluationComponent implements OnInit {
       }
     })
   }
-  onChangeKPIFor(value) {    
+  onChangeKPIFor(value) {
     this.enableKPIFor = value.target.checked;
     if (value.target.value) {
       this.evaluationForm.controls['KPIFor'].setValidators(Validators.required);
-    }else{
+    } else {
       this.evaluationForm.controls['KPIFor'].clearValidators();
       this.evaluationForm.controls['KPIFor'].reset();
       this.evaluationForm.controls['KPIFor'].setValue(null);
     }
   }
-  enablePeerRating(value){
-    this.enablePeersRating = value.target.checked; 
-    if(!this.enablePeersRating){
+  enablePeerRating(value) {
+    this.enablePeersRating = value.target.checked;
+    if (!this.enablePeersRating) {
       this.evaluationForm.controls['PeersComptencyMessage'].disable();
       this.evaluationForm.controls['PeersCompetency'].disable();
-      this.evaluationForm.controls['Peers'].disable();    
-  }else{
+      this.evaluationForm.controls['Peers'].disable();
+    } else {
+      this.evaluationForm.controls['PeersComptencyMessage'].enable();
+      this.evaluationForm.controls['PeersCompetency'].enable();
+      this.evaluationForm.controls['Peers'].enable();
+    }
+  }
 
-    this.evaluationForm.controls['PeersComptencyMessage'].enable();
-    this.evaluationForm.controls['PeersCompetency'].enable();
-    this.evaluationForm.controls['Peers'].enable();
-  }
-  }
-  
-  enableDirectReporting(value){
-    this.enableDirectReport = value.target.checked;    
-    
-    if(!this.enableDirectReport){
+  enableDirectReporting(value) {
+    this.enableDirectReport = value.target.checked;
+    if (!this.enableDirectReport) {
       this.evaluationForm.controls['DirectReportsCompetency'].disable();
       this.evaluationForm.controls['DirectReportMessage'].disable();
-      this.evaluationForm.controls['DirectReports'].disable();     
-    }else{      
-    this.evaluationForm.controls['DirectReportsCompetency'].enable();
-    this.evaluationForm.controls['DirectReportMessage'].enable();
-    this.evaluationForm.controls['DirectReports'].enable();
+      this.evaluationForm.controls['DirectReports'].disable();
+    } else {
+      this.evaluationForm.controls['DirectReportsCompetency'].enable();
+      this.evaluationForm.controls['DirectReportMessage'].enable();
+      this.evaluationForm.controls['DirectReports'].enable();
     }
   }
-  disablePeerDirectReportes(){
+  disablePeerDirectReportes() {
     this.evaluationForm.controls['DirectReportsCompetency'].disable();
     this.evaluationForm.controls['DirectReportMessage'].disable();
-    this.evaluationForm.controls['DirectReports'].disable();     
+    this.evaluationForm.controls['DirectReports'].disable();
     this.evaluationForm.controls['PeersComptencyMessage'].disable();
-      this.evaluationForm.controls['PeersCompetency'].disable();
-      this.evaluationForm.controls['Peers'].disable();    
+    this.evaluationForm.controls['PeersCompetency'].disable();
+    this.evaluationForm.controls['Peers'].disable();
   }
-  setEmployeeIds(){    
-    var _curArray=this.evaluationForm.value.Employees
-    this.evaluationForm.value.Employees=_curArray.map(x=>{return {_id:x}});
-    console.log('after settings ids',this.evaluationForm.value.Employees)
-    
+  setEmployeeIds() {
+    var _curArray = this.evaluationForm.value.Employees
+    console.log('mappppppppp',_curArray.map(x => { return { _id: x } }))
+    this.evaluationForm.value.Employees = _curArray.map(x => { return { _id: x } });
+    console.log('after settings ids', this.evaluationForm.value.Employees)
   }
-  setModelIds(){    
-    var _curArray=this.evaluationForm.value.Model
-    this.evaluationForm.value.Model=_curArray.map(x=>{return {_id:x}});
-    console.log('after settings Model ids',this.evaluationForm.value.Model)
-    
+  setModelIds() {
+    var _curArray = this.evaluationForm.value.Model
+    this.evaluationForm.value.Model = _curArray.map(x => { return { _id: x } });
+    console.log('after settings Model ids', this.evaluationForm.value.Model)
+
   }
-  selectAllEmployees(ev){
-    if(ev._selected){
-      this.evaluationForm.controls['Employees'].setValue(this.employeesList$.map(x=>x._id));
-ev._selected=true;
+  selectAllEmployees(ev) {
+    if (ev._selected) {
+      this.evaluationForm.controls['Employees'].setValue(this.employeesList$.map(x => x._id));
+      ev._selected = true;
     }
-    if(ev._selected==false){
+    if (ev._selected == false) {
       this.evaluationForm.controls['Employees'].setValue([]);
     }
-    
+
   }
-  
-  selectAllPeersCompetency(ev){
-   
-    if(ev._selected){
-      this.evaluationForm.controls['PeersCompetency'].setValue(this.competencyList.map(x=>x._id));
-ev._selected=true;
+
+  selectAllPeersCompetency(ev) {
+
+    if (ev._selected) {
+      this.evaluationForm.controls['PeersCompetency'].setValue(this.competencyList.map(x => x._id));
+      ev._selected = true;
     }
-    if(ev._selected==false){
+    if (ev._selected == false) {
       this.evaluationForm.controls['PeersCompetency'].setValue([]);
     }
-    
+
   }
 
-  selectAllDRCompetency(ev){
-   
-    if(ev._selected){
-      this.evaluationForm.controls['DirectReportsCompetency'].setValue(this.competencyList.map(x=>x._id));
-ev._selected=true;
+  selectAllDRCompetency(ev) {
+
+    if (ev._selected) {
+      this.evaluationForm.controls['DirectReportsCompetency'].setValue(this.competencyList.map(x => x._id));
+      ev._selected = true;
     }
-    if(ev._selected==false){
+    if (ev._selected == false) {
       this.evaluationForm.controls['DirectReportsCompetency'].setValue([]);
     }
-    
+
   }
 
-  selectAllPeers(ev){
-   
-    if(ev._selected){
-      this.evaluationForm.controls['Peers'].setValue(this.peersList.map(x=>x._id));
-ev._selected=true;
+  selectAllPeers(ev) {
+
+    if (ev._selected) {
+      this.evaluationForm.controls['Peers'].setValue(this.peersList.map(x => x._id));
+      ev._selected = true;
     }
-    if(ev._selected==false){
+    if (ev._selected == false) {
       this.evaluationForm.controls['Peers'].setValue([]);
     }
-    
-  }
-  
 
-  selectAllDRs(ev){
-   
-    if(ev._selected){
-      this.evaluationForm.controls['DirectReports'].setValue(this.directReportees.map(x=>x._id));
-ev._selected=true;
+  }
+
+
+  selectAllDRs(ev) {
+
+    if (ev._selected) {
+      this.evaluationForm.controls['DirectReports'].setValue(this.directReportees.map(x => x._id));
+      ev._selected = true;
     }
-    if(ev._selected==false){
+    if (ev._selected == false) {
       this.evaluationForm.controls['DirectReports'].setValue([]);
     }
-    
+
+  }
+  draftEvaluation() {
+    debugger
+    if(this.evaluationForm.value.Department==="" || this.evaluationForm.value.Employees.length===0){
+
+      this.notification.error('To save as Draft at least one department and Emloyeed need to select')
+      return;
+    }
+    this.evaluationForm.value.CreatedBy = this.currentUser._id;
+    this.evaluationForm.value.Company = this.currentOrganization._id;
+    this.setEmployeeIds();
+    this.evaluationForm.value.IsDraft=true;
+    console.log('evaluation form', this.evaluationForm.value);
+    this.perfApp.method = "DraftEvaluation";
+    this.perfApp.requestBody = this.evaluationForm.value;
+    this.perfApp.route = "evaluation"
+    this.perfApp.CallAPI().subscribe(x => {
+      debugger
+      console.log('draft evaluation', x)
+      this.notification.success('Evaluation Form Saved Successfully.')
+      this.router.navigate(['ea/evaluation-list'])
+    }, error => {
+      debugger
+      console.log('error while saving form', error)
+      this.notification.error(error.error.message)
+    })
+
   }
 }
