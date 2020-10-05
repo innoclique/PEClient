@@ -48,6 +48,7 @@
                         <mat-select formControlName="Employees" name="Employees"
                             [ngClass]="{ 'is-invalid':isFormSubmitted && f.Employees.errors }"
                             class="form-control" multiple>
+                            <mat-option [value]="1" (click)="selectAllEmployees(eo)"   #eo >SelectAll</mat-option>
                             <mat-option *ngFor="let option of employeesList$ " [value]="option._id">
                                 {{option.FirstName}}
                             </mat-option>
@@ -187,6 +188,7 @@
                             <mat-select formControlName="Peers" name="Peers"
                             [ngClass]="{ 'is-invalid':isFormSubmitted && f.Peers.errors }"
                             class="form-control" multiple>
+                            <mat-option [value]="1" (click)="selectAllPeers(pr)"   #pr >SelectAll</mat-option>
                             <mat-option *ngFor="let option of employeesList$ " [value]="option._id">
                                 {{option.FirstName}}
                             </mat-option>
@@ -209,6 +211,7 @@
                             <mat-select formControlName="PeersCompetency" name="PeersCompetency"
                             [ngClass]="{ 'is-invalid':isFormSubmitted && f.PeersCompetency.errors }"
                             class="form-control" multiple>
+                            <mat-option [value]="1" (click)="selectAllPeersCompetency(ev)"   #ev >SelectAll</mat-option>
                             <mat-option *ngFor="let option of competencyList " [value]="option._id">
                                 {{option.Name}}
                             </mat-option>
@@ -259,6 +262,8 @@
                             <mat-select formControlName="DirectReports" name="DirectReports"
                             [ngClass]="{ 'is-invalid':isFormSubmitted && f.DirectReports.errors }"
                             class="form-control" multiple>
+                            
+                            <mat-option [value]="1" (click)="selectAllDRs(dr)"   #dr >SelectAll</mat-option>
                             <mat-option *ngFor="let option of employeesList$ " [value]="option._id">
                                 {{option.FirstName}}
                             </mat-option>
@@ -281,6 +286,7 @@
                             <mat-select formControlName="DirectReportsCompetency" name="DirectReportsCompetency"
                             [ngClass]="{ 'is-invalid':isFormSubmitted && f.DirectReportsCompetency.errors }"
                             class="form-control" multiple>
+                            <mat-option [value]="1" (click)="selectAllDRCompetency(drc)"   #drc >SelectAll</mat-option>
                             <mat-option *ngFor="let option of competencyList " [value]="option._id">
                                 {{option.Name}}
                             </mat-option>

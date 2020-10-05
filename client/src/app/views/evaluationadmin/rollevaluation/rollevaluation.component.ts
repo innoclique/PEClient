@@ -26,7 +26,7 @@ export class RollevaluationComponent implements OnInit {
   enableKPIFor: boolean = false;
   enablePeersRating: boolean = false;
   enableDirectReport: boolean = false;
-  employeesList$: Observable<any[]>;
+  employeesList$: any[];
   peersList: any[];
   directReportees: any[];
   evaluationPeriods: any[];
@@ -92,6 +92,8 @@ export class RollevaluationComponent implements OnInit {
       console.log('lients data', c);
       if (c && c.length > 0) {
         this.employeesList$ = c
+        this.directReportees=c;
+        this.peersList=c;
       }
     })
   }
@@ -234,6 +236,65 @@ export class RollevaluationComponent implements OnInit {
     var _curArray=this.evaluationForm.value.Model
     this.evaluationForm.value.Model=_curArray.map(x=>{return {_id:x}});
     console.log('after settings Model ids',this.evaluationForm.value.Model)
+    
+  }
+  selectAllEmployees(ev){
+    if(ev._selected){
+      this.evaluationForm.controls['Employees'].setValue(this.employeesList$.map(x=>x._id));
+ev._selected=true;
+    }
+    if(ev._selected==false){
+      this.evaluationForm.controls['Employees'].setValue([]);
+    }
+    
+  }
+  
+  selectAllPeersCompetency(ev){
+   
+    if(ev._selected){
+      this.evaluationForm.controls['PeersCompetency'].setValue(this.competencyList.map(x=>x._id));
+ev._selected=true;
+    }
+    if(ev._selected==false){
+      this.evaluationForm.controls['PeersCompetency'].setValue([]);
+    }
+    
+  }
+
+  selectAllDRCompetency(ev){
+   
+    if(ev._selected){
+      this.evaluationForm.controls['DirectReportsCompetency'].setValue(this.competencyList.map(x=>x._id));
+ev._selected=true;
+    }
+    if(ev._selected==false){
+      this.evaluationForm.controls['DirectReportsCompetency'].setValue([]);
+    }
+    
+  }
+
+  selectAllPeers(ev){
+   
+    if(ev._selected){
+      this.evaluationForm.controls['Peers'].setValue(this.peersList.map(x=>x._id));
+ev._selected=true;
+    }
+    if(ev._selected==false){
+      this.evaluationForm.controls['Peers'].setValue([]);
+    }
+    
+  }
+  
+
+  selectAllDRs(ev){
+   
+    if(ev._selected){
+      this.evaluationForm.controls['DirectReports'].setValue(this.directReportees.map(x=>x._id));
+ev._selected=true;
+    }
+    if(ev._selected==false){
+      this.evaluationForm.controls['DirectReports'].setValue([]);
+    }
     
   }
 }
