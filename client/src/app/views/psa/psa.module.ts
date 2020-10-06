@@ -11,7 +11,13 @@ import { EmployessModule } from '../../employess/employess.module';
 import { EvalCommonModule } from '../common/common.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { CreateResellerComponent } from './create-reseller/create-reseller.component';
-import {NumberDirective} from '../../directives/numbersonly'
+import {NumberDirective} from '../../directives/numbersonly';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ReportsComponent } from './reports/reports.component';
+import { ApplicationSettingsComponent } from './application-settings/application-settings.component';
+import { EvaluationSettingsComponent } from './evaluation-settings/evaluation-settings.component';
+import { PaymentSettingsComponent } from './payment-settings/payment-settings.component';
+import { ProfileComponent } from './profile/profile.component'
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -19,10 +25,16 @@ export const projectRoutes: Routes = [
     title: 'Clients'
   },
   children: [
+    
     {
       path: '',
-      redirectTo: 'list'
+      redirectTo: 'dashboard'
     },
+    
+    { path: 'dashboard', component: DashboardComponent,data: {
+      title: 'Dashboard'
+    }},
+    
     { path: 'list', component: ClientSetupComponent,data: {
       title: 'View All'
     }},
@@ -46,7 +58,33 @@ export const projectRoutes: Routes = [
       component:CreateResellerComponent,
       data:{title:'Create'}
     }
-  
+    ,
+    {
+      path:'reports',
+      component:ReportsComponent,
+      data:{title:'Reports'}
+    },
+    {
+      path:'application-settings',
+      component:ApplicationSettingsComponent,
+      data:{title:'Application-Settings'}
+    },
+    
+    {
+      path:'setup-evaluations',
+      component:EvaluationSettingsComponent,
+      data:{title:'Evaluation-Settings'}
+    },
+    {
+      path:'payment-settings',
+      component:PaymentSettingsComponent,
+      data:{title:'Payment-Settings'}
+    },
+    {
+      path:'profile',
+      component:ProfileComponent,
+      data:{title:'Profile'}
+    },
   ]
 },
   
@@ -54,7 +92,13 @@ export const projectRoutes: Routes = [
 
 @NgModule({
   declarations: [ClientSetupComponent, CreateClientComponent, CreateResellerComponent,
-    NumberDirective
+    NumberDirective,
+    DashboardComponent,
+    ReportsComponent,
+    ApplicationSettingsComponent,
+    EvaluationSettingsComponent,
+    PaymentSettingsComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,
