@@ -11,7 +11,8 @@
                 <div class="card-body">
 
 
-                    <form [formGroup]="kpiForm" novalidate="" class="ng-untouched ng-pristine ng-valid">
+                    <form [formGroup]="kpiForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
+                     class="ng-untouched ng-pristine ng-valid">
 
                         <div class="form-group row">
                             <div class="col-md-3 kpi-fl ">
@@ -163,7 +164,7 @@
                                 
                             </div>
 
-                            <div class="col-md-3">
+                            <div *ngIf="currentAction != 'view'" class="col-md-3">
                                 <button class="btn btn-block btn-primary w-75"
                                  (click)="addMesurment()"  >+ Add Mesuerment Criteria  </button>
                                 </div>
@@ -189,7 +190,7 @@
                                       <mat-datepicker #picker></mat-datepicker>
               
                                       <div *ngIf="f.TargetCompletionDate.touched && f.TargetCompletionDate.invalid" class="invalid-feedback">
-                                        <div *ngIf="f.TargetCompletionDate.errors.required">Start Date is required</div>
+                                        <div *ngIf="f.TargetCompletionDate.errors.required">Target Completion is mandatory.</div>
                                     </div>
                                     </div>
                                   </div>
@@ -207,7 +208,7 @@
                                         
                                       </select>
                                       <div *ngIf="f.Score.touched && f.Score.invalid" class="invalid-feedback">
-                                        <div *ngIf="f.Score.errors.required">Application Role is required</div>
+                                        <div *ngIf="f.Score.errors.required">Score is mandatory.</div>
                                     </div>
                                     </div>
                                   </div>
@@ -229,7 +230,7 @@
                                         
                                       </select>
                                       <div *ngIf="f.Status.touched && f.Status.invalid" class="invalid-feedback">
-                                        <div *ngIf="f.Status.errors.required">Application Role is required</div>
+                                        <div *ngIf="f.Status.errors.required">Status is mandatory.</div>
                                     </div>
                                     </div>
                                   </div>
@@ -243,7 +244,7 @@
                                       </div>
                                       <input maxlength="12"  class="form-control"  type="text" disabled
                                       [ngClass]="{ 'is-invalid': f.Signoff.touched  &&  f.Signoff.invalid }"
-                                      formControlName="Signoff"  name="Signoff"  [value]="loginUser?.FirstName"         >
+                                      formControlName="Signoff"  name="Signoff"          >
                                     
                                     
                                     
@@ -261,7 +262,9 @@
                                         <div class="col-md-7">
                                             <span>Weighting: </span>
                                         </div>
-                                        <div class="col-md-4"><span formControlName="Weighting"  name="Weighting"   > {{weight}}%</span></div>
+                                        <div class="col-md-4">
+                                            <input class="border-0 w-50" readonly  formControlName="Weighting"  name="Weighting"   > 
+                                            <span >%</span></div>
                                       
                                      
                                       </div>
@@ -289,8 +292,14 @@
                             
                         </div>
 
+                        <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
+                            <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre Kpi</button>
+                            <button [disabled]='selIndex+1 == empKPIData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next Kpi</button>
+                            
+                          </div>
+                        <!-- <div class="clearfix"></div> -->
 
-                        <div class="form-group row">
+                        <div class="form-group row ">
                             <div class="col-md-2 kpi-fl ">
                                 <div class="col-md-9">
                                     <strong>Score (manager): </strong> 
@@ -325,9 +334,10 @@
 
                         </div>
 
-                        <div class="form-group form-actions pull-right">
+                        <div *ngIf="currentAction != 'view'" class="form-group form-actions pull-right">
                             <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>
-                            <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >Submit</button>
+                            <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 'Update' :'Submit' }}</button>
+                            <button class="btn btn-sm btn-primary"  (click)="submitAllKPIs()" >Submit KPIs</button>
                           </div>
             
                           <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>

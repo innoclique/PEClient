@@ -6,4 +6,5 @@ export const Constants = {
     SuccessText:"Success",
     PhoneAlreadyExist:"Employee Phone Number Already Exist",
     EvaluationAdminNotFound:"Evaluation Administrator Not Found",
+    KpiNotActivated:"KPI Setting Form Not Activeted",
   };

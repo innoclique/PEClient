@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
@@ -22,7 +22,7 @@ export class KpiSettingsComponent implements OnInit {
 
 
   public kpiForm: FormGroup;
-  kpiDetails: any = { IsActive: 'true' }
+  kpiDetails: any = { IsActive: 'true',MeasurementCriteria:[] }
   loginUser: any;
   public alert: AlertDialog;
   appScores: any = [];
@@ -41,6 +41,9 @@ export class KpiSettingsComponent implements OnInit {
   public empMeasuCriData: any[] = []
   public selectedItems: any[] = []
   weight:any;
+  currentKpiId: any;
+  selIndex: any;
+  isKpiActivated: boolean;
 
 
 
@@ -48,6 +51,7 @@ export class KpiSettingsComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
     public themeService: ThemeService,
     private snack: NotificationService,
@@ -57,6 +61,14 @@ export class KpiSettingsComponent implements OnInit {
 
     this.initApicallsForKpi();
 
+    this.activatedRoute.params.subscribe(params => {
+     
+     if (params['action']) {
+      this.currentKpiId = params['id'];
+      this.currentAction = params['action'];
+     }
+     
+    });   
 
   }
 
@@ -91,7 +103,7 @@ export class KpiSettingsComponent implements OnInit {
         // Validators.minLength(2)])
       ],
 
-      Kpi: [this.kpiDetails.Kpi ? this.kpiDetails.Kpi : '', Validators.compose([
+      Kpi: [this.kpiDetails.Kpi ? this.kpiDetails : '', Validators.compose([
         Validators.required, Validators.minLength(2),
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
       ])
@@ -99,8 +111,8 @@ export class KpiSettingsComponent implements OnInit {
       TargetCompletionDate: [this.kpiDetails.TargetCompletionDate ? new Date(this.kpiDetails.TargetCompletionDate) : '', [Validators.required]],
       YearEndComments: [''],
       YECommManager: [''],
-      Weighting: [''],
-      Signoff: [''],
+      Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
+      Signoff: [this.loginUser.FirstName],
 
       IsSubmit: ['false'],
       IsDraft: [''],
@@ -110,6 +122,10 @@ export class KpiSettingsComponent implements OnInit {
     });
 
    
+    this.kpiDetails.MeasurementCriteria.forEach(e => {
+      this.toggleSelection(e.measureId);
+    });
+
   }
 
 
@@ -122,7 +138,7 @@ export class KpiSettingsComponent implements OnInit {
 
 
   onCancle() {
-    this.router.navigate(['employee/setup']);
+    this.router.navigate(['employee/kpi-setup']);
   }
 
   submitKpi() {
@@ -159,8 +175,10 @@ export class KpiSettingsComponent implements OnInit {
      
     })
 
-    this.perfApp.requestBody.Kpi = this.perfApp.requestBody.Kpi.Kpi?this.perfApp.requestBody.Kpi.Kpi:this.perfApp.requestBody.Kpi;
+    this.perfApp.requestBody.Kpi = this.perfApp.requestBody.Kpi.Kpi?
+                                    this.perfApp.requestBody.Kpi.Kpi :this.perfApp.requestBody.Kpi;
     // this.perfApp.requestBody.MeasurementCriteria = this.selectedItems.map(e => { e.measureId=e._id});
+    this.perfApp.requestBody.kpiId = this.kpiDetails._id?  this.kpiDetails._id : '';
     this.perfApp.requestBody.MeasurementCriteria = Measurements;
     this.perfApp.requestBody.Weighting = this.weight;
     this.perfApp.requestBody.Signoff = this.loginUser._id;
@@ -209,7 +227,7 @@ export class KpiSettingsComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c) {
-
+this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesfully`));
         
       }
     })
@@ -269,6 +287,10 @@ export class KpiSettingsComponent implements OnInit {
             map(name => name ? this._filterTD(name) : this.empMeasuCriData.slice())
           );
 
+          if (this.currentAction!='create') {
+            this.initKPIForm();
+          }
+
       }
 
     })
@@ -297,13 +319,39 @@ export class KpiSettingsComponent implements OnInit {
 
 
 
+
+  
+  submitAllKPIs() {
+
+    this.perfApp.route = "app";
+    this.perfApp.method = "SubmitKpisForEvaluation",
+      this.perfApp.requestBody = { 'empId': this.loginUser._id }
+    this.perfApp.CallAPI().subscribe(c => {
+
+     if (c) {
+      this.snack.success(c.message);
+     } else {
+       
+     }
+
+    }
+    
+    , error => {
+
+      this.snack.error(error.error.message);
+
+    }
+    
+    )
+  }
+
   getAllKPIs() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllKpis",
       this.perfApp.requestBody = { 'empId': this.loginUser._id }
     this.perfApp.CallAPI().subscribe(c => {
 
-      this.setWeighting(c.length);
+      this.setWeighting(c.filter(item => item.IsDraft === false).length);
       if (c && c.length > 0) {
         this.empKPIData = c;
 
@@ -316,13 +364,35 @@ export class KpiSettingsComponent implements OnInit {
             map(name => name ? this._filterKPI(name) : this.empKPIData.slice())
           );
 
+
+          if (this.currentAction !='create') {
+            this.kpiDetails=  this.empKPIData.filter(e=> e._id== this.currentKpiId)[0];
+            this.selIndex=  this.empKPIData.findIndex(e=> e._id== this.currentKpiId);
+          }
+
       }
 
-    })
+    }
+    
+    , error => {
+      if (error.error.message === Constants.KpiNotActivated) {
+        this.isKpiActivated=false;
+        this.onCancle();
+        this.snack.error(error.error.message);
+      } else {
+
+      this.snack.error(error.error.message);
+
+       }
+    }
+    
+    )
   }
   setWeighting(length: any) {
     
-    this.weight = length==0? 100 :   100/length;
+    this.weight = length==0? 100 :  Math.round( 100/length);
+
+    this.kpiForm.patchValue({ Weighting: this.weight });
 
    
   }
@@ -392,6 +462,23 @@ export class KpiSettingsComponent implements OnInit {
       this.kpiForm.controls['MeasurementCriteria'].setValidators([Validators.required])
     }
 
+  }
+
+
+  nextKpi(){
+
+   this.selIndex=this.selIndex+1;
+    this.kpiDetails=  this.empKPIData[this.selIndex];
+    this.initKPIForm();
+    this.currentKpiId=this.kpiDetails._id;
+  }
+
+  priKpi(){
+
+    this.selIndex=this.selIndex-1;
+    this.kpiDetails=  this.empKPIData[this.selIndex];
+    this.initKPIForm();
+    this.currentKpiId=this.kpiDetails._id;
   }
 
 

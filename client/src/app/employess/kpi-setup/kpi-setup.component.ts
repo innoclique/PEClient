@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
+import { Constants } from '../../shared/AppConstants';
 
 @Component({
   selector: 'app-kpi-setup',
@@ -23,6 +24,7 @@ export class KpiSetupComponent implements OnInit {
   currentRowItem: any;
   public alert: AlertDialog;
   public kpiListData: any
+  isKpiActivated=false;
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -55,6 +57,7 @@ export class KpiSetupComponent implements OnInit {
     { headerName: 'Target Completion', field: 'TargetCompletionDate', sortable: true, filter: true },
     { headerName: 'Score (self)', field: 'Score', width: 150, sortable: true, filter: true },
     { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
+    { headerName: 'KPI Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
     {
       headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
@@ -77,16 +80,35 @@ export class KpiSetupComponent implements OnInit {
       switch (actionType) {
 
         case "VF":
-          // this.viewEmpForm(this.currentRowItem);
+          this.viewKpiForm(this.currentRowItem);
           break;
         case "EF":
-          //  this.editEmpForm(this.currentRowItem);
+            this.editKpiForm(this.currentRowItem);
           break;
 
         default:
       }
     }
   }
+
+
+
+  editKpiForm(currentRowItem: any) {
+   
+
+      this.router.navigate(['employee/kpi-setting',{action:'edit',id:this.currentRowItem._id}],{ skipLocationChange: true });
+      
+  }
+
+  
+
+  viewKpiForm(currentRowItem: any) {
+   
+
+    this.router.navigate(['employee/kpi-setting',{action:'view',id:this.currentRowItem._id}],{ skipLocationChange: true });
+    
+}
+  
 
 
   createKpi(){
@@ -112,6 +134,7 @@ export class KpiSetupComponent implements OnInit {
           TargetCompletionDate: row.TargetCompletionDate,
           Score: row.Score,
           YearEndComments: row.YearEndComments,
+          IsSubmitedKPIs: row.IsSubmitedKPIs,
           Status: row.Status,
 
           RowData: row
@@ -121,6 +144,16 @@ export class KpiSetupComponent implements OnInit {
 
 
     }
+    }, error => {
+      if (error.error.message === Constants.KpiNotActivated) {
+        this.isKpiActivated=true;
+        this.kpiListData=[];
+        this.snack.error(error.error.message);
+      } else {
+
+      this.snack.error(error.error.message);
+
+       }
     })
   }
 

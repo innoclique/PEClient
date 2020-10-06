@@ -17,11 +17,17 @@ import { KpiSettingsComponent } from './kpi-settings/kpi-settings.component';
 import { DateAgoPipe } from '../pipes/DateAgoPipe';
 import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
 import { KpiSetupComponent } from './kpi-setup/kpi-setup.component';
+import { ReportsComponent } from './reports/reports.component';
+import { ProfileComponent } from './profile/profile.component';
+import { AccomplishmentsComponent } from './accomplishments/accomplishments.component';
+import { CurrentEvaluationComponent } from './current-evaluation/current-evaluation.component';
+import { ActionPlanComponent } from './action-plan/action-plan.component';
 
 
 
 @NgModule({
-  declarations: [KpiSettingsComponent,DateAgoPipe, KpiSetupComponent],
+  declarations: [KpiSettingsComponent,DateAgoPipe, KpiSetupComponent,ReportsComponent,ProfileComponent,
+     AccomplishmentsComponent, CurrentEvaluationComponent, ActionPlanComponent],
   imports: [
     CommonModule,
     EmployessRoutingModule,
