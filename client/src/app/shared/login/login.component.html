@@ -30,7 +30,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="icon-lock"></i></span>
                     </div>
-                    <input type="password" class="form-control"
+                    <input type="password" class="form-control" (keyup.enter)="onSubmit()"
                       [ngClass]="{ 'is-invalid': f.password.touched  &&  f.password.invalid }" placeholder="Password"
                       autocomplete="current-password" formControlName="password" name="password" required>
                     <div *ngIf=" f.password.invalid" class="invalid-feedback">
@@ -41,7 +41,7 @@
                   </div>
                   <div class="row">
                     <div class="col-6">
-                      <button [disabled]="!loginForm.valid" (click)="onSubmit()" type="button"
+                      <button  [disabled]="!loginForm.valid" (click)="onSubmit()" type="button"
                         class="btn btn-primary px-4">Login</button>
                     </div>
                     <div class="col-6 text-right">

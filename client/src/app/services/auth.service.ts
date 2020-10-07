@@ -101,14 +101,11 @@ export class AuthService {
 
 /**Logout API Calling */
   LogOut() {    
-    
-    if (!this.currentUser) {
+    if (!this.getCurrentUser()) {
       localStorage.clear();
       return 
     }
     let m = { email: this.currentUser.Email };
-    // let headers = new HttpHeaders();
-    // headers = headers.set('Authorization', `Bearer ${this.currentUser.AccessToken}`)
      this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m).subscribe(r=>{
       localStorage.clear(); 
      },error=>{
@@ -118,13 +115,13 @@ export class AuthService {
      })
 
 
-     return this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m).pipe(
-      tap(() => localStorage.clear()),
-      mapTo(true),
-      catchError(error => {
-        alert(error.error);
-        return of(false);
-      }));
+    //  return this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m).pipe(
+    //   tap(() => localStorage.clear()),
+    //   mapTo(true),
+    //   catchError(error => {
+    //     alert(error.error);
+    //     return of(false);
+    //   }));
 
   }
 

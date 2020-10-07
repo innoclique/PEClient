@@ -71,12 +71,20 @@ export class ClientSetupComponent implements OnInit {
         Sorting: false,        
         cellRenderer: (data) => {
         console.log('column data', data)
-          
-          return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-    font-size: 17px;"   data-action-type="suspendorg" title="Deactivate Client"></i>
+          if(data && data.data && data.data.RowData && data.data.RowData.IsActive){
+            return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
+            font-size: 17px;"   data-action-type="suspendorg" title="Deactivate Client"></i>
+            <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+            font-size: 17px;"   data-action-type="edit" title="Edit Client" ></i>
+            `
+          }else{
+            return `<i class="icon-check" style="cursor:pointer ;padding: 7px 20px 0 0;
+    font-size: 17px;"   data-action-type="activateOrg" title="Activate Client"></i>
     <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
     font-size: 17px;"   data-action-type="edit" title="Edit Client" ></i>
     `
+          }
+          
           //}
         }
   
@@ -440,6 +448,9 @@ export class ClientSetupComponent implements OnInit {
           return this.openOrgView();
         case "suspendorg":
           return this.suspendOrg();
+          case "activateOrg":
+          return this.activateOrg();
+          
         case "edit":
         return this.editClient();
       }
@@ -462,7 +473,27 @@ export class ClientSetupComponent implements OnInit {
     }
   }
   suspendOrg() {
-
+    debugger
+    const cr = this.currentRowItem;
+    this.perfApp.route = "app";
+    this.perfApp.method = "SuspendOrg",
+      this.perfApp.requestBody = {id:cr._id}; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+     this.notification.success('Client Deactivated Successfully.')      
+    }, error => {
+      this.notification.error(error.error.message||error.message)
+    });
+  }
+  activateOrg() {    
+    const cr = this.currentRowItem;
+    this.perfApp.route = "app";
+    this.perfApp.method = "ActivateOrg",
+      this.perfApp.requestBody = {id:cr._id}; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+     this.notification.success("Client Activated Successfully.")      
+    }, error => {
+      this.notification.error(error.error.message||error.message)
+    });
   }
   editClient(){
     const cr = this.currentRowItem;
@@ -518,9 +549,7 @@ export class ClientSetupComponent implements OnInit {
       this.industries = c;
       console.table(c);
     }, error => {
-
-
-      //this.notification.error(error.error.message)
+      this.notification.error(error.error.message)
     });
   }
   //#region  update client related
