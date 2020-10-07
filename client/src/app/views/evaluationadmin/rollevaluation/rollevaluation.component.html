@@ -1,318 +1,400 @@
-
-  <div class="animated fadeIn">
+<div class="animated fadeIn">
 
 
     <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-header">
-            Create New Evaluation
-  
-            <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal"
-            (click)="router.navigate(['ea/evaluation-list'])">
-            Back to list
-          </button>
-                  </div>
-          <div class="card-body">
-  
-    <form [formGroup]="evaluationForm">
-        <div class="form-group row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text  redStar">Department</span>
-                        </div>
-                        <select class="form-control" (change)="onDepartmentChange($event)"
-                            
-                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.Department.errors }"
-                            formControlName="Department" name="Department" required>
-                            <option value="" disabled>Please select</option>
-                            <option *ngFor="let e of departments" [value]="e.DeptName">{{e.DeptName}}</option>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Create New Evaluation
 
-                        </select>
-                        <div *ngIf="isFormSubmitted && f.Department.errors" class="invalid-feedback">
-                            <div *ngIf="f.Department.errors.required">Department is required</div>
-                        </div>
-                    </div>
+                    <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal"
+                        (click)="router.navigate(['ea/evaluation-list'])">
+                        Back to list
+                    </button>
                 </div>
-            </div>
+                <div class="card-body">
 
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text redStar">Select Employee(s)</span>
-                        </div>
+                    <form [formGroup]="evaluationForm">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text  redStar">Department</span>
+                                        </div>
+                                        <select class="form-control" (change)="onDepartmentChange($event)"
+                                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.Department.errors }"
+                                            formControlName="Department" name="Department" required>
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of departments" [value]="e.DeptName">{{e.DeptName}}
+                                            </option>
 
-                        <mat-select formControlName="Employees" name="Employees"
-                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.Employees.errors }"
-                            class="form-control" multiple>
-                            <mat-option [value]="1" (click)="selectAllEmployees(eo)"   #eo >SelectAll</mat-option>
-                            <mat-option *ngFor="let option of employeesList$ " [value]="option._id">
-                                {{option.FirstName}}
-                            </mat-option>
-                        </mat-select>
-
-
-                        <div *ngIf=" isFormSubmitted &&   f.Employees.errors" class="invalid-feedback">
-                            <div *ngIf="f.Employees.errors.required">must select at least one employee</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <div class="form-check">
-                        <input (change)="onChangeKPIFor($event)" formControlName="ActivateKPI" class="form-check-input"
-                            type="checkbox" id="ActivateKPI">
-                        <label class="form-check-label" for="ActivateKPI">
-                            Activate KPI Setting Form
-                        </label>
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <div class="form-check">
-                        <input formControlName="ActivateActionPlan" class="form-check-input" type="checkbox"
-                            id="ActivateActionPlan">
-                        <label class="form-check-label" for="ActivateActionPlan">
-                            Activate Action Plan
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div *ngIf="enableKPIFor" class="form-group row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label id="kpi-for-group">KPI For</label>
-                    <mat-radio-group aria-labelledby="kpi-for-group" class="example-radio-group"
-                        formControlName="KPIFor">
-                        <mat-radio-button class="kpi-radio-button" *ngFor="let kpifor of kpiForList" [value]="kpifor">
-                            {{kpifor}}
-                        </mat-radio-button>
-                    </mat-radio-group>
-                    
-                    <div *ngIf=" isFormSubmitted &&   f.KPIFor.errors" class="invalid-feedback">
-                        <div *ngIf="f.KPIFor.errors.required">must select KPI For</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!--Evaluation Details Begin-->
-        <div class="form-group row">
-
-            <div class="col-md-6">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text redStar"> Evaluation Period</span>
-                        </div>
-                        <div class="form-control">
-                        {{currentOrganization?.EvaluationPeriod}}-{{currentOrganization?.StartMonth}} {{currentOrganization?.EndMonth}}
-                    </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text redStar"> Evaluation Duration</span>
-                        </div>
-                        <div class="form-control">
-                        {{currentOrganization?.EvaluationDuration}}
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <!--Evaluation Details End-->
-        <div class="form-group row">
-            
-            <div class="col-md-4">
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text redStar">Select Model</span>
-                    </div>
-
-                    <mat-select formControlName="Model"
-                      [ngClass]="{ 'is-invalid':isFormSubmitted && f.Model.errors }" class="form-control"
-                      >
-                      <mat-option *ngFor="let model of modelsList" [value]="model._id">{{model.Name}}</mat-option>
-                    </mat-select>
-
-                    <div *ngIf="isFormSubmitted && f.Model.errors" class="invalid-feedback">
-                      <div *ngIf="f.Model.errors.required">Evaluation Model is required</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-        </div>
-        <!--Peer Rating Model Begin-->
-        <div class="form-group row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <input type="checkbox" (change)="enablePeerRating($event)" formControlName="PeerRatingNeeded"> Peer
-                    Rating Needed
-                </div>
-            </div>
-        </div>
-        <h2>Peer Rating Needed</h2>
-        <div class="form-group row">
-            
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Peers(s)</span>
+                                        </select>
+                                        <div *ngIf="isFormSubmitted && f.Department.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Department.errors.required">Department is required</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <mat-select formControlName="Peers" name="Peers"
-                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.Peers.errors }"
-                            class="form-control" multiple>
-                            <mat-option [value]="1" (click)="selectAllPeers(pr)"   #pr >SelectAll</mat-option>
-                            <mat-option *ngFor="let option of employeesList$ " [value]="option._id">
-                                {{option.FirstName}}
-                            </mat-option>
-                        </mat-select>
 
-                            <div *ngIf="isFormSubmitted && f.Peers.errors" class="invalid-feedback">
-                                <div *ngIf="f.Peers.errors.required">Peers is required</div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text  redStar">Employees</span>
+                                        </div>
+
+                                        <input type="text" placeholder="Select Employees" aria-label="Select Users"
+                                            [matAutocomplete]="auto" formControlName="Employees">
+
+
+                                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                                            <mat-option *ngFor="let user of employeesList$ "
+                                                [value]="selectedEmployees">
+                                                <div (click)="optionClicked($event, user)">
+                                                    <mat-checkbox [checked]="user.selected"
+                                                        (change)="toggleSelection(user)"
+                                                        (click)="$event.stopPropagation()">
+                                                        {{ user.FirstName }} {{ user.LastName }}
+                                                    </mat-checkbox>
+                                                </div>
+                                            </mat-option>
+                                        </mat-autocomplete>
+
+                                        <br><br>
+
+                                        <!-- <label>Selected Users:</label>
+                                        <mat-list dense>
+                                            <mat-list-item *ngIf="selectedEmployees?.length === 0">(None)
+                                            </mat-list-item>
+                                            <mat-list-item *ngFor="let user of selectedEmployees">
+                                                {{ user.FirstName }} {{ user.LastName }}
+                                            </mat-list-item>
+                                        </mat-list> -->
+
+                                        <div *ngIf=" isFormSubmitted &&   f.Employees.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Employees.errors.required">must select at least one employee
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text redStar">Competency</span>
-                            </div>
-                            
-                            <mat-select formControlName="PeersCompetency" name="PeersCompetency"
-                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.PeersCompetency.errors }"
-                            class="form-control" multiple>
-                            <mat-option [value]="1" (click)="selectAllPeersCompetency(ev)"   #ev >SelectAll</mat-option>
-                            <mat-option *ngFor="let option of competencyList " [value]="option._id">
-                                {{option.Name}}
-                            </mat-option>
-                        </mat-select>
-                            <div *ngIf="isFormSubmitted && f.PeersCompetency.errors" class="invalid-feedback">
-                                <div *ngIf="f.PeersCompetency.errors.required">Peer Comptency is required</div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+
+                                <ag-grid-angular *ngIf="selectedEmployees.length>0" style="width: auto; height: 200px;" class="ag-theme-alpine"
+                                    [rowData]="selectedEmployees" [gridOptions]="empGridOptions" [pagination]="true"
+                                    [paginationPageSize]="10" (gridReady)="onEmpGridReady($event)"
+                                    (rowClicked)="onEmpRowClicked($event)">
+                                </ag-grid-angular>
                             </div>
                         </div>
-                    </div>
-                </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input (change)="onChangeKPIFor($event)" formControlName="ActivateKPI"
+                                            class="form-check-input" type="checkbox" id="ActivateKPI">
+                                        <label class="form-check-label" for="ActivateKPI">
+                                            Activate KPI Setting Form
+                                        </label>
+                                    </div>
 
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text ">Message</span>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input formControlName="ActivateActionPlan" class="form-check-input"
+                                            type="checkbox" id="ActivateActionPlan">
+                                        <label class="form-check-label" for="ActivateActionPlan">
+                                            Activate Action Plan
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <textarea [disabled]="enablePeersRating" formControlName="PeersComptencyMessage"></textarea>
-                            <div *ngIf="isFormSubmitted && f.PeersComptencyMessage.errors" class="invalid-feedback">
-                                <div *ngIf="f.PeersComptencyMessage.errors.required">Message is required</div>
+                            <div *ngIf="enableKPIFor" class="col-md-6">
+                                <div class="form-group">
+                                    <label id="kpi-for-group">KPI For</label>
+                                    <mat-radio-group aria-labelledby="kpi-for-group" class="example-radio-group"
+                                        formControlName="KPIFor">
+                                        <mat-radio-button class="kpi-radio-button" *ngFor="let kpifor of kpiForList"
+                                            [value]="kpifor">
+                                            {{kpifor}}
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+
+                                    <div *ngIf=" isFormSubmitted &&   f.KPIFor.errors" class="invalid-feedback">
+                                        <div *ngIf="f.KPIFor.errors.required">must select KPI For</div>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
-                    </div>
-                </div>
-            
-        </div>
-        <!--Peer Rating Model End-->
 
-        <!--Direct Report Rating Model Begin-->
-        <div class="form-group row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <input type="checkbox" (change)="enableDirectReporting($event)"
-                        formControlName="DirectReportRateNeeded"> Direct Report Rating Needed
-                </div>
-            </div>
-        </div>
+                        <!--Evaluation Details Begin-->
+                        <div class="form-group row">
 
-        <div class="form-group row">
-
-            
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Direct Reportees</span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar"> Evaluation Period</span>
+                                        </div>
+                                        <div class="form-control">
+                                            {{currentOrganization?.EvaluationPeriod}}-{{currentOrganization?.StartMonth}}
+                                            {{currentOrganization?.EndMonth}}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <mat-select formControlName="DirectReports" name="DirectReports"
-                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.DirectReports.errors }"
-                            class="form-control" multiple>
-                            
-                            <mat-option [value]="1" (click)="selectAllDRs(dr)"   #dr >SelectAll</mat-option>
-                            <mat-option *ngFor="let option of employeesList$ " [value]="option._id">
-                                {{option.FirstName}}
-                            </mat-option>
-                        </mat-select>
-                            <div *ngIf="isFormSubmitted && f.DirectReports.errors" class="invalid-feedback">
-                                <div *ngIf="f.DirectReports.errors.required">DirectReports is required</div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar"> Evaluation Duration</span>
+                                        </div>
+                                        <div class="form-control">
+                                            {{currentOrganization?.EvaluationDuration}}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
-                    </div>
-                </div>
-            
-            
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text redStar">Competency</span>
-                            </div>
-                            
-                            <mat-select formControlName="DirectReportsCompetency" name="DirectReportsCompetency"
-                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.DirectReportsCompetency.errors }"
-                            class="form-control" multiple>
-                            <mat-option [value]="1" (click)="selectAllDRCompetency(drc)"   #drc >SelectAll</mat-option>
-                            <mat-option *ngFor="let option of competencyList " [value]="option._id">
-                                {{option.Name}}
-                            </mat-option>
-                        </mat-select>
-                            <div *ngIf="isFormSubmitted && f.DirectReportsCompetency.errors" class="invalid-feedback">
-                                <div *ngIf="f.DirectReportsCompetency.errors.required">Direct Comptency is required
+                        <!--Evaluation Details End-->
+                        <div class="form-group row">
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar">Select Model</span>
+                                        </div>
+
+                                        <mat-select formControlName="Model"
+                                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.Model.errors }"
+                                            class="form-control">
+                                            <mat-option *ngFor="let model of modelsList" [value]="model._id">
+                                                {{model.Name}}</mat-option>
+                                        </mat-select>
+
+                                        <div *ngIf="isFormSubmitted && f.Model.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Model.errors.required">Evaluation Model is required</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            
-            
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text ">Message</span>
-                            </div>
-                            <textarea  formControlName="DirectReportMessage"></textarea>
-                            <div *ngIf="isFormSubmitted && f.DirectReportMessage.errors" class="invalid-feedback">
-                                <div *ngIf="f.DirectReportMessage.errors.required">Message is required</div>
+                        <!--Peer Rating Model Begin-->
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="checkbox" (change)="enablePeerRating($event)"
+                                        formControlName="PeerRatingNeeded"> Peer
+                                    Rating Needed
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            
-        </div>
-        <!--Direct Report Rating Model End-->
-        <div class="modal-footer">
+                        <h2>Peer Rating Needed</h2>
+                        <div class="form-group row">
 
-            <button type="button" class="btn btn-secondary" (click)="reset()">Reset</button>
-            <button type="button" (click)="draftEvaluation()" class="btn btn-primary">Save</button>
-            <button type="button" (click)="submitEvaluation()" class="btn btn-primary">Submit</button>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Peers(s)</span>
+                                        </div>
+
+                                        <input type="text" placeholder="Select Users" aria-label="Select Peers"
+                                            [matAutocomplete]="peersAuto" formControlName="Peers">
+
+
+                                        <mat-autocomplete #peersAuto="matAutocomplete" [displayWith]="displayFn">
+                                            <mat-option *ngFor="let p of peersList; trackBy:trackByEmpCode "
+                                                [value]="selectedPeers">
+                                                <div (click)="peersOptionClicked($event, p)">
+                                                    <mat-checkbox [checked]="p.selected"
+                                                        (change)="togglePeersSelection(p)"
+                                                        (click)="$event.stopPropagation()">
+                                                        {{ p.FirstName }} {{ p.LastName }}
+                                                    </mat-checkbox>
+                                                </div>
+                                            </mat-option>
+                                        </mat-autocomplete>                                        
+                                        <div *ngIf="isFormSubmitted && f.Peers.errors" class="invalid-feedback">
+                                            <div *ngIf="f.Peers.errors.required">Peers is required</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar">Competency</span>
+                                        </div>
+
+                                        <mat-select formControlName="PeersCompetency" name="PeersCompetency"
+                                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.PeersCompetency.errors }"
+                                            class="form-control" multiple>
+                                            <mat-option [value]="1" (click)="selectAllPeersCompetency(ev)" #ev>SelectAll
+                                            </mat-option>
+                                            <mat-option *ngFor="let option of competencyList " [value]="option._id">
+                                                {{option.Name}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <div *ngIf="isFormSubmitted && f.PeersCompetency.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="f.PeersCompetency.errors.required">Peer Comptency is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text ">Message</span>
+                                        </div>
+                                        <textarea [disabled]="enablePeersRating"
+                                            formControlName="PeersComptencyMessage"></textarea>
+                                        <div *ngIf="isFormSubmitted && f.PeersComptencyMessage.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="f.PeersComptencyMessage.errors.required">Message is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+
+                                <ag-grid-angular *ngIf="selectedPeers.length>0" style="width: auto; height: 200px;" class="ag-theme-alpine"
+                                    [rowData]="selectedPeers" [gridOptions]="PeersGridOptions" [pagination]="true"
+                                    [paginationPageSize]="10" (gridReady)="onPeersGridReady($event)"
+                                    (rowClicked)="onPeersRowClicked($event)">
+                                </ag-grid-angular>
+                            </div>
+                        </div>
+                        <!--Peer Rating Model End-->
+
+                        <!--Direct Report Rating Model Begin-->
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="checkbox" (change)="enableDirectReporting($event)"
+                                        formControlName="DirectReportRateNeeded"> Direct Report Rating Needed
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Direct Reportee(s)</span>
+                                            </div>
+
+                                            <input type="text" placeholder="Select Users"
+                                                aria-label="Select Direct Reportees" [matAutocomplete]="drAuto"
+                                                formControlName="DirectReports">
+
+
+                                            <mat-autocomplete #drAuto="matAutocomplete" [displayWith]="displayFn">
+                                                <mat-option *ngFor="let dr of directReportees;" [value]="selectedDrs">
+                                                    <div (click)="DrsOptionClicked($event, dr)">
+                                                        <mat-checkbox [checked]="dr.selected"
+                                                            (change)="toggleDrsSelection(dr)"
+                                                            (click)="$event.stopPropagation()">
+                                                            {{ dr.FirstName }} {{ dr.LastName }}
+                                                        </mat-checkbox>
+                                                    </div>
+                                                </mat-option>
+                                            </mat-autocomplete>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar">Competency</span>
+                                        </div>
+
+                                        <mat-select formControlName="DirectReportsCompetency"
+                                            name="DirectReportsCompetency"
+                                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.DirectReportsCompetency.errors }"
+                                            class="form-control" multiple>
+                                            <mat-option [value]="1" (click)="selectAllDRCompetency(drc)" #drc>SelectAll
+                                            </mat-option>
+                                            <mat-option *ngFor="let option of competencyList " [value]="option._id">
+                                                {{option.Name}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <div *ngIf="isFormSubmitted && f.DirectReportsCompetency.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="f.DirectReportsCompetency.errors.required">Direct Comptency is
+                                                required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text ">Message</span>
+                                        </div>
+                                        <textarea formControlName="DirectReportMessage"></textarea>
+                                        <div *ngIf="isFormSubmitted && f.DirectReportMessage.errors"
+                                            class="invalid-feedback">
+                                            <div *ngIf="f.DirectReportMessage.errors.required">Message is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-12">
+
+                                <ag-grid-angular *ngIf="selectedDrs.length>0" style="width: auto; height: 200px;" class="ag-theme-alpine"
+                                    [rowData]="selectedDrs" [gridOptions]="DrGridOptions" [pagination]="true"
+                                    [paginationPageSize]="10" (gridReady)="onDrsGridReady($event)"
+                                    (rowClicked)="onDrsRowClicked($event)">
+                                </ag-grid-angular>
+                            </div>
+                        </div>
+                        <!--Direct Report Rating Model End-->
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-secondary" (click)="reset()">Reset</button>
+                            <button type="button" (click)="draftEvaluation()" class="btn btn-primary">Save</button>
+                            <button type="button" (click)="submitEvaluation()" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </form>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-  
+</div>

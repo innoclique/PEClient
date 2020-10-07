@@ -92,6 +92,9 @@ export class LoginComponent implements OnInit {
           else if(x.Role==='RSA'){
             this.router.navigate(['rsa/dashboard']);
             }
+            else if(x.Role === 'EO'){
+              this.router.navigate(['employee/dashboard']);
+            }
         }
         
       }, error => {

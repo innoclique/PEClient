@@ -23,11 +23,11 @@ import { AccomplishmentsComponent } from './accomplishments/accomplishments.comp
 import { CurrentEvaluationComponent } from './current-evaluation/current-evaluation.component';
 import { ActionPlanComponent } from './action-plan/action-plan.component';
 
-
+import{DashboardComponent} from '../employess/dashboard/dashboard.component'
 
 @NgModule({
   declarations: [KpiSettingsComponent,DateAgoPipe, KpiSetupComponent,ReportsComponent,ProfileComponent,
-     AccomplishmentsComponent, CurrentEvaluationComponent, ActionPlanComponent],
+     AccomplishmentsComponent, CurrentEvaluationComponent, ActionPlanComponent,DashboardComponent],
   imports: [
     CommonModule,
     EmployessRoutingModule,
