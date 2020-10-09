@@ -1,3 +1,6 @@
+
+
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -5,20 +8,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-import { AlertDialog } from '../../Models/AlertDialog';
-import { AuthService } from '../../services/auth.service';
-import { NotificationService } from '../../services/notification.service';
-import { PerfAppService } from '../../services/perf-app.service';
-import { ThemeService } from '../../services/theme.service';
-import { Constants } from '../../shared/AppConstants';
-import { CustomValidators } from '../../shared/custom-validators';
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../services/notification.service';
+import { PerfAppService } from '../../../services/perf-app.service';
+import { ThemeService } from '../../../services/theme.service';
+import { Constants } from '../../../shared/AppConstants';
+import { CustomValidators } from '../../../shared/custom-validators';
 
 @Component({
-  selector: 'app-kpi-settings',
-  templateUrl: './kpi-settings.component.html',
-  styleUrls: ['./kpi-settings.component.css']
+  selector: 'app-kpi-review',
+  templateUrl: './kpi-review.component.html',
+  styleUrls: ['./kpi-review.component.css']
 })
-export class KpiSettingsComponent implements OnInit {
+export class KpiReviewComponent implements OnInit {
 
 
   public kpiForm: FormGroup;
@@ -26,8 +29,9 @@ export class KpiSettingsComponent implements OnInit {
   loginUser: any;
   public alert: AlertDialog;
   appScores: any = [];
-  kpiStatus: any = [];
   coachingRemDays: any = [];
+
+  kpiStatus: any = [];
   currentAction = 'create';
   isAllSelected = false;
   addMCSwitch = true;
@@ -44,6 +48,7 @@ export class KpiSettingsComponent implements OnInit {
   public selectedItems: any[] = []
   weight:any;
   currentKpiId: any;
+  currentEmpId: any;
   selIndex: any;
   isKpiActivated: boolean;
   msSelText="";
@@ -63,16 +68,19 @@ export class KpiSettingsComponent implements OnInit {
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
 
-    this.initApicallsForKpi();
+    
 
     this.activatedRoute.params.subscribe(params => {
      
      if (params['action']) {
       this.currentKpiId = params['id'];
+      this.currentEmpId = params['empId'];
       this.currentAction = params['action'];
      }
      
     });   
+
+   
 
   }
 
@@ -87,7 +95,7 @@ export class KpiSettingsComponent implements OnInit {
 
   ngOnInit(): void {
 
-
+    this.initApicallsForKpi();
 
     this.initKPIForm()
 
@@ -113,14 +121,18 @@ export class KpiSettingsComponent implements OnInit {
       ])
       ],
       TargetCompletionDate: [this.kpiDetails.TargetCompletionDate ? new Date(this.kpiDetails.TargetCompletionDate) : '', [Validators.required]],
-      YearEndComments: [''],
-      YECommManager: [''],
+      YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments : ''],
+      YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager : ''],
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
       Signoff: [this.loginUser.FirstName],
+      CoachingReminder: [this.loginUser.Organization.CoachingReminder],
 
       IsSubmit: ['false'],
       IsDraft: [''],
-      Score: [this.kpiDetails.Score ? this.kpiDetails.Score : '', [Validators.required]],
+      Score: [this.kpiDetails.Score ? this.kpiDetails.Score : ''],
+      ManagerScore: [this.kpiDetails.ManagerScore ? this.kpiDetails.ManagerScore : ''],
+      IsActive: [this.kpiDetails.IsActive+'' ],
+      ManagerFTSubmitedOn: [this.kpiDetails.ManagerFTSubmitedOn ],
       Status: [this.kpiDetails.Status ? this.kpiDetails.Status : '', [Validators.required]],
 
     });
@@ -142,7 +154,7 @@ export class KpiSettingsComponent implements OnInit {
 
 
   onCancle() {
-    this.router.navigate(['employee/kpi-setup']);
+    this.router.navigate(['em/review-kpi-list']);
   }
 
   submitKpi() {
@@ -160,7 +172,32 @@ export class KpiSettingsComponent implements OnInit {
 
     this.kpiForm.patchValue({ IsSubmit: 'true' });
     this.kpiForm.patchValue({ IsDraft: 'false' });
-    this.saveKpi();
+    this.submitReview();
+  }
+
+
+  
+  submitReview() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "UpdateKpiDataById";
+    this.perfApp.requestBody = {};
+    this.perfApp.requestBody.kpiId = this.currentKpiId;
+    this.perfApp.requestBody.IsActive = this.kpiForm.get('IsActive').value;;
+    this.perfApp.requestBody.ManagerScore = this.kpiForm.get('ManagerScore').value;;
+    this.perfApp.requestBody.YECommManager = this.kpiForm.get('YECommManager').value;;
+    this.perfApp.requestBody.IsManaFTSubmited = this.kpiForm.get('ManagerFTSubmitedOn').value ? false:true;
+    this.perfApp.requestBody.Action='Review' ;
+    this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+    this.perfApp.CallAPI().subscribe(c => {
+
+      if (c) {
+
+      this.getAllKPIs();
+    this.snack.success(this.translate.instant(`Kpi  Succeesfully`));
+        
+      }
+    })
+
   }
 
 
@@ -281,7 +318,7 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
   getMeasurementCriterias() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllMeasurementCriterias",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id }
+      this.perfApp.requestBody = { 'empId':this.currentEmpId }
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c && c.length > 0) {
@@ -370,7 +407,7 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
   getAllKPIs() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllKpis",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id }
+      this.perfApp.requestBody = { 'empId': this.currentEmpId }
     this.perfApp.CallAPI().subscribe(c => {
 
       this.setWeighting(c.filter(item => item.IsDraft === false).length);
@@ -582,3 +619,4 @@ this.msSelText="";
 
 
 }
+

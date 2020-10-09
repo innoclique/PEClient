@@ -1,0 +1,510 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    KPI Review
+
+                    <div class="form-group form-actions pull-right m-0">
+                        <button type="button" class="btn btn-sm btn-primary"
+                            (click)="router.navigate(['em/review-kpi-list'])">
+                            Back to list
+                        </button>
+                    </div>
+
+                </div>
+                <div class="card-body">
+
+
+                    <form [formGroup]="kpiForm" novalidate="" 
+                        class="ng-untouched ng-pristine ng-valid">
+
+                        <div class="form-group row">
+                            <div class="col-md-3 kpi-fl ">
+                                <div class="col-md-6">
+                                    <strong>Evaluation Period: </strong>
+                                </div>
+                                <div class="col-md-5"><span>Jan - Dec 2020</span></div>
+
+                            </div>
+
+                            <div class="col-md-3 ">
+                                <div class="col-md-6">
+                                    <strong>Title: </strong>
+                                </div>
+                                <div class="col-md-5"><span>{{loginUser?.Title}}</span></div>
+
+                            </div>
+
+                            <div class="col-md-3 ">
+                                <div class="col-md-6">
+                                    <strong>Department: </strong>
+                                </div>
+                                <div class="col-md-5"><span>{{loginUser?.Department}}</span></div>
+
+                            </div>
+
+                            <div class="col-md-3 ">
+                                <div class="col-md-6">
+                                    <strong>Length of Service: </strong>
+                                </div>
+                                <div class="col-md-5"><span>{{ loginUser?.JoiningDate| dateAgo}}</span></div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-3 ">
+                                <div class="col-md-6">
+                                    <strong>Manager: </strong>
+                                </div>
+                                <div class="col-md-5">
+                                    <span>{{loginUser?.Manager? loginUser?.Manager?.FirstName :'NA'}}</span></div>
+
+                            </div>
+
+                            <div class="col-md-3 ">
+                                <div class="col-md-6">
+                                    <strong>Length of Time in Current Role: </strong>
+                                </div>
+                                <div class="col-md-5"><span>{{ loginUser?.RoleEffFrom | dateAgo}}</span></div>
+
+                            </div>
+
+                            <div class="col-md-3 ">
+                                <div class="col-md-6">
+                                    <strong>Leadership Role: </strong>
+                                </div>
+                                <div class="col-md-5"><span>{{loginUser?.DirectReports?'Yes':'No'}}</span></div>
+
+                            </div>
+
+                            <div class="col-md-3 ">
+                                <div class="col-md-6">
+                                    <strong>Job Level: </strong>
+                                </div>
+                                <div class="col-md-5"><span>{{loginUser?.JobLevel}}</span></div>
+
+                            </div>
+
+                        </div>
+
+                        <br>
+
+                    <div class="view-only">
+
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text ">Key Performance Indicators
+                                                (KPI)</span>
+                                        </div>
+                                        <input max="500" maxlength="500" class="form-control" type="text"
+                                            [ngClass]="{ 'is-invalid': f.Kpi.touched  &&  f.Kpi.invalid }"
+                                            formControlName="Kpi" name="Kpi" required [matAutocomplete]="kpiAuto">
+
+                                        <mat-autocomplete #kpiAuto="matAutocomplete"
+                                            (optionSelected)="onKpiAutoSelected($event)" [displayWith]="displayKPIFn">
+                                            <mat-option *ngFor="let option of filteredOptionsKPI | async"
+                                                [value]="option">
+                                                {{option.Kpi}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+
+                                        <div *ngIf="f.Kpi.touched && f.Kpi.invalid" class="invalid-feedback">
+
+                                            <div *ngIf="f.Kpi.errors.minlength">KPI Name must be at least 2
+                                                characters </div>
+                                            <div *ngIf="f.Kpi.errors.hasKPISplChars">Allowed special characters are
+                                                (.,-,(,),&,#,:,/,?) </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text ">Measurement Criteria </span>
+                                        </div>
+                                        <input *ngIf="addMCSwitch" max="500" maxlength="500" class="form-control"
+                                            type="text" formControlName="MeasurementCriteria"
+                                            name="MeasurementCriteria">
+
+
+                                        <input *ngIf="!addMCSwitch" max="500" maxlength="500"
+                                            class="form-control text-capitalize" type="text"
+                                            [ngClass]="{ 'is-invalid': f.MeasurementCriteria.touched  &&  selectedItems.length==0 }"
+                                            formControlName="MeasurementCriteria" name="MeasurementCriteria"
+                                            [matAutocomplete]="auto2" [placeholder]="msSelText">
+
+
+
+                                        <label *ngIf="currentAction != 'view'"
+                                            class="switch switch-label switch-lg switch-primary input-group-postpend ml-2">
+                                            <input (change)="toggleSwitch()" [checked]="addMCSwitch"
+                                                class="switch-input form-control" type="checkbox">
+                                            <span class="switch-slider" data-checked="On"
+                                                data-unchecked="Off"></span></label>
+
+
+
+                                        <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn">
+
+
+                                            <mat-option *ngFor="let option of filteredOptionsTS | async"
+                                                [value]="option">
+
+                                                <div (click)="optionClicked($event, option);">
+                                                    <mat-checkbox [checked]="option?.selected" class="text-capitalize"
+                                                        (change)="toggleSelection(option)"
+                                                        (click)="$event.stopPropagation()">
+                                                        {{option.Name}}
+                                                    </mat-checkbox>
+                                                </div>
+                                            </mat-option>
+                                        </mat-autocomplete>
+
+                                        <div *ngIf="f.MeasurementCriteria.touched && selectedItems.length==0"
+                                            class="invalid-feedback">
+
+                                            <div *ngIf="selectedItems.length==0">Please select Measurement Criteria
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+
+                        </div>
+
+
+
+
+
+
+                        <div class="form-group row">
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text "> Target Completion</span>
+                                        </div>
+                                        <input class="autoc-border  form-control" (click)="picker.open()" readonly
+                                            matInput [matDatepicker]="picker" formControlName="TargetCompletionDate"
+                                            name="TargetCompletionDate"
+                                            [ngClass]="{ 'is-invalid': f.TargetCompletionDate.touched  &&  f.TargetCompletionDate.invalid }"
+                                            required>
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+
+                                        <div *ngIf="f.TargetCompletionDate.touched && f.TargetCompletionDate.invalid"
+                                            class="invalid-feedback">
+                                            <div *ngIf="f.TargetCompletionDate.errors.required">Target Completion is
+                                                mandatory.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Score</span>
+                                        </div>
+                                        <select class="form-control"
+                                            [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }"
+                                            formControlName="Score" name="Score" required>
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of appScores" [value]="e">{{e}}</option>
+
+                                        </select>
+                                        <div *ngIf="f.Score.touched && f.Score.invalid" class="invalid-feedback">
+                                            <div *ngIf="f.Score.errors.required">Score is mandatory.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Status</span>
+                                        </div>
+                                        <select class="form-control"
+                                            [ngClass]="{ 'is-invalid': f.Status.touched  &&  f.Status.invalid }"
+                                            formControlName="Status" name="Status" required>
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of kpiStatus" [value]="e">{{e}}</option>
+
+                                        </select>
+                                        <div *ngIf="f.Status.touched && f.Status.invalid" class="invalid-feedback">
+                                            <div *ngIf="f.Status.errors.required">Status is mandatory.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group ">
+
+
+
+                                    <div class="input-group ">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Weighting</span>
+                                        </div>
+                                        <input maxlength="12" class="form-control mr-2" type="text"
+                                            [ngClass]="{ 'is-invalid': f.Weighting.touched  &&  f.Weighting.invalid }"
+                                            formControlName="Weighting" name="Weighting">
+
+                                        <!-- <div class="col-md-5">
+                                            <span>Weighting: </span>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <input class="" readonly  formControlName="Weighting"  name="Weighting"   > 
+                                            <span >%</span></div> -->
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Year-end Comments</span>
+                                        </div>
+                                        <textarea maxlength="500" class="form-control" cols="" rows="4"
+                                            [ngClass]="{ 'is-invalid': f.YearEndComments.touched  &&  f.YearEndComments.invalid }"
+                                            formControlName="YearEndComments" name="YearEndComments">  </textarea>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        
+                        <div class="form-group row">
+
+
+
+
+
+                            <div class="col-md-4">
+
+
+
+                                <div class="form-group ">
+
+                                    <div class="input-group ">
+                                        <div class="input-group-prepend ml-2">
+                                            <span class="input-group-text">Sign-off</span>
+                                        </div>
+                                        <input maxlength="12" class="form-control" type="text" disabled
+                                            [ngClass]="{ 'is-invalid': f.Signoff.touched  &&  f.Signoff.invalid }"
+                                            formControlName="Signoff" name="Signoff">
+
+
+
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text "> Date</span>
+                                        </div>
+                                        <input class="autoc-border  form-control" (click)="picker.open()" readonly
+                                            matInput [matDatepicker]="Signpicker" formControlName="TargetCompletionDate"
+                                            name="TargetCompletionDate"
+                                            [ngClass]="{ 'is-invalid': f.TargetCompletionDate.touched  &&  f.TargetCompletionDate.invalid }"
+                                            required>
+                                        <mat-datepicker-toggle matSuffix [for]="Signpicker"></mat-datepicker-toggle>
+                                        <mat-datepicker #Signpicker></mat-datepicker>
+
+                                        <div *ngIf="f.TargetCompletionDate.touched && f.TargetCompletionDate.invalid"
+                                            class="invalid-feedback">
+                                            <div *ngIf="f.TargetCompletionDate.errors.required">Target Completion is
+                                                mandatory.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <div *ngIf="currentAction != 'create'"
+                            class=" row form-group form-actions clearfix w-100 d-block all-events ">
+                            <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()">Pre
+                                Kpi</button>
+                            <button [disabled]='selIndex+1 == empKPIData.length' class="btn btn-link pull-right"
+                                (click)="nextKpi()">Next Kpi</button>
+
+                        </div>
+
+
+                    </div>
+                        <!-- <div class="clearfix"></div> -->
+                        <h3>Manager</h3>
+                      
+
+
+                        <div class="form-group row">
+
+
+                            <div class="col-md-4">
+
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Score (self)</span>
+                                        </div>
+                                        <select class="form-control"
+                                            [ngClass]="{ 'is-invalid': f.ManagerScore.touched  &&  f.ManagerScore.invalid }"
+                                            formControlName="ManagerScore" name="ManagerScore" required>
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of appScores" [value]="e">{{e}}</option>
+
+                                        </select>
+                                        <div *ngIf="f.ManagerScore.touched && f.ManagerScore.invalid" class="invalid-feedback">
+                                            <div *ngIf="f.ManagerScore.errors.required">Score is mandatory.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Coaching Reminder</span>
+                                        </div>
+                                        <select class="form-control"
+                                            [ngClass]="{ 'is-invalid': f.CoachingReminder.touched  &&  f.CoachingReminder.invalid }"
+                                            formControlName="CoachingReminder" name="CoachingReminder" >
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of coachingRemDays" [value]="e">{{e}}</option>
+
+                                        </select>
+                                        <div class="input-group-postpend">
+                                            <span class="input-group-text">Days</span>
+                                        </div>
+                                        <div *ngIf="f.CoachingReminder.touched && f.CoachingReminder.invalid" class="invalid-feedback">
+                                            <div *ngIf="f.CoachingReminder.errors.required">Coaching Reminder is mandatory.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-md-4">
+
+
+
+                                <div class="form-group ">
+
+                                    <div class="input-group ">
+                                        <div class="input-group-prepend ml-2">
+                                            <span class="input-group-text">Sign-off</span>
+                                        </div>
+                                        <input maxlength="12" class="form-control" type="text" disabled
+                                            [ngClass]="{ 'is-invalid': f.Signoff.touched  &&  f.Signoff.invalid }"
+                                            formControlName="Signoff" name="Signoff">
+
+
+
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+                                <label class="col-md-4 col-form-label pull-left ml-2" for="inline-radios">Active</label>
+                                <div class="col-md-5 col-form-label ">
+                                    <div class="form-check form-check-inline mr-1" id="inline-radios"><input
+                                            class="form-check-input" id="inlineRadio1" name="IsActive"
+                                            formControlName="IsActive" type="radio" value="true"><label
+                                            class="form-check-label" for="inlineRadio1">Yes</label>
+                                    </div>
+                                    <div class="form-check form-check-inline mr-1"><input class="form-check-input"
+                                            id="inlineRadio2" name="IsActive" formControlName="IsActive" type="radio"
+                                            value="false"><label class="form-check-label" for="inlineRadio2">No</label>
+                                    </div>
+
+                                </div>
+
+                                
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Year-end Comments</span>
+                                        </div>
+                                        <textarea maxlength="500" class="form-control" cols="" rows="4"
+                                            [ngClass]="{ 'is-invalid': f.YECommManager.touched  &&  f.YECommManager.invalid }"
+                                            formControlName="YECommManager" name="YECommManager">  </textarea>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div  class="form-group form-actions pull-right">
+                            <button class="btn btn-sm btn-primary" (click)="onCancle()">Cancel</button>
+                            <button  class="btn btn-sm btn-primary"
+                                (click)="submitKpi()">{{currentAction=='edit'? 'Update' :'Submit' }}</button>
+                          
+                        </div>
+
+                        <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

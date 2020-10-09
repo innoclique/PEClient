@@ -41,7 +41,7 @@ const routes: Routes = [
       },
       {
         path:'dashboard',
-        component:DashboardComponent,
+        component:KpiSetupComponent,
         data:{title:'Dashboard'}
       }, {
         path:'action-plan',

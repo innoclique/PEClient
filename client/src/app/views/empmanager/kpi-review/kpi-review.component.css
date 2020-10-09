@@ -24,6 +24,15 @@
     display: inherit;
 } */
 
+strong {
+    font-weight: 500;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: #fff !important;
+   
+}
+
 .mea-cri-sel {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -33,12 +42,26 @@
     display: block;
 }
 
-
-strong {
-    font-weight: 500;
+h3 {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
-.form-control:disabled, .form-control[readonly] {
-    background-color: #fff !important;
-   
+ 
+
+h3:before,
+h3:after {
+    content: '';
+    border-top: 2px solid;
+    margin: 0 20px 0 0;
+    flex: 1 0 20px;
+}
+
+ 
+
+h3:after {
+    margin: 0 0 0 20px;
 }

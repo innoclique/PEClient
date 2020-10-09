@@ -1,0 +1,55 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { KpiReviewListComponent } from './kpi-review-list/kpi-review-list.component';
+import { KpiReviewComponent } from './kpi-review/kpi-review.component';
+import { ManagerDashboardComponent } from './manager-dashboard/manager-dashboard.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    data: {
+      title: 'Manager'
+    },
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard'
+      },
+
+      {
+        path:'dashboard',
+        component:ManagerDashboardComponent,
+        data:{title:'Dashboard'}
+      },
+     
+      {
+        path: 'review-kpi-list',
+        component: KpiReviewListComponent,
+        data: {
+          title: 'KPI Review'
+        }
+      },
+
+      {
+        path: 'kpi-review',
+        component: KpiReviewComponent,
+        data: {
+          title: 'Review'
+        }
+      },
+
+    
+
+     
+
+     
+    ]
+}
+
+]
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class EmpmanagerRoutingModule { }

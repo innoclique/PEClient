@@ -195,6 +195,7 @@ export class CreateEmployeeComponent implements OnInit {
     //   this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
     // }else{
       this.perfApp.requestBody.CreatedBy=this.loginUser._id;
+      this.perfApp.requestBody.Organization=this.loginUser.Organization?this.loginUser.Organization._id:null ;
       this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
       this.perfApp.requestBody.ParentUser=this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id;
       this.perfApp.requestBody.IgnoreEvalAdminCreated=false;

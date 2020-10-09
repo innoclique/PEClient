@@ -6,7 +6,12 @@
                     Employee KPI Setting
 
                     <div class="form-group form-actions pull-right m-0">
+                        <button type="button" class="btn btn-sm btn-primary" 
+                        (click)="router.navigate(['employee/kpi-setup'])">
+                        Back to list
+                      </button>
                     </div>
+                    
                 </div>
                 <div class="card-body">
 
@@ -132,22 +137,35 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text redStar">Measurement Criteria  </span>
                                         </div>
-                                        <input max="500" maxlength="500" class="form-control" type="text"
-                                        [ngClass]="{ 'is-invalid': f.MeasurementCriteria.touched  &&  selectedItems.length==0 }"
+                                        <input *ngIf="addMCSwitch" max="500" maxlength="500" class="form-control" type="text"
+                                       
                                             formControlName="MeasurementCriteria" name="MeasurementCriteria" 
-                                            [matAutocomplete]="auto2"  >
+                                           >
 
-                                            <div *ngIf="selectedItems.length>0"   [tooltip]="showSelectedItems()" class="input-group-postpend ">
-                                                <span  class="input-group-text mea-cri-sel"> {{showSelectedItems()}} </span>
-                                            </div>
+
+                                            <input  *ngIf="!addMCSwitch" max="500" maxlength="500" 
+                                            class="form-control text-capitalize" type="text"
+                                            [ngClass]="{ 'is-invalid': f.MeasurementCriteria.touched  &&  selectedItems.length==0 }"
+                                                formControlName="MeasurementCriteria" name="MeasurementCriteria" 
+                                                [matAutocomplete]="auto2" [placeholder]="msSelText" 
+                                                >
+                                             
+
+                                           
+                                            <label *ngIf="currentAction != 'view'" class="switch switch-label switch-lg switch-primary input-group-postpend ml-2">
+                                                <input (change)="toggleSwitch()" [checked]="addMCSwitch" class="switch-input form-control" type="checkbox">
+                                                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span></label>
 
                                             
 
                                             <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn" >
+                                             
+                                                
                                                 <mat-option *ngFor="let option of filteredOptionsTS | async" [value]="option">
                                                  
                                                   <div (click)="optionClicked($event, option);">
-                                                    <mat-checkbox [checked]="option?.selected"  (change)="toggleSelection(option)" (click)="$event.stopPropagation()">
+                                                    <mat-checkbox [checked]="option?.selected" class="text-capitalize"
+                                                 (change)="toggleSelection(option)" (click)="$event.stopPropagation()">
                                                         {{option.Name}}
                                                     </mat-checkbox>
                                                 </div>
@@ -165,7 +183,7 @@
                             </div>
 
                             <div *ngIf="currentAction != 'view'" class="col-md-3">
-                                <button class="btn btn-block btn-primary w-75"
+                                <button class="btn btn-block btn-primary w-75" [disabled]="!addMCSwitch"
                                  (click)="addMesurment()"  >+ Add Mesuerment Criteria  </button>
                                 </div>
 
@@ -262,7 +280,7 @@
                                         <div class="col-md-7">
                                             <span>Weighting: </span>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-5">
                                             <input class="border-0 w-50" readonly  formControlName="Weighting"  name="Weighting"   > 
                                             <span >%</span></div>
                                       
@@ -299,12 +317,12 @@
                           </div>
                         <!-- <div class="clearfix"></div> -->
 
-                        <div class="form-group row ">
+                        <div *ngIf="currentAction != 'create'" class="form-group row ">
                             <div class="col-md-2 kpi-fl ">
                                 <div class="col-md-9">
                                     <strong>Score (manager): </strong> 
                                 </div>
-                                <div class="col-md-3"><span>10</span></div>
+                                <div class="col-md-3"><span></span></div>
 
                             </div>
 
@@ -312,7 +330,7 @@
                                 <div class="col-md-6">
                                     <strong>Manager Sign-off: </strong>
                                 </div>
-                                <div class="col-md-6"><span>{{loginUser?.Title}}</span></div>
+                                <div class="col-md-6"><span></span></div>
 
                             </div>
 
@@ -320,7 +338,7 @@
                                 <div class="col-md-5">
                                     <strong>Date: </strong>
                                 </div>
-                                <div class="col-md-7"><span>{{loginUser?.JoiningDate| date}}</span></div>
+                                <div class="col-md-7"><span></span></div>
 
                             </div>
 
@@ -328,7 +346,7 @@
                                 <div class="col-md-6">
                                     <strong>Year-end Comments (manager): </strong>
                                 </div>
-                                <div class="col-md-6"><span>Jsr snnn</span></div>
+                                <div class="col-md-6"><span></span></div>
 
                             </div>
 

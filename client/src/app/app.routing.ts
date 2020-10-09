@@ -85,6 +85,11 @@ export const routes: Routes = [
         path: 'employee',
         loadChildren: () => import('./employess/employess.module').then(m => m.EmployessModule)
       },
+
+      {
+        path: 'em',
+        loadChildren: () => import('./views/empmanager/empmanager.module').then(m => m.EmpmanagerModule)
+      },
       {
         path: 'ea',
         loadChildren: () => import('./views/evaluationadmin/evaluationadmin.module').then(m => m.EvaluationadminModule)
@@ -107,7 +112,7 @@ export const routes: Routes = [
       }
     ]
   },
-  { path: '**', component: P404Component }
+  // { path: '**', component: P404Component }
 ];
 
 @NgModule({
