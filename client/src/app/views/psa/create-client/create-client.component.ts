@@ -134,7 +134,7 @@ export class CreateClientComponent implements OnInit {
       ZipCode: ['', [Validators.required]],
       ClientType: ['Client',[]],
       UsageType: ['License', [Validators.required]],
-      UsageCount: [null, []],
+      UsageCount: [0, []],
       AdminFirstName: [null, Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),

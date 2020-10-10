@@ -16,7 +16,7 @@ import { CreateEmployeeComponent } from '../common/create-employee/create-employ
 import {SetingsComponent} from '../evaluationadmin/setings/setings.component'
 import{ReportsComponent} from '../evaluationadmin/reports/reports.component';
 import { ProfileComponent } from './profile/profile.component'
-
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 const routes: Routes = [
   {
     path: '',
@@ -100,7 +100,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     CustomMaterialModule,
     AgGridModule.withComponents([]),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    TypeaheadModule.forRoot(),
   ]
 })
 export class EvaluationadminModule { 

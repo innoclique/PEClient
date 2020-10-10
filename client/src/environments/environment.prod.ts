@@ -1,3 +1,3 @@
 export const environment = {
-  production: false, ApiPath : 'http://35.182.33.16:3000/api/'
+  production: false, ApiPath : 'http://15.223.26.103:3000/api/'
 };

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GridOptions } from 'ag-grid-community';
@@ -7,7 +7,9 @@ import { AuthService } from '../../../services/auth.service';
 
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
-
+import { noop, Observable, Observer, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { threadId } from 'worker_threads';
 
 @Component({
   selector: 'app-rollevaluation',
@@ -36,6 +38,15 @@ export class RollevaluationComponent implements OnInit {
   kpiForList: string[] = ['Employee', 'Manager', 'EA'];
   modelsList: any[];
   competencyList: any[];
+  config = {
+    backdrop: true,
+    ignoreBackdropClick: true,
+
+  };
+  selectePeersViewRef: BsModalRef;
+  @ViewChild('selectePeersView') selectePeersView: TemplateRef<any>;
+  @ViewChild('selecteDirectReporteeView') selecteDirectReporteeView: TemplateRef<any>;
+  selecteDirectReporteeViewRef: BsModalRef;
   constructor(private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
     private notification: NotificationService,
@@ -49,13 +60,11 @@ export class RollevaluationComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     this.initForm();
-    this.getAllDepartments();
-    this.disablePeerDirectReportes();
-
+    this.getEmployees();
     this.getModels();
     this.getCompetencyList();
-    debugger
-
+    this.getPeersForEmp();
+    this.getDirectReportees();
   }
   initForm() {
     this.evaluationForm = this.formBuilder.group({
@@ -64,16 +73,8 @@ export class RollevaluationComponent implements OnInit {
       EvaluationDuration: ['', []],
       Model: [null, [Validators.required]],
       PeerRatingNeeded: [false, [Validators.required]],
-      Peers: [[], [Validators.required]],
-      PeersCompetency: ['', [Validators.required]],
-      PeersComptencyMessage: ['', []],
-      DirectReportRateNeeded: [false, []],
-      DirectReports: [[], []],
-      DirectReportsCompetency: ['', [Validators.required]],
-      DirectReportMessage: ['', []],
       ActivateKPI: [false, []],
       ActivateActionPlan: [false, []],
-      Department: ['', [Validators.required]],
       KPIFor: ["Employee", []],
       CreatedBy: ['', []],
       Company: ['', []]
@@ -107,16 +108,16 @@ export class RollevaluationComponent implements OnInit {
     debugger
     if (this.evaluationForm.invalid)
       return;
-const _evform=this.evaluationForm.value;
-      if(_evform.PeerRatingNeeded && _evform.Peers.length<2){
-        this.notification.error('at least 2 peers needed to submit evalution')
-        return false;
-      }
-      
-      if(_evform.DirectReportRateNeeded && _evform.DirectReports.length<2){
-        this.notification.error('at least 2 Direct Reports needed to submit evalution')
-        return false;
-      }
+    const _evform = this.evaluationForm.value;
+    if (_evform.PeerRatingNeeded && _evform.Peers.length < 2) {
+      this.notification.error('at least 2 peers needed to submit evalution')
+      return false;
+    }
+
+    if (_evform.DirectReportRateNeeded && _evform.DirectReports.length < 2) {
+      this.notification.error('at least 2 Direct Reports needed to submit evalution')
+      return false;
+    }
 
     this.evaluationForm.value.CreatedBy = this.currentUser._id;
     this.evaluationForm.value.Company = this.currentOrganization._id;
@@ -168,24 +169,6 @@ const _evform=this.evaluationForm.value;
     });
   }
 
-  onDepartmentChange(event) {
-    this.getEmployees();
-    console.log('depart value', event)
-  }
-
-
-  getAllDepartments() {
-    this.perfApp.route = "app";
-    this.perfApp.method = "GetEmpSetupBasicData",
-      this.perfApp.requestBody = { 'empId': this.currentUser._id }
-    this.perfApp.CallAPI().subscribe(c => {
-      console.log('departments', c);
-      if (c) {
-
-        this.departments = c.Industries.Department;
-      }
-    })
-  }
   onChangeKPIFor(value) {
     this.enableKPIFor = value.target.checked;
     if (value.target.value) {
@@ -196,55 +179,13 @@ const _evform=this.evaluationForm.value;
       this.evaluationForm.controls['KPIFor'].setValue(null);
     }
   }
-  enablePeerRating(value) {
-    this.enablePeersRating = value.target.checked;
-    if (!this.enablePeersRating) {
-      this.evaluationForm.controls['PeersComptencyMessage'].disable();
-      this.evaluationForm.controls['PeersCompetency'].disable();
-      this.evaluationForm.controls['Peers'].disable();
-      this.evaluationForm.controls['PeersCompetency'].setValidators(null);
-      this.evaluationForm.controls['Peers'].setValidators(null);
-    } else {
-      this.evaluationForm.controls['PeersComptencyMessage'].enable();
-      this.evaluationForm.controls['PeersCompetency'].enable();
-      this.evaluationForm.controls['Peers'].enable();
 
-      this.evaluationForm.controls['PeersCompetency'].setValidators(Validators.required);
-      this.evaluationForm.controls['Peers'].setValidators(Validators.required);
-    }
-  }
-
-  enableDirectReporting(value) {
-    this.enableDirectReport = value.target.checked;
-    if (!this.enableDirectReport) {
-      this.evaluationForm.controls['DirectReportsCompetency'].disable();
-      this.evaluationForm.controls['DirectReportMessage'].disable();
-      this.evaluationForm.controls['DirectReports'].disable();
-    } else {
-      this.evaluationForm.controls['DirectReportsCompetency'].enable();
-      this.evaluationForm.controls['DirectReportMessage'].enable();
-      this.evaluationForm.controls['DirectReports'].enable();
-    }
-  }
-  disablePeerDirectReportes() {
-    this.evaluationForm.controls['DirectReportsCompetency'].disable();
-    this.evaluationForm.controls['DirectReportMessage'].disable();
-    this.evaluationForm.controls['DirectReports'].disable();
-    this.evaluationForm.controls['PeersComptencyMessage'].disable();
-    this.evaluationForm.controls['PeersCompetency'].disable();
-    this.evaluationForm.controls['Peers'].disable();
-  }
   setEmployeeIds() {
     var _curArray = this.evaluationForm.value.Employees
     console.log('mappppppppp', _curArray.map(x => { return { _id: x } }))
     this.evaluationForm.value.Employees = _curArray.map(x => { return { _id: x } });
     console.log('after settings ids', this.evaluationForm.value.Employees)
   }
-  // setModelIds() {
-  //   var _curArray = this.evaluationForm.value.Model;
-  //   this.evaluationForm.value.Model = _curArray.map(x => { return { _id: x._id } });
-  //   console.log('after settings Model ids', this.evaluationForm.value.Model);
-  // }
   selectAllEmployees(ev) {
     if (ev._selected) {
       this.evaluationForm.controls['Employees'].setValue(this.employeesList$.map(x => x._id));
@@ -256,63 +197,15 @@ const _evform=this.evaluationForm.value;
 
   }
 
-  selectAllPeersCompetency(ev) {
-
-    if (ev._selected) {
-      this.evaluationForm.controls['PeersCompetency'].setValue(this.competencyList.map(x => x._id));
-      ev._selected = true;
-    }
-    if (ev._selected == false) {
-      this.evaluationForm.controls['PeersCompetency'].setValue([]);
-    }
-
-  }
-
-  selectAllDRCompetency(ev) {
-
-    if (ev._selected) {
-      this.evaluationForm.controls['DirectReportsCompetency'].setValue(this.competencyList.map(x => x._id));
-      ev._selected = true;
-    }
-    if (ev._selected == false) {
-      this.evaluationForm.controls['DirectReportsCompetency'].setValue([]);
-    }
-
-  }
-
-  selectAllPeers(ev) {
-
-    if (ev._selected) {
-      this.evaluationForm.controls['Peers'].setValue(this.peersList.map(x => x._id));
-      ev._selected = true;
-    }
-    if (ev._selected == false) {
-      this.evaluationForm.controls['Peers'].setValue([]);
-    }
-
-  }
-
-
-  selectAllDRs(ev) {
-
-    if (ev._selected) {
-      this.evaluationForm.controls['DirectReports'].setValue(this.directReportees.map(x => x._id));
-      ev._selected = true;
-    }
-    if (ev._selected == false) {
-      this.evaluationForm.controls['DirectReports'].setValue([]);
-    }
-
-  }
   draftEvaluation() {
     debugger
-    if (this.evaluationForm.value.Department === "" || this.evaluationForm.value.Employees.length === 0) {
+    if (this.evaluationForm.value.Employees.length === 0) {
       this.notification.error('To save as Draft at least one department and Emloyeed need to select')
       return;
     }
     this.evaluationForm.value.CreatedBy = this.currentUser._id;
     this.evaluationForm.value.Company = this.currentOrganization._id;
-    this.setEmployeeIds();
+    //this.setEmployeeIds();
     //this.setModelIds();
     this.evaluationForm.value.IsDraft = true;
     console.log('evaluation form', this.evaluationForm.value);
@@ -338,9 +231,6 @@ const _evform=this.evaluationForm.value;
   public selectedEmployees: any = [];
   public selectedEmployee: any;
 
-  public empGridOptions: GridOptions = {
-    columnDefs: this.getEmpColDef()
-  }
   getSelectedOptions(selected) {
     this.selectedEmployees = selected;
   }
@@ -349,14 +239,17 @@ const _evform=this.evaluationForm.value;
     this.selectedEmployees = [];
   }
 
-  
+  empselectedCount = "";
   displayFn(value: any[] | string): string | undefined {
     let displayValue: string;
     if (Array.isArray(value)) {
-      if(value.length ===0){
-        displayValue = "Please select";  
+      if (value.length === 0) {
+        displayValue = "";
+      } else {
+
+        displayValue = "";
+        this.empselectedCount = value.length + "  record (s) selected";;
       }
-      displayValue = value.length + "  record (s) selected";
       // value.forEach((user, index) => {
       //   if (index === 0) {
       //     displayValue = user.FirstName + ' ' + user.LastName;
@@ -386,92 +279,205 @@ const _evform=this.evaluationForm.value;
     }
 
     this.evaluationForm.controls["Employees"].setValue(this.selectedEmployees);
-    this.empGridOptions.api.setRowData(this.selectedEmployees);
+    this.EmpGridOptions.api.setRowData(this.selectedEmployees);
   }
-  getEmpColDef() {
-    return [
-      {
-        headerName: 'Employee', sortable: true, filter: true,
-        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.FirstName}-${data.data.LastName}</span>` }
-      },
-      { headerName: 'Title', field: 'Title', sortable: true, filter: true },
-      { headerName: 'Email', field: 'Email', sortable: true, filter: true },
-      {
-        headerName: "Actions",
-        suppressMenu: true,
-        Sorting: false,
-        cellRenderer: (data) => {
-          console.log('column data', data)
-          return ``
-          //}
-        }
-      }
-    ];
-
-  }
-
   onEmpGridReady(params) {
-    this.empGridOptions.api = params.api; // To access the grids API
+    this.EmpGridOptions.api = params.api; // To access the grids API
   }
-  public onEmpRowClicked(e) {
-    debugger
-    if (e.event.target !== undefined) {
 
-      this.selectedEmployee = e.data;
-
-      let actionType = e.event.target.getAttribute("data-action-type");
-      switch (actionType) {
-        case "deleteEmp":
-          return this.toggleSelection(this.selectedEmployee);
-        // case "suspendorg":
-        //   return this.suspendOrg();
-        // case "edit":
-        // return this.editClient();
-      }
-    }
-  }
 
 
   //#endregion
 
   //#region  Multi_Select_Peers
 
-  public selectedPeers: any = [];
-  public selectedPeer: any;
-
-  public PeersGridOptions: GridOptions = {
-    columnDefs: this.getPeerColDef()
-  }
 
 
 
-  peersOptionClicked(event: Event, user: any) {
-    event.stopPropagation();
-    this.togglePeersSelection(user);
-  }
 
 
-  togglePeersSelection(user: any) {
+
+
+  currentEmployeeForPeers: any;
+
+
+
+  //#endregion
+
+
+  public empFilterList: any
+  public filterOption(filter: string): void {
     debugger
-    user.selected = !user.selected;
-    if (user.selected) {
-      this.selectedPeers.push(user);
-    } else {
-      const i = this.selectedPeers.findIndex(value => value.FirstName === user.FirstName && value.LastName === user.LastName);
-      this.selectedPeers.splice(i, 1);
-    }
-
-    this.evaluationForm.controls["Peers"].setValue(this.selectedPeers);
-    this.PeersGridOptions.api.setRowData(this.selectedPeers);
+    this.empFilterList = this.employeesList$.filter(x => x.FirstName.toLowerCase().includes(filter.toLowerCase()));
   }
-  getPeerColDef() {
+
+
+
+  /**Code refactoring starts from here */
+  /**For Grid */
+  public onEmpRowClicked(e) {
+    debugger
+    if (e.event.target !== undefined) {
+      this.selectedEmployee = e.data;
+      let actionType = e.event.target.getAttribute("data-action-type");
+      switch (actionType) {
+        case "deleteEmp":
+          return this.toggleSelection(this.selectedEmployee);
+        case "chooseDirectReports":
+          return this.selectDirectReportees();
+        case "choosePeers":
+          return this.selectPeersForEmployee();
+        // case "edit":
+        // return this.editClient();
+      }
+    }
+  }
+
+  public EmpGridOptions: GridOptions = {
+    columnDefs: this.getGridColumnsForEmp()
+  }
+
+
+  //#region Peers Code Blocak
+
+  currentPeer: any;
+  PeersCompetencyList = [];
+  PeersCompetencyMessage = "";
+  peersSearch: "";
+  selectedPeersOb: Observable<any[]>
+  getPeersForEmp() {
+    this.selectedPeersOb = new Observable((observer: Observer<string>) => {
+      observer.next(this.peersSearch);
+    }).pipe(
+      switchMap((query: string) => {
+        if (query) {
+          // using github public api to get users by name
+          this.perfApp.route = "app";
+          this.perfApp.method = "GetAllEmployees",
+            this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id }
+          return this.perfApp.CallAPI()
+            .pipe(
+              map((data: any) => { return data || [] }),
+              tap(() => noop, err => {
+                // in case of http error
+
+                this.errorMessage = err && err.message || 'Something goes wrong';
+              })
+            );
+        } else {
+          return of([]);
+        }
+      })
+    );
+    debugger
+  }
+  currentPeersList = []
+  onPeerEmployeeSelect(value) {
+    var ff = this.selectedEmployees.find(x => x._id === this.selectedEmployee._id);
+    if (!ff.Peers) {
+      ff.Peers = [];
+    }
+    ff.Peers.push(value)
+    this.currentPeersList = ff.Peers;
+    this.selectedEmployee.Peers = ff.Peers;;
+    this.peersForEmpGridOptions.api.setRowData(this.currentPeersList);
+    this.peersSearch = "";
+    this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).Peers = ff.Peers;
+    this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).PeersCompetencyMessage = this.PeersCompetencyMessage;
+    this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).PeersCompetencyList = this.PeersCompetencyList;
+  }
+  public peersForEmpGridOptions: GridOptions = {
+    columnDefs: this.getPeersForEmpCols()
+  }
+  public onPeersGridReady(params) {
+    this.peersForEmpGridOptions.api = params.api;
+  }
+  getPeersForEmpCols() {
+    return [
+      {
+        headerName: 'Peer', sortable: true, filter: true,
+        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.FirstName}-${data.data.LastName}</span>` }
+      },
+
+      {
+        headerName: "Actions",
+        suppressMenu: true,
+        Sorting: false,
+        cellRenderer: (data) => {
+          console.log('column data', data)
+          return ` `
+          //}
+        }
+      }
+    ];
+
+  }
+  selectPeersForEmployee() {
+    this.selectePeersViewRef = this.modalService.show(this.selectePeersView, this.config);
+    
+    this.PeersCompetencyMessage=this.selectedEmployee.PeersCompetencyMessage;
+    this.PeersCompetencyList=this.selectedEmployee.PeersCompetencyList;
+    this.currentPeersList=this.selectedEmployee.Peers;
+  }
+  public onPeersRowClicked(e) {
+    debugger
+    if (e.event.target !== undefined) {
+      this.currentPeer = e.data;
+      let actionType = e.event.target.getAttribute("data-action-type");
+      switch (actionType) {
+        case "deletePeer":
+          return this.deletePeer();
+        // case "edit":
+        // return this.editClient();
+      }
+    }
+  }
+  deletePeer() {
+    var _p = this.currentPeersList.indexOf(this.currentPeer);
+    this.currentPeersList.slice(_p, 1);
+  }
+  closePeersModel() {
+    this.selectePeersViewRef.hide();
+  }
+
+  savePeers() {
+    if (this.PeersCompetencyList.length === 0) {
+      this.notification.error('Please select at least one  Competency');
+      return;
+    }
+    if (!this.selectedEmployee.Peers || this.selectedEmployee.Peers.length === 0) {
+      this.notification.error('Please select at least one Peer');
+      return;
+    }
+    this.selectedEmployee.PeersCompetencyMessage = this.PeersCompetencyMessage;
+    this.selectedEmployee.PeersCompetencyList = this.PeersCompetencyList;
+    this.closePeersModel();
+  }
+
+  //#endregion
+
+
+
+  getGridColumnsForEmp() {
     return [
       {
         headerName: 'Employee', sortable: true, filter: true,
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.FirstName}-${data.data.LastName}</span>` }
       },
-      { headerName: 'Title', field: 'Title', sortable: true, filter: true },
       { headerName: 'Email', field: 'Email', sortable: true, filter: true },
+      {
+        headerName: 'Peers', field: '', sortable: false, filter: false,
+        cellRenderer: (data) => {
+          return `<span style="color:blue;cursor:pointer" data-action-type="choosePeers">View</span>`
+        }
+      },
+      {
+        headerName: 'Direct Reportees', field: '', sortable: false, filter: false,
+        cellRenderer: (data) => {
+          return `<span style="color:blue;cursor:pointer" data-action-type="chooseDirectReports">View</span>`
+        }
+      },
+
       {
         headerName: "Actions",
         suppressMenu: true,
@@ -486,98 +492,118 @@ const _evform=this.evaluationForm.value;
 
   }
 
-  onPeersGridReady(params) {
-    this.PeersGridOptions.api = params.api; // To access the grids API
+  directReporteeSearch: string;
+  selectedDirectReporteeTypeHead: any;
+  currentDirectReportees: any;
+  currentDirectReportee: any;
+  directReporteeCompetencyMessage: string = "";
+  directReporteeCompetencyList = [];
+  public directReporteesOfEmpGridOptions: GridOptions = {
+    columnDefs: this.getDirectReporteeGridCols()
   }
-  public onPeersRowClicked(e) {
+  selectDirectReportees() {
+    debugger
+    this.selecteDirectReporteeViewRef = this.modalService.show(this.selecteDirectReporteeView, this.config)
+    this.directReporteeCompetencyMessage = this.selectedEmployee.DirectReporteeComptencyMessage;
+
+  }
+  getDirectReportees() {
+    this.selectedDirectReporteeTypeHead = new Observable((observer: Observer<string>) => {
+      observer.next(this.directReporteeSearch);
+    }).pipe(
+      switchMap((query: string) => {
+        if (query) {
+          this.perfApp.route = "app";
+          this.perfApp.method = "GetAllEmployees",
+            this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id }
+          return this.perfApp.CallAPI()
+            .pipe(
+              map((data: any) => { ; return data || [] }),
+              tap(() => noop, err => {
+                // in case of http error
+
+                this.errorMessage = err && err.message || 'Something goes wrong';
+              })
+            );
+        } else {
+          return of([]);
+        }
+      })
+    );
+    debugger
+  }
+  onSelectDirectReportee(value) {
+    var ff = this.selectedEmployees.find(x => x._id === this.selectedEmployee._id);
+    if (!ff.DirectReportees) {
+      ff.DirectReportees = [];
+    }
+    ff.DirectReportees.push(value)
+    this.currentDirectReportees = ff.DirectReportees;
+    this.selectedEmployee.DirectReportees = ff.DirectReportees;
+    this.directReporteesOfEmpGridOptions.api.setRowData(this.currentDirectReportees);
+    this.directReporteeSearch = "";
+    this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = ff.DirectReportees;
+    this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
+    this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
+  }
+  closeDrModel() {
+    this.selecteDirectReporteeViewRef.hide();
+  }
+  getDirectReporteeGridCols() {
+    return [
+      {
+        headerName: 'Direct Reportee', sortable: true, filter: true,
+        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="">${data.data.FirstName}-${data.data.LastName}</span>` }
+      },
+
+      {
+        headerName: "Actions",
+        suppressMenu: true,
+        Sorting: false,
+        cellRenderer: (data) => {
+          console.log('column data', data)
+          return ` `
+          //}
+        }
+      }
+    ];
+
+  }
+  onDirectReporteeGridReady(params) {
+    debugger
+    this.directReporteesOfEmpGridOptions.api = params.api;
+  }
+
+
+  public onDirectReporteeGridRowClicked(e) {
     debugger
     if (e.event.target !== undefined) {
-
-      this.selectedPeer = e.data;
-
+      this.currentDirectReportee = e.data;
+      this.currentEmployeeForPeers = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
       switch (actionType) {
-        case "deleteEmp":
-          return this.togglePeersSelection(this.selectedPeer);
-        // case "suspendorg":
-        //   return this.suspendOrg();
-        // case "edit":
-        // return this.editClient();
+        case "deleteDirectReportee":
+          return this.deleteDirectReportee();
       }
     }
   }
 
-  
-  //#endregion
-
-//#region Direct Reports
-
-public selectedDrs: any = [];
-public selectedDr: any;
-
-public DrGridOptions: GridOptions = {
-  columnDefs: this.getDrsColDef()
-}
-DrsOptionClicked(event: Event, user: any) {
-  event.stopPropagation();
-  this.toggleDrsSelection(user);
-}
-
-toggleDrsSelection(user: any) {
-  debugger
-  user.selected = !user.selected;
-  if (user.selected) {
-    this.selectedDrs.push(user);
-  } else {
-    const i = this.selectedDrs.findIndex(value => value.FirstName === user.FirstName && value.LastName === user.LastName);
-    this.selectedDrs.splice(i, 1);
+  deleteDirectReportee() {
+    var _p = this.currentDirectReportees.indexOf(this.currentDirectReportee);
+    this.currentDirectReportees.slice(_p, 1);
   }
-
-  this.evaluationForm.controls["DirectReports"].setValue(this.selectedDrs);
-  this.DrGridOptions.api.setRowData(this.selectedDrs);
-}
-getDrsColDef() {
-  return [
-    {
-      headerName: 'Employee', sortable: true, filter: true,
-      cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.FirstName}-${data.data.LastName}</span>` }
-    },
-    { headerName: 'Title', field: 'Title', sortable: true, filter: true },
-    { headerName: 'Email', field: 'Email', sortable: true, filter: true },
-    {
-      headerName: "Actions",
-      suppressMenu: true,
-      Sorting: false,
-      cellRenderer: (data) => {
-        console.log('column data', data)
-        return ``
-        //}
-      }
+  saveDirectReportees() {
+    if (this.directReporteeCompetencyList.length === 0) {
+      this.notification.error('Please select at least 1 Competency');
+      return;
     }
-  ];
-
-}
-
-onDrsGridReady(params) {
-  this.DrGridOptions.api = params.api; // To access the grids API
-}
-public onDrsRowClicked(e) {
-  debugger
-  if (e.event.target !== undefined) {
-
-    this.selectedPeer = e.data;
-
-    let actionType = e.event.target.getAttribute("data-action-type");
-    switch (actionType) {
-      case "deleteEmp":
-        return this.togglePeersSelection(this.selectedPeer);
-      // case "suspendorg":
-      //   return this.suspendOrg();
-      // case "edit":
-      // return this.editClient();
+    if (!this.selectedEmployee.DirectReportees || this.selectedEmployee.DirectReportees.length === 0) {
+      this.notification.error('Please select at least one Ditrct Reportee');
+      return;
     }
+    this.selectedEmployee.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
+    this.selectedEmployee.DirectReportsCompetency = this.directReporteeCompetencyList;
+    this.closeDrModel();
   }
-}
-//#endregion
 
 }
