@@ -17,6 +17,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LogoutComponent } from './logout/logout.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { SelectCheckAllComponent } from './select-check-all/select-check-all.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     ResetPasswordComponent,
     AlertComponent,
     MatSpinnerOverlayComponent,
-    LogoutComponent
+    LogoutComponent,
+    SelectCheckAllComponent
     ],
   imports: [    
     CommonModule,
@@ -45,7 +47,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     ModalModule.forRoot()
   ],
   entryComponents:[AlertComponent],
-  exports:[AlertComponent]
+  exports:[AlertComponent,SelectCheckAllComponent]
 })
 export class SharedModule { }
 export function httpTranslateLoader(http: HttpClient) {

@@ -4,7 +4,12 @@
             <div class="card">
                 <div class="card-header">
                     Create New Evaluation
-
+                    <div>
+                        <span> Current Evaluation: fff</span>
+                    </div>
+                    <div>
+                        <span>kkkkkfffffffff</span>
+                    </div>
                     <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal"
                         (click)="router.navigate(['ea/evaluation-list'])">
                         Go to list
@@ -41,16 +46,17 @@
                                             <span class="input-group-text  redStar">Employees</span>
                                         </div>
 
-                                        <input matInput (input)="filterOption($event.target.value)" class="form-control"
-                                            type="text" placeholder="Select Employees" aria-label="Select Users"
+                                        <input matInput (click)="filterOption($event.target.value)"
+                                            (input)="filterOption($event.target.value)" class="form-control" type="text"
+                                            placeholder="Select Employees" aria-label="Select Users"
                                             [matAutocomplete]="auto" formControlName="Employees">
-                                        <span>{{empselectedCount}}</span>
+                                        
 
                                         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                                             <mat-option [value]="1" (click)="selectAllEmployees(ev)" #ev>
-                                                <input type="checkbox"(click)="selectAllEmployees(ev)" #ev> Select All
+                                                <input type="checkbox"  #ev> Select All
                                             </mat-option>
-                                            <mat-option *ngFor="let user of empFilterList " [value]="selectedEmployees">
+                                            <mat-option *ngFor="let user of empFilterList" [value]="selectedEmployees">
                                                 <div (click)="optionClicked($event, user)">
                                                     <mat-checkbox [checked]="user.selected"
                                                         (change)="toggleSelection(user)"
@@ -60,7 +66,17 @@
                                                 </div>
                                             </mat-option>
                                         </mat-autocomplete>
-
+                                        <!-- <mat-select-autocomplete
+                                        [placeholder]="'Select Options'"
+                                        [options]="empFilterList"
+                                        [multiple]='true'
+                                        name="optionsSelector"
+                                        ngDefaultControl
+                                        display ="FirstName"
+                                        value="FirstName"
+                                        [formControl]="f.Employees">
+                                        
+                                      </mat-select-autocomplete> -->
 
                                         <div *ngIf=" isFormSubmitted &&   f.Employees.errors" class="invalid-feedback">
                                             <div *ngIf="f.Employees.errors.required">must select at least one employee
@@ -73,11 +89,8 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <ag-grid-angular *ngIf="selectedEmployees.length>0" 
-                                    style="width: auto; height: 200px;"
-                                    class="ag-theme-alpine" 
-                                    [rowData]="selectedEmployees" 
-                                    [gridOptions]="EmpGridOptions"
+                                <ag-grid-angular *ngIf="selectedEmployees.length>0" style="width: auto; height: 200px;"
+                                    class="ag-theme-alpine" [rowData]="selectedEmployees" [gridOptions]="EmpGridOptions"
                                     [pagination]="true" [paginationPageSize]="10" (gridReady)="onEmpGridReady($event)"
                                     (rowClicked)="onEmpRowClicked($event)">
                                 </ag-grid-angular>
@@ -206,7 +219,22 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text redStar">Competency</span>
                                     </div>
-                                    <mat-select  name="PeersCompetencyList" [(ngModel)]="PeersCompetencyList"
+                                    <mat-select placeholder="Select" class="form-control"
+                                    name="Select"
+                                    [(ngModel)]="selectedPeersCompetencyList"
+                                    multiple
+                                    #selectionModel="ngModel">
+                                    
+                          <app-select-check-all [model]="selectionModel" 
+                                                [values]="PeersCompetencyList">
+                          </app-select-check-all>  
+                                                                  
+                          <mat-option *ngFor="let option of PeersCompetencyList"
+                                      [value]="option._id">
+                            {{option.Name}}
+                          </mat-option>
+                        </mat-select>
+                                    <!-- <mat-select name="PeersCompetencyList" [(ngModel)]="PeersCompetencyList"
                                         [ngClass]="{ 'is-invalid':isFormSubmitted && f.PeersCompetency.errors }"
                                         class="form-control" multiple>
                                         <mat-option [value]="1" (click)="selectAllPeersCompetency(ev)" #ev>SelectAll
@@ -214,23 +242,23 @@
                                         <mat-option *ngFor="let option of competencyList " [value]="option._id">
                                             {{option.Name}}
                                         </mat-option>
-                                    </mat-select>
-                                    
+                                    </mat-select> -->
+
                                 </div>
                             </div>
                         </div>
 
                     </div>
                     <div class="form-group row">
-                        
+
                         <div class="col-md-12">
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text ">Message</span>
                                     </div>
-                                    <textarea  class="form-control" [(ngModel)]="PeersCompetencyMessage"
-                                        formControlName="PeersCompetencyMessage"></textarea>
+                                    <textarea class="form-control" [(ngModel)]="PeersCompetencyMessage" name="PeersCompetencyMessage"
+                                        ></textarea>
 
                                 </div>
                             </div>
@@ -238,15 +266,10 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <ag-grid-angular *ngIf="currentPeersList.length>0" 
-                                style="width: auto; height: 200px;"
-                                class="ag-theme-alpine" 
-                                [rowData]="currentPeersList" 
-                                [gridOptions]="peersForEmpGridOptions"
-                                [pagination]="true" 
-                                [paginationPageSize]="10" 
-                                (gridReady)="onPeersGridReady($event)"
-                                (rowClicked)="onPeersRowClicked($event)">
+                            <ag-grid-angular *ngIf="currentPeersList && currentPeersList.length>0" style="width: auto; height: 200px;"
+                                class="ag-theme-alpine" [rowData]="currentPeersList"
+                                [gridOptions]="peersForEmpGridOptions" [pagination]="true" [paginationPageSize]="10"
+                                (gridReady)="onPeersGridReady($event)" (rowClicked)="onPeersRowClicked($event)">
                             </ag-grid-angular>
                         </div>
                     </div>
@@ -260,7 +283,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary"  (click)="savePeers()">Save</button>
+                <button type="button" class="btn btn-primary" (click)="savePeers()">Save</button>
                 <button type="button" class="btn btn-secondary" #closeModal (click)="closePeersModel()">Close</button>
 
             </div>
@@ -289,10 +312,9 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text redStar">Search</span>
                                     </div>
-                                    <input [(ngModel)]="directReporteeSearch" name="directReporteeSearch" 
-                                    typeaheadOptionField="FirstName"
-                                        [typeahead]="selectedDirectReporteeTypeHead" [typeaheadAsync]="true" class="form-control"
-                                        [typeaheadMinLength]="3" 
+                                    <input [(ngModel)]="directReporteeSearch" name="directReporteeSearch"
+                                        typeaheadOptionField="FirstName" [typeahead]="selectedDirectReporteeTypeHead"
+                                        [typeaheadAsync]="true" class="form-control" [typeaheadMinLength]="3"
                                         (typeaheadOnSelect)="onSelectDirectReportee($event.item)"
                                         placeholder="Enter Employee Name" class="form-control">
                                 </div>
@@ -306,21 +328,29 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text redStar">Competency</span>
                                     </div>
-                                    <mat-select [(ngModel)]="directReporteeCompetencyList" name="directReporteeCompetencyList"
-                                        
-                                        class="form-control" multiple>
-                                        <mat-option [value]="1" (click)="selectAllPeersCompetency(ev)" #ev>SelectAll
-                                        </mat-option>
-                                        <mat-option *ngFor="let option of competencyList " [value]="option._id">
-                                            {{option.Name}}
-                                        </mat-option>
-                                    </mat-select>
                                     
+                                        <mat-select placeholder="Select" class="form-control"
+                                                    name="Select"
+                                                    [(ngModel)]="directReporteeSelectedCompetencyList"
+                                                    multiple
+                                                    #selectionModel="ngModel">
+                                                    
+                                          <app-select-check-all [model]="selectionModel" 
+                                                                [values]="directReporteeCompetencyList">
+                                          </app-select-check-all>  
+                                                                                  
+                                          <mat-option *ngFor="let option of directReporteeCompetencyList"
+                                                      [value]="option._id">
+                                            {{option.Name}}
+                                          </mat-option>
+                                        </mat-select>
+                                      
+
                                 </div>
                             </div>
                         </div>
 
-                        
+
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
@@ -338,11 +368,11 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <ag-grid-angular *ngIf="currentDirectReportees && currentDirectReportees.length>0" style="width: auto; height: 200px;"
-                                class="ag-theme-alpine" [rowData]="currentDirectReportees" 
-                                [gridOptions]="directReporteesOfEmpGridOptions"
+                            <ag-grid-angular *ngIf="currentDirectReportees && currentDirectReportees.length>0"
+                                style="width: auto; height: 200px;" class="ag-theme-alpine"
+                                [rowData]="currentDirectReportees" [gridOptions]="directReporteesOfEmpGridOptions"
                                 [pagination]="true" [paginationPageSize]="10"
-                                 (gridReady)="onDirectReporteeGridReady($event)"
+                                (gridReady)="onDirectReporteeGridReady($event)"
                                 (rowClicked)="onDirectReporteeGridRowClicked($event)">
                             </ag-grid-angular>
                         </div>
@@ -357,7 +387,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary"  (click)="saveDirectReportees()">Save</button>
+                <button type="button" class="btn btn-primary" (click)="saveDirectReportees()">Save</button>
                 <button type="button" class="btn btn-secondary" #closeModal (click)="closeDrModel()">Close</button>
 
             </div>

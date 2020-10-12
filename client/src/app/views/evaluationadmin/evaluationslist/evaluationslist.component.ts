@@ -47,29 +47,34 @@ export class EvaluationslistComponent implements OnInit {
   }
   public columnDefs = [
     {
-      headerName: 'Department', field: 'Department', sortable: true, filter: true,
+      headerName: 'Employee(s)', field: '', sortable: true, filter: true,
 
-      cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
+      cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="viewEmp">View</span>` }
     },
-    { headerName: 'Evaluation Period', field: 'EvaluationPeriod', sortable: true, filter: true },
-    { headerName: 'Evaluation Duration', field: 'EvaluationDuration', sortable: true, filter: true },
-    
-    { headerName: 'Employees', field: 'Employees', sortable: true, filter: true },    
-    {
-      headerName: "Actions",
-      suppressMenu: true,
-      Sorting: false,
-      //width: 170,
-      cellRenderer: (data) => {
-        console.log('column data', data)
-        //if (data.data.ApprovalRecord.status === 'ACTIVE') {
-        return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-  font-size: 17px;"   data-action-type="suspendorg" ></i>`
-        //}
+    { headerName: 'Email', field: 'Email', sortable: true, filter: true },
+      {
+        headerName: 'Peers', field: '', sortable: false, filter: false,
+        cellRenderer: (data) => {
+          return `<span style="color:blue;cursor:pointer" data-action-type="choosePeers">View</span>`
+        }
+      },
+      {
+        headerName: 'Direct Reportees', field: '', sortable: false, filter: false,
+        cellRenderer: (data) => {
+          return `<span style="color:blue;cursor:pointer" data-action-type="chooseDirectReports">View</span>`
+        }
+      },
+
+      {
+        headerName: "Actions",
+        suppressMenu: true,
+        Sorting: false,
+        cellRenderer: (data) => {
+          console.log('column data', data)
+          return ` `
+          //}
+        }
       }
-
-
-    }
   ];
 
   public evaluationsList: any

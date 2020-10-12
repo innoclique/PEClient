@@ -35,7 +35,6 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import {OverlayModule} from '@angular/cdk/overlay';
-
 @NgModule({
   declarations: [],
   imports: [OverlayModule,
@@ -75,7 +74,7 @@ import {OverlayModule} from '@angular/cdk/overlay';
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule
-  ],
+    ],
   exports: [
     CommonModule,
     MatAutocompleteModule,
@@ -112,7 +111,7 @@ import {OverlayModule} from '@angular/cdk/overlay';
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatTreeModule
+    MatTreeModule    
   ]
 })
 export class CustomMaterialModule { }

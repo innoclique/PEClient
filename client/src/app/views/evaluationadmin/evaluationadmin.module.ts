@@ -17,6 +17,7 @@ import {SetingsComponent} from '../evaluationadmin/setings/setings.component'
 import{ReportsComponent} from '../evaluationadmin/reports/reports.component';
 import { ProfileComponent } from './profile/profile.component'
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { SharedModule } from '../../shared/shared.module';
 const routes: Routes = [
   {
     path: '',
@@ -102,6 +103,7 @@ const routes: Routes = [
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
     TypeaheadModule.forRoot(),
+    SharedModule
   ]
 })
 export class EvaluationadminModule { 
