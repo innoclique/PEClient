@@ -282,6 +282,9 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
   getAllKpiBasicData() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpiSetupBasicData",
+    this.perfApp.requestBody = { 'empId': this.loginUser._id,
+    'orgId':this.authService.getOrganization()._id
+   }
       this.perfApp.CallAPI().subscribe(c => {
 
         if (c) {
@@ -407,7 +410,10 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
   getAllKPIs() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllKpis",
-      this.perfApp.requestBody = { 'empId': this.currentEmpId }
+      this.perfApp.requestBody = {
+         'empId': this.currentEmpId,
+        'orgId':this.authService.getOrganization()._id}
+
     this.perfApp.CallAPI().subscribe(c => {
 
       this.setWeighting(c.filter(item => item.IsDraft === false).length);

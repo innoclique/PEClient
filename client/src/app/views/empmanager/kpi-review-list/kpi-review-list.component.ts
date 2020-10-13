@@ -60,23 +60,18 @@ export class KpiReviewListComponent implements OnInit {
     // { headerName: 'Score (self)', field: 'Score', width: 150, sortable: true, filter: true },
     // { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
     // { headerName: 'KPI Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
-    // {
-    //   headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
-    //   cellRenderer: (data) => {
+     {
+      headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+      cellRenderer: (data) => {
 
-    //    if (data.data.RowData.IsActive) {
-    //     return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-    //     font-size: 17px;"   data-action-type="deActiveKPI" title="Deactivate KPI"></i>
+      
+        return `<i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="addKPI" title="Add KPI"></i>       
+        `
        
-    //     `
-    //    } else {
-    //     return `<i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-    //     font-size: 17px;"   data-action-type="activeKPI" title="activate KPI"></i>       
-    //     `
-    //    }
        
-    //   }
-    // }
+      }
+    }
   ];
 
 
@@ -100,6 +95,10 @@ export class KpiReviewListComponent implements OnInit {
           break;
           case "activeKPI":
             this.activedeActiveKPI(true);
+          break;
+
+          case "addKPI":
+            this.addKpiForm();
           break;
 
 
@@ -140,6 +139,14 @@ this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived
       this.router.navigate(['employee/kpi-setting',{action:'edit',id:this.currentRowItem._id}],{ skipLocationChange: true });
       
   }
+
+  
+  addKpiForm() {
+   
+
+    this.router.navigate(['em/add-kpi',{action:'add',id:this.currentRowItem[0].Owner._id}],{ skipLocationChange: true });
+    
+}
 
   
 

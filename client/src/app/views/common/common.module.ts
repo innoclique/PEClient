@@ -11,6 +11,7 @@ import { SetupEmployeeComponent } from './setup-employee/setup-employee.componen
 import { AgGridModule } from 'ag-grid-angular';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CreateEmployeeComponent } from './create-employee/create-employee.component';
+import { CustomMaterialModule } from '../../custom-material/custom-material.module';
 
 
 
@@ -24,6 +25,7 @@ import { CreateEmployeeComponent } from './create-employee/create-employee.compo
     MatDatepickerModule,
     TooltipModule.forRoot(),
     MatInputModule,
+    CustomMaterialModule,
     AgGridModule.withComponents([]),
     ModalModule.forRoot()
   ],

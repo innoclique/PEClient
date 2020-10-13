@@ -143,7 +143,7 @@ export class SetupEmployeeComponent implements OnInit {
       ApplicationRole: [this.empDetails.ApplicationRole?this.empDetails.ApplicationRole:'',[Validators.required] ],
       ThirdSignatory: [this.empDetails.ThirdSignatory?this.empDetails.ThirdSignatory:'',],
       CopiesTo: [this.empDetails.CopiesTo?this.empDetails.CopiesTo:'', ],
-      DirectReports: [this.empDetails.DirectReports?this.empDetails.DirectReports:'',],
+      Manager: [this.empDetails.Manager?this.empDetails.Manager:'',],
       Country: [this.empDetails.Country?this.empDetails.Country:'',],
       State: [this.empDetails.State?this.empDetails.State:'',],
       City: [this.empDetails.City?this.empDetails.City:'',],
@@ -335,7 +335,7 @@ getEmployees(){
        map(name => name ? this._filterTD(name) : this.employeeThirdSigData.slice())
      );
 
-     this.filteredOptionsDR = this.empForm.controls['DirectReports'].valueChanges
+     this.filteredOptionsDR = this.empForm.controls['Manager'].valueChanges
      .pipe(
        startWith(''),
        map(value => typeof value === 'string' ? value :  value? value.FirstName:""),
@@ -391,8 +391,8 @@ saveEmployee(){
     this.empForm.get('ThirdSignatory').value._id : ''});
     this.empForm.patchValue({CopiesTo: this.empForm.get('CopiesTo').value?
     this.empForm.get('CopiesTo').value._id : ''});
-    this.empForm.patchValue({DirectReports: this.empForm.get('DirectReports').value?
-    this.empForm.get('DirectReports').value._id : ''});
+    this.empForm.patchValue({Manager: this.empForm.get('Manager').value?
+    this.empForm.get('Manager').value._id : ''});
 
  
   
@@ -408,6 +408,16 @@ saveEmployee(){
     this.perfApp.requestBody.IgnoreEvalAdminCreated=false;
     this.perfApp.requestBody.RoleEffFrom= this.perfApp.requestBody.JoiningDate;
   }
+
+  let roleCode= this.appRoles.filter(e=>e._id==this.perfApp.requestBody.ApplicationRole[0])[0];
+  let selectedRoles= [];
+  this.perfApp.requestBody.ApplicationRole.forEach(element => {
+        this.appRoles.filter(e=>
+      {if (e._id==element)  selectedRoles.push( e.RoleCode)} )
+        
+  });
+  this.perfApp.requestBody.Role=roleCode.RoleCode;
+  this.perfApp.requestBody.SelectedRoles=selectedRoles;
   
   this.callEmpApi();
  
@@ -417,7 +427,7 @@ callEmpApi(){
 
 if(!this.perfApp.requestBody.ThirdSignatory) delete this.perfApp.requestBody.ThirdSignatory;
 if(!this.perfApp.requestBody.CopiesTo) delete this.perfApp.requestBody.CopiesTo;
-if(!this.perfApp.requestBody.DirectReports) delete this.perfApp.requestBody.DirectReports;
+if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
 
   this.perfApp.CallAPI().subscribe(c=>{
 
@@ -497,13 +507,13 @@ this.jobRoles=depts.JobRoles;
 getAllDepartments(){
   this.perfApp.route="app";
   this.perfApp.method="GetEmpSetupBasicData",
-  this.perfApp.requestBody={'empId':'5f5929f56c16e542d823247b'}
+  this.perfApp.requestBody={industry:this.authService.getOrganization().Industry}
   this.perfApp.CallAPI().subscribe(c=>{
     
     console.log('lients data',c);
     if(c){
      
-      this.departments=c.Industries.Department;
+      this.departments=c.Industries[0].Department;
       this.appRoles=c.AppRoles;
       this.jobLevels=c.JobLevels;
       console.log('lients data snnn',this.jobRoles);

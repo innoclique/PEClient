@@ -17,10 +17,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { EvalCommonModule } from '../common/common.module';
 import { DateAgoPipe } from '../../pipes/DateAgoPipe';
+import { KpiAddComponent } from './kpi-add/kpi-add.component';
 
 
 @NgModule({
-  declarations: [KpiReviewListComponent,DateAgoPipe, KpiReviewComponent, ManagerDashboardComponent],
+  declarations: [KpiReviewListComponent,DateAgoPipe, KpiReviewComponent, ManagerDashboardComponent, KpiAddComponent],
   imports: [
     CommonModule,
     EmpmanagerRoutingModule,

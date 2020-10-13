@@ -61,18 +61,24 @@ export class KpiSetupComponent implements OnInit {
     {
       headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
-
+ let actionlinks=''
        if (data.data.RowData.IsActive) {
-        return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
+        actionlinks= `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="deActiveKPI" title="Deactivate KPI"></i>
        
         `
        } else {
-        return `<i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+        actionlinks= `<i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="activeKPI" title="activate KPI"></i>       
         `
        }
-       
+
+       actionlinks=  actionlinks+`
+       <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+       font-size: 17px;"   data-action-type="EF" title="Edit KPI" ></i>    
+       `
+       return actionlinks
+       ;
       }
     }
   ];
@@ -159,7 +165,10 @@ this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived
   getAllKpis() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllKpis",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id }
+    this.perfApp.requestBody = {
+       'empId': this.loginUser._id,
+       'currentOnly': true,
+    'orgId':this.authService.getOrganization()._id}
 
 
     this.perfApp.CallAPI().subscribe(c => {

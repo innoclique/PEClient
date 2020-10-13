@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { KpiAddComponent } from './kpi-add/kpi-add.component';
 import { KpiReviewListComponent } from './kpi-review-list/kpi-review-list.component';
 import { KpiReviewComponent } from './kpi-review/kpi-review.component';
 import { ManagerDashboardComponent } from './manager-dashboard/manager-dashboard.component';
@@ -27,6 +28,13 @@ const routes: Routes = [
         component: KpiReviewListComponent,
         data: {
           title: 'KPI Review'
+        }
+      },
+      {
+        path: 'add-kpi',
+        component: KpiAddComponent,
+        data: {
+          title: 'Add KPI'
         }
       },
 

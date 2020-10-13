@@ -362,14 +362,14 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text ">Direct Report(s)</span>
+                    <span class="input-group-text ">Manager</span>
                   </div>
                   <input type="text" class="autoc-border form-control"
                   placeholder="Search for a Direct Report(s)"
                  
                   [matAutocomplete]="auto3"
-                     formControlName="DirectReports" name="DirectReports"
-                      [formControl]="f.DirectReports" 
+                     formControlName="Manager" name="Manager"
+                      [formControl]="f.Manager" 
                       >
            <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn" >
             <mat-option *ngFor="let option of filteredOptionsDR | async" [value]="option">
@@ -417,13 +417,20 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text redStar">Application Role</span>
                         </div>
-                        <select class="form-control"
+                        <!-- <select class="form-control"
                         [ngClass]="{ 'is-invalid': f.ApplicationRole.touched  &&  f.ApplicationRole.invalid }"
                         formControlName="ApplicationRole"  name="ApplicationRole" required   >
                           <option value="" disabled >Please select</option>
                           <option *ngFor="let e of appRoles" [value]="e._id" >{{e.RoleName}}</option>
                           
-                        </select>
+                        </select> -->
+
+                        <mat-select  class="form-control"  multiple 
+                        [ngClass]="{ 'is-invalid': f.ApplicationRole.touched  &&  f.ApplicationRole.invalid }"
+                          formControlName="ApplicationRole"  name="ApplicationRole" required >
+                         <mat-option *ngFor="let e of appRoles" [value]="e._id">{{e.RoleName}}</mat-option>
+                       </mat-select> 
+
                         <div *ngIf="f.ApplicationRole.touched && f.ApplicationRole.invalid" class="invalid-feedback">
                           <div *ngIf="f.ApplicationRole.errors.required">Application Role is required</div>
                       </div>

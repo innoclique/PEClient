@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -5,20 +6,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-import { AlertDialog } from '../../Models/AlertDialog';
-import { AuthService } from '../../services/auth.service';
-import { NotificationService } from '../../services/notification.service';
-import { PerfAppService } from '../../services/perf-app.service';
-import { ThemeService } from '../../services/theme.service';
-import { Constants } from '../../shared/AppConstants';
-import { CustomValidators } from '../../shared/custom-validators';
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../services/notification.service';
+import { PerfAppService } from '../../../services/perf-app.service';
+import { ThemeService } from '../../../services/theme.service';
+import { Constants } from '../../../shared/AppConstants';
+import { CustomValidators } from '../../../shared/custom-validators';
 
 @Component({
-  selector: 'app-kpi-settings',
-  templateUrl: './kpi-settings.component.html',
-  styleUrls: ['./kpi-settings.component.css']
+  selector: 'app-kpi-add',
+  templateUrl: './kpi-add.component.html',
+  styleUrls: ['./kpi-add.component.css']
 })
-export class KpiSettingsComponent implements OnInit {
+export class KpiAddComponent implements OnInit {
 
 
   public kpiForm: FormGroup;
@@ -43,12 +44,12 @@ export class KpiSettingsComponent implements OnInit {
   public empMeasuCriData: any[] = []
   public selectedItems: any[] = []
   weight:any;
-  currentKpiId: any;
+  currentOwnerId: any;
   selIndex: any;
   isKpiActivated: boolean;
   msSelText="";
   msSelVal="";
-  currEvaluation: any;
+  ownerInfo: any;
 
 
 
@@ -64,16 +65,20 @@ export class KpiSettingsComponent implements OnInit {
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
 
-    this.initApicallsForKpi();
+    
 
     this.activatedRoute.params.subscribe(params => {
      
      if (params['action']) {
-      this.currentKpiId = params['id'];
+      this.currentOwnerId = params['id'];
       this.currentAction = params['action'];
      }
+
+     this.initApicallsForKpi();
      
     });   
+
+    
 
   }
 
@@ -117,7 +122,7 @@ export class KpiSettingsComponent implements OnInit {
       YearEndComments: [''],
       YECommManager: [''],
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
-      Signoff: [this.loginUser.FirstName],
+      
 
       IsSubmit: ['false'],
       IsDraft: [''],
@@ -167,7 +172,7 @@ export class KpiSettingsComponent implements OnInit {
 
   saveKpi() {
     this.perfApp.route = "app";
-    this.perfApp.method = this.currentAction == 'create' ? "AddKpi" : "UpdateKpiDataById",
+    this.perfApp.method = this.currentAction == 'add' ? "AddKpi" : "UpdateKpiDataById",
 
 
       this.perfApp.requestBody = this.kpiForm.value; //fill body object with form 
@@ -186,13 +191,11 @@ export class KpiSettingsComponent implements OnInit {
     this.perfApp.requestBody.kpiId = this.kpiDetails._id?  this.kpiDetails._id : '';
     this.perfApp.requestBody.MeasurementCriteria = Measurements;
     this.perfApp.requestBody.Weighting = this.weight;
-    this.perfApp.requestBody.Signoff = this.loginUser._id;
-    this.perfApp.requestBody.EvaluationId = this.currEvaluation._id;
-
+    //this.perfApp.requestBody.Signoff = this.loginUser._id;
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
-    this.perfApp.requestBody.Owner = this.loginUser._id;
+    this.perfApp.requestBody.Owner = this.ownerInfo._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
-    this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id;
+    this.perfApp.requestBody.ManagerId = this.loginUser._id;//this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id;
 
 
     this.callKpiApi();
@@ -205,9 +208,9 @@ export class KpiSettingsComponent implements OnInit {
 
       if (c.message == Constants.SuccessText) {
 
-        this.snack.success(this.translate.instant(`KPI ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Succeesfully`));
+        this.snack.success(this.translate.instant(`KPI ${this.currentAction == 'add' ? 'Added' : 'Updated'}  Succeesfully`));
 
-        this.router.navigate(['employee/kpi-setup']);
+        this.router.navigate(['em/review-kpi-list']);
       }
 
     }, error => {
@@ -237,7 +240,7 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
     this.perfApp.method = "CreateMeasurementCriteria";
     this.perfApp.requestBody = {};
     this.perfApp.requestBody.Name = this.kpiForm.get('MeasurementCriteria').value;
-    this.perfApp.requestBody.CreatedBy = this.loginUser._id;
+    this.perfApp.requestBody.CreatedBy = this.ownerInfo._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
     this.perfApp.CallAPI().subscribe(c => {
 
@@ -255,9 +258,9 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
   getAllKpiBasicData() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpiSetupBasicData";
-    this.perfApp.requestBody = { 'empId': this.loginUser._id ,
+    this.perfApp.requestBody = { 'empId': this.currentOwnerId,
     'orgId':this.authService.getOrganization()._id
-  }
+   }
       this.perfApp.CallAPI().subscribe(c => {
 
         if (c) {
@@ -265,7 +268,6 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
           this.appScores = c.KpiScore;
           this.kpiStatus = c.KpiStatus;
           this.coachingRemDays = c.coachingRem;
-          this.currEvaluation = c.evaluation;
         }
       })
   }
@@ -295,7 +297,7 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
   getMeasurementCriterias() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllMeasurementCriterias",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id }
+      this.perfApp.requestBody = { 'empId': this.currentOwnerId }
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c && c.length > 0) {
@@ -321,9 +323,9 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
             });
           }
 
-          if (this.currentAction!='create') {
-            this.initKPIForm();
-          }
+          // if (this.currentAction!='create') {
+          //   this.initKPIForm();
+          // }
 
 
 
@@ -356,40 +358,17 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
 
 
 
-  
-  submitAllKPIs() {
-
-    this.perfApp.route = "app";
-    this.perfApp.method = "SubmitKpisForEvaluation",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id }
-    this.perfApp.CallAPI().subscribe(c => {
-
-     if (c) {
-      this.snack.success(c.message);
-     } else {
-       
-     }
-
-    }
-    
-    , error => {
-
-      this.snack.error(error.error.message);
-
-    }
-    
-    )
-  }
-
   getAllKPIs() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllKpis",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id,'orgId':this.authService.getOrganization()._id}
+      this.perfApp.requestBody = { 'empId': this.currentOwnerId ,
+      'orgId':this.authService.getOrganization()._id }
     this.perfApp.CallAPI().subscribe(c => {
 
       this.setWeighting(c.filter(item => item.IsDraft === false).length);
       if (c && c.length > 0) {
         this.empKPIData = c;
+        this.ownerInfo=c[0].Owner;
 
 
 
@@ -401,10 +380,10 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
           );
 
 
-          if (this.currentAction !='create') {
-            this.kpiDetails=  this.empKPIData.filter(e=> e._id== this.currentKpiId)[0];
-            this.selIndex=  this.empKPIData.findIndex(e=> e._id== this.currentKpiId);
-          }
+          // if (this.currentAction !='create') {
+          //   this.kpiDetails=  this.empKPIData.filter(e=> e._id== this.currentKpiId)[0];
+          //   this.selIndex=  this.empKPIData.findIndex(e=> e._id== this.currentKpiId);
+          // }
 
       }
 
@@ -582,7 +561,7 @@ this.msSelText="";
    this.selIndex=this.selIndex+1;
     this.kpiDetails=  this.empKPIData[this.selIndex];
     this.initKPIForm();
-    this.currentKpiId=this.kpiDetails._id;
+    // this.currentKpiId=this.kpiDetails._id;
   }
 
   priKpi(){
@@ -590,9 +569,10 @@ this.msSelText="";
     this.selIndex=this.selIndex-1;
     this.kpiDetails=  this.empKPIData[this.selIndex];
     this.initKPIForm();
-    this.currentKpiId=this.kpiDetails._id;
+    // this.currentKpiId=this.kpiDetails._id;
   }
 
 
 
 }
+
