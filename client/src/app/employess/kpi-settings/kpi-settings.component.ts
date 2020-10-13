@@ -55,7 +55,7 @@ export class KpiSettingsComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
+    public router: Router,
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
     public themeService: ThemeService,

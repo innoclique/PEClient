@@ -101,12 +101,13 @@ export class AuthService {
 
 /**Logout API Calling */
   LogOut() {    
+    debugger
     if (!this.getCurrentUser()) {
       localStorage.clear();
       return 
     }
-    let m = { email: this.currentUser.Email };
-     this.Http.post<any>(environment.ApiPath + 'Identity/Log_Out', m).subscribe(r=>{
+   // let m = { email: this.currentUser.Email };
+     this.Http.delete<any>(environment.ApiPath + 'Identity/Log_Out').subscribe(r=>{
       localStorage.clear(); 
      },error=>{
       localStorage.clear();

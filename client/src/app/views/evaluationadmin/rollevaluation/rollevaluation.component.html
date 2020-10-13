@@ -4,12 +4,7 @@
             <div class="card">
                 <div class="card-header">
                     Create New Evaluation
-                    <div>
-                        <span> Current Evaluation: fff</span>
-                    </div>
-                    <div>
-                        <span>kkkkkfffffffff</span>
-                    </div>
+                    
                     <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal"
                         (click)="router.navigate(['ea/evaluation-list'])">
                         Go to list
@@ -18,6 +13,37 @@
                 <div class="card-body">
 
                     <form [formGroup]="evaluationForm">
+                        
+                        <!--Evaluation Details Begin-->
+                        <div class="form-group row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar"> Evaluation Period</span>
+                                        </div>
+                                        <div class="form-control">
+                                            {{currentOrganization?.EvaluationPeriod}}-{{currentOrganization?.StartMonth}}
+                                            {{currentOrganization?.EndMonth}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar"> Evaluation Duration</span>
+                                        </div>
+                                        <div class="form-control" style="border:none;">
+                                            {{currentOrganization?.EvaluationDuration}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                         <div class="form-group row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -26,7 +52,7 @@
                                             <span class="input-group-text redStar">Select Model</span>
                                         </div>
 
-                                        <mat-select formControlName="Model"
+                                        <mat-select [disabled]="!isCreate" formControlName="Model"
                                             [ngClass]="{ 'is-invalid':isFormSubmitted && f.Model.errors }"
                                             class="form-control">
                                             <mat-option *ngFor="let model of modelsList" [value]="model._id">
@@ -42,17 +68,17 @@
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
+                                        <div  class="input-group-prepend">
                                             <span class="input-group-text  redStar">Employees</span>
                                         </div>
 
-                                        <input matInput (click)="filterOption($event.target.value)"
+                                        <input [readonly]="!isCreate" matInput (click)="filterOption($event.target.value)"
                                             (input)="filterOption($event.target.value)" class="form-control" type="text"
                                             placeholder="Select Employees" aria-label="Select Users"
                                             [matAutocomplete]="auto" formControlName="Employees">
                                         
 
-                                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                                        <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayFn">
                                             <mat-option [value]="1" (click)="selectAllEmployees(ev)" #ev>
                                                 <input type="checkbox"  #ev> Select All
                                             </mat-option>
@@ -100,9 +126,9 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <input (change)="onChangeKPIFor($event)" formControlName="ActivateKPI"
+                                        <input [attr.disabled]="isCreate?null:'true'" (change)="onChangeKPIFor($event)" formControlName="ActivateKPI"
                                             class="form-check-input" type="checkbox" id="ActivateKPI">
-                                        <label class="form-check-label" for="ActivateKPI">
+                                        <label  class="form-check-label" for="ActivateKPI">
                                             Activate KPI Setting Form
                                         </label>
                                     </div>
@@ -110,10 +136,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <input formControlName="ActivateActionPlan" class="form-check-input"
+                                        <input [attr.disabled]="isCreate?null:'true'" formControlName="ActivateActionPlan" class="form-check-input"
                                             type="checkbox" id="ActivateActionPlan">
                                         <label class="form-check-label" for="ActivateActionPlan">
-                                            Activate Action Plan
+                                            Activate Action Plan 
                                         </label>
                                     </div>
                                 </div>
@@ -137,42 +163,18 @@
 
                         </div>
 
-                        <!--Evaluation Details Begin-->
-                        <div class="form-group row">
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text redStar"> Evaluation Period</span>
-                                        </div>
-                                        <div class="form-control">
-                                            {{currentOrganization?.EvaluationPeriod}}-{{currentOrganization?.StartMonth}}
-                                            {{currentOrganization?.EndMonth}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text redStar"> Evaluation Duration</span>
-                                        </div>
-                                        <div class="form-control">
-                                            {{currentOrganization?.EvaluationDuration}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="modal-footer">
+                        <div *ngIf="isCreate" class="modal-footer">
 
                             <button type="button" class="btn btn-secondary" (click)="reset()">Reset</button>
                             <button type="button" (click)="draftEvaluation()" class="btn btn-primary">Save</button>
                             <button type="button" (click)="submitEvaluation()" class="btn btn-primary">Submit</button>
+                        </div>
+                        
+                        <div *ngIf="!isCreate" class="modal-footer">
+
+                           
+                            <button type="button" (click)="updateEvaluation()" class="btn btn-primary">Update</button>
                         </div>
                     </form>
                 </div>
@@ -219,7 +221,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text redStar">Competency</span>
                                     </div>
-                                    <mat-select placeholder="Select" class="form-control"
+                                    <mat-select [disabled]="!isCreate" placeholder="Select" class="form-control"
                                     name="Select"
                                     [(ngModel)]="selectedPeersCompetencyList"
                                     multiple
@@ -257,7 +259,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text ">Message</span>
                                     </div>
-                                    <textarea class="form-control" [(ngModel)]="PeersCompetencyMessage" name="PeersCompetencyMessage"
+                                    <textarea [disabled]="!isCreate" class="form-control" [(ngModel)]="PeersCompetencyMessage" name="PeersCompetencyMessage"
                                         ></textarea>
 
                                 </div>

@@ -17,11 +17,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { EvalCommonModule } from '../common/common.module';
 import { DateAgoPipe } from '../../pipes/DateAgoPipe';
-import { KpiAddComponent } from './kpi-add/kpi-add.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
-  declarations: [KpiReviewListComponent,DateAgoPipe, KpiReviewComponent, ManagerDashboardComponent, KpiAddComponent],
+  declarations: [KpiReviewListComponent, KpiReviewComponent, ManagerDashboardComponent],
   imports: [
     CommonModule,
     EmpmanagerRoutingModule,
@@ -38,7 +38,8 @@ import { KpiAddComponent } from './kpi-add/kpi-add.component';
     RouterModule,
     EvalCommonModule,
     AgGridModule.withComponents([]),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    SharedModule
   ]
 })
 export class EmpmanagerModule { }

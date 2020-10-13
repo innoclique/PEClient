@@ -18,6 +18,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LogoutComponent } from './logout/logout.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SelectCheckAllComponent } from './select-check-all/select-check-all.component';
+import { DateAgoPipe } from '../pipes/DateAgoPipe';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { SelectCheckAllComponent } from './select-check-all/select-check-all.com
     AlertComponent,
     MatSpinnerOverlayComponent,
     LogoutComponent,
-    SelectCheckAllComponent
+    SelectCheckAllComponent,
+    DateAgoPipe
     ],
   imports: [    
     CommonModule,
@@ -47,7 +49,7 @@ import { SelectCheckAllComponent } from './select-check-all/select-check-all.com
     ModalModule.forRoot()
   ],
   entryComponents:[AlertComponent],
-  exports:[AlertComponent,SelectCheckAllComponent]
+  exports:[AlertComponent,SelectCheckAllComponent,DateAgoPipe]
 })
 export class SharedModule { }
 export function httpTranslateLoader(http: HttpClient) {

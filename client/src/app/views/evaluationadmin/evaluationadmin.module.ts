@@ -59,6 +59,13 @@ const routes: Routes = [
         }
       },
       {
+        path: 'rollout/:id',
+        component: RollevaluationComponent,
+        data: {
+          title: 'Rollout'
+        }
+      },
+      {
         path: 'evaluation-list',
         component: EvaluationslistComponent,
         data: {

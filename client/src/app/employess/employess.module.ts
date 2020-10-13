@@ -24,9 +24,10 @@ import { CurrentEvaluationComponent } from './current-evaluation/current-evaluat
 import { ActionPlanComponent } from './action-plan/action-plan.component';
 
 import{DashboardComponent} from '../employess/dashboard/dashboard.component'
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [KpiSettingsComponent,DateAgoPipe, KpiSetupComponent,ReportsComponent,ProfileComponent,
+  declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
      AccomplishmentsComponent, CurrentEvaluationComponent, ActionPlanComponent,DashboardComponent],
   imports: [
     CommonModule,
@@ -43,7 +44,8 @@ import{DashboardComponent} from '../employess/dashboard/dashboard.component'
     RouterModule,
     EvalCommonModule,
     AgGridModule.withComponents([]),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    SharedModule
   ],
   exports: [
     ModalModule

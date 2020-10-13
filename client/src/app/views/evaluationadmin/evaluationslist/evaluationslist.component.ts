@@ -71,7 +71,8 @@ export class EvaluationslistComponent implements OnInit {
         Sorting: false,
         cellRenderer: (data) => {
           console.log('column data', data)
-          return ` `
+          return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="edit" title="Edit Form"></i> `
           //}
         }
       }
@@ -111,8 +112,8 @@ export class EvaluationslistComponent implements OnInit {
 
       let actionType = e.event.target.getAttribute("data-action-type");
       switch (actionType) {
-        case "orgView":
-          return this.openOrgView();
+        case "edit":
+          return this.editEvaluationForm();
         case "approveRequest":
         // return this.approveRequest(data);
         case "rejectRequest":
@@ -127,7 +128,10 @@ export class EvaluationslistComponent implements OnInit {
     
 
   }
-  
+  editEvaluationForm(){
+    const cr = this.currentRowItem;
+    this.router.navigate(['ea/rollout/'+cr._id])
+  }
 
   getIndustries() {
     this.perfApp.route = "shared";
