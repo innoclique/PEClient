@@ -41,7 +41,7 @@ strong {
     vertical-align: top;
     display: block;
 }
-
+/* 
 h3 {
     display: flex;
     width: 100%;
@@ -64,4 +64,4 @@ h3:after {
 
 h3:after {
     margin: 0 0 0 20px;
-}
+} */

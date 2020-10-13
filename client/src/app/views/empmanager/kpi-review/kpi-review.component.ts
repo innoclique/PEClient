@@ -53,6 +53,7 @@ export class KpiReviewComponent implements OnInit {
   isKpiActivated: boolean;
   msSelText="";
   msSelVal="";
+  currEvaluation: any;
 
 
 
@@ -125,7 +126,7 @@ export class KpiReviewComponent implements OnInit {
       YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager : ''],
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
       Signoff: [this.loginUser.FirstName],
-      CoachingReminder: [this.loginUser.Organization.CoachingReminder],
+      CoachingReminder: [this.kpiDetails.CoachingReminder ? this.kpiDetails.CoachingReminder :this.loginUser.Organization.CoachingReminder],
 
       IsSubmit: ['false'],
       IsDraft: [''],
@@ -182,9 +183,10 @@ export class KpiReviewComponent implements OnInit {
     this.perfApp.method = "UpdateKpiDataById";
     this.perfApp.requestBody = {};
     this.perfApp.requestBody.kpiId = this.currentKpiId;
-    this.perfApp.requestBody.IsActive = this.kpiForm.get('IsActive').value;;
-    this.perfApp.requestBody.ManagerScore = this.kpiForm.get('ManagerScore').value;;
-    this.perfApp.requestBody.YECommManager = this.kpiForm.get('YECommManager').value;;
+    this.perfApp.requestBody.IsActive = this.kpiForm.get('IsActive').value;
+    this.perfApp.requestBody.ManagerScore = this.kpiForm.get('ManagerScore').value;
+    this.perfApp.requestBody.YECommManager = this.kpiForm.get('YECommManager').value;
+    this.perfApp.requestBody.CoachingReminder = this.kpiForm.get('CoachingReminder').value;
     this.perfApp.requestBody.IsManaFTSubmited = this.kpiForm.get('ManagerFTSubmitedOn').value ? false:true;
     this.perfApp.requestBody.Action='Review' ;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
@@ -193,7 +195,7 @@ export class KpiReviewComponent implements OnInit {
       if (c) {
 
       this.getAllKPIs();
-    this.snack.success(this.translate.instant(`Kpi  Succeesfully`));
+    this.snack.success(this.translate.instant(`Kpi Updated Succeesfully`));
         
       }
     })
@@ -282,7 +284,7 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
   getAllKpiBasicData() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpiSetupBasicData",
-    this.perfApp.requestBody = { 'empId': this.loginUser._id,
+    this.perfApp.requestBody = { 'empId': this.currentEmpId,
     'orgId':this.authService.getOrganization()._id
    }
       this.perfApp.CallAPI().subscribe(c => {
@@ -292,6 +294,7 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
           this.appScores = c.KpiScore;
           this.kpiStatus = c.KpiStatus;
           this.coachingRemDays = c.coachingRem;
+          this.currEvaluation = c.evaluation;
         }
       })
   }

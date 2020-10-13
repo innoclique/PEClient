@@ -114,13 +114,12 @@ export class KpiSettingsComponent implements OnInit {
       ])
       ],
       TargetCompletionDate: [this.kpiDetails.TargetCompletionDate ? new Date(this.kpiDetails.TargetCompletionDate) : '', [Validators.required]],
-      YearEndComments: [''],
-      YECommManager: [''],
+      YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments :''],
+      YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager :''],
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
-      Signoff: [this.loginUser.FirstName],
+      Signoff: [this.kpiDetails.Signoff ? this.kpiDetails.Signoff.SignOffBy : null],
 
-      IsSubmit: ['false'],
-      IsDraft: [''],
+      IsDraft: [this.kpiDetails.IsDraft ? 'true' : 'false'],
       Score: [this.kpiDetails.Score ? this.kpiDetails.Score : '', [Validators.required]],
       Status: [this.kpiDetails.Status ? this.kpiDetails.Status : '', [Validators.required]],
 
@@ -159,13 +158,24 @@ export class KpiSettingsComponent implements OnInit {
       // }
     }
 
-    this.kpiForm.patchValue({ IsSubmit: 'true' });
     this.kpiForm.patchValue({ IsDraft: 'false' });
     this.saveKpi();
   }
 
 
+  draftKpi(){
+    this.kpiForm.patchValue({ IsDraft: 'true' });
+    this.saveKpi();
+  }
+
+
   saveKpi() {
+
+if (!this.kpiForm.get('Kpi').value) {
+  this.snack.error('Kpi is required');
+  return
+}
+
     this.perfApp.route = "app";
     this.perfApp.method = this.currentAction == 'create' ? "AddKpi" : "UpdateKpiDataById",
 
@@ -185,8 +195,9 @@ export class KpiSettingsComponent implements OnInit {
     // this.perfApp.requestBody.MeasurementCriteria = this.selectedItems.map(e => { e.measureId=e._id});
     this.perfApp.requestBody.kpiId = this.kpiDetails._id?  this.kpiDetails._id : '';
     this.perfApp.requestBody.MeasurementCriteria = Measurements;
+
     this.perfApp.requestBody.Weighting = this.weight;
-    this.perfApp.requestBody.Signoff = this.loginUser._id;
+   
     this.perfApp.requestBody.EvaluationId = this.currEvaluation._id;
 
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
@@ -194,6 +205,10 @@ export class KpiSettingsComponent implements OnInit {
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
     this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id;
 
+    if (this.kpiForm.get('IsDraft').value=='true') {
+      this.perfApp.requestBody.Weighting = '';
+      this.perfApp.requestBody.Action = 'Draft';
+    }
 
     this.callKpiApi();
 
@@ -366,6 +381,7 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
 
      if (c) {
       this.snack.success(c.message);
+      this.router.navigate(['employee/kpi-setup']);
      } else {
        
      }

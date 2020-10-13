@@ -24,7 +24,7 @@
                                 <div class="col-md-6">
                                     <strong>Evaluation Period: </strong> 
                                 </div>
-                                <div class="col-md-5"><span>Jan - Dec 2020</span></div>
+                                <div class="col-md-5"><span>{{currEvaluation?.EvaluationPeriod}}</span></div>
 
                             </div>
 
@@ -100,6 +100,7 @@
                                                 (KPI)</span>
                                         </div>
                                         <input max="500" maxlength="500" class="form-control" type="text"
+                                        [readonly]="currentAction != 'create' "
                                             [ngClass]="{ 'is-invalid': f.Kpi.touched  &&  f.Kpi.invalid }"
                                             formControlName="Kpi" name="Kpi" required
                                             [matAutocomplete]="kpiAuto">
@@ -145,6 +146,7 @@
 
                                             <input  *ngIf="!addMCSwitch" max="500" maxlength="500" 
                                             class="form-control text-capitalize" type="text"
+                                            [readonly]="currentAction != 'create' "
                                             [ngClass]="{ 'is-invalid': f.MeasurementCriteria.touched  &&  selectedItems.length==0 }"
                                                 formControlName="MeasurementCriteria" name="MeasurementCriteria" 
                                                 [matAutocomplete]="auto2" [placeholder]="msSelText" 
@@ -152,7 +154,7 @@
                                              
 
                                            
-                                            <label *ngIf="currentAction != 'view'" class="switch switch-label switch-lg switch-primary input-group-postpend ml-2">
+                                            <label *ngIf="currentAction == 'create'" class="switch switch-label switch-lg switch-primary input-group-postpend ml-2">
                                                 <input (change)="toggleSwitch()" [checked]="addMCSwitch" class="switch-input form-control" type="checkbox">
                                                 <span class="switch-slider" data-checked="On" data-unchecked="Off"></span></label>
 
@@ -182,7 +184,7 @@
                                 
                             </div>
 
-                            <div *ngIf="currentAction != 'view'" class="col-md-3">
+                            <div *ngIf="currentAction == 'create'" class="col-md-3">
                                 <button class="btn btn-block btn-primary w-75" [disabled]="!addMCSwitch"
                                  (click)="addMesurment()"  >+ Add Mesuerment Criteria  </button>
                                 </div>
@@ -317,12 +319,12 @@
                           </div>
                         <!-- <div class="clearfix"></div> -->
 
-                        <div *ngIf="currentAction != 'create'" class="form-group row ">
+                        <div *ngIf="kpiDetails.ManagerSignOff" class="form-group row ">
                             <div class="col-md-2 kpi-fl ">
                                 <div class="col-md-9">
-                                    <strong>Score (manager): </strong> 
+                                    <strong>Score (manager):</strong> 
                                 </div>
-                                <div class="col-md-3"><span></span></div>
+                                <div class="col-md-3"><span>{{kpiDetails.ManagerScore}}</span></div>
 
                             </div>
 
@@ -330,7 +332,7 @@
                                 <div class="col-md-6">
                                     <strong>Manager Sign-off: </strong>
                                 </div>
-                                <div class="col-md-6"><span></span></div>
+                                <div class="col-md-6"><span>{{kpiDetails.ManagerSignOff.SignOffBy}}</span></div>
 
                             </div>
 
@@ -338,7 +340,7 @@
                                 <div class="col-md-5">
                                     <strong>Date: </strong>
                                 </div>
-                                <div class="col-md-7"><span></span></div>
+                                <div class="col-md-7"><span>{{ kpiDetails.ManagerSignOff.SignOffOn | date}}</span></div>
 
                             </div>
 
@@ -346,7 +348,7 @@
                                 <div class="col-md-6">
                                     <strong>Year-end Comments (manager): </strong>
                                 </div>
-                                <div class="col-md-6"><span></span></div>
+                                <div class="col-md-6"><span>{{kpiDetails.YECommManager}}</span></div>
 
                             </div>
 
@@ -354,7 +356,10 @@
 
                         <div *ngIf="currentAction != 'view'" class="form-group form-actions pull-right">
                             <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>
-                            <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 'Update' :'Submit' }}</button>
+                            <button *ngIf="f?.IsDraft.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftKpi()" >Save</button>
+                            <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 
+                                f.IsDraft.value=='true' ? 'Submit': 'Update'
+                                 :'Submit' }}</button>
                             <button class="btn btn-sm btn-primary"  (click)="submitAllKPIs()" >Submit KPIs</button>
                           </div>
             

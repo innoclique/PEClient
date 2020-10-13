@@ -66,6 +66,9 @@ export class KpiSetupComponent implements OnInit {
         actionlinks= `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="deActiveKPI" title="Deactivate KPI"></i>
        
+        <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="EF" title="Edit KPI" ></i>    
+        
         `
        } else {
         actionlinks= `<i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -73,10 +76,10 @@ export class KpiSetupComponent implements OnInit {
         `
        }
 
-       actionlinks=  actionlinks+`
-       <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-       font-size: 17px;"   data-action-type="EF" title="Edit KPI" ></i>    
-       `
+      //  actionlinks=  actionlinks+`
+      //  <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+      //  font-size: 17px;"   data-action-type="EF" title="Edit KPI" ></i>    
+      //  `
        return actionlinks
        ;
       }

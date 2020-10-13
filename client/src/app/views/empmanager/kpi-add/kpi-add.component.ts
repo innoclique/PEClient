@@ -50,6 +50,7 @@ export class KpiAddComponent implements OnInit {
   msSelText="";
   msSelVal="";
   ownerInfo: any;
+  currEvaluation: any;
 
 
 
@@ -124,7 +125,6 @@ export class KpiAddComponent implements OnInit {
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
       
 
-      IsSubmit: ['false'],
       IsDraft: [''],
       Score: [this.kpiDetails.Score ? this.kpiDetails.Score : '', [Validators.required]],
       Status: [this.kpiDetails.Status ? this.kpiDetails.Status : '', [Validators.required]],
@@ -164,7 +164,6 @@ export class KpiAddComponent implements OnInit {
       // }
     }
 
-    this.kpiForm.patchValue({ IsSubmit: 'true' });
     this.kpiForm.patchValue({ IsDraft: 'false' });
     this.saveKpi();
   }
@@ -191,6 +190,7 @@ export class KpiAddComponent implements OnInit {
     this.perfApp.requestBody.kpiId = this.kpiDetails._id?  this.kpiDetails._id : '';
     this.perfApp.requestBody.MeasurementCriteria = Measurements;
     this.perfApp.requestBody.Weighting = this.weight;
+    this.perfApp.requestBody.EvaluationId = this.currEvaluation._id;
     //this.perfApp.requestBody.Signoff = this.loginUser._id;
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
     this.perfApp.requestBody.Owner = this.ownerInfo._id;
@@ -268,6 +268,7 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
           this.appScores = c.KpiScore;
           this.kpiStatus = c.KpiStatus;
           this.coachingRemDays = c.coachingRem;
+          this.currEvaluation = c.evaluation;
         }
       })
   }
