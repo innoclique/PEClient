@@ -218,11 +218,11 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                       <div class="input-group-prepend">
-                                        <span class="input-group-text redStar">Score (self)</span>
+                                        <span class="input-group-text ">Score (self)</span>
                                       </div>
                                       <select class="form-control"
                                       [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }"
-                                      formControlName="Score"  name="Score" required   >
+                                      formControlName="Score"  name="Score"    >
                                         <option value="" disabled >Please select</option>
                                         <option *ngFor="let e of appScores" [value]="e" >{{e}}</option>
                                         

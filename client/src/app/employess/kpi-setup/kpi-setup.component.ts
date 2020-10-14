@@ -1,3 +1,5 @@
+
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -31,11 +33,12 @@ export class KpiSetupComponent implements OnInit {
     private router: Router,
     public dialog: MatDialog,
     public themeService: ThemeService,
+      public datePipe: DatePipe, 
     private snack: NotificationService,
     private perfApp: PerfAppService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
-
+    // this.datePipe= new DatePipe('en-US');
 
 
 
@@ -49,17 +52,17 @@ export class KpiSetupComponent implements OnInit {
 
   public columnDefs = [
     {
-      headerName: 'KPI Name', field: 'Name', width: 320, sortable: true, filter: true,
+      headerName: 'KPI Name', field: 'Name', width: 250, sortable: true, filter: true,
       cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
       }
     },
     { headerName: 'Target Completion', field: 'TargetCompletionDate', sortable: true, filter: true },
-    { headerName: 'Score (self)', field: 'Score', width: 150, sortable: true, filter: true },
+    { headerName: 'Is Draft', field: 'IsDraft', width: 130, sortable: true, filter: true },
     { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
     { headerName: 'KPI Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', width: 150, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
  let actionlinks=''
        if (data.data.RowData.IsActive) {
@@ -182,10 +185,10 @@ this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived
 
         return {
           Name: row.Kpi,
-          TargetCompletionDate: row.TargetCompletionDate,
-          Score: row.Score,
+          TargetCompletionDate: new DatePipe('en-US').transform(row.TargetCompletionDate, 'MM-dd-yyyy'),
+          IsDraft: row.IsDraft?'Yes':'No',
           YearEndComments: row.YearEndComments,
-          IsSubmitedKPIs: row.IsSubmitedKPIs,
+          IsSubmitedKPIs: row.IsSubmitedKPIs?'Yes':'No',
           Status: row.Status,
 
           RowData: row

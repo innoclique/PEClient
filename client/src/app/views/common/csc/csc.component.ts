@@ -58,6 +58,11 @@ export class CSCComponent implements OnInit,OnChanges {
   constructor( private fb: FormBuilder,
     private sHttp: HttpClient){
 
+      this.countryForm = this.fb.group({ 
+        Country: ['', [Validators.required]],
+        State: ['', [Validators.required]],
+        City: ['', [Validators.required]]
+      });
 
 
     } 

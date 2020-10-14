@@ -18,10 +18,11 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { EvalCommonModule } from '../common/common.module';
 import { DateAgoPipe } from '../../pipes/DateAgoPipe';
 import { SharedModule } from '../../shared/shared.module';
+import { KpiAddComponent } from './kpi-add/kpi-add.component';
 
 
 @NgModule({
-  declarations: [KpiReviewListComponent, KpiReviewComponent, ManagerDashboardComponent],
+  declarations: [KpiReviewListComponent, KpiReviewComponent, ManagerDashboardComponent,KpiAddComponent],
   imports: [
     CommonModule,
     EmpmanagerRoutingModule,

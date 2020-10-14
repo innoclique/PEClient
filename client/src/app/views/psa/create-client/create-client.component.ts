@@ -97,6 +97,8 @@ export class CreateClientComponent implements OnInit {
       this.perfApp.requestBody = { id: this.currentRecord.id }; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.currentRecord = c;
+      this.countyFormReset=true; 
+      this.cscData={Country:c.Country,State:c.State,City:c.City};
       console.info('client record', c);
       this.setValues(this.clientForm, c);
       this.models=c.EvaluationModels

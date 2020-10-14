@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { EmployessRoutingModule } from './employess-routing.module';
 
@@ -49,6 +49,7 @@ import { SharedModule } from '../shared/shared.module';
   ],
   exports: [
     ModalModule
-]
+],
+providers:[DatePipe]
 })
 export class EmployessModule { }

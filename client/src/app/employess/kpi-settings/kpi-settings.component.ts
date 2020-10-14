@@ -120,7 +120,7 @@ export class KpiSettingsComponent implements OnInit {
       Signoff: [this.kpiDetails.Signoff ? this.kpiDetails.Signoff.SignOffBy : null],
 
       IsDraft: [this.kpiDetails.IsDraft ? 'true' : 'false'],
-      Score: [this.kpiDetails.Score ? this.kpiDetails.Score : '', [Validators.required]],
+      Score: [this.kpiDetails.Score ? this.kpiDetails.Score : '', ],
       Status: [this.kpiDetails.Status ? this.kpiDetails.Status : '', [Validators.required]],
 
     });

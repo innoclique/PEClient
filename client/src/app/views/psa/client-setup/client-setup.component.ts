@@ -45,6 +45,8 @@ export class ClientSetupComponent implements OnInit {
       columnDefs: this.getColDef()      
     }
     currentUser:any;
+  cscData:any=undefined;
+  countyFormReset: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -515,7 +517,9 @@ export class ClientSetupComponent implements OnInit {
       return;
     }else{
       this.orgViewRef = this.modalService.show(this.orgView, this.config);
-      this.orgViewRef.setClass('modal-xlg');      
+      this.orgViewRef.setClass('modal-xlg');  
+      this.countyFormReset=true; 
+      this.cscData={Country:cr.Country,State:cr.State,City:cr.City};    
       this.setValues(this.clientForm, cr);
       this.disableForm(this.clientForm);
     }
@@ -529,13 +533,27 @@ export class ClientSetupComponent implements OnInit {
       return;
     }else{
       this.orgViewRef = this.modalService.show(this.orgView, this.config);
-      this.orgViewRef.setClass('modal-xlg');      
+      this.orgViewRef.setClass('modal-xlg');     
+      this.countyFormReset=true; 
+      this.cscData={Country:cr.Country,State:cr.State,City:cr.City};
       this.setValues(this.clientForm, cr);
       this.disableForm(this.clientForm);
     }
     
 
   }
+
+
+  
+
+onCSCSelect(data){
+  this.clientForm.patchValue({City:data.City.name});
+  this.clientForm.patchValue({Country:data.Country.name});
+  this.clientForm.patchValue({State:data.State.name});
+ 
+  
+  }
+
   hideorgView() {
     this.orgViewRef.hide();
     this.emptyForm(this.clientForm);
