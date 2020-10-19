@@ -34,3 +34,27 @@
     </div>
 
 
+
+    
+<!--For PR track  in model-->
+<ng-template #kpiTrack class="modal fade " tabindex="-1" role="dialog"
+
+>
+  <div class="modal-body">
+    <div class="modal-content no_bdr">
+        <div class="container clearfix" style="height: 200px;   overflow-y: auto;">
+          <ul class="timeline clearfix">
+            <li   [ngClass]="{ 'active' : last }"  *ngFor="let t of currentRowItem.tracks;let i=index;let last = last">
+              <span>{{t.comment}}</span>
+              <div class="clear"></div>
+              <i *ngIf="!last"></i>
+            </li>
+          </ul>          
+        </div>
+      <div class="modal-footer m-auto" style="border-top:none;">
+        <button type="button" (click)="trackViewRef.hide()" class="btn btn-primary pull-right"
+        data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

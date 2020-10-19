@@ -144,7 +144,7 @@ this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived
   addKpiForm() {
    
 
-    this.router.navigate(['em/add-kpi',{action:'add',id:this.currentRowItem[0].Owner._id}],{ skipLocationChange: true });
+    this.router.navigate(['em/add-kpi',{action:'add',ownerId:this.currentRowItem[0].Owner._id}],{ skipLocationChange: true });
     
 }
 
@@ -175,16 +175,29 @@ this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived
 
     this.perfApp.CallAPI().subscribe(c => {
 
+      if(c){ 
+ const kpiGroup=  c.reduce((acc, obj) => {
+  const key = obj.Owner.FirstName;
+  if (!acc[key]) {
+     acc[key] = [];
+  }
+  // Add object to list for given key's value
+  acc[key].push(obj);
+  return acc;
+}, {});
+
       this.kpiListData=[];
-      if (c) {
-        for(var i in c) 
+      if (kpiGroup) {
+        for(var i in kpiGroup) 
         this.kpiListData.push({
 
           Name:i,
-          KpiCount: c[i].length,
-          RowData: c[i]
+          KpiCount: kpiGroup[i].length,
+          RowData: kpiGroup[i]
         }); 
       }
+
+    }
      
     }, error => {
       if (error.error.message === Constants.KpiNotActivated) {

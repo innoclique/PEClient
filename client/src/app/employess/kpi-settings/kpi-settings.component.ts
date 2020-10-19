@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
+import { AlertComponent } from '../../shared/alert/alert.component';
 import { Constants } from '../../shared/AppConstants';
 import { CustomValidators } from '../../shared/custom-validators';
 
@@ -227,7 +228,7 @@ if (!this.kpiForm.get('Kpi').value) {
 
     }, error => {
       if (error.error.message === Constants.EvaluationAdminNotFound) {
-        //  this.openEvaluationAdminNotFoundDialog()
+        //  this.openConfirmSubmitKpisDialog()
       } else {
         this.snack.error(this.translate.instant(error.error.message));
 
@@ -370,7 +371,9 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
 
 
 
-
+conformSubmitKpis(){
+  this.openConfirmSubmitKpisDialog();
+}
   
   submitAllKPIs() {
 
@@ -420,6 +423,12 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
           if (this.currentAction !='create') {
             this.kpiDetails=  this.empKPIData.filter(e=> e._id== this.currentKpiId)[0];
             this.selIndex=  this.empKPIData.findIndex(e=> e._id== this.currentKpiId);
+
+
+            if (!this.kpiDetails.ViewedByEmpOn && this.kpiDetails.ManagerSignOff) {
+              this.updateKpiAsViewed();
+            }
+
           }
 
       }
@@ -440,6 +449,32 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
     
     )
   }
+
+
+
+  updateKpiAsViewed() {
+    
+    this.perfApp.route = "app";
+    this.perfApp.method = this.currentAction ="UpdateKpiDataById";
+
+
+      this.perfApp.requestBody = {} //fill body object with form    
+    this.perfApp.requestBody.kpiId = this.currentKpiId;
+    this.perfApp.requestBody.ViewedByEmpOn = true;
+      this.perfApp.requestBody.Action = 'Viewed';  
+      this.perfApp.CallAPI().subscribe(c => {
+        if (c.message == Constants.SuccessText) {
+         console.log(c)
+        } 
+      }, error => {
+  
+      });
+  
+  }
+
+
+
+
   setWeighting(length: any) {
     
     this.weight = length==0? 100 :  Math.round( 100/length);
@@ -592,6 +627,42 @@ if ( this.isAllSelected ){
 
 this.msSelText="";
   }
+
+
+
+  
+   /**To alert user for submit kpis */
+   openConfirmSubmitKpisDialog() {
+    this.alert.Title = "Secure Alert";
+    this.alert.Content = "This will confirm your sign-off. Are you sure you want to continue?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.submitAllKPIs();
+     } else {
+       
+     }
+    })
+  }
+
+
+
 
   nextKpi(){
 

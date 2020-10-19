@@ -1,10 +1,11 @@
 
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { AlertDialog } from '../../Models/AlertDialog';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
@@ -28,6 +29,14 @@ export class KpiSetupComponent implements OnInit {
   public kpiListData: any
   isKpiActivated=false;
 
+  @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
+  config = {
+    backdrop: true,
+    ignoreBackdropClick: true,
+
+  };
+  trackViewRef: BsModalRef;
+
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
@@ -36,6 +45,7 @@ export class KpiSetupComponent implements OnInit {
       public datePipe: DatePipe, 
     private snack: NotificationService,
     private perfApp: PerfAppService,
+    private modalService: BsModalService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
     // this.datePipe= new DatePipe('en-US');
@@ -58,11 +68,11 @@ export class KpiSetupComponent implements OnInit {
       }
     },
     { headerName: 'Target Completion', field: 'TargetCompletionDate', sortable: true, filter: true },
-    { headerName: 'Is Draft', field: 'IsDraft', width: 130, sortable: true, filter: true },
+    { headerName: 'Is Draft', field: 'IsDraft', width: 110, sortable: true, filter: true },
     { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
     { headerName: 'KPI Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width: 150, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', width: 170, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
  let actionlinks=''
        if (data.data.RowData.IsActive) {
@@ -71,11 +81,18 @@ export class KpiSetupComponent implements OnInit {
        
         <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="EF" title="Edit KPI" ></i>    
+
+        <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="Track" title="Track KPI" ></i>    
         
         `
        } else {
         actionlinks= `<i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="activeKPI" title="activate KPI"></i>       
+      
+        <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="Track" title="Track KPI" ></i>   
+       
         `
        }
 
@@ -110,6 +127,10 @@ export class KpiSetupComponent implements OnInit {
           break;
           case "activeKPI":
             this.activedeActiveKPI(true);
+            break;
+
+            case "Track":
+              this.trackKpi();
           break;
 
 
@@ -117,6 +138,10 @@ export class KpiSetupComponent implements OnInit {
         default:
       }
     }
+  }
+  trackKpi() {
+
+      this.trackViewRef = this.modalService.show(this.kpiTrackView, this.config);
   }
 
 

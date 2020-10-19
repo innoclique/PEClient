@@ -6,10 +6,9 @@
                     Employee KPI Setting
 
                     <div class="form-group form-actions pull-right m-0">
-                        <button type="button" class="btn btn-sm btn-primary" 
-                        (click)="router.navigate(['em/review-kpi-list'])">
-                        Back to list
-                      </button>
+                        <i class=" cui-account-logout icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+                    font-size: 17px;"  (click)="router.navigate(['em/review-kpi-list'])" title="Back to list" ></i>    
+
                     </div>
                     
                 </div>
@@ -220,7 +219,7 @@
                                       </div>
                                       <select class="form-control"
                                       [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }"
-                                      formControlName="Score"  name="Score" required   >
+                                      formControlName="Score"  name="Score"    >
                                         <option value="" disabled >Please select</option>
                                         <option *ngFor="let e of appScores" [value]="e" >{{e}}</option>
                                         
@@ -315,7 +314,9 @@
 
                         <div *ngIf="currentAction != 'view'" class="form-group form-actions pull-right">
                             <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>
-                            <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 'Update' :'Submit Kpi' }}</button>
+                            <button  class="btn btn-sm btn-primary" (click)="draftKpiByManager()" >Save</button>
+                            <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >Submit Kpi</button>
+                            <!-- <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 'Update' :'Submit Kpi' }}</button> -->
                           </div>
             
                           <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>

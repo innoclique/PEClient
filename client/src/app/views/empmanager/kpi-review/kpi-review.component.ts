@@ -1,11 +1,12 @@
 
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { AlertDialog } from '../../../Models/AlertDialog';
@@ -13,6 +14,7 @@ import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { ThemeService } from '../../../services/theme.service';
+import { AlertComponent } from '../../../shared/alert/alert.component';
 import { Constants } from '../../../shared/AppConstants';
 import { CustomValidators } from '../../../shared/custom-validators';
 
@@ -56,6 +58,14 @@ export class KpiReviewComponent implements OnInit {
   currEvaluation: any;
 
 
+  
+  @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
+  config = {
+    backdrop: true,
+    ignoreBackdropClick: true,
+
+  };
+  trackViewRef: BsModalRef;
 
 
   constructor(private fb: FormBuilder,
@@ -65,6 +75,7 @@ export class KpiReviewComponent implements OnInit {
     public dialog: MatDialog,
     public themeService: ThemeService,
     private snack: NotificationService,
+    private modalService: BsModalService,
     private perfApp: PerfAppService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
@@ -173,7 +184,7 @@ export class KpiReviewComponent implements OnInit {
 
     this.kpiForm.patchValue({ IsSubmit: 'true' });
     this.kpiForm.patchValue({ IsDraft: 'false' });
-    this.submitReview();
+    this.openConfirmSubmitKpisDialog();
   }
 
 
@@ -195,7 +206,7 @@ export class KpiReviewComponent implements OnInit {
       if (c) {
 
       this.getAllKPIs();
-    this.snack.success(this.translate.instant(`Kpi Updated Succeesfully`));
+    this.snack.success(this.translate.instant(`Your sign-off is successful`));
         
       }
     })
@@ -412,10 +423,12 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
 
   getAllKPIs() {
     this.perfApp.route = "app";
-    this.perfApp.method = "GetAllKpis",
-      this.perfApp.requestBody = {
-         'empId': this.currentEmpId,
-        'orgId':this.authService.getOrganization()._id}
+    this.perfApp.method = "GetKpisByManager",
+    this.perfApp.requestBody = { 'managerId': this.loginUser._id }
+    // this.perfApp.method = "GetAllKpis",
+      // this.perfApp.requestBody = {
+      //    'empId': this.currentEmpId,
+      //   'orgId':this.authService.getOrganization()._id}
 
     this.perfApp.CallAPI().subscribe(c => {
 
@@ -625,7 +638,72 @@ this.msSelText="";
     this.currentKpiId=this.kpiDetails._id;
   }
 
+  
+   /**To alert user for submit kpis */
+   openConfirmSubmitKpisDialog() {
+    this.alert.Title = "Secure Alert";
+    this.alert.Content = "Are you sure you want to sign-off?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.submitReview();
+     } else {
+       
+     }
+    })
+  }
 
+
+
+  activeDeActiveKPI(isActive) {
+    this.perfApp.route = "app";
+    this.perfApp.method = "UpdateKpiDataById";
+    this.perfApp.requestBody = {};
+    this.perfApp.requestBody.kpiId = this.currentKpiId;
+    this.perfApp.requestBody.IsActive = isActive;
+    this.perfApp.requestBody.Action=isActive?'Active': 'DeActive' ;
+    this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+    this.perfApp.CallAPI().subscribe(c => {
+
+      if (c) {
+
+      
+this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived'} Succeesfully`));
+this.router.navigate(['em/review-kpi-list']);
+      }
+    })
+
+  }
+
+  
+  
+trackKpi() {
+
+  this.trackViewRef = this.modalService.show(this.kpiTrackView, this.config);
+}
+
+editDraftKpi(){
+
+  this.router.navigate(['em/add-kpi',{action:'edit',
+  ownerId:this.kpiDetails.Owner._id,
+  id:this.currentKpiId}],{ skipLocationChange: true });
+}
 
 }
 

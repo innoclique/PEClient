@@ -6,10 +6,21 @@
                     KPI Review
 
                     <div class="form-group form-actions pull-right m-0">
-                        <button type="button" class="btn btn-sm btn-primary"
-                            (click)="router.navigate(['em/review-kpi-list'])">
-                            Back to list
-                        </button>
+
+                        <i class=" cui-account-logout icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+                    font-size: 17px;"  (click)="router.navigate(['em/review-kpi-list'])" title="Back to list" ></i>    
+
+                    <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+                    font-size: 17px;"  (click)="trackKpi()"  title="Track KPI" ></i>    
+                    <i *ngIf="kpiDetails?.IsActive" class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
+                            font-size: 17px;" (click)="activeDeActiveKPI(false)" title="Deactivate KPI"></i>
+
+                    <i *ngIf="!kpiDetails?.IsActive" class="cui-circle-check" style="cursor:pointer ;padding: 7px 20px 0 0;
+                    font-size: 17px;" (click)="activeDeActiveKPI(true)" title="Active KPI"></i>
+
+                    <i *ngIf="kpiDetails?.IsDraftByManager" class="cui-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+                    font-size: 17px;" (click)="editDraftKpi()" title="Edit KPI"></i>
+
                     </div>
 
                 </div>
@@ -375,11 +386,11 @@
 
                     </div>
                         <!-- <div class="clearfix"></div> -->
-                        <h4>Manager</h4>
+                        <h4 *ngIf="kpiDetails?.IsActive && !kpiDetails?.IsDraftByManager "  >Manager</h4>
                       
 
 
-                        <div class="form-group row">
+                        <div *ngIf="kpiDetails?.IsActive && !kpiDetails?.IsDraftByManager " class="form-group row">
 
 
                             <div class="col-md-4">
@@ -492,7 +503,7 @@
 
 
 
-                        <div  class="form-group form-actions pull-right">
+                        <div *ngIf="kpiDetails?.IsActive && !kpiDetails?.IsDraftByManager"  class="form-group form-actions pull-right">
                             <button class="btn btn-sm btn-primary" (click)="onCancle()">Cancel</button>
                             <button  class="btn btn-sm btn-primary"
                                 (click)="submitKpi()">{{currentAction=='edit'? 'Update' :'Submit' }}</button>
@@ -508,3 +519,30 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+<!--For PR track  in model-->
+<ng-template #kpiTrack class="modal fade " tabindex="-1" role="dialog"
+
+>
+  <div class="modal-body">
+    <div class="modal-content no_bdr">
+        <div class="container clearfix" style="height: 200px;   overflow-y: auto;">
+          <ul class="timeline clearfix">
+            <li   [ngClass]="{ 'active' : last }"  *ngFor="let t of kpiDetails?.tracks;let i=index;let last = last">
+              <span>{{t.comment}}</span>
+              <div class="clear"></div>
+              <i *ngIf="!last"></i>
+            </li>
+          </ul>          
+        </div>
+      <div class="modal-footer m-auto" style="border-top:none;">
+        <button type="button" (click)="trackViewRef.hide()" class="btn btn-primary pull-right"
+        data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

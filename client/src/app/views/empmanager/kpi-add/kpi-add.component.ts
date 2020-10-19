@@ -30,6 +30,7 @@ export class KpiAddComponent implements OnInit {
   kpiStatus: any = [];
   coachingRemDays: any = [];
   currentAction = 'create';
+  currentKpiId: any;
   isAllSelected = false;
   addMCSwitch = true;
 
@@ -71,7 +72,8 @@ export class KpiAddComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
      
      if (params['action']) {
-      this.currentOwnerId = params['id'];
+      this.currentOwnerId = params['ownerId'];
+      this.currentKpiId = params['id'];
       this.currentAction = params['action'];
      }
 
@@ -125,8 +127,9 @@ export class KpiAddComponent implements OnInit {
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
       
 
-      IsDraft: [''],
-      Score: [this.kpiDetails.Score ? this.kpiDetails.Score : '', [Validators.required]],
+      IsDraftByManager: [''],
+      IsDraft: ['false'],
+      Score: [this.kpiDetails.Score ? this.kpiDetails.Score : ''],
       Status: [this.kpiDetails.Status ? this.kpiDetails.Status : '', [Validators.required]],
 
     });
@@ -148,7 +151,7 @@ export class KpiAddComponent implements OnInit {
 
 
   onCancle() {
-    this.router.navigate(['employee/kpi-setup']);
+    this.router.navigate(['em/review-kpi-list']);
   }
 
   submitKpi() {
@@ -164,12 +167,25 @@ export class KpiAddComponent implements OnInit {
       // }
     }
 
-    this.kpiForm.patchValue({ IsDraft: 'false' });
+    this.kpiForm.patchValue({ IsDraftByManager: 'false' });
     this.saveKpi();
   }
 
 
+  
+  draftKpiByManager(){
+    this.kpiForm.patchValue({ IsDraftByManager: 'true' });
+    this.saveKpi();
+  }
+
   saveKpi() {
+
+
+    if (!this.kpiForm.get('Kpi').value) {
+      this.snack.error('Kpi is required');
+      return
+    }
+
     this.perfApp.route = "app";
     this.perfApp.method = this.currentAction == 'add' ? "AddKpi" : "UpdateKpiDataById",
 
@@ -197,6 +213,12 @@ export class KpiAddComponent implements OnInit {
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
     this.perfApp.requestBody.ManagerId = this.loginUser._id;//this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id;
 
+
+    
+    if (this.kpiForm.get('IsDraftByManager').value=='true') {
+      this.perfApp.requestBody.Weighting = '';
+      this.perfApp.requestBody.Action = 'Draft';
+    }
 
     this.callKpiApi();
 
@@ -324,7 +346,7 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
             });
           }
 
-          // if (this.currentAction!='create') {
+          // if (this.currentAction!='add') {
           //   this.initKPIForm();
           // }
 
@@ -381,10 +403,9 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
           );
 
 
-          // if (this.currentAction !='create') {
-          //   this.kpiDetails=  this.empKPIData.filter(e=> e._id== this.currentKpiId)[0];
-          //   this.selIndex=  this.empKPIData.findIndex(e=> e._id== this.currentKpiId);
-          // }
+          if (this.currentAction !='create') {
+           this.getKpiById();
+          }
 
       }
 
@@ -573,6 +594,24 @@ this.msSelText="";
     // this.currentKpiId=this.kpiDetails._id;
   }
 
+
+  
+
+  getKpiById() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetKpiDataById",
+      this.perfApp.requestBody = { 'id': this.currentKpiId }
+    this.perfApp.CallAPI().subscribe(c => {
+if (c) {
+  this.kpiDetails=c;
+  this.initKPIForm();
+  return c;
+}
+
+
+
+    })
+  }
 
 
 }

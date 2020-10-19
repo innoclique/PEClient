@@ -258,7 +258,7 @@
 
                                   <div class="form-group row">
                                    
-                                    <div class="input-group col-md-7">
+                                    <div *ngIf="currentAction != 'create'"  class="input-group col-md-7">
                                       <div class="input-group-prepend ml-2">
                                         <span class="input-group-text">Sign-off</span>
                                       </div>
@@ -360,7 +360,7 @@
                             <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 
                                 f.IsDraft.value=='true' ? 'Submit': 'Update'
                                  :'Submit' }}</button>
-                            <button class="btn btn-sm btn-primary"  (click)="submitAllKPIs()" >Submit KPIs</button>
+                            <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit KPIs</button>
                           </div>
             
                           <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
@@ -372,3 +372,30 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+<!--For PR track  in model-->
+<ng-template #kpiTrack class="modal fade " tabindex="-1" role="dialog"
+
+>
+  <div class="modal-body">
+    <div class="modal-content no_bdr">
+        <div class="container clearfix" style="height: 200px;   overflow-y: auto;">
+          <ul class="timeline clearfix">
+            <li   [ngClass]="{ 'active' : last }"  *ngFor="let t of currentRowItem.tracks;let i=index;let last = last">
+              <span>{{t.comment}}</span>
+              <div class="clear"></div>
+              <i *ngIf="!last"></i>
+            </li>
+          </ul>          
+        </div>
+      <div class="modal-footer m-auto" style="border-top:none;">
+        <button type="button" (click)="trackViewRef.hide()" class="btn btn-primary pull-right"
+        data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
