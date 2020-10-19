@@ -55,6 +55,7 @@ export class EvaluationslistComponent implements OnInit {
   competencyDropdownSettings:any={}
   directReporteeDropdownSettings:any={}
   currentPeerCompetencyList:any=[];
+  peerDropdownSettings:any={}
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -83,9 +84,18 @@ export class EvaluationslistComponent implements OnInit {
       itemsShowLimit: 3,
       allowSearchFilter: true
     };
+    this.peerDropdownSettings = {
+      singleSelection: false,
+      idField: '_id',
+      textField: 'displayTemplate',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
     this.directReporteeDropdownSettings = {
       singleSelection: false,
-      idField: 'row',
+      idField: '_id',
       textField: 'displayTemplate',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
@@ -107,29 +117,38 @@ export class EvaluationslistComponent implements OnInit {
     columnDefs: this.getGridColumnsForEmp(),
     api: new GridApi()
   }
+  formattedPeers:any=[]
   getEmployees() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllEmployees",
-      this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? 
-      this.currentUser.ParentUser :
-      this.currentUser._id }
+      this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
       if (c && c.length > 0) {
         this.employeesList$ = c
-        this.employeesList$.map(x => {
-          var _f=  Object.assign({}, x);
-          x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
-          x.row=  _f;          
-        });
-        console.log('formated data',this.employeesList$ );
         var clonedArray = this.employeesList$.map((_arrayElement) => Object.assign({}, _arrayElement));
+        this.employeesList$.map(x => {
+          var _f = Object.assign({}, x);
+          x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
+            x.row = _f;
+        });
+        console.log('formated data', this.employeesList$);
+
         console.log(clonedArray);
+        clonedArray.map(x => {
+          var _f :any= {};
+      
+            _f._id = x._id;
+            _f.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
+this.formattedPeers.push(_f);
+        });
+        debugger
         this.peersList = clonedArray;
-        
+        console.log('formated peers data', clonedArray);
       }
     })
   }
+ 
   getGridColumnsForEmp() {
     return [
       {
@@ -226,7 +245,7 @@ export class EvaluationslistComponent implements OnInit {
               PeersCompetencyMessage:x.PeersCompetencyMessage,
               DirectReporteeComptencyMessage:x.DirectReporteeComptencyMessage,
               PeersCompetencyList:x.PeersCompetencyList,
-              directReporteeCompetencyList:x.directReporteeCompetencyList
+              DirectReporteeCompetencyList:x.DirectReporteeCompetencyList
             });
           })
         })
@@ -251,7 +270,7 @@ export class EvaluationslistComponent implements OnInit {
         case "chooseDirectReports":
           return this.selectDirectReportees();
         case "choosePeers":
-          return this.selectPeersForEmployee();
+          return this.openPeerView();
         case "deleteEmp":
           return this.deleteEmpFromList();
       }
@@ -260,18 +279,22 @@ export class EvaluationslistComponent implements OnInit {
 
   selectDirectReportees() {
     debugger
-      this.directReporteeCompetencyMessage = this.selectedEmployee.DirectReporteeComptencyMessage;
-      this.currentEmployeeSelectedDirectReportees = this.selectedEmployee.DirectReportees;    
-    this.getDirectReportees();    
+    this.directReporteeCompetencyMessage = this.selectedEmployee.DirectReporteeComptencyMessage;
+    this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees||[];
+this.seletedDirectReporteeCompetencyList=this.selectedEmployee.DirectReporteeCompetencyList;
+
+    this.getDirectReportees();
+    this.getCompetencyList();
   }
-  selectPeersForEmployee() {    
+  openPeerView() {    
     debugger
   this.PeersCompetencyMessage = this.selectedEmployee.PeersCompetencyMessage;      
-  this.currentPeersList = this.selectedEmployee.Peers;    
-  this.selectePeersViewRef = this.modalService.show(this.selectePeersView, this.config);
+  this.selectedEmployeePeers = this.selectedEmployee.Peers||[];    
+  
   this.selectedModel=this.selectedEmployee.Model;
   this.currentPeerCompetencyList=this.selectedEmployee.PeersCompetencyList;
-  this.selectedEmployeePeers=this.selectedEmployee.Peers;
+  this.selectePeersViewRef = this.modalService.show(this.selectePeersView, this.config);
+  
   this.getCompetencyList();
 }
 public deleteEmpFromList() {
@@ -298,7 +321,7 @@ public deleteEmpFromList() {
       debugger
       var clonedArray2 = c.map((_arrayElement) => Object.assign({}, _arrayElement));
       this.peersCompetencyList = clonedArray2;
-
+  
     }, error => {
       debugger
       console.log('competencyList error ', error)
@@ -307,7 +330,49 @@ public deleteEmpFromList() {
   }
 
   public directReporteeSelectedCompetencyList = [];
+  updateDirectReporteesOfEmployee(){
+    this.perfApp.method = "UpdateDirectReportees";
+    this.perfApp.requestBody = {
+      EvaluationId:this.selectedEmployee.EvaluationRow._id,
+      EmployeeId:this.selectedEmployee.Employee._id,
+      DirectReportees:this.selectedEmployee.DirectReportees,
+      DirectReporteeCompetencyMessage:this.selectedEmployee.DirectReporteeComptencyMessage,
+      DirectReporteeCompetencyList:this.selectedEmployee.DirectReportsCompetency
+    }
+    this.perfApp.route = "evaluation"
+    this.perfApp.CallAPI().subscribe(x => {
+      console.log('added evaluation', x)
+      this.notification.success('Evaluation Updated Successfully.')
+      this.router.navigate(['ea/evaluation-list'])
+    }, error => {
 
+      console.log('error while adding eval', error)
+      this.notification.error(error.error.message)
+    })
+
+  }
+  UpdatePeers(){
+    this.perfApp.method = "UpdatePeers";
+    this.perfApp.requestBody = {
+      EvaluationId:this.selectedEmployee.EvaluationRow._id,
+      EmployeeId:this.selectedEmployee.Employee._id,
+      Peers:this.selectedEmployee.Peers,
+      PeersCompetencyMessage:this.selectedEmployee.PeersCompetencyMessage,
+      PeersCompetencyList:this.selectedEmployee.PeersCompetencyList
+    }
+    this.perfApp.route = "evaluation"
+    this.perfApp.CallAPI().subscribe(x => {
+      console.log('added evaluation', x)
+      this.notification.success('Evaluation Updated Successfully.')
+      this.router.navigate(['ea/evaluation-list'])
+      this.closePeersModel();
+    }, error => {
+      this.closePeersModel();
+      console.log('error while adding eval', error)
+      this.notification.error(error.error.message)
+    })
+
+  }
   updateEvaluation() {
     debugger
     const _evform = this.evaluationForm.value;
@@ -317,6 +382,7 @@ public deleteEmpFromList() {
     // this.setEmployeeIds();
     //this.setModelIds();
     //this.currentEvaluationForm.Employees=this.evaluationForm.value.Employees;
+    this.evaluationForm.value.Employees = this.selectedEmployees;
     console.log('evaluation form', this.evaluationForm.value);
     this.perfApp.method = "UpdateEvaluationForm";
     this.perfApp.requestBody = this.currentEvaluationForm;
@@ -377,7 +443,7 @@ public deleteEmpFromList() {
     return [
       {
         headerName: 'Peer', sortable: true, filter: true,
-        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.FirstName}-${data.data.LastName}</span>` }
+        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.displayTemplate}</span>` }
       },
 
       {
@@ -394,78 +460,6 @@ public deleteEmpFromList() {
     ];
 
   }
-  onPeerSelect(item) {
-    console.log('onPeer Select', item);
-    if (!this.selectedEmployee.Peers) {
-      this.selectedEmployee.Peers = [];
-    }
-    var _f=  Object.assign({}, item.row);
-    this.selectedEmployee.Peers.push(_f);
-    if (this.peersForEmpGridOptions.api) {
-      this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
-    }
-  }
-  onSelectAllPeers(items: any) {
-    //this.selectedEmployees = items;
-    if (!this.selectedEmployee.Peers) {
-      this.selectedEmployee.Peers = [];
-    }
-    items.map(x => {      
-    var _f=  Object.assign({}, x.row);
-    this.selectedEmployee.Peers.push(_f);
-    })
-    this.selectedEmployeePeers = this.selectedEmployee.Peers
-    console.log('onSelectAll peers', this.selectedEmployee.Peers);
-    if (this.peersForEmpGridOptions.api) {
-      this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
-    }
-  }
-  deletePeer() {
-    debugger
-    var _p = this.selectedEmployee.Peers.indexOf(this.currentPeer);
-    this.selectedEmployee.Peers.splice(_p, 1);
-    if (this.peersForEmpGridOptions.api) {
-      this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
-    }
-    this.selectedEmployeePeers = this.selectedEmployee.Peers
-  }
-  currentPeer(currentPeer: any) {
-    throw new Error('Method not implemented.');
-  }
-  onPeerDeSelect(item:any){
-    var _position=this.selectedEmployee.Peers.indexOf(item);
-    this.selectedEmployee.Peers.splice(_position,1);
-  }
-  onDeSelectAllPeers(items:any){
-    this.selectedEmployees.Peers=[];  
-  }
-  closePeersModel() {
-    this.selectePeersViewRef.hide();
-    this.selectedEmployee = {};  
-  }
-
-  savePeers() {
-    debugger
-    if (this.selectedPeersCompetencyList.length === 0) {
-      this.notification.error('Please select at least one  Competency');
-      return;
-    }
-    if (!this.selectedEmployee.Peers || this.selectedEmployee.Peers.length < 2) {
-      this.notification.error('Peers should be minimum two members');
-      return;
-    }
-    this.selectedEmployee.PeersCompetencyMessage = this.PeersCompetencyMessage;
-    this.selectedEmployee.PeersCompetencyList = this.selectedPeersCompetencyList;
-
-    this.closePeersModel();
-  }
-
-  onSelectAllPeersCompetency(items){
-    this.selectedPeersCompetencyList.push(items)
-  }
-  onSelectPeersCompetency(item){
-  this.selectedPeersCompetencyList.push(item)
-  }
 
   closeDrModel() {
     this.selecteDirectReporteeViewRef.hide();
@@ -476,7 +470,7 @@ public deleteEmpFromList() {
     return [
       {
         headerName: 'Direct Reportee', sortable: true, filter: true,
-        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="">${data.data.FirstName}-${data.data.LastName}</span>` }
+        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="">${data.data.displayTemplate}</span>` }
       },
 
       {
@@ -512,9 +506,10 @@ public deleteEmpFromList() {
   }
 
   deleteDirectReportee() {
-    var _p = this.currentEmployeeSelectedDirectReportees.indexOf(this.currentDirectReportee);
-    this.currentEmployeeSelectedDirectReportees.splice(_p, 1);
-    this.directReporteesOfEmpGridOptions.api.setRowData(this.currentEmployeeSelectedDirectReportees);
+    var _p = this.selectedEmployeeDirectReportees.indexOf(this.currentDirectReportee);
+    this.selectedEmployeeDirectReportees.splice(_p, 1);
+    this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployeeDirectReportees);
+    this.selectedEmployeeDirectReportees=[...this.selectedEmployeeDirectReportees]
   }
   saveDirectReportees() {
     if (this.seletedDirectReporteeCompetencyList.length === 0) {
@@ -527,85 +522,185 @@ public deleteEmpFromList() {
     }
     debugger
     this.selectedEmployee.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
-    this.selectedEmployee.DirectReportsCompetency = this.directReporteeCompetencyList;
+    this.selectedEmployee.DirectReportsCompetency = this.seletedDirectReporteeCompetencyList;
 
-    this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
-    this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
-    this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
-
+    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
+    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
+    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
+this.updateDirectReporteesOfEmployee();
     this.closeDrModel();
   }
-  onSelectAllDirectReporteeCompetency(items){
-    this.seletedDirectReporteeCompetencyList.push(items)
-    
-  }
-  onSelectDirectReporteeCompetency(item){
-  this.seletedDirectReporteeCompetencyList.push(item)
-  }
+  
 
   public directReporteesOfEmpGridOptions: GridOptions = {
     columnDefs: this.getDirectReporteeGridCols(),   
     api:new GridApi()
   }  
-  public getDirectReportees(): void {
-      this.perfApp.method = "GetDirectReporteesOfManager";
-      this.perfApp.requestBody = { id: this.selectedEmployee._id };
-      this.perfApp.route = "app"
-      this.perfApp.CallAPI().subscribe(x => {
-        console.table('emp list ', x)
-        x.map(emp => {
-          var _f=  Object.assign({}, emp);
-          emp.displayTemplate = `${emp.FirstName}-${emp.LastName}-${emp.Email}`,
-            emp.row = _f
-        });
-        
-        this.currentEmployeeDirectReportees = x;
-        this.selecteDirectReporteeViewRef = this.modalService.show(this.selecteDirectReporteeView, this.config)  
-      }, error => {
-        console.log('error while adding eval', error)
-
-      })
-    
-  }
-  onDirectReporteeSelect(item) {
-    console.log('onItemSelect', item);
-    if (!this.selectedEmployee.DirectReportees) {
-      this.selectedEmployee.DirectReportees = [];
-    }
-    this.selectedEmployee.DirectReportees.push(item.row);
-    this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees
-    if(this.directReporteesOfEmpGridOptions.api){
-      debugger
-      this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
-    }
-  }
-  onSelectAllDirectReportee(items: any) {
-    //this.selectedEmployees = items;
-    if (!this.selectedEmployee.DirectReportees) {
-      this.selectedEmployee.DirectReportees = [];
-    }    
-    items.map(x => {
-      this.selectedEmployee.DirectReportees.push(x.row);
-    })
-    this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees
-    console.log('onSelectAll', items);
-    if(this.directReporteesOfEmpGridOptions.api){
-      this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
-    }
-  }
   
-  onDirectReporteeDeSelect(item:any){
+//#region Refactring
+
+currentPeer:any={};
+onPeerSelect(item) {
+  console.log('onPeer Select', item);
+  if (!this.selectedEmployee.Peers) {
+    this.selectedEmployee.Peers = [];
+  }
+  //var _f=  Object.assign({}, item.row);
+  this.selectedEmployee.Peers.push(item);
+  if (this.peersForEmpGridOptions.api) {
+    this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
+  }
+}
+onSelectAllPeers(items: any) {
+  debugger
+  //this.selectedEmployees = items;
+  if (!this.selectedEmployee.Peers) {
+    this.selectedEmployee.Peers = [];
+  }
+  this.selectedEmployee.Peers=items;
+  // items.map(x => {
+  //   var _f = Object.assign({}, x.row);
+  //   this.selectedEmployee.Peers.push(x);
+  // })
+ // this.selectedEmployeePeers = this.selectedEmployee.Peers
+  console.log('onSelectAll peers', this.selectedEmployee.Peers);
+  if (this.peersForEmpGridOptions.api) {
+    this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
+  }
+}
+deletePeer() {
+  debugger
+  var _p = this.selectedEmployee.Peers.indexOf(this.currentPeer);
+  this.selectedEmployee.Peers.splice(_p, 1);
+  if (this.peersForEmpGridOptions.api) {
+    this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
+  }
+  this.selectedEmployeePeers =[...this.selectedEmployee.Peers]
+}
+onPeerDeSelect(item: any) {
+  var _position = this.selectedEmployee.Peers.indexOf(item);
+  this.selectedEmployee.Peers.splice(_position, 1);
+}
+onDeSelectAllPeers(items: any) {
+  this.selectedEmployees.Peers = [];
+}
+closePeersModel() {
+  this.selectePeersViewRef.hide();
+  this.selectedEmployee = {};
+  this.selectedEmployeePeers=[];
+}
+public onPeersRowClicked(e) {
+  debugger
+  if (e.event.target !== undefined) {
+    this.currentPeer = e.data;
+    let actionType = e.event.target.getAttribute("data-action-type");
+    switch (actionType) {
+      case "deletePeer":
+        return this.deletePeer();
+      // case "edit":
+      // return this.editClient();
+    }
+  }
+}
+savePeers() {
+  debugger
+  if (this.currentPeerCompetencyList.length === 0) {
+    this.notification.error('Please select at least one  Competency');
+    return;
+  }
+  if (!this.selectedEmployee.Peers || this.selectedEmployee.Peers.length < 2) {
+    this.notification.error('Peers should be minimum two members');
+    return;
+  }
+  this.selectedEmployee.PeersCompetencyMessage = this.PeersCompetencyMessage;
+  this.selectedEmployee.PeersCompetencyList = this.currentPeerCompetencyList;
+
+  
+  this.UpdatePeers();
+}
+
+onDeSelectDirectReporteeCompetency(item) {
+  var _position = this.seletedDirectReporteeCompetencyList.indexOf(item);
+  this.seletedDirectReporteeCompetencyList.splice(_position, 1);
+
+}
+onDeSelectAllDirectReporteeCompetency(items) {
+  this.seletedDirectReporteeCompetencyList = []
+}
+onSelectAllPeersCompetency(items) {
+  this.selectedPeersCompetencyList=items;
+}
+onSelectPeersCompetency(item) {
+  this.selectedPeersCompetencyList.push(item)
+}
+
+onSelectAllDirectReporteeCompetency(items) {  
+  this.seletedDirectReporteeCompetencyList=items
+
+}
+onSelectDirectReporteeCompetency(item) {
+  this.seletedDirectReporteeCompetencyList.push(item)
+}
+
+public getDirectReportees(): void {
+  this.perfApp.method = "GetDirectReporteesOfManager";
+  this.perfApp.requestBody = { id: this.selectedEmployee.Employee._id };
+  this.perfApp.route = "app"
+  this.perfApp.CallAPI().subscribe(x => {
+    this.currentEmployeeDirectReportees=[];
+    console.table('emp list ', x)
+    x.map(emp => {        
+      var _f :any= {};      
+          _f._id = emp._id;
+          _f.displayTemplate = `${emp.FirstName}-${emp.LastName}-${emp.Email}`,
+      this.currentEmployeeDirectReportees.push(_f);
+    });
+
+   // this.currentEmployeeDirectReportees = x;
+    this.selecteDirectReporteeViewRef = this.modalService.show(this.selecteDirectReporteeView, this.config)
+  }, error => {
+    console.log('error while adding eval', error)
+
+  })
+
+}
+onDirectReporteeSelect(item) {
+  console.log('onItemSelect', item);
+  if (!this.selectedEmployee.DirectReportees) {
+    this.selectedEmployee.DirectReportees = [];
+  }
+  this.selectedEmployee.DirectReportees.push(item);
+  this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees
+  if (this.directReporteesOfEmpGridOptions.api) {
     debugger
-    var _position=this.selectedEmployee.DirectReportees.indexOf(item.row);
-    this.selectedEmployee.DirectReportees.splice(_position,1);
     this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
   }
-  onDeSelectAllDirectReportee(items){    
-    debugger
-    this.selectedEmployee.DirectReportees=[]    
-    this.directReporteesOfEmpGridOptions.api.setRowData([])
-  
+}
+onSelectAllDirectReportee(items: any) {
+  //this.selectedEmployees = items;
+  if (!this.selectedEmployee.DirectReportees) {
+    this.selectedEmployee.DirectReportees = [];
   }
-  //#endregion
+  this.selectedEmployee.DirectReportees=items;
+  this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees
+  console.log('onSelectAll', items);
+  if (this.directReporteesOfEmpGridOptions.api) {
+    this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
+  }
+}
+
+onDirectReporteeDeSelect(item: any) {
+  debugger
+  var _position = this.selectedEmployee.DirectReportees.indexOf(item);
+  this.selectedEmployee.DirectReportees.splice(_position, 1);
+  this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
+}
+onDeSelectAllDirectReportee(items) {
+  debugger
+  this.selectedEmployee.DirectReportees = []
+  this.directReporteesOfEmpGridOptions.api.setRowData([])
+
+}
+//#endregion
 
 }

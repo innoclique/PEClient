@@ -327,9 +327,12 @@
                                     <ng-multiselect-dropdown style="width:75%;" name="directReporteeCompetencyList" [disabled]="false"
                                         [placeholder]="'Select Competency'" [data]="directReporteeCompetencyList"
                                         [settings]="competencyDropdownSettings"
-[(ngModel)]="seletedDirectReporteeCompetencyList"
+                                        [(ngModel)]="seletedDirectReporteeCompetencyList"
                                         (onSelect)="onSelectAllDirectReporteeCompetency($event)"
-                                        (onSelectAll)="onSelectDirectReporteeCompetency($event)">
+                                        (onSelectAll)="onSelectDirectReporteeCompetency($event)"
+                                        (onDeSelect)="onDeSelectDirectReporteeCompetency($event)"
+                                        (onDeSelectAll)="onDeSelectAllDirectReporteeCompetency($event)"
+                                        >
                                     </ng-multiselect-dropdown>
                                 </div>
                             </div>

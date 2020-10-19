@@ -159,6 +159,14 @@ export class RollevaluationComponent implements OnInit {
   onSelectDirectReporteeCompetency(item) {
     this.seletedDirectReporteeCompetencyList.push(item)
   }
+  onDeSelectDirectReporteeCompetency(item) {
+    var _position = this.seletedDirectReporteeCompetencyList.indexOf(item);
+    this.seletedDirectReporteeCompetencyList.splice(_position, 1);
+  
+  }
+  onDeSelectAllDirectReporteeCompetency(items) {
+    this.seletedDirectReporteeCompetencyList = []
+  }
 
   public directReporteesOfEmpGridOptions: GridOptions = {
     columnDefs: this.getDirectReporteeGridCols(),
