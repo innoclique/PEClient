@@ -18,6 +18,7 @@ import{ReportsComponent} from '../evaluationadmin/reports/reports.component';
 import { ProfileComponent } from './profile/profile.component'
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { SharedModule } from '../../shared/shared.module';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 const routes: Routes = [
   {
     path: '',
@@ -110,7 +111,8 @@ const routes: Routes = [
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
     TypeaheadModule.forRoot(),
-    SharedModule
+    SharedModule,
+    NgMultiSelectDropDownModule.forRoot()
   ]
 })
 export class EvaluationadminModule { 
