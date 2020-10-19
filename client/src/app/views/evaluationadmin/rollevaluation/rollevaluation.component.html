@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-header">
                     Create New Evaluation
-                    
+
                     <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal"
                         (click)="router.navigate(['ea/evaluation-list'])">
                         Go to list
@@ -13,7 +13,7 @@
                 <div class="card-body">
 
                     <form [formGroup]="evaluationForm">
-                        
+
                         <!--Evaluation Details Begin-->
                         <div class="form-group row">
 
@@ -45,64 +45,39 @@
 
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-4">
+                            <div class="col-md-7">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text redStar">Select Model</span>
-                                        </div>
-
-                                        <mat-select [disabled]="!isCreate" formControlName="Model"
-                                            [ngClass]="{ 'is-invalid':isFormSubmitted && f.Model.errors }"
-                                            class="form-control">
-                                            <mat-option *ngFor="let model of modelsList" [value]="model._id">
-                                                {{model.Name}}</mat-option>
-                                        </mat-select>
-
-                                        <div *ngIf="isFormSubmitted && f.Model.errors" class="invalid-feedback">
-                                            <div *ngIf="f.Model.errors.required">Evaluation Model is required</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div  class="input-group-prepend">
                                             <span class="input-group-text  redStar">Employees</span>
                                         </div>
-
-                                        <input [readonly]="!isCreate" matInput (click)="filterOption($event.target.value)"
+                                        <ng-multiselect-dropdown style="width: 80%;" name="Employees" [disabled]="false"
+                                            [placeholder]="'Select Employee'" [data]="this.employeesList$"
+                                            formControlName="Employees" [settings]="dropdownSettings"
+                                            (onSelect)="onItemSelect($event)" (onDeSelect)="onEmployeeDeSelect($event)"
+                                            (onSelectAll)="onSelectAllEmployees($event)">
+                                        </ng-multiselect-dropdown>
+                                        <!-- <input [readonly]="!isCreate" matInput
+                                            (click)="filterOption($event.target.value)"
                                             (input)="filterOption($event.target.value)" class="form-control" type="text"
                                             placeholder="Select Employees" aria-label="Select Users"
                                             [matAutocomplete]="auto" formControlName="Employees">
-                                        
 
-                                        <mat-autocomplete  #auto="matAutocomplete" [displayWith]="displayFn">
+
+                                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                                             <mat-option [value]="1" (click)="selectAllEmployees(ev)" #ev>
-                                                <input type="checkbox"  #ev> Select All
+                                                <input type="checkbox" #ev> Select All
                                             </mat-option>
                                             <mat-option *ngFor="let user of empFilterList" [value]="selectedEmployees">
                                                 <div (click)="optionClicked($event, user)">
                                                     <mat-checkbox [checked]="user.selected"
                                                         (change)="toggleSelection(user)"
                                                         (click)="$event.stopPropagation()">
-                                                        {{ user.FirstName }} {{ user.LastName }}
+                                                        {{ user.FirstName }} {{ user.LastName }} -{{user.Email}}
                                                     </mat-checkbox>
                                                 </div>
                                             </mat-option>
-                                        </mat-autocomplete>
-                                        <!-- <mat-select-autocomplete
-                                        [placeholder]="'Select Options'"
-                                        [options]="empFilterList"
-                                        [multiple]='true'
-                                        name="optionsSelector"
-                                        ngDefaultControl
-                                        display ="FirstName"
-                                        value="FirstName"
-                                        [formControl]="f.Employees">
-                                        
-                                      </mat-select-autocomplete> -->
+                                        </mat-autocomplete> -->
 
                                         <div *ngIf=" isFormSubmitted &&   f.Employees.errors" class="invalid-feedback">
                                             <div *ngIf="f.Employees.errors.required">must select at least one employee
@@ -112,12 +87,31 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar">Select Model</span>
+                                        </div>
+                                        <select class="form-control" (change)="onModelChange($event)"
+                                            formControlName="Model">
+                                            <option *ngFor="let model of modelsList" [value]="model._id">{{model.Name}}
+                                            </option>
+                                        </select>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="button" class="btn btn-primary" (click)="addToGrid()" value="+">
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <ag-grid-angular *ngIf="selectedEmployees.length>0" style="width: auto; height: 200px;"
-                                    class="ag-theme-alpine" [rowData]="selectedEmployees" [gridOptions]="EmpGridOptions"
-                                    [pagination]="true" [paginationPageSize]="10" (gridReady)="onEmpGridReady($event)"
+                                <ag-grid-angular *ngIf="selectedEmployeeList.length>0"
+                                    style="width: auto; height: 200px;" class="ag-theme-alpine"
+                                    [rowData]="selectedEmployeeList" [gridOptions]="EmpGridOptions" [pagination]="true"
+                                    [paginationPageSize]="10" (gridReady)="onEmpGridReady($event)"
                                     (rowClicked)="onEmpRowClicked($event)">
                                 </ag-grid-angular>
                             </div>
@@ -126,9 +120,10 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <input [attr.disabled]="isCreate?null:'true'" (change)="onChangeKPIFor($event)" formControlName="ActivateKPI"
-                                            class="form-check-input" type="checkbox" id="ActivateKPI">
-                                        <label  class="form-check-label" for="ActivateKPI">
+                                        <input [attr.disabled]="isCreate?null:'true'" (change)="onChangeKPIFor($event)"
+                                            formControlName="ActivateKPI" class="form-check-input" type="checkbox"
+                                            id="ActivateKPI">
+                                        <label class="form-check-label" for="ActivateKPI">
                                             Activate KPI Setting Form
                                         </label>
                                     </div>
@@ -136,10 +131,11 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <input [attr.disabled]="isCreate?null:'true'" formControlName="ActivateActionPlan" class="form-check-input"
+                                        <input [attr.disabled]="isCreate?null:'true'"
+                                            formControlName="ActivateActionPlan" class="form-check-input"
                                             type="checkbox" id="ActivateActionPlan">
                                         <label class="form-check-label" for="ActivateActionPlan">
-                                            Activate Action Plan 
+                                            Activate Action Plan
                                         </label>
                                     </div>
                                 </div>
@@ -164,18 +160,13 @@
                         </div>
 
 
-                        <div *ngIf="isCreate" class="modal-footer">
+                        <div class="modal-footer">
 
                             <button type="button" class="btn btn-secondary" (click)="reset()">Reset</button>
                             <button type="button" (click)="draftEvaluation()" class="btn btn-primary">Save</button>
                             <button type="button" (click)="submitEvaluation()" class="btn btn-primary">Submit</button>
                         </div>
-                        
-                        <div *ngIf="!isCreate" class="modal-footer">
 
-                           
-                            <button type="button" (click)="updateEvaluation()" class="btn btn-primary">Update</button>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -201,17 +192,30 @@
                 <form autocomplete="off" novalidate="" class="ng-untouched ng-pristine ng-valid">
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text redStar">Search</span>
+                            <div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text  redStar">Employees</span>
+                                        </div>
+
+                                        <ng-multiselect-dropdown style="width: 75%;" 
+                                        name="Employees" 
+                                        [disabled]="false"
+                                            [placeholder]="'Select Employee'" 
+                                            [data]="formattedPeers"
+                                            [settings]="peerDropdownSettings"
+                                            [(ngModel)]="selectedEmployeePeers" 
+                                            (onSelect)="onPeerSelect($event)"
+                                            (onDeSelect)="onPeerDeSelect($event)"
+                                            (onSelectAll)="onSelectAllPeers($event)"
+                                            (onDeSelectAll)="onDeSelectAllPeers($event)">
+                                        </ng-multiselect-dropdown>
+
                                     </div>
-                                    <input [(ngModel)]="peersSearch" name="peersSearch" typeaheadOptionField="FirstName"
-                                        [typeahead]="selectedPeersOb" [typeaheadAsync]="true" class="form-control"
-                                        [typeaheadMinLength]="3" (typeaheadOnSelect)="onPeerEmployeeSelect($event.item)"
-                                        placeholder="Enter Employee Name" class="form-control">
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="form-group row">
@@ -221,31 +225,15 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text redStar">Competency</span>
                                     </div>
-                                    <mat-select [disabled]="!isCreate" placeholder="Select" class="form-control"
-                                    name="Select"
-                                    [(ngModel)]="selectedPeersCompetencyList"
-                                    multiple
-                                    #selectionModel="ngModel">
-                                    
-                          <app-select-check-all [model]="selectionModel" 
-                                                [values]="PeersCompetencyList">
-                          </app-select-check-all>  
-                                                                  
-                          <mat-option *ngFor="let option of PeersCompetencyList"
-                                      [value]="option._id">
-                            {{option.Name}}
-                          </mat-option>
-                        </mat-select>
-                                    <!-- <mat-select name="PeersCompetencyList" [(ngModel)]="PeersCompetencyList"
-                                        [ngClass]="{ 'is-invalid':isFormSubmitted && f.PeersCompetency.errors }"
-                                        class="form-control" multiple>
-                                        <mat-option [value]="1" (click)="selectAllPeersCompetency(ev)" #ev>SelectAll
-                                        </mat-option>
-                                        <mat-option *ngFor="let option of competencyList " [value]="option._id">
-                                            {{option.Name}}
-                                        </mat-option>
-                                    </mat-select> -->
-
+                                    <ng-multiselect-dropdown style="width: 75%;" 
+                                    name="peersCompetencyList" [disabled]="false"
+                                        [placeholder]="'Select Competency'" 
+                                        [data]="this.peersCompetencyList"
+                                        [settings]="competencyDropdownSettings"
+                                        [(ngModel)]="currentPeerCompetencyList"
+                                        (onSelect)="onSelectPeersCompetency($event)"
+                                        (onSelectAll)="onSelectAllPeersCompetency($event)">
+                                    </ng-multiselect-dropdown>
                                 </div>
                             </div>
                         </div>
@@ -259,8 +247,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text ">Message</span>
                                     </div>
-                                    <textarea [disabled]="!isCreate" class="form-control" [(ngModel)]="PeersCompetencyMessage" name="PeersCompetencyMessage"
-                                        ></textarea>
+                                    <textarea class="form-control" [(ngModel)]="PeersCompetencyMessage"
+                                        name="PeersCompetencyMessage"></textarea>
 
                                 </div>
                             </div>
@@ -268,10 +256,11 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <ag-grid-angular *ngIf="currentPeersList && currentPeersList.length>0" style="width: auto; height: 200px;"
-                                class="ag-theme-alpine" [rowData]="currentPeersList"
-                                [gridOptions]="peersForEmpGridOptions" [pagination]="true" [paginationPageSize]="10"
-                                (gridReady)="onPeersGridReady($event)" (rowClicked)="onPeersRowClicked($event)">
+                            <ag-grid-angular 
+                                style="width: auto; height: 200px;" class="ag-theme-alpine"
+                                [rowData]="selectedEmployee.Peers||[]" [gridOptions]="peersForEmpGridOptions"
+                                [pagination]="true" [paginationPageSize]="10" (gridReady)="onPeersGridReady($event)"
+                                (rowClicked)="onPeersRowClicked($event)">
                             </ag-grid-angular>
                         </div>
                     </div>
@@ -293,8 +282,6 @@
     </div>
 </ng-template>
 
-
-
 <ng-template #selecteDirectReporteeView class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
     <div class="modal-primary modal-xlg" role="document">
@@ -312,16 +299,23 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text redStar">Search</span>
+                                        <span class="input-group-text  redStar">Employees</span>
                                     </div>
-                                    <input [(ngModel)]="directReporteeSearch" name="directReporteeSearch"
-                                        typeaheadOptionField="FirstName" [typeahead]="selectedDirectReporteeTypeHead"
-                                        [typeaheadAsync]="true" class="form-control" [typeaheadMinLength]="3"
-                                        (typeaheadOnSelect)="onSelectDirectReportee($event.item)"
-                                        placeholder="Enter Employee Name" class="form-control">
+                                    <ng-multiselect-dropdown style="width: 75%;" 
+                                    name="EmployeeDirectreportee" [disabled]="false"
+                                        [placeholder]="'Select Employee'" 
+                                        [data]="currentEmployeeDirectReportees"
+                                        [(ngModel)]="selectedEmployeeDirectReportees"
+                                         [settings]="directReporteeDropdownSettings"
+                                        (onSelect)="onDirectReporteeSelect($event)"
+                                        (onDeSelect)="onDirectReporteeDeSelect($event)"
+                                        (onSelectAll)="onSelectAllDirectReportee($event)"
+                                        (onDeSelectAll)="onDeSelectAllDirectReportee($event)">
+                                    </ng-multiselect-dropdown>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
@@ -330,24 +324,13 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text redStar">Competency</span>
                                     </div>
-                                    
-                                        <mat-select placeholder="Select" class="form-control"
-                                                    name="Select"
-                                                    [(ngModel)]="directReporteeSelectedCompetencyList"
-                                                    multiple
-                                                    #selectionModel="ngModel">
-                                                    
-                                          <app-select-check-all [model]="selectionModel" 
-                                                                [values]="directReporteeCompetencyList">
-                                          </app-select-check-all>  
-                                                                                  
-                                          <mat-option *ngFor="let option of directReporteeCompetencyList"
-                                                      [value]="option._id">
-                                            {{option.Name}}
-                                          </mat-option>
-                                        </mat-select>
-                                      
-
+                                    <ng-multiselect-dropdown style="width:75%;" name="directReporteeCompetencyList" [disabled]="false"
+                                        [placeholder]="'Select Competency'" [data]="directReporteeCompetencyList"
+                                        [settings]="competencyDropdownSettings"
+[(ngModel)]="seletedDirectReporteeCompetencyList"
+                                        (onSelect)="onSelectAllDirectReporteeCompetency($event)"
+                                        (onSelectAll)="onSelectDirectReporteeCompetency($event)">
+                                    </ng-multiselect-dropdown>
                                 </div>
                             </div>
                         </div>
@@ -370,11 +353,10 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <ag-grid-angular *ngIf="currentDirectReportees && currentDirectReportees.length>0"
-                                style="width: auto; height: 200px;" class="ag-theme-alpine"
-                                [rowData]="currentDirectReportees" [gridOptions]="directReporteesOfEmpGridOptions"
-                                [pagination]="true" [paginationPageSize]="10"
-                                (gridReady)="onDirectReporteeGridReady($event)"
+                            <ag-grid-angular style="width: auto; height: 200px;" class="ag-theme-alpine"
+                                [rowData]="selectedEmployeeDirectReportees||[]"
+                                [gridOptions]="directReporteesOfEmpGridOptions" [pagination]="true"
+                                [paginationPageSize]="10" (gridReady)="onDirectReporteeGridReady($event)"
                                 (rowClicked)="onDirectReporteeGridRowClicked($event)">
                             </ag-grid-angular>
                         </div>
