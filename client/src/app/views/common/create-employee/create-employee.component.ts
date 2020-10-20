@@ -199,14 +199,14 @@ export class CreateEmployeeComponent implements OnInit {
       this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
       this.perfApp.requestBody.ParentUser=this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id;
       this.perfApp.requestBody.IgnoreEvalAdminCreated=false;
-      let roleCode= this.appRoles.filter(e=>e._id==this.perfApp.requestBody.ApplicationRole[0])[0];
+     // let roleCode= this.appRoles.filter(e=>e._id==this.perfApp.requestBody.ApplicationRole[0])[0];
       let selectedRoles= [];
       this.perfApp.requestBody.ApplicationRole.forEach(element => {
             this.appRoles.filter(e=>
           {if (e._id==element)  selectedRoles.push( e.RoleCode)} )
             
       });
-      this.perfApp.requestBody.Role=roleCode.RoleCode;
+      this.perfApp.requestBody.Role='EO';
       this.perfApp.requestBody.SelectedRoles=selectedRoles;
       this.perfApp.requestBody.RoleEffFrom= this.perfApp.requestBody.JoiningDate;
     // }

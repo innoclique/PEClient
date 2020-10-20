@@ -192,7 +192,7 @@ export class SetupEmployeeComponent implements OnInit {
       cellRenderer: (data) => {
 
         var returnString = '';
-        returnString += `<i class="fa fa-edit" style="cursor:pointer; padding: 7px 20px 0 0;
+        returnString += `<i class="cui-pencil" style="cursor:pointer; padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="EF" title="Edit"></i>`;
         return returnString;
       }
@@ -409,14 +409,14 @@ saveEmployee(){
     this.perfApp.requestBody.RoleEffFrom= this.perfApp.requestBody.JoiningDate;
   }
 
-  let roleCode= this.appRoles.filter(e=>e._id==this.perfApp.requestBody.ApplicationRole[0])[0];
+  //let roleCode= this.appRoles.filter(e=>e._id==this.perfApp.requestBody.ApplicationRole[0])[0];
   let selectedRoles= [];
   this.perfApp.requestBody.ApplicationRole.forEach(element => {
         this.appRoles.filter(e=>
       {if (e._id==element)  selectedRoles.push( e.RoleCode)} )
         
   });
-  this.perfApp.requestBody.Role=roleCode.RoleCode;
+  //this.perfApp.requestBody.Role=roleCode.RoleCode;
   this.perfApp.requestBody.SelectedRoles=selectedRoles;
   
   this.callEmpApi();
