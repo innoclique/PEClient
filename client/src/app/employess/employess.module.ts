@@ -25,10 +25,14 @@ import { ActionPlanComponent } from './action-plan/action-plan.component';
 
 import{DashboardComponent} from '../employess/dashboard/dashboard.component'
 import { SharedModule } from '../shared/shared.module';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { CreateGoalsComponent } from './create-goals/create-goals.component';
+import { GoalsComponent } from './goals/goals.component';
+import { StrengthsComponent } from './strengths/strengths.component';
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
-     AccomplishmentsComponent, CurrentEvaluationComponent, ActionPlanComponent,DashboardComponent],
+     AccomplishmentsComponent, CurrentEvaluationComponent, ActionPlanComponent,DashboardComponent, CreateGoalsComponent, GoalsComponent, StrengthsComponent],
   imports: [
     CommonModule,
     EmployessRoutingModule,
@@ -42,6 +46,7 @@ import { SharedModule } from '../shared/shared.module';
     HttpClientModule,
     FormsModule,
     RouterModule,
+    TabsModule,
     EvalCommonModule,
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),

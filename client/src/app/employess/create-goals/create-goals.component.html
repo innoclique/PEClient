@@ -1,0 +1,92 @@
+
+
+
+<div formGroupName="goalsActionItemsForm" class="invitation_model_in_table table-responsive p-15">
+    <table *ngIf="poItemRows?.length<=9" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Action Step</th>
+          <th>Progress Indicators</th>
+          <th>Barriers</th>
+          <th>Target Date</th>
+          <th>Other Participants</th>
+          <th>Status</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="invitation_model_search">
+            <input formControlName="ActionStep"
+              [ngClass]="{ 'is-invalid': rowItemSubmitted && k.ActionStep.errors }"
+              
+     class=" form-control">
+            <div *ngIf="rowItemSubmitted && k.ActionStep.errors" class="invalid-feedback">
+              <div *ngIf="k.ActionStep.errors.required">ActionStep is required</div>
+            </div>
+          </td>
+          <td class="invitation_model_search">
+            <input formControlName="Description"
+              [ngClass]="{ 'is-invalid': rowItemSubmitted && k.Description.errors }"
+             
+     class=" form-control">
+            <div *ngIf="rowItemSubmitted && k.Description.errors" class="invalid-feedback">
+              <div *ngIf="k.Description.errors.required">Description is required</div>
+            </div>
+          </td>
+          <td class="invitation_model_search">
+            <input formControlName="Make" [ngClass]="{'is-invalid': rowItemSubmitted && k.Make.errors }"
+              
+                class=" form-control">
+            <div *ngIf="rowItemSubmitted && k.Make.errors" class="invalid-feedback">
+              <div *ngIf="k.Make.errors.required">Make is required</div>
+            </div>
+          </td>
+          <td style="width: 100px; border:none;margin:2px 0 2px;" class="invitation_model_in">
+            <input type="number" min="1" [ngClass]="{ 'is-invalid': rowItemSubmitted && k.Qty.errors }" formControlName="Qty"
+              class="form-control" placeholder="Qty">
+            <div *ngIf="rowItemSubmitted && k.Qty.errors" class="invalid-feedback">
+              <div *ngIf="k.Qty.errors.required">Quantity is required</div>
+            </div>
+          </td>
+          <td class="invitation_model_search">
+            <input formControlName="Task"
+            [ngClass]="{ 'is-invalid': rowItemSubmitted && k.Units.errors }" formControlName="Units"
+          
+            class="form-control" placeholder="Units">
+          
+            <div *ngIf="rowItemSubmitted && k.Units.errors" class="invalid-feedback">
+              <div *ngIf="k.Units.errors.required">Units is required</div>
+            </div>
+          </td>
+          <td class="invitation_model_search">
+            <input formControlName="Notes" class="form-control" placeholder="Notes">
+          </td>
+          <td>
+            <button type="button" class="btn btn-primary" (click)="addItemRow()">Add</button>
+          </td>
+        </tr>
+
+
+      </tbody>
+    </table>
+    <div style="height: calc(100% - 80px);">
+      <!-- <ag-grid-angular #agGrid id="myGrid" style="width:100%;height:250px" class="ag-theme-balham"
+        [rowData]="poItemRows" [columnDefs]="poItemColumns" (rowClicked)="onRowClicked($event)"
+        [getRowHeight]="getRowHeight" (gridReady)="onGridReady($event)"></ag-grid-angular> -->
+
+
+
+
+        <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine" 
+              
+        [rowData]="goalsItemRows"
+        [gridOptions]="goalsItemColumns"
+        
+        (gridReady)="onClientGridReady($event)"
+        (rowClicked)="onRowClicked($event)"
+        >
+        </ag-grid-angular>
+
+    </div>
+  </div>

@@ -3,11 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { AccomplishmentsComponent } from './accomplishments/accomplishments.component';
 import { ActionPlanComponent } from './action-plan/action-plan.component';
 import { CurrentEvaluationComponent } from './current-evaluation/current-evaluation.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { GoalsComponent } from './goals/goals.component';
 import { KpiSettingsComponent } from './kpi-settings/kpi-settings.component';
 import { KpiSetupComponent } from './kpi-setup/kpi-setup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReportsComponent } from './reports/reports.component';
+import { StrengthsComponent } from './strengths/strengths.component';
 
 
 
@@ -47,7 +48,20 @@ const routes: Routes = [
         path:'action-plan',
         component:ActionPlanComponent,
         data:{title:'Action-Plan'}
-      }, {
+      },
+      {
+        path:'goals',
+        component:GoalsComponent,
+        data:{title:'Goals'}
+      },
+
+      {
+        path:'strengths',
+        component:StrengthsComponent,
+        data:{title:'Strengths'}
+      },
+      
+      {
         path:'current-evaluation',
         component:CurrentEvaluationComponent,
         data:{title:'Current-Evaluation'}
