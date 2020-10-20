@@ -47,7 +47,7 @@ export class RollevaluationComponent implements OnInit {
   public selectedModel: any;
   public selectedEmployees: any = [];
   public selectedEmployeePeers: any = [];
-  public selectedEmployeeDirectReportees: any = [];  
+  public selectedEmployeeDirectReportees: any = [];
   public competencyList: any = [];
   public peersCompetencyList: any = [];
   public selectedPeersCompetencyList: any = [];
@@ -96,12 +96,12 @@ export class RollevaluationComponent implements OnInit {
     if (!this.selectedEmployee.Peers) {
       this.selectedEmployee.Peers = [];
     }
-    this.selectedEmployee.Peers=items;
+    this.selectedEmployee.Peers = items;
     // items.map(x => {
     //   var _f = Object.assign({}, x.row);
     //   this.selectedEmployee.Peers.push(x);
     // })
-   // this.selectedEmployeePeers = this.selectedEmployee.Peers
+    // this.selectedEmployeePeers = this.selectedEmployee.Peers
     console.log('onSelectAll peers', this.selectedEmployee.Peers);
     if (this.peersForEmpGridOptions.api) {
       this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
@@ -114,7 +114,7 @@ export class RollevaluationComponent implements OnInit {
     if (this.peersForEmpGridOptions.api) {
       this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
     }
-    this.selectedEmployeePeers =[...this.selectedEmployee.Peers]
+    this.selectedEmployeePeers = [...this.selectedEmployee.Peers]
   }
   onPeerDeSelect(item: any) {
     var _position = this.selectedEmployee.Peers.indexOf(item);
@@ -126,7 +126,7 @@ export class RollevaluationComponent implements OnInit {
   closePeersModel() {
     this.selectePeersViewRef.hide();
     this.selectedEmployee = {};
-    this.selectedEmployeePeers=[];
+    this.selectedEmployeePeers = [];
   }
 
   savePeers() {
@@ -146,7 +146,7 @@ export class RollevaluationComponent implements OnInit {
   }
 
   onSelectAllPeersCompetency(items) {
-    this.selectedPeersCompetencyList=items;
+    this.selectedPeersCompetencyList = items;
   }
   onSelectPeersCompetency(item) {
     this.selectedPeersCompetencyList.push(item)
@@ -162,7 +162,7 @@ export class RollevaluationComponent implements OnInit {
   onDeSelectDirectReporteeCompetency(item) {
     var _position = this.seletedDirectReporteeCompetencyList.indexOf(item);
     this.seletedDirectReporteeCompetencyList.splice(_position, 1);
-  
+
   }
   onDeSelectAllDirectReporteeCompetency(items) {
     this.seletedDirectReporteeCompetencyList = []
@@ -177,16 +177,16 @@ export class RollevaluationComponent implements OnInit {
     this.perfApp.requestBody = { id: this.selectedEmployee._id };
     this.perfApp.route = "app"
     this.perfApp.CallAPI().subscribe(x => {
-      this.currentEmployeeDirectReportees=[];
+      this.currentEmployeeDirectReportees = [];
       console.table('emp list ', x)
-      x.map(emp => {        
-        var _f :any= {};      
-            _f._id = emp._id;
-            _f.displayTemplate = `${emp.FirstName}-${emp.LastName}-${emp.Email}`,
-        this.currentEmployeeDirectReportees.push(_f);
+      x.map(emp => {
+        var _f: any = {};
+        _f._id = emp._id;
+        _f.displayTemplate = `${emp.FirstName}-${emp.LastName}-${emp.Email}`,
+          this.currentEmployeeDirectReportees.push(_f);
       });
 
-     // this.currentEmployeeDirectReportees = x;
+      // this.currentEmployeeDirectReportees = x;
       this.selecteDirectReporteeViewRef = this.modalService.show(this.selecteDirectReporteeView, this.config)
     }, error => {
       console.log('error while adding eval', error)
@@ -211,7 +211,7 @@ export class RollevaluationComponent implements OnInit {
     if (!this.selectedEmployee.DirectReportees) {
       this.selectedEmployee.DirectReportees = [];
     }
-    this.selectedEmployee.DirectReportees=items;
+    this.selectedEmployee.DirectReportees = items;
     this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees
     console.log('onSelectAll', items);
     if (this.directReporteesOfEmpGridOptions.api) {
@@ -253,7 +253,7 @@ export class RollevaluationComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     this.initForm();
-    this.getEmployees();
+    this.getEmployees();    
     this.getModels();
     //  this.getCompetencyList();
     //this.getPeersForEmp();
@@ -318,35 +318,43 @@ export class RollevaluationComponent implements OnInit {
   get f() {
     return this.evaluationForm.controls;
   }
-  formattedPeers:any=[]
+  formattedPeers: any = []
   getEmployees() {
     this.perfApp.route = "app";
-    this.perfApp.method = "GetAllEmployees",
-      this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id }
+    this.perfApp.method = "GetUnlistedEmployees",
+      //  this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id }
+      this.perfApp.requestBody = { company: this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
       if (c && c.length > 0) {
         this.employeesList$ = c
-        var clonedArray = this.employeesList$.map((_arrayElement) => Object.assign({}, _arrayElement));
         this.employeesList$.map(x => {
           var _f = Object.assign({}, x);
           x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
             x.row = _f;
         });
         console.log('formated data', this.employeesList$);
-
-        console.log(clonedArray);
-        clonedArray.map(x => {
-          var _f :any= {};
-      
-            _f._id = x._id;
-            _f.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
-this.formattedPeers.push(_f);
-        });
-        debugger
-        this.peersList = clonedArray;
-        console.log('formated peers data', clonedArray);
       }
+    })
+  }
+  getPeersForEmployees() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetPeers",
+    this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id,'id':this.selectedEmployee._id }    
+    this.perfApp.CallAPI().subscribe(c => {
+      console.log('employeed data', c);
+      if (c && c.length > 0) {
+        c.map(x => {
+          var _f: any = {};
+          _f._id = x._id;
+          _f.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
+            this.formattedPeers.push(_f);
+        });
+        debugger        
+        this.peersList = c;
+        console.log('formated peers data',  this.formattedPeers);
+      }
+      this.selectePeersViewRef = this.modalService.show(this.selectePeersView, this.config);
     })
   }
   submitEvaluation() {
@@ -472,7 +480,7 @@ this.formattedPeers.push(_f);
         case "chooseDirectReports":
           return this.selectDirectReportees();
         case "choosePeers":
-          return this.selectPeersForEmployee();
+          return this.openPeersView();
         case "deleteEmp":
           return this.deleteEmpFromList();
       }
@@ -534,11 +542,13 @@ this.formattedPeers.push(_f);
 
   }
   public currentPeerCompetencyList: any = [];
-  selectPeersForEmployee() {
+  openPeersView() {
+    debugger
     this.PeersCompetencyMessage = this.selectedEmployee.PeersCompetencyMessage;
     this.selectedEmployeePeers = this.selectedEmployee.Peers || [];
     this.currentPeerCompetencyList = this.selectedEmployee.PeersCompetencyList;
-    this.selectePeersViewRef = this.modalService.show(this.selectePeersView, this.config);
+    this.getPeersForEmployees();
+    
   }
   public onPeersRowClicked(e) {
     debugger
@@ -605,25 +615,27 @@ this.formattedPeers.push(_f);
   selectDirectReportees() {
     debugger
     this.directReporteeCompetencyMessage = this.selectedEmployee.DirectReporteeComptencyMessage;
-    this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees||[];
-this.seletedDirectReporteeCompetencyList=this.selectedEmployee.DirectReportsCompetency;
-if(this.selectedEmployeeDirectReportees.length>0 && this.directReporteesOfEmpGridOptions.api){
-  this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployeeDirectReportees);
-}
+    this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees || [];
+    this.seletedDirectReporteeCompetencyList = this.selectedEmployee.DirectReportsCompetency;
+    if (this.selectedEmployeeDirectReportees.length > 0 && this.directReporteesOfEmpGridOptions.api) {
+      this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployeeDirectReportees);
+    }
     this.getDirectReportees();
   }
   closeDrModel() {
     this.selecteDirectReporteeViewRef.hide();
     this.selectedEmployee = {};
     this.currentEmployeeSelectedDirectReportees = [];
-    this.selectedEmployeeDirectReportees=[]
+    this.selectedEmployeeDirectReportees = []
   }
   getDirectReporteeGridCols() {
     return [
       {
         headerName: 'Direct Reportee', sortable: true, filter: true,
-        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="">
-        ${data.data.displayTemplate}</span>` }
+        cellRenderer: (data) => {
+          return `<span style="color:blue;cursor:pointer" data-action-type="">
+        ${data.data.displayTemplate}</span>`
+        }
       },
 
       {
@@ -662,7 +674,7 @@ if(this.selectedEmployeeDirectReportees.length>0 && this.directReporteesOfEmpGri
     var _p = this.selectedEmployeeDirectReportees.indexOf(this.currentDirectReportee);
     this.selectedEmployeeDirectReportees.splice(_p, 1);
     this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployeeDirectReportees);
-    this.selectedEmployeeDirectReportees=[...this.selectedEmployeeDirectReportees]
+    this.selectedEmployeeDirectReportees = [...this.selectedEmployeeDirectReportees]
   }
   saveDirectReportees() {
     if (this.seletedDirectReporteeCompetencyList.length === 0) {

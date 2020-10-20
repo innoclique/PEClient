@@ -134,17 +134,6 @@ export class EvaluationslistComponent implements OnInit {
         });
         console.log('formated data', this.employeesList$);
 
-        console.log(clonedArray);
-        clonedArray.map(x => {
-          var _f :any= {};
-      
-            _f._id = x._id;
-            _f.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
-this.formattedPeers.push(_f);
-        });
-        debugger
-        this.peersList = clonedArray;
-        console.log('formated peers data', clonedArray);
       }
     })
   }
@@ -286,6 +275,28 @@ this.seletedDirectReporteeCompetencyList=this.selectedEmployee.DirectReporteeCom
     this.getDirectReportees();
     this.getCompetencyList();
   }
+  getPeersForEmployees() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetPeers",
+    this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? 
+    this.currentUser.ParentUser : this.currentUser._id,
+    'id':this.selectedEmployee.Employee._id }    
+    this.perfApp.CallAPI().subscribe(c => {
+      console.log('employeed data', c);
+      if (c && c.length > 0) {
+        c.map(x => {
+          var _f: any = {};
+          _f._id = x._id;
+          _f.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
+            this.formattedPeers.push(_f);
+        });
+        debugger        
+        this.peersList = c;
+        console.log('formated peers data',  this.formattedPeers);
+      }
+      this.selectePeersViewRef = this.modalService.show(this.selectePeersView, this.config);
+    })
+  }
   openPeerView() {    
     debugger
   this.PeersCompetencyMessage = this.selectedEmployee.PeersCompetencyMessage;      
@@ -293,8 +304,8 @@ this.seletedDirectReporteeCompetencyList=this.selectedEmployee.DirectReporteeCom
   
   this.selectedModel=this.selectedEmployee.Model;
   this.currentPeerCompetencyList=this.selectedEmployee.PeersCompetencyList;
-  this.selectePeersViewRef = this.modalService.show(this.selectePeersView, this.config);
   
+  this.getPeersForEmployees();
   this.getCompetencyList();
 }
 public deleteEmpFromList() {
