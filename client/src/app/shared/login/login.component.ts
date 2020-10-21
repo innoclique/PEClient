@@ -84,6 +84,9 @@ export class LoginComponent implements OnInit {
         if (!x.User.IsPswChangedOnFirstLogin) {
           this.router.navigate(['resetPassword']);
         } else {
+          if(x.Role==='CSA'){
+            this.router.navigate(['ea']);
+          }
           if(x.Role==='EA'){
             this.router.navigate(['ea']);
           }else if(x.Role==='PSA'){

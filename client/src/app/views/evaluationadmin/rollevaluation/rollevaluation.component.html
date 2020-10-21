@@ -120,7 +120,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <input [attr.disabled]="isCreate?null:'true'" (change)="onChangeKPIFor($event)"
+                                        <input  (change)="onChangeKPIFor($event)"
                                             formControlName="ActivateKPI" class="form-check-input" type="checkbox"
                                             id="ActivateKPI">
                                         <label class="form-check-label" for="ActivateKPI">
@@ -131,7 +131,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <input [attr.disabled]="isCreate?null:'true'"
+                                        <input 
                                             formControlName="ActivateActionPlan" class="form-check-input"
                                             type="checkbox" id="ActivateActionPlan">
                                         <label class="form-check-label" for="ActivateActionPlan">
