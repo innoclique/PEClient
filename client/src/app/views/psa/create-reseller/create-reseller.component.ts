@@ -112,7 +112,7 @@ export class CreateResellerComponent implements OnInit {
       ])],
       Phone: [null, Validators.compose([
         Validators.required, 
-        Validators.minLength(10),        
+        Validators.minLength(12),        
         Validators.pattern(/[^0-9]*/g),        
       ])],
       PhoneExt: [null, Validators.compose([

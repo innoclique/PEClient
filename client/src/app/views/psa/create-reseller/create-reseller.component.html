@@ -110,12 +110,12 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text redStar">Phone</span>
                       </div>
-                      <input maxlength="10"  class="form-control"
+                      <input maxlength="12"  class="form-control"
                         [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Phone.errors }"
                          formControlName="Phone" numbersOnly required>
                       <div *ngIf="isFormSubmitted  && f.Phone.errors" class="invalid-feedback">
                         <div *ngIf="f.Phone.errors.required">Phone Number is required</div>  
-                        <div *ngIf="f.Phone.errors.pattern">Phone Number must be 10 digit Number.</div>
+                        <div *ngIf="f.Phone.errors.pattern">Phone Number must be 12 digit Number (including country code).</div>
   
   
                       </div>
@@ -206,7 +206,7 @@
                         formControlName="AdminPhone" numbersOnly>
                       <div *ngIf="isFormSubmitted && f.AdminPhone.errors" class="invalid-feedback">
                         <div *ngIf="f.AdminPhone.errors.required">Admin Phone is required</div>
-                        <div *ngIf="f.AdminPhone.errors.pattern">Admin Phone Number must be 10 digit Number.</div>
+                        <div *ngIf="f.AdminPhone.errors.pattern">Admin Phone Number must be 12 digit Number.</div>
                       </div>
                     </div>
                   </div>

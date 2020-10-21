@@ -115,7 +115,7 @@
                     <div *ngIf="isFormSubmitted  && f.Phone.errors" class="invalid-feedback">
                       <div *ngIf="f.Phone.errors.required">Phone Number is required</div>
 
-                      <div *ngIf="f.Phone.errors.pattern">Phone Number must be 10 digit Number.</div>
+                      <div *ngIf="f.Phone.errors.pattern">Phone Number must be 12 digit Number (including country code).</div>
 
 
                     </div>
