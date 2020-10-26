@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AccomplishmentsComponent } from './accomplishments/accomplishments.component';
 import { ActionPlanComponent } from './action-plan/action-plan.component';
+import { CreateGoalsComponent } from './create-goals/create-goals.component';
 import { CurrentEvaluationComponent } from './current-evaluation/current-evaluation.component';
 import { GoalsComponent } from './goals/goals.component';
 import { KpiSettingsComponent } from './kpi-settings/kpi-settings.component';
@@ -51,7 +52,8 @@ const routes: Routes = [
       },
       {
         path:'goals',
-        component:GoalsComponent,
+         component:GoalsComponent,
+        // component:CreateGoalsComponent,
         data:{title:'Goals'}
       },
 

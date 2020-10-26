@@ -26,7 +26,7 @@ export class DefaultLayoutComponent implements OnInit {
     this.sidebarMinimized = e;
   }
   public logout() {
-    debugger
+    
     this.authService.LogOut()
     this.router.navigate(['login'])
   }
@@ -39,7 +39,7 @@ export class DefaultLayoutComponent implements OnInit {
     this.translate.use(lang);
   }
   ngOnInit() {
-    debugger
+    
     if (this.user) {
       if (this.user.SelectedRoles) {
         var navigationMenu = [];

@@ -1,85 +1,250 @@
-<!-- 
+<div class="animated fadeIn">
+  <div class="row">
+      <div class="col-md-12">
+          <div class="card">
+              <div class="card-header">
+                  Devlopment Goals
+
+                  <div class="form-group form-actions pull-right m-0">
+                    <i class=" cui-account-logout icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+                    font-size: 17px;"  (click)="router.navigate(['em/review-kpi-list'])" title="Back to list" ></i>    
+
+                  </div>
+                  
+              </div>
+              <div class="card-body">
 
 
-<div formGroupName="goalsActionItemsForm" class="invitation_model_in_table table-responsive p-15">
-    <table *ngIf="poItemRows?.length<=9" class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>Action Step</th>
-          <th>Progress Indicators</th>
-          <th>Barriers</th>
-          <th>Target Date</th>
-          <th>Other Participants</th>
-          <th>Status</th>
-          <th>&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="invitation_model_search">
-            <input formControlName="ActionStep"
-              [ngClass]="{ 'is-invalid': rowItemSubmitted && k.ActionStep.errors }"
+                  <form [formGroup]="goalsBuildForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
+                   class="ng-untouched ng-pristine ng-valid">
+
+
+                   <div class="form-group row">
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text redStar">Developmental Goal</span>
+                              </div>
+                              <input max="500" maxlength="500" class="form-control" type="text"
+                              [readonly]="currentAction != 'create' "
+                                  [ngClass]="{ 'is-invalid': f.DevGoal.touched  &&  f.DevGoal.invalid }"
+                                  formControlName="DevGoal" name="DevGoal" required
+                                  [matAutocomplete]="devGoalsAuto">
+
+                                  <mat-autocomplete #devGoalsAuto="matAutocomplete" (optionSelected)="onDevGoalsAutoSelected($event)" [displayWith]="displayDevGoalFn" >
+                                      <mat-option *ngFor="let option of filteredOptionsDevGoals | async" [value]="option">
+                                        {{option.DevGoal}}
+                                      </mat-option>
+                                     </mat-autocomplete>
+
+                              <div *ngIf="f.DevGoal.touched && f.DevGoal.invalid" class="invalid-feedback">
+                                <div *ngIf="f.DevGoal?.errors.required">Please provide Developmental Goal.</div>
+                                  <div *ngIf="f.DevGoal.errors.minlength">KPI Name must be at least 2
+                                      characters </div>
+                                  <div *ngIf="f.DevGoal.errors.hasKPISplChars">Allowed special characters are
+                                      (.,-,(,),&,#,:,/,?) </div>
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text ">KPI</span>
+                                </div>
+                                <input max="500" maxlength="500" class="form-control" type="text"
+                                [readonly]="currentAction != 'create' "
+                                    [ngClass]="{ 'is-invalid': f.Kpi.touched  &&  f.Kpi.invalid }"
+                                    formControlName="Kpi" name="Kpi" 
+                                    [matAutocomplete]="kpiAuto">
+
+                                    <mat-autocomplete #kpiAuto="matAutocomplete" (optionSelected)="onKpiAutoSelected($event)"  [displayWith]="displayKPIFn" >
+                                        <mat-option *ngFor="let option of filteredOptionsKPI | async" [value]="option">
+                                          {{option.Kpi}}
+                                        </mat-option>
+                                       </mat-autocomplete>
+
+                                <div *ngIf="f.Kpi.touched && f.Kpi.invalid" class="invalid-feedback">
+
+                                    <div *ngIf="f.Kpi.errors.minlength">KPI Name must be at least 2
+                                        characters </div>
+                                    <div *ngIf="f.Kpi.errors.hasKPISplChars">Allowed special characters are
+                                        (.,-,(,),&,#,:,/,?) </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text redStar">Desired Outcomes</span>
+                          </div>
+                          <textarea maxlength="1000" class="form-control"  cols="" rows="2" required
+                          [ngClass]="{ 'is-invalid': f.DesiredOutcomes.touched  &&  f.DesiredOutcomes.invalid }"
+                          formControlName="DesiredOutcomes"  name="DesiredOutcomes"  >  </textarea>
+
+                          <div *ngIf="f.DesiredOutcomes?.touched && f.DesiredOutcomes?.errors" class="invalid-feedback">
+                            <div *ngIf="f.DesiredOutcomes?.errors.required">Desired Outcome is mandatory.</div>
+                          </div>
+  
+                        
+  
+                        </div>
+                      </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                      <div class="form-check">
+                          <input 
+                              formControlName="MakePrivate" class="form-check-input" type="checkbox"
+                              id="MakePrivate">
+                          <label class="form-check-label" for="MakePrivate">
+                            Make Private
+                          </label>
+                      </div>
+
+                  </div>
+                  </div>
+
+                </div>
+
+
+
+
+
+                <div formGroupName="GoalActionItems" class="invitation_model_in_table table-responsive p-15">
+                  <table class="table table-bordered table-striped">
+                    <!-- <thead>
+                      <tr>
+                        <th>Action Step</th>
+                        <th>Progress Indicators</th>
+                        <th>Barriers</th>
+                        <th>Target Date</th>
+                        <th>Other Participants</th>
+                        <th>Status</th>
+                        <th>&nbsp;</th>
+                      </tr>
+                    </thead> -->
+                    <tbody>
+                      <tr>
+                        <td class="invitation_model_search">
+                          <input formControlName="ActionStep" placeholder="ActionStep"
+                            [ngClass]="{ 'is-invalid': rowItemSubmitted && k.ActionStep?.errors }"
+                                 class=" form-control">
+                          <div *ngIf="rowItemSubmitted && k.ActionStep?.errors" class="invalid-feedback">
+                            <div *ngIf="k.ActionStep?.errors.required">Action Step is required</div>
+                          </div>
+                        </td>
+                          <td class="invitation_model_search">
+                          <input formControlName="ProgressIndicators" placeholder="Progress Indicators"
+                            [ngClass]="{ 'is-invalid': rowItemSubmitted && k.ProgressIndicators?.errors }"
+                           
+                   class=" form-control">
+                          <div *ngIf="rowItemSubmitted && k.ProgressIndicators?.errors" class="invalid-feedback">
+                            <div *ngIf="k.ProgressIndicators?.errors.required">Progress Indicators is required</div>
+                          </div>
+                        </td>
+                        <td class="invitation_model_search">
+                          <input formControlName="Barriers"      placeholder="Barriers"                class=" form-control">
+                          
+                        </td>
+                        <td style="width: 100px; border:none;margin:2px 0 2px;" class="invitation_model_in">
+                          <input  [ngClass]="{ 'is-invalid': rowItemSubmitted && k.TargetDate?.errors }" formControlName="TargetDate"
+                            class="form-control " placeholder="Target Date"
+                            (click)="picker.open()" readonly matInput  [matDatepicker]="picker">
               
-     class=" form-control">
-            <div *ngIf="rowItemSubmitted && k.ActionStep.errors" class="invalid-feedback">
-              <div *ngIf="k.ActionStep.errors.required">ActionStep is required</div>
-            </div>
-          </td>
-          <td class="invitation_model_search">
-            <input formControlName="Description"
-              [ngClass]="{ 'is-invalid': rowItemSubmitted && k.Description.errors }"
-             
-     class=" form-control">
-            <div *ngIf="rowItemSubmitted && k.Description.errors" class="invalid-feedback">
-              <div *ngIf="k.Description.errors.required">Description is required</div>
-            </div>
-          </td>
-          <td class="invitation_model_search">
-            <input formControlName="Make" [ngClass]="{'is-invalid': rowItemSubmitted && k.Make.errors }"
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
               
-                class=" form-control">
-            <div *ngIf="rowItemSubmitted && k.Make.errors" class="invalid-feedback">
-              <div *ngIf="k.Make.errors.required">Make is required</div>
-            </div>
-          </td>
-          <td style="width: 100px; border:none;margin:2px 0 2px;" class="invitation_model_in">
-            <input type="number" min="1" [ngClass]="{ 'is-invalid': rowItemSubmitted && k.Qty.errors }" formControlName="Qty"
-              class="form-control" placeholder="Qty">
-            <div *ngIf="rowItemSubmitted && k.Qty.errors" class="invalid-feedback">
-              <div *ngIf="k.Qty.errors.required">Quantity is required</div>
-            </div>
-          </td>
-          <td class="invitation_model_search">
-            <input formControlName="Task"
-            [ngClass]="{ 'is-invalid': rowItemSubmitted && k.Units.errors }" formControlName="Units"
-          
-            class="form-control" placeholder="Units">
-          
-            <div *ngIf="rowItemSubmitted && k.Units.errors" class="invalid-feedback">
-              <div *ngIf="k.Units.errors.required">Units is required</div>
-            </div>
-          </td>
-          <td class="invitation_model_search">
-            <input formControlName="Notes" class="form-control" placeholder="Notes">
-          </td>
-          <td>
-            <button type="button" class="btn btn-primary" (click)="addItemRow()">Add</button>
-          </td>
-        </tr>
-
-
-      </tbody>
-    </table>
-    <div style="height: calc(100% - 80px);">
-        <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine" 
+                          <div *ngIf="rowItemSubmitted && k.TargetDate?.errors" class="invalid-feedback">
+                            <div *ngIf="k.TargetDate?.errors.required">Target Date is required</div>
+                          </div>
+                        </td>
+                        <td class="invitation_model_search">
+                          <input formControlName="OtherParticipants"    placeholder="Other Participants"    class="form-control"
+                          [matAutocomplete]="auto2">
+                          <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn" >
+                           <mat-option *ngFor="let option of filteredOptionsOP | async" [value]="option">
+                             {{option.FirstName}}
+                           </mat-option>
+                          </mat-autocomplete>
+                        
+                        </td>
+                        <td class="invitation_model_search">
+                          <select class="form-control" placeholder="Status"
+                                                    [ngClass]="{ 'is-invalid': rowItemSubmitted  &&  k.Status.invalid }"
+                                                    formControlName="Status"  name="Status" required   >
+                                                      <option value="" disabled >Please select</option>
+                                                      <option *ngFor="let e of devGoalsStatus" [value]="e" >{{e}}</option>
+                                                      
+                                                    </select>
+                                                    <div *ngIf="rowItemSubmitted && k.Status.invalid" class="invalid-feedback">
+                                                      <div *ngIf="k.Status?.errors.required">Status is mandatory.</div>
+                                                  </div>
+                        </td> 
+                        <td>
+                          <button  type="button" class="btn btn-primary" (click)="addItemRow()">Add</button>
+                        </td>  
+                      </tr>
               
-        [rowData]="goalsItemRows"
-        [gridOptions]="goalsItemColumns"
-        
-        (gridReady)="onClientGridReady($event)"
-        (rowClicked)="onRowClicked($event)"
-        >
-        </ag-grid-angular>
+              
+                    </tbody>
+                  </table>
+                  <!-- <div style="height: calc(100% - 80px);"> -->
+                      <ag-grid-angular style="width: auto; height: 200px;" class="ag-theme-alpine" 
+                            
+                      [rowData]="goalsItemRows"
+                      [gridOptions]="goalsItemColumns"
+                      
+                      (gridReady)="onActionItemsGridReady($event)"
+                      (rowClicked)="onRowActionItemsClicked($event)"
+                      >
+                      </ag-grid-angular>
+              
+                  <!-- </div> -->
+                </div> 
 
-    </div>
-  </div> -->
+
+
+
+
+                <div *ngIf="currentAction != 'view'" class="form-group form-actions pull-right mt-2">
+                  <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>
+
+                  <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftDevGoal()" >Save</button>
+                
+                  <button [disabled]="!goalsBuildForm.valid" class="btn btn-sm btn-primary" (click)="submitGoal()" >{{currentAction=='edit'? 
+                      f.IsDraft?.value=='true' ? 'Submit': 'Update'
+                       :'Submit' }}</button>
+
+                  <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit KPIs</button>
+                </div>
+  
+                <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+
+
+
+                  </form>
+
+                </div>
+              </div>
+  
+          </div>
+      </div>
+  </div>
+
+

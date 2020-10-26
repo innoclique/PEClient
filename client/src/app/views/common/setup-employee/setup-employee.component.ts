@@ -75,6 +75,8 @@ export class SetupEmployeeComponent implements OnInit {
     this.loginUser=this.authService.getCurrentUser();
    this.getAllDepartments();
    this.getEmployees();
+   this.getManagersEmps();
+    this.getThirdSignatoryEmps();
 
    this.initEmpForm()
 
@@ -301,11 +303,60 @@ var add=""
  ${data.State.name?data.State.name+",":""}
   ${data.Country.name?data.Country.name:""}
  `
-//  if(data.City.name)
-this.empForm.patchValue({Address:add});
 
 }
 
+
+
+getManagersEmps(){
+  this.perfApp.route="app";
+  this.perfApp.method="GetManagers",
+  this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+  this.perfApp.CallAPI().subscribe(c=>{
+    
+    console.log('lients data',c);
+    if(c && c.length>0){
+      
+      this.employeeDirReportData=c;
+      this.filteredOptionsDR = this.empForm.controls['Manager'].valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value :  value? value.FirstName:""),
+        map(name => name ? this._filterDR(name) : this.employeeDirReportData.slice())
+      );
+    }
+   
+     
+  })
+
+}
+
+getThirdSignatoryEmps(){
+  this.perfApp.route="app";
+  this.perfApp.method="GetThirdSignatorys",
+  this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+  this.perfApp.CallAPI().subscribe(c=>{
+    
+    console.log('lients data',c);
+    if(c && c.length>0){
+
+
+      this.employeeThirdSigData=c;
+     
+    
+      this.filteredOptionsTS = this.empForm.controls['ThirdSignatory'].valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value? value.FirstName:""),
+        map(name => name ? this._filterTD(name) : this.employeeThirdSigData.slice())
+      );
+
+    }
+   
+     
+  })
+
+}
 
 
 public employeeData :any
@@ -324,23 +375,8 @@ getEmployees(){
     }
      // if(!row.isDraft)
      this.employeeDropDownData=c;
-     this.employeeThirdSigData=c;
-     this.employeeDirReportData=c;
      
     
-     this.filteredOptionsTS = this.empForm.controls['ThirdSignatory'].valueChanges
-     .pipe(
-       startWith(''),
-       map(value => typeof value === 'string' ? value : value? value.FirstName:""),
-       map(name => name ? this._filterTD(name) : this.employeeThirdSigData.slice())
-     );
-
-     this.filteredOptionsDR = this.empForm.controls['Manager'].valueChanges
-     .pipe(
-       startWith(''),
-       map(value => typeof value === 'string' ? value :  value? value.FirstName:""),
-       map(name => name ? this._filterDR(name) : this.employeeDirReportData.slice())
-     );
 
      this.filteredOptions = this.empForm.controls['CopiesTo'].valueChanges
      .pipe(
