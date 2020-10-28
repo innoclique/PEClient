@@ -51,9 +51,9 @@ const routes: Routes = [
         data:{title:'Action-Plan'}
       },
       {
-        path:'goals',
-         component:GoalsComponent,
-        // component:CreateGoalsComponent,
+        path:'dev-goal',
+        //  component:GoalsComponent,
+        component:CreateGoalsComponent,
         data:{title:'Goals'}
       },
 

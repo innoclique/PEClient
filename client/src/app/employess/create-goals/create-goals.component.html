@@ -7,7 +7,7 @@
 
                   <div class="form-group form-actions pull-right m-0">
                     <i class=" cui-account-logout icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-                    font-size: 17px;"  (click)="router.navigate(['em/review-kpi-list'])" title="Back to list" ></i>    
+                    font-size: 17px;"  (click)="navToGoalsList()" title="Back to list" ></i>    
 
                   </div>
                   
@@ -29,7 +29,7 @@
                               </div>
                               <input max="500" maxlength="500" class="form-control" type="text"
                               [readonly]="currentAction != 'create' "
-                                  [ngClass]="{ 'is-invalid': f.DevGoal.touched  &&  f.DevGoal.invalid }"
+                                  [ngClass]="{ 'is-invalid': (f.DevGoal.touched || submitClicked)  &&  f.DevGoal.invalid }"
                                   formControlName="DevGoal" name="DevGoal" required
                                   [matAutocomplete]="devGoalsAuto">
 
@@ -39,7 +39,7 @@
                                       </mat-option>
                                      </mat-autocomplete>
 
-                              <div *ngIf="f.DevGoal.touched && f.DevGoal.invalid" class="invalid-feedback">
+                              <div *ngIf=" (f.DevGoal.touched || submitClicked) && f.DevGoal.invalid" class="invalid-feedback">
                                 <div *ngIf="f.DevGoal?.errors.required">Please provide Developmental Goal.</div>
                                   <div *ngIf="f.DevGoal.errors.minlength">KPI Name must be at least 2
                                       characters </div>
@@ -70,13 +70,7 @@
                                         </mat-option>
                                        </mat-autocomplete>
 
-                                <div *ngIf="f.Kpi.touched && f.Kpi.invalid" class="invalid-feedback">
-
-                                    <div *ngIf="f.Kpi.errors.minlength">KPI Name must be at least 2
-                                        characters </div>
-                                    <div *ngIf="f.Kpi.errors.hasKPISplChars">Allowed special characters are
-                                        (.,-,(,),&,#,:,/,?) </div>
-                                </div>
+                                
 
                             </div>
                         </div>
@@ -93,11 +87,13 @@
                             <span class="input-group-text redStar">Desired Outcomes</span>
                           </div>
                           <textarea maxlength="1000" class="form-control"  cols="" rows="2" required
-                          [ngClass]="{ 'is-invalid': f.DesiredOutcomes.touched  &&  f.DesiredOutcomes.invalid }"
+                          [ngClass]="{ 'is-invalid': (f.DesiredOutcomes?.touched || submitClicked) &&  f.DesiredOutcomes.invalid }"
                           formControlName="DesiredOutcomes"  name="DesiredOutcomes"  >  </textarea>
 
-                          <div *ngIf="f.DesiredOutcomes?.touched && f.DesiredOutcomes?.errors" class="invalid-feedback">
+                          <div *ngIf="(f.DesiredOutcomes?.touched || submitClicked) && f.DesiredOutcomes?.errors" class="invalid-feedback">
                             <div *ngIf="f.DesiredOutcomes?.errors.required">Desired Outcome is mandatory.</div>
+                            <div *ngIf="f.DesiredOutcomes.errors.minlength">Desired Outcome  must be at least 2 characters </div>
+                            <div *ngIf="f.DesiredOutcomes.errors.hasKPISplChars">Allowed special characters are (.,-,(,),&,#,:,/,?) </div>
                           </div>
   
                         
@@ -109,7 +105,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                       <div class="form-check">
-                          <input 
+                          <input [checked]="f?.MakePrivate?.value "
                               formControlName="MakePrivate" class="form-check-input" type="checkbox"
                               id="MakePrivate">
                           <label class="form-check-label" for="MakePrivate">
@@ -126,8 +122,8 @@
 
 
 
-                <div formGroupName="GoalActionItems" class="invitation_model_in_table table-responsive p-15">
-                  <table class="table table-bordered table-striped">
+                <div  formGroupName="GoalActionItems" class="invitation_model_in_table table-responsive p-15">
+                  <table *ngIf="currentAction != 'view'"  class="table table-bordered table-striped">
                     <!-- <thead>
                       <tr>
                         <th>Action Step</th>
@@ -146,20 +142,24 @@
                             [ngClass]="{ 'is-invalid': rowItemSubmitted && k.ActionStep?.errors }"
                                  class=" form-control">
                           <div *ngIf="rowItemSubmitted && k.ActionStep?.errors" class="invalid-feedback">
-                            <div *ngIf="k.ActionStep?.errors.required">Action Step is required</div>
+                            <div *ngIf="k.ActionStep?.errors.required">Action Steps is mandatory.</div>
+                            <div *ngIf="k.ActionStep?.errors.minlength">Desired Outcome  must be at least 2 characters </div>
+                            <div *ngIf="k.ActionStep?.errors.hasKPISplChars">Allowed special characters are (.,-,(,),&,#,:,/,?) </div>
                           </div>
                         </td>
                           <td class="invitation_model_search">
-                          <input formControlName="ProgressIndicators" placeholder="Progress Indicators"
+                          <input max="1000" maxlength="1000" formControlName="ProgressIndicators" placeholder="Progress Indicators"
                             [ngClass]="{ 'is-invalid': rowItemSubmitted && k.ProgressIndicators?.errors }"
                            
                    class=" form-control">
                           <div *ngIf="rowItemSubmitted && k.ProgressIndicators?.errors" class="invalid-feedback">
-                            <div *ngIf="k.ProgressIndicators?.errors.required">Progress Indicators is required</div>
+                            <div *ngIf="k.ProgressIndicators?.errors.required">Progress Indicators is mandatory.</div>
+                            <div *ngIf="k.ProgressIndicators?.errors.minlength">Desired Outcome  must be at least 2 characters </div>
+                            <div *ngIf="k.ProgressIndicators?.errors.hasKPISplChars">Allowed special characters are (.,-,(,),&,#,:,/,?) </div>
                           </div>
                         </td>
                         <td class="invitation_model_search">
-                          <input formControlName="Barriers"      placeholder="Barriers"                class=" form-control">
+                          <input  max="1000" maxlength="1000" formControlName="Barriers"      placeholder="Barriers"                class=" form-control">
                           
                         </td>
                         <td style="width: 100px; border:none;margin:2px 0 2px;" class="invitation_model_in">
@@ -171,7 +171,7 @@
                             <mat-datepicker #picker></mat-datepicker>
               
                           <div *ngIf="rowItemSubmitted && k.TargetDate?.errors" class="invalid-feedback">
-                            <div *ngIf="k.TargetDate?.errors.required">Target Date is required</div>
+                            <div *ngIf="k.TargetDate?.errors.required">Target Date is mandatory.</div>
                           </div>
                         </td>
                         <td class="invitation_model_search">
@@ -222,16 +222,23 @@
 
 
 
+                <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
+                  <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre Kpi</button>
+                  <button [disabled]='selIndex+1 == empDevGoalsData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next Kpi</button>
+                  
+                </div>
+
+
                 <div *ngIf="currentAction != 'view'" class="form-group form-actions pull-right mt-2">
-                  <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>
+                  <button class="btn btn-sm btn-primary" (click)="navToGoalsList()" >Cancel</button>
 
                   <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftDevGoal()" >Save</button>
                 
-                  <button [disabled]="!goalsBuildForm.valid" class="btn btn-sm btn-primary" (click)="submitGoal()" >{{currentAction=='edit'? 
+                  <button  class="btn btn-sm btn-primary" (click)="conformSubmitDevGoals()" >{{currentAction=='edit'? 
                       f.IsDraft?.value=='true' ? 'Submit': 'Update'
                        :'Submit' }}</button>
 
-                  <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit KPIs</button>
+                  <!-- <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit KPIs</button> -->
                 </div>
   
                 <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
