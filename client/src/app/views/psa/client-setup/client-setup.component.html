@@ -138,14 +138,14 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Zip Code</span>
+                    <span class="input-group-text redStar">Pin/Zip Code</span>
                   </div>
                   <input maxlength="8" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.ZipCode.errors }"
                     formControlName="ZipCode" class="form-control">
 
 
                   <div *ngIf=" isFormSubmitted && f.ZipCode.errors" class="invalid-feedback">
-                    <div *ngIf="f.ZipCode.errors.required">Zip Code is required</div>
+                    <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is required</div>
                   </div>
                 </div>
               </div>
@@ -214,11 +214,11 @@ aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="form-group col-md-4 ">
               <label class="col-form-label redStar" for="inline-radios">Client Type:</label>
 
-              <label class="radio-inline">
+              <label class="radio-inline ml-2">
                 <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.ClientType.invalid }"
                   formControlName="ClientType" type="radio" name="ClientType" value="Reseller"> Reseller
               </label>
-              <label class="form-control" class="radio-inline">
+              <label class="form-control" class="radio-inline ml-2">
                 <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.ClientType.invalid }"
                   formControlName="ClientType" type="radio" name="ClientType" value="Client"> Client
               </label>
@@ -231,12 +231,12 @@ aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="form-group col-md-4 ">
               <label class="col-form-label redStar" for="inline-radios">Usage Type:</label>
 
-              <label class="radio-inline">
+              <label class="radio-inline ml-2">
                 <input formControlName="UsageType" name="UsageType"
                   [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="license">
                 License
               </label>
-              <label class="form-control" class="radio-inline">
+              <label class="form-control" class="radio-inline ml-2">
                 <input formControlName="UsageType" name="UsageType"
                   [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
                   value="countofEmployees"> # of Employees
@@ -594,11 +594,11 @@ aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="form-group col-md-4 ">
               <label class="col-form-label redStar" for="inline-radios">Ative:</label>
 
-              <label class="radio-inline">
+              <label class="radio-inline ml-2">
                 <input [checked]="true" [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
                   formControlName="IsActive" type="radio" name="IsActive" [value]="true"> Yes
               </label>
-              <label class="form-control" class="radio-inline">
+              <label class="form-control" class="radio-inline ml-2">
                 <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
                   formControlName="IsActive" type="radio" name="IsActive" [value]="false"> No
               </label>

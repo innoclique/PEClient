@@ -194,8 +194,8 @@ Back to list
                           [ngClass]="{ 'is-invalid': f.ZipCode.touched  &&  f.ZipCode.invalid }"
                           formControlName="ZipCode"  name="ZipCode" required  >
                           <div *ngIf="f.ZipCode.touched && f.ZipCode.invalid" class="invalid-feedback">
-                            <div *ngIf="f.ZipCode.errors.required">Zip Code is required</div>
-                           <div *ngIf="f.ZipCode.errors.minlength">Zip Code must be at least 5 characters  </div>
+                            <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is required</div>
+                           <div *ngIf="f.ZipCode.errors.minlength">Pin/Zip Code must be at least 5 characters  </div>
                             <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                         </div>
                        
