@@ -123,7 +123,7 @@
 
 
                 <div  formGroupName="GoalActionItems" class="invitation_model_in_table table-responsive p-15">
-                  <table *ngIf="currentAction != 'view'"  class="table table-bordered table-striped">
+                  <table *ngIf="currentAction != 'view'"  class="table table-bordered table-striped" style="margin-bottom: -2px;">
                     <!-- <thead>
                       <tr>
                         <th>Action Step</th>
@@ -162,9 +162,9 @@
                           <input  max="1000" maxlength="1000" formControlName="Barriers"      placeholder="Barriers"                class=" form-control">
                           
                         </td>
-                        <td style="width: 100px; border:none;margin:2px 0 2px;" class="invitation_model_in">
+                        <td class=" mat-date-class input-group">
                           <input  [ngClass]="{ 'is-invalid': rowItemSubmitted && k.TargetDate?.errors }" formControlName="TargetDate"
-                            class="form-control " placeholder="Target Date"
+                            class="form-control  " (click)="picker.open()" placeholder="Target Date"
                             (click)="picker.open()" readonly matInput  [matDatepicker]="picker">
               
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

@@ -57,7 +57,7 @@
                                 <div class="col-md-6">
                                     <strong>Manager: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{ownerInfo?.Manager? loginUser?.Manager?.FirstName :'NA'}}</span></div>
+                                <div class="col-md-5"><span>{{ loginUser?.FirstName }}</span></div>
 
                             </div>
 
@@ -81,7 +81,7 @@
                                 <div class="col-md-6">
                                     <strong>Job Level: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{ownerInfo?.JobLevel}}</span></div>
+                                <div class="col-md-5"><span>{{ownerInfo?.JobLevel?.JobLevelName}}</span></div>
 
                             </div>
 
@@ -211,10 +211,10 @@
                                     </div>
                                   </div>
                             
-                                <div class="form-group">
+                                <div hidden class="form-group">
                                     <div class="input-group">
                                       <div class="input-group-prepend">
-                                        <span class="input-group-text redStar">Score (self)</span>
+                                        <span class="input-group-text ">Score (self)</span>
                                       </div>
                                       <select class="form-control"
                                       [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }"
@@ -289,7 +289,7 @@
                             </div>
 
 
-                            <div class="col-md-4">
+                            <div hidden class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
                                       <div class="input-group-prepend">

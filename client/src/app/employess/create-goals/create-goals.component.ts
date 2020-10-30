@@ -154,7 +154,7 @@ get k (){
     { headerName: 'ActionStep', field: 'ActionStep', width: 160, autoHeight: true },
     { headerName: 'Progress Indicators', field: 'ProgressIndicators', width: 190, autoHeight: true },
     { headerName: 'Barriers', field: 'Barriers', width: 160, autoHeight: true },
-    { headerName: 'Target Date', field: 'TargetDate', width: 120, autoHeight: true ,
+    { headerName: 'Target Date', field: 'TargetDate', width: 150, autoHeight: true ,
     cellRenderer: (data) => { return new DatePipe('en-US').transform(data.data.TargetDate, 'MM-dd-yyyy')}
     
   },
@@ -164,7 +164,7 @@ get k (){
       headerName: "Action",
       suppressMenu: true,
       Sorting: false,
-      width: 120,
+      width: 90,
       template: `
       
       <i class="cui-trash icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -333,7 +333,8 @@ private _filterDevGoals(name: string): any[] {
 getAllDevGoalsDetails() {
   this.perfApp.route = "app";
   this.perfApp.method = "GetAllDevGoals",
-    this.perfApp.requestBody = { 'empId': this.loginUser._id,'orgId':this.authService.getOrganization()._id}
+    this.perfApp.requestBody = { 'empId': this.loginUser._id,
+    'fetchAll':true,'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
 
     if (c && c.length > 0) {

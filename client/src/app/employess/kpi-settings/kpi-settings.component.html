@@ -83,7 +83,7 @@
                                 <div class="col-md-6">
                                     <strong>Job Level: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{loginUser?.JobLevel}}</span></div>
+                                <div class="col-md-5"><span>{{loginUser?.JobLevel?.JobLevelName}}</span></div>
 
                             </div>
 
@@ -203,11 +203,11 @@
                                       <div class="input-group-prepend">
                                         <span class="input-group-text redStar"> Target Completion</span>
                                       </div>
-                                      <input class="autoc-border  form-control" (click)="picker.open()" readonly matInput  [matDatepicker]="picker"
+                                      <input  class="autoc-border  form-control" (click)="currentAction == 'create' && picker.open()" readonly matInput  [matDatepicker]="picker"
                                       formControlName="TargetCompletionDate" name="TargetCompletionDate"
                                       [ngClass]="{ 'is-invalid': f.TargetCompletionDate.touched  &&  f.TargetCompletionDate.invalid }" required >
-                                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                      <mat-datepicker #picker></mat-datepicker>
+                                      <mat-datepicker-toggle *ngIf="currentAction == 'create' " matSuffix [for]="picker"></mat-datepicker-toggle>
+                                      <mat-datepicker  #picker></mat-datepicker>
               
                                       <div *ngIf="f.TargetCompletionDate.touched && f.TargetCompletionDate.invalid" class="invalid-feedback">
                                         <div *ngIf="f.TargetCompletionDate.errors.required">Target Completion is mandatory.</div>
@@ -258,7 +258,7 @@
 
                                   <div class="form-group row">
                                    
-                                    <div *ngIf="currentAction != 'create'"  class="input-group col-md-7">
+                                    <div *ngIf="kpiDetails?.IsSubmitedKPIs"  class="input-group col-md-7">
                                       <div class="input-group-prepend ml-2">
                                         <span class="input-group-text">Sign-off</span>
                                       </div>
@@ -358,9 +358,9 @@
                             <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>
                             <button *ngIf="f?.IsDraft.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftKpi()" >Save</button>
                             <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 
-                                f.IsDraft.value=='true' ? 'Submit': 'Update'
-                                 :'Submit' }}</button>
-                            <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit KPIs</button>
+                                f.IsDraft.value=='true' ? 'Create': 'Update'
+                                 :'Create' }}</button>
+                            <button *ngIf="!kpiDetails?.IsSubmitedKPIs" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit KPIs</button>
                           </div>
             
                           <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>

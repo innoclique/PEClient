@@ -43,7 +43,7 @@
                                 <div class="col-md-6">
                                     <strong>Title: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{loginUser?.Title}}</span></div>
+                                <div class="col-md-5"><span>{{kpiDetails?.Owner?.Title}}</span></div>
 
                             </div>
 
@@ -51,7 +51,7 @@
                                 <div class="col-md-6">
                                     <strong>Department: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{loginUser?.Department}}</span></div>
+                                <div class="col-md-5"><span>{{kpiDetails?.Owner?.Department}}</span></div>
 
                             </div>
 
@@ -59,7 +59,7 @@
                                 <div class="col-md-6">
                                     <strong>Length of Service: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{ loginUser?.JoiningDate| dateAgo}}</span></div>
+                                <div class="col-md-5"><span>{{ kpiDetails?.Owner?.JoiningDate| dateAgo}}</span></div>
 
                             </div>
 
@@ -71,7 +71,7 @@
                                     <strong>Manager: </strong>
                                 </div>
                                 <div class="col-md-5">
-                                    <span>{{loginUser?.Manager? loginUser?.Manager?.FirstName :'NA'}}</span></div>
+                                    <span>{{loginUser?.FirstName }}</span></div>
 
                             </div>
 
@@ -79,7 +79,7 @@
                                 <div class="col-md-6">
                                     <strong>Length of Time in Current Role: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{ loginUser?.RoleEffFrom | dateAgo}}</span></div>
+                                <div class="col-md-5"><span>{{ kpiDetails?.Owner?.RoleEffFrom | dateAgo}}</span></div>
 
                             </div>
 
@@ -87,7 +87,7 @@
                                 <div class="col-md-6">
                                     <strong>Leadership Role: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{loginUser?.DirectReports?'Yes':'No'}}</span></div>
+                                <div class="col-md-5"><span>{{kpiDetails?.Owner?.DirectReports?'Yes':'No'}}</span></div>
 
                             </div>
 
@@ -95,7 +95,7 @@
                                 <div class="col-md-6">
                                     <strong>Job Level: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{loginUser?.JobLevel}}</span></div>
+                                <div class="col-md-5"><span>{{kpiDetails?.Owner?.JobLevel?.JobLevelName}}</span></div>
 
                             </div>
 
@@ -449,8 +449,8 @@
                                             <span class="input-group-text">Sign-off</span>
                                         </div>
                                         <input maxlength="12" class="form-control" type="text" disabled
-                                            [ngClass]="{ 'is-invalid': f.Signoff.touched  &&  f.Signoff.invalid }"
-                                            formControlName="Signoff" name="Signoff">
+                                            [ngClass]="{ 'is-invalid': f.ManagerSignOff.touched  &&  f.ManagerSignOff.invalid }"
+                                            formControlName="ManagerSignOff" name="ManagerSignOff">
 
 
 

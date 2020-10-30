@@ -100,7 +100,7 @@ getAllDevGoalsDetails() {
   this.perfApp.route = "app";
   this.perfApp.method = "GetAllDevGoals",
     this.perfApp.requestBody = { 'empId': this.loginUser._id,
-    'currentOnly':true,
+    'currentOnly':true,'fetchAll':true,
     'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
 
