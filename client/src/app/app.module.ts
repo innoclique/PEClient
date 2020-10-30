@@ -68,7 +68,7 @@ import { CustomMaterialModule } from './custom-material/custom-material.module';
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
   ],
   providers: [{
     provide: LocationStrategy,

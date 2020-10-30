@@ -44,16 +44,16 @@ export class LoginComponent implements OnInit {
     private modalService: BsModalService,) { }
 
 
-    get f(){
-      return this.loginForm.controls;
-    }
+  get f() {
+    return this.loginForm.controls;
+  }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required,Validators.email]],
+      username: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
 
-     
+
     });
     this.alert = new AlertDialog();
   }
@@ -64,50 +64,53 @@ export class LoginComponent implements OnInit {
       this.loginInvalid = true;
       return false;
     }
-    
+
     try {
       this.showSpinner = true;
       const email = this.loginForm.get('username').value;
       const password = this.loginForm.get('password').value;
       const LoginModel = { Email: email, Password: password };
 
-      await this.authService.login(LoginModel).subscribe(x => {        
+      await this.authService.login(LoginModel).subscribe(x => {
         if (x.Error === Constants.DuplicateSession) {
           this.openDuplicateSessionDialog()
-          return 
+          return
         }
-        console.log('user ....',x)
-        if(!x.User.TnCAccepted){
+        console.log('user ....', x)
+        if (!x.User.TnCAccepted) {
           this.openTnCDialog();
           return;
-          }
-        if (!x.User.IsPswChangedOnFirstLogin) {
-          this.router.navigate(['resetPassword']);
         } else {
-          if(x.Role==='CSA'){
-            this.router.navigate(['ea']);
-          }
-          if(x.Role==='EA'){
-            this.router.navigate(['ea']);
-          }else if(x.Role==='PSA'){
-          this.router.navigate(['psa/dashboard']);
-          }
-          else if(x.Role==='RSA'){
-            this.router.navigate(['rsa/dashboard']);
-            }
-            else if(x.Role === 'EO'){
-              this.router.navigate(['employee/dashboard']);
-            }
+          this.logincallback(x)
         }
-        
+
+        // if (!x.User.IsPswChangedOnFirstLogin) {
+        //   this.router.navigate(['resetPassword']);
+        // } else {
+        //   if (x.Role === 'CSA') {
+        //     this.router.navigate(['ea']);
+        //   }
+        //   if (x.Role === 'EA') {
+        //     this.router.navigate(['ea']);
+        //   } else if (x.Role === 'PSA') {
+        //     this.router.navigate(['psa/dashboard']);
+        //   }
+        //   else if (x.Role === 'RSA') {
+        //     this.router.navigate(['rsa/dashboard']);
+        //   }
+        //   else if (x.Role === 'EO') {
+        //     this.router.navigate(['employee/dashboard']);
+        //   }
+        //}
+
       }, error => {
         if (error.error.message === Constants.DuplicateSession) {
           this.openDuplicateSessionDialog()
         } if (error.error.message === Constants.InvalidCredentials) {
 
         }
-        this.snack.error(this.translate.instant('Login.InvalidCredentials'));
-
+       // this.snack.error(this.translate.instant('Login.InvalidCredentials'));
+       this.snack.error(this.translate.instant('Invalid Credentials'));
         this.showSpinner = false;
       })
 
@@ -148,19 +151,43 @@ export class LoginComponent implements OnInit {
       console.log('alert dialog', resp);
     })
   }
-  acceptTnC(){    
+  acceptTnC() {
     this.perfApp.route = 'Shared';
-      this.perfApp.method = "ConfirmTnC"
-      this.perfApp.requestBody = {}
-      this.perfApp.CallAPI().subscribe(res => {
-        /**conforming TnC dialog */
-        this.tncRef.hide();
-        var currentUser=this.authService.getCurrentUser();
-        if(currentUser.Role==='EA'){
-          this.router.navigate(['ea']);
-        }else{
-        this.router.navigate(['dashboard']);
-        }
-      })
+    this.perfApp.method = "ConfirmTnC"
+    this.perfApp.requestBody = {}
+    this.perfApp.CallAPI().subscribe(res => {
+      /**conforming TnC dialog */
+      this.tncRef.hide();
+      var currentUser = this.authService.getCurrentUser();
+      this.logincallback(currentUser)
+
+    })
+  }
+
+  logincallback(x) {
+    console.log('user ....', x)
+    if (!x.User.TnCAccepted) {
+      this.openTnCDialog();
+      return;
+    }
+    if (!x.User.IsPswChangedOnFirstLogin) {
+      this.router.navigate(['resetPassword']);
+    } else {
+      if (x.Role === 'CSA') {
+        this.router.navigate(['ea']);
+      }
+      if (x.Role === 'EA') {
+        this.router.navigate(['ea']);
+      } else if (x.Role === 'PSA') {
+        this.router.navigate(['psa/dashboard']);
+      }
+      else if (x.Role === 'RSA') {
+        this.router.navigate(['rsa/dashboard']);
+      }
+      else if (x.Role === 'EO') {
+        this.router.navigate(['employee/dashboard']);
+      }
+
+    }
   }
 }

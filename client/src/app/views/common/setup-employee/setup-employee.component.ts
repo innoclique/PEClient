@@ -50,7 +50,7 @@ export class SetupEmployeeComponent implements OnInit {
   cscData:any=undefined;
 
   public alert: AlertDialog;
-  
+  public currentOrganization:any={};
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -71,7 +71,7 @@ export class SetupEmployeeComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    this.currentOrganization = this.authService.getOrganization();
     this.loginUser=this.authService.getCurrentUser();
    this.getAllDepartments();
    this.getEmployees();
@@ -315,7 +315,8 @@ public employeeDirReportData :any[]=[]
 getEmployees(){
   this.perfApp.route="app";
   this.perfApp.method="GetAllEmployees",
-  this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+ // this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+ this.perfApp.requestBody = { parentId: this.currentOrganization._id }
   this.perfApp.CallAPI().subscribe(c=>{
     
     console.log('lients data',c);

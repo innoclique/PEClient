@@ -29,10 +29,19 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { CreateGoalsComponent } from './create-goals/create-goals.component';
 import { GoalsComponent } from './goals/goals.component';
 import { StrengthsComponent } from './strengths/strengths.component';
-
+import { KpiReviewComponent } from './kpi-review/kpi-review.component';
+import { KpiReviewListComponent } from './kpi-review-list/kpi-review-list.component';
+// RECOMMENDED
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { CompetencyFormModule } from '../views/competency-form/competency-form.module';
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
-     AccomplishmentsComponent, CurrentEvaluationComponent, ActionPlanComponent,DashboardComponent, CreateGoalsComponent, GoalsComponent, StrengthsComponent],
+     AccomplishmentsComponent, CurrentEvaluationComponent, 
+     ActionPlanComponent,DashboardComponent, CreateGoalsComponent, GoalsComponent, 
+     StrengthsComponent,
+     KpiReviewComponent,
+     KpiReviewListComponent
+    ],
   imports: [
     CommonModule,
     EmployessRoutingModule,
@@ -50,7 +59,9 @@ import { StrengthsComponent } from './strengths/strengths.component';
     EvalCommonModule,
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
-    SharedModule
+    SharedModule,
+    AccordionModule.forRoot(),
+    CompetencyFormModule
   ],
   exports: [
     ModalModule

@@ -42,7 +42,7 @@ export class CreateEmployeeComponent implements OnInit {
   filteredOptions: Observable<any[]>;
   filteredOptionsTS: Observable<any[]>;
   filteredOptionsDR: Observable<any[]>;
-
+public currentOrganization:any={}
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -53,7 +53,9 @@ export class CreateEmployeeComponent implements OnInit {
     private modalService: BsModalService,
     private snack: NotificationService,
     private perfApp: PerfAppService,
-    public translate: TranslateService) { }
+    public translate: TranslateService) {
+      
+     }
 
 
 
@@ -64,7 +66,7 @@ export class CreateEmployeeComponent implements OnInit {
     }
 
   ngOnInit(): void {
-
+    this.currentOrganization = this.authService.getOrganization();
     this.loginUser=this.authService.getCurrentUser();
     this.getEmployees();
    this.getAllDepartments();
@@ -331,7 +333,8 @@ export class CreateEmployeeComponent implements OnInit {
   getEmployees(){
     this.perfApp.route="app";
     this.perfApp.method="GetAllEmployees",
-    this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+   // this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+   this.perfApp.requestBody = { parentId: this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c=>{
       
       console.log('lients data',c);
