@@ -10,7 +10,9 @@ import { KpiSetupComponent } from './kpi-setup/kpi-setup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReportsComponent } from './reports/reports.component';
 import { StrengthsComponent } from './strengths/strengths.component';
-
+import {KpiReviewComponent} from './kpi-review/kpi-review.component';
+import {KpiReviewListComponent} from './kpi-review-list/kpi-review-list.component'
+import { ViewComponent } from '../views/final-rating/view/view.component';
 
 
 const routes: Routes = [
@@ -67,7 +69,8 @@ const routes: Routes = [
         path:'current-evaluation',
         component:CurrentEvaluationComponent,
         data:{title:'Current-Evaluation'}
-      }, {
+      },
+      {
         path:'accomplishments',
         component:AccomplishmentsComponent,
         data:{title:'Accomplishments'}
@@ -81,8 +84,21 @@ const routes: Routes = [
         component:ProfileComponent,
         data:{title:'Profile'}
       },
-
-     
+      {
+        path: 'kpi-review',
+        component: KpiReviewComponent,
+        data: {
+          title: 'Review'
+        }
+      },
+      {
+        path: 'review-kpi-list',
+        component: KpiReviewListComponent,
+        data: {
+          title: 'KPI Review'
+        }
+      },
+      
 
      
     ]

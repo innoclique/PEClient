@@ -69,7 +69,7 @@ export class DefaultLayoutComponent implements OnInit {
         {
           
           "IsActive": true,
-          "url": "/em/review-kpi-list",
+          "url": "/employee/review-kpi-list",
           "name": "KPI Review",
           "code": "KPISetting",
           "icon": "icon-wrench"

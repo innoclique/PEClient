@@ -179,10 +179,10 @@
                                                     <div class="input-group-prepend ml-2">
                                                         <span class="input-group-text">Sign-off</span>
                                                     </div>
-                                                    <input readonly class="form-control" type="text" disabled
+                                                    <input readonly class="form-control" type="text" disabled                                                        
                                                         formControlName="Signoff" name="Signoff">
                                                 </div>
-                                            </div>
+                                             </div>
                                         </div>
 
 
@@ -192,10 +192,11 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text "> Date</span>
                                                     </div>
-                                                    <input class="autoc-border  form-control" readonly
+                                                    <input class="autoc-border  form-control" 
+                                                        readonly 
                                                         formControlName="TargetCompletionDate"
                                                         name="TargetCompletionDate">
-
+                                                   
                                                 </div>
                                             </div>
 
@@ -204,7 +205,8 @@
 
                                     </div>
 
-                                    <div class=" row form-group form-actions clearfix w-100 d-block all-events ">
+                                    <div 
+                                        class=" row form-group form-actions clearfix w-100 d-block all-events ">
                                         <button [disabled]='selIndex==0' class="btn btn-link pull-left"
                                             (click)="priKpi()"> Prev Kpi </button>
                                         <button [disabled]='selIndex+1 == empKPIData.length'
@@ -223,7 +225,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">Score (self)</span>
                                                 </div>
-                                                <input readonly formControlName="ManagerScore" name="ManagerScore">
+                                                <input readonly formControlName="ManagerScore" name="ManagerScore">                                                
                                             </div>
                                         </div>
 
@@ -242,7 +244,7 @@
                                                     <span class="input-group-text">Sign-off</span>
                                                 </div>
 
-                                                <input class="form-control" type="text" disabled
+                                                <input  class="form-control" type="text" disabled                                                    
                                                     formControlName="Signoff" name="Signoff">
                                             </div>
                                         </div>
@@ -253,7 +255,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">Year-end Comments</span>
                                                 </div>
-                                                <textarea class="form-control" cols="" rows="4" readonly
+                                                <textarea  class="form-control" cols="" rows="4" readonly                                                   
                                                     formControlName="YECommManager" name="YECommManager">  </textarea>
 
                                             </div>
@@ -265,63 +267,10 @@
                         <!--View KPI End-->
                         <tab>
                             <ng-template tabHeading><i class="icon-hand-rock"></i>Competencies</ng-template>
-
-
-                            <div [formGroup]="selfCompetencyForm">
-                                <accordion [closeOthers]="oneAtATime">
-                                    <accordion-group *ngFor="let c of competencyQuestionsList"
-                                        heading="{{c.CompetenyName}}">
-                                        <app-competency-wrapper [questions]="c.Questions" [form]="c.form"></app-competency-wrapper>
-                                    </accordion-group>
-
-                                </accordion>
-                                <div class="form-group row">
-                                    <div class="col-md-4 ">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text redStar">Rating</span>
-                                                </div>
-                                                <select formControlName="OverallRating" class="form-control"
-                                                    name="Score">
-                                                    <option value="" disabled>Please select</option>
-                                                    <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 ">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">Comments</span>
-                                                </div>
-                                                <textarea maxlength="500" formControlName="Comments"
-                                                    class="form-control"></textarea>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="btn-group">
-                                                <button (click)="cancelCompetencyRating()"
-                                                    class="btn btn-secondary">Cancel</button>
-                                                <button (click)="saveSelfCompetencyFormAsDraft()"
-                                                    class="btn btn-primary">Save</button>
-                                                <button (click)="submitSelfCompetencyForm()"
-                                                    class="btn btn-primary">Submit</button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
+                            <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine"
+                                [rowData]="tsKpiList" [columnDefs]="columnDefs" [pagination]="true"
+                                [paginationPageSize]="10" (rowClicked)="onKpiGridRowClick($event)">
+                            </ag-grid-angular>
                         </tab>
                         <tab>
                             <ng-template tabHeading><i class="icon-hand-rock"></i>Developmental Goals (previous year)
@@ -333,26 +282,10 @@
                         </tab>
                         <tab>
                             <ng-template tabHeading><i class="icon-hand-rock"></i>Peer Rating</ng-template>
-
-                            <accordion *ngFor="let c of employeeCompetencyList" [isAnimated]="true">
-                                <accordion-group heading="{{c.Competency.Name}}">
-                                    <div class="" *ngFor="let q of c.Questions">
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <div class="col-md-8">
-                                                    <span> {{q.Question}}</span>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <select class="form-control">
-                                                        <option [value]="o.Value" *ngFor="let o of q.Rating">{{o.Text}}
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </accordion-group>
-                            </accordion>
+                            <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine"
+                                [rowData]="tsKpiList" [columnDefs]="columnDefs" [pagination]="true"
+                                [paginationPageSize]="10" (rowClicked)="onKpiGridRowClick($event)">
+                            </ag-grid-angular>
                         </tab>
 
                         <tab>
