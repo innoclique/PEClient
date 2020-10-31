@@ -1,0 +1,55 @@
+<div [formGroup]="peerCompetencyForm">
+    <accordion [closeOthers]="oneAtATime">
+        <accordion-group *ngFor="let c of competencyQuestionsList"
+            heading="{{c.CompetenyName}}">
+            <app-competency-wrapper [questions]="c.Questions" [form]="c.form"></app-competency-wrapper>
+        </accordion-group>
+
+    </accordion>
+    <div class="form-group row">
+        <div class="col-md-4 ">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text redStar">Rating</span>
+                    </div>
+                    <select formControlName="OverallRating" class="form-control"
+                        name="Score">
+                        <option value="" disabled>Please select</option>
+                        <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 ">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Comments</span>
+                    </div>
+                    <textarea maxlength="500" formControlName="Comments"
+                        class="form-control"></textarea>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="btn-group">
+                    <button (click)="cancelCompetencyRating()"
+                        class="btn btn-secondary">Cancel</button>
+                    <button (click)="savePeerCompetencyFormAsDraft()"
+                        class="btn btn-primary">Save</button>
+                    <button (click)="submitPeerCompetencyForm()"
+                        class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -13,6 +13,8 @@ import { StrengthsComponent } from './strengths/strengths.component';
 import {KpiReviewComponent} from './kpi-review/kpi-review.component';
 import {KpiReviewListComponent} from './kpi-review-list/kpi-review-list.component'
 import { ViewComponent } from '../views/final-rating/view/view.component';
+import { PeerReviewListComponent } from '../peer-review/peer-review-list/peer-review-list.component';
+import { DoPeerReviewComponent } from '../peer-review/do-peer-review/do-peer-review.component';
 
 
 const routes: Routes = [
@@ -75,6 +77,18 @@ const routes: Routes = [
         component:AccomplishmentsComponent,
         data:{title:'Accomplishments'}
       },
+      {
+        path:'peerreview',
+        component:PeerReviewListComponent,
+        data:{title:'Accomplishments'}
+      },
+      {
+        path:'submitpeerreview',
+        component:DoPeerReviewComponent,
+        data:{title:'Accomplishments'}
+      },
+      
+      
       {
         path:'reports',
         component:ReportsComponent,

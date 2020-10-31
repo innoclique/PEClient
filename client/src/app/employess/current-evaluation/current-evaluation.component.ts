@@ -188,38 +188,7 @@ export class CurrentEvaluationComponent implements OnInit {
   get scf() {
     return this.selfCompetencyForm.controls;
   }
-  setCompetencies() {
-    let control = <FormArray>this.selfCompetencyForm.controls.competencyList;
-    this.employeeCompetencyList.forEach(x => {
-      control.push(this.fb.group({
-        Competency: x.Competency.Name,
-        Questions: this.setQuestions(x)
-      }))
-    })
-    console.log('control', control)
-  }
-  setQuestions(x) {
-    let arr = new FormArray([])
-    x.Questions.forEach(y => {
-      arr.push(this.fb.group({
-        Question: y.Question,
-        Rating: y.Rating.Ra //this.setOptions(y)
-      }))
-    })
-    return arr;
-  }
-  setOptions(y) {
-
-    let arr = new FormArray([])
-    y.Rating.forEach(o => {
-      arr.push(this.fb.group({
-        Text: o.Text,
-        Value: o.Value
-      }))
-    })
-    return arr;
-  }
-
+  
   submitCompetencyRating() {
     debugger
     console.log('after submit with rating', this.employeeCompetencyList)
