@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,6 +32,11 @@ export class CurrentEvaluationComponent implements OnInit {
   evaluationForm: any = {};
   employeeCompetencyList: any;
   questions$: Observable<CompetencyBase<any>[]>;
+  currEvaluation: any;
+  public oneAtATime: boolean = true;
+  public FinalRatingForm: FormGroup;
+  public showEmployeeSubmit: Boolean = true;
+  public PeerScoreCard: any;
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -39,6 +45,7 @@ export class CurrentEvaluationComponent implements OnInit {
     public translate: TranslateService,
     private fb: FormBuilder,
     private qcs: CompetencyFormService,
+    private datePipe: DatePipe
   ) {
     this.loginUser = this.authService.getCurrentUser();
   }
@@ -46,7 +53,9 @@ export class CurrentEvaluationComponent implements OnInit {
   ngOnInit(): void {
     this.initKPIForm()
     this.initCompetencyForm();
+    this.initFinalRatingForm();
     this.getTabsData();
+
   }
   public columnDefs = [
     {
@@ -78,7 +87,7 @@ export class CurrentEvaluationComponent implements OnInit {
       //this.getTSKPIs().pipe(catchError(error => of({ error: error, isError: true }))),
       //this.getCompetencyQuestionsList().pipe(catchError(error => of({ error: error, isError: true })))
     ).subscribe(([res1]) => {
-      if (res1) {
+      if (res1 && !res1.isError) {
 
         this.evaluationForm = res1;
         if (res1.Competencies.Employees[0]) {
@@ -86,10 +95,23 @@ export class CurrentEvaluationComponent implements OnInit {
           this.employeeCompetencyList = res1.Competencies.Employees[0].Competencies;
           // this.setCompetencies();
           this.prepareCompetencyQuestions();
+          console.log('the evauation form', this.evaluationForm)
+        }
+        if (res1.FinalRating) {
+          this.FinalRatingForm.controls["EmployeeComments"].setValue(res1.FinalRating.Self.YearEndComments)
+          this.FinalRatingForm.controls["EmployeeOverallRating"].setValue(res1.FinalRating.Self.YearEndRating)
+          this.FinalRatingForm.controls["EmployeeIsDraft"].setValue(!res1.FinalRating.Self.IsSubmitted)
+          this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff)
+          this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
+          this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
+        }
+        if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
+          this.PeerScoreCard = res1.PeerScoreCard;
         }
 
-        console.log('the evauation form', this.evaluationForm)
 
+      } else {
+        this.evaluationForm = null;
       }
       //   if (res1 && !res1.isError) {
       //     this.setWeighting(res1.filter(item => item.IsDraft === false).length);
@@ -111,7 +133,7 @@ export class CurrentEvaluationComponent implements OnInit {
   getCurrentEvaluationDetails() {
     this.perfApp.route = "evaluation";
     this.perfApp.method = "GetEmpCurrentEvaluation",
-      this.perfApp.requestBody = { empId: this.loginUser._id }
+      this.perfApp.requestBody = { EmployeeId: this.loginUser._id }
     return this.perfApp.CallAPI()
   }
 
@@ -166,6 +188,17 @@ export class CurrentEvaluationComponent implements OnInit {
     })
 
   }
+  initFinalRatingForm() {
+    this.FinalRatingForm = this.fb.group({
+      EmployeeComments: ['', [Validators.required]],
+      EmployeeOverallRating: [1, [Validators.required]],
+      EmployeeIsDraft: [true],
+      EmployeeSignOff: [],
+      EmployeeSubmittedOn: ['']
+    })
+
+  }
+
 
   nextKpi() {
     this.selIndex = this.selIndex + 1;
@@ -188,9 +221,9 @@ export class CurrentEvaluationComponent implements OnInit {
   get scf() {
     return this.selfCompetencyForm.controls;
   }
-  
+
   submitCompetencyRating() {
-    debugger
+
     console.log('after submit with rating', this.employeeCompetencyList)
 
   }
@@ -215,7 +248,7 @@ export class CurrentEvaluationComponent implements OnInit {
         }))
 
       });
-      debugger
+
       this.competencyQuestionsList.push({
 
         CompetenyName: element.Competency.Name,
@@ -229,6 +262,9 @@ export class CurrentEvaluationComponent implements OnInit {
       })
 
     });
+
+  }
+  cancelCompetencyRating() {
 
   }
   saveSelfCompetencyFormAsDraft() {
@@ -245,9 +281,7 @@ export class CurrentEvaluationComponent implements OnInit {
     this.competencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
       if (_qna && _qna.length > 0) {
-        debugger
         _qna.forEach(q => {
-          debugger
           competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1] })
         });
       } else {
@@ -256,34 +290,57 @@ export class CurrentEvaluationComponent implements OnInit {
 
         }
       }
-
-
     });
     if (!isvalid) {
       this.snack.error('Please provide rating to all question(s) in each competency')
       return;
     }
-    competencyQA.Comments = this.selfCompetencyForm.value.Comments
-    competencyQA.OverallRating = this.selfCompetencyForm.value.OverallRating
-
-    competencyQA.EvaluationId = this.evaluationForm.Competencies._id
-    competencyQA.EmployeeId = this.loginUser._id
-    competencyQA.IsDraft = isDraft
-
-
+    competencyQA.Comments = this.selfCompetencyForm.value.Comments;
+    competencyQA.OverallRating = this.selfCompetencyForm.value.OverallRating;
+    competencyQA.EvaluationId = this.evaluationForm.Competencies._id;
+    competencyQA.EmployeeId = this.loginUser._id;
+    competencyQA.IsDraft = isDraft;
     console.log('QnA', competencyQA);
     this.perfApp.route = "app";
     this.perfApp.method = "SaveCompetencyQnA",
       this.perfApp.requestBody = competencyQA;// { TsId: this.loginUser._id }
     this.perfApp.CallAPI().subscribe(x => {
-
       console.log(x)
     }, error => {
-
       console.log('error', error)
     })
 
   }
   /**For Self-Competency Rating End */
+  submitFinalRating() {
+    this.saveFinalRating(false)
+  }
+  draftFinalRating() {
+    this.saveFinalRating(true)
+  }
+  saveFinalRating(isDraft) {
+    this.perfApp.route = "app";
+    this.perfApp.method = "SaveEmployeeFinalRating",
+      this.perfApp.requestBody = {
+        EvaluationId: this.evaluationForm.Competencies._id,
+        EmployeeId: this.loginUser._id,
+        YearEndComments: this.FinalRatingForm.value.EmployeeComments,
+        OverallRating: this.FinalRatingForm.value.EmployeeOverallRating,
+        IsDraft: isDraft,
+        SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
+      };
+    console.log('final rating form', this.perfApp.requestBody)
+    this.perfApp.CallAPI().subscribe(x => {
+      console.log(x)
+      this.snack.success('Successfully Submitted Final Rating');
+      window.location.reload();
+    }, error => {
+      console.log('error', error)
+      this.snack.error('Something went wrong')
+    })
 
+  }
+  cancelFinalRating() {
+
+  }
 }

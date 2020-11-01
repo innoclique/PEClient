@@ -6,158 +6,256 @@
                     Rating View
                 </div>
                 <div class="card-body">
-                    <tabset #staticTabs class="pro-tabs">
-                        <!--View KPI Start-->
-                        <tab>
-                            <ng-template tabHeading><i class="icon-layers"></i>KPIs</ng-template>
+                    <div *ngIf="!evaluationForm">
+                        <h5>No Active Evaluation</h5>
+                    </div>
+                    <div *ngIf="evaluationForm">
+                        <tabset #staticTabs class="pro-tabs">
+                            <!--View KPI Start-->
+                            <tab>
+                                <ng-template tabHeading><i class="icon-layers"></i>KPIs</ng-template>
 
-                            <form [formGroup]="kpiForm" novalidate="" class="ng-untouched ng-pristine ng-valid">
-
-                                <div class="form-group row">
-                                    <div class="col-md-3 kpi-fl ">
-                                        <div class="col-md-6">
-                                            <strong>Evaluation Period: </strong>
-                                        </div>
-                                        <div class="col-md-5"><span>{{currEvaluation?.EvaluationPeriod}}</span></div>
-
-                                    </div>
-
-                                    <div class="col-md-3 ">
-                                        <div class="col-md-6">
-                                            <strong>Title: </strong>
-                                        </div>
-                                        <div class="col-md-5"><span>{{loginUser?.Title}}</span></div>
-
-                                    </div>
-
-                                    <div class="col-md-3 ">
-                                        <div class="col-md-6">
-                                            <strong>Department: </strong>
-                                        </div>
-                                        <div class="col-md-5"><span>{{loginUser?.Department}}</span></div>
-
-                                    </div>
-
-                                    <div class="col-md-3 ">
-                                        <div class="col-md-6">
-                                            <strong>Length of Service: </strong>
-                                        </div>
-                                        <div class="col-md-5"><span>{{ loginUser?.JoiningDate| dateAgo}}</span></div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="form-group row">
-                                    <div class="col-md-3 ">
-                                        <div class="col-md-6">
-                                            <strong>Manager: </strong>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <span>{{loginUser?.Manager? loginUser?.Manager?.FirstName :'NA'}}</span>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="col-md-3 ">
-                                        <div class="col-md-6">
-                                            <strong>Length of Time in Current Role: </strong>
-                                        </div>
-                                        <div class="col-md-5"><span>{{ loginUser?.RoleEffFrom | dateAgo}}</span></div>
-
-                                    </div>
-
-                                    <div class="col-md-3 ">
-                                        <div class="col-md-6">
-                                            <strong>Leadership Role: </strong>
-                                        </div>
-                                        <div class="col-md-5"><span>{{loginUser?.DirectReports?'Yes':'No'}}</span></div>
-
-                                    </div>
-
-                                    <div class="col-md-3 ">
-                                        <div class="col-md-6">
-                                            <strong>Job Level: </strong>
-                                        </div>
-                                        <div class="col-md-5"><span>{{loginUser?.JobLevel}}</span></div>
-
-                                    </div>
-
-                                </div>
-
-                                <br>
-
-                                <div class="view-only">
+                                <form [formGroup]="kpiForm" novalidate="" class="ng-untouched ng-pristine ng-valid">
 
                                     <div class="form-group row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text ">Key Performance Indicators
-                                                            (KPI)</span>
-                                                    </div>
-                                                    <input type="text" readonly formControlName="Kpi" name="kpi">
-
-                                                </div>
+                                        <div class="col-md-3 kpi-fl ">
+                                            <div class="col-md-6">
+                                                <strong>Evaluation Period: </strong>
                                             </div>
+                                            <div class="col-md-5"><span>{{currEvaluation?.EvaluationPeriod}}</span>
+                                            </div>
+
                                         </div>
 
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text ">Measurement Criteria </span>
-                                                    </div>
-                                                    <input type="text" readonly formControlName="MeasurementCriteria"
-                                                        name="MeasurementCriteria">
-                                                </div>
+                                        <div class="col-md-3 ">
+                                            <div class="col-md-6">
+                                                <strong>Title: </strong>
                                             </div>
+                                            <div class="col-md-5"><span>{{loginUser?.Title}}</span></div>
+
                                         </div>
+
+                                        <div class="col-md-3 ">
+                                            <div class="col-md-6">
+                                                <strong>Department: </strong>
+                                            </div>
+                                            <div class="col-md-5"><span>{{loginUser?.Department}}</span></div>
+
+                                        </div>
+
+                                        <div class="col-md-3 ">
+                                            <div class="col-md-6">
+                                                <strong>Length of Service: </strong>
+                                            </div>
+                                            <div class="col-md-5"><span>{{ loginUser?.JoiningDate| dateAgo}}</span>
+                                            </div>
+
+                                        </div>
+
                                     </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-3 ">
+                                            <div class="col-md-6">
+                                                <strong>Manager: </strong>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <span>{{loginUser?.Manager? loginUser?.Manager?.FirstName :'NA'}}</span>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3 ">
+                                            <div class="col-md-6">
+                                                <strong>Length of Time in Current Role: </strong>
+                                            </div>
+                                            <div class="col-md-5"><span>{{ loginUser?.RoleEffFrom | dateAgo}}</span>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3 ">
+                                            <div class="col-md-6">
+                                                <strong>Leadership Role: </strong>
+                                            </div>
+                                            <div class="col-md-5"><span>{{loginUser?.DirectReports?'Yes':'No'}}</span>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3 ">
+                                            <div class="col-md-6">
+                                                <strong>Job Level: </strong>
+                                            </div>
+                                            <div class="col-md-5"><span>{{loginUser?.JobLevel}}</span></div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <br>
+
+                                    <div class="view-only">
+
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text ">Key Performance Indicators
+                                                                (KPI)</span>
+                                                        </div>
+                                                        <input type="text" readonly formControlName="Kpi" name="kpi">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text ">Measurement Criteria </span>
+                                                        </div>
+                                                        <input type="text" readonly
+                                                            formControlName="MeasurementCriteria"
+                                                            name="MeasurementCriteria">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text "> Target Completion</span>
+                                                        </div>
+                                                        <input readonly formControlName="TargetCompletionDate"
+                                                            name="TargetCompletionDate">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Score</span>
+                                                        </div>
+                                                        <input readonly formControlName="Score" name="Score">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Status</span>
+                                                        </div>
+                                                        <input readonly formControlName="Status" name="Status">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <div class="input-group ">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Weighting</span>
+                                                        </div>
+                                                        <input readonly formControlName="Weighting" name="Weighting">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Year-end Comments</span>
+                                                        </div>
+                                                        <textarea class="form-control" cols="" rows="4" readonly
+                                                            formControlName="YearEndComments"
+                                                            name="YearEndComments">  </textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <div class="form-group ">
+                                                    <div class="input-group ">
+                                                        <div class="input-group-prepend ml-2">
+                                                            <span class="input-group-text">Sign-off</span>
+                                                        </div>
+                                                        <input readonly class="form-control" type="text" disabled
+                                                            formControlName="Signoff" name="Signoff">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text "> Date</span>
+                                                        </div>
+                                                        <input class="autoc-border  form-control" readonly
+                                                            formControlName="TargetCompletionDate"
+                                                            name="TargetCompletionDate">
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class=" row form-group form-actions clearfix w-100 d-block all-events ">
+                                            <button [disabled]='selIndex==0' class="btn btn-link pull-left"
+                                                (click)="priKpi()"> Prev Kpi </button>
+                                            <button [disabled]='selIndex+1 == empKPIData.length'
+                                                class="btn btn-link pull-right" (click)="nextKpi()">Next Kpi</button>
+
+                                        </div>
+
+
+                                    </div>
+                                    <!-- <div class="clearfix"></div> -->
+                                    <h4>Manager</h4>
                                     <div class="form-group row">
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text "> Target Completion</span>
+                                                        <span class="input-group-text">Score (self)</span>
                                                     </div>
-                                                    <input readonly formControlName="TargetCompletionDate"
-                                                        name="TargetCompletionDate">
+                                                    <input readonly formControlName="ManagerScore" name="ManagerScore">
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Score</span>
-                                                    </div>
-                                                    <input readonly formControlName="Score" name="Score">
-                                                </div>
-                                            </div>
                                         </div>
+
+
+
                                         <div class="col-md-4">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Status</span>
-                                                    </div>
-                                                    <input readonly formControlName="Status" name="Status">
-                                                </div>
-                                            </div>
+
+
+
                                             <div class="form-group ">
-                                                <div class="input-group ">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Weighting</span>
-                                                    </div>
-                                                    <input readonly formControlName="Weighting" name="Weighting">
-                                                </div>
 
+                                                <div class="input-group ">
+                                                    <div class="input-group-prepend ml-2">
+                                                        <span class="input-group-text">Sign-off</span>
+                                                    </div>
+
+                                                    <input class="form-control" type="text" disabled
+                                                        formControlName="Signoff" name="Signoff">
+                                                </div>
                                             </div>
                                         </div>
-
-
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <div class="input-group">
@@ -165,204 +263,191 @@
                                                         <span class="input-group-text">Year-end Comments</span>
                                                     </div>
                                                     <textarea class="form-control" cols="" rows="4" readonly
-                                                        formControlName="YearEndComments"
-                                                        name="YearEndComments">  </textarea>
+                                                        formControlName="YECommManager"
+                                                        name="YECommManager">  </textarea>
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </form>
+                            </tab>
+                            <!--View KPI End-->
+                            <tab>
+                                <ng-template tabHeading><i class="icon-hand-rock"></i>Competencies</ng-template>
 
+
+                                <div [formGroup]="selfCompetencyForm">
+                                    <accordion [closeOthers]="oneAtATime">
+                                        <accordion-group *ngFor="let c of competencyQuestionsList"
+                                            heading="{{c.CompetenyName}}">
+                                            <app-competency-wrapper [questions]="c.Questions" [form]="c.form">
+                                            </app-competency-wrapper>
+                                        </accordion-group>
+
+                                    </accordion>
                                     <div class="form-group row">
-                                        <div class="col-md-4">
-                                            <div class="form-group ">
-                                                <div class="input-group ">
-                                                    <div class="input-group-prepend ml-2">
-                                                        <span class="input-group-text">Sign-off</span>
-                                                    </div>
-                                                    <input readonly class="form-control" type="text" disabled
-                                                        formControlName="Signoff" name="Signoff">
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 ">
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text "> Date</span>
+                                                        <span class="input-group-text redStar">Rating</span>
                                                     </div>
-                                                    <input class="autoc-border  form-control" readonly
-                                                        formControlName="TargetCompletionDate"
-                                                        name="TargetCompletionDate">
+                                                    <select formControlName="OverallRating" class="form-control"
+                                                        name="Score">
+                                                        <option value="" disabled>Please select</option>
+                                                        <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
 
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-
-                                    </div>
-
-                                    <div class=" row form-group form-actions clearfix w-100 d-block all-events ">
-                                        <button [disabled]='selIndex==0' class="btn btn-link pull-left"
-                                            (click)="priKpi()"> Prev Kpi </button>
-                                        <button [disabled]='selIndex+1 == empKPIData.length'
-                                            class="btn btn-link pull-right" (click)="nextKpi()">Next Kpi</button>
-
-                                    </div>
-
-
-                                </div>
-                                <!-- <div class="clearfix"></div> -->
-                                <h4>Manager</h4>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">Score (self)</span>
-                                                </div>
-                                                <input readonly formControlName="ManagerScore" name="ManagerScore">
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-
-
-                                    <div class="col-md-4">
-
-
-
-                                        <div class="form-group ">
-
-                                            <div class="input-group ">
-                                                <div class="input-group-prepend ml-2">
-                                                    <span class="input-group-text">Sign-off</span>
-                                                </div>
-
-                                                <input class="form-control" type="text" disabled
-                                                    formControlName="Signoff" name="Signoff">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">Year-end Comments</span>
-                                                </div>
-                                                <textarea class="form-control" cols="" rows="4" readonly
-                                                    formControlName="YECommManager" name="YECommManager">  </textarea>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </tab>
-                        <!--View KPI End-->
-                        <tab>
-                            <ng-template tabHeading><i class="icon-hand-rock"></i>Competencies</ng-template>
-
-
-                            <div [formGroup]="selfCompetencyForm">
-                                <accordion [closeOthers]="oneAtATime">
-                                    <accordion-group *ngFor="let c of competencyQuestionsList"
-                                        heading="{{c.CompetenyName}}">
-                                        <app-competency-wrapper [questions]="c.Questions" [form]="c.form"></app-competency-wrapper>
-                                    </accordion-group>
-
-                                </accordion>
-                                <div class="form-group row">
-                                    <div class="col-md-4 ">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text redStar">Rating</span>
-                                                </div>
-                                                <select formControlName="OverallRating" class="form-control"
-                                                    name="Score">
-                                                    <option value="" disabled>Please select</option>
-                                                    <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 ">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">Comments</span>
-                                                </div>
-                                                <textarea maxlength="500" formControlName="Comments"
-                                                    class="form-control"></textarea>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <div class="btn-group">
-                                                <button (click)="cancelCompetencyRating()"
-                                                    class="btn btn-secondary">Cancel</button>
-                                                <button (click)="saveSelfCompetencyFormAsDraft()"
-                                                    class="btn btn-primary">Save</button>
-                                                <button (click)="submitSelfCompetencyForm()"
-                                                    class="btn btn-primary">Submit</button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </tab>
-                        <tab>
-                            <ng-template tabHeading><i class="icon-hand-rock"></i>Developmental Goals (previous year)
-                            </ng-template>
-                            <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine"
-                                [rowData]="tsKpiList" [columnDefs]="columnDefs" [pagination]="true"
-                                [paginationPageSize]="10" (rowClicked)="onKpiGridRowClick($event)">
-                            </ag-grid-angular>
-                        </tab>
-                        <tab>
-                            <ng-template tabHeading><i class="icon-hand-rock"></i>Peer Rating</ng-template>
-
-                            <accordion *ngFor="let c of employeeCompetencyList" [isAnimated]="true">
-                                <accordion-group heading="{{c.Competency.Name}}">
-                                    <div class="" *ngFor="let q of c.Questions">
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <div class="col-md-8">
-                                                    <span> {{q.Question}}</span>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <select class="form-control">
-                                                        <option [value]="o.Value" *ngFor="let o of q.Rating">{{o.Text}}
-                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </accordion-group>
-                            </accordion>
-                        </tab>
+                                        <div class="col-md-8 ">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Comments</span>
+                                                    </div>
+                                                    <textarea maxlength="500" formControlName="Comments"
+                                                        class="form-control"></textarea>
 
-                        <tab>
-                            <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
-                            <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine"
-                                [rowData]="tsKpiList" [columnDefs]="columnDefs" [pagination]="true"
-                                [paginationPageSize]="10" (rowClicked)="onKpiGridRowClick($event)">
-                            </ag-grid-angular>
-                        </tab>
-                    </tabset>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="pull-right col-md-4">
+                                            <div class="form-group">
+                                                <div class="btn-group">
+                                                    <button (click)="cancelCompetencyRating()"
+                                                        class="btn btn-secondary">Cancel</button>
+                                                    <button (click)="saveSelfCompetencyFormAsDraft()"
+                                                        class="btn btn-primary">Save</button>
+                                                    <button (click)="submitSelfCompetencyForm()"
+                                                        class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab>
+                            <tab>
+                                <ng-template tabHeading><i class="icon-hand-rock"></i>Developmental Goals (previous
+                                    year)
+                                </ng-template>
+
+                            </tab>
+                            <tab>
+                                <ng-template tabHeading><i class="icon-hand-rock"></i>Peer Rating</ng-template>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-group">
+                                            
+                                            <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let peer of PeerScoreCard?.PeerList">
+                                                {{peer.FirstName}} {{peer.LastName}}
+                                            </li>
+                                          </ul>
+                                        
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Average Rating
+                                              <span class="badge badge-primary badge-pill">{{PeerScoreCard?.averageScore}}</span>
+                                            </li>
+                                           
+                                          </ul>
+                                        
+                                    </div>
+                                </div>
+
+                            </tab>
+
+                            <tab>
+                                <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
+                                <div [formGroup]="FinalRatingForm">
+                                    <section>
+                                        <h3>Employee Self Review</h3>
+                                        <div class="form-group row">
+                                            <div class="col-md-4 ">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text redStar">Rating</span>
+                                                        </div>
+                                                        <select formControlName="EmployeeOverallRating"
+                                                            class="form-control" name="Score">
+                                                            <option value="" disabled>Please select</option>
+                                                            <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 ">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Comments</span>
+                                                        </div>
+                                                        <textarea maxlength="2000" formControlName="EmployeeComments"
+                                                            class="form-control"></textarea>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="EmployeeSignOff">
+                                                        Employee Sign-Off:
+                                                    </label>
+                                                    <input type="text" readonly formControlName="EmployeeSignOff"
+                                                        name="EmployeeSignOff">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="EmployeeSubmittedOn">
+                                                        Submitted On:
+                                                    </label>
+                                                    <input type="text" readonly formControlName="EmployeeSubmittedOn"
+                                                        name="EmployeeSubmittedOn">
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf="showEmployeeSubmit" class="col-md-8">
+                                                <div class="pull-right form-group">
+                                                    <div class="">
+                                                        <button (click)="cancelFinalRating()"
+                                                            class="btn btn-secondary">Cancel</button>
+                                                        <button (click)="saveFinalRating()"
+                                                            class="btn btn-primary">Save</button>
+                                                        <button (click)="submitFinalRating()"
+                                                            class="btn btn-primary">Submit
+                                                            Final Rating</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                </div>
+                            </tab>
+                        </tabset>
+
+                    </div>
                     <br>
                 </div>
             </div>

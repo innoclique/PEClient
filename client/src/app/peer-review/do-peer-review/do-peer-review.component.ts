@@ -22,6 +22,7 @@ export class DoPeerReviewComponent implements OnInit {
   peerCompetencyForm:FormGroup;
   questions$: Observable<CompetencyBase<any>[]>;
   private subscriptions: Subscription[] = [];
+  public oneAtATime: boolean = true;
   constructor(private authService: AuthService,
     private router: Router,
     private snack: NotificationService,
@@ -167,7 +168,9 @@ this.peerCompetencyForm.controls["OverallRating"].setValue(this.competencyList.P
 
   }
 
-
+  cancelCompetencyRating(){
+    
+  }
 
   ngOnDestroy() {
     this.subscriptions.forEach(s => s.unsubscribe())
