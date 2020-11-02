@@ -19,6 +19,11 @@ import { ProfileComponent } from './profile/profile.component'
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { SharedModule } from '../../shared/shared.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ChartsModule } from "ng2-charts";
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatDividerModule} from '@angular/material/divider';
+ 
+
 const routes: Routes = [
   {
     path: '',
@@ -112,7 +117,10 @@ const routes: Routes = [
     ModalModule.forRoot(),
     TypeaheadModule.forRoot(),
     SharedModule,
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+    ChartsModule,
+    MatGridListModule,
+    MatDividerModule
   ]
 })
 export class EvaluationadminModule { 

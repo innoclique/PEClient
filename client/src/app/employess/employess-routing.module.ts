@@ -9,6 +9,7 @@ import { KpiSetupComponent } from './kpi-setup/kpi-setup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReportsComponent } from './reports/reports.component';
 import { StrengthsComponent } from './strengths/strengths.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 
@@ -42,7 +43,7 @@ const routes: Routes = [
       },
       {
         path:'dashboard',
-        component:KpiSetupComponent,
+        component:DashboardComponent,
         data:{title:'Dashboard'}
       }, {
         path:'action-plan',

@@ -29,6 +29,11 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { CreateGoalsComponent } from './create-goals/create-goals.component';
 import { GoalsComponent } from './goals/goals.component';
 import { StrengthsComponent } from './strengths/strengths.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {ProgressBarModule} from "angular-progress-bar";
+import {MatCardModule} from '@angular/material/card';
+import {MatListModule} from '@angular/material/list';
+ 
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
@@ -50,7 +55,11 @@ import { StrengthsComponent } from './strengths/strengths.component';
     EvalCommonModule,
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
-    SharedModule
+    SharedModule,
+    MatGridListModule,
+    ProgressBarModule,
+    MatCardModule,
+    MatListModule
   ],
   exports: [
     ModalModule

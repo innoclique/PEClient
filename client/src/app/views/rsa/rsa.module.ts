@@ -8,7 +8,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReportsComponent } from './reports/reports.component';
 import { SetupModelComponent } from './setup-model/setup-model.component';
 import { QuestionsModule } from '../questions/questions.module';
-
+import { ChartsModule } from "ng2-charts";
+import {MatCardModule} from '@angular/material/card';
+import {MatGridListModule} from '@angular/material/grid-list';
+ 
 
 export const rsaRoutes: Routes = [
   
@@ -59,7 +62,10 @@ data:{title:'Model'}
   imports: [
     CommonModule,
     QuestionsModule,
-    RouterModule.forChild(rsaRoutes)
+    RouterModule.forChild(rsaRoutes),
+    ChartsModule,
+    MatCardModule,
+    MatGridListModule
   ]
 })
 export class RsaModule { }
