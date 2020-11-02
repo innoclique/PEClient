@@ -35,9 +35,9 @@ p											{  font-size:15px; line-height:21px; font-weight:400; color:#717171;
 
 .box_main { display: block; padding: 0;}
 .box { display: block; padding: 0; margin: 0 0 10px;}
-.box_in  {border:1px solid #ddd; border-radius: 4px; background: #fff; min-height: 200px;
+.box_in  {border:1px solid #ddd; border-radius: 4px; background: #fff; min-height: 277px;
     margin: 0 6px;
-    display: block;}
+    display: block; position: relative;}
 .box_in h2  { font-size: 16px; line-height: 18px; color: #717171; display: block; padding: 15px; margin: 0 0 6px;}
 .box_in h2 span { font-size: 12px; line-height: 14px; color: #717171; display: block; font-weight: 400; }
 .box_in_bar { display: block; padding:0 15px;}
@@ -57,6 +57,15 @@ p											{  font-size:15px; line-height:21px; font-weight:400; color:#717171;
 .box_in_btns_modify   {  font-size: 13px; line-height: 16px; color: #717171; border:1px solid #ddd; border-radius: 4px; padding: 10px 20px; float: left;}
 .box_in_btns_modify i {font-size: 14px;display: inline-block;position: relative;top: -3px;left: 5px;font-weight: bold;}
 .box_in_btns_modify:hover { background:#f5f5f7; color: #000;}
-.box_in_btns_view            { font-size: 13px; line-height: 16px; color: #1996f2; float: right; font-weight: bold; padding: 10px 10px 15px;}
+.box_in_btns_view            { font-size: 13px; line-height: 16px; color: #1996f2; float: right; font-weight: bold; padding: 10px 10px 15px;position: absolute;right: 10px;bottom: 0;}
+
+
+/*Dashboard*/
+.bg-blue  { background: #e4f2fd !important;}
+.box_progressbar { margin:10px 15px;}
+.box_goalsetting { display: block; padding: 15px; margin: 0;}
+.box_goalsetting h2  { font-size: 14px; line-height: 17px; color: #1996f2; display: block; padding: 0; margin: 0 0 10px;}
+.box_goalsetting h2 span { font-size: 13px; line-height: 17px; color: #717171; display: block; font-weight: 400; }
+.box_rating h3   { background: #f5f5f7; border-radius: 4px; padding: 10px; margin: 0 0 10px;color: #000; }
 
 

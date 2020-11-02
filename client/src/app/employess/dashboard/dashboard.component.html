@@ -1,1 +1,61 @@
-<p>coming soon!</p>
+<div class="wrapper"> 
+  
+       
+  <!--Section1 Start Here-->
+    <div class="container clearfix">
+        <div class="box_main clearfix">
+          <div class="row">
+            <!-- Box1 -->
+            <div class="box col-lg-4">
+              <div class="box_in">
+                <h2 class="bg-blue">Current Evaluation Progress</h2>
+                <div class="box_progressbar">
+                  <progress-bar [progress]="70" 
+        [color-degraded]="{'0': 'red',  '15': '#f9c3d3', '25': '#92d892'}">
+        </progress-bar>
+                </div>
+                <div class="box_goalsetting clearfix">
+                  <h2 class="col-xs-6">Goal Setting<span>Completed</span></h2>
+                  <h2 class="col-xs-6">Final Rating<span>Signed-off</span></h2>
+                  <h2 class="col-xs-6">Manager Sign-off<span>Pending</span></h2>
+                  <h2 class="col-xs-6">Third Signatory<span>Pending</span></h2>
+                </div> 
+                <a href="#" class="box_in_btns_view">View Evaluation &#8594;</a>
+                <div class="clear"></div>
+              </div>
+            </div>
+            <!-- Box 2 -->
+            <div class="box col-lg-4">
+              <div class="box_in">
+                <h2 class="bg-blue">Previous Rating</h2>
+                
+                <div class="box_goalsetting box_rating clearfix">
+                  <h3 class="col-xs-12">Evaluation Period: N/A</h3>
+                  <h3 class="col-xs-12">Rating: N/A</h3>
+                  <h3 class="col-xs-12">Peer Review: N/A</h3>
+                </div> 
+                <a href="#" class="box_in_btns_view">View Evaluation &#8594;</a>
+                <div class="clear"></div>
+              </div>
+            </div>
+            <!-- Box 3 -->
+            <div class="box col-lg-4">
+              <div class="box_in">
+                <h2 class="bg-blue">Peer Review</h2>
+                
+                <div class="box_goalsetting box_rating clearfix">
+                  <h3 class="col-xs-12">Due By: {{peerReview.date}} ({{peerReview.days}} days)</h3>
+                  <h3 class="col-xs-12">Rating For: {{peerReview.rating_for}}</h3>
+                </div> 
+                <a href="#" class="box_in_btns_view">View Evaluation &#8594;</a>
+                <div class="clear"></div>
+              </div>
+            </div>
+          </div>
+
+          
+        </div>
+     </div>
+  <!--Section1 End Here-->
+   
+</div>

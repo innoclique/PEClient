@@ -1,1 +1,63 @@
-<p>eadashboard works!</p>
+<div class="wrapper"> 
+  
+       
+  <!--Section1 Start Here-->
+    <div class="container clearfix">
+        <div class="box_main clearfix">
+          <div class="row">
+            <!-- Box1 -->
+            <div class="box col-lg-6">
+              <div class="box_in">
+                <div class="chart">
+                  <canvas height="200" baseChart
+                    [data]=pieChartData
+                    [labels]=pieChartLabels
+                    chartType={{pieChartType}}
+                    [options]=pieChartOptions
+                    [plugins]=pieChartPlugins
+                    [colors]=pieChartColors
+                    [legend]=pieChartLegend>
+                  </canvas>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </div>
+            <!-- Box 2 -->
+            <div class="box col-lg-6">
+              <div class="box_in">
+                <h2 class="bg-blue">Next Evaluation</h2>
+                <div class="box_goalsetting box_rating clearfix">
+                  <h3 class="col-xs-12">Evaluation Period: {{nextEvaluationObj.date}} ({{nextEvaluationObj.days}} days)</h3>
+                  <h3 class="col-xs-12"># of Employees: {{nextEvaluationObj.total_employees}}</h3>
+                  <h3 class="col-xs-12">Current Pending Evaluation: {{nextEvaluationObj.current_pending_evealuations}}</h3>
+                </div> 
+                <a href="#" class="box_in_btns_view">View Evaluation &#8594;</a>
+                <div class="clear"></div>
+              </div>
+            </div>
+            <!-- Box 3 -->
+            <div class="box col-lg-6">
+              <div class="box_in">
+                <h2 class="bg-blue">Overdue Evaluation</h2>
+                <div class="box_goalsetting box_rating clearfix">
+                  <ag-grid-angular
+                    style="width: 480px; height: 200px;"
+                    class="ag-theme-alpine"
+                    [rowData]="rowData"
+                    [columnDefs]="columnDefs">
+                  </ag-grid-angular>
+                </div> 
+                <div class="clear"></div>
+              </div>
+            </div>
+          </div>
+
+          
+        </div>
+     </div>
+  <!--Section1 End Here-->
+   
+</div>
+
+
+  

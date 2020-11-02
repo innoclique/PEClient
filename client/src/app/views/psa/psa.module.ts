@@ -17,7 +17,9 @@ import { ReportsComponent } from './reports/reports.component';
 import { ApplicationSettingsComponent } from './application-settings/application-settings.component';
 import { EvaluationSettingsComponent } from './evaluation-settings/evaluation-settings.component';
 import { PaymentSettingsComponent } from './payment-settings/payment-settings.component';
-import { ProfileComponent } from './profile/profile.component'
+import { ProfileComponent } from './profile/profile.component';
+import { ChartsModule } from "ng2-charts";
+
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -109,7 +111,8 @@ export const projectRoutes: Routes = [
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
     EvalCommonModule,
-    TabsModule
+    TabsModule,
+    ChartsModule
   ]
 })
 export class PSAModule {

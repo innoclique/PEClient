@@ -10,11 +10,16 @@ import { KpiSetupComponent } from './kpi-setup/kpi-setup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ReportsComponent } from './reports/reports.component';
 import { StrengthsComponent } from './strengths/strengths.component';
+
+import { DashboardComponent } from './dashboard/dashboard.component';
+
+
 import {KpiReviewComponent} from './kpi-review/kpi-review.component';
 import {KpiReviewListComponent} from './kpi-review-list/kpi-review-list.component'
 import { ViewComponent } from '../views/final-rating/view/view.component';
 import { PeerReviewListComponent } from '../peer-review/peer-review-list/peer-review-list.component';
 import { DoPeerReviewComponent } from '../peer-review/do-peer-review/do-peer-review.component';
+
 
 
 const routes: Routes = [
@@ -47,7 +52,7 @@ const routes: Routes = [
       },
       {
         path:'dashboard',
-        component:KpiSetupComponent,
+        component:DashboardComponent,
         data:{title:'Dashboard'}
       }, {
         path:'action-plan',
