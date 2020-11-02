@@ -26,7 +26,7 @@
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text redStar">State</span>
+                    <span class="input-group-text redStar">Province/State</span>
                 </div>
                 <input type="text" class="form-control" [readonly]="f.Country.invalid?true:false"  placeholder="Search for a State" 
                 [formControl]="f.State" [matAutocomplete]="auto1"
@@ -38,7 +38,7 @@
                     </mat-option>
                 </mat-autocomplete>
                 <div *ngIf="f.State.touched && f.State.invalid" class="invalid-feedback">
-                    <div *ngIf="f.State.errors.required">State is required</div>
+                    <div *ngIf="f.State.errors.required">Province/State is required</div>
                 </div>
             </div>
         </div>

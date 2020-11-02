@@ -109,6 +109,14 @@ export const routes: Routes = [
         },
         loadChildren:()=>import('./views/rsa/rsa.module').then(m=>m.RsaModule),
         
+      },
+      {
+        path: 'finalrating',
+        data: {
+          title: 'Rating'
+        },
+        loadChildren:()=>import('./views/final-rating/final-rating.module').then(m=>m.FinalRatingModule),
+        
       }
     ]
   },

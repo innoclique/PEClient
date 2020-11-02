@@ -1,0 +1,35 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          KPI Review
+        </div>
+        <div class="card-body">
+          <tabset #staticTabs class="pro-tabs">
+            <tab>  
+              <ng-template tabHeading><i class="icon-layers"></i>My Reportees</ng-template>
+              <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine" [rowData]="kpiListData"
+              [columnDefs]="columnDefs" [pagination]="true" [paginationPageSize]="10"
+              (rowClicked)="onKpiGridRowClick($event)">
+            </ag-grid-angular>
+            </tab>
+            <tab >
+  
+              <ng-template tabHeading><i class="icon-hand-rock"></i>TS KPI's</ng-template>
+              
+              
+              
+              <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine" [rowData]="tsKpiList"
+              [columnDefs]="tsKPIcolumnDefs" [pagination]="true" [paginationPageSize]="10"
+              (rowClicked)="onKpiGridRowClick($event)">
+            </ag-grid-angular>
+            </tab>
+            
+          </tabset>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

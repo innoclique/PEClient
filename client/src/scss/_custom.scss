@@ -6,6 +6,14 @@
 .breadcrumb li a {
     color: #fff !important;
 }
+.breadcrumb li  {
+  visibility: hidden !important;
+}
+
+.nav-tabs .nav-link.active {
+
+  background-color: #c8ced3 !important;
+}
 
 .form-control.is-invalid {
     background-image: none !important;
@@ -36,6 +44,13 @@
     position: absolute;
     right: 1px;
     top: -3px;
+}
+
+.mat-date-class .mat-datepicker-toggle {
+
+  position: absolute;
+  right: 7px;
+  top: 10px;
 }
 
 .mat-dialog-container{

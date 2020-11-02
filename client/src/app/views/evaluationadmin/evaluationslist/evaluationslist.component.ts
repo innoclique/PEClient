@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -86,7 +87,7 @@ export class EvaluationslistComponent implements OnInit {
     };
     this.peerDropdownSettings = {
       singleSelection: false,
-      idField: '_id',
+      idField: 'EmployeeId',
       textField: 'displayTemplate',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
@@ -95,7 +96,7 @@ export class EvaluationslistComponent implements OnInit {
     };
     this.directReporteeDropdownSettings = {
       singleSelection: false,
-      idField: '_id',
+      idField: 'EmployeeId',
       textField: 'displayTemplate',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
@@ -144,18 +145,38 @@ export class EvaluationslistComponent implements OnInit {
         headerName: 'Employee', sortable: true, filter: true,
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</span>` }
       },
-       { headerName: 'Email', field: '', sortable: true, filter: true,
-       cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="">${data.data.Employee.Email}</span>` } },
+      {
+        headerName: 'RolledOn', sortable: true, filter: true,
+        cellRenderer: (data) => { return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')}
+        
+      },
+      {
+        headerName: 'Type', sortable: true, filter: true,
+        cellRenderer: (data) => { return "Regular"}
+      },
+      {
+        headerName: 'Evaluation Period', sortable: true, filter: true,
+        cellRenderer: (data) => { return data.data.EvaluationRow.EvaluationPeriod}
+      },
+      {
+        headerName: 'Evaluation Duration', sortable: true, filter: true,
+        cellRenderer: (data) => { return data.data.EvaluationRow.EvaluationDuration}
+      },
+       { headerName: 'Model', field: '', sortable: true, filter: true,
+       cellRenderer: (data) => { return `${data.data.EmployeeRow.Model.Name}` } },
+       { headerName: 'Manager', field: '', sortable: true, filter: true,
+       cellRenderer: (data) => { return `${data.data.Employee.Manager.FirstName} ${data.data.Employee.Manager.LastName}` } },
+       
       {
         headerName: 'Peers', field: '', sortable: false, filter: false,
         cellRenderer: (data) => {
-          return `<span style="color:blue;cursor:pointer" data-action-type="choosePeers">View</span>`
+          return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.Peers.length}</span>`
         }
       },
       {
         headerName: 'Direct Reportees', field: '', sortable: false, filter: false,
         cellRenderer: (data) => {
-          return `<span style="color:blue;cursor:pointer" data-action-type="chooseDirectReports">View</span>`
+          return `<span style="color:blue;cursor:pointer;" data-action-type="chooseDirectReports">${data.data.EmployeeRow.DirectReportees.length}</span>`
         }
       },
 
@@ -257,7 +278,7 @@ export class EvaluationslistComponent implements OnInit {
         // case "deleteEmp":
         //   return this.toggleSelection(this.selectedEmployee);
         case "chooseDirectReports":
-          return this.selectDirectReportees();
+          return this.openDirectReporteesView();
         case "choosePeers":
           return this.openPeerView();
         case "deleteEmp":
@@ -266,27 +287,27 @@ export class EvaluationslistComponent implements OnInit {
     }
   }
 
-  selectDirectReportees() {
+  openDirectReporteesView() {
     debugger
-    this.directReporteeCompetencyMessage = this.selectedEmployee.DirectReporteeComptencyMessage;
+    if(this.selectedEmployee.DirectReportees && this.selectedEmployee.DirectReportees.length>0){
+    this.directReporteeCompetencyMessage = this.selectedEmployee.DirectReportees[0].DirectReporteeComptencyMessage;
     this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees||[];
-this.seletedDirectReporteeCompetencyList=this.selectedEmployee.DirectReporteeCompetencyList;
-
+this.seletedDirectReporteeCompetencyList=this.selectedEmployee.DirectReportees[0].DirectReporteeCompetencyList;
+    }
+    this.selectedModel=this.selectedEmployee.Model;
     this.getDirectReportees();
     this.getCompetencyList();
   }
   getPeersForEmployees() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetPeers",
-    this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? 
-    this.currentUser.ParentUser : this.currentUser._id,
-    'id':this.selectedEmployee.Employee._id }    
+    this.perfApp.requestBody = { company: this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
       if (c && c.length > 0) {
         c.map(x => {
           var _f: any = {};
-          _f._id = x._id;
+          _f.EmployeeId = x._id;
           _f.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
             this.formattedPeers.push(_f);
         });
@@ -299,11 +320,16 @@ this.seletedDirectReporteeCompetencyList=this.selectedEmployee.DirectReporteeCom
   }
   openPeerView() {    
     debugger
-  this.PeersCompetencyMessage = this.selectedEmployee.PeersCompetencyMessage;      
-  this.selectedEmployeePeers = this.selectedEmployee.Peers||[];    
+    
+    this.PeersCompetencyMessage = this.selectedEmployee.Peers[0]?this.selectedEmployee.Peers[0].PeersCompetencyMessage:"";
+    this.selectedEmployeePeers = this.selectedEmployee.Peers || [];
+  //  this.currentPeerCompetencyList = this.selectedEmployee.Peers[0].PeersCompetencyList;
+   
+  //this.PeersCompetencyMessage = this.selectedEmployee.PeersCompetencyMessage;      
+  //this.selectedEmployeePeers = this.selectedEmployee.Peers||[];    
   
   this.selectedModel=this.selectedEmployee.Model;
-  this.currentPeerCompetencyList=this.selectedEmployee.PeersCompetencyList;
+  this.currentPeerCompetencyList=this.selectedEmployee.Peers[0]?this.selectedEmployee.Peers[0].PeersCompetencyList:[];
   
   this.getPeersForEmployees();
   this.getCompetencyList();
@@ -318,11 +344,17 @@ public deleteEmpFromList() {
 
 }
   getCompetencyList() {
+    var modelId="";
+    if(this.selectedModel instanceof Object){
+      modelId=this.selectedModel._id
+    }else{
+      modelId=this.selectedModel
+    }
     this.perfApp.route = "shared";
     this.perfApp.method = "GetCompetencyList",
       this.perfApp.requestBody = {
         id: this.currentOrganization._id,
-        modelId: this.selectedModel
+        modelId: modelId
       }; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.competencyList = c;
@@ -534,7 +566,11 @@ public deleteEmpFromList() {
     debugger
     this.selectedEmployee.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
     this.selectedEmployee.DirectReportsCompetency = this.seletedDirectReporteeCompetencyList;
-
+    this.selectedEmployee.DirectReportees.map(element => {
+      element.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
+      element.DirectReporteeCompetencyList = this.seletedDirectReporteeCompetencyList;
+    });
+    
     // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
     // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
     // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
@@ -624,9 +660,13 @@ savePeers() {
     return;
   }
   this.selectedEmployee.PeersCompetencyMessage = this.PeersCompetencyMessage;
-  this.selectedEmployee.PeersCompetencyList = this.currentPeerCompetencyList;
+  this.selectedEmployee.PeersPeersCompetencyList = this.currentPeerCompetencyList;
 
   
+this.selectedEmployee.Peers.map(element => {
+  element.PeersCompetencyMessage = this.PeersCompetencyMessage;
+  element.PeersCompetencyList = this.currentPeerCompetencyList;
+});
   this.UpdatePeers();
 }
 
@@ -662,7 +702,7 @@ public getDirectReportees(): void {
     console.table('emp list ', x)
     x.map(emp => {        
       var _f :any= {};      
-          _f._id = emp._id;
+          _f.EmployeeId = emp._id;
           _f.displayTemplate = `${emp.FirstName}-${emp.LastName}-${emp.Email}`,
       this.currentEmployeeDirectReportees.push(_f);
     });

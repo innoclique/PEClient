@@ -124,11 +124,11 @@ export class CreateClientComponent implements OnInit {
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/])/, { hasAddressSplChars: true }, 'hasAddressSplChars'),
       ])],
       Phone: [null, Validators.compose([
-        Validators.required, Validators.minLength(10),
+        Validators.required, Validators.minLength(12),
         Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
 
       ])],
-      PhoneExt: [null, []],
+      PhoneExt: ["", []],
       Email: ['', [Validators.required, Validators.email]],
       Country: ['', [Validators.required]],
       State: ['', [Validators.required]],

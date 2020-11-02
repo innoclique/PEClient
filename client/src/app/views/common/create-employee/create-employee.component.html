@@ -7,11 +7,12 @@
           <div class="card">
             <div class="card-header">
                Create Employee
-            
+                        
             <div class="form-group form-actions pull-right m-0">
-              <i class=" cui-account-logout icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-              font-size: 17px;"  (click)="onCancle()" title="Back to list" ></i>    
-
+          <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+(click)="onCancle()" >
+Back to list
+</button>
             </div>
             </div>
             <div class="card-body">
@@ -193,8 +194,8 @@
                           [ngClass]="{ 'is-invalid': f.ZipCode.touched  &&  f.ZipCode.invalid }"
                           formControlName="ZipCode"  name="ZipCode" required  >
                           <div *ngIf="f.ZipCode.touched && f.ZipCode.invalid" class="invalid-feedback">
-                            <div *ngIf="f.ZipCode.errors.required">Zip Code is required</div>
-                           <div *ngIf="f.ZipCode.errors.minlength">Zip Code must be at least 5 characters  </div>
+                            <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is required</div>
+                           <div *ngIf="f.ZipCode.errors.minlength">Pin/Zip Code must be at least 5 characters  </div>
                             <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                         </div>
                        
@@ -337,7 +338,7 @@
                           <span class="input-group-text ">Manager</span>
                         </div>
                         <input type="text" class="autoc-border form-control"
-                        placeholder="Search for a Direct Report(s)"
+                        placeholder="Search for a Manager"
                        
                         [matAutocomplete]="auto3"
                            formControlName="Manager" name="Manager"

@@ -1,0 +1,23 @@
+<div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            Peer Review List
+          </div>
+          <div class="card-body">
+            <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine" 
+            [rowData]="peerReviewList"
+            [columnDefs]="columnDefs" 
+            [pagination]="true" 
+            [paginationPageSize]="10"
+            (gridReady)="onGridReady($event)"
+            (rowClicked)="onGridRowClick($event)">
+              </ag-grid-angular>
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

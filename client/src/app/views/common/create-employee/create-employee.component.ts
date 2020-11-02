@@ -42,7 +42,7 @@ export class CreateEmployeeComponent implements OnInit {
   filteredOptions: Observable<any[]>;
   filteredOptionsTS: Observable<any[]>;
   filteredOptionsDR: Observable<any[]>;
-
+public currentOrganization:any={}
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -53,7 +53,9 @@ export class CreateEmployeeComponent implements OnInit {
     private modalService: BsModalService,
     private snack: NotificationService,
     private perfApp: PerfAppService,
-    public translate: TranslateService) { }
+    public translate: TranslateService) {
+      
+     }
 
 
 
@@ -64,9 +66,11 @@ export class CreateEmployeeComponent implements OnInit {
     }
 
   ngOnInit(): void {
-
+    this.currentOrganization = this.authService.getOrganization();
     this.loginUser=this.authService.getCurrentUser();
     this.getEmployees();
+    this.getManagersEmps();
+    this.getThirdSignatoryEmps();
    this.getAllDepartments();
 
    this.initEmpForm()
@@ -230,7 +234,7 @@ export class CreateEmployeeComponent implements OnInit {
         // this.closeForm();
         // this.showSpinner = false;
 
-        this.router.navigate(['employee/setup']);
+        this.router.navigate(['ea/setup-employee']);
       }
       
         }, error => {
@@ -320,7 +324,6 @@ export class CreateEmployeeComponent implements OnInit {
     ${data.Country.name?data.Country.name:""}
    `
   //  if(data.City.name)
-  this.empForm.patchValue({Address:add});
   
   }
 
@@ -328,10 +331,65 @@ export class CreateEmployeeComponent implements OnInit {
   public employeeDropDownData :any[]=[]
   public employeeThirdSigData :any[]=[]
   public employeeDirReportData :any[]=[]
+  getManagersEmps(){
+    this.perfApp.route="app";
+    this.perfApp.method="GetManagers",
+    this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+    this.perfApp.CallAPI().subscribe(c=>{
+      
+      console.log('lients data',c);
+      if(c && c.length>0){
+        
+        this.employeeDirReportData=c;
+        this.filteredOptionsDR = this.empForm.controls['Manager'].valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value :  value? value.FirstName:""),
+          map(name => name ? this._filterDR(name) : this.employeeDirReportData.slice())
+        );
+      }
+     
+       
+    })
+
+  }
+
+
+
+  getThirdSignatoryEmps(){
+    this.perfApp.route="app";
+    this.perfApp.method="GetThirdSignatorys",
+    this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+    this.perfApp.CallAPI().subscribe(c=>{
+      
+      console.log('lients data',c);
+      if(c && c.length>0){
+
+
+        this.employeeThirdSigData=c;
+       
+      
+        this.filteredOptionsTS = this.empForm.controls['ThirdSignatory'].valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value? value.FirstName:""),
+          map(name => name ? this._filterTD(name) : this.employeeThirdSigData.slice())
+        );
+
+      }
+     
+       
+    })
+
+  }
+
+
+
   getEmployees(){
     this.perfApp.route="app";
     this.perfApp.method="GetAllEmployees",
-    this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+   // this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+   this.perfApp.requestBody = { parentId: this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c=>{
       
       console.log('lients data',c);
@@ -340,23 +398,9 @@ export class CreateEmployeeComponent implements OnInit {
       }
        // if(!row.isDraft)
        this.employeeDropDownData=c;
-       this.employeeThirdSigData=c;
-       this.employeeDirReportData=c;
-       
       
-       this.filteredOptionsTS = this.empForm.controls['ThirdSignatory'].valueChanges
-       .pipe(
-         startWith(''),
-         map(value => typeof value === 'string' ? value : value? value.FirstName:""),
-         map(name => name ? this._filterTD(name) : this.employeeThirdSigData.slice())
-       );
   
-       this.filteredOptionsDR = this.empForm.controls['Manager'].valueChanges
-       .pipe(
-         startWith(''),
-         map(value => typeof value === 'string' ? value :  value? value.FirstName:""),
-         map(name => name ? this._filterDR(name) : this.employeeDirReportData.slice())
-       );
+      
   
        this.filteredOptions = this.empForm.controls['CopiesTo'].valueChanges
        .pipe(

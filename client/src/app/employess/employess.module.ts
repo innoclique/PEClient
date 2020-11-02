@@ -29,15 +29,29 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { CreateGoalsComponent } from './create-goals/create-goals.component';
 import { GoalsComponent } from './goals/goals.component';
 import { StrengthsComponent } from './strengths/strengths.component';
+
 import {MatGridListModule} from '@angular/material/grid-list';
 import {ProgressBarModule} from "angular-progress-bar";
 import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
  
 
+
+import { KpiReviewComponent } from './kpi-review/kpi-review.component';
+import { KpiReviewListComponent } from './kpi-review-list/kpi-review-list.component';
+// RECOMMENDED
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { CompetencyFormModule } from '../views/competency-form/competency-form.module';
+import { PeerReviewModule } from '../peer-review/peer-review.module';
+
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
-     AccomplishmentsComponent, CurrentEvaluationComponent, ActionPlanComponent,DashboardComponent, CreateGoalsComponent, GoalsComponent, StrengthsComponent],
+     AccomplishmentsComponent, CurrentEvaluationComponent, 
+     ActionPlanComponent,DashboardComponent, CreateGoalsComponent, GoalsComponent, 
+     StrengthsComponent,
+     KpiReviewComponent,
+     KpiReviewListComponent
+    ],
   imports: [
     CommonModule,
     EmployessRoutingModule,
@@ -56,10 +70,16 @@ import {MatListModule} from '@angular/material/list';
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
     SharedModule,
+
     MatGridListModule,
     ProgressBarModule,
     MatCardModule,
     MatListModule
+
+    AccordionModule.forRoot(),
+    CompetencyFormModule,
+    PeerReviewModule
+
   ],
   exports: [
     ModalModule

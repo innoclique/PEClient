@@ -136,7 +136,8 @@ export class KpiReviewComponent implements OnInit {
       YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments : ''],
       YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager : ''],
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
-      Signoff: [this.loginUser.FirstName],
+      Signoff: [this.kpiDetails.Owner?this.kpiDetails.Owner.FirstName:""],
+      ManagerSignOff: [this.loginUser.FirstName],
       CoachingReminder: [this.kpiDetails.CoachingReminder ? this.kpiDetails.CoachingReminder :this.loginUser.Organization.CoachingReminder],
 
       IsSubmit: ['false'],

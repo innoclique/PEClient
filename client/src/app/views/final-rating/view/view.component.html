@@ -1,0 +1,292 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Rating View
+                </div>
+                <div class="card-body">
+                    <tabset #staticTabs class="pro-tabs">
+                        <!--View KPI Start-->
+                        <tab>
+                            <ng-template tabHeading><i class="icon-layers"></i>KPIs</ng-template>
+
+                            <form [formGroup]="kpiForm" novalidate="" class="ng-untouched ng-pristine ng-valid">
+
+                                <div class="form-group row">
+                                    <div class="col-md-3 kpi-fl ">
+                                        <div class="col-md-6">
+                                            <strong>Evaluation Period: </strong>
+                                        </div>
+                                        <!-- <div class="col-md-5"><span>{{currEvaluation?.EvaluationPeriod}}</span></div> -->
+
+                                    </div>
+
+                                    <div class="col-md-3 ">
+                                        <div class="col-md-6">
+                                            <strong>Title: </strong>
+                                        </div>
+                                        <div class="col-md-5"><span>{{loginUser?.Title}}</span></div>
+
+                                    </div>
+
+                                    <div class="col-md-3 ">
+                                        <div class="col-md-6">
+                                            <strong>Department: </strong>
+                                        </div>
+                                        <div class="col-md-5"><span>{{loginUser?.Department}}</span></div>
+
+                                    </div>
+
+                                    <div class="col-md-3 ">
+                                        <div class="col-md-6">
+                                            <strong>Length of Service: </strong>
+                                        </div>
+                                        <div class="col-md-5"><span>{{ loginUser?.JoiningDate| dateAgo}}</span></div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-3 ">
+                                        <div class="col-md-6">
+                                            <strong>Manager: </strong>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <span>{{loginUser?.Manager? loginUser?.Manager?.FirstName :'NA'}}</span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-3 ">
+                                        <div class="col-md-6">
+                                            <strong>Length of Time in Current Role: </strong>
+                                        </div>
+                                        <div class="col-md-5"><span>{{ loginUser?.RoleEffFrom | dateAgo}}</span></div>
+
+                                    </div>
+
+                                    <div class="col-md-3 ">
+                                        <div class="col-md-6">
+                                            <strong>Leadership Role: </strong>
+                                        </div>
+                                        <div class="col-md-5"><span>{{loginUser?.DirectReports?'Yes':'No'}}</span></div>
+
+                                    </div>
+
+                                    <div class="col-md-3 ">
+                                        <div class="col-md-6">
+                                            <strong>Job Level: </strong>
+                                        </div>
+                                        <div class="col-md-5"><span>{{loginUser?.JobLevel}}</span></div>
+
+                                    </div>
+
+                                </div>
+
+                                <br>
+
+                                <div class="view-only">
+
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text ">Key Performance Indicators
+                                                            (KPI)</span>
+                                                    </div>
+                                                    <input type="text" readonly formControlName="Kpi" name="kpi">
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text ">Measurement Criteria </span>
+                                                    </div>
+                                                    <input type="text" readonly formControlName="MeasurementCriteria"
+                                                        name="MeasurementCriteria">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text "> Target Completion</span>
+                                                    </div>
+                                                    <input readonly formControlName="TargetCompletionDate"
+                                                        name="TargetCompletionDate">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Score</span>
+                                                    </div>
+                                                    <input readonly formControlName="Score" name="Score">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Status</span>
+                                                    </div>
+                                                    <input readonly formControlName="Status" name="Status">
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <div class="input-group ">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Weighting</span>
+                                                    </div>
+                                                    <input readonly formControlName="Weighting" name="Weighting">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Year-end Comments</span>
+                                                    </div>
+                                                    <textarea class="form-control" cols="" rows="4" readonly
+                                                        formControlName="YearEndComments"
+                                                        name="YearEndComments">  </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <div class="form-group ">
+                                                <div class="input-group ">
+                                                    <div class="input-group-prepend ml-2">
+                                                        <span class="input-group-text">Sign-off</span>
+                                                    </div>
+                                                    <input readonly class="form-control" type="text" disabled                                                        
+                                                        formControlName="Signoff" name="Signoff">
+                                                </div>
+                                             </div>
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text "> Date</span>
+                                                    </div>
+                                                    <input class="autoc-border  form-control" 
+                                                        readonly 
+                                                        formControlName="TargetCompletionDate"
+                                                        name="TargetCompletionDate">
+                                                   
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                    <div 
+                                        class=" row form-group form-actions clearfix w-100 d-block all-events ">
+                                        <button [disabled]='selIndex==0' class="btn btn-link pull-left"
+                                            (click)="priKpi()"> Prev Kpi </button>
+                                        <button [disabled]='selIndex+1 == empKPIData.length'
+                                            class="btn btn-link pull-right" (click)="nextKpi()">Next Kpi</button>
+
+                                    </div>
+
+
+                                </div>
+                                <!-- <div class="clearfix"></div> -->
+                                <h4>Manager</h4>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Score (self)</span>
+                                                </div>
+                                                <input readonly formControlName="ManagerScore" name="ManagerScore">                                                
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="col-md-4">
+
+
+
+                                        <div class="form-group ">
+
+                                            <div class="input-group ">
+                                                <div class="input-group-prepend ml-2">
+                                                    <span class="input-group-text">Sign-off</span>
+                                                </div>
+
+                                                <input  class="form-control" type="text" disabled                                                    
+                                                    formControlName="Signoff" name="Signoff">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Year-end Comments</span>
+                                                </div>
+                                                <textarea  class="form-control" cols="" rows="4" readonly                                                   
+                                                    formControlName="YECommManager" name="YECommManager">  </textarea>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </tab>
+                        <!--View KPI End-->
+                        <tab>
+                            <ng-template tabHeading><i class="icon-hand-rock"></i>Competencies</ng-template>
+                           
+                        </tab>
+                        <tab>
+                            <ng-template tabHeading><i class="icon-hand-rock"></i>Developmental Goals (previous year)
+                            </ng-template>
+                            
+                        </tab>
+                        <tab>
+                            <ng-template tabHeading><i class="icon-hand-rock"></i>Peer Rating</ng-template>
+                            
+                        </tab>
+
+                        <tab>
+                            <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
+                            
+                        </tab>
+                    </tabset>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
