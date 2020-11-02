@@ -74,7 +74,7 @@ export class EvaluationslistComponent implements OnInit {
     this.currentOrganization = this.authService.getOrganization();
     this.getEvaluationList();
     //    this.getIndustries();
-    this.currentOrganization = this.authService.getOrganization();
+    
     this.getEmployees();
     this.dropdownSettings = {
       singleSelection: false,
@@ -122,7 +122,7 @@ export class EvaluationslistComponent implements OnInit {
   getEmployees() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllEmployees",
-      this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id }
+      this.perfApp.requestBody = { 'companyId': this.currentOrganization._id  }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
       if (c && c.length > 0) {
@@ -301,9 +301,10 @@ this.seletedDirectReporteeCompetencyList=this.selectedEmployee.DirectReportees[0
   getPeersForEmployees() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetPeers",
-    this.perfApp.requestBody = { company: this.currentOrganization._id }
+    this.perfApp.requestBody = { company: this.currentOrganization._id,id:this.currentUser._id }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
+      this.formattedPeers=[];
       if (c && c.length > 0) {
         c.map(x => {
           var _f: any = {};

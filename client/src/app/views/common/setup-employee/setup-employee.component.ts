@@ -367,7 +367,7 @@ getEmployees(){
   this.perfApp.route="app";
   this.perfApp.method="GetAllEmployees",
  // this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
- this.perfApp.requestBody = { parentId: this.currentOrganization._id }
+ this.perfApp.requestBody = { companyId: this.currentOrganization._id }
   this.perfApp.CallAPI().subscribe(c=>{
     
     console.log('lients data',c);

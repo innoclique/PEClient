@@ -74,7 +74,7 @@ import { PeerReviewModule } from '../peer-review/peer-review.module';
     MatGridListModule,
     ProgressBarModule,
     MatCardModule,
-    MatListModule
+    MatListModule,
 
     AccordionModule.forRoot(),
     CompetencyFormModule,

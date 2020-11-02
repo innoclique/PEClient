@@ -80,8 +80,9 @@ export class PeerReviewListComponent implements OnInit {
     this.perfApp.route = "app";
     this.perfApp.method = "GetPendingPeerReviewsList",
       this.perfApp.requestBody = {
-        "EvaluationId": "5f9afa0b8705d33cfc4228fb",
-        "EmployeeId": "5f904bdfa8f3771460ef153b"
+        EmployeeId:this.loginUser._id
+        // "EvaluationId": "5f9afa0b8705d33cfc4228fb",
+        // "EmployeeId": "5f904bdfa8f3771460ef153b"
       }
     this.subscriptions.push(this.perfApp.CallAPI().subscribe(c => {
       if (c) {

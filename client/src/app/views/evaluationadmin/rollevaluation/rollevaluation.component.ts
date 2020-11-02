@@ -158,6 +158,7 @@ export class RollevaluationComponent implements OnInit {
       element.PeersCompetencyMessage = this.PeersCompetencyMessage;
       element.PeersCompetencyList = this.selectedPeersCompetencyList;
     });
+    this.EmpGridOptions.api.setRowData(this.selectedEmployeeList)
     this.closePeersModel();
   }
 
@@ -197,7 +198,7 @@ export class RollevaluationComponent implements OnInit {
       console.table('emp list ', x)
       x.map(emp => {
         var _f: any = {};
-        _f._id = emp._id;
+        _f.EmployeeId = emp._id;
         _f.displayTemplate = `${emp.FirstName}-${emp.LastName}-${emp.Email}`,
           this.currentEmployeeDirectReportees.push(_f);
       });
@@ -284,7 +285,7 @@ export class RollevaluationComponent implements OnInit {
     };
     this.peerDropdownSettings = {
       singleSelection: false,
-      idField: '_id',
+      idField: 'EmployeeId',
       textField: 'displayTemplate',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
@@ -293,7 +294,7 @@ export class RollevaluationComponent implements OnInit {
     };
     this.directReporteeDropdownSettings = {
       singleSelection: false,
-      idField: '_id',
+      idField: 'EmployeeId',
       textField: 'displayTemplate',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
@@ -341,14 +342,16 @@ export class RollevaluationComponent implements OnInit {
       this.perfApp.requestBody = { company: this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
-      if (c && c.length > 0) {
-        this.employeesList$ = c
+      if (c && c.IsSuccess && c.Data && c.Data.length > 0) {
+        this.employeesList$ = c.Data
         this.employeesList$.map(x => {
           var _f = Object.assign({}, x);
           x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
             x.row = _f;
         });
         console.log('formated data', this.employeesList$);
+      }else{
+        this.notification.error('You have reached maximum employees limit for evaluation. Please contact Admin')
       }
     })
   }
@@ -356,13 +359,14 @@ export class RollevaluationComponent implements OnInit {
     this.perfApp.route = "app";
     this.perfApp.method = "GetPeers",
       //this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id,'id':this.selectedEmployee._id }    
-      this.perfApp.requestBody = { company: this.currentOrganization._id }
+      this.perfApp.requestBody = { company: this.currentOrganization._id,id:this.currentUser._id }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
+      this.formattedPeers=[];
       if (c && c.length > 0) {
         c.map(x => {
           var _f: any = {};
-          _f._id = x._id;
+          _f.EmployeeId = x._id;
           _f.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
             this.formattedPeers.push(_f);
         });
@@ -386,7 +390,7 @@ export class RollevaluationComponent implements OnInit {
 
     // this.setEmployeeIds();
     //this.setModelIds();
-    this.evaluationForm.value.Employees = this.selectedEmployees;
+    this.evaluationForm.value.Employees = this.selectedEmployeeList;
     console.log('evaluation form', this.evaluationForm.value);
     this.perfApp.method = "CreateEvaluation";
     this.perfApp.requestBody = this.evaluationForm.value;
