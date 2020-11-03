@@ -9,63 +9,89 @@ import { ReportsComponent } from './reports/reports.component';
 import { SetupModelComponent } from './setup-model/setup-model.component';
 import { QuestionsModule } from '../questions/questions.module';
 import { ChartsModule } from "ng2-charts";
-import {MatCardModule} from '@angular/material/card';
-import {MatGridListModule} from '@angular/material/grid-list';
- 
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AgGridModule } from 'ag-grid-angular';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { CustomMaterialModule } from '../../custom-material/custom-material.module';
+import { EvalCommonModule } from '../common/common.module';
+import { projectRoutes } from '../psa/psa.module';
+import { ClientListComponent } from './client-list/client-list.component';
+
 
 export const rsaRoutes: Routes = [
-  
-  {path: '',
-  data: {
-    title: 'Dashboard'
+
+  {
+    path: '',
+    data: {
+      title: 'Dashboard'
+    },
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      },
+      {
+        path:'setup-client/:id',
+        component:SetupclientComponent,
+        data:{title:'Update'}
+      },
+      {
+        path: 'client-list', component: ClientListComponent,
+        data: {
+          title: 'View All'
+        }
+      },
+      {
+        path: 'setup-clients',
+        component: SetupclientComponent,
+        data: { title: 'Create' }
+      },
+      {
+        path: 'app-settings',
+        component: AppsettingsComponent,
+        data: { title: 'Create' }
+      },
+      {
+        path: 'evaluation-settings',
+        component: EvaluationsettingsComponent,
+        data: { title: 'Create' }
+      },
+      {
+        path: 'reports',
+        component: ReportsComponent,
+        data: { title: 'Reports' }
+      },
+      {
+        path: 'setup-model',
+        component: SetupModelComponent,
+        data: { title: 'Model' }
+      }
+
+    ]
   },
-  children: [
-    {
-      path: 'dashboard',
-      component:DashboardComponent
-    },
-    // { path: 'list', component: cli,data: {
-    //   title: 'View All'
-    // }},
-    {
-      path:'setup-clients',
-      component:SetupclientComponent,
-      data:{title:'Create'}
-    },
-    {
-      path:'app-settings',
-      component:AppsettingsComponent,
-      data:{title:'Create'}
-    },
-    {
-      path:'evaluation-settings',
-      component:EvaluationsettingsComponent,
-      data:{title:'Create'}
-    },
-    {
-      path:'reports',
-      component:ReportsComponent,
-      data:{title:'Reports'}
-    },
-  {path:'setup-model',
-component:SetupModelComponent,
-data:{title:'Model'}
-}
-  
-  ]
-},
-  
+
 ];
 
 @NgModule({
-  declarations: [DashboardComponent, SetupclientComponent, AppsettingsComponent, EvaluationsettingsComponent, ReportsComponent, SetupModelComponent],
+  declarations: [DashboardComponent, SetupclientComponent, AppsettingsComponent, EvaluationsettingsComponent, ReportsComponent, SetupModelComponent, ClientListComponent],
   imports: [
     CommonModule,
-    QuestionsModule,
+
     RouterModule.forChild(rsaRoutes),
     ChartsModule,
     MatCardModule,
-    MatGridListModule
+    MatGridListModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CustomMaterialModule,
+
+    AgGridModule.withComponents([]),
+    ModalModule.forRoot(),
+    EvalCommonModule,
+    TabsModule,
   ]
 })
 export class RsaModule { }

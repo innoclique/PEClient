@@ -37,6 +37,7 @@ export class CreateClientComponent implements OnInit {
   clientFormData: any = {};
   isCreate:Boolean=true;
   models:any=[];
+  currentOrganization:any;
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -46,7 +47,8 @@ export class CreateClientComponent implements OnInit {
     public router: Router,
     public activatedRoute: ActivatedRoute
   ) {
-
+    this.currentUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
 
   }
   public monthList = ["January", "February", "March", "April", "May", "June", "July",
@@ -480,6 +482,7 @@ action='Update'
       organization.IsDraft=false;
     }
     organization = this.setContactPersonData(organization);
+    organization.ParentOrganization=this.currentOrganization._id;
     delete organization.contactPersonForm;
     return organization;
   }

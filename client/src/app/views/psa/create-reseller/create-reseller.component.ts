@@ -38,6 +38,7 @@ export class CreateResellerComponent implements OnInit {
   industries: any;
   evaluationPeriods: any;
   clientFormData: any = {};
+  currentOrganization:any;
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -48,7 +49,8 @@ export class CreateResellerComponent implements OnInit {
     public activatedRoute: ActivatedRoute
   ) {
 
-
+    this.currentUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
   }
   countyFormReset: boolean;
   cscData: any = null;
@@ -386,6 +388,7 @@ action='Update'
       organization.IsDraft=false;
     }
     organization = this.setContactPersonData(organization);
+    organization.ParentOrganization=this.currentOrganization._id;
     delete organization.contactPersonForm;
     return organization;
   }

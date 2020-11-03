@@ -4,7 +4,6 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { GridApi, GridOptions, _ } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { AuthService } from '../../../services/auth.service';
 
 import { NotificationService } from '../../../services/notification.service';

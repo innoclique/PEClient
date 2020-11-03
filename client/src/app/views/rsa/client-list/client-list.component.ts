@@ -1,21 +1,20 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-
-import { MatDialog } from '@angular/material/dialog';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GridOptions } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AuthService } from '../../../services/auth.service';
-
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { CustomValidators } from '../../../shared/custom-validators';
+
 @Component({
-  selector: 'app-client-setup',
-  templateUrl: './client-setup.component.html',
-  styleUrls: ['./client-setup.component.css']
+  selector: 'app-client-list',
+  templateUrl: './client-list.component.html',
+  styleUrls: ['./client-list.component.css']
 })
-export class ClientSetupComponent implements OnInit {
+export class ClientListComponent implements OnInit {
+
 
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
@@ -26,23 +25,19 @@ export class ClientSetupComponent implements OnInit {
   currentRowItem: any;
   orgViewRef: BsModalRef;
   @ViewChild('orgView') orgView: TemplateRef<any>;
-  @ViewChild('resellerView') resellerView: TemplateRef<any>;
+  
   config = {
     backdrop: true,
     ignoreBackdropClick: true,
 
   };
   industries: any;
-  public resellerList: any=[];
+  
   public clientData: any=[]
   public monthList = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"]
-    public resellerGridApi:any;
     
     public clientGridOptions: GridOptions = {
-      columnDefs: this.getColDef()      
-    }
-    public resellerGridOptions: GridOptions = {
       columnDefs: this.getColDef()      
     }
     currentUser:any;
@@ -57,6 +52,7 @@ export class ClientSetupComponent implements OnInit {
     public authService: AuthService,
     public router: Router
   ) {
+
 
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
@@ -99,10 +95,7 @@ export class ClientSetupComponent implements OnInit {
   
   }
   gotoCreate() {
-    this.router.navigate(['/psa/setup-clients'])
-  }
-  gotoResellerCreate(){
-    this.router.navigate(['/psa/setup-reseller'])
+    this.router.navigate(['rsa/setup-client'])
   }
   ngOnInit(): void {
     this.getClients();
@@ -213,16 +206,12 @@ export class ClientSetupComponent implements OnInit {
   onClientGridReady(params) {
     this.clientGridOptions.api = params.api; // To access the grids API
   }
-  onResellerGridReady(params) {
-    this.resellerGridOptions.api = params.api; // To access the grids API
-  }
 
 
 
   getClients() {
     this.perfApp.route = "app";
-    this.perfApp.method = "GetAllOrganizations",
-    //this.perfApp.requestBody = { 'id': '5f5929f56c16e542d823247b' }
+    this.perfApp.method = "GetAllOrganizationsForReseller",
     this.perfApp.requestBody = { 'companyId': this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c => {
       
@@ -242,21 +231,12 @@ export class ClientSetupComponent implements OnInit {
               , RowData: row
             })
           }
-          if(row.ClientType==='Reseller'){
-            this.resellerList.push({
-              Name: row.Name
-              , OrganizationType: row.OrganizationType
-              , Industry: row.Industry
-              , UsageType: row.UsageType
-              , ContactName: row.ContactName
-              , RowData: row
-            })
-          }        
+                  
         });
         debugger
         this.clientGridOptions.api.setRowData(this.clientData);
        
-        this.resellerGridOptions.api.setRowData(this.resellerList);
+      
       
       }
       
@@ -462,22 +442,6 @@ export class ClientSetupComponent implements OnInit {
       }
     }
   }
-  public onResellerRowClicked(e){
-    if (e.event.target !== undefined) {
-      let data = e.data;
-      this.currentRowItem = data.RowData;
-
-      let actionType = e.event.target.getAttribute("data-action-type");
-      switch (actionType) {
-        case "orgView":
-          return this.openResellerview();
-        case "suspendorg":
-          return this.suspendOrg();
-        case "edit":
-        return this.editReseller();
-      }
-    }
-  }
   suspendOrg() {
     debugger
     const cr = this.currentRowItem;
@@ -503,37 +467,15 @@ export class ClientSetupComponent implements OnInit {
   }
   editClient(){
     const cr = this.currentRowItem;
-    
-      this.router.navigate(['/psa/setup-clients/'+cr._id])
+    this.router.navigate(['/rsa/setup-client/'+cr._id], { skipLocationChange: true });      
       return;
-    
-  }
-  editReseller(){
-    const cr = this.currentRowItem;    
-      this.router.navigate(['/psa/setup-reseller/'+cr._id])
-      return;    
-  }
-  openResellerview(){
-    debugger
-    const cr = this.currentRowItem;
-    if(cr.IsDraft){
-      this.router.navigate(['/psa/setup-reseller/'+cr._id])
-      return;
-    }else{
-      this.orgViewRef = this.modalService.show(this.orgView, this.config);
-      this.orgViewRef.setClass('modal-xlg');  
-      this.countyFormReset=true; 
-      this.cscData={Country:cr.Country,State:cr.State,City:cr.City};    
-      this.setValues(this.clientForm, cr);
-      this.disableForm(this.clientForm);
-    }
     
   }
   openOrgView() {
     debugger
     const cr = this.currentRowItem;
     if(cr.IsDraft){
-      this.router.navigate(['/psa/setup-clients/'+cr._id])
+      this.router.navigate(['/rsa/setup-client/'+cr._id])
       return;
     }else{
       this.orgViewRef = this.modalService.show(this.orgView, this.config);
