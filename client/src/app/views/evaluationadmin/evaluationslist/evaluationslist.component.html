@@ -12,8 +12,8 @@
             </button>
           </div>
           <div class="card-body">
-            <ag-grid-angular *ngIf="selectedEmployeesList.length>0"
-              style="width: auto; height: 200px;" class="ag-theme-alpine"
+            <ag-grid-angular 
+              style="width: auto; height: 500px;" class="ag-theme-alpine"
               [rowData]="selectedEmployeesList" [gridOptions]="EmpGridOptions" [pagination]="true"
               [paginationPageSize]="10" (gridReady)="onEmpGridReady($event)"
               (rowClicked)="onEmpRowClicked($event)">

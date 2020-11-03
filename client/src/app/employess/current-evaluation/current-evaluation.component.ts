@@ -231,9 +231,9 @@ export class CurrentEvaluationComponent implements OnInit {
   prepareCompetencyQuestions() {
     var questions: CompetencyBase<string>[] = [];
 
-    this.selfCompetencyForm.value.Comments = this.evaluationForm.Competencies.Employees[0].CompetencyComments,
-      this.selfCompetencyForm.value.OverallRating = this.evaluationForm.Competencies.Employees[0].OverallRating,
-      this.selfCompetencyForm.value.IsDraft = !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
+    this.selfCompetencyForm.controls["Comments"].setValue( this.evaluationForm.Competencies.Employees[0].CompetencyComments),
+      this.selfCompetencyForm.controls["OverallRating"].setValue( this.evaluationForm.Competencies.Employees[0].CompetencyOverallRating),
+      this.selfCompetencyForm.controls["IsDraft"].setValue(!this.evaluationForm.Competencies.Employees[0].CompetencySubmitted)
     console.log('this.selfCompetencyForm.value', this.selfCompetencyForm.value)
     this.employeeCompetencyList.forEach(element => {
       questions = [];
@@ -306,7 +306,9 @@ export class CurrentEvaluationComponent implements OnInit {
       this.perfApp.requestBody = competencyQA;// { TsId: this.loginUser._id }
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
+      this.snack.success(isDraft?'Competencies Rating Successfully':'Competency Rating Submitted Successfully');
     }, error => {
+      this.snack.error('something went wrong.')
       console.log('error', error)
     })
 
@@ -330,15 +332,33 @@ export class CurrentEvaluationComponent implements OnInit {
         SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
       };
     console.log('final rating form', this.perfApp.requestBody)
-    this.perfApp.CallAPI().subscribe(x => {
-      console.log(x)
-      this.snack.success('Successfully Submitted Final Rating');
-      window.location.reload();
-    }, error => {
-      console.log('error', error)
-      this.snack.error('Something went wrong')
-    })
-
+    
+    if(!isDraft){
+      this.perfApp.CallAPI().subscribe(x => {
+        console.log(x)
+        this.snack.success('Successfully Submitted Final Rating');
+        window.location.reload();
+      }, error => {
+        console.log('error', error)
+        this.snack.error('Something went wrong')
+      })
+    }else{
+      var confirm=window.confirm('Are you sure, you want to submit Final Rating?')
+      
+    if(confirm){
+      this.perfApp.CallAPI().subscribe(x => {
+        console.log(x)
+        this.snack.success('Successfully Submitted Final Rating');
+        window.location.reload();
+      }, error => {
+        console.log('error', error)
+        this.snack.error('Something went wrong')
+      })
+  
+    }
+    }
+    
+    
   }
   cancelFinalRating() {
 
