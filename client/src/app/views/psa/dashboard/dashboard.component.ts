@@ -99,5 +99,11 @@ export class DashboardComponent implements OnInit {
   public lineChartType: ChartType = 'line';
   public lineChartPlugins = [pluginAnnotations];
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
+  chartClicked(event){
+    console.log(event)
+  }
 
+  chartHovered(event){
+    console.log(event)
+  }
 }

@@ -102,4 +102,12 @@ export class DashboardComponent implements OnInit {
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
 
+  chartClicked(event){
+    console.log(event)
+  }
+  
+  chartHovered(event){
+    console.log(event)
+  }
+
 }
