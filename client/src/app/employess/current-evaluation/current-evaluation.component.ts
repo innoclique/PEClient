@@ -37,6 +37,7 @@ export class CurrentEvaluationComponent implements OnInit {
   public FinalRatingForm: FormGroup;
   public showEmployeeSubmit: Boolean = true;
   public PeerScoreCard: any;
+  DirectReporteeScoreCard: any;
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -107,6 +108,9 @@ export class CurrentEvaluationComponent implements OnInit {
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
           this.PeerScoreCard = res1.PeerScoreCard;
+        }
+        if (res1 && Object.keys(res1.DirectReporteeScoreCard).length > 0) {
+          this.DirectReporteeScoreCard = res1.DirectReporteeScoreCard;
         }
 
 
