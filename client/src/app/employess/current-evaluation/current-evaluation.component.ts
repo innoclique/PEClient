@@ -93,7 +93,7 @@ export class CurrentEvaluationComponent implements OnInit {
         this.evaluationForm = res1;
         if (res1.Competencies.Employees[0]) {
           this.employeeCompetencyList = res1.Competencies.Employees[0].Competencies;
-          this.employeeCompetencyList = res1.Competencies.Employees[0].Competencies;
+          
           // this.setCompetencies();
           this.prepareCompetencyQuestions();
           console.log('the evauation form', this.evaluationForm)
@@ -227,18 +227,18 @@ export class CurrentEvaluationComponent implements OnInit {
   }
 
   submitCompetencyRating() {
-
     console.log('after submit with rating', this.employeeCompetencyList)
 
   }
   competencyQuestionsList = [];
+  showCompetencySubmit=true;
   prepareCompetencyQuestions() {
     var questions: CompetencyBase<string>[] = [];
-
     this.selfCompetencyForm.controls["Comments"].setValue( this.evaluationForm.Competencies.Employees[0].CompetencyComments),
-      this.selfCompetencyForm.controls["OverallRating"].setValue( this.evaluationForm.Competencies.Employees[0].CompetencyOverallRating),
-      this.selfCompetencyForm.controls["IsDraft"].setValue(!this.evaluationForm.Competencies.Employees[0].CompetencySubmitted)
-    console.log('this.selfCompetencyForm.value', this.selfCompetencyForm.value)
+    this.selfCompetencyForm.controls["OverallRating"].setValue( this.evaluationForm.Competencies.Employees[0].CompetencyOverallRating),
+    this.selfCompetencyForm.controls["IsDraft"].setValue(!this.evaluationForm.Competencies.Employees[0].CompetencySubmitted)
+    console.log('this.selfCompetencyForm.value', this.selfCompetencyForm.value);
+    this.showCompetencySubmit = !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
     this.employeeCompetencyList.forEach(element => {
       questions = [];
       element.Questions.forEach(q => {
@@ -254,7 +254,6 @@ export class CurrentEvaluationComponent implements OnInit {
       });
 
       this.competencyQuestionsList.push({
-
         CompetenyName: element.Competency.Name,
         CompetencyId: element.Competency._id,
         CompetencyRowId: element._id,
@@ -310,7 +309,7 @@ export class CurrentEvaluationComponent implements OnInit {
       this.perfApp.requestBody = competencyQA;// { TsId: this.loginUser._id }
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
-      this.snack.success(isDraft?'Competencies Rating Successfully':'Competency Rating Submitted Successfully');
+      this.snack.success(isDraft?'Competencies Rating Saved Successfully':'Competency Rating Submitted Successfully');
     }, error => {
       this.snack.error('something went wrong.')
       console.log('error', error)
@@ -337,7 +336,7 @@ export class CurrentEvaluationComponent implements OnInit {
       };
     console.log('final rating form', this.perfApp.requestBody)
     
-    if(!isDraft){
+    if(isDraft){
       this.perfApp.CallAPI().subscribe(x => {
         console.log(x)
         this.snack.success('Successfully Submitted Final Rating');
