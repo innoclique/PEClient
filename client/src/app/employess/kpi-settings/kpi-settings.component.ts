@@ -260,6 +260,8 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
       if (c) {
 
         this.getMeasurementCriterias();
+        // this.kpiForm.get('MeasurementCriteria').setErrors(null);
+        // this.kpiForm.get('MeasurementCriteria').markAsUntouched;
 this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesfully`));
         
       }

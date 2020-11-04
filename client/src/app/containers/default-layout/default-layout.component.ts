@@ -171,6 +171,50 @@ export class DefaultLayoutComponent implements OnInit {
         }]
         this.navItems=navigationMenu;
         }
+
+        if(this.user.SelectedRoles.indexOf('EM')>-1){
+          navigationMenu= [{
+            "IsActive": true,
+            "__v": 0,
+            "url": "/em/dashboard",
+            "name": "Dashboard",
+            "code": "Dashboard",
+            "icon": "icon-star",
+            "badge": {
+                "variant": "info",
+                "text": "Home"
+            },
+            "linkProps": {
+                "routerLinkActive": "dashboard"
+            }
+        },
+        {
+          "IsActive": true,
+          "url": "/employee/review-evaluation-list", 
+          "name": "Review Evaluations",
+          "code": "Review Evaluations",
+          "icon": "icon-star"
+      }, {
+            "IsActive": true,
+            "url": "/ea/reports",
+            "name": "Reports",
+            "code": "Reports",
+            "icon": "icon-star"
+        }, {
+            "IsActive": true,
+            "url": "/ea/profile",
+            "name": "Profile",
+            "code": "Profile",
+            "icon": "icon-star"
+        }, {
+            "IsActive": true,
+            "url": "/logout",
+            "name": "Logout",
+            "code": "Logout",
+            "icon": "icon-star"
+        }]
+        this.navItems=navigationMenu;
+        }
         
       
       }

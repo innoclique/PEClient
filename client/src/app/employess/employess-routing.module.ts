@@ -19,6 +19,8 @@ import {KpiReviewListComponent} from './kpi-review-list/kpi-review-list.componen
 import { ViewComponent } from '../views/final-rating/view/view.component';
 import { PeerReviewListComponent } from '../peer-review/peer-review-list/peer-review-list.component';
 import { DoPeerReviewComponent } from '../peer-review/do-peer-review/do-peer-review.component';
+import { ReviewEvaluationComponent } from './review-evaluation/review-evaluation.component';
+import { ReviewEvaluationListComponent } from './review-evaluation-list/review-evaluation-list.component';
 
 
 
@@ -117,6 +119,20 @@ const routes: Routes = [
           title: 'KPI Review'
         }
       },
+      {
+        path: 'review-evaluation',
+        component: ReviewEvaluationComponent,
+        data: {
+          title: 'KPI Review'
+        }
+      },
+      {
+        path: 'review-evaluation-list',
+        component: ReviewEvaluationListComponent,
+        data: {
+          title: 'KPI Review'
+        }
+      }
       
 
      

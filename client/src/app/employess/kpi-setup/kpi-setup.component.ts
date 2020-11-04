@@ -222,7 +222,7 @@ this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived
       )
 
 
-    }
+    }else{ this.kpiListData=[] }
     }, error => {
       if (error.error.message === Constants.KpiNotActivated) {
         this.isKpiActivated=true;

@@ -43,6 +43,8 @@ import { KpiReviewListComponent } from './kpi-review-list/kpi-review-list.compon
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CompetencyFormModule } from '../views/competency-form/competency-form.module';
 import { PeerReviewModule } from '../peer-review/peer-review.module';
+import { ReviewEvaluationComponent } from './review-evaluation/review-evaluation.component';
+import { ReviewEvaluationListComponent } from './review-evaluation-list/review-evaluation-list.component';
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
@@ -50,7 +52,9 @@ import { PeerReviewModule } from '../peer-review/peer-review.module';
      ActionPlanComponent,DashboardComponent, CreateGoalsComponent, GoalsComponent, 
      StrengthsComponent,
      KpiReviewComponent,
-     KpiReviewListComponent
+     KpiReviewListComponent,
+     ReviewEvaluationComponent,
+     ReviewEvaluationListComponent
     ],
   imports: [
     CommonModule,
