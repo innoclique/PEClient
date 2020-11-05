@@ -1,7 +1,7 @@
 
 
 
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,11 +19,15 @@ import { Constants } from '../../../shared/AppConstants';
 import { CustomValidators } from '../../../shared/custom-validators';
 
 @Component({
-  selector: 'app-kpi-review',
+  selector: 'app-kpi-review-manager',
   templateUrl: './kpi-review.component.html',
   styleUrls: ['./kpi-review.component.css']
 })
 export class KpiReviewComponent implements OnInit {
+
+
+@Input()
+actor:any;
 
 
   public kpiForm: FormGroup;
@@ -448,6 +452,7 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
 
 
           if (this.currentAction !='create') {
+            this.currentKpiId=this.currentKpiId ? this.currentKpiId:this.empKPIData[0]._id;
             this.kpiDetails=  this.empKPIData.filter(e=> e._id== this.currentKpiId)[0];
             this.selIndex=  this.empKPIData.findIndex(e=> e._id== this.currentKpiId);
           }

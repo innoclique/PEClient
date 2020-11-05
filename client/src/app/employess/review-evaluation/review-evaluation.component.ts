@@ -22,6 +22,7 @@ import { PerfAppService } from '../../services/perf-app.service';
 export class ReviewEvaluationComponent implements OnInit {
 
   loginUser: any;
+  seletedTabRole:any;
   public empKPIData: any[] = []
   kpiDetails: any = {};
   currentKpiId: any;
@@ -38,6 +39,8 @@ export class ReviewEvaluationComponent implements OnInit {
   public FinalRatingForm: FormGroup;
   public showEmployeeSubmit: Boolean = true;
   public PeerScoreCard: any;
+  currentEmpId: any;
+  currentAction: any;
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -48,16 +51,44 @@ export class ReviewEvaluationComponent implements OnInit {
     private qcs: CompetencyFormService,
     private datePipe: DatePipe
   ) {
-    this.loginUser = this.authService.getCurrentUser();
+   
+
+
+    this.activatedRoute.params.subscribe(  params => {
+      
+      if (params['action']) {
+       this.currentEmpId = params['empId'];
+       this.currentAction = params['action'];
+       this.seletedTabRole = params['actor'];
+  debugger
+       this.GetEmployeeDetailsById();
+
+      }
+      })
+    
+   
   }
 
   ngOnInit(): void {
-    this.initKPIForm()
-    this.initCompetencyForm();
-    this.initFinalRatingForm();
-    this.getTabsData();
 
   }
+
+
+  callInitApis(){
+
+
+      this.initKPIForm()
+      this.initCompetencyForm();
+      this.initFinalRatingForm();
+      this.getTabsData();
+    
+    
+  
+}
+
+
+
+
   public columnDefs = [
     {
       headerName: 'Name', field: 'Name', width: 320, sortable: true, filter: true,
@@ -118,14 +149,14 @@ export class ReviewEvaluationComponent implements OnInit {
       //     this.setWeighting(res1.filter(item => item.IsDraft === false).length);
       //     if (res1 && res1.length > 0) {
       //       this.empKPIData = res1;
-      //       debugger
+      //       
       //       this.kpiDetails = this.empKPIData[0];//.filter(e => e._id == this.currentKpiId)[0];
       //       this.selIndex = 0;//this.empKPIData.findIndex(e => e._id == this.currentKpiId);
       //       this.initKPIForm();
       //     }
       //   }
       //  if(res2) {
-      //    debugger
+      //    
       //  }
 
     });
@@ -136,6 +167,19 @@ export class ReviewEvaluationComponent implements OnInit {
     this.perfApp.method = "GetEmpCurrentEvaluation",
       this.perfApp.requestBody = { EmployeeId: this.loginUser._id }
     return this.perfApp.CallAPI()
+  }
+
+ async GetEmployeeDetailsById() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetEmployeeDataById",
+      this.perfApp.requestBody = { id: this.currentEmpId }
+      this.perfApp.CallAPI().subscribe(x => {
+      this.loginUser =x;
+
+      this.callInitApis();
+      }, error => {
+        console.log('error', error)
+      })
   }
 
   getTSKPIs() {
@@ -167,8 +211,8 @@ export class ReviewEvaluationComponent implements OnInit {
       YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments : ''],
       YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager : ''],
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
-      Signoff: [this.loginUser.FirstName],
-      CoachingReminder: [this.kpiDetails.CoachingReminder ? this.kpiDetails.CoachingReminder : this.loginUser.Organization.CoachingReminder],
+      Signoff: [this.loginUser? this.loginUser.FirstName: ""],
+      CoachingReminder: [this.kpiDetails.CoachingReminder ? this.kpiDetails.CoachingReminder : ""],// this.loginUser.Organization.CoachingReminder],
 
       IsSubmit: ['false'],
       IsDraft: [''],

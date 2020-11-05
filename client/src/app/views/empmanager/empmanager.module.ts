@@ -41,6 +41,7 @@ import { KpiAddComponent } from './kpi-add/kpi-add.component';
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
     SharedModule
-  ]
+  ],
+  exports:[KpiReviewComponent]
 })
 export class EmpmanagerModule { }

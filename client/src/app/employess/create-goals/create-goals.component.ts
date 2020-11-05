@@ -54,6 +54,7 @@ export class CreateGoalsComponent implements OnInit {
   currentDevGoalId: any;
   selIndex: number;
   currentRowItem: any;
+  currentOrganization: any={};
   
  
   constructor(private formBuilder: FormBuilder,
@@ -67,6 +68,7 @@ export class CreateGoalsComponent implements OnInit {
     public translate: TranslateService) {
 
     this.loginUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
     
 
     this.getAllKPIs();
@@ -581,7 +583,8 @@ private _filterOP(name: string): any[] {
 getOtherParticipantsEmps(){
   this.perfApp.route="app";
   this.perfApp.method="GetManagers",
-  this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+  this.perfApp.requestBody = { companyId: this.currentOrganization._id }
+  // this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
   this.perfApp.CallAPI().subscribe(c=>{
     
     console.log('lients data',c);

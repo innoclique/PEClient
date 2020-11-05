@@ -45,6 +45,7 @@ import { CompetencyFormModule } from '../views/competency-form/competency-form.m
 import { PeerReviewModule } from '../peer-review/peer-review.module';
 import { ReviewEvaluationComponent } from './review-evaluation/review-evaluation.component';
 import { ReviewEvaluationListComponent } from './review-evaluation-list/review-evaluation-list.component';
+import { EmpmanagerModule } from '../views/empmanager/empmanager.module';
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
@@ -74,6 +75,7 @@ import { ReviewEvaluationListComponent } from './review-evaluation-list/review-e
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
     SharedModule,
+    EmpmanagerModule,
 
     MatGridListModule,
     ProgressBarModule,

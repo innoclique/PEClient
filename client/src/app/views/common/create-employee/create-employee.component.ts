@@ -140,7 +140,7 @@ public currentOrganization:any={}
       ApplicationRole: [this.empDetails.ApplicationRole?this.empDetails.ApplicationRole:'',[Validators.required] ],
       ThirdSignatory: [this.empDetails.ThirdSignatory?this.empDetails.ThirdSignatory:'',],
       CopiesTo: [this.empDetails.CopiesTo?this.empDetails.CopiesTo:'', ],
-      Manager: [this.empDetails.Manager?this.empDetails.Manager:'',],
+      Manager: [this.empDetails.Manager?this.empDetails.Manager:'',[Validators.required]],
       Country: [this.empDetails.Country?this.empDetails.Country:'',],
       State: [this.empDetails.State?this.empDetails.State:'',],
       City: [this.empDetails.City?this.empDetails.City:'',],
@@ -334,7 +334,8 @@ public currentOrganization:any={}
   getManagersEmps(){
     this.perfApp.route="app";
     this.perfApp.method="GetManagers",
-    this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+    this.perfApp.requestBody = { companyId: this.currentOrganization._id }
+    // this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
     this.perfApp.CallAPI().subscribe(c=>{
       
       console.log('lients data',c);
@@ -359,7 +360,8 @@ public currentOrganization:any={}
   getThirdSignatoryEmps(){
     this.perfApp.route="app";
     this.perfApp.method="GetThirdSignatorys",
-    this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+    this.perfApp.requestBody = { companyId: this.currentOrganization._id }
+
     this.perfApp.CallAPI().subscribe(c=>{
       
       console.log('lients data',c);

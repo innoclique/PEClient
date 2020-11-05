@@ -335,11 +335,11 @@ Back to list
                     <div class="form-group">
                       <div class="input-group">
                         <div class="input-group-prepend">
-                          <span class="input-group-text ">Manager</span>
+                          <span class="input-group-text redStar">Manager</span>
                         </div>
-                        <input type="text" class="autoc-border form-control"
-                        placeholder="Search for a Manager"
-                       
+                        <input type="text" class=" form-control"
+                        placeholder="Search for a Manager" required
+                        [ngClass]="{ 'is-invalid': f.Manager.touched  &&  f.Manager.invalid }"
                         [matAutocomplete]="auto3"
                            formControlName="Manager" name="Manager"
                             [formControl]="f.Manager" 
@@ -350,6 +350,9 @@ Back to list
                   </mat-option>
                  </mat-autocomplete>
       
+                   <div *ngIf="f.Manager.touched && f.Manager.invalid" class="invalid-feedback">
+                        <div *ngIf="f.Manager.errors.required">Manager is required</div>
+                      </div>
                 
                       </div>
                     </div>

@@ -43,7 +43,7 @@ export class DefaultLayoutComponent implements OnInit {
     if (this.user) {
       if (this.user.SelectedRoles) {
         var navigationMenu = [];
-        if(this.user.SelectedRoles.indexOf('EO')>-1){
+        if(this.user.Role.indexOf('EO')>-1){
         navigationMenu.push(
           {
             "IsActive": true,
@@ -112,9 +112,88 @@ export class DefaultLayoutComponent implements OnInit {
         }
         )
         this.navItems=navigationMenu;
-        return ;
+
+
+        if (this.user.SelectedRoles.indexOf('EA') > -1) {
+          navigationMenu.push(
+            {
+              "IsActive": true,
+              "url": "/ea/setup-employee",
+              "name": "Set up Employees",
+              "code": "Employees",
+              "icon": "icon-star",
+              "linkProps": {
+                  "routerLinkActive": "employee"
+              }
+          }, {
+              "IsActive": true,
+              "url": "/ea/evaluation-list",
+              "name": "Evaluations",
+              "code": "Evaluations",
+              "icon": "icon-star"
+          }
+
+
+          )
+          this.navItems = navigationMenu;
         }
-        if(this.user.SelectedRoles.indexOf('EA')>-1 ||this.user.Role==='CSA'){
+
+     
+
+          if (this.user.SelectedRoles.indexOf('EM') > -1) {
+            navigationMenu.push(
+              {
+                "IsActive": true,
+                "url": "/employee/review-evaluation-list",
+                "name": "Review Evaluations",
+                "code": "Review Evaluations",
+                "icon": "icon-star"
+              }
+
+
+            )
+            this.navItems = navigationMenu;
+          }
+
+          if (this.user.SelectedRoles.indexOf('TS') > -1) {
+          //   navigationMenu.push(
+             
+          //  {
+          //   "IsActive": true,
+          //   "url": "/employee/review-evaluation-list", 
+          //   "name": "Review Evaluations",
+          //   "code": "Review Evaluations",
+          //   "icon": "icon-star"
+          // }
+          //   )
+            this.navItems = navigationMenu;
+          }
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        return  this.navItems;
+        }
+        
+        if(this.user.Role==='CSA'){
           navigationMenu= [{
             "IsActive": true,
             "__v": 0,
@@ -131,7 +210,7 @@ export class DefaultLayoutComponent implements OnInit {
             }
         }, {
             "IsActive": true,
-            "url": "/ea/create-employee",
+            "url": "/ea/setup-employee",
             "name": "Set up Employees",
             "code": "Employees",
             "icon": "icon-star",
@@ -172,49 +251,7 @@ export class DefaultLayoutComponent implements OnInit {
         this.navItems=navigationMenu;
         }
 
-        if(this.user.SelectedRoles.indexOf('EM')>-1){
-          navigationMenu= [{
-            "IsActive": true,
-            "__v": 0,
-            "url": "/em/dashboard",
-            "name": "Dashboard",
-            "code": "Dashboard",
-            "icon": "icon-star",
-            "badge": {
-                "variant": "info",
-                "text": "Home"
-            },
-            "linkProps": {
-                "routerLinkActive": "dashboard"
-            }
-        },
-        {
-          "IsActive": true,
-          "url": "/employee/review-evaluation-list", 
-          "name": "Review Evaluations",
-          "code": "Review Evaluations",
-          "icon": "icon-star"
-      }, {
-            "IsActive": true,
-            "url": "/ea/reports",
-            "name": "Reports",
-            "code": "Reports",
-            "icon": "icon-star"
-        }, {
-            "IsActive": true,
-            "url": "/ea/profile",
-            "name": "Profile",
-            "code": "Profile",
-            "icon": "icon-star"
-        }, {
-            "IsActive": true,
-            "url": "/logout",
-            "name": "Logout",
-            "code": "Logout",
-            "icon": "icon-star"
-        }]
-        this.navItems=navigationMenu;
-        }
+      
         
       
       }

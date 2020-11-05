@@ -110,16 +110,39 @@ public onEmpGridRowClick(e) {
         this.viewEmpForm(this.currentRowItem);
         break;
         case "EF":
-          this.editEmpForm(this.currentRowItem);
+          this.editEmpForm(this.currentRowItem,"Manager");
           break;
      
       default:
     }
   }
 }
-  editEmpForm(currentRowItem: any) {
+
+
+
+public onAsTSGridRowClick(e) {
+  if (e.event.target !== undefined) {
+    this.currentRowItem = e.data.RowData;;
+  
+    let actionType = e.event.target.getAttribute("data-action-type");
+    switch (actionType) {
     
-    this.router.navigate(['employee/review-evaluation']);
+      case "VF":
+        this.viewEmpForm(this.currentRowItem);
+        break;
+        case "EF":
+          this.editEmpForm(this.currentRowItem,'TS');
+          break;
+     
+      default:
+    }
+  }
+}
+
+  editEmpForm(currentRowItem,actor) {
+      this.router.navigate(['employee/review-evaluation',
+       { action: 'review', empId: this.currentRowItem._id,actor:actor }
+    ], { skipLocationChange: true });
   }
   viewEmpForm(currentRowItem: any) {
     throw new Error('Method not implemented.');
