@@ -48,7 +48,8 @@ export class ReviewEvaluationListComponent implements OnInit {
 
   public alert: AlertDialog;
   public currentOrganization:any={};
-  employeeData: any;
+  managerReporteesData: any;
+  tSReporteesData: any;
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -69,32 +70,67 @@ export class ReviewEvaluationListComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.getEmployees();
+    this.GetReporteeEvaluationsDetails();
+    this.GetTSReporteeEvDetails();
   }
 
 
 
   
   public columnDefs = [
-    {headerName: 'Employee', field: 'Name', width: 320, sortable: true, filter: true,
+    {headerName: 'Employee', field: 'Name', width: 250, sortable: true, filter: true,
     cellRenderer: (data) => {
       return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     }},
-    {headerName: 'Title', field: 'Title', sortable: true, filter: true },
-    // {headerName: 'Department', field: 'Department', sortable: true, filter: true },
-    {headerName: 'Phone', field: 'PhoneNumber', sortable: true, filter: true },
-    // {headerName: 'IsDraft', field: 'IsDraft',  width: 120, sortable: true, filter: true },
-    {headerName: 'IsActive', field: 'IsActive',  width: 120, sortable: true, filter: true },
+    {headerName: 'No.of Kpis', field: 'NoOfKpis', sortable: true, filter: true },
+    {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
+    {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
     {
       headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
-        returnString += `<i class="cui-pencil" style="cursor:pointer; padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="EF" title="Edit"></i>`;
+        returnString += `<i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="reviewKPI" title="Review KPI"></i>
+        
+        <i class="cui-layers" style="cursor:pointer; padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
+
+        <i class="cui-map" style="cursor:pointer; padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="reviewEval" title="Review Evaluation"></i>
+        `;
         return returnString;
       }
     }
+];
+
+
+  
+public tsColumnDefs = [
+  {headerName: 'Employee', field: 'Name', width: 250, sortable: true, filter: true,
+  cellRenderer: (data) => {
+    return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
+  }},
+  {headerName: 'No.of Kpis', field: 'NoOfKpis', sortable: true, filter: true },
+  {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
+  {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
+  {
+    headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+    cellRenderer: (data) => {
+
+      var returnString = '';
+      returnString += `<i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
+      font-size: 17px;"   data-action-type="reviewKPI" title="Review KPI"></i>
+      
+      <i class="cui-layers" style="cursor:pointer; padding: 7px 20px 0 0;
+      font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
+
+      <i class="cui-map" style="cursor:pointer; padding: 7px 20px 0 0;
+      font-size: 17px;"   data-action-type="reviewEval" title="Review Evaluation"></i>
+      `;
+      return returnString;
+    }
+  }
 ];
 
 
@@ -107,11 +143,17 @@ public onEmpGridRowClick(e) {
     switch (actionType) {
     
       case "VF":
-        this.viewEmpForm(this.currentRowItem);
+        this.viewEmpForm('reviewEval','Manager');
         break;
-        case "EF":
-          this.editEmpForm(this.currentRowItem,"Manager");
+        case "reviewKPI":
+          this.reviewEvalForm('reviewKPI','Manager');
           break;
+          case "reviewGoals":
+            this.reviewEvalForm('reviewGoals','Manager');
+            break;
+            case "reviewEval":
+              this.reviewEvalForm('reviewEval','Manager');
+              break;
      
       default:
     }
@@ -128,45 +170,91 @@ public onAsTSGridRowClick(e) {
     switch (actionType) {
     
       case "VF":
-        this.viewEmpForm(this.currentRowItem);
+        this.viewEmpForm('reviewEval','TS');
         break;
-        case "EF":
-          this.editEmpForm(this.currentRowItem,'TS');
+        case "reviewKPI":
+          this.reviewEvalForm('reviewKPI','TS');
           break;
+          case "reviewGoals":
+            this.reviewEvalForm('reviewGoals','TS');
+            break;
+            case "reviewEval":
+              this.reviewEvalForm('reviewEval','TS');
+              break;
+          
      
       default:
     }
   }
 }
 
-  editEmpForm(currentRowItem,actor) {
+  reviewEvalForm(action,actor) {
       this.router.navigate(['employee/review-evaluation',
-       { action: 'review', empId: this.currentRowItem._id,actor:actor }
+       { action: action, empId: this.currentRowItem._id,actor:actor }
     ], { skipLocationChange: true });
   }
-  viewEmpForm(currentRowItem: any) {
-    throw new Error('Method not implemented.');
+
+  viewEmpForm(action,actor) {
+     this.router.navigate(['employee/review-evaluation',
+       { action: action, empId: this.currentRowItem._id,actor:actor }
+    ], { skipLocationChange: true });
   }
 
 
-getEmployees(){
+GetReporteeEvaluationsDetails(){
   this.perfApp.route="app";
-  this.perfApp.method="GetDirectReporteesOfManager",
+  this.perfApp.method="GetReporteeEvaluations",
  this.perfApp.requestBody = { id: this.loginUser._id }
   this.perfApp.CallAPI().subscribe(c=>{
     
     
-    this.employeeData=c.map(function (row) {
+    this.managerReporteesData=c.map(row=> {
       
-     
-     return  {Name:row.FirstName+' '+row.LastName
+let evaluation=row.Evaluation[0];
+     return  {
+         Name:row.FirstName+' '+row.LastName,
+         NoOfKpis: row.KpiList.length,
+         NoOfDevGoals: row.GoalList.length,
+         FRStatus: evaluation[0].FinalRating.Status,
        
-        ,RowData:row
+        RowData:row
       }
     }
     )
   })
 }
+
+
+
+
+
+
+GetTSReporteeEvDetails(){
+  this.perfApp.route="app";
+  this.perfApp.method="GetTSReporteeEvaluations",
+ this.perfApp.requestBody = { id: this.loginUser._id }
+  this.perfApp.CallAPI().subscribe(c=>{
+    
+    
+    this.tSReporteesData=c.map(row=> {
+      
+let evaluation=row.Evaluation[0];
+     return  {
+         Name:row.FirstName+' '+row.LastName,
+         NoOfKpis: row.KpiList.length,
+         NoOfDevGoals: row.GoalList.length,
+         FRStatus: evaluation[0].FinalRating.Status,
+       
+        RowData:row
+      }
+    }
+    )
+  })
+}
+
+
+
+
 
 }
 

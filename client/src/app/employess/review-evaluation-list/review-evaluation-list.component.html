@@ -13,7 +13,7 @@
     
                 <ng-template tabHeading><i class="icon-layers"></i>As Manager</ng-template>
                 <ag-grid-angular style="width: auto; height: 500px;" 
-                class="ag-theme-alpine" [rowData]="employeeData"
+                class="ag-theme-alpine" [rowData]="managerReporteesData"
                   [columnDefs]="columnDefs"
                   [pagination]="true"
                   [paginationPageSize]="10"
@@ -26,8 +26,8 @@
                 <ng-template tabHeading><i class="icon-hand-rock"></i>As Third Signatory</ng-template>
                
                 <ag-grid-angular style="width: auto; height: 500px;" 
-                class="ag-theme-alpine" [rowData]="employeeData"
-                  [columnDefs]="columnDefs"
+                class="ag-theme-alpine" [rowData]="tSReporteesData"
+                  [columnDefs]="tsColumnDefs"
                   [pagination]="true"
                   [paginationPageSize]="10"
                    (rowClicked)="onAsTSGridRowClick($event)" >

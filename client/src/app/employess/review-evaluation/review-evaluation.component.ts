@@ -1,9 +1,10 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { error } from 'console';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CompetencyBase } from '../../Models/CompetencyFormModel';
@@ -12,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
+import { ThemeService } from '../../services/theme.service';
 
 
 @Component({
@@ -19,9 +21,10 @@ import { PerfAppService } from '../../services/perf-app.service';
   templateUrl: './review-evaluation.component.html',
   styleUrls: ['./review-evaluation.component.css']
 })
-export class ReviewEvaluationComponent implements OnInit {
+export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
 
   loginUser: any;
+  selectedUser: any;
   seletedTabRole:any;
   public empKPIData: any[] = []
   kpiDetails: any = {};
@@ -38,9 +41,13 @@ export class ReviewEvaluationComponent implements OnInit {
   public oneAtATime: boolean = true;
   public FinalRatingForm: FormGroup;
   public showEmployeeSubmit: Boolean = true;
+  public showManagerSubmit: Boolean = true;
   public PeerScoreCard: any;
   currentEmpId: any;
   currentAction: any;
+
+  @ViewChild('evTabset') tabset: TabsetComponent;
+
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -62,14 +69,24 @@ export class ReviewEvaluationComponent implements OnInit {
        this.seletedTabRole = params['actor'];
   debugger
        this.GetEmployeeDetailsById();
+       
 
       }
       })
+
+      this.loginUser = this.authService.getCurrentUser();
     
    
   }
 
+  ngAfterViewInit(){
+        this.goto(this.currentAction)
+  }
+
   ngOnInit(): void {
+
+    
+
 
   }
 
@@ -77,7 +94,6 @@ export class ReviewEvaluationComponent implements OnInit {
   callInitApis(){
 
 
-      this.initKPIForm()
       this.initCompetencyForm();
       this.initFinalRatingForm();
       this.getTabsData();
@@ -87,6 +103,19 @@ export class ReviewEvaluationComponent implements OnInit {
 }
 
 
+goto(selTab){
+
+  if (selTab=='reviewKPI') {
+    this.tabset.tabs[0].active = true;
+  } else  if (selTab=='reviewGoals') {
+    this.tabset.tabs[2].active = true;
+  }
+  else  if (selTab=='reviewEval') {
+    this.tabset.tabs[4].active = true;
+  }
+
+  
+}
 
 
   public columnDefs = [
@@ -136,6 +165,15 @@ export class ReviewEvaluationComponent implements OnInit {
           this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff)
           this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
           this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
+
+
+          this.FinalRatingForm.controls["ManagerComments"].setValue(res1.FinalRating.Manager.YearEndComments)
+          this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1.FinalRating.Manager.YearEndRating)
+          this.FinalRatingForm.controls["ManagerIsDraft"].setValue(!res1.FinalRating.Manager.IsSubmitted)
+          this.FinalRatingForm.controls["ManagerSignOff"].setValue(res1.FinalRating.Manager.SignOff?res1.FinalRating.Manager.SignOff
+            :this.loginUser.FirstName+" "+this.loginUser.LastName)
+          this.FinalRatingForm.controls["ManagerSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Manager.SubmittedOn))
+          this.showManagerSubmit = !res1.FinalRating.Manager.IsSubmitted;
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
           this.PeerScoreCard = res1.PeerScoreCard;
@@ -165,7 +203,7 @@ export class ReviewEvaluationComponent implements OnInit {
   getCurrentEvaluationDetails() {
     this.perfApp.route = "evaluation";
     this.perfApp.method = "GetEmpCurrentEvaluation",
-      this.perfApp.requestBody = { EmployeeId: this.loginUser._id }
+      this.perfApp.requestBody = { EmployeeId: this.currentEmpId }
     return this.perfApp.CallAPI()
   }
 
@@ -174,7 +212,7 @@ export class ReviewEvaluationComponent implements OnInit {
     this.perfApp.method = "GetEmployeeDataById",
       this.perfApp.requestBody = { id: this.currentEmpId }
       this.perfApp.CallAPI().subscribe(x => {
-      this.loginUser =x;
+      this.selectedUser =x;
 
       this.callInitApis();
       }, error => {
@@ -185,13 +223,13 @@ export class ReviewEvaluationComponent implements OnInit {
   getTSKPIs() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpisForTS",
-      this.perfApp.requestBody = { TsId: this.loginUser._id }
+      this.perfApp.requestBody = { TsId: this.selectedUser._id }
     return this.perfApp.CallAPI()
   }
   getCompetencyQuestionsList() {
     this.perfApp.route = "evaluation";
     this.perfApp.method = "GetCompetencyValues",
-      this.perfApp.requestBody = { EvaluationId: '5f91f79a597ad544742141df', employeeId: this.loginUser._id }
+      this.perfApp.requestBody = { EvaluationId: '5f91f79a597ad544742141df', employeeId: this.currentEmpId}
     return this.perfApp.CallAPI()
   }
 
@@ -199,32 +237,7 @@ export class ReviewEvaluationComponent implements OnInit {
     this.weight = length == 0 ? 100 : Math.round(100 / length);
     this.kpiForm.patchValue({ Weighting: this.weight });
   }
-  initKPIForm() {
-
-    this.kpiForm = this.fb.group({
-      MeasurementCriteria: [this.kpiDetails.MeasurementCriteria ?
-        (this.kpiDetails.MeasurementCriteria[0] ? this.kpiDetails.MeasurementCriteria[0].measureId.Name : '') : '',
-      ],
-
-      Kpi: [this.kpiDetails.Kpi],
-      TargetCompletionDate: [this.kpiDetails.TargetCompletionDate ? new Date(this.kpiDetails.TargetCompletionDate) : '', []],
-      YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments : ''],
-      YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager : ''],
-      Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
-      Signoff: [this.loginUser? this.loginUser.FirstName: ""],
-      CoachingReminder: [this.kpiDetails.CoachingReminder ? this.kpiDetails.CoachingReminder : ""],// this.loginUser.Organization.CoachingReminder],
-
-      IsSubmit: ['false'],
-      IsDraft: [''],
-      Score: [this.kpiDetails.Score ? this.kpiDetails.Score : ''],
-      ManagerScore: [this.kpiDetails.ManagerScore ? this.kpiDetails.ManagerScore : ''],
-      IsActive: [this.kpiDetails.IsActive + ''],
-      ManagerFTSubmitedOn: [this.kpiDetails.ManagerFTSubmitedOn],
-      Status: [this.kpiDetails.Status ? this.kpiDetails.Status : ''],
-    });
-
-
-  }
+ 
   initCompetencyForm() {
     this.selfCompetencyForm = this.fb.group({
       Comments: ['', [Validators.required]],
@@ -240,24 +253,17 @@ export class ReviewEvaluationComponent implements OnInit {
       EmployeeIsDraft: [true],
       EmployeeSignOff: [],
       EmployeeSubmittedOn: ['']
+
+      ,ManagerComments: ['', [Validators.required]],
+      ManagerOverallRating: [1, [Validators.required]],
+      ManagerIsDraft: [true],
+      ManagerSignOff: [],
+      ManagerSubmittedOn: ['']
     })
 
   }
 
 
-  nextKpi() {
-    this.selIndex = this.selIndex + 1;
-    this.kpiDetails = this.empKPIData[this.selIndex];
-    this.initKPIForm()
-    this.currentKpiId = this.kpiDetails._id;
-  }
-
-  priKpi() {
-    this.selIndex = this.selIndex - 1;
-    this.kpiDetails = this.empKPIData[this.selIndex];
-    this.initKPIForm()
-    this.currentKpiId = this.kpiDetails._id;
-  }
 
   /**For Self-Competency Rating Begin */
   get scfc() {
@@ -343,7 +349,7 @@ export class ReviewEvaluationComponent implements OnInit {
     competencyQA.Comments = this.selfCompetencyForm.value.Comments;
     competencyQA.OverallRating = this.selfCompetencyForm.value.OverallRating;
     competencyQA.EvaluationId = this.evaluationForm.Competencies._id;
-    competencyQA.EmployeeId = this.loginUser._id;
+    competencyQA.EmployeeId = this.selectedUser._id;
     competencyQA.IsDraft = isDraft;
     console.log('QnA', competencyQA);
     this.perfApp.route = "app";
@@ -365,12 +371,12 @@ export class ReviewEvaluationComponent implements OnInit {
   }
   saveFinalRating(isDraft) {
     this.perfApp.route = "app";
-    this.perfApp.method = "SaveEmployeeFinalRating",
+    this.perfApp.method = "SaveManagerFinalRating",
       this.perfApp.requestBody = {
         EvaluationId: this.evaluationForm.Competencies._id,
-        EmployeeId: this.loginUser._id,
-        YearEndComments: this.FinalRatingForm.value.EmployeeComments,
-        OverallRating: this.FinalRatingForm.value.EmployeeOverallRating,
+        EmployeeId: this.selectedUser._id,
+        YearEndComments: this.FinalRatingForm.value.ManagerComments,
+        OverallRating: this.FinalRatingForm.value.ManagerOverallRating,
         IsDraft: isDraft,
         SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
       };

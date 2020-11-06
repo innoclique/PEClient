@@ -10,7 +10,7 @@
                         <h5>No Active Evaluation</h5>
                     </div> -->
                     <div *ngIf="evaluationForm">
-                        <tabset #staticTabs class="pro-tabs">
+                        <tabset #evTabset class="pro-tabs">
                           
                             <tab>
                                 <ng-template tabHeading><i class="icon-layers"></i>KPIs</ng-template>
@@ -114,7 +114,7 @@
                             <tab>
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
                                 <div [formGroup]="FinalRatingForm">
-                                    <section>
+                                    <section class="view-only">
                                         <h3>Employee Self Review</h3>
                                         <div class="form-group row">
                                             <div class="col-md-4 ">
@@ -171,7 +171,7 @@
                                                 </div>
                                             </div>
   
-                                            <div *ngIf="showEmployeeSubmit" class="col-md-8">
+                                            <!-- <div *ngIf="showEmployeeSubmit" class="col-md-8">
                                                 <div class="pull-right form-group">
                                                     <div class="">
                                                         <button (click)="cancelFinalRating()"
@@ -184,13 +184,13 @@
                                                     </div>
                                                 </div>
   
-                                            </div>
+                                             </div> -->
                                         </div>
                                     </section>
 
 
-                                    <section>
-                                        <h3>Manger Self Review</h3>
+                                    <section [ngClass]="{ 'view-only': seletedTabRole=='TS' }">
+                                        <h3>Manger Review</h3>
                                         <div class="form-group row">
                                             <div class="col-md-4 ">
                                                 <div class="form-group">
@@ -198,7 +198,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text redStar">Rating</span>
                                                         </div>
-                                                        <select formControlName="EmployeeOverallRating"
+                                                        <select formControlName="ManagerOverallRating"
                                                             class="form-control" name="Score">
                                                             <option value="" disabled>Please select</option>
                                                             <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
@@ -216,7 +216,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">Comments</span>
                                                         </div>
-                                                        <textarea maxlength="2000" formControlName="EmployeeComments"
+                                                        <textarea maxlength="2000" formControlName="ManagerComments"
                                                             class="form-control"></textarea>
   
                                                     </div>
@@ -229,24 +229,84 @@
                                         <div class="form-group row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="EmployeeSignOff">
-                                                        Employee Sign-Off:
+                                                    <label for="ManagerSignOff">
+                                                        Manager Sign-Off:
                                                     </label>
-                                                    <input type="text" readonly formControlName="EmployeeSignOff"
-                                                        name="EmployeeSignOff">
+                                                    <input type="text" readonly formControlName="ManagerSignOff"
+                                                        name="ManagerSignOff">
+                                                </div>
+                                            </div>
+                                            <div *ngIf="!showManagerSubmit" class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="ManagerSubmittedOn">
+                                                        Submitted On:
+                                                    </label>
+                                                    <input type="text" readonly formControlName="ManagerSubmittedOn"
+                                                        name="ManagerSubmittedOn">
+                                                </div>
+                                            </div>
+  
+                                            <div *ngIf="showManagerSubmit" class="col-md-8">
+                                                <div class="pull-right form-group">
+                                                    <div class="">
+                                                        <button (click)="cancelFinalRating()"
+                                                            class="btn btn-secondary">Cancel</button>
+                                                        <button (click)="saveFinalRating()"
+                                                            class="btn btn-primary">Save</button>
+                                                        <button (click)="submitFinalRating()"
+                                                            class="btn btn-primary">Submit
+                                                            Final Rating</button>
+                                                    </div>
+                                                </div>
+  
+                                            </div>
+                                        </div>
+                                    </section>
+
+
+
+                                    
+                                    <section  *ngIf="seletedTabRole=='TS' ">
+                                        <h3>Third Signatory Review</h3>
+                                        <div class="form-group row">
+                                           
+                                            <div class="col-md-8 ">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Comments</span>
+                                                        </div>
+                                                        <textarea maxlength="2000" formControlName="ManagerComments"
+                                                            class="form-control"></textarea>
+  
+                                                    </div>
+                                                </div>
+  
+                                            </div>
+  
+                                        </div>
+  
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="ManagerSignOff">
+                                                        Manager Sign-Off:
+                                                    </label>
+                                                    <input type="text" readonly formControlName="ManagerSignOff"
+                                                        name="ManagerSignOff">
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="EmployeeSubmittedOn">
+                                                    <label for="ManagerSubmittedOn">
                                                         Submitted On:
                                                     </label>
-                                                    <input type="text" readonly formControlName="EmployeeSubmittedOn"
-                                                        name="EmployeeSubmittedOn">
+                                                    <input type="text" readonly formControlName="ManagerSubmittedOn"
+                                                        name="ManagerSubmittedOn">
                                                 </div>
                                             </div>
   
-                                            <div *ngIf="showEmployeeSubmit" class="col-md-8">
+                                            <div *ngIf="showManagerSubmit" class="col-md-8">
                                                 <div class="pull-right form-group">
                                                     <div class="">
                                                         <button (click)="cancelFinalRating()"
