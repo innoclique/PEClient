@@ -42,6 +42,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   public FinalRatingForm: FormGroup;
   public showEmployeeSubmit: Boolean = true;
   public showManagerSubmit: Boolean = true;
+  public showThirdSignatorySubmit: Boolean = true;
   public PeerScoreCard: any;
   currentEmpId: any;
   currentAction: any;
@@ -174,6 +175,21 @@ goto(selTab){
             :this.loginUser.FirstName+" "+this.loginUser.LastName)
           this.FinalRatingForm.controls["ManagerSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Manager.SubmittedOn))
           this.showManagerSubmit = !res1.FinalRating.Manager.IsSubmitted;
+          this.FinalRatingForm.controls["ManagerRevComments"].setValue(res1.FinalRating.Manager.RevComments)
+          this.FinalRatingForm.controls["ManagerReqRevision"].setValue(res1.FinalRating.Manager.ReqRevision)
+
+
+          debugger
+          this.FinalRatingForm.controls["ThirdSignatoryComments"].setValue(res1.FinalRating.ThirdSignatory.YearEndComments)
+          this.FinalRatingForm.controls["ThirdSignatoryRevComments"].setValue(res1.FinalRating.ThirdSignatory.RevComments)
+          this.FinalRatingForm.controls["TSReqRevision"].setValue(res1.FinalRating.ThirdSignatory.ReqRevision)
+          this.FinalRatingForm.controls["ThirdSignatoryIsDraft"].setValue(!res1.FinalRating.ThirdSignatory.IsSubmitted)
+          this.FinalRatingForm.controls["ThirdSignatorySignOff"].setValue(res1.FinalRating.ThirdSignatory.SignOff?res1.FinalRating.ThirdSignatory.SignOff
+            :this.loginUser.FirstName+" "+this.loginUser.LastName)
+          this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.ThirdSignatory.SubmittedOn))
+          this.showThirdSignatorySubmit = !res1.FinalRating.ThirdSignatory.IsSubmitted;
+
+
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
           this.PeerScoreCard = res1.PeerScoreCard;
@@ -256,9 +272,18 @@ goto(selTab){
 
       ,ManagerComments: ['', [Validators.required]],
       ManagerOverallRating: [1, [Validators.required]],
+      ManagerRevComments: ['',],
+      ManagerReqRevision: [false],
       ManagerIsDraft: [true],
       ManagerSignOff: [],
       ManagerSubmittedOn: ['']
+
+      ,ThirdSignatoryComments: ['', [Validators.required]],
+      ThirdSignatoryRevComments: ['',],
+      TSReqRevision: [false],
+      ThirdSignatoryIsDraft: [true],
+      ThirdSignatorySignOff: [],
+      ThirdSignatorySubmittedOn: ['']
     })
 
   }
@@ -364,6 +389,13 @@ goto(selTab){
   }
   /**For Self-Competency Rating End */
   submitFinalRating() {
+
+    
+if (this.FinalRatingForm.value.ManagerReqRevision &&
+  this.FinalRatingForm.value.ManagerRevComments.length==0) {
+    this.snack.error('Revision Comments is mandatory')
+    return;
+}
     this.saveFinalRating(false)
   }
   draftFinalRating() {
@@ -377,6 +409,10 @@ goto(selTab){
         EmployeeId: this.selectedUser._id,
         YearEndComments: this.FinalRatingForm.value.ManagerComments,
         OverallRating: this.FinalRatingForm.value.ManagerOverallRating,
+
+        RevComments: this.FinalRatingForm.value.ManagerRevComments,
+        ReqRevision: this.FinalRatingForm.value.ManagerReqRevision,
+
         IsDraft: isDraft,
         SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
       };
@@ -390,6 +426,67 @@ goto(selTab){
       this.snack.error('Something went wrong')
     })
 
+  }
+
+  submitTSFinalRating() {
+
+if (this.FinalRatingForm.value.TSReqRevision &&
+  this.FinalRatingForm.value.ThirdSignatoryRevComments.length==0) {
+    this.snack.error('Revision Comments is mandatory')
+    return;
+}
+
+    this.saveTSFinalRating(false)
+  }
+  draftTSFinalRating() {
+    this.saveTSFinalRating(true)
+  }
+  
+  saveTSFinalRating(isDraft) {
+    this.perfApp.route = "app";
+    this.perfApp.method = "SaveTSFinalRating",
+      this.perfApp.requestBody = {
+        EvaluationId: this.evaluationForm.Competencies._id,
+        EmployeeId: this.selectedUser._id,
+        YearEndComments: this.FinalRatingForm.value.ThirdSignatoryComments,
+        RevComments: this.FinalRatingForm.value.ThirdSignatoryRevComments,
+        ReqRevision: this.FinalRatingForm.value.TSReqRevision,
+        
+        IsDraft: isDraft,
+        SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
+      };
+    console.log('final rating form', this.perfApp.requestBody)
+    this.perfApp.CallAPI().subscribe(x => {
+      console.log(x)
+      this.snack.success('Successfully Submitted Final Rating');
+      window.location.reload();
+    }, error => {
+      console.log('error', error)
+      this.snack.error('Something went wrong')
+    })
+
+  }
+
+  
+  tsReqRevisionCheck(value) {
+    if (value.target.value) {
+      this.evaluationForm.controls['ThirdSignatoryRevComments'].setValidators(Validators.required);
+    } else {
+      this.evaluationForm.controls['ThirdSignatoryRevComments'].clearValidators();
+      this.evaluationForm.controls['ThirdSignatoryRevComments'].reset();
+      this.evaluationForm.controls['ThirdSignatoryRevComments'].setValue(null);
+    }
+  }
+
+  
+  managerReqRevisionCheck(value) {
+    if (value.target.value) {
+      this.evaluationForm.controls['ManagerRevComments'].setValidators(Validators.required);
+    } else {
+      this.evaluationForm.controls['ManagerRevComments'].clearValidators();
+      this.evaluationForm.controls['ManagerRevComments'].reset();
+      this.evaluationForm.controls['ManagerRevComments'].setValue(null);
+    }
   }
   cancelFinalRating() {
 

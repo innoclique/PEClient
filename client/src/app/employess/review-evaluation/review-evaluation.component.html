@@ -225,6 +225,35 @@
                                             </div>
   
                                         </div>
+
+
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input  (change)="managerReqRevisionCheck($event)"
+                                                            formControlName="ManagerReqRevision" class="form-check-input" type="checkbox" >
+                                                        <label class="form-check-label" for="ManagerReqRevision">
+                                                            Request Revision
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8" *ngIf='FinalRatingForm?.value?.ManagerReqRevision'>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text redStar">Revision Comments</span>
+                                                        </div>
+                                                        <textarea maxlength="2000" formControlName="ManagerRevComments"
+                                                            class="form-control"></textarea>
+  
+                                                    </div>
+                                                </div>
+                                            </div>
+  
+                                           
+                                        </div>
   
                                         <div class="form-group row">
                                             <div class="col-md-4">
@@ -246,7 +275,7 @@
                                                 </div>
                                             </div>
   
-                                            <div *ngIf="showManagerSubmit" class="col-md-8">
+                                            <div *ngIf="showManagerSubmit && !showEmployeeSubmit && seletedTabRole=='Manager'" class="col-md-8">
                                                 <div class="pull-right form-group">
                                                     <div class="">
                                                         <button (click)="cancelFinalRating()"
@@ -266,7 +295,7 @@
 
 
                                     
-                                    <section  *ngIf="seletedTabRole=='TS' ">
+                                    <section [ngClass]="{ 'view-only': seletedTabRole !='TS' }" >
                                         <h3>Third Signatory Review</h3>
                                         <div class="form-group row">
                                            
@@ -276,7 +305,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text">Comments</span>
                                                         </div>
-                                                        <textarea maxlength="2000" formControlName="ManagerComments"
+                                                        <textarea maxlength="2000" formControlName="ThirdSignatoryComments"
                                                             class="form-control"></textarea>
   
                                                     </div>
@@ -289,31 +318,60 @@
                                         <div class="form-group row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="ManagerSignOff">
-                                                        Manager Sign-Off:
-                                                    </label>
-                                                    <input type="text" readonly formControlName="ManagerSignOff"
-                                                        name="ManagerSignOff">
+                                                    <div class="form-check">
+                                                        <input  (change)="tsReqRevisionCheck($event)"
+                                                            formControlName="TSReqRevision" class="form-check-input" type="checkbox" >
+                                                        <label class="form-check-label" for="TSReqRevision">
+                                                            Request Revision
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-4" *ngIf='FinalRatingForm?.value?.TSReqRevision'>
                                                 <div class="form-group">
-                                                    <label for="ManagerSubmittedOn">
-                                                        Submitted On:
-                                                    </label>
-                                                    <input type="text" readonly formControlName="ManagerSubmittedOn"
-                                                        name="ManagerSubmittedOn">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text redStar">Revision Comments</span>
+                                                        </div>
+                                                        <textarea maxlength="2000" formControlName="ThirdSignatoryRevComments"
+                                                            class="form-control"></textarea>
+  
+                                                    </div>
                                                 </div>
                                             </div>
   
-                                            <div *ngIf="showManagerSubmit" class="col-md-8">
+                                           
+                                        </div>
+
+
+                                        <div  class="form-group row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="ThirdSignatorySignOff">
+                                                        Third Signatory Sign-Off:
+                                                    </label>
+                                                    <input type="text" readonly formControlName="ThirdSignatorySignOff"
+                                                        name="ThirdSignatorySignOff">
+                                                </div>
+                                            </div>
+                                            <div *ngIf="!showThirdSignatorySubmit" class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="ThirdSignatorySubmittedOn">
+                                                        Submitted On:
+                                                    </label>
+                                                    <input type="text" readonly formControlName="ThirdSignatorySubmittedOn"
+                                                        name="ThirdSignatorySubmittedOn">
+                                                </div>
+                                            </div>
+  
+                                            <div *ngIf="showThirdSignatorySubmit && !showManagerSubmit && seletedTabRole=='TS' " class="col-md-8">
                                                 <div class="pull-right form-group">
                                                     <div class="">
                                                         <button (click)="cancelFinalRating()"
                                                             class="btn btn-secondary">Cancel</button>
-                                                        <button (click)="saveFinalRating()"
+                                                        <button (click)="saveTSFinalRating()"
                                                             class="btn btn-primary">Save</button>
-                                                        <button (click)="submitFinalRating()"
+                                                        <button (click)="submitTSFinalRating()"
                                                             class="btn btn-primary">Submit
                                                             Final Rating</button>
                                                     </div>
