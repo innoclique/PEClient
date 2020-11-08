@@ -22,6 +22,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ChartsModule } from "ng2-charts";
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDividerModule} from '@angular/material/divider';
+import { TabsModule } from 'ngx-bootstrap/tabs';
  
 
 const routes: Routes = [
@@ -66,6 +67,13 @@ const routes: Routes = [
       },
       {
         path: 'rollout/:id',
+        component: RollevaluationComponent,
+        data: {
+          title: 'Rollout'
+        }
+      },
+      {
+        path: 'rollout/:action',
         component: RollevaluationComponent,
         data: {
           title: 'Rollout'
@@ -120,7 +128,8 @@ const routes: Routes = [
     NgMultiSelectDropDownModule.forRoot(),
     ChartsModule,
     MatGridListModule,
-    MatDividerModule
+    MatDividerModule,
+    TabsModule
   ]
 })
 export class EvaluationadminModule { 

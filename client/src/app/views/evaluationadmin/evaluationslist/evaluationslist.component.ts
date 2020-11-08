@@ -57,6 +57,7 @@ export class EvaluationslistComponent implements OnInit {
   directReporteeDropdownSettings: any = {}
   currentPeerCompetencyList: any = [];
   peerDropdownSettings: any = {}
+  kpiList:any=[];
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -118,6 +119,10 @@ export class EvaluationslistComponent implements OnInit {
     columnDefs: this.getGridColumnsForEmp(),
     api: new GridApi()
   }
+  public EmpKpiGridOptions: GridOptions = {
+    columnDefs: this.getGridColumnsForEmpKpi(),
+    api: new GridApi()
+  }
   formattedPeers: any = []
   getEmployees() {
     this.perfApp.route = "app";
@@ -138,7 +143,50 @@ export class EvaluationslistComponent implements OnInit {
       }
     })
   }
+  getGridColumnsForEmpKpi() {
+    return [
+      {
+        headerName: 'Employee', sortable: true, filter: true,
+        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee[0].FirstName}-${data.data.Employee[0].LastName}</span>` }
+      },
+      {
+        headerName: 'Released On', sortable: true, filter: true,
+        cellRenderer: (data) => {
+          
+            return new DatePipe('en-US').transform(data.data.CreatedDate, 'MM-dd-yyyy')
+        
+      }},   
+      
+      {
+        headerName: 'Evaluation Year', sortable: true, filter: true,
+        cellRenderer: (data) => {          
+            return data.data.EvaluationYear
+      }},
+      {
+        headerName: 'Manager', field: '', sortable: true, filter: true,
+        cellRenderer: (data) => { 
+          if (this.getNested(data.data.Manager, 'Name')) {
+            return `${data.data.Manager.Name} ` }
+          }
+          
+      },
 
+      {
+        headerName: "Actions",
+        suppressMenu: true,
+        Sorting: false,
+        cellRenderer: (data) => {
+          console.log('column data', data)
+
+            return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+            font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
+            `
+          //}
+        }
+      }
+    ];
+
+  }
   getGridColumnsForEmp() {
     return [
       {
@@ -260,13 +308,12 @@ export class EvaluationslistComponent implements OnInit {
       this.perfApp.requestBody = { clientId: this.authService.getOrganization()._id }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('evaluationList data', c);
-      if (c && c.length > 0) {
+      if (c) {
         this.selectedEmployeesList = [];
-        c.map(row => {
+        c.evaluations.map(row => {
           var _f = Object.assign({}, row);
           row.Employees.map(x => {
-            var _e = Object.assign({}, x);
-            debugger
+            var _e = Object.assign({}, x);            
             this.selectedEmployeesList.push({
               EmployeeRow: _e,
               EvaluationRow: _f,
@@ -281,12 +328,18 @@ export class EvaluationslistComponent implements OnInit {
             });
           })
         })
+if(c.kpiList){
+this.kpiList=c.kpiList;
+this.EmpKpiGridOptions.api.setRowData(this.kpiList);
+}
+
+
       }
       console.table(this.selectedEmployeesList)
       this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
     })
   }
-
+  
   onEmpGridReady(params) {
     debugger
     this.EmpGridOptions.api = params.api; // To access the grids API
@@ -789,6 +842,9 @@ export class EvaluationslistComponent implements OnInit {
   getNested(obj, ...args) {
     return args.reduce((obj, level) => obj && obj[level], obj)
   }
-
+  initiateEvaluation(){
+    this.router.navigate(['ea/rollout', { allKpi: 'true' }], { skipLocationChange: true });
+    
+  }
 
 }

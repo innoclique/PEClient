@@ -41,7 +41,7 @@ export class RollevaluationComponent implements OnInit {
   @ViewChild('selectePeersView') selectePeersView: TemplateRef<any>;
   @ViewChild('selecteDirectReporteeView') selecteDirectReporteeView: TemplateRef<any>;
   selecteDirectReporteeViewRef: BsModalRef;
-
+  public initializeFormFor = 'kpionly';
 
   //#region Refactring
   public selectedModel: any;
@@ -54,27 +54,28 @@ export class RollevaluationComponent implements OnInit {
   public directReporteeCompetencyList: any = [];
   public seletedDirectReporteeCompetencyList: any = [];
   public selectedEmployee: any;
-  public selectedEmployeesForEvaluation:any=[];
-  public disabledAddButton:Boolean=false;
+  public selectedEmployeesForEvaluation: any = [];
+  public disabledAddButton: Boolean = false;
+  allKpi: Boolean=false;
   onEmpGridReady(params) {
     this.EmpGridOptions.api = params.api; // To access the grids API
   }
   onItemSelect(item: any) {
     console.log('onItemSelect', item);
     this.selectedEmployees.push(item.row);
-    this.disabledAddButton=false;
+    this.disabledAddButton = false;
     //this.selectedEmployeesForEvaluation.push(item);
   }
   onSelectAllEmployees(items: any) {
     //this.selectedEmployees = items;
     this.selectedEmployees = [];
-    this.selectedEmployeesForEvaluation=[]
+    this.selectedEmployeesForEvaluation = []
     items.map(x => {
       this.selectedEmployees.push(x.row);
-   //   this.selectedEmployeesForEvaluation.push(x);
+      //   this.selectedEmployeesForEvaluation.push(x);
     })
     console.log('onSelectAll', items);
-    this.disabledAddButton=false;
+    this.disabledAddButton = false;
   }
   onEmployeeDeSelect(item: any) {
     var _position = this.selectedEmployees.indexOf(item);
@@ -84,7 +85,7 @@ export class RollevaluationComponent implements OnInit {
   onDeSelectAllEmployees(items: any) {
     //this.selectedEmployees = items;
     this.selectedEmployees = [];
-    this.selectedEmployeesForEvaluation=[];
+    this.selectedEmployeesForEvaluation = [];
     console.log('onSelectAll', items);
   }
   onModelChange(event) {
@@ -267,12 +268,18 @@ export class RollevaluationComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
+    this.activatedRoute.params.subscribe(params => {
+     debugger
+      if (params['allKpi']) {
+       this.allKpi = params['allKpi'];
+       this.initializeFormFor=this.allKpi?'evaluation':'kpionly'
+      }
+      
+     });   
+ 
     this.initForm();
     this.getEmployees();
     this.getModels();
-    //  this.getCompetencyList();
-    //this.getPeersForEmp();
-    //this.getDirectReportees();
     this.dropdownSettings = {
       singleSelection: false,
       idField: 'row',
@@ -338,18 +345,19 @@ export class RollevaluationComponent implements OnInit {
     this.perfApp.route = "app";
     this.perfApp.method = "GetUnlistedEmployees",
       //  this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id }
-      this.perfApp.requestBody = { company: this.currentOrganization._id }
+      this.perfApp.requestBody = { company: this.currentOrganization._id,allKpi:this.allKpi }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
       if (c && c.IsSuccess && c.Data && c.Data.length > 0) {
-        this.employeesList$ = c.Data
+        
+          this.employeesList$ = c.Data
         this.employeesList$.map(x => {
           var _f = Object.assign({}, x);
           x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
             x.row = _f;
         });
-        console.log('formated data', this.employeesList$);
-      }else{
+        
+      } else {
         this.notification.error('You have reached maximum employees limit for evaluation. Please contact Admin')
       }
     })
@@ -358,10 +366,10 @@ export class RollevaluationComponent implements OnInit {
     this.perfApp.route = "app";
     this.perfApp.method = "GetPeers",
       //this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id,'id':this.selectedEmployee._id }    
-      this.perfApp.requestBody = { company: this.currentOrganization._id,id:this.currentUser._id }
+      this.perfApp.requestBody = { company: this.currentOrganization._id, id: this.currentUser._id }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
-      this.formattedPeers=[];
+      this.formattedPeers = [];
       if (c && c.length > 0) {
         c.map(x => {
           var _f: any = {};
@@ -442,7 +450,7 @@ export class RollevaluationComponent implements OnInit {
       debugger
       var clonedArray2 = c.map((_arrayElement) => Object.assign({}, _arrayElement));
       this.peersCompetencyList = clonedArray2;
-this.disabledAddButton=false;
+      this.disabledAddButton = false;
     }, error => {
       debugger
       console.log('competencyList error ', error)
@@ -517,8 +525,8 @@ this.disabledAddButton=false;
     this.selectedEmployees.splice(_index, 1)
     _index = this.selectedEmployeeList.indexOf(this.selectedEmployee);
 
-    this.selectedEmployeesForEvaluation.splice(_index,1);
-    this.selectedEmployeesForEvaluation=[...this.selectedEmployeesForEvaluation]
+    this.selectedEmployeesForEvaluation.splice(_index, 1);
+    this.selectedEmployeesForEvaluation = [...this.selectedEmployeesForEvaluation]
     this.selectedEmployeeList.splice(_index, 1);
     this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
 
@@ -572,10 +580,10 @@ this.disabledAddButton=false;
   public currentPeerCompetencyList: any = [];
   openPeersView() {
     debugger
-    if(this.selectedEmployee.Peers){
-    this.PeersCompetencyMessage = this.selectedEmployee.Peers[0].PeersCompetencyMessage;
-    this.selectedEmployeePeers = this.selectedEmployee.Peers || [];
-    this.currentPeerCompetencyList = this.selectedEmployee.Peers[0].PeersCompetencyList;
+    if (this.selectedEmployee.Peers) {
+      this.PeersCompetencyMessage = this.selectedEmployee.Peers[0].PeersCompetencyMessage;
+      this.selectedEmployeePeers = this.selectedEmployee.Peers || [];
+      this.currentPeerCompetencyList = this.selectedEmployee.Peers[0].PeersCompetencyList;
     }
     this.getPeersForEmployees();
 
@@ -611,29 +619,47 @@ this.disabledAddButton=false;
       {
         headerName: 'Employee', sortable: true, filter: true,
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.FirstName}-${data.data.LastName}</span>` }
-      },      
-       { headerName: 'Model', field: '', sortable: true, filter: true,
-       cellRenderer: (data) => { 
-        console.log('data for grid',data);
-        return `${  data.data.Model.Name}` } },
-        { headerName: 'Manager', field: '', sortable: true, filter: true,
-        cellRenderer: (data) => { 
-          var _name=data.data.Manager?data.data.Manager.FirstName:""
-          return `${_name}` } },
-       
+      },
+      {
+        headerName: 'Model', field: '', sortable: true, filter: true,
+        cellRenderer: (data) => {
+          console.log('data for grid', data);
+          if (this.initializeFormFor === 'kpionly') {
+            return '';
+          } else {
+            return `${data.data.Model.Name}`
+          }
+        },
+      },
+      {
+        headerName: 'Manager', field: '', sortable: true, filter: true,
+        cellRenderer: (data) => {
+          var _name = data.data.Manager ? data.data.Manager.FirstName : ""
+          return `${_name}`
+        },
+      },
+
       {
         headerName: 'Peers', field: '', sortable: false, filter: false,
         cellRenderer: (data) => {
-          var _count=data.data.Peers?data.data.Peers.length:0
-          debugger
-          return `<span style="color:blue;cursor:pointer" data-action-type="choosePeers">${_count}</span>`
+          if (this.initializeFormFor === 'kpionly') {
+            return '';
+          } else {
+            var _count = data.data.Peers ? data.data.Peers.length : 0
+            return `<span style="color:blue;cursor:pointer" data-action-type="choosePeers">${_count}</span>`
+          }
+
         }
       },
       {
         headerName: 'Direct Reportees', field: '', sortable: false, filter: false,
         cellRenderer: (data) => {
-          var _count=data.data.DirectReportees?data.data.DirectReportees.length:0
-          return `<span style="color:blue;cursor:pointer" data-action-type="chooseDirectReports">${_count}</span>`
+          if (this.initializeFormFor === 'kpionly') {
+            return '';
+          } else {
+            var _count = data.data.DirectReportees ? data.data.DirectReportees.length : 0
+            return `<span style="color:blue;cursor:pointer" data-action-type="chooseDirectReports">${_count}</span>`
+          }
         }
       },
       {
@@ -646,7 +672,7 @@ this.disabledAddButton=false;
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
             font-size: 17px;"   data-action-type="deleteEmp" title="Delete Employee"></i>
             `
-        
+
         }
       }
     ];
@@ -734,7 +760,7 @@ this.disabledAddButton=false;
       element.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
       element.DirectReporteeCompetencyList = this.directReporteeCompetencyList;
     });
-    
+
 
     // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
     // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
@@ -751,23 +777,78 @@ this.disabledAddButton=false;
       this.notification.error('Please select Employee(s)')
       return;
     }
-    if (this.evaluationForm.value.Model === null || this.evaluationForm.value.Model === '') {
+    if (this.initializeFormFor === 'evaluation' && (this.evaluationForm.value.Model === null || this.evaluationForm.value.Model === '')) {
       this.notification.error('Please select Model')
       return;
     }
     this.selectedEmployees.map(x => {
-      x.Model = this.modelsList.find(x=>x._id===this.selectedModel);      
+
+      x.Model = this.modelsList.find(x => x._id === this.selectedModel);
     })
     this.selectedEmployees.forEach(element => {
-      if(this.selectedEmployeeList.indexOf(element)<0){
+      if (this.selectedEmployeeList.indexOf(element) < 0) {
         this.selectedEmployeeList.push(element);
       }
-});
+    });
     //this.selectedEmployeeList.push(...this.selectedEmployees);
     if (this.EmpGridOptions.api) {
       this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
     }
     this.selectedEmployees = [];
-    this.disabledAddButton=true;
+    this.disabledAddButton = true;
+  }
+
+  addToGridForKPI() {
+    debugger
+    if (this.selectedEmployees.length === 0) {
+      this.notification.error('Please select Employee(s)')
+      return;
+    }
+
+    this.selectedEmployees.map(x => {
+      x.Model = null;
+    })
+    this.selectedEmployees.forEach(element => {
+      if (this.selectedEmployeeList.indexOf(element) < 0) {
+        this.selectedEmployeeList.push(element);
+      }
+    });
+    //this.selectedEmployeeList.push(...this.selectedEmployees);
+    if (this.EmpGridOptions.api) {
+      this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
+    }
+    this.selectedEmployees = [];
+    this.disabledAddButton = true;
+  }
+  /**Bookmark1 */
+
+
+  changeFormFor(value) {
+    this.initializeFormFor = value;
+    this.selectedEmployeeList = [];
+    this.selectedEmployeesForEvaluation = [];
+    this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
+  }
+  saveKpiForm() {
+    let list = this.evaluationForm.value.Employees;
+    var body: any;
+    if (list && list.length > 0) {
+      body = list.map(x => { return { EmployeeId: x.row._id, Company: this.currentOrganization._id } })
+
+    }
+
+    this.perfApp.method = "ReleaseKpiForm";
+    this.perfApp.requestBody = body;
+    this.perfApp.route = "evaluation"
+    this.perfApp.CallAPI().subscribe(x => {
+      console.log('added evaluation', x)
+      this.notification.success('Evaluation Created Successfully.')
+      this.router.navigate(['ea/evaluation-list'])
+    }, error => {
+      console.log('error while adding eval', error)
+      this.notification.error(error.error.message)
+    })
+
+
   }
 }
