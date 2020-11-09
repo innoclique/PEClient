@@ -90,7 +90,12 @@ export class ReviewEvaluationListComponent implements OnInit {
       cellRenderer: (data) => {
 
         var returnString = '';
-        returnString += `<i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
+        returnString += `
+        
+        <i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="addKPI" title="Add KPI"></i> 
+        
+        <i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="reviewKPI" title="Review KPI"></i>
         
         <i class="cui-layers" style="cursor:pointer; padding: 7px 20px 0 0;
@@ -154,6 +159,11 @@ public onEmpGridRowClick(e) {
             case "reviewEval":
               this.reviewEvalForm('reviewEval','Manager');
               break;
+
+              case "addKPI":
+                this.addKpiForm();
+                break;
+      
      
       default:
     }
@@ -198,6 +208,16 @@ public onAsTSGridRowClick(e) {
      this.router.navigate(['employee/review-evaluation',
        { action: action, empId: this.currentRowItem._id,actor:actor }
     ], { skipLocationChange: true });
+  }
+
+
+  
+
+  addKpiForm() {
+
+
+    this.router.navigate(['em/add-kpi', { action: 'add', ownerId: this.currentRowItem._id }], { skipLocationChange: true });
+
   }
 
 
