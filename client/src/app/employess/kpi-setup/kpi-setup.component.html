@@ -8,6 +8,7 @@
             
             <div class="form-group form-actions pull-right m-0">
               <button [disabled]='isKpiActivated' class="btn btn-sm btn-primary" data-toggle="modal" (click)="createKpi()">Add New KPI</button>
+              <button [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit KPIs</button>
             </div>
             </div>
             <div class="card-body">

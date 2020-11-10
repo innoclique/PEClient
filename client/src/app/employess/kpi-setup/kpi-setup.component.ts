@@ -2,7 +2,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
+import { AlertComponent } from '../../shared/alert/alert.component';
 import { Constants } from '../../shared/AppConstants';
 
 @Component({
@@ -28,6 +29,7 @@ export class KpiSetupComponent implements OnInit {
   public alert: AlertDialog;
   public kpiListData: any
   isKpiActivated=false;
+  unSubmitedCount=0;
 
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
   config = {
@@ -57,6 +59,7 @@ export class KpiSetupComponent implements OnInit {
   ngOnInit(): void {
 
     this.getAllKpis();
+    this.alert = new AlertDialog();
   }
 
 
@@ -187,6 +190,64 @@ this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived
   
 
 
+
+  
+   /**To alert user for submit kpis */
+   conformSubmitKpis() {
+    this.alert.Title = "Secure Alert";
+    this.alert.Content = "This will confirm your sign-off. Are you sure you want to continue?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.submitAllKPIs();
+     } else {
+       
+     }
+    })
+  }
+
+
+submitAllKPIs() {
+
+  this.perfApp.route = "app";
+  this.perfApp.method = "SubmitKpisForEvaluation",
+    this.perfApp.requestBody = { 'empId': this.loginUser._id }
+  this.perfApp.CallAPI().subscribe(c => {
+
+   if (c) {
+    this.snack.success(c.message);
+    this.getAllKpis();
+   } else {
+     
+   }
+
+  }
+  
+  , error => {
+
+    this.snack.error(error.error.message);
+
+  }
+  
+  )
+}
+
   createKpi(){
 
     this.router.navigate(['employee/kpi-setting']);
@@ -205,6 +266,8 @@ this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c && c.length > 0) {
+this.unSubmitedCount=c.filter(e=>e.IsSubmitedKPIs==false).length;
+
       this.kpiListData = c.map(function (row) {
 
 

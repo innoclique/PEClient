@@ -103,13 +103,13 @@ actor:any;
 
   async initApicallsForKpi() {
 
-    await this.getAllKPIs()
     await this.getAllKpiBasicData();
-    await this.getMeasurementCriterias();
+    await this.getAllKPIs()
 
   }
 
   ngOnInit(): void {
+    
 
     this.initApicallsForKpi();
 
@@ -426,7 +426,7 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
     )
   }
 
-  getAllKPIs() {
+   async  getAllKPIs() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpisByManager",
     this.perfApp.requestBody = { 'managerId': this.loginUser._id }
@@ -435,7 +435,8 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
       //    'empId': this.currentEmpId,
       //   'orgId':this.authService.getOrganization()._id}
 
-    this.perfApp.CallAPI().subscribe(c => {
+      await this.perfApp.CallAPI().subscribe(c => {
+      
 
       this.setWeighting(c.filter(item => item.IsDraft === false).length);
       if (c && c.length > 0) {
@@ -450,18 +451,22 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
             map(name => name ? this._filterKPI(name) : this.empKPIData.slice())
           );
 
-
+  
           if (this.currentAction !='create') {
-            this.currentKpiId=this.currentKpiId ? this.currentKpiId:this.empKPIData[0]._id;
-            this.kpiDetails=  this.empKPIData.filter(e=> e._id== this.currentKpiId)[0];
+                this.currentKpiId=this.currentKpiId ? this.currentKpiId:this.empKPIData[0]._id;
+             this.kpiDetails=  this.empKPIData.filter(e=> e._id== this.currentKpiId)[0];
             this.selIndex=  this.empKPIData.findIndex(e=> e._id== this.currentKpiId);
           }
+
+          
+          this.getMeasurementCriterias();
 
       }
 
     }
     
     , error => {
+      
       if (error.error.message === Constants.KpiNotActivated) {
         this.isKpiActivated=false;
         this.onCancle();
