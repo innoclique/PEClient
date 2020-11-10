@@ -183,12 +183,12 @@ public currentOrganization:any={}
     this.perfApp.route="app";
     this.perfApp.method= this.currentAction=='create'?"CreateEmployee":"UpdateEmployee",
     
-    this.empForm.patchValue({ThirdSignatory: this.empForm.get('ThirdSignatory').value?
-      this.empForm.get('ThirdSignatory').value._id : ''});
-      this.empForm.patchValue({CopiesTo: this.empForm.get('CopiesTo').value?
-      this.empForm.get('CopiesTo').value._id : ''});
-      this.empForm.patchValue({Manager: this.empForm.get('Manager').value?
-      this.empForm.get('Manager').value._id : ''});
+    // this.empForm.patchValue({ThirdSignatory: this.empForm.get('ThirdSignatory').value?
+    //   this.empForm.get('ThirdSignatory').value._id : ''});
+    //   this.empForm.patchValue({CopiesTo: this.empForm.get('CopiesTo').value?
+    //   this.empForm.get('CopiesTo').value._id : ''});
+    //   this.empForm.patchValue({Manager: this.empForm.get('Manager').value?
+    //   this.empForm.get('Manager').value._id : ''});
   
    
     
@@ -198,6 +198,12 @@ public currentOrganization:any={}
     //   this.perfApp.requestBody._id=this.currentRowItem._id; 
     //   this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
     // }else{
+
+
+      if(this.perfApp.requestBody.ThirdSignatory)  this.perfApp.requestBody.ThirdSignatory = this.perfApp.requestBody.ThirdSignatory._id;
+      if(this.perfApp.requestBody.CopiesTo)  this.perfApp.requestBody.CopiesTo=this.perfApp.requestBody.CopiesTo._id;
+      if(this.perfApp.requestBody.Manager)  this.perfApp.requestBody.Manager=this.perfApp.requestBody.Manager._id;
+
       this.perfApp.requestBody.CreatedBy=this.loginUser._id;
       this.perfApp.requestBody.Organization=this.loginUser.Organization?this.loginUser.Organization._id:null ;
       this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
@@ -391,7 +397,7 @@ public currentOrganization:any={}
     this.perfApp.route="app";
     this.perfApp.method="GetAllEmployees",
    // this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
-   this.perfApp.requestBody = { parentId: this.currentOrganization._id }
+   this.perfApp.requestBody = { companyId: this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c=>{
       
       console.log('lients data',c);
