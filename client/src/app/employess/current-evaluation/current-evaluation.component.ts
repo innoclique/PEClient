@@ -21,12 +21,8 @@ import { PerfAppService } from '../../services/perf-app.service';
 export class CurrentEvaluationComponent implements OnInit {
 
   loginUser: any;
-  public empKPIData: any[] = []
-  kpiDetails: any = {};
-  currentKpiId: any;
-  selIndex: number;
-  weight: number;
-  kpiForm: FormGroup;
+  
+  
   selfCompetencyForm: FormGroup;
   competencyList: any = [];
   evaluationForm: any = {};
@@ -52,7 +48,7 @@ export class CurrentEvaluationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initKPIForm()
+    
     this.initCompetencyForm();
     this.initFinalRatingForm();
     this.getTabsData();
@@ -117,19 +113,7 @@ export class CurrentEvaluationComponent implements OnInit {
       } else {
         this.evaluationForm = null;
       }
-      //   if (res1 && !res1.isError) {
-      //     this.setWeighting(res1.filter(item => item.IsDraft === false).length);
-      //     if (res1 && res1.length > 0) {
-      //       this.empKPIData = res1;
-      //       debugger
-      //       this.kpiDetails = this.empKPIData[0];//.filter(e => e._id == this.currentKpiId)[0];
-      //       this.selIndex = 0;//this.empKPIData.findIndex(e => e._id == this.currentKpiId);
-      //       this.initKPIForm();
-      //     }
-      //   }
-      //  if(res2) {
-      //    debugger
-      //  }
+     
 
     });
 
@@ -154,36 +138,8 @@ export class CurrentEvaluationComponent implements OnInit {
     return this.perfApp.CallAPI()
   }
 
-  setWeighting(length: any) {
-    this.weight = length == 0 ? 100 : Math.round(100 / length);
-    this.kpiForm.patchValue({ Weighting: this.weight });
-  }
-  initKPIForm() {
-
-    this.kpiForm = this.fb.group({
-      MeasurementCriteria: [this.kpiDetails.MeasurementCriteria ?
-        (this.kpiDetails.MeasurementCriteria[0] ? this.kpiDetails.MeasurementCriteria[0].measureId.Name : '') : '',
-      ],
-
-      Kpi: [this.kpiDetails.Kpi],
-      TargetCompletionDate: [this.kpiDetails.TargetCompletionDate ? new Date(this.kpiDetails.TargetCompletionDate) : '', []],
-      YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments : ''],
-      YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager : ''],
-      Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
-      Signoff: [this.loginUser.FirstName],
-      CoachingReminder: [this.kpiDetails.CoachingReminder ? this.kpiDetails.CoachingReminder : this.loginUser.Organization.CoachingReminder],
-
-      IsSubmit: ['false'],
-      IsDraft: [''],
-      Score: [this.kpiDetails.Score ? this.kpiDetails.Score : ''],
-      ManagerScore: [this.kpiDetails.ManagerScore ? this.kpiDetails.ManagerScore : ''],
-      IsActive: [this.kpiDetails.IsActive + ''],
-      ManagerFTSubmitedOn: [this.kpiDetails.ManagerFTSubmitedOn],
-      Status: [this.kpiDetails.Status ? this.kpiDetails.Status : ''],
-    });
-
-
-  }
+ 
+ 
   initCompetencyForm() {
     this.selfCompetencyForm = this.fb.group({
       Comments: ['', [Validators.required]],
@@ -204,19 +160,6 @@ export class CurrentEvaluationComponent implements OnInit {
   }
 
 
-  nextKpi() {
-    this.selIndex = this.selIndex + 1;
-    this.kpiDetails = this.empKPIData[this.selIndex];
-    this.initKPIForm()
-    this.currentKpiId = this.kpiDetails._id;
-  }
-
-  priKpi() {
-    this.selIndex = this.selIndex - 1;
-    this.kpiDetails = this.empKPIData[this.selIndex];
-    this.initKPIForm()
-    this.currentKpiId = this.kpiDetails._id;
-  }
 
   /**For Self-Competency Rating Begin */
   get scfc() {

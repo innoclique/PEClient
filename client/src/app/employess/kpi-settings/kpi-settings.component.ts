@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,6 +29,7 @@ export class KpiSettingsComponent implements OnInit {
   appScores: any = [];
   kpiStatus: any = [];
   coachingRemDays: any = [];
+  @Input()
   currentAction = 'create';
   isAllSelected = false;
   addMCSwitch = true;
@@ -36,7 +37,8 @@ export class KpiSettingsComponent implements OnInit {
   filteredOptionsKPI: Observable<any[]>;
   public empKPIData: any[] = []
   // public selectedKPIItems :any[]=[]
-
+@Input()
+accessingFrom:any;
 
 
 
@@ -424,6 +426,7 @@ conformSubmitKpis(){
 
 
           if (this.currentAction !='create') {
+            this.currentKpiId=this.currentKpiId ? this.currentKpiId:this.empKPIData[0]._id;
             this.kpiDetails=  this.empKPIData.filter(e=> e._id== this.currentKpiId)[0];
             this.selIndex=  this.empKPIData.findIndex(e=> e._id== this.currentKpiId);
 
