@@ -42,15 +42,30 @@ export class PeerReviewListComponent implements OnInit {
     },
     { headerName: 'Evaluation Period', field: 'EvaluationPeriod', sortable: true, filter: true },
     { headerName: 'Evaluation Duration', field: 'EvaluationDuration', sortable: true, filter: true },
-    { headerName: 'Status', field: 'Status', sortable: true, filter: true },
+    { headerName: 'Status', field: 'Status', sortable: true, filter: true,
+    cellRenderer: (data) => {
+      debugger
+      if(data.data.IsRatingSubmitted && data.data.IsRatingSubmitted){
+      return `Submitted`
+      }else{
+        return `Not Submitted` 
+      }
+      
+    } },
     {
       headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
-        //if(data.data.Status && data.data.Status!=='Submitted'){
+        debugger
+        if(data.data.IsRatingSubmitted && data.data.IsRatingSubmitted){
         return `<i class="icon-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="doreview" title="Submit Review"></i>       
         `
-        //}
+        }else{
+          return `<i class="icon-eye font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;" data-action-type="doreview" title="View Rating"></i>       
+          ` 
+        }
+        
       }
     }
   ];

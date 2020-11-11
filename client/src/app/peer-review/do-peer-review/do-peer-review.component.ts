@@ -18,11 +18,12 @@ import { PerfAppService } from '../../services/perf-app.service';
 export class DoPeerReviewComponent implements OnInit {
   currentReview: any = {};
   loginUser: any;
-  competencyList:any
-  peerCompetencyForm:FormGroup;
+  competencyList: any
+  peerCompetencyForm: FormGroup;
   questions$: Observable<CompetencyBase<any>[]>;
   private subscriptions: Subscription[] = [];
   public oneAtATime: boolean = true;
+  isSubmitted:Boolean=false;
   constructor(private authService: AuthService,
     private router: Router,
     private snack: NotificationService,
@@ -34,10 +35,10 @@ export class DoPeerReviewComponent implements OnInit {
     this.loginUser = this.authService.getCurrentUser();
 
     this.activatedRoute.params.subscribe(params => {
-       this.currentReview =params;
-       console.log('current peer',this.currentReview)
-       this.getCompetencyQuestions()
-     });   
+      this.currentReview = params;
+      console.log('current peer', this.currentReview)
+      this.getCompetencyQuestions()
+    });
   }
 
   ngOnInit(): void {
@@ -51,14 +52,14 @@ export class DoPeerReviewComponent implements OnInit {
     })
 
   }
-  getCompetencyQuestions(){
-    
+  getCompetencyQuestions() {
+
     this.perfApp.route = "app";
     this.perfApp.method = "GetPendingPeerReviewsToSubmit",
       this.perfApp.requestBody = {
-        "EvaluationId":this.currentReview.EvaluationId,// "5f9afa0b8705d33cfc4228fb",
-        "ForEmployeeId":this.currentReview.EmployeeId,// "5f904bdfa8f3771460ef153b"
-        "PeerId":this.loginUser._id
+        "EvaluationId": this.currentReview.EvaluationId,// "5f9afa0b8705d33cfc4228fb",
+        "ForEmployeeId": this.currentReview.EmployeeId,// "5f904bdfa8f3771460ef153b"
+        "PeerId": this.loginUser._id
       }
     this.subscriptions.push(this.perfApp.CallAPI().subscribe(c => {
       if (c) {
@@ -75,30 +76,42 @@ export class DoPeerReviewComponent implements OnInit {
   competencyQuestionsList = [];
   prepareCompetencyQuestions() {
     var questions: CompetencyBase<string>[] = [];
-this.peerCompetencyForm.controls["Comments"].setValue(this.competencyList.Peer[0].CompetencyComments)
-this.peerCompetencyForm.controls["OverallRating"].setValue(this.competencyList.Peer[0].CompetencyOverallRating)
-     
-       
-    //   this.peerCompetencyForm.value.IsDraft = !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
+    let _peer=this.competencyList.Peer[0];
+    if (_peer) {
+      this.peerCompetencyForm.controls["Comments"].setValue(this.competencyList.Peer[0].CompetencyComments)
+      this.peerCompetencyForm.controls["OverallRating"].setValue(this.competencyList.Peer[0].CompetencyOverallRating)
+      this.peerCompetencyForm.value.IsDraft = this.competencyList.Peer[0].CompetencySubmitted
+      this.isSubmitted=this.competencyList.Peer[0].CompetencySubmitted
+    }
     console.log('this.selfCompetencyForm.value', this.peerCompetencyForm.value)
-    this.competencyList.Competencies.forEach(c => {      
+    this.competencyList.Competencies.forEach(c => {
       questions = [];
-      c.Questions.forEach(q => {        
-        let cq=this.competencyList.Questions.find(x=>x._id===q)
-        if(cq){
+      c.Questions.forEach(q => {
+        let cq = this.competencyList.Questions.find(x => x._id === q)
+        var selectedAnswer = "-1";
+        if (cq && _peer.QnA && _peer.QnA.length>0) {
+
+          var answer = this.competencyList.Peer[0].QnA.find(x => x.CompetencyId === c._id && x.QuestionId === q);
+          
+          if (answer) {
+            selectedAnswer = answer.Answer ? answer.Answer : "-1"
+            console.log('answer', answer.Answer);
+          }
+        }
+          
           questions.push(new QuestionBase({
             key: cq._id,
             label: cq.Question,
             options: cq.Rating,
             order: 1,
             required: true,
-            value: this.competencyList.Peer[0].QnA.find(x=>x.CompetencyId===c._id && x.QuestionId===q).Answer
+            value: selectedAnswer
           }))
-          
-        }
+
+        
       });
-      
-      
+
+
       this.competencyQuestionsList.push({
         CompetenyName: c.Name,
         CompetencyId: c._id,
@@ -127,10 +140,10 @@ this.peerCompetencyForm.controls["OverallRating"].setValue(this.competencyList.P
     this.competencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
       if (_qna && _qna.length > 0) {
-        
+
         _qna.forEach(q => {
-          
-          competencyQA.QnA.push({  CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1] })
+
+          competencyQA.QnA.push({ CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1] })
         });
       } else {
         if (!isDraft) {
@@ -161,15 +174,17 @@ this.peerCompetencyForm.controls["OverallRating"].setValue(this.competencyList.P
     this.perfApp.CallAPI().subscribe(x => {
 
       console.log(x)
+      this.snack.success('Peer Review Submitted Successfully');
+      this.router.navigate(['employee/peerreview']);
     }, error => {
-
+      this.snack.error('Something went wrong');
       console.log('error', error)
     })
 
   }
 
-  cancelCompetencyRating(){
-    
+  cancelCompetencyRating() {
+    this.router.navigate(['employee/peerreview']);
   }
 
   ngOnDestroy() {
