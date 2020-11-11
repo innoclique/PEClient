@@ -14,32 +14,20 @@
                 </div>
                 <div class="card-body">
                     <tabset #staticTabs class="pro-tabs">
-                        <tab>
-
-                            <ng-template tabHeading><i class="icon-mouse"></i> KPI</ng-template>
-                            <div class="row">
-                                <div class="col-md-12">
-                                <button (click)="initiateEvaluation()" class="btn btn-primary pull-right">Initiate Evaluation</button>
-                            </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine"
-                                    [rowData]="kpiList" [gridOptions]="EmpKpiGridOptions" [pagination]="true"
-                                    [paginationPageSize]="10" (gridReady)="onEmpGridReady($event)"
-                                    (rowClicked)="onEmpRowClicked($event)">
-                                </ag-grid-angular>
-                            </div>
-
-                            </div>
-
-                        </tab>
+                        
                         <tab>
                             <ng-template tabHeading><i class="icon-cursor"></i> Evaluations</ng-template>
+                            <!-- <div class="row">
+                                <div class="col-md-12">
+                                    <button (click)="initiateEvaluation()" class="btn btn-primary pull-right">Initiate
+                                        Evaluation</button>
+                                </div>
+                            </div> -->
                             <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine"
                                 [rowData]="selectedEmployeesList" [gridOptions]="EmpGridOptions" [pagination]="true"
                                 [paginationPageSize]="10" (gridReady)="onEmpGridReady($event)"
-                                (rowClicked)="onEmpRowClicked($event)">
+                                [rowSelection]="rowSelection" [suppressMenuHide]="true"
+                                [isRowSelectable]="isRowSelectable" (rowClicked)="onEmpRowClicked($event)">
                             </ag-grid-angular>
                         </tab>
                     </tabset>
@@ -95,7 +83,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text redStar">Competency</span>
                                     </div>
-                                    <ng-multiselect-dropdown style="width: 75%;" name="peersCompetencyList"
+                                    <ng-multiselect-dropdown style="width: 70%;" name="peersCompetencyList"
                                         [disabled]="false" [placeholder]="'Select Competency'"
                                         [data]="this.peersCompetencyList" [settings]="competencyDropdownSettings"
                                         [(ngModel)]="currentPeerCompetencyList"
@@ -190,7 +178,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text redStar">Competency</span>
                                     </div>
-                                    <ng-multiselect-dropdown style="width:75%;" name="directReporteeCompetencyList"
+                                    <ng-multiselect-dropdown style="width:70%;" name="directReporteeCompetencyList"
                                         [disabled]="false" [placeholder]="'Select Competency'"
                                         [data]="directReporteeCompetencyList" [settings]="competencyDropdownSettings"
                                         [(ngModel)]="seletedDirectReporteeCompetencyList"

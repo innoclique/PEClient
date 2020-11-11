@@ -28,19 +28,8 @@
                                 </div>
 
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <input (change)="onChangeKPIFor($event)" formControlName="ActivateKPI"
-                                            class="form-check-input" type="checkbox" id="ActivateKPI">
-                                        <label class="form-check-label" for="ActivateKPI">
-                                            Activate KPI Setting Form
-                                        </label>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div *ngIf="enableKPIFor" class="col-md-6">
+                            
+                            <div *ngIf="initializeFormFor==='kpionly'" class="col-md-6">
                                 <div class="form-group">
                                     <label id="kpi-for-group">KPI For</label>
                                     <mat-radio-group aria-labelledby="kpi-for-group" class="example-radio-group"
@@ -204,7 +193,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text redStar">Competency</span>
                                     </div>
-                                    <ng-multiselect-dropdown style="width: 75%;" name="peersCompetencyList"
+                                    <ng-multiselect-dropdown style="width: 70%;" name="peersCompetencyList"
                                         [disabled]="false" [placeholder]="'Select Competency'"
                                         [data]="this.peersCompetencyList" [settings]="competencyDropdownSettings"
                                         [(ngModel)]="currentPeerCompetencyList"
@@ -299,7 +288,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text redStar">Competency</span>
                                     </div>
-                                    <ng-multiselect-dropdown style="width:75%;" name="directReporteeCompetencyList"
+                                    <ng-multiselect-dropdown style="width:70%;" name="directReporteeCompetencyList"
                                         [disabled]="false" [placeholder]="'Select Competency'"
                                         [data]="directReporteeCompetencyList" [settings]="competencyDropdownSettings"
                                         [(ngModel)]="seletedDirectReporteeCompetencyList"

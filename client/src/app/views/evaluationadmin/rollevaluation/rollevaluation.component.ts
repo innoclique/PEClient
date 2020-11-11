@@ -22,7 +22,7 @@ export class RollevaluationComponent implements OnInit {
   errorOnSave = false;
   errorMessage: string = "";
   enableKPIFor: boolean = false;
-  employeesList$: any[];
+  employeesList$: any[]=[];
   peersList: any[];
   directReportees: any[];
   evaluationPeriods: any[];
@@ -57,6 +57,7 @@ export class RollevaluationComponent implements OnInit {
   public selectedEmployeesForEvaluation: any = [];
   public disabledAddButton: Boolean = false;
   allKpi: Boolean=false;
+  kpiSelectedEmployees:any=[];
   onEmpGridReady(params) {
     this.EmpGridOptions.api = params.api; // To access the grids API
   }
@@ -274,12 +275,15 @@ export class RollevaluationComponent implements OnInit {
        this.allKpi = params['allKpi'];
        this.initializeFormFor=this.allKpi?'evaluation':'kpionly'
       }
-      
+      if(params["list"]){
+        this.kpiSelectedEmployees=params["list"].split(',')
+      }
+      this.initForm();
+      this.getEmployees();
+      this.getModels();  
      });   
  
-    this.initForm();
-    this.getEmployees();
-    this.getModels();
+    
     this.dropdownSettings = {
       singleSelection: false,
       idField: 'row',
@@ -348,10 +352,21 @@ export class RollevaluationComponent implements OnInit {
       this.perfApp.requestBody = { company: this.currentOrganization._id,allKpi:this.allKpi }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
+      
       if (c && c.IsSuccess && c.Data && c.Data.length > 0) {
-        
+        if(this.kpiSelectedEmployees.length>0){
+        var gi=[]
+          this.kpiSelectedEmployees.forEach(element => {
+            gi.push(c.Data.find(x=>x._id===element) ) 
+            
+          });
+          this.employeesList$=[...gi]
+        }else{
           this.employeesList$ = c.Data
+        }
+          
         this.employeesList$.map(x => {
+          debugger
           var _f = Object.assign({}, x);
           x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
             x.row = _f;

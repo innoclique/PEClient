@@ -57,7 +57,7 @@ export class EvaluationslistComponent implements OnInit {
   directReporteeDropdownSettings: any = {}
   currentPeerCompetencyList: any = [];
   peerDropdownSettings: any = {}
-  kpiList:any=[];
+  kpiList: any = [];
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -117,7 +117,12 @@ export class EvaluationslistComponent implements OnInit {
 
   public EmpGridOptions: GridOptions = {
     columnDefs: this.getGridColumnsForEmp(),
+
     api: new GridApi()
+  }
+  public rowSelection = 'multiple';
+  public isRowSelectable(rowNode) {
+    return  rowNode.data ? rowNode.data.Type ==='K'?true:false:false
   }
   public EmpKpiGridOptions: GridOptions = {
     columnDefs: this.getGridColumnsForEmpKpi(),
@@ -147,28 +152,32 @@ export class EvaluationslistComponent implements OnInit {
     return [
       {
         headerName: 'Employee', sortable: true, filter: true,
+
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee[0].FirstName}-${data.data.Employee[0].LastName}</span>` }
       },
       {
         headerName: 'Released On', sortable: true, filter: true,
         cellRenderer: (data) => {
-          
-            return new DatePipe('en-US').transform(data.data.CreatedDate, 'MM-dd-yyyy')
-        
-      }},   
-      
+
+          return new DatePipe('en-US').transform(data.data.CreatedDate, 'MM-dd-yyyy')
+
+        }
+      },
+
       {
         headerName: 'Evaluation Year', sortable: true, filter: true,
-        cellRenderer: (data) => {          
-            return data.data.EvaluationYear
-      }},
+        cellRenderer: (data) => {
+          return data.data.EvaluationYear
+        }
+      },
       {
         headerName: 'Manager', field: '', sortable: true, filter: true,
-        cellRenderer: (data) => { 
+        cellRenderer: (data) => {
           if (this.getNested(data.data.Manager, 'Name')) {
-            return `${data.data.Manager.Name} ` }
+            return `${data.data.Manager.Name} `
           }
-          
+        }
+
       },
 
       {
@@ -178,7 +187,7 @@ export class EvaluationslistComponent implements OnInit {
         cellRenderer: (data) => {
           console.log('column data', data)
 
-            return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+          return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
             font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
             `
           //}
@@ -191,6 +200,7 @@ export class EvaluationslistComponent implements OnInit {
     return [
       {
         headerName: 'Employee', sortable: true, filter: true,
+        checkboxSelection: true,
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</span>` }
       },
       {
@@ -208,12 +218,12 @@ export class EvaluationslistComponent implements OnInit {
         headerName: 'Evaluation Period', sortable: true, filter: true,
         cellRenderer: (data) => {
           if (this.getNested(data.data.EvaluationRow, 'EvaluationPeriod')) // true
-            return data.data.EvaluationRow.EvaluationPeriod         
+            return data.data.EvaluationRow.EvaluationPeriod
         }
       },
       {
         headerName: 'Evaluation Duration', sortable: true, filter: true,
-        cellRenderer: (data) => {          
+        cellRenderer: (data) => {
           if (this.getNested(data.data.EvaluationRow, 'EvaluationDuration')) {
             return data.data.EvaluationRow.EvaluationDuration
           }
@@ -222,30 +232,42 @@ export class EvaluationslistComponent implements OnInit {
       {
         headerName: 'Model', field: '', sortable: true, filter: true,
         cellRenderer: (data) => {
-          if (this.getNested(data.data.EmployeeRow, 'Model','Name')) {
+          if (this.getNested(data.data.EmployeeRow, 'Model', 'Name')) {
             return data.data.EmployeeRow.Model.Name
-          }         
+          }
         }
       },
       {
         headerName: 'Manager', field: '', sortable: true, filter: true,
-        cellRenderer: (data) => { 
-          if (this.getNested(data.data.Employee, 'Manager','FirstName')) {
-            return `${data.data.Employee.Manager.FirstName} ${data.data.Employee.Manager.LastName}` }
+        cellRenderer: (data) => {
+          if (this.getNested(data.data.Employee, 'Manager', 'FirstName')) {
+            return `${data.data.Employee.Manager.FirstName} ${data.data.Employee.Manager.LastName}`
           }
-          
+        }
+
       },
 
       {
         headerName: 'Peers', field: '', sortable: false, filter: false,
         cellRenderer: (data) => {
-          return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.Peers.length}</span>`
+          if (this.getNested(data.data.EmployeeRow, 'Peers')){
+            return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.Peers.length}</span>`
+          }else{
+            return '';
+          }
+          
         }
       },
       {
         headerName: 'Direct Reportees', field: '', sortable: false, filter: false,
+        
         cellRenderer: (data) => {
-          return `<span style="color:blue;cursor:pointer;" data-action-type="chooseDirectReports">${data.data.EmployeeRow.DirectReportees.length}</span>`
+          if (this.getNested(data.data.EmployeeRow, 'DirectReportees')){
+            return `<span style="color:blue;cursor:pointer;" data-action-type="chooseDirectReports">${data.data.EmployeeRow.DirectReportees.length}</span>`
+          }else{
+            return '';
+          }
+          
         }
       },
 
@@ -256,7 +278,7 @@ export class EvaluationslistComponent implements OnInit {
         cellRenderer: (data) => {
           console.log('column data', data)
 
-            return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+          return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
             font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
             `
           //}
@@ -266,7 +288,9 @@ export class EvaluationslistComponent implements OnInit {
 
   }
   gotoCreateEvaluation() {
-    this.router.navigate(['/ea/rollout'])
+    var selectedRows = this.EmpGridOptions.api.getSelectedRows();
+    debugger
+    this.router.navigate(['ea/rollout', { allKpi: selectedRows.length>0,list:selectedRows.map(x=>x.Employee._id) }], { skipLocationChange: true });
   }
   public columnDefs = [
     {
@@ -310,36 +334,49 @@ export class EvaluationslistComponent implements OnInit {
       console.log('evaluationList data', c);
       if (c) {
         this.selectedEmployeesList = [];
-        c.evaluations.map(row => {
+        c.map(row => {
+          if(row.Type==='K'){
+            this.selectedEmployeesList.push({
+              Type:row.Type,
+              EmployeeRow: row.Employee[0],
+              EvaluationRow: row,
+              Peers: [],
+              DirectReportees: [],
+              Model: '',
+              Employee: row.Employee[0],
+              PeersCompetencyMessage: '',
+              DirectReporteeComptencyMessage: '',
+              PeersCompetencyList: [],
+              DirectReporteeCompetencyList: []
+            });
+          
+        }else{
           var _f = Object.assign({}, row);
           row.Employees.map(x => {
             var _e = Object.assign({}, x);            
-            this.selectedEmployeesList.push({
-              EmployeeRow: _e,
-              EvaluationRow: _f,
-              Peers: x.Peers,
-              DirectReportees: x.DirectReportees,
-              Model: x.Model,
-              Employee: x._id,
-              PeersCompetencyMessage: x.PeersCompetencyMessage,
-              DirectReporteeComptencyMessage: x.DirectReporteeComptencyMessage,
-              PeersCompetencyList: x.PeersCompetencyList,
-              DirectReporteeCompetencyList: x.DirectReporteeCompetencyList
-            });
-          })
+              this.selectedEmployeesList.push({
+                EmployeeRow: _e,
+                EvaluationRow: _f,
+                Peers: x.Peers,
+                DirectReportees: x.DirectReportees,
+                Model: x.Model,
+                Employee: x._id,
+                PeersCompetencyMessage: x.PeersCompetencyMessage,
+                DirectReporteeComptencyMessage: x.DirectReporteeComptencyMessage,
+                PeersCompetencyList: x.PeersCompetencyList,
+                DirectReporteeCompetencyList: x.DirectReporteeCompetencyList
+              });
+                      })
+          
+        }
         })
-if(c.kpiList){
-this.kpiList=c.kpiList;
-this.EmpKpiGridOptions.api.setRowData(this.kpiList);
-}
-
-
+        
       }
       console.table(this.selectedEmployeesList)
       this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
     })
   }
-  
+
   onEmpGridReady(params) {
     debugger
     this.EmpGridOptions.api = params.api; // To access the grids API
@@ -360,13 +397,13 @@ this.EmpKpiGridOptions.api.setRowData(this.kpiList);
           return this.openPeerView();
         case "deleteEmp":
           return this.deleteEmpFromList();
-          case "changeModel":
+        case "changeModel":
           return this.changeModel();
-          
+
       }
     }
   }
-  changeModel(){
+  changeModel() {
 
   }
   openDirectReporteesView() {
@@ -842,9 +879,10 @@ this.EmpKpiGridOptions.api.setRowData(this.kpiList);
   getNested(obj, ...args) {
     return args.reduce((obj, level) => obj && obj[level], obj)
   }
-  initiateEvaluation(){
+  initiateEvaluation() {
     this.router.navigate(['ea/rollout', { allKpi: 'true' }], { skipLocationChange: true });
-    
+
   }
+
 
 }
