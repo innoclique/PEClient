@@ -198,7 +198,7 @@ if (!this.kpiForm.get('Kpi').value) {
     this.perfApp.requestBody.MeasurementCriteria = Measurements;
 
     this.perfApp.requestBody.Weighting = this.weight;
-   
+   if(this.currEvaluation)
     this.perfApp.requestBody.EvaluationId = this.currEvaluation._id;
 
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;

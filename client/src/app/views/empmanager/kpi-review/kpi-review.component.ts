@@ -429,7 +429,8 @@ this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesf
    async  getAllKPIs() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpisByManager",
-    this.perfApp.requestBody = { 'managerId': this.loginUser._id }
+    this.perfApp.requestBody = { 'managerId': this.loginUser._id,
+        'empId': this.currentEmpId,}
     // this.perfApp.method = "GetAllKpis",
       // this.perfApp.requestBody = {
       //    'empId': this.currentEmpId,
