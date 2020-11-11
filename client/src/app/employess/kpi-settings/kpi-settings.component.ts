@@ -81,9 +81,10 @@ export class KpiSettingsComponent implements OnInit {
 
   async initApicallsForKpi() {
 
-    await this.getAllKPIs()
+    
     await this.getAllKpiBasicData();
-    await this.getMeasurementCriterias();
+    await this.getAllKPIs();
+    
 
   }
 
@@ -432,6 +433,8 @@ conformSubmitKpis(){
             }
 
           }
+
+           this.getMeasurementCriterias();
 
       }
 
