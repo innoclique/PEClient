@@ -58,6 +58,10 @@ export class EvaluationslistComponent implements OnInit {
   currentPeerCompetencyList: any = [];
   peerDropdownSettings: any = {}
   kpiList: any = [];
+  gridRefreshParams = {
+    force: true,
+    suppressFlash: false
+  };
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -117,13 +121,15 @@ export class EvaluationslistComponent implements OnInit {
 
   public EmpGridOptions: GridOptions = {
     columnDefs: this.getGridColumnsForEmp(),
-
     api: new GridApi()
   }
   public rowSelection = 'multiple';
   public isRowSelectable(rowNode) {
     return  rowNode.data ? rowNode.data.Type ==='K'?true:false:false
   }
+  public getRowNodeId (data) {    
+    return data.Employee._id;
+  };
   public EmpKpiGridOptions: GridOptions = {
     columnDefs: this.getGridColumnsForEmpKpi(),
     api: new GridApi()
@@ -271,19 +277,19 @@ export class EvaluationslistComponent implements OnInit {
         }
       },
 
-      {
-        headerName: "Actions",
-        suppressMenu: true,
-        Sorting: false,
-        cellRenderer: (data) => {
-          console.log('column data', data)
+      // {
+      //   headerName: "Actions",
+      //   suppressMenu: true,
+      //   Sorting: false,
+      //   cellRenderer: (data) => {
+      //     console.log('column data', data)
 
-          return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-            font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
-            `
-          //}
-        }
-      }
+      //     return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+      //       font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
+      //       `
+      //     //}
+      //   }
+      // }
     ];
 
   }
@@ -527,8 +533,15 @@ export class EvaluationslistComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(x => {
       console.log('added evaluation', x)
       this.notification.success('Evaluation Updated Successfully.')
-      this.router.navigate(['ea/evaluation-list'])
+      
+      var rowNode = this.EmpGridOptions.api.getRowNode(this.selectedEmployee.Employee._id);
+      debugger
+      var newdata=rowNode.data;
+      newdata.Peers=this.selectedEmployee.Peers;
+      rowNode.setData(newdata);     
+      this.EmpGridOptions.api.refreshCells(this.gridRefreshParams);
       this.closePeersModel();
+      
     }, error => {
       this.closePeersModel();
       console.log('error while adding eval', error)
@@ -744,12 +757,14 @@ export class EvaluationslistComponent implements OnInit {
     }
     this.selectedEmployeePeers = [...this.selectedEmployee.Peers]
   }
-  onPeerDeSelect(item: any) {
-    var _position = this.selectedEmployee.Peers.indexOf(item);
+  onPeerDeSelect(item: any) {    
+    var _position = this.selectedEmployee.Peers.findIndex(x=>x.EmployeeId===item.EmployeeId);
     this.selectedEmployee.Peers.splice(_position, 1);
+    this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
   }
   onDeSelectAllPeers(items: any) {
     this.selectedEmployees.Peers = [];
+    this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
   }
   closePeersModel() {
     this.selectePeersViewRef.hide();
@@ -862,7 +877,7 @@ export class EvaluationslistComponent implements OnInit {
 
   onDirectReporteeDeSelect(item: any) {
     debugger
-    var _position = this.selectedEmployee.DirectReportees.indexOf(item);
+    var _position = this.selectedEmployee.DirectReportees.findIndex(x=>x.EmployeeId===item.EmployeeId);   
     this.selectedEmployee.DirectReportees.splice(_position, 1);
     this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
   }

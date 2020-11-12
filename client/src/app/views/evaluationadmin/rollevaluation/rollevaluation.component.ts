@@ -58,6 +58,10 @@ export class RollevaluationComponent implements OnInit {
   public disabledAddButton: Boolean = false;
   allKpi: Boolean=false;
   kpiSelectedEmployees:any=[];
+  gridRefreshParams = {
+    force: true,
+    suppressFlash: false
+  };
   onEmpGridReady(params) {
     this.EmpGridOptions.api = params.api; // To access the grids API
   }
@@ -133,7 +137,8 @@ export class RollevaluationComponent implements OnInit {
     this.selectedEmployeePeers = [...this.selectedEmployee.Peers]
   }
   onPeerDeSelect(item: any) {
-    var _position = this.selectedEmployee.Peers.indexOf(item);
+    
+    var _position = this.selectedEmployee.Peers.findIndex(x=>x.EmployeeId===item.EmployeeId);
     this.selectedEmployee.Peers.splice(_position, 1);
   }
   onDeSelectAllPeers(items: any) {
@@ -160,6 +165,7 @@ export class RollevaluationComponent implements OnInit {
       element.PeersCompetencyList = this.selectedPeersCompetencyList;
     });
     this.EmpGridOptions.api.setRowData(this.selectedEmployeeList)
+    this.EmpGridOptions.api.refreshCells(this.gridRefreshParams)
     this.closePeersModel();
   }
 
@@ -238,7 +244,8 @@ export class RollevaluationComponent implements OnInit {
 
   onDirectReporteeDeSelect(item: any) {
     debugger
-    var _position = this.selectedEmployee.DirectReportees.indexOf(item);
+    
+    var _position = this.selectedEmployee.DirectReportees.findIndex(x=>x.EmployeeId===item.EmployeeId);
     this.selectedEmployee.DirectReportees.splice(_position, 1);
     this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
   }
@@ -759,14 +766,15 @@ export class RollevaluationComponent implements OnInit {
     this.selectedEmployeeDirectReportees = [...this.selectedEmployeeDirectReportees]
   }
   saveDirectReportees() {
-    if (this.seletedDirectReporteeCompetencyList.length === 0) {
-      this.notification.error('Please select at least 1 Competency');
-      return;
-    }
     if (!this.selectedEmployee.DirectReportees || this.selectedEmployee.DirectReportees.length < 2) {
       this.notification.error('Please select minimum two Ditrct Reportee');
       return;
     }
+    if (this.seletedDirectReporteeCompetencyList.length === 0) {
+      this.notification.error('Please select at least 1 Competency');
+      return;
+    }
+    
     debugger
     this.selectedEmployee.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
     this.selectedEmployee.DirectReportsCompetency = this.seletedDirectReporteeCompetencyList;
@@ -775,11 +783,8 @@ export class RollevaluationComponent implements OnInit {
       element.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
       element.DirectReporteeCompetencyList = this.directReporteeCompetencyList;
     });
+    this.EmpGridOptions.api.refreshCells(this.gridRefreshParams)
 
-
-    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
-    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
-    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
 
     this.closeDrModel();
   }

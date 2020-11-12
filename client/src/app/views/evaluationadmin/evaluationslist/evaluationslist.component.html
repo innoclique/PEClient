@@ -27,6 +27,7 @@
                                 [rowData]="selectedEmployeesList" [gridOptions]="EmpGridOptions" [pagination]="true"
                                 [paginationPageSize]="10" (gridReady)="onEmpGridReady($event)"
                                 [rowSelection]="rowSelection" [suppressMenuHide]="true"
+                                [getRowNodeId]="getRowNodeId"
                                 [isRowSelectable]="isRowSelectable" (rowClicked)="onEmpRowClicked($event)">
                             </ag-grid-angular>
                         </tab>
