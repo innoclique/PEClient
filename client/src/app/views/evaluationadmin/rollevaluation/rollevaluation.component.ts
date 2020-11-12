@@ -667,7 +667,7 @@ export class RollevaluationComponent implements OnInit {
         }
       },
       {
-        headerName: 'Direct Reportees', field: '', sortable: false, filter: false,
+        headerName: 'Direct Report(s)', field: '', sortable: false, filter: false,
         cellRenderer: (data) => {
           if (this.initializeFormFor === 'kpionly') {
             return '';
@@ -713,7 +713,7 @@ export class RollevaluationComponent implements OnInit {
   getDirectReporteeGridCols() {
     return [
       {
-        headerName: 'Direct Reportee', sortable: true, filter: true,
+        headerName: 'Direct Report(s)', sortable: true, filter: true,
         cellRenderer: (data) => {
           return `<span style="color:blue;cursor:pointer" data-action-type="">
         ${data.data.displayTemplate}</span>`

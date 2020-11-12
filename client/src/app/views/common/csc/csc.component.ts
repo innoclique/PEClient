@@ -17,7 +17,8 @@ import { stateData } from '../../../shared/AppConstants/states';
 })
 export class CSCComponent implements OnInit,OnChanges {
  
-
+@Input()
+showValidateMsg:boolean=false;
 
 
 @Input() set reset(value: boolean) {

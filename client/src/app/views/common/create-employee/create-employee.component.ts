@@ -43,6 +43,7 @@ export class CreateEmployeeComponent implements OnInit {
   filteredOptionsTS: Observable<any[]>;
   filteredOptionsDR: Observable<any[]>;
 public currentOrganization:any={}
+  submitClicked=false;
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -163,7 +164,7 @@ public currentOrganization:any={}
   }
 
   submitCreateEmployee(){
-
+this.submitClicked=true;
     if (!this.empForm.valid) {
         return;    
       }else{
@@ -234,6 +235,7 @@ public currentOrganization:any={}
     this.perfApp.CallAPI().subscribe(c=>{
   
       if (c.message==Constants.SuccessText) {
+        this.submitClicked=false;
         
         this.snack.success(this.translate.instant(`Employee ${this.currentAction=='create'?'Added':'Updated'}  Succeesfully`));
         // this.getEmployees();

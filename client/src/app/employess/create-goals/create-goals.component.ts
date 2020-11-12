@@ -153,7 +153,7 @@ get k (){
 
   getColDef(){
  return [
-    { headerName: 'ActionStep', field: 'ActionStep', width: 160, autoHeight: true },
+    { headerName: 'Action Step', field: 'ActionStep', width: 160, autoHeight: true },
     { headerName: 'Progress Indicators', field: 'ProgressIndicators', width: 190, autoHeight: true },
     { headerName: 'Barriers', field: 'Barriers', width: 160, autoHeight: true },
     { headerName: 'Target Date', field: 'TargetDate', width: 150, autoHeight: true ,

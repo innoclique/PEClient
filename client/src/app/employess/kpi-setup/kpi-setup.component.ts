@@ -266,7 +266,7 @@ submitAllKPIs() {
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c && c.length > 0) {
-this.unSubmitedCount=c.filter(e=>e.IsSubmitedKPIs==false).length;
+this.unSubmitedCount=c.filter(e=>e.IsSubmitedKPIs==false && e.IsDraft==false ).length;
 
       this.kpiListData = c.map(function (row) {
 

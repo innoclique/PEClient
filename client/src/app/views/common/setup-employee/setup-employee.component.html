@@ -362,10 +362,11 @@
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text ">Manager</span>
+                    <span class="input-group-text redStar">Manager</span>
                   </div>
                   <input type="text" class="autoc-border form-control"
-                  placeholder="Search for a Direct Report(s)"
+                  placeholder="Search for a Manager" required
+                  [ngClass]="{ 'is-invalid': (f.Manager.touched )  &&  f.Manager.invalid }"
                  
                   [matAutocomplete]="auto3"
                      formControlName="Manager" name="Manager"
@@ -377,7 +378,9 @@
             </mat-option>
            </mat-autocomplete>
 
-          
+           <div *ngIf="(f.Manager.touched) && f.Manager.invalid" class="invalid-feedback">
+            <div *ngIf="f.Manager.errors.required">Manager is required</div>
+          </div>
                 </div>
               </div>
             </div>
@@ -533,7 +536,7 @@
       <div *ngIf="currentAction != 'view'" class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="addEmployee.hide();closeForm()">Cancel</button>
         <!-- <button *ngIf="!currentRowItem?.IsSubmit" type="button" (click)="createEmployee()" class="btn btn-primary">Save changes</button> -->
-        <button type="button" [disabled]="!empForm.valid" (click)="submitCreateEmployee()" class="btn btn-primary">
+        <button type="button"  (click)="submitCreateEmployee()" class="btn btn-primary">
           {{currentAction == 'create'?'Submit':'Update'}}</button>
       </div>
     </div><!-- /.modal-content -->

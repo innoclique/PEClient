@@ -145,7 +145,7 @@ export class SetupEmployeeComponent implements OnInit {
       ApplicationRole: [this.empDetails.ApplicationRole?this.empDetails.ApplicationRole:'',[Validators.required] ],
       ThirdSignatory: [this.empDetails.ThirdSignatory?this.empDetails.ThirdSignatory:'',],
       CopiesTo: [this.empDetails.CopiesTo?this.empDetails.CopiesTo:'', ],
-      Manager: [this.empDetails.Manager?this.empDetails.Manager:'',],
+      Manager: [this.empDetails.Manager?this.empDetails.Manager:'',[Validators.required]],
       Country: [this.empDetails.Country?this.empDetails.Country:'',],
       State: [this.empDetails.State?this.empDetails.State:'',],
       City: [this.empDetails.City?this.empDetails.City:'',],
