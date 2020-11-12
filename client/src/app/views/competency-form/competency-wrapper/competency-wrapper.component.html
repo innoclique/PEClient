@@ -5,9 +5,14 @@
         <app-competency-questions [question]="question" [form]="form"></app-competency-questions>
       </div>
   
-      <!-- <div class="form-row">
-        <button type="submit" [disabled]="!form.valid">Save</button>
-      </div> -->
+       <div *ngIf="form" class="form-row">
+         <div class="form-group">
+           <label for="Comments">Comments: </label>
+        <textarea maxlength="500" id="Comments" class="form-control" cols="" rows="4"
+                       formControlName="Comments"
+                      name="Comments">  </textarea>
+                    </div>
+      </div> 
     </form>
   
     <!-- <div *ngIf="payLoad" class="form-row">

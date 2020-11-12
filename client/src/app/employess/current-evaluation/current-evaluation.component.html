@@ -26,7 +26,7 @@
                                     <accordion [closeOthers]="oneAtATime">
                                         <accordion-group *ngFor="let c of competencyQuestionsList"
                                             heading="{{c.CompetenyName}}">
-                                            <app-competency-wrapper [questions]="c.Questions" [form]="c.form">
+                                            <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments">
                                             </app-competency-wrapper>
                                         </accordion-group>
 
@@ -56,7 +56,7 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">Comments</span>
                                                     </div>
-                                                    <textarea maxlength="500" formControlName="Comments"
+                                                    <textarea maxlength="500" formControlName="OverallComments"
                                                         class="form-control"></textarea>
 
                                                 </div>
@@ -96,7 +96,7 @@
                                     </div>
 
                                 </div>
-                                <div *ngIf="PeerScoreCard.PeerList && PeerScoreCard.PeerList.length>0" class="row">
+                                <div *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length>0" class="row">
                                     <div class="col-md-6">
                                         <ul class="list-group">                                            
                                             <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let peer of PeerScoreCard?.PeerList">
@@ -126,7 +126,7 @@
                                     </div>
 
                                 </div>
-                                <div *ngIf="DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0" class="row">
+                                <div *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0" class="row">
                                     <div class="col-md-6">
                                         <ul class="list-group">                                            
                                             <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">

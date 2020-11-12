@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { error } from 'console';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CompetencyBase } from '../../Models/CompetencyFormModel';
@@ -19,10 +18,7 @@ import { PerfAppService } from '../../services/perf-app.service';
   styleUrls: ['./current-evaluation.component.css']
 })
 export class CurrentEvaluationComponent implements OnInit {
-
   loginUser: any;
-  
-  
   selfCompetencyForm: FormGroup;
   competencyList: any = [];
   evaluationForm: any = {};
@@ -87,8 +83,9 @@ export class CurrentEvaluationComponent implements OnInit {
       if (res1 && !res1.isError) {
 
         this.evaluationForm = res1;
-        if (res1.Competencies.Employees[0]) {
-          this.employeeCompetencyList = res1.Competencies.Employees[0].Competencies;
+        debugger
+        if (res1.Competencies) {
+          this.employeeCompetencyList = res1.Competencies.Employee.Competencies
           
           // this.setCompetencies();
           this.prepareCompetencyQuestions();
@@ -142,7 +139,7 @@ export class CurrentEvaluationComponent implements OnInit {
  
   initCompetencyForm() {
     this.selfCompetencyForm = this.fb.group({
-      Comments: ['', [Validators.required]],
+      OverallComments: ['', [Validators.required]],
       OverallRating: [1, [Validators.required]],
       IsDraft: [true]
     })
@@ -176,12 +173,13 @@ export class CurrentEvaluationComponent implements OnInit {
   competencyQuestionsList = [];
   showCompetencySubmit=true;
   prepareCompetencyQuestions() {
+    debugger
     var questions: CompetencyBase<string>[] = [];
-    this.selfCompetencyForm.controls["Comments"].setValue( this.evaluationForm.Competencies.Employees[0].CompetencyComments),
-    this.selfCompetencyForm.controls["OverallRating"].setValue( this.evaluationForm.Competencies.Employees[0].CompetencyOverallRating),
-    this.selfCompetencyForm.controls["IsDraft"].setValue(!this.evaluationForm.Competencies.Employees[0].CompetencySubmitted)
+    this.selfCompetencyForm.controls["OverallComments"].setValue( this.evaluationForm.Competencies.Employee.CompetencyComments,),
+    this.selfCompetencyForm.controls["OverallRating"].setValue( this.evaluationForm.Competencies.Employee.CompetencyOverallRating),
+    this.selfCompetencyForm.controls["IsDraft"].setValue(!this.evaluationForm.Competencies.Employee.CompetencySubmitted)
     console.log('this.selfCompetencyForm.value', this.selfCompetencyForm.value);
-    this.showCompetencySubmit = !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
+    this.showCompetencySubmit = !this.evaluationForm.Competencies.CompetencySubmitted
     this.employeeCompetencyList.forEach(element => {
       questions = [];
       element.Questions.forEach(q => {
@@ -202,9 +200,7 @@ export class CurrentEvaluationComponent implements OnInit {
         CompetencyRowId: element._id,
         Questions: questions,
         form: this.qcs.toFormGroup(questions),
-        Comments: this.evaluationForm.Competencies.Employees[0].CompetencyComments,
-        OverallRating: this.evaluationForm.Competencies.Employees[0].OverallRating,
-        IsDraft: !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
+        comments:element.Comments,
       })
 
     });
@@ -221,19 +217,23 @@ export class CurrentEvaluationComponent implements OnInit {
   }
   saveSelfCompetencyForm(isDraft) {
     //selfCompetencyForm
+    debugger
     const competencyQA: any = {}
     competencyQA.QnA = []
     let isvalid = true;
     this.competencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
       if (_qna && _qna.length > 0) {
+        var _lastitem=_qna.pop();
         _qna.forEach(q => {
-          competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1] })
+          competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1],Comments:_lastitem?_lastitem[1]:"" })          
         });
+        //Comments:_qna[5]?_qna[5][1]:""
+        // var last = competencyQA.QnA[competencyQA.QnA.length - 1]
+        // competencyQA.QnA.map(x=>x.Comments=last?last[1]:"" )          
       } else {
         if (!isDraft) {
           isvalid = false;
-
         }
       }
     });
@@ -241,10 +241,10 @@ export class CurrentEvaluationComponent implements OnInit {
       this.snack.error('Please provide rating to all question(s) in each competency')
       return;
     }
-    competencyQA.Comments = this.selfCompetencyForm.value.Comments;
+    competencyQA.Comments = this.selfCompetencyForm.value.OverallComments;
     competencyQA.OverallRating = this.selfCompetencyForm.value.OverallRating;
-    competencyQA.EvaluationId = this.evaluationForm.Competencies._id;
-    competencyQA.EmployeeId = this.loginUser._id;
+    competencyQA.EvaluationId = this.evaluationForm.Competencies.EvaluationId
+    competencyQA.EmployeeId = this.evaluationForm.Competencies.Employee._id;;
     competencyQA.IsDraft = isDraft;
     console.log('QnA', competencyQA);
     this.perfApp.route = "app";

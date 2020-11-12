@@ -118,6 +118,7 @@ export class DoPeerReviewComponent implements OnInit {
         //CompetencyRowId: element._id,
         Questions: questions,
         form: this.qcs.toFormGroup(questions),
+        Comments:c.Comments||""
         // Comments: this.evaluationForm.Competencies.Employees[0].CompetencyComments,
         // OverallRating: this.evaluationForm.Competencies.Employees[0].OverallRating,
         // IsDraft: !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
@@ -134,6 +135,7 @@ export class DoPeerReviewComponent implements OnInit {
   }
   savePeerCompetencyForm(isDraft) {
     //selfCompetencyForm
+    
     const competencyQA: any = {}
     competencyQA.QnA = []
     let isvalid = true;

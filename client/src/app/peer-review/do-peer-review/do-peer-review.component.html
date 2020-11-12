@@ -2,7 +2,7 @@
     <accordion [closeOthers]="oneAtATime">
         <accordion-group *ngFor="let c of competencyQuestionsList"
             heading="{{c.CompetenyName}}">
-            <app-competency-wrapper [questions]="c.Questions" [form]="c.form"></app-competency-wrapper>
+            <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="Comments"></app-competency-wrapper>
         </accordion-group>
 
     </accordion>
