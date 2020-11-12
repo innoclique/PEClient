@@ -23,7 +23,7 @@ export class DoPeerReviewComponent implements OnInit {
   questions$: Observable<CompetencyBase<any>[]>;
   private subscriptions: Subscription[] = [];
   public oneAtATime: boolean = true;
-  isSubmitted:Boolean=false;
+  isSubmitted: Boolean = false;
   constructor(private authService: AuthService,
     private router: Router,
     private snack: NotificationService,
@@ -46,7 +46,7 @@ export class DoPeerReviewComponent implements OnInit {
   }
   initCompetencyForm() {
     this.peerCompetencyForm = this.fb.group({
-      Comments: ['', [Validators.required]],
+      OverallComments: ['', [Validators.required]],
       OverallRating: [1, [Validators.required]],
       IsDraft: [true]
     })
@@ -76,29 +76,29 @@ export class DoPeerReviewComponent implements OnInit {
   competencyQuestionsList = [];
   prepareCompetencyQuestions() {
     var questions: CompetencyBase<string>[] = [];
-    let _peer=this.competencyList.Peer[0];
+    let _peer = this.competencyList.Peer[0];
     if (_peer) {
-      this.peerCompetencyForm.controls["Comments"].setValue(this.competencyList.Peer[0].CompetencyComments)
+      this.peerCompetencyForm.controls["OverallComments"].setValue(this.competencyList.Peer[0].CompetencyComments)
       this.peerCompetencyForm.controls["OverallRating"].setValue(this.competencyList.Peer[0].CompetencyOverallRating)
       this.peerCompetencyForm.value.IsDraft = this.competencyList.Peer[0].CompetencySubmitted
-      this.isSubmitted=this.competencyList.Peer[0].CompetencySubmitted
-    }
-    console.log('this.selfCompetencyForm.value', this.peerCompetencyForm.value)
-    this.competencyList.Competencies.forEach(c => {
-      questions = [];
-      c.Questions.forEach(q => {
-        let cq = this.competencyList.Questions.find(x => x._id === q)
-        var selectedAnswer = "-1";
-        if (cq && _peer.QnA && _peer.QnA.length>0) {
+      this.isSubmitted = this.competencyList.Peer[0].CompetencySubmitted
 
-          var answer = this.competencyList.Peer[0].QnA.find(x => x.CompetencyId === c._id && x.QuestionId === q);
-          
-          if (answer) {
-            selectedAnswer = answer.Answer ? answer.Answer : "-1"
-            console.log('answer', answer.Answer);
+      console.log('this.selfCompetencyForm.value', this.peerCompetencyForm.value)
+      this.competencyList.Competencies.forEach(c => {
+        questions = [];
+        c.Questions.forEach(q => {
+          let cq = this.competencyList.Questions.find(x => x._id === q)
+          var selectedAnswer = "-1";
+          if (cq && _peer.QnA && _peer.QnA.length > 0) {
+
+            var answer = this.competencyList.Peer[0].QnA.find(x => x.CompetencyId === c._id && x.QuestionId === q);
+
+            if (answer) {
+              selectedAnswer = answer.Answer ? answer.Answer : "-1"
+              console.log('answer', answer.Answer);
+            }
           }
-        }
-          
+
           questions.push(new QuestionBase({
             key: cq._id,
             label: cq.Question,
@@ -107,24 +107,23 @@ export class DoPeerReviewComponent implements OnInit {
             required: true,
             value: selectedAnswer
           }))
+        });
+        debugger
+        var cc=_peer.QnA.find(x => x.CompetencyId === c._id);
+        this.competencyQuestionsList.push({
+          CompetenyName: c.Name,
+          CompetencyId: c._id,
+          //CompetencyRowId: element._id,
+          Questions: questions,
+          form: this.qcs.toFormGroup(questions),
+          comments: cc?cc.Comments:""
+          // Comments: this.evaluationForm.Competencies.Employees[0].CompetencyComments,
+          // OverallRating: this.evaluationForm.Competencies.Employees[0].OverallRating,
+          // IsDraft: !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
+        })
 
-        
       });
-
-
-      this.competencyQuestionsList.push({
-        CompetenyName: c.Name,
-        CompetencyId: c._id,
-        //CompetencyRowId: element._id,
-        Questions: questions,
-        form: this.qcs.toFormGroup(questions),
-        // Comments: this.evaluationForm.Competencies.Employees[0].CompetencyComments,
-        // OverallRating: this.evaluationForm.Competencies.Employees[0].OverallRating,
-        // IsDraft: !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
-      })
-
-    });
-
+    }
   }
   savePeerCompetencyFormAsDraft() {
     this.savePeerCompetencyForm(true)
@@ -134,16 +133,18 @@ export class DoPeerReviewComponent implements OnInit {
   }
   savePeerCompetencyForm(isDraft) {
     //selfCompetencyForm
+
     const competencyQA: any = {}
     competencyQA.QnA = []
     let isvalid = true;
     this.competencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
+      debugger
       if (_qna && _qna.length > 0) {
-
+        var _lastitem = _qna.pop();
         _qna.forEach(q => {
 
-          competencyQA.QnA.push({ CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1] })
+          competencyQA.QnA.push({ CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1], Comments: _lastitem ? _lastitem[1] : "" })
         });
       } else {
         if (!isDraft) {
@@ -158,7 +159,7 @@ export class DoPeerReviewComponent implements OnInit {
       this.snack.error('Please provide rating to all question(s) in each competency')
       return;
     }
-    competencyQA.CompetencyComments = this.peerCompetencyForm.value.Comments
+    competencyQA.CompetencyComments = this.peerCompetencyForm.value.OverallComments
     competencyQA.OverallRating = this.peerCompetencyForm.value.OverallRating
 
     competencyQA.EvaluationId = this.currentReview.EvaluationId

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { CompetencyBase } from '../../../Models/CompetencyFormModel';
 import { CompetencyFormService } from '../../../services/CompetencyFormService';
 
@@ -12,13 +12,20 @@ export class CompetencyWrapperComponent implements OnInit {
 
   @Input() questions: CompetencyBase<string>[] = [];
   @Input() form: FormGroup;
+  @Input() comments:String
   //form: FormGroup;
   payLoad = '';
 
-  constructor(private qcs: CompetencyFormService) {  }
+  constructor(private qcs: CompetencyFormService) {
+    
+    }
 
   ngOnInit() {
-    debugger
+    
+    if(this.form){
+      this.form.addControl('Comments', new FormControl())
+      this.form.controls['Comments'].setValue(this.comments)
+    }
    // this.form = this.qcs.toFormGroup(this.questions);
   }
 
