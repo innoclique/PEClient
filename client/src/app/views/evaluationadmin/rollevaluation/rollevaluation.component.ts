@@ -69,7 +69,7 @@ export class RollevaluationComponent implements OnInit {
     console.log('onItemSelect', item);
     this.selectedEmployees.push(item.row);
     this.disabledAddButton = false;
-    //this.selectedEmployeesForEvaluation.push(item);
+    
   }
   onSelectAllEmployees(items: any) {
     //this.selectedEmployees = items;
@@ -77,7 +77,7 @@ export class RollevaluationComponent implements OnInit {
     this.selectedEmployeesForEvaluation = []
     items.map(x => {
       this.selectedEmployees.push(x.row);
-      //   this.selectedEmployeesForEvaluation.push(x);
+    
     })
     console.log('onSelectAll', items);
     this.disabledAddButton = false;
@@ -85,7 +85,7 @@ export class RollevaluationComponent implements OnInit {
   onEmployeeDeSelect(item: any) {
     var _position = this.selectedEmployees.indexOf(item);
     this.selectedEmployees.splice(_position, 1);
-    //this.selectedEmployeesForEvaluation.splice(_position, 1);
+    
   }
   onDeSelectAllEmployees(items: any) {
     //this.selectedEmployees = items;
@@ -368,16 +368,27 @@ export class RollevaluationComponent implements OnInit {
             
           });
           this.employeesList$=[...gi]
+          this.employeesList$.map(x => {
+            debugger
+            var _f = Object.assign({}, x);
+            this.selectedEmployees.push(_f);
+            x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
+              x.row = _f;
+          });
+          this.selectedEmployeesForEvaluation = [...this.employeesList$]
         }else{
           this.employeesList$ = c.Data
+          this.employeesList$.map(x => {
+          
+            var _f = Object.assign({}, x);
+           
+            x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
+              x.row = _f;
+          });
+          
         }
           
-        this.employeesList$.map(x => {
-          debugger
-          var _f = Object.assign({}, x);
-          x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
-            x.row = _f;
-        });
+        
         
       } else {
         this.notification.error('You have reached maximum employees limit for evaluation. Please contact Admin')
