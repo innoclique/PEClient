@@ -7,9 +7,9 @@
                 </div>
                 <div class="card-body">
                     <tabset #staticTabs class="pro-tabs">
-                        <!--View KPI Start-->
+                        <!--View Performance Goal Start-->
                         <tab>
-                            <ng-template tabHeading><i class="icon-layers"></i>KPIs</ng-template>
+                            <ng-template tabHeading><i class="icon-layers"></i>Performance Goals</ng-template>
 
                             <form [formGroup]="kpiForm" novalidate="" class="ng-untouched ng-pristine ng-valid">
 
@@ -94,8 +94,8 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text ">Key Performance Indicators
-                                                            (KPI)</span>
+                                                        <span class="input-group-text ">
+                                                            Performance Goal</span>
                                                     </div>
                                                     <input type="text" readonly formControlName="Kpi" name="kpi">
 
@@ -108,7 +108,7 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text ">Measurement Criteria </span>
+                                                        <span class="input-group-text ">KPI </span>
                                                     </div>
                                                     <input type="text" readonly formControlName="MeasurementCriteria"
                                                         name="MeasurementCriteria">
@@ -264,7 +264,7 @@
                                 </div>
                             </form>
                         </tab>
-                        <!--View KPI End-->
+                        <!--View Performance Goal End-->
                         <tab>
                             <ng-template tabHeading><i class="icon-hand-rock"></i>Competencies</ng-template>
                            

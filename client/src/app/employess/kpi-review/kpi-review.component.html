@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    KPI Review
+                    Performance Goal Review
 
                     <div class="form-group form-actions pull-right m-0">
 
@@ -11,15 +11,15 @@
                     font-size: 17px;"  (click)="router.navigate(['em/review-kpi-list'])" title="Back to list" ></i>    
 
                     <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-                    font-size: 17px;"  (click)="trackKpi()"  title="Track KPI" ></i>    
+                    font-size: 17px;"  (click)="trackKpi()"  title="Track Performance Goal" ></i>    
                     <i *ngIf="kpiDetails?.IsActive" class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-                            font-size: 17px;" (click)="activeDeActiveKPI(false)" title="Deactivate KPI"></i>
+                            font-size: 17px;" (click)="activeDeActiveKPI(false)" title="Deactivate Performance Goal"></i>
 
                     <i *ngIf="!kpiDetails?.IsActive" class="cui-circle-check" style="cursor:pointer ;padding: 7px 20px 0 0;
-                    font-size: 17px;" (click)="activeDeActiveKPI(true)" title="Active KPI"></i>
+                    font-size: 17px;" (click)="activeDeActiveKPI(true)" title="Active Performance Goal"></i>
 
                     <i *ngIf="kpiDetails?.IsDraftByManager" class="cui-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-                    font-size: 17px;" (click)="editDraftKpi()" title="Edit KPI"></i>
+                    font-size: 17px;" (click)="editDraftKpi()" title="Edit Performance Goal"></i>
 
                     </div>
 
@@ -110,8 +110,8 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text ">Key Performance Indicators
-                                                (KPI)</span>
+                                            <span class="input-group-text ">
+                                                Performance Goal</span>
                                         </div>
                                         <input max="500" maxlength="500" class="form-control" type="text"
                                             [ngClass]="{ 'is-invalid': f.Kpi.touched  &&  f.Kpi.invalid }"
@@ -127,7 +127,7 @@
 
                                         <div *ngIf="f.Kpi.touched && f.Kpi.invalid" class="invalid-feedback">
 
-                                            <div *ngIf="f.Kpi.errors.minlength">KPI Name must be at least 2
+                                            <div *ngIf="f.Kpi.errors.minlength">Performance Goal Name must be at least 2
                                                 characters </div>
                                             <div *ngIf="f.Kpi.errors.hasKPISplChars">Allowed special characters are
                                                 (.,-,(,),&,#,:,/,?) </div>
@@ -142,7 +142,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text ">Measurement Criteria </span>
+                                            <span class="input-group-text ">KPI </span>
                                         </div>
                                         <input *ngIf="addMCSwitch" max="500" maxlength="500" class="form-control"
                                             type="text" formControlName="MeasurementCriteria"
@@ -185,7 +185,7 @@
                                         <div *ngIf="f.MeasurementCriteria.touched && selectedItems.length==0"
                                             class="invalid-feedback">
 
-                                            <div *ngIf="selectedItems.length==0">Please select Measurement Criteria
+                                            <div *ngIf="selectedItems.length==0">Please select KPI
                                             </div>
                                         </div>
 

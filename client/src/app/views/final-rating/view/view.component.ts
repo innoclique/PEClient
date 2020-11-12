@@ -48,12 +48,12 @@ export class ViewComponent implements OnInit {
     { headerName: 'No.of Kpis', field: 'KpiCount', sortable: true, filter: true },
     // { headerName: 'Score (self)', field: 'Score', width: 150, sortable: true, filter: true },
     // { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
-    // { headerName: 'KPI Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
+    // { headerName: 'Performance Goal Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
     {
       headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
         return `<i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="addKPI" title="Add KPI"></i>       
+        font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i>       
         `
 
 

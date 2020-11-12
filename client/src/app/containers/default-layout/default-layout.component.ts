@@ -62,7 +62,7 @@ export class DefaultLayoutComponent implements OnInit {
        {
           "IsActive": true,
           "url": "/employee/kpi-setup",
-          "name": "KPI Setting",
+          "name": "Performance Goal Setting",
           "code": "KPISetting",
           "icon": "icon-wrench"
         }, 
@@ -70,7 +70,7 @@ export class DefaultLayoutComponent implements OnInit {
           
         //   "IsActive": true,
         //   "url": "/employee/review-kpi-list",
-        //   "name": "KPI Review",
+        //   "name": "Performance Goal Review",
         //   "code": "KPISetting",
         //   "icon": "icon-wrench"
           

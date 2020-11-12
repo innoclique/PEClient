@@ -65,7 +65,7 @@ export class KpiSetupComponent implements OnInit {
 
   public columnDefs = [
     {
-      headerName: 'KPI Name', field: 'Name', width: 250, sortable: true, filter: true,
+      headerName: 'Performance Goal Name', field: 'Name', width: 250, sortable: true, filter: true,
       cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
       }
@@ -73,35 +73,35 @@ export class KpiSetupComponent implements OnInit {
     { headerName: 'Target Completion', field: 'TargetCompletionDate', sortable: true, filter: true },
     { headerName: 'Is Draft', field: 'IsDraft', width: 110, sortable: true, filter: true },
     { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
-    { headerName: 'KPI Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
+    { headerName: 'Is Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
     {
       headerName: 'Action', field: '', width: 170, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
  let actionlinks=''
        if (data.data.RowData.IsActive) {
         actionlinks= `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="deActiveKPI" title="Deactivate KPI"></i>
+        font-size: 17px;"   data-action-type="deActiveKPI" title="DeactivatePerformance Goal"></i>
        
         <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="EF" title="Edit KPI" ></i>    
+        font-size: 17px;"   data-action-type="EF" title="EditPerformance Goal" ></i>    
 
         <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="Track" title="Track KPI" ></i>    
+        font-size: 17px;"   data-action-type="Track" title="TrackPerformance Goal" ></i>    
         
         `
        } else {
         actionlinks= `<i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="activeKPI" title="activate KPI"></i>       
+        font-size: 17px;"   data-action-type="activeKPI" title="activatePerformance Goal"></i>       
       
         <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="Track" title="Track KPI" ></i>   
+        font-size: 17px;"   data-action-type="Track" title="TrackPerformance Goal" ></i>   
        
         `
        }
 
       //  actionlinks=  actionlinks+`
       //  <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-      //  font-size: 17px;"   data-action-type="EF" title="Edit KPI" ></i>    
+      //  font-size: 17px;"   data-action-type="EF" title="EditPerformance Goal" ></i>    
       //  `
        return actionlinks
        ;

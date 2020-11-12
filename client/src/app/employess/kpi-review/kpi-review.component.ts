@@ -247,7 +247,7 @@ export class KpiReviewComponent implements OnInit {
 
       if (c.message == Constants.SuccessText) {
 
-        this.snack.success(this.translate.instant(`KPI ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Succeesfully`));
+        this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Succeesfully`));
 
         this.router.navigate(['employee/kpi-setup']);
       }
@@ -279,7 +279,7 @@ export class KpiReviewComponent implements OnInit {
       if (c) {
 
         this.getMeasurementCriterias();
-this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesfully`));
+this.snack.success(this.translate.instant(`KPI Created Succeesfully`));
         
       }
     })

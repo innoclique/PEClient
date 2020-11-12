@@ -176,8 +176,15 @@ accessingFrom:any;
   saveKpi() {
 
 if (!this.kpiForm.get('Kpi').value) {
-  this.snack.error('Kpi is required');
+  this.snack.error('Performance Goal is required');
   return
+}
+
+
+if(this.selectedItems.length==0) {
+
+  this.snack.error('Please add and select KPI');
+  return;
 }
 
     this.perfApp.route = "app";
@@ -224,7 +231,7 @@ if (!this.kpiForm.get('Kpi').value) {
 
       if (c.message == Constants.SuccessText) {
 
-        this.snack.success(this.translate.instant(`KPI ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Succeesfully`));
+        this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Succeesfully`));
 
         this.router.navigate(['employee/kpi-setup']);
       }
@@ -248,7 +255,7 @@ if (!this.kpiForm.get('Kpi').value) {
 
 if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
 
-  this.snack.error('Measurement Criteria is required');
+  this.snack.error('KPI is required');
   return;
 }
 
@@ -265,7 +272,7 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
         this.getMeasurementCriterias();
         // this.kpiForm.get('MeasurementCriteria').setErrors(null);
         // this.kpiForm.get('MeasurementCriteria').markAsUntouched;
-this.snack.success(this.translate.instant(`Measurement Criteria Created Succeesfully`));
+this.snack.success(this.translate.instant(`KPI Created Succeesfully`));
         
       }
     })
@@ -446,8 +453,7 @@ conformSubmitKpis(){
     , error => {
       if (error.error.message === Constants.KpiNotActivated) {
         this.isKpiActivated=false;
-        this.onCancle();
-        this.snack.error(error.error.message);
+       
       } else {
 
       this.snack.error(error.error.message);

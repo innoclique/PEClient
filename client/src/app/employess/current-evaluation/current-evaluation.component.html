@@ -11,13 +11,13 @@
                     </div>
                     <div *ngIf="evaluationForm">
                         <tabset #staticTabs class="pro-tabs">
-                            <!--View KPI Start-->
+                            <!--View Performance Goal Start-->
                             <tab>
-                                <ng-template tabHeading><i class="icon-layers"></i>KPIs</ng-template>
+                                <ng-template tabHeading><i class="icon-layers"></i>Performance Goals</ng-template>
 
                               <app-kpi-settings [accessingFrom]="'currEvaluation'" [currentAction]="'view'"></app-kpi-settings>
                             </tab>
-                            <!--View KPI End-->
+                            <!--View Performance Goal End-->
                             <tab>
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Competencies</ng-template>
 

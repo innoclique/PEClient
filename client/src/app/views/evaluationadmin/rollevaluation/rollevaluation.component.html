@@ -19,7 +19,7 @@
                                     <input [checked]="initializeFormFor==='kpionly'" (change)="changeFormFor('kpionly')"
                                         class="form-check-input" type="radio" name="initializeForm" id="inlineRadio1"
                                         value="kpionly">
-                                    <label class="form-check-label" for="inlineRadio1">Only KPI's</label>
+                                    <label class="form-check-label" for="inlineRadio1">Only Performance Goal's</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input [checked]="initializeFormFor!=='kpionly'" (change)="changeFormFor('evaluation')" class="form-check-input" type="radio"
@@ -31,7 +31,7 @@
                             
                             <div *ngIf="initializeFormFor==='kpionly'" class="col-md-6">
                                 <div class="form-group">
-                                    <label id="kpi-for-group">KPI For</label>
+                                    <label id="kpi-for-group">Performance Goal For</label>
                                     <mat-radio-group aria-labelledby="kpi-for-group" class="example-radio-group"
                                         formControlName="KPIFor">
                                         <mat-radio-button class="kpi-radio-button" *ngFor="let kpifor of kpiForList"
@@ -41,7 +41,7 @@
                                     </mat-radio-group>
 
                                     <div *ngIf=" isFormSubmitted &&   f.KPIFor.errors" class="invalid-feedback">
-                                        <div *ngIf="f.KPIFor.errors.required">must select KPI For</div>
+                                        <div *ngIf="f.KPIFor.errors.required">must select Performance Goal For</div>
                                     </div>
                                 </div>
                             </div>

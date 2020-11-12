@@ -41,7 +41,7 @@
 
                               <div *ngIf=" (f.DevGoal.touched || submitClicked) && f.DevGoal.invalid" class="invalid-feedback">
                                 <div *ngIf="f.DevGoal?.errors.required">Please provide Developmental Goal.</div>
-                                  <div *ngIf="f.DevGoal.errors.minlength">KPI Name must be at least 2
+                                  <div *ngIf="f.DevGoal.errors.minlength">Performance Goal Name must be at least 2
                                       characters </div>
                                   <div *ngIf="f.DevGoal.errors.hasKPISplChars">Allowed special characters are
                                       (.,-,(,),&,#,:,/,?) </div>
@@ -56,7 +56,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text ">KPI</span>
+                                    <span class="input-group-text ">Performance Goal</span>
                                 </div>
                                 <input max="500" maxlength="500" class="form-control" type="text"
                                 [readonly]="currentAction != 'create' "
@@ -238,7 +238,7 @@
                       f.IsDraft?.value=='true' ? 'Submit': 'Update'
                        :'Submit' }}</button>
 
-                  <!-- <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit KPIs</button> -->
+                  <!-- <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
                 </div>
   
                 <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>

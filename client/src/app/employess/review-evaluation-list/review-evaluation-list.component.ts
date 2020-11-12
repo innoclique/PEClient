@@ -93,10 +93,10 @@ export class ReviewEvaluationListComponent implements OnInit {
         returnString += `
         
         <i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="addKPI" title="Add KPI"></i> 
+        font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i> 
         
         <i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="reviewKPI" title="Review KPI"></i>
+        font-size: 17px;"   data-action-type="reviewKPI" title="ReviewPerformance Goal"></i>
         
         <i class="cui-layers" style="cursor:pointer; padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
@@ -125,7 +125,7 @@ public tsColumnDefs = [
 
       var returnString = '';
       returnString += `<i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
-      font-size: 17px;"   data-action-type="reviewKPI" title="Review KPI"></i>
+      font-size: 17px;"   data-action-type="reviewKPI" title="ReviewPerformance Goal"></i>
       
       <i class="cui-layers" style="cursor:pointer; padding: 7px 20px 0 0;
       font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
