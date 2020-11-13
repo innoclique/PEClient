@@ -1,6 +1,6 @@
-<div class="animated fadeIn">
+<div class="animated fadeIn" >
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" *ngIf="showKpiForm;else noRecordsFound">
             <div class="card">
                 <div *ngIf="accessingFrom!='currEvaluation' " class="card-header">
                     Employee Performance Goal Setting
@@ -370,6 +370,10 @@
             </div>
 
         </div>
+
+        <ng-template class="col-md-12"  #noRecordsFound>
+            <h3>No Performance Goals Found</h3>
+        </ng-template>
     </div>
 </div>
 

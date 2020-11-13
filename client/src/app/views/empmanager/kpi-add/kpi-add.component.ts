@@ -182,9 +182,17 @@ export class KpiAddComponent implements OnInit {
 
 
     if (!this.kpiForm.get('Kpi').value) {
-      this.snack.error('Kpi is required');
+      this.snack.error('Performance Goal is required');
       return
     }
+
+        
+        if(this.selectedItems.length==0) {
+
+          this.snack.error('Please add and select KPI');
+          return;
+        }
+
 
     this.perfApp.route = "app";
     this.perfApp.method = this.currentAction == 'add' ? "AddKpi" : "UpdateKpiDataById",
@@ -230,7 +238,7 @@ export class KpiAddComponent implements OnInit {
 
       if (c.message == Constants.SuccessText) {
 
-        this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'add' ? 'Added' : 'Updated'}  Succeesfully`));
+        this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'add' ? 'Added' : 'Updated'}  Successfully`));
 
         this.router.navigate(['employee/review-evaluation-list']);
       }
@@ -269,7 +277,7 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
       if (c) {
 
         this.getMeasurementCriterias();
-this.snack.success(this.translate.instant(`KPI Created Succeesfully`));
+this.snack.success(this.translate.instant(`KPI Created Successfully`));
         
       }
     })

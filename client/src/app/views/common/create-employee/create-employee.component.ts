@@ -237,7 +237,7 @@ this.submitClicked=true;
       if (c.message==Constants.SuccessText) {
         this.submitClicked=false;
         
-        this.snack.success(this.translate.instant(`Employee ${this.currentAction=='create'?'Added':'Updated'}  Succeesfully`));
+        this.snack.success(this.translate.instant(`Employee ${this.currentAction=='create'?'Added':'Updated'}  Successfully`));
         // this.getEmployees();
         // this.closeForm();
         // this.showSpinner = false;

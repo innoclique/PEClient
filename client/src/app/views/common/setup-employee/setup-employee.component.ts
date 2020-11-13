@@ -472,7 +472,7 @@ if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
 
     if (c.message==Constants.SuccessText) {
       
-      this.snack.success(this.translate.instant(`Employee ${this.currentAction=='create'?'Added':'Updated'}  Succeesfully`));
+      this.snack.success(this.translate.instant(`Employee ${this.currentAction=='create'?'Added':'Updated'}  Successfully`));
       this.getEmployees();
       this.closeForm();
       // this.showSpinner = false;

@@ -52,6 +52,7 @@ accessingFrom:any;
   msSelText="";
   msSelVal="";
   currEvaluation: any;
+  showKpiForm=true;
 
 
 
@@ -231,9 +232,14 @@ if(this.selectedItems.length==0) {
 
       if (c.message == Constants.SuccessText) {
 
-        this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Succeesfully`));
+        this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Successfully`));
 
+        if (this.accessingFrom=='currEvaluation') {
+          
+          this.router.navigate(['employee/current-evaluation']);
+        } else {         
         this.router.navigate(['employee/kpi-setup']);
+        }
       }
 
     }, error => {
@@ -272,7 +278,7 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
         this.getMeasurementCriterias();
         // this.kpiForm.get('MeasurementCriteria').setErrors(null);
         // this.kpiForm.get('MeasurementCriteria').markAsUntouched;
-this.snack.success(this.translate.instant(`KPI Created Succeesfully`));
+this.snack.success(this.translate.instant(`KPI Created Successfully`));
         
       }
     })
@@ -446,6 +452,11 @@ conformSubmitKpis(){
 
            this.getMeasurementCriterias();
 
+      }else{
+        
+        if (this.accessingFrom=='currEvaluation') {
+          this.showKpiForm=false;
+        }
       }
 
     }

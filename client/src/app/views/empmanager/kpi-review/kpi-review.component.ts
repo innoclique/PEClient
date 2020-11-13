@@ -257,7 +257,7 @@ actor:any;
 
       if (c.message == Constants.SuccessText) {
 
-        this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Succeesfully`));
+        this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Successfully`));
 
         this.router.navigate(['employee/kpi-setup']);
       }
@@ -289,7 +289,7 @@ actor:any;
       if (c) {
 
         this.getMeasurementCriterias();
-this.snack.success(this.translate.instant(`KPI Created Succeesfully`));
+this.snack.success(this.translate.instant(`KPI Created Successfully`));
         
       }
     })
@@ -696,7 +696,7 @@ this.msSelText="";
       if (c) {
 
       
-this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived'} Succeesfully`));
+this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived'} Successfully`));
 this.router.navigate(['em/review-kpi-list']);
       }
     })
