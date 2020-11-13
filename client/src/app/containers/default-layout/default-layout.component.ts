@@ -105,6 +105,13 @@ export class DefaultLayoutComponent implements OnInit {
         },
         {
           "IsActive": true,
+          "url": "/employee/drreview",
+          "name": "Manager Review",
+          "code": "CurrentEvaluation",
+          "icon": "icon-code"
+        },
+        {
+          "IsActive": true,
           "url": "/employee/reports",
           "name": "Reports",
           "code": "Reports",
