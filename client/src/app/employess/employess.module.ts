@@ -46,6 +46,7 @@ import { PeerReviewModule } from '../peer-review/peer-review.module';
 import { ReviewEvaluationComponent } from './review-evaluation/review-evaluation.component';
 import { ReviewEvaluationListComponent } from './review-evaluation-list/review-evaluation-list.component';
 import { EmpmanagerModule } from '../views/empmanager/empmanager.module';
+import { DRReviewModule } from '../drreview/drreview.module';
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
@@ -84,8 +85,8 @@ import { EmpmanagerModule } from '../views/empmanager/empmanager.module';
 
     AccordionModule.forRoot(),
     CompetencyFormModule,
-    PeerReviewModule
-
+    PeerReviewModule,
+DRReviewModule
   ],
   exports: [
     ModalModule

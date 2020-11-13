@@ -21,6 +21,8 @@ import { PeerReviewListComponent } from '../peer-review/peer-review-list/peer-re
 import { DoPeerReviewComponent } from '../peer-review/do-peer-review/do-peer-review.component';
 import { ReviewEvaluationComponent } from './review-evaluation/review-evaluation.component';
 import { ReviewEvaluationListComponent } from './review-evaluation-list/review-evaluation-list.component';
+import { DrReviewListComponent } from '../drreview/dr-review-list/dr-review-list.component';
+import { DoDrReviewComponent } from '../drreview/do-dr-review/do-dr-review.component';
 
 
 
@@ -90,11 +92,20 @@ const routes: Routes = [
         data:{title:'Accomplishments'}
       },
       {
+        path:'drreview',
+        component:DrReviewListComponent,
+        data:{title:'DirectReport Review'}
+      },
+      {
         path:'submitpeerreview',
         component:DoPeerReviewComponent,
         data:{title:'Accomplishments'}
       },
-      
+      {
+        path:'submitdrreview',
+        component:DoDrReviewComponent,
+        data:{title:'Accomplishments'}
+      },
       
       {
         path:'reports',

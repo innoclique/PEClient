@@ -267,10 +267,12 @@ export class CurrentEvaluationComponent implements OnInit {
     this.saveFinalRating(true)
   }
   saveFinalRating(isDraft) {
+    debugger
     this.perfApp.route = "app";
     this.perfApp.method = "SaveEmployeeFinalRating",
+    
       this.perfApp.requestBody = {
-        EvaluationId: this.evaluationForm.Competencies._id,
+        EvaluationId: this.evaluationForm.Competencies.EvaluationId,
         EmployeeId: this.loginUser._id,
         YearEndComments: this.FinalRatingForm.value.EmployeeComments,
         OverallRating: this.FinalRatingForm.value.EmployeeOverallRating,
