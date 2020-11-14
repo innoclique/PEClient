@@ -88,7 +88,7 @@
                                         <ul class="list-group">
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                               Average Rating
-                                              <span class="badge badge-primary badge-pill">{{PeerScoreCard?.averageScore}}</span>
+                                              <span class="ratingcard badge badge-primary badge-pill">{{PeerScoreCard?.averageScore}}</span>
                                             </li>
                                            
                                           </ul>
@@ -97,7 +97,33 @@
                                 </div>
   
                             </tab>
-  
+                            <tab>
+                                <ng-template tabHeading><i class="icon-hand-rock"></i>Direct Report(s) Rating</ng-template>
+                                <div *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList.length===0" class="row">
+                                    <div class="col-md-12">
+                                        <h3>No  Review requested</h3>
+                                    </div>
+
+                                </div>
+                                <div *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0" class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-group">                                            
+                                            <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">
+                                                {{dr.FirstName}} {{dr.LastName}}
+                                            </li>
+                                          </ul>                                        
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Average Rating
+                                              <span class="ratingcard badge badge-primary badge-pill">{{DirectReporteeScoreCard?.averageScore|number:'1.2-2'}}%</span>
+                                            </li>
+                                          </ul>                                        
+                                    </div>
+                                </div>
+                            </tab>
+
                             <tab>
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
                                 <div [formGroup]="FinalRatingForm">

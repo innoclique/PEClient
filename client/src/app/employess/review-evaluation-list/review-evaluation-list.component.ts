@@ -226,16 +226,16 @@ GetReporteeEvaluationsDetails(){
   this.perfApp.method="GetReporteeEvaluations",
  this.perfApp.requestBody = { id: this.loginUser._id }
   this.perfApp.CallAPI().subscribe(c=>{
-    
+    debugger
     
     this.managerReporteesData=c.map(row=> {
-      
-let evaluation=row.Evaluation[0];
+      let flatarray=row.Evaluation.flat()
+let evaluation=flatarray.find(x=>x.Status==='Active')
      return  {
          Name:row.FirstName+' '+row.LastName,
          NoOfKpis: row.KpiList.length,
          NoOfDevGoals: row.GoalList.length,
-         FRStatus: evaluation[0].FinalRating.Status,
+         FRStatus: evaluation.FinalRating.Status,
        
         RowData:row
       }
@@ -257,13 +257,15 @@ GetTSReporteeEvDetails(){
     
     
     this.tSReporteesData=c.map(row=> {
-      
-let evaluation=row.Evaluation[0];
+      debugger
+
+      let flatarray=row.Evaluation.flat()
+let evaluation=flatarray.find(x=>x.Status==='Active')
      return  {
          Name:row.FirstName+' '+row.LastName,
          NoOfKpis: row.KpiList.length,
          NoOfDevGoals: row.GoalList.length,
-         FRStatus: evaluation[0].FinalRating.Status,
+         FRStatus: evaluation.FinalRating.Status,
        
         RowData:row
       }

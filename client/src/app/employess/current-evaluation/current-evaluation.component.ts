@@ -223,8 +223,9 @@ export class CurrentEvaluationComponent implements OnInit {
     let isvalid = true;
     this.competencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
+      var _lastitem=_qna.pop();
       if (_qna && _qna.length > 0) {
-        var _lastitem=_qna.pop();
+        
         _qna.forEach(q => {
           competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1],Comments:_lastitem?_lastitem[1]:"" })          
         });

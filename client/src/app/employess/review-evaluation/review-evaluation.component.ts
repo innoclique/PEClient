@@ -44,6 +44,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   public showManagerSubmit: Boolean = true;
   public showThirdSignatorySubmit: Boolean = true;
   public PeerScoreCard: any;
+  DirectReporteeScoreCard: any;
   currentEmpId: any;
   currentAction: any;
 
@@ -191,7 +192,9 @@ goto(selTab){
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
           this.PeerScoreCard = res1.PeerScoreCard;
         }
-
+        if (res1 && Object.keys(res1.DirectReporteeScoreCard).length > 0) {
+          this.DirectReporteeScoreCard = res1.DirectReporteeScoreCard;
+        }
 
       } else {
         this.evaluationForm = null;
@@ -400,10 +403,11 @@ if (this.FinalRatingForm.value.ManagerReqRevision &&
     this.saveFinalRating(true)
   }
   saveFinalRating(isDraft) {
+    debugger
     this.perfApp.route = "app";
     this.perfApp.method = "SaveManagerFinalRating",
       this.perfApp.requestBody = {
-        EvaluationId: this.evaluationForm.Competencies._id,
+        EvaluationId: this.evaluationForm.Competencies.EvaluationId,
         EmployeeId: this.selectedUser._id,
         YearEndComments: this.FinalRatingForm.value.ManagerComments,
         OverallRating: this.FinalRatingForm.value.ManagerOverallRating,
@@ -444,7 +448,7 @@ if (this.FinalRatingForm.value.TSReqRevision &&
     this.perfApp.route = "app";
     this.perfApp.method = "SaveTSFinalRating",
       this.perfApp.requestBody = {
-        EvaluationId: this.evaluationForm.Competencies._id,
+        EvaluationId: this.evaluationForm.Competencies.EvaluationId,
         EmployeeId: this.selectedUser._id,
         YearEndComments: this.FinalRatingForm.value.ThirdSignatoryComments,
         RevComments: this.FinalRatingForm.value.ThirdSignatoryRevComments,
