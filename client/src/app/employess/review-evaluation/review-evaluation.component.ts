@@ -85,10 +85,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit(): void {
-
-    
-
-
+    this.initCompetencyForm();
   }
 
 
@@ -152,9 +149,9 @@ goto(selTab){
       if (res1 && !res1.isError) {
 
         this.evaluationForm = res1;
-        if (res1.Competencies.Employees[0]) {
-          this.employeeCompetencyList = res1.Competencies.Employees[0].Competencies;
-          this.employeeCompetencyList = res1.Competencies.Employees[0].Competencies;
+        if (res1.Competencies.Employee) {
+          this.employeeCompetencyList = res1.Competencies.Employee.Competencies;
+          
           // this.setCompetencies();
           this.prepareCompetencyQuestions();
           console.log('the evauation form', this.evaluationForm)
@@ -256,8 +253,8 @@ goto(selTab){
  
   initCompetencyForm() {
     this.selfCompetencyForm = this.fb.group({
-      Comments: ['', [Validators.required]],
-      OverallRating: [1, [Validators.required]],
+      OverallComments: ['', [Validators.required]],
+      OverallRating: ['', [Validators.required]],
       IsDraft: [true]
     })
 
@@ -306,10 +303,10 @@ goto(selTab){
   competencyQuestionsList = [];
   prepareCompetencyQuestions() {
     var questions: CompetencyBase<string>[] = [];
-
-    this.selfCompetencyForm.value.Comments = this.evaluationForm.Competencies.Employees[0].CompetencyComments,
-      this.selfCompetencyForm.value.OverallRating = this.evaluationForm.Competencies.Employees[0].OverallRating,
-      this.selfCompetencyForm.value.IsDraft = !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
+debugger
+    this.selfCompetencyForm.controls["OverallComments"].setValue( this.evaluationForm.Competencies.Employee.CompetencyComments,),
+    this.selfCompetencyForm.controls["OverallRating"].setValue( this.evaluationForm.Competencies.Employee.CompetencyOverallRating),
+    this.selfCompetencyForm.controls["IsDraft"].setValue(!this.evaluationForm.Competencies.Employee.CompetencySubmitted)
     console.log('this.selfCompetencyForm.value', this.selfCompetencyForm.value)
     this.employeeCompetencyList.forEach(element => {
       questions = [];
@@ -332,9 +329,10 @@ goto(selTab){
         CompetencyRowId: element._id,
         Questions: questions,
         form: this.qcs.toFormGroup(questions),
-        Comments: this.evaluationForm.Competencies.Employees[0].CompetencyComments,
-        OverallRating: this.evaluationForm.Competencies.Employees[0].OverallRating,
-        IsDraft: !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
+        comments:element.Comments,
+        OverallComments: this.evaluationForm.Competencies.Employee.CompetencyComments,
+        OverallRating: this.evaluationForm.Competencies.Employee.OverallRating,
+        IsDraft: !this.evaluationForm.Competencies.Employee.CompetencySubmitted
       })
 
     });
@@ -371,7 +369,7 @@ goto(selTab){
       this.snack.error('Please provide rating to all question(s) in each competency')
       return;
     }
-    competencyQA.Comments = this.selfCompetencyForm.value.Comments;
+    competencyQA.Comments = this.selfCompetencyForm.value.OverallComments;
     competencyQA.OverallRating = this.selfCompetencyForm.value.OverallRating;
     competencyQA.EvaluationId = this.evaluationForm.Competencies._id;
     competencyQA.EmployeeId = this.selectedUser._id;

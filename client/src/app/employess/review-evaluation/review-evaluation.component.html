@@ -1,14 +1,3 @@
-<!-- <div class="animated fadeIn">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    Rating View
-                </div>
-                <div class="card-body">
-                    <div *ngIf="!evaluationForm">
-                        <h5>No Active Evaluation</h5>
-                    </div> -->
                     <div *ngIf="evaluationForm">
                         <tabset #evTabset class="pro-tabs">
                           
@@ -20,13 +9,11 @@
                            
                             <tab>
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Competencies</ng-template>
-  
-  
                                 <div [formGroup]="selfCompetencyForm">
                                     <accordion [closeOthers]="oneAtATime">
                                         <accordion-group *ngFor="let c of competencyQuestionsList"
                                             heading="{{c.CompetenyName}}">
-                                            <app-competency-wrapper [questions]="c.Questions" [form]="c.form">
+                                            <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments">
                                             </app-competency-wrapper>
                                         </accordion-group>
   
@@ -39,7 +26,7 @@
                                                         <span class="input-group-text redStar">Rating</span>
                                                     </div>
                                                     <select formControlName="OverallRating" class="form-control"
-                                                        name="Score">
+                                                        name="OverallRating">
                                                         <option value="" disabled>Please select</option>
                                                         <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
                                                         <option value="1">1</option>
@@ -56,14 +43,14 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">Comments</span>
                                                     </div>
-                                                    <textarea maxlength="500" formControlName="Comments"
+                                                    <textarea maxlength="500" formControlName="OverallComments"
                                                         class="form-control"></textarea>
   
                                                 </div>
                                             </div>
   
                                         </div>
-                                        <div class="pull-right col-md-4">
+                                        <!-- <div class="pull-right col-md-4">
                                             <div class="form-group">
                                                 <div class="btn-group">
                                                     <button (click)="cancelCompetencyRating()"
@@ -75,7 +62,7 @@
                                                 </div>
                                             </div>
   
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </tab>
@@ -386,9 +373,5 @@
                         </tabset>
   
                     </div>
-                    <br>
-                <!-- </div>
-            </div>
-        </div>
-    </div>
-  </div> -->
+               
+               
