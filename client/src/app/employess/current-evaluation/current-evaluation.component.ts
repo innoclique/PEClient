@@ -96,6 +96,8 @@ export class CurrentEvaluationComponent implements OnInit {
           this.FinalRatingForm.controls["EmployeeOverallRating"].setValue(res1.FinalRating.Self.YearEndRating)
           this.FinalRatingForm.controls["EmployeeIsDraft"].setValue(!res1.FinalRating.Self.IsSubmitted)
           this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff)
+          this.FinalRatingForm.controls["EmployeeRevComments"].setValue(res1.FinalRating.Self.RevComments)
+          this.FinalRatingForm.controls["IsManagerReqRev"].setValue(res1.FinalRating.Manager.ReqRevision)
           this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
           this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
         }
@@ -148,8 +150,10 @@ export class CurrentEvaluationComponent implements OnInit {
   initFinalRatingForm() {
     this.FinalRatingForm = this.fb.group({
       EmployeeComments: ['', [Validators.required]],
+      EmployeeRevComments: [''],
       EmployeeOverallRating: [1, [Validators.required]],
       EmployeeIsDraft: [true],
+      IsManagerReqRev: [false],
       EmployeeSignOff: [],
       EmployeeSubmittedOn: ['']
     })
@@ -173,7 +177,7 @@ export class CurrentEvaluationComponent implements OnInit {
   competencyQuestionsList = [];
   showCompetencySubmit=true;
   prepareCompetencyQuestions() {
-    debugger
+    
     var questions: CompetencyBase<string>[] = [];
     this.selfCompetencyForm.controls["OverallComments"].setValue( this.evaluationForm.Competencies.Employee.CompetencyComments,),
     this.selfCompetencyForm.controls["OverallRating"].setValue( this.evaluationForm.Competencies.Employee.CompetencyOverallRating),
@@ -217,7 +221,7 @@ export class CurrentEvaluationComponent implements OnInit {
   }
   saveSelfCompetencyForm(isDraft) {
     //selfCompetencyForm
-    debugger
+    
     const competencyQA: any = {}
     competencyQA.QnA = []
     let isvalid = true;
@@ -268,7 +272,13 @@ export class CurrentEvaluationComponent implements OnInit {
     this.saveFinalRating(true)
   }
   saveFinalRating(isDraft) {
-    debugger
+
+    if (this.FinalRatingForm.value.IsManagerReqRev &&
+  this.FinalRatingForm.value.EmployeeRevComments.length==0) {
+    this.snack.error('Revision Comments is mandatory')
+    return;
+}
+    
     this.perfApp.route = "app";
     this.perfApp.method = "SaveEmployeeFinalRating",
     
@@ -276,6 +286,7 @@ export class CurrentEvaluationComponent implements OnInit {
         EvaluationId: this.evaluationForm.Competencies.EvaluationId,
         EmployeeId: this.loginUser._id,
         YearEndComments: this.FinalRatingForm.value.EmployeeComments,
+        RevComments: this.FinalRatingForm.value.EmployeeRevComments,
         OverallRating: this.FinalRatingForm.value.EmployeeOverallRating,
         IsDraft: isDraft,
         SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`

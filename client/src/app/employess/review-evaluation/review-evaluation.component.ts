@@ -253,6 +253,7 @@ goto(selTab){
   initFinalRatingForm() {
     this.FinalRatingForm = this.fb.group({
       EmployeeComments: ['', [Validators.required]],
+      EmployeeRevComments: [''],
       EmployeeOverallRating: [1, [Validators.required]],
       EmployeeIsDraft: [true],
       EmployeeSignOff: [],
@@ -380,7 +381,7 @@ debugger
   submitFinalRating() {
 
     
-if (this.FinalRatingForm.value.ManagerReqRevision &&
+if (this.FinalRatingForm.value.TSReqRevision &&
   this.FinalRatingForm.value.ManagerRevComments.length==0) {
     this.snack.error('Revision Comments is mandatory')
     return;
@@ -420,11 +421,11 @@ if (this.FinalRatingForm.value.ManagerReqRevision &&
 
   submitTSFinalRating() {
 
-if (this.FinalRatingForm.value.TSReqRevision &&
-  this.FinalRatingForm.value.ThirdSignatoryRevComments.length==0) {
-    this.snack.error('Revision Comments is mandatory')
-    return;
-}
+// if (this.FinalRatingForm.value.TSReqRevision &&
+//   this.FinalRatingForm.value.ThirdSignatoryRevComments.length==0) {
+//     this.snack.error('Revision Comments is mandatory')
+//     return;
+// }
 
     this.saveTSFinalRating(false)
   }
