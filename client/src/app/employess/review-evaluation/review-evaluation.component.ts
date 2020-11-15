@@ -85,33 +85,27 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
         this.goto(this.currentAction)
   }
 
-  ngOnInit(): void {
-    this.initCompetencyForm();
+  ngOnInit(): void {   
   }
 
 
   callInitApis(){
-
-
       this.initCompetencyForm();
       this.initFinalRatingForm();
       this.getTabsData();
-    
-    
-  
 }
 
 
 goto(selTab){
 
-  if (selTab=='reviewKPI') {
-    this.tabset.tabs[0].active = true;
-  } else  if (selTab=='reviewGoals') {
-    this.tabset.tabs[2].active = true;
-  }
-  else  if (selTab=='reviewEval') {
-    this.tabset.tabs[4].active = true;
-  }
+  // if (selTab=='reviewKPI') {
+  //   this.tabset.tabs[0].active = true;
+  // } else  if (selTab=='reviewGoals') {
+  //   this.tabset.tabs[2].active = true;
+  // }
+  // else  if (selTab=='reviewEval') {
+  //   this.tabset.tabs[4].active = true;
+  // }
 
   
 }
@@ -147,6 +141,7 @@ goto(selTab){
       //this.getTSKPIs().pipe(catchError(error => of({ error: error, isError: true }))),
       //this.getCompetencyQuestionsList().pipe(catchError(error => of({ error: error, isError: true })))
     ).subscribe(([res1]) => {
+      debugger
       if (res1 && !res1.isError) {
 
         this.evaluationForm = res1;
@@ -199,20 +194,11 @@ goto(selTab){
       } else {
         this.evaluationForm = null;
       }
-      //   if (res1 && !res1.isError) {
-      //     this.setWeighting(res1.filter(item => item.IsDraft === false).length);
-      //     if (res1 && res1.length > 0) {
-      //       this.empKPIData = res1;
-      //       
-      //       this.kpiDetails = this.empKPIData[0];//.filter(e => e._id == this.currentKpiId)[0];
-      //       this.selIndex = 0;//this.empKPIData.findIndex(e => e._id == this.currentKpiId);
-      //       this.initKPIForm();
-      //     }
-      //   }
-      //  if(res2) {
-      //    
-      //  }
-
+      
+    },error=>{
+      console.log('error while getting evaluation data',error)
+      this.evaluationForm=null;
+      this.snack.error('something went wrong')
     });
 
   }
@@ -233,6 +219,8 @@ goto(selTab){
       this.callInitApis();
       }, error => {
         console.log('error', error)
+        this.evaluationForm=null;
+      this.snack.error('something went wrong')
       })
   }
 
