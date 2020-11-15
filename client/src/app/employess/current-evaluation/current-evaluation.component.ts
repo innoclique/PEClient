@@ -183,7 +183,7 @@ export class CurrentEvaluationComponent implements OnInit {
     this.selfCompetencyForm.controls["OverallRating"].setValue( this.evaluationForm.Competencies.Employee.CompetencyOverallRating),
     this.selfCompetencyForm.controls["IsDraft"].setValue(!this.evaluationForm.Competencies.Employee.CompetencySubmitted)
     console.log('this.selfCompetencyForm.value', this.selfCompetencyForm.value);
-    this.showCompetencySubmit = !this.evaluationForm.Competencies.CompetencySubmitted
+    this.showCompetencySubmit = !this.evaluationForm.Competencies.Employee.CompetencySubmitted
     this.employeeCompetencyList.forEach(element => {
       questions = [];
       element.Questions.forEach(q => {
