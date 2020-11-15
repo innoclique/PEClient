@@ -235,7 +235,7 @@ let evaluation=flatarray.find(x=>x.Status==='Active')
          Name:row.FirstName+' '+row.LastName,
          NoOfKpis: row.KpiList.length,
          NoOfDevGoals: row.GoalList.length,
-         FRStatus: evaluation.FinalRating.Status,
+         FRStatus: evaluation ?evaluation.FinalRating.Status:'',
        
         RowData:row
       }
@@ -265,7 +265,7 @@ let evaluation=flatarray.find(x=>x.Status==='Active')
          Name:row.FirstName+' '+row.LastName,
          NoOfKpis: row.KpiList.length,
          NoOfDevGoals: row.GoalList.length,
-         FRStatus: evaluation.FinalRating.Status,
+         FRStatus: evaluation?evaluation.FinalRating.Status:'',
        
         RowData:row
       }

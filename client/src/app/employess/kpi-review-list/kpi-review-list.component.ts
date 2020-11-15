@@ -129,7 +129,7 @@ export class KpiReviewListComponent implements OnInit {
       if (c) {
 
         this.getAllKpis();
-        this.snack.success(this.translate.instant(`Kpi ${isActive ? 'Activated' : 'Deactived'} Successfully`));
+        this.snack.success(this.translate.instant(`Performance Goal ${isActive ? 'Activated' : 'Deactived'} Successfully`));
 
       }
     })

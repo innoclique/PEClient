@@ -163,16 +163,15 @@ export class DefaultLayoutComponent implements OnInit {
           }
 
           if (this.user.SelectedRoles.indexOf('TS') > -1) {
-          //   navigationMenu.push(
-             
-          //  {
-          //   "IsActive": true,
-          //   "url": "/employee/review-evaluation-list", 
-          //   "name": "Review Evaluations",
-          //   "code": "Review Evaluations",
-          //   "icon": "icon-star"
-          // }
-          //   )
+          navigationMenu.push(
+            {
+              "IsActive": true,
+              "url": "/employee/review-evaluation-list",
+              "name": "Review Evaluations",
+              "code": "Review Evaluations",
+              "icon": "icon-star"
+            }
+          )
             this.navItems = navigationMenu;
           }
 

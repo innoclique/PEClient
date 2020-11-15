@@ -780,7 +780,7 @@ export class RollevaluationComponent implements OnInit {
   }
   saveDirectReportees() {
     if (!this.selectedEmployee.DirectReportees || this.selectedEmployee.DirectReportees.length < 2) {
-      this.notification.error('Please select minimum two Ditrct Reportee');
+      this.notification.error('Please select minimum two Direct Report(s)');
       return;
     }
     if (this.seletedDirectReporteeCompetencyList.length === 0) {

@@ -709,7 +709,7 @@ this.msSelText="";
       if (c) {
 
       
-this.snack.success(this.translate.instant(`Kpi ${isActive?'Activated':'Deactived'} Successfully`));
+this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactived'} Successfully`));
 this.router.navigate(['em/review-kpi-list']);
       }
     })

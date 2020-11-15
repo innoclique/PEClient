@@ -693,7 +693,7 @@ export class EvaluationslistComponent implements OnInit {
       return;
     }
     if (!this.selectedEmployee.DirectReportees || this.selectedEmployee.DirectReportees.length < 2) {
-      this.notification.error('Please select minimum two Ditrct Reportee');
+      this.notification.error('Please select minimum two Direct Report(s)');
       return;
     }
     debugger
