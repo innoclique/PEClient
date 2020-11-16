@@ -4,7 +4,7 @@
                             <tab>
                                 <ng-template tabHeading><i class="icon-layers"></i>Performance Goals</ng-template>
   
-                                <app-kpi-review-manager [actor]=seletedTabRole> </app-kpi-review-manager>
+                                <app-kpi-review-manager  [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole> </app-kpi-review-manager>
                             </tab>
                            
                             <tab>
@@ -70,6 +70,7 @@
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Developmental Goals (previous
                                     year)
                                 </ng-template>
+                                Coming soon
   
                             </tab>
                             <tab>
@@ -224,7 +225,7 @@
 
 
                                     <section [ngClass]="{ 'view-only': seletedTabRole=='TS' }">
-                                        <h3>Manger Review</h3>
+                                        <h3>Manager Review</h3>
                                         <div class="form-group row">
                                             <div class="col-md-4 ">
                                                 <div class="form-group">

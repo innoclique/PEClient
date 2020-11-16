@@ -1,5 +1,5 @@
 <div class="animated fadeIn">
-    <div class="row">
+    <div class="row" *ngIf="showKpiForm;else noRecordsFound" >
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -506,6 +506,10 @@
 
         </div>
     </div>
+
+    <ng-template class="col-md-12"  #noRecordsFound>
+        <h3>No Performance Goals Found</h3>
+    </ng-template>
 </div>
 
 

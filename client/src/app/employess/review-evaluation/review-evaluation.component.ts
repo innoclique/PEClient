@@ -98,14 +98,14 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
 
 goto(selTab){
 
-  // if (selTab=='reviewKPI') {
-  //   this.tabset.tabs[0].active = true;
-  // } else  if (selTab=='reviewGoals') {
-  //   this.tabset.tabs[2].active = true;
-  // }
-  // else  if (selTab=='reviewEval') {
-  //   this.tabset.tabs[4].active = true;
-  // }
+  if (selTab=='reviewKPI') {
+    this.tabset.tabs[0].active = true;
+  } else  if (selTab=='reviewGoals') {
+    this.tabset.tabs[2].active = true;
+  }
+  else  if (selTab=='reviewEval') {
+    this.tabset.tabs[5].active = true;
+  }
 
   
 }
@@ -154,6 +154,7 @@ goto(selTab){
         }
         if (res1.FinalRating) {
           this.FinalRatingForm.controls["EmployeeComments"].setValue(res1.FinalRating.Self.YearEndComments)
+          this.FinalRatingForm.controls["EmployeeRevComments"].setValue(res1.FinalRating.Self.RevComments)
           this.FinalRatingForm.controls["EmployeeOverallRating"].setValue(res1.FinalRating.Self.YearEndRating)
           this.FinalRatingForm.controls["EmployeeIsDraft"].setValue(!res1.FinalRating.Self.IsSubmitted)
           this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff)
@@ -393,6 +394,7 @@ if (this.FinalRatingForm.value.TSReqRevision &&
   }
   saveFinalRating(isDraft) {
     debugger
+    let reqRev=this.FinalRatingForm.value.ManagerRevComments;
     this.perfApp.route = "app";
     this.perfApp.method = "SaveManagerFinalRating",
       this.perfApp.requestBody = {
@@ -410,7 +412,7 @@ if (this.FinalRatingForm.value.TSReqRevision &&
     console.log('final rating form', this.perfApp.requestBody)
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
-      this.snack.success('Successfully Submitted Final Rating');
+      this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
       window.location.reload();
     }, error => {
       console.log('error', error)
@@ -434,6 +436,7 @@ if (this.FinalRatingForm.value.TSReqRevision &&
   }
   
   saveTSFinalRating(isDraft) {
+    let reqRev=this.FinalRatingForm.value.TSReqRevision;
     this.perfApp.route = "app";
     this.perfApp.method = "SaveTSFinalRating",
       this.perfApp.requestBody = {
@@ -449,7 +452,7 @@ if (this.FinalRatingForm.value.TSReqRevision &&
     console.log('final rating form', this.perfApp.requestBody)
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
-      this.snack.success('Successfully Submitted Final Rating');
+      this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
       window.location.reload();
     }, error => {
       console.log('error', error)

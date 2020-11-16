@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -28,7 +28,10 @@ export class CreateGoalsComponent implements OnInit {
   goalsItemRows = [];
   goalsActionItemsForm: FormGroup;
   goalsBuildForm: FormGroup;
+  @Input()
   currentAction='create'
+  @Input()
+accessingFrom:any;
   goalDetails: any = { MakePrivate:false}
 
   filteredOptionsOP: Observable<any[]>;
@@ -55,6 +58,7 @@ export class CreateGoalsComponent implements OnInit {
   selIndex: number;
   currentRowItem: any;
   currentOrganization: any={};
+  showDevGoalsForm=true;
   
  
   constructor(private formBuilder: FormBuilder,
@@ -353,6 +357,7 @@ getAllDevGoalsDetails() {
 
 
         if (this.currentAction !='create') {
+          this.currentDevGoalId=this.currentDevGoalId ? this.currentDevGoalId:this.empDevGoalsData[0]._id;
           this.goalDetails=  this.empDevGoalsData.filter(e=> e._id== this.currentDevGoalId)[0];
           this.selIndex=  this.empDevGoalsData.findIndex(e=> e._id== this.currentDevGoalId);
 
@@ -364,6 +369,12 @@ getAllDevGoalsDetails() {
         }
        
 
+    }
+    else{
+        
+      if (this.accessingFrom=='currEvaluation') {
+        this.showDevGoalsForm=false;
+      }
     }
 
   }

@@ -45,7 +45,11 @@ actor:any;
   filteredOptionsKPI: Observable<any[]>;
   public empKPIData: any[] = []
   // public selectedKPIItems :any[]=[]
+  
+  @Input()
+  accessingFrom:any;
 
+  showKpiForm=true;
 
 
 
@@ -435,6 +439,7 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
       // this.perfApp.requestBody = {
       //    'empId': this.currentEmpId,
       //   'orgId':this.authService.getOrganization()._id}
+      debugger
 
       await this.perfApp.CallAPI().subscribe(c => {
       
@@ -462,6 +467,11 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
           
           this.getMeasurementCriterias();
 
+      }else{
+        
+        if (this.accessingFrom=='reviewEvaluation') {
+          this.showKpiForm=false;
+        }
       }
 
     }

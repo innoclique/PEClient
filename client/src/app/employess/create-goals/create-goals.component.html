@@ -1,8 +1,8 @@
 <div class="animated fadeIn">
   <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12" *ngIf="showDevGoalsForm;else noRecordsFound">
           <div class="card">
-              <div class="card-header">
+              <div *ngIf="accessingFrom!='currEvaluation' "  class="card-header">
                   Devlopment Goals
 
                   <div class="form-group form-actions pull-right m-0">
@@ -251,6 +251,9 @@
               </div>
   
           </div>
+          <ng-template class="col-md-12"  #noRecordsFound>
+            <h3>No Devlopment Goals Found</h3>
+        </ng-template>
       </div>
   </div>
 
