@@ -59,6 +59,7 @@ actor:any;
   weight:any;
   currentKpiId: any;
   currentEmpId: any;
+  currentEmpManagerId: any;
   selIndex: any;
   isKpiActivated: boolean;
   msSelText="";
@@ -95,6 +96,7 @@ actor:any;
      if (params['action']) {
       this.currentKpiId = params['id'];
       this.currentEmpId = params['empId'];
+      this.currentEmpManagerId = params['empManagerId'];
       this.currentAction = params['action'];
      }
      
@@ -433,7 +435,7 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
    async  getAllKPIs() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpisByManager",
-    this.perfApp.requestBody = { 'managerId': this.loginUser._id,
+    this.perfApp.requestBody = { 'managerId': this.currentEmpManagerId,
         'empId': this.currentEmpId,}
     // this.perfApp.method = "GetAllKpis",
       // this.perfApp.requestBody = {
@@ -663,7 +665,7 @@ this.msSelText="";
   
    /**To alert user for submit kpis */
    openConfirmSubmitKpisDialog() {
-    this.alert.Title = "Secure Alert";
+    this.alert.Title = "Alert";
     this.alert.Content = "Are you sure you want to sign-off?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
@@ -706,7 +708,7 @@ this.msSelText="";
       if (c) {
 
       
-this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactived'} Successfully`));
+this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactivated'} Successfully`));
 this.router.navigate(['em/review-kpi-list']);
       }
     })

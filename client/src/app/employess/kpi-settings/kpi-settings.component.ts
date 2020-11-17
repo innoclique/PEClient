@@ -658,7 +658,7 @@ this.msSelText="";
   
    /**To alert user for submit kpis */
    openConfirmSubmitKpisDialog() {
-    this.alert.Title = "Secure Alert";
+    this.alert.Title = "Alert";
     this.alert.Content = "This will confirm your sign-off. Are you sure you want to continue?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;

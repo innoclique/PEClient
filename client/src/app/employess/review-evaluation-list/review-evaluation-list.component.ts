@@ -96,7 +96,7 @@ export class ReviewEvaluationListComponent implements OnInit {
         font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i> 
         
         <i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="reviewKPI" title="ReviewPerformance Goal"></i>
+        font-size: 17px;"   data-action-type="reviewKPI" title="Review Performance Goal"></i>
         
         <i class="cui-layers" style="cursor:pointer; padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
@@ -200,7 +200,7 @@ public onAsTSGridRowClick(e) {
 
   reviewEvalForm(action,actor) {
       this.router.navigate(['employee/review-evaluation',
-       { action: action, empId: this.currentRowItem._id,actor:actor }
+       { action: action, empId: this.currentRowItem._id,actor:actor,empManagerId:this.currentRowItem.Manager }
     ], { skipLocationChange: true });
   }
 

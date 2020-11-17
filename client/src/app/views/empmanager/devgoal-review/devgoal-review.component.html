@@ -1,0 +1,186 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12" *ngIf="showDevGoalsForm;else noRecordsFound">
+            <div class="card">
+                <div *ngIf="accessingFrom!='reviewEvaluation' "  class="card-header">
+                    Development Goals
+  
+                    <div class="form-group form-actions pull-right m-0">
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                        (click)="navToGoalsList()" >    Back to list </button>  
+  
+                    </div>
+                    
+                </div>
+                <div class="card-body">
+  
+  
+                    <form [formGroup]="goalsBuildForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
+                     class="ng-untouched ng-pristine ng-valid">
+  
+  
+                     <div class="form-group row">
+  
+                      <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text ">Developmental Goal</span>
+                                </div>
+                                <input max="500" maxlength="500" class="form-control" type="text"
+                                [readonly]="currentAction != 'create' "
+                                    [ngClass]="{ 'is-invalid': (f.DevGoal.touched || submitClicked)  &&  f.DevGoal.invalid }"
+                                    formControlName="DevGoal" name="DevGoal" required
+                                    [matAutocomplete]="devGoalsAuto">
+  
+                                    <mat-autocomplete #devGoalsAuto="matAutocomplete" (optionSelected)="onDevGoalsAutoSelected($event)" [displayWith]="displayDevGoalFn" >
+                                        <mat-option *ngFor="let option of filteredOptionsDevGoals | async" [value]="option">
+                                          {{option.DevGoal}}
+                                        </mat-option>
+                                       </mat-autocomplete>
+  
+                                <div *ngIf=" (f.DevGoal.touched || submitClicked) && f.DevGoal.invalid" class="invalid-feedback">
+                                  <div *ngIf="f.DevGoal?.errors.required">Please provide Developmental Goal.</div>
+                                    <div *ngIf="f.DevGoal.errors.minlength">Performance Goal Name must be at least 2
+                                        characters </div>
+                                    <div *ngIf="f.DevGoal.errors.hasKPISplChars">Allowed special characters are
+                                        (.,-,(,),&,#,:,/,?) </div>
+                                </div>
+  
+                            </div>
+                        </div>
+                    </div>
+  
+  
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <div class="input-group">
+                                  <div class="input-group-prepend">
+                                      <span class="input-group-text ">Performance Goal</span>
+                                  </div>
+                                  <input max="500" maxlength="500" class="form-control" type="text"
+                                  [readonly]="currentAction != 'create' "
+                                      [ngClass]="{ 'is-invalid': f.Kpi.touched  &&  f.Kpi.invalid }"
+                                      formControlName="Kpi" name="Kpi" 
+                                      [matAutocomplete]="kpiAuto">
+  
+                                      <mat-autocomplete #kpiAuto="matAutocomplete" (optionSelected)="onKpiAutoSelected($event)"  [displayWith]="displayKPIFn" >
+                                          <mat-option *ngFor="let option of filteredOptionsKPI | async" [value]="option">
+                                            {{option.Kpi}}
+                                          </mat-option>
+                                         </mat-autocomplete>
+  
+                                  
+  
+                              </div>
+                          </div>
+                      </div>
+  
+  
+                  </div>
+  
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text ">Desired Outcomes</span>
+                            </div>
+                            <textarea maxlength="1000" class="form-control"  cols="" rows="2" required readonly
+                            [ngClass]="{ 'is-invalid': (f.DesiredOutcomes?.touched || submitClicked) &&  f.DesiredOutcomes.invalid }"
+                            formControlName="DesiredOutcomes"  name="DesiredOutcomes"  >  </textarea>
+  
+                            <div *ngIf="(f.DesiredOutcomes?.touched || submitClicked) && f.DesiredOutcomes?.errors" class="invalid-feedback">
+                              <div *ngIf="f.DesiredOutcomes?.errors.required">Desired Outcome is mandatory.</div>
+                              <div *ngIf="f.DesiredOutcomes.errors.minlength">Desired Outcome  must be at least 2 characters </div>
+                              <div *ngIf="f.DesiredOutcomes.errors.hasKPISplChars">Allowed special characters are (.,-,(,),&,#,:,/,?) </div>
+                            </div>
+    
+                          
+    
+                          </div>
+                        </div>
+                  </div>
+  
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text redStar">Manager's Comments</span>
+                          </div>
+                          <textarea maxlength="2000" class="form-control"  cols="" rows="2" required
+                          [ngClass]="{ 'is-invalid': (f.ManagerComments?.touched || submitClicked) &&  f.ManagerComments.invalid }"
+                          formControlName="ManagerComments"  name="ManagerComments"  >  </textarea>
+
+                          <div *ngIf="(f.ManagerComments?.touched || submitClicked) && f.ManagerComments?.errors" class="invalid-feedback">
+                            <div *ngIf="f.ManagerComments?.errors.required">Manager's Comments is mandatory.</div>
+                            <div *ngIf="f.ManagerComments.errors.minlength">Manager's Comments must be at least 2 characters </div>
+                            <div *ngIf="f.ManagerComments.errors.hasKPISplChars">Allowed special characters are (.,-,(,),&,#,:,/,?) </div>
+                          </div>
+  
+                        
+  
+                        </div>
+                      </div>
+                </div>
+  
+                  </div>
+  
+  
+  
+  
+  
+                  <div  formGroupName="GoalActionItems" class="invitation_model_in_table table-responsive p-15">
+                    <!-- <div style="height: calc(100% - 80px);"> -->
+                        <ag-grid-angular style="width: auto; height: 200px;" class="ag-theme-alpine" 
+                              
+                        [rowData]="goalsItemRows"
+                        [gridOptions]="goalsItemColumns"
+                        
+                        (gridReady)="onActionItemsGridReady($event)"
+                        (rowClicked)="onRowActionItemsClicked($event)"
+                        >
+                        </ag-grid-angular>
+                
+                    <!-- </div> -->
+                  </div> 
+  
+  
+  
+  
+  
+                  <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
+                    <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre Kpi</button>
+                    <button [disabled]='selIndex+1 == empDevGoalsData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next Kpi</button>
+                    
+                  </div>
+  
+  
+                  <div  *ngIf="actor!='TS'" class="form-group form-actions pull-right mt-2">
+                    <button class="btn btn-sm btn-primary" (click)="navToGoalsList()" >Cancel</button>
+  
+                    <button *ngIf="!f.ManagerFTSubmitedOn"  class="btn btn-sm btn-primary" (click)="draftDevGoal()" >Save</button>
+                  
+                    <button  class="btn btn-sm btn-primary" (click)="conformSubmitDevGoals()" >Submit</button>
+  
+                    <!-- <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
+                  </div>
+    
+                  <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+  
+  
+  
+                    </form>
+  
+                  </div>
+                </div>
+    
+            </div>
+            <ng-template class="col-md-12"  #noRecordsFound>
+              <h3>No Development Goals Found</h3>
+          </ng-template>
+        </div>
+    </div>
+  
+  
+  

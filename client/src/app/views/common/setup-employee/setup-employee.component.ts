@@ -494,7 +494,7 @@ if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
 
  /**To alert user for duplicate sessions */
  openEvaluationAdminNotFoundDialog() {
-  this.alert.Title = "Secure Alert";
+  this.alert.Title = "Alert";
   this.alert.Content = "We found that Evaluation Administrator not created. Do you want to continue ?";
   this.alert.ShowCancelButton = true;
   this.alert.ShowConfirmButton = true;

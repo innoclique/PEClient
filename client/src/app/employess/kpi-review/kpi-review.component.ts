@@ -666,7 +666,7 @@ this.msSelText="";
   
    /**To alert user for submit kpis */
    openConfirmSubmitKpisDialog() {
-    this.alert.Title = "Secure Alert";
+    this.alert.Title = "Alert";
     this.alert.Content = "Are you sure you want to sign-off?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
@@ -709,7 +709,7 @@ this.msSelText="";
       if (c) {
 
       
-this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactived'} Successfully`));
+this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactivated'} Successfully`));
 this.router.navigate(['em/review-kpi-list']);
       }
     })

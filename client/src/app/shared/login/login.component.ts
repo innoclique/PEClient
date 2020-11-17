@@ -128,7 +128,7 @@ export class LoginComponent implements OnInit {
 
   /**To alert user for duplicate sessions */
   openDuplicateSessionDialog() {
-    this.alert.Title = "Secure Alert";
+    this.alert.Title = "Alert";
     this.alert.Content = "We found that you have already logged in some where. Please logout from other session, to continue click on logout";
     this.alert.ShowCancelButton = false;
     this.alert.ShowConfirmButton = true;

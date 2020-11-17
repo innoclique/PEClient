@@ -19,10 +19,11 @@ import { EvalCommonModule } from '../common/common.module';
 import { DateAgoPipe } from '../../pipes/DateAgoPipe';
 import { SharedModule } from '../../shared/shared.module';
 import { KpiAddComponent } from './kpi-add/kpi-add.component';
+import { DevgoalReviewComponent } from './devgoal-review/devgoal-review.component';
 
 
 @NgModule({
-  declarations: [KpiReviewListComponent, KpiReviewComponent, ManagerDashboardComponent,KpiAddComponent],
+  declarations: [KpiReviewListComponent, KpiReviewComponent, ManagerDashboardComponent,KpiAddComponent, DevgoalReviewComponent],
   imports: [
     CommonModule,
     EmpmanagerRoutingModule,
@@ -42,6 +43,6 @@ import { KpiAddComponent } from './kpi-add/kpi-add.component';
     ModalModule.forRoot(),
     SharedModule
   ],
-  exports:[KpiReviewComponent]
+  exports:[KpiReviewComponent,DevgoalReviewComponent]
 })
 export class EmpmanagerModule { }

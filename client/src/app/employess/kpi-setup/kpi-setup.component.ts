@@ -161,7 +161,7 @@ export class KpiSetupComponent implements OnInit {
       if (c) {
 
       this.getAllKpis();
-this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactived'} Successfully`));
+this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactivated'} Successfully`));
         
       }
     })
@@ -194,7 +194,7 @@ this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activate
   
    /**To alert user for submit kpis */
    conformSubmitKpis() {
-    this.alert.Title = "Secure Alert";
+    this.alert.Title = "Alert";
     this.alert.Content = "This will confirm your sign-off. Are you sure you want to continue?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;

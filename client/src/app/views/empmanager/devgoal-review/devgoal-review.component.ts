@@ -1,3 +1,4 @@
+
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,21 +9,33 @@ import { GridOptions } from 'ag-grid-community';
 import { timeStamp } from 'console';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-import { AlertDialog } from '../../Models/AlertDialog';
-import { AuthService } from '../../services/auth.service';
-import { NotificationService } from '../../services/notification.service';
-import { PerfAppService } from '../../services/perf-app.service';
-import { ThemeService } from '../../services/theme.service';
-import { AlertComponent } from '../../shared/alert/alert.component';
-import { Constants } from '../../shared/AppConstants';
-import { CustomValidators } from '../../shared/custom-validators';
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../services/notification.service';
+import { PerfAppService } from '../../../services/perf-app.service';
+import { ThemeService } from '../../../services/theme.service';
+import { AlertComponent } from '../../../shared/alert/alert.component';
+import { Constants } from '../../../shared/AppConstants';
+import { CustomValidators } from '../../../shared/custom-validators';
+
 
 @Component({
-  selector: 'app-create-goals',
-  templateUrl: './create-goals.component.html',
-  styleUrls: ['./create-goals.component.css']
+  selector: 'app-devgoal-review',
+  templateUrl: './devgoal-review.component.html',
+  styleUrls: ['./devgoal-review.component.css']
 })
-export class CreateGoalsComponent implements OnInit {
+export class DevgoalReviewComponent implements OnInit {
+
+
+
+  @Input()
+  actor:any;
+  @Input()
+  accessingFrom:any;
+  showDevGoalForm=true;
+  currentDevGoalId: any;
+  currentEmpId: any;
+  selIndex: any;
 
   public alert: AlertDialog;
   goalsItemRows = [];
@@ -30,8 +43,7 @@ export class CreateGoalsComponent implements OnInit {
   goalsBuildForm: FormGroup;
   @Input()
   currentAction='create'
-  @Input()
-accessingFrom:any;
+
   goalDetails: any = { MakePrivate:false}
 
   filteredOptionsOP: Observable<any[]>;
@@ -54,8 +66,7 @@ accessingFrom:any;
   public empDevGoalsData: any[] = []
   currEvaluation: any;
   submitClicked=false;
-  currentDevGoalId: any;
-  selIndex: number;
+
   currentRowItem: any;
   currentOrganization: any={};
   showDevGoalsForm=true;
@@ -75,21 +86,32 @@ accessingFrom:any;
     this.currentOrganization = this.authService.getOrganization();
     
 
-    this.getAllKPIs();
-    this.getAllDevGoalsDetails();
-    this.getAllDevGoalsBasicData();
-    this.getOtherParticipantsEmps();
+    
     this.activatedRoute.params.subscribe(params => {
-     
+     debugger
       if (params['action']) {
        this.currentDevGoalId = params['id'];
+       this.currentEmpId = params['empId'];
        this.currentAction = params['action'];
       }
       
      });   
+
+ 
+    
    }
 
+   async initApicallsForDevGoals() {
+    this.getAllKPIs();
+    this.getAllDevGoalsDetails();
+    this.getAllDevGoalsBasicData();
+    this.getOtherParticipantsEmps();
+
+  }
+
   ngOnInit(): void {
+
+    this.initApicallsForDevGoals();
 
 this.initDevGoalForm();
 this.alert = new AlertDialog();
@@ -104,6 +126,13 @@ this.alert = new AlertDialog();
         Validators.required, Validators.minLength(2),
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
       ])  ],
+
+      ManagerComments: [this.goalDetails.ManagerComments ? this.goalDetails.ManagerComments :'', 
+      Validators.compose([
+        Validators.required, Validators.minLength(2),
+        CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
+      ])  ],
+
       DevGoal: [this.goalDetails && this.currentAction!='create' ? this.goalDetails :'',  Validators.compose([
         Validators.required, Validators.minLength(2),
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
@@ -111,6 +140,8 @@ this.alert = new AlertDialog();
       Kpi: [this.goalDetails.Kpi ? this.goalDetails.Kpi : null],
       MakePrivate: [this.goalDetails.MakePrivate ],
       IsDraft: [this.goalDetails.IsDraft ? 'true' : 'false'],
+      IsDraftByManager: [this.goalDetails.IsDraftByManager ? 'true' : 'false'],
+       ManagerFTSubmitedOn: [this.goalDetails.ManagerFTSubmitedOn?this.goalDetails.ManagerFTSubmitedOn:"" ],
      
       GoalActionItems: this.formBuilder.group({
         ActionStep: ['',
@@ -166,17 +197,17 @@ get k (){
   },
     { headerName: 'Other Participants', field: 'OtherParticipants', width: 170, autoHeight: true },
     { headerName: 'Status', field: 'Status', width: 120, autoHeight: true },
-    {
-      headerName: "Action",
-      suppressMenu: true,
-      Sorting: false,
-      width: 90,
-      template: `
+    // {
+    //   headerName: "Action",
+    //   suppressMenu: true,
+    //   Sorting: false,
+    //   width: 90,
+    //   template: `
       
-      <i class="cui-trash icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="remove"  ></i>  `
+    //   <i class="cui-trash icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+    //     font-size: 17px;"   data-action-type="remove"  ></i>  `
 
-    }
+    // }
 
 
   ];
@@ -270,7 +301,7 @@ private _filterKPI(name: string): any[] {
 getAllKPIs() {
   this.perfApp.route = "app";
   this.perfApp.method = "GetKpisForDevGoals",
-    this.perfApp.requestBody = { 'empId': this.loginUser._id,'orgId':this.authService.getOrganization()._id}
+    this.perfApp.requestBody = { 'empId': this.currentEmpId,'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
 
     if (c && c.length > 0) {
@@ -339,7 +370,7 @@ private _filterDevGoals(name: string): any[] {
 getAllDevGoalsDetails() {
   this.perfApp.route = "app";
   this.perfApp.method = "GetAllDevGoals",
-    this.perfApp.requestBody = { 'empId': this.loginUser._id,
+    this.perfApp.requestBody = { 'empId': this.currentEmpId,
     'fetchAll':true,'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
 
@@ -372,7 +403,7 @@ getAllDevGoalsDetails() {
     }
     else{
         
-      if (this.accessingFrom=='currEvaluation') {
+      if (this.accessingFrom=='reviewEvaluation') {
         this.showDevGoalsForm=false;
       }
     }
@@ -391,21 +422,23 @@ getAllDevGoalsDetails() {
 
 
 navToGoalsList() {
-  this.router.navigate(['employee/action-plan']);
+  this.router.navigate(['employee/review-evaluation-list']);
 }
+
+
 
 submitGoal() {
 
   // if (!this.goalsBuildForm.valid) {
   //   return;
   // }
-   this.goalsBuildForm.patchValue({ IsDraft: 'false' });
+   this.goalsBuildForm.patchValue({ IsDraftByManager: 'false' });
   this.saveDevGoal();
 }
 
 
 draftDevGoal(){
-  this.goalsBuildForm.patchValue({ IsDraft: 'true' });
+  this.goalsBuildForm.patchValue({ IsDraftByManager: 'true' });
   this.saveDevGoal();
 }
 
@@ -421,26 +454,21 @@ return
   this.perfApp.method = this.currentAction == 'create' ? "AddDevGoal" : "UpdateDevGoalById",
 
 
-    this.perfApp.requestBody = this.goalsBuildForm.value; //fill body object with form 
+    this.perfApp.requestBody = {};
 
   
-
-  this.perfApp.requestBody.DevGoal = this.perfApp.requestBody.DevGoal.DevGoal?
-                                  this.perfApp.requestBody.DevGoal.DevGoal :this.perfApp.requestBody.DevGoal;
+this.perfApp.requestBody.ManagerComments = this.goalsBuildForm.get('ManagerComments').value ;
+this.perfApp.requestBody.IsDraftByManager = this.goalsBuildForm.get('IsDraftByManager').value ;
   this.perfApp.requestBody.devGoalId = this.goalDetails._id?  this.goalDetails._id : '';
- // sg todo
-  //this.perfApp.requestBody.EvaluationId = this.currEvaluation._id;
-
-
-
-  this.perfApp.requestBody.Kpi = this.perfApp.requestBody.Kpi?  this.perfApp.requestBody.Kpi._id :null;
-  this.perfApp.requestBody.GoalActionItems = this.goalsItemRows.length>0? this.goalsItemRows :null;
+  this.perfApp.requestBody.IsManaFTSubmited = this.goalsBuildForm.get('ManagerFTSubmitedOn').value ? false:true;
+ 
   this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
-  // this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id; sg todo
-
-  if (this.goalsBuildForm.get('IsDraft').value=='true') {
-    this.perfApp.requestBody.Action = 'Draft';
-  }
+  this.perfApp.requestBody.empId = this.currentEmpId;
+  // this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id; sg todo 
+  this.perfApp.requestBody.Action = 'Review';
+  // if (this.goalsBuildForm.get('IsDraft').value=='true') {
+  //   this.perfApp.requestBody.Action = 'Draft';
+  // }
   if (this.currentAction=='create') {
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
     this.perfApp.requestBody.Owner = this.loginUser._id;
@@ -456,9 +484,9 @@ callKpiApi() {
 
     if (c.message == Constants.SuccessText) {
 
-      this.snack.success(this.translate.instant(` Action plan has been ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)} successfully`       ));
+      this.snack.success(this.translate.instant(` Comments have been submitted successfully.`       ));
 
-      this.router.navigate(['employee/action-plan']);
+      this.router.navigate(['employee/review-evaluation-list']);
     }
 
   }, error => {
@@ -473,14 +501,13 @@ conformSubmitDevGoals(){
 
   
   this.submitClicked=true;
-  if(this.goalsActionItemsForm.valid && this.goalsActionItemsForm.get('ActionStep').value ){
-  this.addItemRow()
-  }
+ 
 
 
   if(this.goalsItemRows.length==0 && this.goalsActionItemsForm.invalid){
   this.rowItemSubmitted=true
   }
+
   else if(this.goalsItemRows.length >0){
     this.removeGoalActionValidators(this.goalsActionItemsForm);
   }
@@ -490,12 +517,8 @@ conformSubmitDevGoals(){
   }
   
 
-  if (this.currentAction=='create') {
-  this.openConfirmSubmitDialog();
 
-}else  {
-  this.submitGoal();
-}
+this.openConfirmSubmitDialog();
  
 }
 
@@ -513,7 +536,7 @@ conformSubmitDevGoals(){
    /**To alert user for submit */
    openConfirmSubmitDialog() {
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to submit the action plan?";
+    this.alert.Content = "Are you sure you want to submit the comments?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";
@@ -549,6 +572,8 @@ conformSubmitDevGoals(){
       return 'submitted'
     }else  if (currentAction=='edit') {
       return 'updated'
+    }else  if (currentAction=='reviewGoals') {
+      return 'updated'
     }
     
    
@@ -565,7 +590,7 @@ conformSubmitDevGoals(){
 getAllDevGoalsBasicData() {
   this.perfApp.route = "app";
   this.perfApp.method = "GetKpiSetupBasicData";
-  this.perfApp.requestBody = { 'empId': this.loginUser._id ,
+  this.perfApp.requestBody = { 'empId': this.currentEmpId ,
   'orgId':this.authService.getOrganization()._id
 }
     this.perfApp.CallAPI().subscribe(c => {
@@ -648,3 +673,4 @@ nextKpi(){
  }
 
 }
+
