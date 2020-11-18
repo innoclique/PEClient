@@ -44,7 +44,7 @@ export class CurrentEvaluationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
     this.initCompetencyForm();
     this.initFinalRatingForm();
     this.getTabsData();
@@ -86,7 +86,7 @@ export class CurrentEvaluationComponent implements OnInit {
         debugger
         if (res1.Competencies) {
           this.employeeCompetencyList = res1.Competencies.Employee.Competencies
-          
+
           // this.setCompetencies();
           this.prepareCompetencyQuestions();
           console.log('the evauation form', this.evaluationForm)
@@ -112,7 +112,7 @@ export class CurrentEvaluationComponent implements OnInit {
       } else {
         this.evaluationForm = null;
       }
-     
+
 
     });
 
@@ -130,15 +130,10 @@ export class CurrentEvaluationComponent implements OnInit {
       this.perfApp.requestBody = { TsId: this.loginUser._id }
     return this.perfApp.CallAPI()
   }
-  getCompetencyQuestionsList() {
-    this.perfApp.route = "evaluation";
-    this.perfApp.method = "GetCompetencyValues",
-      this.perfApp.requestBody = { EvaluationId: '5f91f79a597ad544742141df', employeeId: this.loginUser._id }
-    return this.perfApp.CallAPI()
-  }
+  
 
- 
- 
+
+
   initCompetencyForm() {
     this.selfCompetencyForm = this.fb.group({
       OverallComments: ['', [Validators.required]],
@@ -175,13 +170,13 @@ export class CurrentEvaluationComponent implements OnInit {
 
   }
   competencyQuestionsList = [];
-  showCompetencySubmit=true;
+  showCompetencySubmit = true;
   prepareCompetencyQuestions() {
-    
+
     var questions: CompetencyBase<string>[] = [];
-    this.selfCompetencyForm.controls["OverallComments"].setValue( this.evaluationForm.Competencies.Employee.CompetencyComments,),
-    this.selfCompetencyForm.controls["OverallRating"].setValue( this.evaluationForm.Competencies.Employee.CompetencyOverallRating),
-    this.selfCompetencyForm.controls["IsDraft"].setValue(!this.evaluationForm.Competencies.Employee.CompetencySubmitted)
+    this.selfCompetencyForm.controls["OverallComments"].setValue(this.evaluationForm.Competencies.Employee.CompetencyComments,),
+      this.selfCompetencyForm.controls["OverallRating"].setValue(this.evaluationForm.Competencies.Employee.CompetencyOverallRating),
+      this.selfCompetencyForm.controls["IsDraft"].setValue(!this.evaluationForm.Competencies.Employee.CompetencySubmitted)
     console.log('this.selfCompetencyForm.value', this.selfCompetencyForm.value);
     this.showCompetencySubmit = !this.evaluationForm.Competencies.Employee.CompetencySubmitted
     this.employeeCompetencyList.forEach(element => {
@@ -204,7 +199,8 @@ export class CurrentEvaluationComponent implements OnInit {
         CompetencyRowId: element._id,
         Questions: questions,
         form: this.qcs.toFormGroup(questions),
-        comments:element.Comments,
+        comments: element.Comments,
+        CompetencyAvgRating:element.CompetencyAvgRating
       })
 
     });
@@ -221,21 +217,21 @@ export class CurrentEvaluationComponent implements OnInit {
   }
   saveSelfCompetencyForm(isDraft) {
     //selfCompetencyForm
-    
+
     const competencyQA: any = {}
     competencyQA.QnA = []
     let isvalid = true;
     this.competencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
-      var _lastitem=_qna.pop();
+      var _lastitem = _qna.pop();
+      debugger
+
       if (_qna && _qna.length > 0) {
-        
+        var _avgScore = this.getAverage(_qna.map(x => x[1]));
         _qna.forEach(q => {
-          competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1],Comments:_lastitem?_lastitem[1]:"" })          
+          competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1], Comments: _lastitem ? _lastitem[1] : "", CompetencyAvgRating: _avgScore })
         });
-        //Comments:_qna[5]?_qna[5][1]:""
-        // var last = competencyQA.QnA[competencyQA.QnA.length - 1]
-        // competencyQA.QnA.map(x=>x.Comments=last?last[1]:"" )          
+       
       } else {
         if (!isDraft) {
           isvalid = false;
@@ -257,7 +253,7 @@ export class CurrentEvaluationComponent implements OnInit {
       this.perfApp.requestBody = competencyQA;// { TsId: this.loginUser._id }
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
-      this.snack.success(isDraft?'Competencies Rating Saved Successfully':'Competency Rating Submitted Successfully');
+      this.snack.success(isDraft ? 'Competencies Rating Saved Successfully' : 'Competency Rating Submitted Successfully');
     }, error => {
       this.snack.error('something went wrong.')
       console.log('error', error)
@@ -272,16 +268,19 @@ export class CurrentEvaluationComponent implements OnInit {
     this.saveFinalRating(true)
   }
   saveFinalRating(isDraft) {
-
+debugger
     if (this.FinalRatingForm.value.IsManagerReqRev &&
-  this.FinalRatingForm.value.EmployeeRevComments.length==0) {
-    this.snack.error('Revision Comments is mandatory')
-    return;
-}
-    
+      this.FinalRatingForm.value.EmployeeRevComments.length == 0) {
+      this.snack.error('Revision Comments is mandatory')
+      return;
+    }
+    if (!this.evaluationForm.Competencies.Employee.CompetencySubmitted) {
+      this.snack.error('Competencies Rating should be Submitted')
+      return;
+    }
     this.perfApp.route = "app";
     this.perfApp.method = "SaveEmployeeFinalRating",
-    
+
       this.perfApp.requestBody = {
         EvaluationId: this.evaluationForm.Competencies.EvaluationId,
         EmployeeId: this.loginUser._id,
@@ -292,8 +291,8 @@ export class CurrentEvaluationComponent implements OnInit {
         SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
       };
     console.log('final rating form', this.perfApp.requestBody)
-    
-    if(isDraft){
+
+    if (isDraft) {
       this.perfApp.CallAPI().subscribe(x => {
         console.log(x)
         this.snack.success('Successfully Submitted Final Rating');
@@ -302,25 +301,38 @@ export class CurrentEvaluationComponent implements OnInit {
         console.log('error', error)
         this.snack.error('Something went wrong')
       })
-    }else{
-      var confirm=window.confirm('Are you sure, you want to submit Final Rating?')
-      
-    if(confirm){
-      this.perfApp.CallAPI().subscribe(x => {
-        console.log(x)
-        this.snack.success('Successfully Submitted Final Rating');
-        window.location.reload();
-      }, error => {
-        console.log('error', error)
-        this.snack.error('Something went wrong')
-      })
-  
+    } else {
+      var confirm = window.confirm('Are you sure, you want to submit Final Rating?')
+
+      if (confirm) {
+        this.perfApp.CallAPI().subscribe(x => {
+          console.log(x)
+          this.snack.success('Successfully Submitted Final Rating');
+          window.location.reload();
+        }, error => {
+          console.log('error', error)
+          this.snack.error('Something went wrong')
+        })
+
+      }
     }
-    }
-    
-    
+
+
   }
   cancelFinalRating() {
 
+  }
+
+  getAverage(arr) {
+    debugger
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+      sum += parseInt(arr[i], 10); //don't forget to add the base
+    }
+
+    var avg = sum / arr.length;
+    // const average= arr.reduce((p, c) => p + c, 0) / arr.length;
+    console.log('avarage score :', avg);
+    return avg;
   }
 }

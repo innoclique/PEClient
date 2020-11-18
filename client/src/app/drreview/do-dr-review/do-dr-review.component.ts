@@ -117,7 +117,8 @@ export class DoDrReviewComponent implements OnInit {
           //CompetencyRowId: element._id,
           Questions: questions,
           form: this.qcs.toFormGroup(questions),
-          comments: cc?cc.Comments:""
+          comments: cc?cc.Comments:"",
+          CompetencyAvgRating:cc.CompetencyAvgRating
           // Comments: this.evaluationForm.Competencies.Employees[0].CompetencyComments,
           // OverallRating: this.evaluationForm.Competencies.Employees[0].OverallRating,
           // IsDraft: !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
@@ -143,9 +144,10 @@ export class DoDrReviewComponent implements OnInit {
       debugger
       if (_qna && _qna.length > 0) {
         var _lastitem = _qna.pop();
+        var _avgScore = this.getAverage(_qna.map(x => x[1]));
         _qna.forEach(q => {
 
-          competencyQA.QnA.push({ CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1], Comments: _lastitem ? _lastitem[1] : "" })
+          competencyQA.QnA.push({ CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1], Comments: _lastitem ? _lastitem[1] : "",CompetencyAvgRating: _avgScore })
         });
       } else {
         if (!isDraft) {
@@ -192,5 +194,16 @@ export class DoDrReviewComponent implements OnInit {
   ngOnDestroy() {
     this.subscriptions.forEach(s => s.unsubscribe())
   }
+  getAverage(arr) {
+    debugger
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+      sum += parseInt(arr[i], 10); //don't forget to add the base
+    }
 
+    var avg = sum / arr.length;
+    // const average= arr.reduce((p, c) => p + c, 0) / arr.length;
+    console.log('avarage score :', avg);
+    return avg;
+  }
 }

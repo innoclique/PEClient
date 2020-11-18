@@ -60,3 +60,6 @@ p											{  font-size:15px; line-height:21px; font-weight:400; color:#717171;
 .box_in_btns_view            { font-size: 13px; line-height: 16px; color: #1996f2; float: right; font-weight: bold; padding: 10px 10px 15px;}
 
 
+.avgScore{
+    font-size: small;
+}

@@ -1,43 +1,17 @@
 <div [formGroup]="peerCompetencyForm">
     <accordion [closeOthers]="oneAtATime">
         <accordion-group *ngFor="let c of competencyQuestionsList"
-            heading="{{c.CompetenyName}}">
+            >
+            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                <div class="pull-left float-left">{{c.CompetenyName}}</div>
+                <span class="badge badge-secondary float-right pull-right avgScore"> Avarage Rating: {{c.CompetencyAvgRating||0}}</span>
+              </button>  
             <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments"></app-competency-wrapper>
         </accordion-group>
 
     </accordion>
     <div class="form-group row">
-        <div class="col-md-4 ">
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text redStar">Rating</span>
-                    </div>
-                    <select formControlName="OverallRating" class="form-control"
-                        name="Score">
-                        <option value="" disabled>Please select</option>
-                        <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8 ">
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Comments</span>
-                    </div>
-                    <textarea maxlength="500" formControlName="OverallComments"
-                        class="form-control"></textarea>
-
-                </div>
-            </div>
-
-        </div>
+        
         <div class="pull-right col-md-12">
             <div class="form-group">
                 <div class="pull-right" *ngIf="!isSubmitted">

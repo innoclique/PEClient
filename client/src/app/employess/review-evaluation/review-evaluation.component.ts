@@ -33,9 +33,11 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   weight: number;
   kpiForm: FormGroup;
   selfCompetencyForm: FormGroup;
+  managerCompetencyForm: FormGroup;
   competencyList: any = [];
   evaluationForm: any = {};
   employeeCompetencyList: any;
+  managerCompetencyList: any;
   questions$: Observable<CompetencyBase<any>[]>;
   currEvaluation: any;
   public oneAtATime: boolean = true;
@@ -47,7 +49,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   DirectReporteeScoreCard: any;
   currentEmpId: any;
   currentAction: any;
-
+  showCompetencySubmitForManager:Boolean=true;
   @ViewChild('evTabset') tabset: TabsetComponent;
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -69,7 +71,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
        this.currentEmpId = params['empId'];
        this.currentAction = params['action'];
        this.seletedTabRole = params['actor'];
-  debugger
+  
        this.GetEmployeeDetailsById();
        
 
@@ -137,11 +139,9 @@ goto(selTab){
   /**To GET ALL  tabs data */
   getTabsData() {
     forkJoin(
-      this.getCurrentEvaluationDetails().pipe(catchError(error => of({ error: error, isError: true })))
-      //this.getTSKPIs().pipe(catchError(error => of({ error: error, isError: true }))),
-      //this.getCompetencyQuestionsList().pipe(catchError(error => of({ error: error, isError: true })))
+      this.getCurrentEvaluationDetails().pipe(catchError(error => of({ error: error, isError: true })))      
     ).subscribe(([res1]) => {
-      debugger
+      
       if (res1 && !res1.isError) {
 
         this.evaluationForm = res1;
@@ -150,6 +150,7 @@ goto(selTab){
           
           // this.setCompetencies();
           this.prepareCompetencyQuestions();
+          this.prepareCompetencyQuestionsByManager();
           console.log('the evauation form', this.evaluationForm)
         }
         if (res1.FinalRating) {
@@ -173,7 +174,7 @@ goto(selTab){
           this.FinalRatingForm.controls["ManagerReqRevision"].setValue(res1.FinalRating.Manager.ReqRevision)
 
 
-          debugger
+          
           this.FinalRatingForm.controls["ThirdSignatoryComments"].setValue(res1.FinalRating.ThirdSignatory.YearEndComments)
           this.FinalRatingForm.controls["ThirdSignatoryRevComments"].setValue(res1.FinalRating.ThirdSignatory.RevComments)
           this.FinalRatingForm.controls["TSReqRevision"].setValue(res1.FinalRating.ThirdSignatory.ReqRevision)
@@ -249,6 +250,7 @@ goto(selTab){
       OverallRating: ['', [Validators.required]],
       IsDraft: [true]
     })
+    
 
   }
   initFinalRatingForm() {
@@ -294,9 +296,10 @@ goto(selTab){
 
   }
   competencyQuestionsList = [];
+  managerCompetencyQuestionsList=[];
   prepareCompetencyQuestions() {
     var questions: CompetencyBase<string>[] = [];
-debugger
+
     this.selfCompetencyForm.controls["OverallComments"].setValue( this.evaluationForm.Competencies.Employee.CompetencyComments,),
     this.selfCompetencyForm.controls["OverallRating"].setValue( this.evaluationForm.Competencies.Employee.CompetencyOverallRating),
     this.selfCompetencyForm.controls["IsDraft"].setValue(!this.evaluationForm.Competencies.Employee.CompetencySubmitted)
@@ -323,9 +326,40 @@ debugger
         Questions: questions,
         form: this.qcs.toFormGroup(questions),
         comments:element.Comments,
-        OverallComments: this.evaluationForm.Competencies.Employee.CompetencyComments,
-        OverallRating: this.evaluationForm.Competencies.Employee.OverallRating,
-        IsDraft: !this.evaluationForm.Competencies.Employee.CompetencySubmitted
+        CompetencyAvgRating:element.CompetencyAvgRating
+      })
+
+    });
+
+  }
+  prepareCompetencyQuestionsByManager() {
+    var questions: CompetencyBase<string>[] = [];
+    debugger
+    this.managerCompetencyList = this.evaluationForm.ManagerCompetencies.Manager.Competencies;
+    this.showCompetencySubmitForManager=!this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted;
+   // console.log('this.managerCompetencyForm.value', this.managerCompetencyForm.value)
+    this.managerCompetencyList.forEach(element => {
+      questions = [];
+      element.Questions.forEach(q => {
+        questions.push(new QuestionBase({
+          key: q._id,
+          label: q.Question,
+          options: q.Rating,
+          order: 1,
+          required: true,
+          value: q.SelectedRating
+        }))
+
+      });
+
+      this.managerCompetencyQuestionsList.push({
+        CompetenyName: element.Competency.Name,
+        CompetencyId: element.Competency._id,
+        CompetencyRowId: element._id,
+        Questions: questions,
+        form: this.qcs.toFormGroup(questions),
+        comments:element.Comments,
+        CompetencyAvgRating:element.CompetencyAvgRating
       })
 
     });
@@ -334,23 +368,26 @@ debugger
   cancelCompetencyRating() {
 
   }
-  saveSelfCompetencyFormAsDraft() {
-    this.saveSelfCompetencyForm(true)
+  saveManagerCompetencyFormAsDraft() {
+    this.saveManagerCompetencyForm(true)
   }
-  submitSelfCompetencyForm() {
-    this.saveSelfCompetencyForm(false)
+  submitManagerCompetencyForm() {
+    this.saveManagerCompetencyForm(false)
   }
-  saveSelfCompetencyForm(isDraft) {
+  saveManagerCompetencyForm(isDraft) {
     //selfCompetencyForm
     const competencyQA: any = {}
     competencyQA.QnA = []
     let isvalid = true;
-    this.competencyQuestionsList.forEach(element => {
+    this.managerCompetencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
+      var _lastitem = _qna.pop();
       if (_qna && _qna.length > 0) {
+        var _avgScore = this.getAverage(_qna.map(x => x[1]));
         _qna.forEach(q => {
-          competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1] })
+          competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1], Comments: _lastitem ? _lastitem[1] : "", CompetencyAvgRating: _avgScore })
         });
+       
       } else {
         if (!isDraft) {
           isvalid = false;
@@ -362,14 +399,16 @@ debugger
       this.snack.error('Please provide rating to all question(s) in each competency')
       return;
     }
+    debugger
     competencyQA.Comments = this.selfCompetencyForm.value.OverallComments;
     competencyQA.OverallRating = this.selfCompetencyForm.value.OverallRating;
-    competencyQA.EvaluationId = this.evaluationForm.Competencies._id;
+    competencyQA.EvaluationId = this.evaluationForm.Competencies.EvaluationId;
     competencyQA.EmployeeId = this.selectedUser._id;
     competencyQA.IsDraft = isDraft;
+    this.showCompetencySubmitForManager=isDraft;
     console.log('QnA', competencyQA);
     this.perfApp.route = "app";
-    this.perfApp.method = "SaveCompetencyQnA",
+    this.perfApp.method = "SaveCompetencyQnAByManager",
       this.perfApp.requestBody = competencyQA;// { TsId: this.loginUser._id }
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
@@ -393,7 +432,7 @@ if (this.FinalRatingForm.value.TSReqRevision &&
     this.saveFinalRating(true)
   }
   saveFinalRating(isDraft) {
-    debugger
+    
     let reqRev=this.FinalRatingForm.value.ManagerRevComments;
     this.perfApp.route = "app";
     this.perfApp.method = "SaveManagerFinalRating",
@@ -409,6 +448,12 @@ if (this.FinalRatingForm.value.TSReqRevision &&
         IsDraft: isDraft,
         SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
       };
+      if(!isDraft){
+        if (!this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted) {
+          this.snack.error('Competencies Rating should be Submitted')
+          return;
+        }
+      }
     console.log('final rating form', this.perfApp.requestBody)
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
@@ -484,6 +529,18 @@ if (this.FinalRatingForm.value.TSReqRevision &&
   }
   cancelFinalRating() {
 
+  }
+  getAverage(arr) {
+    
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+      sum += parseInt(arr[i], 10); //don't forget to add the base
+    }
+
+    var avg = sum / arr.length;
+    // const average= arr.reduce((p, c) => p + c, 0) / arr.length;
+    console.log('avarage score :', avg);
+    return avg;
   }
 }
 
