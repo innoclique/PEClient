@@ -1,41 +1,171 @@
 <div class="animated fadeIn">
+  <div class="row">
+      <div class="col-md-12" >
+          <div class="card">
+              <div   class="card-header">
+                  Strength
+
+                  <div class="form-group form-actions pull-right m-0">
+                      <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                      (click)="navToStrengthList()" >Back to list </button>  
+
+                  </div>
+                  
+              </div>
+              <div class="card-body">
 
 
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-header">
-             Strengths  
-                     </div>
-          <div class="card-body">
-            <tabset #staticTabs class="pro-tabs">
-              <tab>
+                  <form [formGroup]="strengthBuildForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
+                   class="ng-untouched ng-pristine ng-valid">
+
+
+                   <div class="form-group row">
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text redStar">Strength</span>
+                              </div>
+                              <input max="500" maxlength="500" class="form-control" type="text"
+                                  [ngClass]="{ 'is-invalid': (f.Strength.touched || submitClicked)  &&  f.Strength.invalid }"
+                                  formControlName="Strength" name="Strength" required
+                                  [matAutocomplete]="devGoalsAuto">
+
+                                  <mat-autocomplete #devGoalsAuto="matAutocomplete" (optionSelected)="onStrengthAutoSelected($event)" [displayWith]="displayDevGoalFn" >
+                                      <mat-option *ngFor="let option of filteredOptionsDevGoals | async" [value]="option">
+                                        {{option.Strength}}
+                                      </mat-option>
+                                     </mat-autocomplete>
+
+                              <div *ngIf=" (f.Strength.touched || submitClicked) && f.Strength.invalid" class="invalid-feedback">
+                                <div *ngIf="f.Strength?.errors.required">Please provide Strength.</div>
+                                 
+                                  <div *ngIf="f.Strength.errors.hasKPISplChars">Allowed special characters are
+                                      (.,-,(,),&,#,:,/,?) </div>
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+                  
+
+                </div>
+
+                <div   class="invitation_model_in_table table-responsive p-15">
+                  <table *ngIf="currentAction != 'view'"  class="table table-bordered table-striped" style="margin-bottom: -2px;">
+                     <thead>
+                      <tr>
+                        <th class="redStar">How To Leverage</th>
+                        <th class="redStar">Benefit (Self)</th>
+                        <th class="redStar">Benefit (team)</th>
+                        <th>Progress Comments</th>
+                        <th>Manager Comments</th>
+                      </tr>
+                    </thead> 
+                    <tbody>
+                      <tr>
+                        <td class="invitation_model_search">
+                          <div class="form-group">
+                            <div class="input-group">
+                                <input max="500" maxlength="500" class="form-control" type="text"
+                                
+                                    [ngClass]="{ 'is-invalid': (f.Leverage.touched || submitClicked)  &&  f.Leverage.invalid }"
+                                    formControlName="Leverage" name="Leverage" required>
+  
+                                <div *ngIf=" (f.Leverage.touched || submitClicked) && f.Leverage.invalid" class="invalid-feedback">
+                                  <div *ngIf="f.Leverage?.errors.required">Please provide Leverage.</div>
+                                    <div *ngIf="f.Leverage.errors.hasKPISplChars">Allowed special characters are
+                                        (.,-,(,),&,#,:,/,?) </div>
+                                </div>
+  
+                            </div>
+                        </div>
+                        </td>
+                          <td class="invitation_model_search">
+                            <div class="form-group">
+                              <div class="input-group">
+                                  
+                                  <input max="500" maxlength="500" class="form-control" type="text"
+                                  
+                                      [ngClass]="{ 'is-invalid': (f.SelfBenifit.touched || submitClicked)  &&  f.SelfBenifit.invalid }"
+                                      formControlName="SelfBenifit" name="SelfBenifit" required >
     
-                <ng-template tabHeading><i class="icon-layers"></i> My Strengths</ng-template>
-               
-              </tab>
-              <tab >
+                                  <div *ngIf=" (f.SelfBenifit.touched || submitClicked) && f.SelfBenifit.invalid" class="invalid-feedback">
+                                    <div *ngIf="f.SelfBenifit?.errors.required">Please provide SelfBenifit.</div>
+                                     
+                                      <div *ngIf="f.SelfBenifit.errors.hasKPISplChars">Allowed special characters are
+                                          (.,-,(,),&,#,:,/,?) </div>
+                                  </div>
     
-                <ng-template tabHeading><i class="icon-hand-rock"></i>Manager Strengths Review</ng-template>
-               
-              </tab>
-              <tab >
-    
-                <ng-template tabHeading><i class="icon-hand-rock"></i>TS Strengths Review</ng-template>
-               
-              </tab>
-              <tab >
-    
-                <ng-template tabHeading><i class="icon-hand-rock"></i>Pears Strengths Review</ng-template>
-               
-              </tab>
-              
-            </tabset>
-            
+                              </div>
+                          </div>
+                        </td>
+                        <td class="invitation_model_search">
+                          <div class="form-group">
+                            <div class="input-group">
+                                
+                                <input max="500" maxlength="500" class="form-control" type="text"
+                                
+                                    [ngClass]="{ 'is-invalid': (f.TeamBenifit.touched || submitClicked)  &&  f.TeamBenifit.invalid }"
+                                    formControlName="TeamBenifit" name="TeamBenifit" required >
+  
+                                    
+  
+                                <div *ngIf=" (f.TeamBenifit.touched || submitClicked) && f.TeamBenifit.invalid" class="invalid-feedback">
+                                  <div *ngIf="f.TeamBenifit?.errors.required">Please provide TeamBenifit.</div>
+                                   
+                                    <div *ngIf="f.TeamBenifit.errors.hasKPISplChars">Allowed special characters are
+                                        (.,-,(,),&,#,:,/,?) </div>
+                                </div>
+  
+                            </div>
+                        </div>
+                          
+                        </td>
+                        <td class="invitation_model_search">
+                          <input  max="1000" maxlength="1000" formControlName="ProgressComments"      placeholder=""                class=" form-control">
+                          
+                        </td>
+                        <td class="invitation_model_search">
+                          <input  max="1000" maxlength="1000" formControlName="ManagerComments"      placeholder=""                class=" form-control">
+                          
+                        </td>
+                        
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                </div> 
+
+
+
+                <div class="form-group form-actions pull-right mt-2">
+                  <button class="btn btn-sm btn-primary" (click)="navToGoalsList()" >Cancel</button>
+
+                  <button  class="btn btn-sm btn-primary" (click)="draftStrength()" >Save</button>
+                
+                  <button  class="btn btn-sm btn-primary" (click)="submitGoal()" >{{currentAction=='edit'? 
+                      f.IsDraft?.value=='true' ? 'Submit': 'Update'
+                       :'Submit' }}</button>
+
+                  <!-- <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
+                </div>
+  
+                <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+
+
+
+                  </form>
+
+                </div>
+              </div>
+  
           </div>
-        </div>
+          <ng-template class="col-md-12"  #noRecordsFound>
+            <h3>No Devlopment Goals Found</h3>
+        </ng-template>
       </div>
-      <!--/.col-->
-    </div>
-    <!--/.row-->
   </div>
+
+

@@ -8,7 +8,7 @@
              My Action Plan  
              <div class="form-group form-actions pull-right m-0">
                 <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="openDevGoalForm()">&#x271A; Developmental Goals</button>
-                <button disabled class="btn btn-sm btn-primary" data-toggle="modal" (click)="openStrengthsForm()">&#x271A; Strengths</button>
+                <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="openStrengthsForm()">&#x271A; Strengths</button>
               </div>
 
                      </div>
@@ -31,8 +31,17 @@
               </tab>
               <tab >
     
-                <ng-template tabHeading><i class="icon-hand-rock"></i>Strengths</ng-template>
+                <ng-template tabHeading><i class="icon-layers"></i>Strengths</ng-template>
+                <ag-grid-angular style="width: auto; height: 350px;" class="ag-theme-alpine" 
+                            
+                [rowData]="strengthRecords"
+                [gridOptions]="strengthItemColumns"
+                [pagination]="true"
+                [paginationPageSize]="10"
                
+                (rowClicked)="onStrengthGridRowClick($event)"
+                >
+                </ag-grid-angular>
               </tab>
               
             </tabset>
