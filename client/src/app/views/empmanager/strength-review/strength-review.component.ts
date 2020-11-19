@@ -1,3 +1,4 @@
+
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -5,23 +6,29 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-import { AlertDialog } from '../../Models/AlertDialog';
-import { AuthService } from '../../services/auth.service';
-import { NotificationService } from '../../services/notification.service';
-import { PerfAppService } from '../../services/perf-app.service';
-import { ThemeService } from '../../services/theme.service';
-import { AlertComponent } from '../../shared/alert/alert.component';
-import { Constants } from '../../shared/AppConstants';
-import { CustomValidators } from '../../shared/custom-validators';
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../services/notification.service';
+import { PerfAppService } from '../../../services/perf-app.service';
+import { ThemeService } from '../../../services/theme.service';
+import { Constants } from '../../../shared/AppConstants';
+import { CustomValidators } from '../../../shared/custom-validators';
 
 @Component({
-  selector: 'app-strengths',
-  templateUrl: './strengths.component.html',
-  styleUrls: ['./strengths.component.css']
+  selector: 'app-strength-review',
+  templateUrl: './strength-review.component.html',
+  styleUrls: ['./strength-review.component.css']
 })
-export class StrengthsComponent implements OnInit {
+export class StrengthReviewComponent implements OnInit {
 
-  
+  @Input()
+  actor:any;
+  @Input()
+  accessingFrom:any;
+  showDevGoalForm=true;
+  currentDevGoalId: any;
+  currentEmpId: any;
+  selIndex: any;
 
   public alert: AlertDialog;
   goalsItemRows = [];
@@ -29,8 +36,7 @@ export class StrengthsComponent implements OnInit {
   strengthBuildForm: FormGroup;
   @Input()
   currentAction='create'
-  @Input()
-accessingFrom:any;
+
   goalDetails: any = { MakePrivate:false}
 
   filteredOptionsOP: Observable<any[]>;
@@ -48,8 +54,7 @@ accessingFrom:any;
   public empDevGoalsData: any[] = []
   currEvaluation: any;
   submitClicked=false;
-  currentDevGoalId: any;
-  selIndex: number;
+
   currentRowItem: any;
   currentOrganization: any={};
   showDevGoalsForm=true;
@@ -69,18 +74,25 @@ accessingFrom:any;
     this.loginUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     
-    this.getAllStrengthDetails();
+   
+    
+   
     
     this.activatedRoute.params.subscribe(params => {
-      if (params['action']) {
-       this.currentDevGoalId = params['id'];
-       this.currentAction = params['action'];
-      }
-      
-     });   
+      debugger
+       if (params['action']) {
+        this.currentDevGoalId = params['id'];
+        this.currentEmpId = params['empId'];
+        this.currentAction = params['action'];
+       }
+       
+      });   
+
    }
 
   ngOnInit(): void {
+
+    this.getAllStrengthDetails();
 
 this.initStrengthGoalForm();
 this.alert = new AlertDialog();
@@ -91,32 +103,17 @@ this.alert = new AlertDialog();
 
     this.strengthBuildForm = this.formBuilder.group({
       
-      Strength: [this.goalDetails && this.currentAction!='create' ? this.goalDetails :'', 
-       Validators.compose([
-        Validators.required,
+      Strength: [this.goalDetails && this.currentAction!='create' ? this.goalDetails :'',  Validators.compose([
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
       ])],
-        Leverage: ['',
-        Validators.compose([
-          Validators.required,
-          CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
-        ]) ],
-        SelfBenifit: ['',
-        Validators.compose([
-          Validators.required,
-          CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
-        ]) ],
-        TeamBenifit: ['',
-        Validators.compose([
-          Validators.required,
-          CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
-        ]) ],
-        ProgressComments: ['',
-        Validators.compose([
-          CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
-        ])],
+        Leverage: ['',[Validators.required]],
+        SelfBenifit: ['',[Validators.required]],
+        TeamBenifit: ['',[Validators.required]],
+        ProgressComments: ['',[Validators.required]],
         ManagerComments: [''],
-        IsDraft: ['false'],
+        IsDraft: [this.goalDetails.IsDraft ? 'true' : 'false'],
+        IsDraftByManager: [this.goalDetails.IsDraftByManager ? 'true' : 'false'],
+        ManagerFTSubmitedOn: [this.goalDetails.ManagerFTSubmitedOn?this.goalDetails.ManagerFTSubmitedOn:"" ],
         IsStrengthSubmited: ['false'],
     })
     
@@ -139,7 +136,7 @@ onStrengthAutoSelected(event) {
   var strength = event.option.value;
   console.log("strength: "+JSON.stringify(strength));
 
- // this.strengthId = strength._id;
+  this.strengthId = strength._id;
    this.strengthBuildForm.patchValue({
      Strength: strength.Strength,
      Leverage: strength.Leverage,
@@ -165,7 +162,7 @@ private _filterDevGoals(name: string): any[] {
 getAllStrengthDetails() {
   this.perfApp.route = "app";
   this.perfApp.method = "GetAllStrengths",
-    this.perfApp.requestBody = { 'empId': this.loginUser._id,
+    this.perfApp.requestBody = { 'empId': this.currentEmpId,
     'fetchAll':true,'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
     if (c && c.length > 0) {
@@ -228,34 +225,23 @@ getAllStrengthDetails() {
 
 
 navToStrengthList() {
-  this.router.navigate(['employee/action-plan',{'activeTab':1}]);
+  this.router.navigate(['employee/review-evaluation-list']);
 }
-
 
 submitGoal() {
 
-  if (!this.strengthBuildForm.valid) {
-    this.strengthBuildForm.markAllAsTouched();
-    return;
-  }
-   this.strengthBuildForm.patchValue({ IsDraft: 'false' });
+  // if (!this.strengthBuildForm.valid) {
+  //   return;
+  // }
+   this.strengthBuildForm.patchValue({ IsDraftByManager: 'false' });
    this.strengthBuildForm.patchValue({ IsStrengthSubmited: 'true' });
-
-   if (this.currentAction=='create') {
-    this.openConfirmSubmitDialog();
-  
-  }else  {
-    this.saveStrength();
-  }
-
-
-  
+  this.saveStrength();
 }
 
 
 draftStrength(){
   console.log("inside:draftStrength");
-  this.strengthBuildForm.patchValue({ IsDraft: 'true' });
+  this.strengthBuildForm.patchValue({ IsDraftByManager: 'true' });
   this.saveStrength();
 }
 
@@ -268,17 +254,24 @@ return
 }
 
   this.perfApp.route = "app";
-  this.perfApp.method = this.currentAction == 'create' ? "AddStrength" : "AddStrength";
- this.perfApp.requestBody = this.strengthBuildForm.value; //fill body object with form 
+  this.perfApp.method = 'UpdateStrengthById' ;
+  this.perfApp.requestBody = {};
   if(this.strengthId){
     this.perfApp.requestBody.StrengthId=this.strengthId;
   }
-  //this.perfApp.requestBody.Kpi = this.perfApp.requestBody.Kpi?  this.perfApp.requestBody.Kpi._id :null;
-  //this.perfApp.requestBody.GoalActionItems = this.goalsItemRows.length>0? this.goalsItemRows :null;
-  //this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
-  this.perfApp.requestBody.Employee = this.loginUser._id;
-   this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id; 
-   this.perfApp.requestBody.Owner = this.loginUser._id;
+
+
+  this.perfApp.requestBody.ManagerComments = this.strengthBuildForm.get('ManagerComments').value ;
+  this.perfApp.requestBody.IsDraftByManager = this.strengthBuildForm.get('IsDraftByManager').value ;
+  this.perfApp.requestBody.IsManaFTSubmited = this.strengthBuildForm.get('ManagerFTSubmitedOn').value ? false:true;
+ 
+
+  
+  this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+  this.perfApp.requestBody.empId = this.currentEmpId;
+  this.perfApp.requestBody.Action = 'Review';
+
+
   console.log(this.perfApp.requestBody)
   this.callStregnthApi();
   
@@ -296,7 +289,9 @@ callStregnthApi() {
 
       this.snack.success(this.translate.instant(` Strength has been ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)} successfully`       ));
 
-      this.router.navigate(['employee/action-plan',{'activeTab':1}]);
+  this.router.navigate(['employee/review-evaluation-list']);
+     
+
     }
 
   }, error => {
@@ -309,62 +304,32 @@ callStregnthApi() {
 
 
 
+nextKpi(){
 
-   /**To alert user for submit */
-   openConfirmSubmitDialog() {
-    this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to submit the action plan?";
-    this.alert.ShowCancelButton = true;
-    this.alert.ShowConfirmButton = true;
-    this.alert.CancelButtonText = "Cancel";
-    this.alert.ConfirmButtonText = "Continue";
-  
-  
-    const dialogConfig = new MatDialogConfig()
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = this.alert;
-    dialogConfig.height = "300px";
-    dialogConfig.maxWidth = '40%';
-    dialogConfig.minWidth = '40%';
-  
-  
-    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(resp => {
-     if (resp=='yes') {
-      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
-      this.saveStrength();
-     } else {
-     // this.resetGoalsActionItemsForm()
-     }
-    })
-  }
+  this.selIndex=this.selIndex+1;
+   this.goalDetails=  this.empDevGoalsData[this.selIndex];
+  // this.initStrengthGoalForm();
+  let event={option:{value:{}}};
+   event.option.value=this.goalDetails;
+
+   this.onStrengthAutoSelected(event);
+   this.currentDevGoalId=this.goalDetails._id;
+ }
+
+ priKpi(){
+
+   this.selIndex=this.selIndex-1;
+   this.goalDetails=  this.empDevGoalsData[this.selIndex];
+  // this.initStrengthGoalForm();
+   let event={option:{value:{}}};
+   event.option.value=this.goalDetails;
+
+   this.onStrengthAutoSelected(event);
+   this.currentDevGoalId=this.goalDetails._id;
+ }
 
 
 
-  nextKpi(){
-
-    this.selIndex=this.selIndex+1;
-     this.goalDetails=  this.empDevGoalsData[this.selIndex];
-    // this.initStrengthGoalForm();
-    let event={option:{value:{}}};
-     event.option.value=this.goalDetails;
-  
-     this.onStrengthAutoSelected(event);
-     this.currentDevGoalId=this.goalDetails._id;
-   }
-  
-   priKpi(){
-  
-     this.selIndex=this.selIndex-1;
-     this.goalDetails=  this.empDevGoalsData[this.selIndex];
-    // this.initStrengthGoalForm();
-     let event={option:{value:{}}};
-     event.option.value=this.goalDetails;
-  
-     this.onStrengthAutoSelected(event);
-     this.currentDevGoalId=this.goalDetails._id;
-   }
 
   resetGoalsActionItemsForm() {
     let temp=this.goalsActionItemsForm.value
@@ -406,3 +371,4 @@ callStregnthApi() {
 
 
 }
+

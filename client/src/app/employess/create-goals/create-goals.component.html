@@ -43,8 +43,7 @@
                                 <div *ngIf="f.DevGoal?.errors.required">Please provide Developmental Goal.</div>
                                   <div *ngIf="f.DevGoal.errors.minlength">Performance Goal Name must be at least 2
                                       characters </div>
-                                  <div *ngIf="f.DevGoal.errors.hasKPISplChars">Allowed special characters are
-                                      (.,-,(,),&,#,:,/,?) </div>
+                                  <div *ngIf="f.DevGoal.errors.hasKPISplChars">Developmental Goal can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/</div>
                               </div>
 
                           </div>
@@ -93,7 +92,7 @@
                           <div *ngIf="(f.DesiredOutcomes?.touched || submitClicked) && f.DesiredOutcomes?.errors" class="invalid-feedback">
                             <div *ngIf="f.DesiredOutcomes?.errors.required">Desired Outcome is mandatory.</div>
                             <div *ngIf="f.DesiredOutcomes.errors.minlength">Desired Outcome  must be at least 2 characters </div>
-                            <div *ngIf="f.DesiredOutcomes.errors.hasKPISplChars">Allowed special characters are (.,-,(,),&,#,:,/,?) </div>
+                            <div *ngIf="f.DesiredOutcomes.errors.hasKPISplChars">Desired Outcomes can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/</div>
                           </div>
   
                         
@@ -101,6 +100,28 @@
                         </div>
                       </div>
                 </div>
+
+                <div class="col-md-6" *ngIf="f.ManagerComments?.value">
+                  <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Manager's Comments</span>
+                        </div>
+                        <textarea maxlength="2000" class="form-control "  cols="" rows="2" readonly
+                        [ngClass]="{ 'is-invalid': (f.ManagerComments?.touched || submitClicked) &&  f.ManagerComments.invalid }"
+                        formControlName="ManagerComments"  name="ManagerComments"  >  </textarea>
+
+                        <div *ngIf="(f.ManagerComments?.touched || submitClicked) && f.ManagerComments?.errors" class="invalid-feedback">
+                          <div *ngIf="f.ManagerComments?.errors.required">Manager's Comments is mandatory.</div>
+                          <div *ngIf="f.ManagerComments.errors.minlength">Manager's Comments must be at least 2 characters </div>
+                          <div *ngIf="f.ManagerComments.errors.hasKPISplChars">Allowed special characters are (.,-,(,),&,#,:,/,?) </div>
+                        </div>
+
+                      
+
+                      </div>
+                    </div>
+              </div>
 
                 <!-- <div class="col-md-4">
                   <div class="form-group">
@@ -144,7 +165,7 @@
                           <div *ngIf="rowItemSubmitted && k.ActionStep?.errors" class="invalid-feedback">
                             <div *ngIf="k.ActionStep?.errors.required">Action Steps is mandatory.</div>
                             <div *ngIf="k.ActionStep?.errors.minlength">Desired Outcome  must be at least 2 characters </div>
-                            <div *ngIf="k.ActionStep?.errors.hasKPISplChars">Allowed special characters are (.,-,(,),&,#,:,/,?) </div>
+                            <div *ngIf="k.ActionStep?.errors.hasKPISplChars">Action Steps can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/ </div>
                           </div>
                         </td>
                           <td class="invitation_model_search">
@@ -155,7 +176,7 @@
                           <div *ngIf="rowItemSubmitted && k.ProgressIndicators?.errors" class="invalid-feedback">
                             <div *ngIf="k.ProgressIndicators?.errors.required">Progress Indicators is mandatory.</div>
                             <div *ngIf="k.ProgressIndicators?.errors.minlength">Desired Outcome  must be at least 2 characters </div>
-                            <div *ngIf="k.ProgressIndicators?.errors.hasKPISplChars">Allowed special characters are (.,-,(,),&,#,:,/,?) </div>
+                            <div *ngIf="k.ProgressIndicators?.errors.hasKPISplChars">Progress Indicators can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/ </div>
                           </div>
                         </td>
                         <td class="invitation_model_search">

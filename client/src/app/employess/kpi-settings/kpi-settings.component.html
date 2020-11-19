@@ -357,10 +357,10 @@
                         <div *ngIf="currentAction != 'view'" class="form-group form-actions pull-right">
                             <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>
                             <button *ngIf="f?.IsDraft.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftKpi()" >Save</button>
-                            <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 
+                            <button  class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 
                                 f.IsDraft.value=='true' ? 'Create': 'Update'
                                  :'Create' }}</button>
-                            <!-- <button *ngIf="!kpiDetails?.IsSubmitedKPIs" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
+                            <!-- [disabled]="!kpiForm.valid" <button *ngIf="!kpiDetails?.IsSubmitedKPIs" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
                           </div>
             
                           <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>

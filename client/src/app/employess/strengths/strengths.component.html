@@ -32,7 +32,7 @@
                                   formControlName="Strength" name="Strength" required
                                   [matAutocomplete]="devGoalsAuto">
 
-                                  <mat-autocomplete #devGoalsAuto="matAutocomplete" (optionSelected)="onStrengthAutoSelected($event)" [displayWith]="displayDevGoalFn" >
+                                  <mat-autocomplete #devGoalsAuto="matAutocomplete" (optionSelected)="onStrengthAutoSelected($event)" >
                                       <mat-option *ngFor="let option of filteredOptionsDevGoals | async" [value]="option">
                                         {{option.Strength}}
                                       </mat-option>
@@ -41,8 +41,7 @@
                               <div *ngIf=" (f.Strength.touched || submitClicked) && f.Strength.invalid" class="invalid-feedback">
                                 <div *ngIf="f.Strength?.errors.required">Please provide Strength.</div>
                                  
-                                  <div *ngIf="f.Strength.errors.hasKPISplChars">Allowed special characters are
-                                      (.,-,(,),&,#,:,/,?) </div>
+                                  <div *ngIf="f.Strength.errors.hasKPISplChars">Strength can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/</div>
                               </div>
 
                           </div>
@@ -60,7 +59,7 @@
                         <th class="redStar">Benefit (Self)</th>
                         <th class="redStar">Benefit (team)</th>
                         <th>Progress Comments</th>
-                        <th>Manager Comments</th>
+                        <th *ngIf="f.ManagerComments.value" >Manager Comments</th>
                       </tr>
                     </thead> 
                     <tbody>
@@ -68,15 +67,14 @@
                         <td class="invitation_model_search">
                           <div class="form-group">
                             <div class="input-group">
-                                <input max="500" maxlength="500" class="form-control" type="text"
+                                <input max="1000" maxlength="1000" class="form-control" type="text"
                                 
                                     [ngClass]="{ 'is-invalid': (f.Leverage.touched || submitClicked)  &&  f.Leverage.invalid }"
                                     formControlName="Leverage" name="Leverage" required>
   
                                 <div *ngIf=" (f.Leverage.touched || submitClicked) && f.Leverage.invalid" class="invalid-feedback">
-                                  <div *ngIf="f.Leverage?.errors.required">Please provide Leverage.</div>
-                                    <div *ngIf="f.Leverage.errors.hasKPISplChars">Allowed special characters are
-                                        (.,-,(,),&,#,:,/,?) </div>
+                                  <div *ngIf="f.Leverage?.errors.required">How to Leverage is mandatory.</div>
+                                    <div *ngIf="f.Leverage.errors.hasKPISplChars">How to Leverage can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/</div>
                                 </div>
   
                             </div>
@@ -86,16 +84,15 @@
                             <div class="form-group">
                               <div class="input-group">
                                   
-                                  <input max="500" maxlength="500" class="form-control" type="text"
+                                  <input max="1000" maxlength="1000" class="form-control" type="text"
                                   
                                       [ngClass]="{ 'is-invalid': (f.SelfBenifit.touched || submitClicked)  &&  f.SelfBenifit.invalid }"
                                       formControlName="SelfBenifit" name="SelfBenifit" required >
     
                                   <div *ngIf=" (f.SelfBenifit.touched || submitClicked) && f.SelfBenifit.invalid" class="invalid-feedback">
-                                    <div *ngIf="f.SelfBenifit?.errors.required">Please provide SelfBenifit.</div>
+                                    <div *ngIf="f.SelfBenifit?.errors.required">Benefit (self) is mandatory.</div>
                                      
-                                      <div *ngIf="f.SelfBenifit.errors.hasKPISplChars">Allowed special characters are
-                                          (.,-,(,),&,#,:,/,?) </div>
+                                      <div *ngIf="f.SelfBenifit.errors.hasKPISplChars"> Benefit (self) can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/ </div>
                                   </div>
     
                               </div>
@@ -105,7 +102,7 @@
                           <div class="form-group">
                             <div class="input-group">
                                 
-                                <input max="500" maxlength="500" class="form-control" type="text"
+                                <input max="1000" maxlength="1000" class="form-control" type="text"
                                 
                                     [ngClass]="{ 'is-invalid': (f.TeamBenifit.touched || submitClicked)  &&  f.TeamBenifit.invalid }"
                                     formControlName="TeamBenifit" name="TeamBenifit" required >
@@ -113,10 +110,9 @@
                                     
   
                                 <div *ngIf=" (f.TeamBenifit.touched || submitClicked) && f.TeamBenifit.invalid" class="invalid-feedback">
-                                  <div *ngIf="f.TeamBenifit?.errors.required">Please provide TeamBenifit.</div>
+                                  <div *ngIf="f.TeamBenifit?.errors.required">Benefit (team/org.) is mandatory.</div>
                                    
-                                    <div *ngIf="f.TeamBenifit.errors.hasKPISplChars">Allowed special characters are
-                                        (.,-,(,),&,#,:,/,?) </div>
+                                    <div *ngIf="f.TeamBenifit.errors.hasKPISplChars"> Benefit (team/org.) can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/ </div>
                                 </div>
   
                             </div>
@@ -125,10 +121,14 @@
                         </td>
                         <td class="invitation_model_search">
                           <input  max="1000" maxlength="1000" formControlName="ProgressComments"      placeholder=""                class=" form-control">
+                          <div *ngIf=" (f.ProgressComments.touched || submitClicked) && f.ProgressComments.invalid" class="invalid-feedback">
+                             
+                              <div *ngIf="f.ProgressComments.errors.hasKPISplChars"> Progress Comments can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/ </div>
+                          </div>
                           
                         </td>
-                        <td class="invitation_model_search">
-                          <input  max="1000" maxlength="1000" formControlName="ManagerComments"      placeholder=""                class=" form-control">
+                        <td *ngIf="f.ManagerComments.value" class="invitation_model_search">
+                          <input readonly  max="1000" maxlength="1000" formControlName="ManagerComments"      placeholder=""                class=" form-control ">
                           
                         </td>
                         
@@ -138,15 +138,18 @@
                   
                 </div> 
 
-
+                <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
+                  <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre Kpi</button>
+                  <button [disabled]='selIndex+1 == empDevGoalsData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next Kpi</button>
+                  
+                </div>
 
                 <div class="form-group form-actions pull-right mt-2">
-                  <button class="btn btn-sm btn-primary" (click)="navToGoalsList()" >Cancel</button>
-
-                  <button  class="btn btn-sm btn-primary" (click)="draftStrength()" >Save</button>
+                  <button class="btn btn-sm btn-primary" (click)="navToStrengthList()" >Cancel</button>
+                  <button  *ngIf="f?.IsDraft?.value==true || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftStrength()" >Save</button>
                 
                   <button  class="btn btn-sm btn-primary" (click)="submitGoal()" >{{currentAction=='edit'? 
-                      f.IsDraft?.value=='true' ? 'Submit': 'Update'
+                      f.IsDraft?.value==true ? 'Submit': 'Update'
                        :'Submit' }}</button>
 
                   <!-- <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->

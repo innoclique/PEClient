@@ -103,10 +103,10 @@ goto(selTab){
   if (selTab=='reviewKPI') {
     this.tabset.tabs[0].active = true;
   } else  if (selTab=='reviewGoals') {
-    this.tabset.tabs[2].active = true;
+    this.tabset.tabs[3].active = true;
   }
   else  if (selTab=='reviewEval') {
-    this.tabset.tabs[5].active = true;
+    this.tabset.tabs[7].active = true;
   }
 
   

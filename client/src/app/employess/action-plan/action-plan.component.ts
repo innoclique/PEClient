@@ -81,9 +81,9 @@ export class ActionPlanComponent implements OnInit {
         return data.data.IsDraft?'Yes':'No'
        }
       },
-       { headerName: 'Is Submited', field: 'IsSubmited', width: 150, sortable: true, filter: true ,
+       { headerName: 'Is Submited', field: 'IsGoalSubmited', width: 160, sortable: true, filter: true ,
        cellRenderer: (data) => {
-         return data.data.IsSubmited?'Yes':'No'
+         return data.data.IsGoalSubmited?'Yes':'No'
         }
       },
        {
@@ -107,26 +107,31 @@ export class ActionPlanComponent implements OnInit {
 
    getStrengthColDef(){
     return [
-       { headerName: 'Strength', field: 'Strength', width: 150, autoHeight: true ,
+       { headerName: 'Strength', field: 'Strength', width: 200, autoHeight: true ,
        cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
        }
       } ,
-       { headerName: 'Leverage', field: 'Leverage', width: 200, autoHeight: true },
-       { headerName: 'Team Benifit', field: 'TeamBenifit', width: 200, autoHeight: true },
-       { headerName: 'Self Benifit', field: 'SelfBenifit', width: 200, autoHeight: true },
+       { headerName: 'Leverage', field: 'Leverage', width: 150, autoHeight: true },
+       { headerName: 'Team Benefit', field: 'TeamBenifit', width: 150, autoHeight: true },
+       { headerName: 'Self Benefit', field: 'SelfBenifit', width: 120, autoHeight: true },
        
       { headerName: 'Is Draft', field: 'IsDraft', width: 120, sortable: true, filter: true ,
       cellRenderer: (data) => {
         return data.data.IsDraft?'Yes':'No'
        }
       },
+      { headerName: 'Is Submited', field: 'IsStrengthSubmited', width: 150, sortable: true, filter: true ,
+      cellRenderer: (data) => {
+        return data.data.IsStrengthSubmited?'Yes':'No'
+       }
+     },
        
        {
          headerName: "Action",
          suppressMenu: true,
          Sorting: false,
-         width: 120,
+         width: 110,
          template: `
          
          <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;

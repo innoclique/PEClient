@@ -157,6 +157,7 @@ export class KpiAddComponent implements OnInit {
   submitKpi() {
 
     if (!this.kpiForm.valid) {
+      this.kpiForm.markAllAsTouched();
       return;
     }
     else {
@@ -278,6 +279,8 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
 
         this.getMeasurementCriterias();
 this.snack.success(this.translate.instant(`KPI Created Successfully`));
+c.selected=false;
+this.toggleSelection(c);
         
       }
     })
@@ -446,8 +449,16 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
   onKpiAutoSelected(event) {
 
     var selkpi = event.option.value;
+    this.selectedItems=[]
+  this.filteredOptionsTS.forEach(e => {
+    e.map(m => {
+        m.selected = false;
+    })
+
+  });
 
     selkpi.MeasurementCriteria.forEach(e => {
+      e.measureId.selected=false;
       this.toggleSelection(e.measureId);
     });
 
@@ -473,6 +484,7 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
 
 
   showSelectedItems() {
+    this.msSelText="";
     this.kpiForm.patchValue({ MeasurementCriteria: '' });
      this.msSelText= this.selectedItems.map(m=>m.Name).join(', ')
      return this.msSelText;
@@ -491,6 +503,7 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
   }
 
   toggleSelection(item) {
+    let f=!item.selected;
     item.selected = !item.selected;
     if (item.selected) {
       this.selectedItems.push(item);
@@ -505,13 +518,15 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
       e.map(m => {
 
         if (m._id == item._id)
-          m.selected = item.selected;
+          m.selected = f;
       })
 
     });
 
     if (this.selectedItems.length > 0) {
+      this.kpiForm.get('MeasurementCriteria').reset();
       this.kpiForm.get('MeasurementCriteria').clearValidators();
+      this.kpiForm.get('MeasurementCriteria').setValue("");
     } else {
       this.kpiForm.controls['MeasurementCriteria'].setValidators([Validators.required])
     }

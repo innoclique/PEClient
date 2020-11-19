@@ -129,7 +129,7 @@ this.alert = new AlertDialog();
 
       ManagerComments: [this.goalDetails.ManagerComments ? this.goalDetails.ManagerComments :'', 
       Validators.compose([
-        Validators.required, Validators.minLength(2),
+        Validators.minLength(2),
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
       ])  ],
 

@@ -104,6 +104,11 @@ this.alert = new AlertDialog();
         Validators.required, Validators.minLength(2),
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
       ])  ],
+      ManagerComments: [this.goalDetails.ManagerComments ? this.goalDetails.ManagerComments :'', 
+      Validators.compose([
+        Validators.minLength(2),
+        CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
+      ])  ],
       DevGoal: [this.goalDetails && this.currentAction!='create' ? this.goalDetails :'',  Validators.compose([
         Validators.required, Validators.minLength(2),
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
@@ -157,15 +162,55 @@ get k (){
 
   getColDef(){
  return [
-    { headerName: 'Action Step', field: 'ActionStep', width: 160, autoHeight: true },
-    { headerName: 'Progress Indicators', field: 'ProgressIndicators', width: 190, autoHeight: true },
+    { headerName: 'Action Step',
+     headerComponentParams: {
+      menuIcon: 'fa-bars',
+      template:
+          '<div class="ag-cell-label-container" role="presentation">' +
+          '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+          '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+          '  <span ref="eText" class="ag-header-cell-text" role="columnheader"></span> <span class="redStar"></span>' +
+          '  </div>' +
+          '</div>'
+  }, field: 'ActionStep', width: 160, autoHeight: true },
+    { headerName: 'Progress Indicators',
+    headerComponentParams: {
+      menuIcon: 'fa-bars',
+      template:
+          '<div class="ag-cell-label-container" role="presentation">' +
+          '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+          '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+          '  <span ref="eText" class="ag-header-cell-text" role="columnheader"></span> <span class="redStar"></span>' +
+          '  </div>' +
+          '</div>'
+  }, field: 'ProgressIndicators', width: 190, autoHeight: true },
     { headerName: 'Barriers', field: 'Barriers', width: 160, autoHeight: true },
-    { headerName: 'Target Date', field: 'TargetDate', width: 150, autoHeight: true ,
+    { headerName: 'Target Date',
+    headerComponentParams: {
+      menuIcon: 'fa-bars',
+      template:
+          '<div class="ag-cell-label-container" role="presentation">' +
+          '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+          '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+          '  <span ref="eText" class="ag-header-cell-text" role="columnheader"></span> <span class="redStar"></span>' +
+          '  </div>' +
+          '</div>'
+  }, field: 'TargetDate', width: 150, autoHeight: true ,
     cellRenderer: (data) => { return new DatePipe('en-US').transform(data.data.TargetDate, 'MM-dd-yyyy')}
     
   },
     { headerName: 'Other Participants', field: 'OtherParticipants', width: 170, autoHeight: true },
-    { headerName: 'Status', field: 'Status', width: 120, autoHeight: true },
+    { headerName: 'Status',
+    headerComponentParams: {
+      menuIcon: 'fa-bars',
+      template:
+          '<div class="ag-cell-label-container" role="presentation">' +
+          '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+          '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+          '  <span ref="eText" class="ag-header-cell-text" role="columnheader"></span> <span class="redStar"></span>' +
+          '  </div>' +
+          '</div>'
+  }, field: 'Status', width: 120, autoHeight: true },
     {
       headerName: "Action",
       suppressMenu: true,

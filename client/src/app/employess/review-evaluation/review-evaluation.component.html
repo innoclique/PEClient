@@ -66,6 +66,13 @@
                                 <app-devgoal-review [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole ></app-devgoal-review>
   
                             </tab>
+
+                            <tab>
+                                <ng-template tabHeading><i class="icon-hand-rock"></i>Strengths
+                                </ng-template>
+                                <app-strength-review [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole ></app-strength-review>
+  
+                            </tab>
                             <tab>
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Peer Rating</ng-template>
                                 <div class="row">

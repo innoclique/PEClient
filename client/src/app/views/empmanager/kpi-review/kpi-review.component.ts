@@ -161,6 +161,7 @@ actor:any;
     });
 
    
+    this.selectedItems=[];
     this.kpiDetails.MeasurementCriteria.forEach(e => {
       this.toggleSelection(e.measureId);
     });

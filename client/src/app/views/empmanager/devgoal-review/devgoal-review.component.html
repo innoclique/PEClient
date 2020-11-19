@@ -15,8 +15,8 @@
                 <div class="card-body">
   
   
-                    <form [formGroup]="goalsBuildForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
-                     class="ng-untouched ng-pristine ng-valid">
+                    <form [formGroup]="goalsBuildForm" novalidate="" 
+                     class="ng-untouched ng-pristine ng-valid view-only">
   
   
                      <div class="form-group row">
@@ -28,7 +28,7 @@
                                     <span class="input-group-text ">Developmental Goal</span>
                                 </div>
                                 <input max="500" maxlength="500" class="form-control" type="text"
-                                [readonly]="currentAction != 'create' "
+                                
                                     [ngClass]="{ 'is-invalid': (f.DevGoal.touched || submitClicked)  &&  f.DevGoal.invalid }"
                                     formControlName="DevGoal" name="DevGoal" required
                                     [matAutocomplete]="devGoalsAuto">
@@ -59,7 +59,7 @@
                                       <span class="input-group-text ">Performance Goal</span>
                                   </div>
                                   <input max="500" maxlength="500" class="form-control" type="text"
-                                  [readonly]="currentAction != 'create' "
+                                 
                                       [ngClass]="{ 'is-invalid': f.Kpi.touched  &&  f.Kpi.invalid }"
                                       formControlName="Kpi" name="Kpi" 
                                       [matAutocomplete]="kpiAuto">
@@ -86,7 +86,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text ">Desired Outcomes</span>
                             </div>
-                            <textarea maxlength="1000" class="form-control"  cols="" rows="2" required readonly
+                            <textarea maxlength="1000" class="form-control"  cols="" rows="2" required 
                             [ngClass]="{ 'is-invalid': (f.DesiredOutcomes?.touched || submitClicked) &&  f.DesiredOutcomes.invalid }"
                             formControlName="DesiredOutcomes"  name="DesiredOutcomes"  >  </textarea>
   
@@ -106,9 +106,9 @@
                     <div class="form-group">
                         <div class="input-group">
                           <div class="input-group-prepend">
-                            <span class="input-group-text redStar">Manager's Comments</span>
+                            <span class="input-group-text">Manager's Comments</span>
                           </div>
-                          <textarea maxlength="2000" class="form-control"  cols="" rows="2" required
+                          <textarea maxlength="2000" class="form-control all-events"  cols="" rows="2" 
                           [ngClass]="{ 'is-invalid': (f.ManagerComments?.touched || submitClicked) &&  f.ManagerComments.invalid }"
                           formControlName="ManagerComments"  name="ManagerComments"  >  </textarea>
 
@@ -156,7 +156,7 @@
                   </div>
   
   
-                  <div  *ngIf="actor!='TS'" class="form-group form-actions pull-right mt-2">
+                  <div  *ngIf="actor!='TS'" class="form-group form-actions pull-right mt-2 all-events">
                     <button class="btn btn-sm btn-primary" (click)="navToGoalsList()" >Cancel</button>
   
                     <button *ngIf="!f.ManagerFTSubmitedOn"  class="btn btn-sm btn-primary" (click)="draftDevGoal()" >Save</button>
