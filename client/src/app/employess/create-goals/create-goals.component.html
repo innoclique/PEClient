@@ -195,16 +195,30 @@
                             <div *ngIf="k.TargetDate?.errors.required">Target Date is mandatory.</div>
                           </div>
                         </td>
+
                         <td class="invitation_model_search">
+                          <input max="1000" maxlength="1000" formControlName="OtherParticipants" placeholder="Other Participants"
+                            [ngClass]="{ 'is-invalid': rowItemSubmitted && k.OtherParticipants?.errors }"
+                           
+                   class=" form-control">
+                          <div *ngIf="rowItemSubmitted && k.OtherParticipants?.errors" class="invalid-feedback">
+                            <div *ngIf="k.OtherParticipants?.errors.required">Progress Indicators is mandatory.</div>
+                            <div *ngIf="k.OtherParticipants?.errors.minlength">Desired Outcome  must be at least 2 characters </div>
+                            <div *ngIf="k.OtherParticipants?.errors.hasKPISplChars">Progress Indicators can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/ </div>
+                          </div>
+                        </td>
+
+
+                        <!-- <td class="invitation_model_search">
                           <input formControlName="OtherParticipants"    placeholder="Other Participants"    class="form-control"
-                          [matAutocomplete]="auto2">
+                         >
                           <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn" >
                            <mat-option *ngFor="let option of filteredOptionsOP | async" [value]="option">
                              {{option.FirstName}}
                            </mat-option>
                           </mat-autocomplete>
                         
-                        </td>
+                        </td> -->
                         <td class="invitation_model_search">
                           <select class="form-control" placeholder="Status"
                                                     [ngClass]="{ 'is-invalid': rowItemSubmitted  &&  k.Status.invalid }"

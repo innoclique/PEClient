@@ -129,10 +129,16 @@ this.alert = new AlertDialog();
           CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
         ])
       ],
+      OtherParticipants: ['',
+      Validators.compose([
+        Validators.required, Validators.minLength(2),
+        CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
+      ])
+    ],
         TargetDate: ['', [Validators.required]],
         Status : ['', [Validators.required]],
         Barriers: ['',],
-        OtherParticipants: [null,],
+       // OtherParticipants: [null,],
        
       })
     })
@@ -267,9 +273,9 @@ addItemRow() {
   this.rowItemSubmitted = true;
   if (this.goalsActionItemsForm.invalid)
     return;
-    this.goalsActionItemsForm.patchValue({OtherParticipants: 
-      this.goalsActionItemsForm.get('OtherParticipants').value?
-    this.goalsActionItemsForm.get('OtherParticipants').value._id : null});
+    // this.goalsActionItemsForm.patchValue({OtherParticipants: 
+    //   this.goalsActionItemsForm.get('OtherParticipants').value?
+    // this.goalsActionItemsForm.get('OtherParticipants').value._id : null});
 
   this.goalsItemRows.push(this.goalsActionItemsForm.value);
   this.redrawAllRows();
