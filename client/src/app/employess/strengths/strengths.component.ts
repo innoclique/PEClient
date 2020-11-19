@@ -212,7 +212,8 @@ getAllStrengthDetails() {
 navToStrengthList() {
   this.router.navigate(['employee/action-plan',{'activeTab':1}]);
 }
-
+displayDevGoalFn(){}
+navToGoalsList(){}
 submitGoal() {
 
   // if (!this.strengthBuildForm.valid) {
