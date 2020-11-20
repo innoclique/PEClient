@@ -239,14 +239,14 @@ submitGoal() {
     return;
   }
    this.strengthBuildForm.patchValue({ IsDraft: 'false' });
-   this.strengthBuildForm.patchValue({ IsStrengthSubmited: 'true' });
+  //  this.strengthBuildForm.patchValue({ IsStrengthSubmited : 'true' });
 
-   if (this.currentAction=='create') {
-    this.openConfirmSubmitDialog();
+  //  if (this.currentAction=='create') {
+  //   this.openConfirmSubmitDialog();
   
-  }else  {
+  //   }else  {
     this.saveStrength();
-  }
+  // }
 
 
   
@@ -380,7 +380,7 @@ callStregnthApi() {
     if (currentAction=='create' && subAction=='Draft') {
       return 'saved'
     } else  if (currentAction=='create') {
-      return 'submitted'
+      return 'created '
     }else  if (currentAction=='edit') {
       return 'updated'
     }

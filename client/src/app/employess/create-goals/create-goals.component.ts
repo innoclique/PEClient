@@ -366,14 +366,29 @@ onKpiAutoSelected(event) {
 onDevGoalsAutoSelected(event) {
 
   var selDevGoal = event.option.value;
+  var selDevGoalItems = event.option.value.GoalActionItems;
+debugger
 
 
+  this.goalsBuildForm.patchValue({
+    DesiredOutcomes: selDevGoal.DesiredOutcomes,
+    Kpi: selDevGoal.Kpi,
+   
+  });
 
-  // this.goalsBuildForm.patchValue({
-  //   TargetCompletionDate: selDevGoal.TargetCompletionDate,
-  //   Score: selDevGoal.Score,
+  this.goalsItemRows=selDevGoalItems;
+
+  // selDevGoalItems.forEach(element => {
+    
+  // });
+  // this.goalsActionItemsForm.patchValue({
+  //   ActionStep: selDevGoal.DesiredOutcomes,
+  //   ProgressIndicators: selDevGoal.ProgressIndicators,
+  //   TargetDate: new Date(selDevGoal.TargetDate),
+  //   Barriers: selDevGoal.Barriers,
   //   Status: selDevGoal.Status,
-  //   YearEndComments: selDevGoal.YearEndComments
+  //   Kpi: selDevGoal.Kpi,
+   
   // });
 
 
@@ -541,12 +556,12 @@ conformSubmitDevGoals(){
   }
   
 
-  if (this.currentAction=='create') {
-  this.openConfirmSubmitDialog();
+//   if (this.currentAction=='create') {
+//   this.openConfirmSubmitDialog();
 
-}else  {
+// }else  {
   this.submitGoal();
-}
+// }
  
 }
 
@@ -597,7 +612,7 @@ conformSubmitDevGoals(){
     if (currentAction=='create' && subAction=='Draft') {
       return 'saved'
     } else  if (currentAction=='create') {
-      return 'submitted'
+      return 'created '
     }else  if (currentAction=='edit') {
       return 'updated'
     }

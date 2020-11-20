@@ -52,7 +52,7 @@
                 </div>
 
                 <div   class="invitation_model_in_table table-responsive p-15">
-                  <table *ngIf="currentAction != 'view'"  class="table table-bordered table-striped" style="margin-bottom: -2px;">
+                  <table   class="table table-bordered table-striped" style="margin-bottom: -2px;">
                      <thead>
                       <tr>
                         <th class="redStar">How To Leverage</th>
@@ -144,15 +144,15 @@
                   
                 </div>
 
-                <div class="form-group form-actions pull-right mt-2">
+                <div *ngIf="currentAction != 'view'" class="form-group form-actions pull-right mt-2">
                   <button class="btn btn-sm btn-primary" (click)="navToStrengthList()" >Cancel</button>
                   <button  *ngIf="f?.IsDraft?.value==true || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftStrength()" >Save</button>
                 
                   <button  class="btn btn-sm btn-primary" (click)="submitGoal()" >{{currentAction=='edit'? 
-                      f.IsDraft?.value==true ? 'Submit': 'Update'
-                       :'Submit' }}</button>
+                      f.IsDraft?.value==true ? 'Create': 'Update'
+                       :'Create' }}</button>
 
-                  <!-- <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
+                  <!-- <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Create Performance Goals</button> -->
                 </div>
   
                 <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>

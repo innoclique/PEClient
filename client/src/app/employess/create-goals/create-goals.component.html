@@ -270,8 +270,8 @@
                   <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftDevGoal()" >Save</button>
                 
                   <button  class="btn btn-sm btn-primary" (click)="conformSubmitDevGoals()" >{{currentAction=='edit'? 
-                      f.IsDraft?.value=='true' ? 'Submit': 'Update'
-                       :'Submit' }}</button>
+                      f.IsDraft?.value=='true' ? 'Create': 'Update'
+                       :'Create' }}</button>
 
                   <!-- <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
                 </div>

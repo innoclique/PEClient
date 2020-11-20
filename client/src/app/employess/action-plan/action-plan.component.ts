@@ -1,14 +1,16 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { GridOptions } from 'ag-grid-community';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { AlertDialog } from '../../Models/AlertDialog';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
+import { AlertComponent } from '../../shared/alert/alert.component';
 
 @Component({
   selector: 'app-action-plan',
@@ -32,6 +34,10 @@ export class ActionPlanComponent implements OnInit {
 
   
   currentRowItem: any;
+  alert = new AlertDialog();
+  unSubmitedCount=0;
+  unSubmitedStrenthCount=0;
+
 
   constructor(private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -163,7 +169,7 @@ getAllDevGoalsDetails() {
     'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
 
-       
+    this.unSubmitedCount=c.filter(e=>e.IsGoalSubmited==false && e.IsDraft==false ).length;
       this.devGoalRecords=c;
     
 
@@ -189,8 +195,8 @@ getAllStrengthDetails() {
     'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
 
-       
-      this.strengthRecords=c;
+    this.unSubmitedStrenthCount=c.filter(e=>e.IsStrengthSubmited==false && e.IsDraft==false ).length;
+    this.strengthRecords=c;
       this.selectTab(this.activeTabIndex);
 
   }
@@ -258,6 +264,14 @@ this.router.navigate(['employee/dev-goal',{action:'view',id:this.currentRowItem.
 
 }
 
+
+viewStrengthForm(currentRowItem: any) {
+
+
+  this.router.navigate(['employee/strengths',{action:'view',id:this.currentRowItem._id}],{ skipLocationChange: true });
+  
+  }
+
 public onStrengthGridRowClick(e) {
   if (e.event.target !== undefined) {
     this.currentRowItem = e.data;
@@ -266,7 +280,7 @@ public onStrengthGridRowClick(e) {
     switch (actionType) {
 
       case "VF":
-        //this.viewKpiForm(this.currentRowItem);
+        this.viewStrengthForm(this.currentRowItem);
         break;
       case "EDG":
           this.editStrengthForm(this.currentRowItem);
@@ -283,6 +297,65 @@ public onStrengthGridRowClick(e) {
       default:
     }
   }
+}
+
+
+
+
+   /**To alert user for submit */
+   openConfirmSubmitDialog() {
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit the action plan?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.submitActionPlan();
+     } else {
+      
+     }
+    })
+  }
+
+submitActionPlan() {
+
+  this.perfApp.route = "app";
+  this.perfApp.method = "SubmitActionPlanByEmp",
+    this.perfApp.requestBody = { 'empId': this.loginUser._id }
+  this.perfApp.CallAPI().subscribe(c => {
+
+   if (c) {
+    this.snack.success(c.message);
+    this.getAllDevGoalsDetails();
+    this.getAllStrengthDetails();
+   } else {
+     
+   }
+
+  }
+  
+  , error => {
+
+    this.snack.error(error.error.message);
+
+  }
+  
+  )
 }
 
 editStrengthForm(currentRowItem: any) {

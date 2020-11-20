@@ -234,7 +234,6 @@ submitGoal() {
   //   return;
   // }
    this.strengthBuildForm.patchValue({ IsDraftByManager: 'false' });
-   this.strengthBuildForm.patchValue({ IsStrengthSubmited: 'true' });
   this.saveStrength();
 }
 
@@ -345,7 +344,7 @@ nextKpi(){
     if (currentAction=='create' && subAction=='Draft') {
       return 'saved'
     } else  if (currentAction=='create') {
-      return 'submitted'
+      return 'created '
     }else  if (currentAction=='edit') {
       return 'updated'
     }

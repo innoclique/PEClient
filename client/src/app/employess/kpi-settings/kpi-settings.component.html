@@ -220,11 +220,12 @@
                                       <div class="input-group-prepend">
                                         <span class="input-group-text ">Score (self)</span>
                                       </div>
-                                      <select class="form-control"
+                                      <input class="form-control" type="text" disabled *ngIf="currentAction == 'create'" style="background-color:#e4e7ea !important" />
+                                      <select class="form-control"   *ngIf="currentAction != 'create'"
                                       [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }"
                                       formControlName="Score"  name="Score"    >
                                         <option value="" disabled >Please select</option>
-                                        <option *ngFor="let e of appScores" [value]="e" >{{e}}</option>
+                                        <option  *ngFor="let e of appScores" [value]="e" >{{e}}</option>
                                         
                                       </select>
                                       <div *ngIf="f.Score.touched && f.Score.invalid" class="invalid-feedback">
