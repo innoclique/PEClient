@@ -70,4 +70,7 @@ public barChartData: ChartDataSets[] = [
       this.barChartData = evaluation_summary.dataSets;
     });
   }
+  chartClicked(event){
+console.log(event)
+  }
 }

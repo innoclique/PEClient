@@ -19,6 +19,7 @@ import { EvaluationSettingsComponent } from './evaluation-settings/evaluation-se
 import { PaymentSettingsComponent } from './payment-settings/payment-settings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChartsModule } from "ng2-charts";
+import { AppDirectiveModule } from '../../directives/app-directive.module';
 
 export const projectRoutes: Routes = [
   
@@ -94,7 +95,7 @@ export const projectRoutes: Routes = [
 
 @NgModule({
   declarations: [ClientSetupComponent, CreateClientComponent, CreateResellerComponent,
-    NumberDirective,
+    
     DashboardComponent,
     ReportsComponent,
     ApplicationSettingsComponent,
@@ -112,7 +113,8 @@ export const projectRoutes: Routes = [
     ModalModule.forRoot(),
     EvalCommonModule,
     TabsModule,
-    ChartsModule
+    ChartsModule,
+    AppDirectiveModule
   ]
 })
 export class PSAModule {

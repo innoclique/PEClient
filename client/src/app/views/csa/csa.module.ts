@@ -11,6 +11,7 @@ import {NumberDirective} from '../../directives/numbersonly';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartsModule } from "ng2-charts";
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { AppDirectiveModule } from '../../directives/app-directive.module';
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -35,7 +36,7 @@ export const projectRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    NumberDirective,
+   
     DashboardComponent,
     
   ],
@@ -50,7 +51,8 @@ export const projectRoutes: Routes = [
     EvalCommonModule,
     TabsModule,
     ChartsModule,
-    FlashMessagesModule.forRoot()
+    FlashMessagesModule.forRoot(),
+    AppDirectiveModule
   ]
 })
 export class CSAModule {
