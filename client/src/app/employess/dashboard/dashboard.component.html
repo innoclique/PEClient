@@ -16,9 +16,9 @@
                 </div>
                 <div class="box_goalsetting clearfix">
                   <!--<h2 class="col-xs-6">Goal Setting<span>Completed</span></h2>-->
-                  <h2 class="col-xs-6">Final Rating<span>{{currentEvaluation.FinalRating}}</span></h2>
-                  <h2 class="col-xs-6">Manager Sign-off<span>{{currentEvaluation.Manager}}</span></h2>
-                  <h2 class="col-xs-6">Third Signatory<span>{{currentEvaluation.ThirdSignatory}}</span></h2>
+                  <h2 class="col-xs-6">Final Rating<span>{{currentEvaluation?.FinalRating}}</span></h2>
+                  <h2 class="col-xs-6">Manager Sign-off<span>{{currentEvaluation?.Manager}}</span></h2>
+                  <h2 class="col-xs-6">Third Signatory<span>{{currentEvaluation?.ThirdSignatory}}</span></h2>
                 </div> 
                 <div class="box_in_btns">
                   <a href="#/employee/current-evaluation" class="box_in_btns_view">View Evaluation &#8594;</a>
@@ -33,9 +33,9 @@
                 <h2 class="bg-blue">Previous Rating</h2>
                 
                 <div class="box_goalsetting box_rating clearfix">
-                  <h3 class="col-xs-12">Evaluation Period: {{previousEvaluation.period}}</h3>
-                  <h3 class="col-xs-12">Rating: {{previousEvaluation.rating}}</h3>
-                  <h3 class="col-xs-12">Peer Review: {{previousEvaluation.peer_review}}</h3>
+                  <h3 class="col-xs-12">Evaluation Period: {{previousEvaluation?.period}}</h3>
+                  <h3 class="col-xs-12">Rating: {{previousEvaluation?.rating}}</h3>
+                  <h3 class="col-xs-12">Peer Review: {{previousEvaluation?.peer_review}}</h3>
                 </div> 
                 <div class="clear"></div>
               </div>
