@@ -203,7 +203,7 @@ export class DefaultLayoutComponent implements OnInit {
           navigationMenu= [{
             "IsActive": true,
             "__v": 0,
-            "url": "/ea/dashboard",
+            "url": "/csa/dashboard",
             "name": "Dashboard",
             "code": "Dashboard",
             "icon": "icon-star",

@@ -111,6 +111,14 @@ export const routes: Routes = [
         
       },
       {
+        path: 'csa',
+        data: {
+          title: 'Clients'
+        },
+        loadChildren:()=>import('./views/csa/csa.module').then(m=>m.CSAModule),
+        
+      },
+      {
         path: 'finalrating',
         data: {
           title: 'Rating'
