@@ -212,9 +212,11 @@ export class ClientSetupComponent implements OnInit {
 
   onClientGridReady(params) {
     this.clientGridOptions.api = params.api; // To access the grids API
+    this.clientGridOptions.api.setDomLayout("autoHeight");
   }
   onResellerGridReady(params) {
     this.resellerGridOptions.api = params.api; // To access the grids API
+    this.resellerGridOptions.api.setDomLayout("autoHeight");
   }
 
 
