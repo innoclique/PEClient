@@ -174,7 +174,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['resetPassword']);
     } else {
       if (x.Role === 'CSA') {
-        this.router.navigate(['ea']);
+        this.router.navigate(['csa']);
       }
       if (x.Role === 'EA') {
         this.router.navigate(['ea']);

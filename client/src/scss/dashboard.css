@@ -51,13 +51,20 @@ p											{  font-size:15px; line-height:21px; font-weight:400; color:#717171;
 .box_in_bar_revenue h2  { font-size: 19px; line-height: 22px; color: #1996f2; display: block; padding: 0; margin: 0 0 6px;}
 .box_in_bar_revenue h2 span { font-size: 13px; line-height: 17px; color: #717171; display: block; font-weight: 400; }
 .box_in_bar_text            { float: left; padding: 0 10px 0 15px;}
-.box_in_btns                { display: block; padding: 10px 15px;}
+.box_in_btns {
+    display: block;
+    padding: 10px 15px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
 .box_in_btns_add            { font-size: 13px; line-height: 16px; color: #1996f2; border:1px solid #1996f2; border-radius: 4px; padding: 10px 20px; float: left; margin: 0 20px 0 0;}
 .box_in_btns_add:hover {background: #1996f2;color: #fff;}
 .box_in_btns_modify   {  font-size: 13px; line-height: 16px; color: #717171; border:1px solid #ddd; border-radius: 4px; padding: 10px 20px; float: left;}
 .box_in_btns_modify i {font-size: 14px;display: inline-block;position: relative;top: -3px;left: 5px;font-weight: bold;}
 .box_in_btns_modify:hover { background:#f5f5f7; color: #000;}
-.box_in_btns_view            { font-size: 13px; line-height: 16px; color: #1996f2; float: right; font-weight: bold; padding: 10px 10px 15px;position: absolute;right: 10px;bottom: 0;}
+.box_in_btns_view            
+{ font-size: 13px; line-height: 16px; color: #1996f2; float: right; font-weight: bold; padding: 10px 10px 15px;}
 
 
 /*Dashboard*/

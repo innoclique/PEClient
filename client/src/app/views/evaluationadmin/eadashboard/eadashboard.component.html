@@ -9,7 +9,22 @@
             <div class="box col-lg-6">
               <div class="box_in">
                 <div class="chart">
-                  <canvas height="200" baseChart
+                  <div id="htmlData">
+                    <canvas baseChart
+                    [datasets]="barChartData"
+                    [labels]="barChartLabels"
+                    [options]="barChartOptions"
+                    [plugins]="barChartPlugins"
+                    [legend]="barChartLegend"
+                    [chartType]="barChartType"
+                    (chartClick)="chartClicked($event)"
+                    >
+                    
+                  </canvas>
+                  </div>
+                  <button [disabled]="enableDownload" (click)="downloadCanvas()" id="exportButton" type="button">Export as PDF</button>     
+      
+                  <!--<canvas height="200" baseChart
                     [data]=pieChartData
                     [labels]=pieChartLabels
                     chartType={{pieChartType}}
@@ -17,7 +32,7 @@
                     [plugins]=pieChartPlugins
                     [colors]=pieChartColors
                     [legend]=pieChartLegend>
-                  </canvas>
+                  </canvas>-->
                 </div>
                 <div class="clear"></div>
               </div>

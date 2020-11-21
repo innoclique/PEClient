@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartType, ChartOptions } from 'chart.js';
+import { ChartDataSets,ChartType, ChartOptions } from 'chart.js';
 import { Label } from 'ng2-charts';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import {EvaluationadminService} from '../../../services/evaluationadmin.service';
 import { AuthService } from '../../../services/auth.service';
-
+import { Router, ActivatedRoute } from '@angular/router';
+//import * as jsPDF from 'jspdf';
+import {jsPDF} from 'jspdf';
 @Component({
   selector: 'app-eadashboard',
   templateUrl: './eadashboard.component.html',
@@ -21,6 +23,7 @@ export class EadashboardComponent implements OnInit {
   public pieChartLegend = true;
   public pieChartPlugins;
   loginUser: any;
+  enableDownload:any=true;
 
   columnDefs = [
     {headerName:'Employee',width:'180px' , field: 'name' ,sortable: true},
@@ -30,7 +33,38 @@ export class EadashboardComponent implements OnInit {
 
 rowData = [];
 
-  constructor(public evaluationadminService:EvaluationadminService,
+/**
+ * Bar chat
+ */
+
+public barChartOptions: ChartOptions = {
+  responsive: true,
+  // We use these empty structures as placeholders for dynamic theming.
+  scales: { xAxes: [{}], yAxes: [{}] },
+  plugins: {
+    datalabels: {
+      anchor: 'end',
+      align: 'end',
+    }
+  }
+};
+public barChartLabels: Label[] = ['Active','inprogress','completed','not started'];
+public barChartType: ChartType = 'bar';
+public barChartLegend = true;
+public barChartPlugins = [pluginDataLabels];
+
+public barChartData: ChartDataSets[] = [
+  { data: [0, 0, 0, 0], label: 'Status' }
+  
+];
+
+
+
+
+  constructor(
+    public router: Router,
+    private activatedRoute: ActivatedRoute,
+    public evaluationadminService:EvaluationadminService,
     private authService: AuthService,) {
       this.loginUser = this.authService.getCurrentUser();
       this.getEvalutionDashboardData();
@@ -49,10 +83,39 @@ rowData = [];
       let statusList = chart.map(obj =>{ return [obj._id]});
       this.pieChartLabelsList = statusList;
       this.pieChartLabelsValues=chart.map(obj =>obj.count);
-      this.loadPie();
+
+      let barchatDataArray:any =[];
+      this.barChartLabels.forEach((element,index) => {
+        console.log(`element = ${element} ,i = ${index}`);
+        let obj = chart.find(obj=>obj._id === element);
+        console.log(obj);
+        barchatDataArray[index]=obj.count;
+      });
+      let reducer = barchatDataArray.reduce((total,currentval)=>total+currentval);
+      if(reducer>0){
+        this.enableDownload = false;
+      }
+      
+      this.barChartData[0].data = barchatDataArray;
+      //this.loadPie();
      });
      
   }
+
+  downloadCanvas() {
+    // get the `<a>` element from click event
+    //var anchor = event.target;
+    // get the canvas, I'm getting it by tag name, you can do by id
+    // and set the href of the anchor to the canvas dataUrl
+   // anchor.href = document.getElementsByTagName('canvas')[0].toDataURL();
+    // set the anchors 'download' attibute (name of the file to be downloaded)
+    //anchor.download = "test.png";
+    var pdf = new jsPDF('p', 'mm', 'a4');
+    pdf.addImage(document.getElementsByTagName('canvas')[0].toDataURL(), 'JPEG', 0, 0,0,0);
+    pdf.save("evaluations.pdf"); 
+    
+}
+
   // Pie
   loadPie(){
     this.pieChartOptions = {
@@ -83,6 +146,11 @@ rowData = [];
     },
   ];
   
+  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
+    console.log(event, active);
+    this.router.navigate(['ea/evaluation-list']);
+  }
+
 
 
 }
