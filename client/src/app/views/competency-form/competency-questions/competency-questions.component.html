@@ -1,6 +1,9 @@
 <div [formGroup]="form" class="row" style="margin-top:1%">
 
   <div class="col-xs-6  col-lg-6 col-md-6">
+    <ul style="list-style:desc">
+      <li> <label [attr.for]="question.key">{{question.label}}</label></li>
+    </ul>
     <label [attr.for]="question.key">{{question.label}}</label>
   </div>
   <div class="col-xs-6  col-lg-6 col-md-6">    
