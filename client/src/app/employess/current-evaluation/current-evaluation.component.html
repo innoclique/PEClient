@@ -24,12 +24,16 @@
 
                                 <div [formGroup]="selfCompetencyForm">
                                     <accordion [closeOthers]="oneAtATime">
-                                        <accordion-group *ngFor="let c of competencyQuestionsList">
-                                            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
-                                                <div class="pull-left float-left">{{c.CompetenyName}}</div>
-                                                <span class="badge badge-secondary float-right pull-right avgScore"> Avarage Rating: {{c.CompetencyAvgRating||0}}</span>
-                                              </button>                                            
-                                            <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments">
+                                        <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of competencyQuestionsList">
+                                            <button  class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                                                <div class="pull-left">
+                                                    <i  [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
+                                                </div>
+                                                <div>
+                                                    <span class="badge badge-secondary float-right pull-right avgScore"> Avarage Rating: {{c.CompetencyAvgRating||0}}</span>
+                                                </div>
+                                              </button>
+                                                 <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments">
                                             </app-competency-wrapper>
                                         </accordion-group>
 

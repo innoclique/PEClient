@@ -41,7 +41,8 @@ export class LoginComponent implements OnInit {
     private snack: NotificationService,
     private perfApp: PerfAppService,
     public translate: TranslateService,
-    private modalService: BsModalService,) { }
+    private modalService: BsModalService,
+    ) { }
 
 
   get f() {
@@ -190,4 +191,5 @@ export class LoginComponent implements OnInit {
 
     }
   }
+  
 }

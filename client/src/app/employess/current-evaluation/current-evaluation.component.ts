@@ -30,6 +30,7 @@ export class CurrentEvaluationComponent implements OnInit {
   public showEmployeeSubmit: Boolean = true;
   public PeerScoreCard: any;
   DirectReporteeScoreCard: any;
+  isContentOpen: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -67,8 +68,6 @@ export class CurrentEvaluationComponent implements OnInit {
         return `<i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i>       
         `
-
-
       }
     }
   ];
@@ -76,18 +75,12 @@ export class CurrentEvaluationComponent implements OnInit {
   /**To GET ALL  tabs data */
   getTabsData() {
     forkJoin(
-      this.getCurrentEvaluationDetails().pipe(catchError(error => of({ error: error, isError: true })))
-      //this.getTSKPIs().pipe(catchError(error => of({ error: error, isError: true }))),
-      //this.getCompetencyQuestionsList().pipe(catchError(error => of({ error: error, isError: true })))
+      this.getCurrentEvaluationDetails().pipe(catchError(error => of({ error: error, isError: true })))      
     ).subscribe(([res1]) => {
       if (res1 && !res1.isError) {
-
-        this.evaluationForm = res1;
-        debugger
+        this.evaluationForm = res1;        
         if (res1.Competencies) {
-          this.employeeCompetencyList = res1.Competencies.Employee.Competencies
-
-          // this.setCompetencies();
+          this.employeeCompetencyList = res1.Competencies.Employee.Competencies          
           this.prepareCompetencyQuestions();
           console.log('the evauation form', this.evaluationForm)
         }
@@ -107,13 +100,9 @@ export class CurrentEvaluationComponent implements OnInit {
         if (res1 && Object.keys(res1.DirectReporteeScoreCard).length > 0) {
           this.DirectReporteeScoreCard = res1.DirectReporteeScoreCard;
         }
-
-
       } else {
         this.evaluationForm = null;
       }
-
-
     });
 
   }
@@ -268,7 +257,7 @@ export class CurrentEvaluationComponent implements OnInit {
     this.saveFinalRating(true)
   }
   saveFinalRating(isDraft) {
-debugger
+
     if (this.FinalRatingForm.value.IsManagerReqRev &&
       this.FinalRatingForm.value.EmployeeRevComments.length == 0) {
       this.snack.error('Revision Comments is mandatory')

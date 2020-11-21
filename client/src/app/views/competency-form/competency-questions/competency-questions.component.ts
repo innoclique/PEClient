@@ -11,7 +11,7 @@ export class CompetencyQuestionsComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
   }
   @Input() question: CompetencyBase<string>;
   @Input() form: FormGroup;

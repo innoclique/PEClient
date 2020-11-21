@@ -24,6 +24,7 @@ export class DoPeerReviewComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   public oneAtATime: boolean = true;
   isSubmitted: Boolean = false;
+  isContentOpen:Boolean=false;
   constructor(private authService: AuthService,
     private router: Router,
     private snack: NotificationService,
@@ -116,11 +117,7 @@ export class DoPeerReviewComponent implements OnInit {
           //CompetencyRowId: element._id,
           Questions: questions,
           form: this.qcs.toFormGroup(questions),
-          comments: cc?cc.Comments:"",
-          CompetencyAvgRating:cc.CompetencyAvgRating
-          // Comments: this.evaluationForm.Competencies.Employees[0].CompetencyComments,
-          // OverallRating: this.evaluationForm.Competencies.Employees[0].OverallRating,
-          // IsDraft: !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted
+          comments: cc?cc.Comments:""
         })
 
       });

@@ -25,6 +25,7 @@ export class DoDrReviewComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   public oneAtATime: boolean = true;
   isSubmitted: Boolean = false;
+  isContentOpen:Boolean=false;
   constructor(private authService: AuthService,
     private router: Router,
     private snack: NotificationService,

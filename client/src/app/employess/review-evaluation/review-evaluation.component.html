@@ -8,32 +8,22 @@
                             </tab>
                            
                             <tab>
-                                <ng-template tabHeading><i class="icon-hand-rock"></i>Competencies</ng-template>
-                                <div [formGroup]="selfCompetencyForm">
-                                    <accordion [closeOthers]="oneAtATime">
-                                        <accordion-group *ngFor="let c of competencyQuestionsList"
-                                            >
-                                            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
-                                                <div class="pull-left float-left">{{c.CompetenyName}}</div>
-                                                <span class="badge badge-secondary float-right pull-right avgScore"> Avarage Rating: {{c.CompetencyAvgRating||0}}</span>
-                                              </button>  
-                                            <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments">
-                                            </app-competency-wrapper>
-                                        </accordion-group>
-  
-                                    </accordion>
-                                    
-                                </div>
-                            </tab>
-                            <tab>
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Manager Competencies</ng-template>
                                 <div [formGroup]="managerCompetencyForm">
                                     <accordion [closeOthers]="oneAtATime">
-                                        <accordion-group *ngFor="let c of managerCompetencyQuestionsList"
+                                        <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of managerCompetencyQuestionsList"
                                             >
-                                            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
-                                                <div class="pull-left float-left">{{c.CompetenyName}}</div>
-                                                <span class="badge badge-secondary float-right pull-right avgScore"> Avarage Rating: {{c.CompetencyAvgRating||0}}</span>
+                                            <button  class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                                                <!-- <i *ngIf="isContentOpen" class="icon-plus pull-left"></i>
+                                                <i *ngIf="!isContentOpen" class="icon-minus pull-left"></i> -->
+                                                <div class="pull-left">
+                                                    <i  [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
+                                                    
+                                                </div>
+                                                <div>
+                                                    <span class="badge badge-secondary float-right pull-right avgScore"> Avarage Rating: {{c.CompetencyAvgRating||0}}</span>
+                                                </div>
+                                                
                                               </button>  
                                             <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments">
                                             </app-competency-wrapper>
@@ -41,7 +31,6 @@
   
                                     </accordion>
                                     <div *ngIf="showCompetencySubmitForManager" class="form-group row">
-                                        
                                         <div class=" col-md-12">
                                             <div class="form-group">
                                                 <div class="pull-right">
@@ -52,8 +41,7 @@
                                                     <button (click)="submitManagerCompetencyForm()"
                                                         class="btn btn-primary">Submit</button>
                                                 </div>
-                                            </div>
-  
+                                            </div>  
                                         </div>
                                     </div>
                                 </div>
@@ -72,57 +60,7 @@
                                 <app-strength-review [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole ></app-strength-review>
   
                             </tab>
-                            <tab>
-                                <ng-template tabHeading><i class="icon-hand-rock"></i>Peer Rating</ng-template>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <ul class="list-group">
-                                            
-                                            <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let peer of PeerScoreCard?.PeerList">
-                                                {{peer.FirstName}} {{peer.LastName}}
-                                            </li>
-                                          </ul>
-                                        
-                                    </div>
-                                    <div class="col-md-6">
-                                        <ul class="list-group">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                              Average Rating
-                                              <span class="ratingcard badge badge-primary badge-pill">{{PeerScoreCard?.averageScore|number:'1.2-2'}}</span>
-                                            </li>
-                                           
-                                          </ul>
-                                        
-                                    </div>
-                                </div>
-  
-                            </tab>
-                            <tab>
-                                <ng-template tabHeading><i class="icon-hand-rock"></i>Direct Report(s) Rating</ng-template>
-                                <div *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList.length===0" class="row">
-                                    <div class="col-md-12">
-                                        <h3>No  Review requested</h3>
-                                    </div>
-
-                                </div>
-                                <div *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0" class="row">
-                                    <div class="col-md-6">
-                                        <ul class="list-group">                                            
-                                            <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">
-                                                {{dr.FirstName}} {{dr.LastName}}
-                                            </li>
-                                          </ul>                                        
-                                    </div>
-                                    <div class="col-md-6">
-                                        <ul class="list-group">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                              Average Rating
-                                              <span class="ratingcard badge badge-primary badge-pill">{{DirectReporteeScoreCard?.averageScore|number:'1.2-2'}}</span>
-                                            </li>
-                                          </ul>                                        
-                                    </div>
-                                </div>
-                            </tab>
+                            
 
                             <tab>
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>

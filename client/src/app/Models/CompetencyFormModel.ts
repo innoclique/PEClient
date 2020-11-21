@@ -7,7 +7,9 @@ export class CompetencyBase<T> {
     controlType: string;
     type: string;
     options: {key: string, value: string}[];
-  
+  showEmpRating:Boolean=false;
+  empRating:Number=-1;
+  empKey:String;
     constructor(options: {
         value?: T;
         key?: string;
@@ -17,6 +19,10 @@ export class CompetencyBase<T> {
         controlType?: string;
         type?: string;
         options?: {key: string, value: string}[];
+        showEmpRating?:Boolean,
+        empRating?:Number,
+        empKey?:String
+
       } = {}) {
       this.value = options.value;
       this.key = options.key || '';
@@ -26,5 +32,9 @@ export class CompetencyBase<T> {
       this.controlType = options.controlType || '';
       this.type = options.type || '';
       this.options = options.options || [];
+      this.showEmpRating=options.showEmpRating||false;
+      this.empRating=options.empRating||-1;
+      this.empKey=options.empKey
+
     }
   }

@@ -1,12 +1,13 @@
 <div [formGroup]="competencyForm">
     <accordion [closeOthers]="oneAtATime">
-        <accordion-group *ngFor="let c of competencyQuestionsList"
+        <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of competencyQuestionsList"
           >
-          <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
-            <div class="pull-left float-left">{{c.CompetenyName}}</div>
+          <button  class="btn btn-link btn-block clearfix" accordion-heading type="button">
+            <div class="pull-left">
+                <i  [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
+            </div>
             
-          </button>  
-            <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments"></app-competency-wrapper>
+          </button>            <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments"></app-competency-wrapper>
         </accordion-group>
 
     </accordion>

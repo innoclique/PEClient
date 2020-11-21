@@ -21,6 +21,7 @@ import { SelectCheckAllComponent } from './select-check-all/select-check-all.com
 import { DateAgoPipe } from '../pipes/DateAgoPipe';
 
 
+
 @NgModule({
   declarations: [ 
     LoginComponent, 
@@ -49,6 +50,7 @@ import { DateAgoPipe } from '../pipes/DateAgoPipe';
     ModalModule.forRoot()
   ],
   entryComponents:[AlertComponent],
+  providers: [  ],
   exports:[AlertComponent,SelectCheckAllComponent,DateAgoPipe]
 })
 export class SharedModule { }

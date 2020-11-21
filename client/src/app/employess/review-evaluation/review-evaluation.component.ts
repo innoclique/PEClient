@@ -3,7 +3,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { error } from 'console';
+
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
-import { ThemeService } from '../../services/theme.service';
+
 
 
 @Component({
@@ -50,6 +50,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   currentEmpId: any;
   currentAction: any;
   showCompetencySubmitForManager:Boolean=true;
+  isContentOpen: boolean = false;
   @ViewChild('evTabset') tabset: TabsetComponent;
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -149,7 +150,7 @@ goto(selTab){
           this.employeeCompetencyList = res1.Competencies.Employee.Competencies;
           
           // this.setCompetencies();
-          this.prepareCompetencyQuestions();
+         // this.prepareCompetencyQuestions();
           this.prepareCompetencyQuestionsByManager();
           console.log('the evauation form', this.evaluationForm)
         }
@@ -347,7 +348,11 @@ goto(selTab){
           options: q.Rating,
           order: 1,
           required: true,
-          value: q.SelectedRating
+          value: q.SelectedRating,
+          showEmpRating:true,
+          empRating:this.getQuestionRating(q._id),
+          empKey:q._id
+
         }))
 
       });
@@ -364,6 +369,17 @@ goto(selTab){
 
     });
 
+  }
+  getQuestionRating(questionId){
+    var _answer=-1;
+
+    var ff=this.employeeCompetencyList.map(element => {return element.Questions.find(q=>q._id===questionId)})      
+      if(ff && ff[0]){
+        return ff[0].SelectedRating
+      }else{
+        return -1;
+      }
+    
   }
   cancelCompetencyRating() {
 

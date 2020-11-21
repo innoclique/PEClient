@@ -1,16 +1,20 @@
 <div [formGroup]="form" class="row" style="margin-top:1%">
-  <div class="col-xs-6 col-md-4 col-lg-6 col-md-6">
+
+  <div class="col-xs-6  col-lg-6 col-md-6">
     <label [attr.for]="question.key">{{question.label}}</label>
   </div>
-  <div class="col-xs-6 col-md-4 col-lg-6 col-md-6">
+  <div class="col-xs-6  col-lg-6 col-md-6">    
+    <div [ngSwitch]="question.controlType" class="row">
+      <div *ngIf="question.showEmpRating" class="col-xs-3  col-lg-3 col-md-3">
+        <input *ngSwitchCase="'dropdown'" [value]="question.empRating" readonly class="form-control" name="ff" >
+      </div>
+      <div class="col-xs-3  col-lg-6 col-md-3">
+        <select class="form-control" [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key">
+          <option *ngFor="let opt of question.options" [value]="opt.value">{{opt.value}}-{{opt.Text}}</option>
+        </select>
+      </div>
 
-    <div [ngSwitch]="question.controlType">
 
-      <input *ngSwitchCase="'textbox'" [formControlName]="question.key" [id]="question.key" [type]="question.type">
-
-      <select class="form-control" [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key">
-        <option *ngFor="let opt of question.options" [value]="opt.value">{{opt.value}}-{{opt.Text}}</option>
-      </select>
     </div>
   </div>
 
