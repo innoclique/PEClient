@@ -12,7 +12,8 @@ export class CompetencyWrapperComponent implements OnInit {
 
   @Input() questions: CompetencyBase<string>[] = [];
   @Input() form: FormGroup;
-  @Input() comments:String
+  @Input() comments:String;
+  @Input() empComments:String
   //form: FormGroup;
   payLoad = '';
 
@@ -24,9 +25,12 @@ export class CompetencyWrapperComponent implements OnInit {
     
     if(this.form){
       this.form.addControl('Comments', new FormControl())
-      this.form.controls['Comments'].setValue(this.comments)
+      this.form.controls['Comments'].setValue(this.comments);
+      this.form.addControl('EmpComments', new FormControl())
+      this.form.controls['EmpComments'].setValue(this.empComments);
+      
     }
-   // this.form = this.qcs.toFormGroup(this.questions);
+   
   }
 
   onSubmit() {

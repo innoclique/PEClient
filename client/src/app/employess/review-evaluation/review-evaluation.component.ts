@@ -352,7 +352,6 @@ goto(selTab){
           showEmpRating:true,
           empRating:this.getQuestionRating(q._id),
           empKey:q._id
-
         }))
 
       });
@@ -364,22 +363,35 @@ goto(selTab){
         Questions: questions,
         form: this.qcs.toFormGroup(questions),
         comments:element.Comments,
-        CompetencyAvgRating:element.CompetencyAvgRating
+        empComments:this.getEmpCommentsForCompetency(element.Competency._id),
+        CompetencyAvgRating:this.getCompetencyOverallRating(element.Competency._id)//element.CompetencyAvgRating
       })
 
     });
 
   }
-  getQuestionRating(questionId){
-    var _answer=-1;
-
+  getCompetencyOverallRating(competencyId){
+    if(this.evaluationForm.OverallCompetencyRating){
+      var _rate=this.evaluationForm.OverallCompetencyRating.find(x=>x.competencyId===competencyId);
+      return _rate.overallScore||"Pending";
+    }
+  }
+  getQuestionRating(questionId){    
     var ff=this.employeeCompetencyList.map(element => {return element.Questions.find(q=>q._id===questionId)})      
       if(ff && ff[0]){
         return ff[0].SelectedRating
       }else{
-        return -1;
+        return "Pending";
       }
-    
+  }
+  getEmpCommentsForCompetency(competencyId){    
+debugger
+    var ff=this.employeeCompetencyList.map(element => {return element.Competency._id===competencyId?element.Comments:""});
+      if(ff && ff[0]){
+        return ff[0]
+      }else{
+        return "";
+      }
   }
   cancelCompetencyRating() {
 
