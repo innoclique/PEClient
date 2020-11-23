@@ -28,9 +28,16 @@
         </div>
       </div>
 
-      <div class="col-md-6">
+      <div *ngIf="questions[0].showEmpRating" class="col-md-6">
         <div class="form-group">
           <label for="Comments" class="strong-key"> Manager Comments: </label>
+          <textarea maxlength="500" class="form-control" cols="" rows="4" formControlName="Comments"
+            name="Comments">  </textarea>
+        </div>
+      </div>
+      <div *ngIf="!questions[0].showEmpRating" class="col-md-6">
+        <div class="form-group">
+          <label for="Comments" style="font-weight: 600;">  Comments: </label>
           <textarea maxlength="500" class="form-control" cols="" rows="4" formControlName="Comments"
             name="Comments">  </textarea>
         </div>

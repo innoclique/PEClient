@@ -177,7 +177,10 @@ export class CurrentEvaluationComponent implements OnInit {
           options: q.Rating,
           order: 1,
           required: true,
-          value: q.SelectedRating
+          value: q.SelectedRating,
+          showEmpRating:false,
+          empRating:0,
+          empKey:q._id
         }))
 
       });
@@ -212,6 +215,7 @@ export class CurrentEvaluationComponent implements OnInit {
     let isvalid = true;
     this.competencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
+      var _lastitem = _qna.pop();
       var _lastitem = _qna.pop();
       debugger
 
