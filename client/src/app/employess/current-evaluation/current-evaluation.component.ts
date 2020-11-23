@@ -334,7 +334,7 @@ export class CurrentEvaluationComponent implements OnInit {
 
     var avg = sum / arr.length;
     // const average= arr.reduce((p, c) => p + c, 0) / arr.length;
-    console.log('avarage score :', avg);
+    console.log('average score :', avg);
     return parseFloat(avg.toFixed(2));
   }
 }

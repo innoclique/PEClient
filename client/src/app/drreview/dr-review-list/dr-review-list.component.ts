@@ -28,21 +28,21 @@ export class DrReviewListComponent implements OnInit {
 
   public columnDefs = [
     {
-      headerName: 'Employee', field: '', width: 320, sortable: true, filter: true,
+      headerName: 'Employee', field: '', width: 250, sortable: true, filter: true,
       cellRenderer: (data) => {
         return `${data.data.ForEmployee[0].FirstName} ${data.data.ForEmployee[0].LastName}`
         
       }
     },
     {
-      headerName: 'Manager', field: '', width: 320, sortable: true, filter: true,
+      headerName: 'Manager', field: '', width: 150, sortable: true, filter: true,
       cellRenderer: (data) => {
         return `${data.data.Manager[0].FirstName} ${data.data.Manager[0].LastName}`
       }
     },
-    { headerName: 'Evaluation Period', field: 'EvaluationPeriod', sortable: true, filter: true },
-    { headerName: 'Evaluation Duration', field: 'EvaluationDuration', sortable: true, filter: true },
-    { headerName: 'Status', field: 'Status', sortable: true, filter: true,
+    { headerName: 'Evaluation Period', width: 220, field: 'EvaluationPeriod', sortable: true, filter: true },
+    { headerName: 'Evaluation Duration',width: 220, field: 'EvaluationDuration', sortable: true, filter: true },
+    { headerName: 'Status',width: 120, field: 'Status', sortable: true, filter: true,
     cellRenderer: (data) => {
       debugger
       if(data.data.IsRatingSubmitted && data.data.IsRatingSubmitted){
@@ -53,7 +53,7 @@ export class DrReviewListComponent implements OnInit {
       
     } },
     {
-      headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', width: 150, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
         debugger
         if(data.data.IsRatingSubmitted && data.data.IsRatingSubmitted){

@@ -1,6 +1,6 @@
 <div class="animated fadeIn" >
-    <div class="row">
-        <div class="col-md-12" *ngIf="showKpiForm;else noRecordsFound">
+    <div >
+        <div *ngIf="showKpiForm;else noRecordsFound">
             <div class="card">
                 <div *ngIf="accessingFrom!='currEvaluation' " class="card-header">
                     Performance Goals
@@ -267,15 +267,16 @@
                             </div>
                              </div>
                             </div>
-                                  <div class="row">
+                                  <div class="col-md-4">
                                    
-                                    <div *ngIf="kpiDetails?.IsSubmitedKPIs"  class="input-group col-md-7">
-                                      <div class="input-group-prepend ml-2">
+                                    <div *ngIf="kpiDetails?.IsSubmitedKPIs"  class="input-group">
+                                      <div class="input-group-prepend">
                                         <span class="input-group-text">Sign-off</span>
                                       </div>
-                                      <input maxlength="12"  class="form-control"  type="text" disabled
+                                      <textarea maxlength="500" class="form-control"  cols="" rows="4"
+                                      disabled
                                       [ngClass]="{ 'is-invalid': f.Signoff.touched  &&  f.Signoff.invalid }"
-                                      formControlName="Signoff"  name="Signoff"          >
+                                      formControlName="Signoff"  name="Signoff"  >  </textarea>
                                     </div>
                                   </div>
                             
@@ -300,8 +301,8 @@
                         <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
                         <div class="clearfix"></div>
                         <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
-                            <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre Kpi</button>
-                            <button [disabled]='selIndex+1 == empKPIData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next Kpi</button>
+                            <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre</button>
+                            <button [disabled]='selIndex+1 == empKPIData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next</button>
                             
                           </div>
                         <div class="clearfix"></div>

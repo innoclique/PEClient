@@ -71,23 +71,23 @@ export class ActionPlanComponent implements OnInit {
   
   getColDef(){
     return [
-       { headerName: 'Developmental Goals', field: 'DevGoal', width: 250, autoHeight: true ,
+       { headerName: 'Developmental Goals', field: 'DevGoal', width: 200, autoHeight: true ,
        cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
        }
       } ,
-       { headerName: 'Desired Outcomes', field: 'DesiredOutcomes', width: 250, autoHeight: true },
-       { headerName: '# of Action Steps', field: 'GoalActionItems', width: 150, autoHeight: true ,
+       { headerName: 'Desired Outcomes', field: 'DesiredOutcomes', width: 200, autoHeight: true },
+       { headerName: '# of Action Steps', field: 'GoalActionItems', width: 200, autoHeight: true ,
        cellRenderer: (data) => {
         return data.data.GoalActionItems?data.data.GoalActionItems.length:0
        }
       },
-      { headerName: 'Draft', field: 'IsDraft', width: 180, sortable: true, filter: true ,
+      { headerName: 'Draft', field: 'IsDraft', width: 100, sortable: true, filter: true ,
       cellRenderer: (data) => {
         return data.data.IsDraft?'Yes':'No'
        }
       },
-       { headerName: 'Submited', field: 'IsGoalSubmited', width: 200, sortable: true, filter: true ,
+       { headerName: 'Submited', field: 'IsGoalSubmited', width: 120, sortable: true, filter: true ,
        cellRenderer: (data) => {
          return data.data.IsGoalSubmited?'Yes':'No'
         }
@@ -96,7 +96,7 @@ export class ActionPlanComponent implements OnInit {
          headerName: "Action",
          suppressMenu: true,
          Sorting: false,
-         width: 200,
+         width: 150,
          template: `
          
          <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -113,21 +113,21 @@ export class ActionPlanComponent implements OnInit {
 
    getStrengthColDef(){
     return [
-       { headerName: 'Strength', field: 'Strength', width: 220, autoHeight: true ,
+       { headerName: 'Strength', field: 'Strength', width: 180, autoHeight: true ,
        cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
        }
       } ,
-       { headerName: 'Leverage', field: 'Leverage', width: 200, autoHeight: true },
+       { headerName: 'Leverage', field: 'Leverage', width: 150, autoHeight: true },
        { headerName: 'Team Benefit', field: 'TeamBenifit', width: 150, autoHeight: true },
        { headerName: 'Self Benefit', field: 'SelfBenifit', width: 150, autoHeight: true },
        
-      { headerName: 'Draft', field: 'IsDraft', width: 150, sortable: true, filter: true ,
+      { headerName: 'Draft', field: 'IsDraft', width: 100, sortable: true, filter: true ,
       cellRenderer: (data) => {
         return data.data.IsDraft?'Yes':'No'
        }
       },
-      { headerName: 'Submited', field: 'IsStrengthSubmited', width: 150, sortable: true, filter: true ,
+      { headerName: 'Submitted', field: 'IsStrengthSubmited', width: 120, sortable: true, filter: true ,
       cellRenderer: (data) => {
         return data.data.IsStrengthSubmited?'Yes':'No'
        }
@@ -137,7 +137,7 @@ export class ActionPlanComponent implements OnInit {
          headerName: "Action",
          suppressMenu: true,
          Sorting: false,
-         width: 210,
+         width: 120,
          template: `
          
          <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;

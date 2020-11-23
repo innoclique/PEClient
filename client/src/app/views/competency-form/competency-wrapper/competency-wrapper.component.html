@@ -4,7 +4,7 @@
       <thead>
         <th>Question</th>
         <th></th>
-        <th>Employee Rating</th>
+        <th style="margin-left: -27px; display: block;margin-bottom: -1px;padding-left: 0px;">Employee Rating</th>
       </thead>
       <tbody>
         <tr>
@@ -21,22 +21,22 @@
     <div *ngIf="form" class="form-row">
       
       <div *ngIf="questions[0].showEmpRating" class="col-md-6">
-        <div class="form-group">
-          <label for="EmpComments" class="strong-key"> Comments: </label>
+        <div style="margin-left: 10px;" class="form-group">
+          <label  for="EmpComments" class="strong-key"> Comments: </label>
           <textarea maxlength="500" class="form-control" cols="" rows="4" formControlName="EmpComments"
             name="EmpComments">  </textarea>
         </div>
       </div>
 
       <div *ngIf="questions[0].showEmpRating" class="col-md-6">
-        <div class="form-group">
+        <div style="margin-left: 10px;" class="form-group">
           <label for="Comments" class="strong-key"> Manager Comments: </label>
           <textarea maxlength="500" class="form-control" cols="" rows="4" formControlName="Comments"
             name="Comments">  </textarea>
         </div>
       </div>
       <div *ngIf="!questions[0].showEmpRating" class="col-md-6">
-        <div class="form-group">
+        <div style="margin-left: 10px;" class="form-group">
           <label for="Comments" style="font-weight: 600;">  Comments: </label>
           <textarea maxlength="500" class="form-control" cols="" rows="4" formControlName="Comments"
             name="Comments">  </textarea>
