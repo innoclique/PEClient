@@ -86,3 +86,15 @@ p											{  font-size:15px; line-height:21px; font-weight:400; color:#717171;
     padding: 0 10px !important;
 }
 
+.bullet-label{
+    position:relative;
+    color:#000;
+    font-size:13px;
+    padding:0 0 0 10px;
+    margin-left:10px;
+}
+
+.bullet-label:after{
+    content:'';position:absolute; top:5px; left:0px; width:5px; height:5px; background:#000; border-radius:100%; 
+}
+

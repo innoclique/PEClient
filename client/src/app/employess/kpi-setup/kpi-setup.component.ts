@@ -70,12 +70,12 @@ export class KpiSetupComponent implements OnInit {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
       }
     },
-    { headerName: 'Target Completion', field: 'TargetCompletionDate', width:220, sortable: true, filter: true },
-    { headerName: 'Draft', field: 'IsDraft', width:200, sortable: true, filter: true },
-    { headerName: 'Status', field: 'Status', width:200, sortable: true, filter: true },
+    { headerName: 'Target Completion', field: 'TargetCompletionDate', width:150, sortable: true, filter: true },
+    { headerName: 'Draft', field: 'IsDraft', width:100, sortable: true, filter: true },
+    { headerName: 'Status', field: 'Status', width:150, sortable: true, filter: true },
     { headerName: 'Submited', field: 'IsSubmitedKPIs',  width:150, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width:240, autoHeight: true,  suppressSizeToFit: true,
+      headerName: 'Action', field: '', width:200, autoHeight: true,  suppressSizeToFit: true,
       cellRenderer: (data) => {
  let actionlinks=''
        if (data.data.RowData.IsActive) {
