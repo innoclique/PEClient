@@ -210,13 +210,13 @@
 
 .nav-tabs .nav-item {
   background: #eff4f9;
-  border-radius: 4px;
+  border-radius: 4px;border-right:1px solid #ddd;
 }
 
 .nav-link {
   font-weight: 600;
-  font-size: 14px;
-  padding: 10px 41px;
+  font-size: 13px;
+  padding: 10px 32px;
 }
 
 .nav-tabs .nav-link {
@@ -335,20 +335,21 @@ accordion .panel-default {
 
 .avgScore {
   padding: 10px;
-  ;
 }
 
 .autoc-border .form-check-input {
   margin-left: 30px;
 }
 
-.accordion {
-  background-color: lightgreen;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 2s;
+
+.btn-block {
+  padding: 0px;
 }
 
-.accordion.open {
-  max-height: 200px;
+.panel-heading {
+  padding: 9px 20px;
+}
+
+.accordion-header-padding {
+  padding-top: 6px;
 }
