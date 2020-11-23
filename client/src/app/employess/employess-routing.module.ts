@@ -23,6 +23,8 @@ import { ReviewEvaluationComponent } from './review-evaluation/review-evaluation
 import { ReviewEvaluationListComponent } from './review-evaluation-list/review-evaluation-list.component';
 import { DrReviewListComponent } from '../drreview/dr-review-list/dr-review-list.component';
 import { DoDrReviewComponent } from '../drreview/do-dr-review/do-dr-review.component';
+import { ReviewPerfGoalsListComponent } from './review-perf-goals-list/review-perf-goals-list.component';
+import { ReviewPerfGoalsComponent } from './review-perf-goals/review-perf-goals.component';
 
 
 
@@ -126,6 +128,20 @@ const routes: Routes = [
       {
         path: 'review-kpi-list',
         component: KpiReviewListComponent,
+        data: {
+          title: 'KPI Review'
+        }
+      },
+      {
+        path: 'review-perf-goals-list',
+        component: ReviewPerfGoalsListComponent,
+        data: {
+          title: 'Performance Goals Review'
+        }
+      },
+      {
+        path: 'review-perf-goals',
+        component: ReviewPerfGoalsComponent,
         data: {
           title: 'KPI Review'
         }

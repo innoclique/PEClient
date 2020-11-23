@@ -156,7 +156,7 @@
                   </div>
   
   
-                  <div  *ngIf="actor!='TS'" class="form-group form-actions pull-right mt-2 all-events">
+                  <div  *ngIf="actor!='TS' && accessingFrom!='reviewEvaluation' " class="form-group form-actions pull-right mt-2 all-events">
                     <button class="btn btn-sm btn-primary" (click)="navToGoalsList()" >Cancel</button>
   
                     <button *ngIf="!f.ManagerFTSubmitedOn"  class="btn btn-sm btn-primary" (click)="draftDevGoal()" >Save</button>

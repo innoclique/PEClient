@@ -122,7 +122,7 @@ export class SetupEmployeeComponent implements OnInit {
       ],
 
       PhoneNumber: [this.empDetails.PhoneNumber?this.empDetails.PhoneNumber:'', Validators.compose([
-         Validators.minLength(6),
+         Validators.minLength(10),
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       ExtNumber: [this.empDetails.ExtNumber?this.empDetails.ExtNumber:'', Validators.compose([
@@ -130,7 +130,7 @@ export class SetupEmployeeComponent implements OnInit {
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       AltPhoneNumber: [this.empDetails.AltPhoneNumber?this.empDetails.AltPhoneNumber:'', Validators.compose([
-        Validators.minLength(6),
+        Validators.minLength(10),
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       MobileNumber: [this.empDetails.MobileNumber?this.empDetails.MobileNumber:'', Validators.compose([
@@ -139,10 +139,11 @@ export class SetupEmployeeComponent implements OnInit {
       ])],
       IsActive: [this.empDetails.IsActive+'',[Validators.required] ],
       IsSubmit: ['false'],
-      JobLevel: [this.empDetails.JobLevel?this.empDetails.JobLevel:'',[Validators.required] ],
+      IsDraft: [this.empDetails.IsDraft?this.empDetails.IsDraft:'false'],
+      JobLevel: [this.empDetails.JobLevel?this.empDetails.JobLevel:null,[Validators.required] ],
       JobRole: [this.empDetails.JobRole?this.empDetails.JobRole:'',[Validators.required] ],
       Department: [this.empDetails.Department?this.empDetails.Department:'',[Validators.required] ],
-      ApplicationRole: [this.empDetails.ApplicationRole?this.empDetails.ApplicationRole:'',[Validators.required] ],
+      ApplicationRole: [this.empDetails.ApplicationRole?this.empDetails.ApplicationRole:null,[Validators.required] ],
       ThirdSignatory: [this.empDetails.ThirdSignatory?this.empDetails.ThirdSignatory:'',],
       CopiesTo: [this.empDetails.CopiesTo?this.empDetails.CopiesTo:'', ],
       Manager: [this.empDetails.Manager?this.empDetails.Manager:'',[Validators.required]],
@@ -187,7 +188,7 @@ export class SetupEmployeeComponent implements OnInit {
     {headerName: 'Title', field: 'Title', sortable: true, width:200, filter: true },
     // {headerName: 'Department', field: 'Department', sortable: true, filter: true },
     {headerName: 'Phone', field: 'PhoneNumber', sortable: true, filter: true },
-    // {headerName: 'IsDraft', field: 'IsDraft',  width: 120, sortable: true, filter: true },
+    {headerName: 'Draft', field: 'IsDraft',  width: 120, sortable: true, filter: true },
     {headerName: 'Active', field: 'IsActive',  width: 190, sortable: true, filter: true },
     {
       headerName: 'Action', field: '', width: 300, autoHeight: true, suppressSizeToFit: true,
@@ -244,6 +245,7 @@ openEmpForm() {
     this.empDetails=data;
 
     var depts= this.departments.filter(f=>f.DeptName==data.Department )[0];
+    if(depts)
     this.jobRoles=depts.JobRoles;
 
 
@@ -395,7 +397,7 @@ getEmployees(){
         ,Title:row.Title
         ,PhoneNumber:row.PhoneNumber
         ,IsActive:row.IsActive==true?"Yes":"No"
-        ,IsDraft:row.IsSubmit==false?"Yes":"No"
+        ,IsDraft:row.IsDraft==true?"Yes":"No"
         ,RowData:row
       }
     }
@@ -405,9 +407,16 @@ getEmployees(){
 
 
 
+saveCreateEmployee(){
+  this.empForm.patchValue({IsDraft: 'true' });
+  this.saveEmployee();
+}
+
+
 submitCreateEmployee(){
 
   if (!this.empForm.valid) {
+    this.empForm.markAllAsTouched();
       return;    
     }else{
       if (!this.empForm.get('PhoneNumber').value &&  !this.empForm.get('AltPhoneNumber').value
@@ -418,6 +427,7 @@ submitCreateEmployee(){
     }
 
   this.empForm.patchValue({IsSubmit: 'true' });
+  this.empForm.patchValue({IsDraft: 'false' });
   this.saveEmployee();
 }
 
@@ -450,11 +460,13 @@ saveEmployee(){
 
   //let roleCode= this.appRoles.filter(e=>e._id==this.perfApp.requestBody.ApplicationRole[0])[0];
   let selectedRoles= [];
+  if( this.perfApp.requestBody.ApplicationRole){
   this.perfApp.requestBody.ApplicationRole.forEach(element => {
         this.appRoles.filter(e=>
       {if (e._id==element)  selectedRoles.push( e.RoleCode)} )
         
   });
+}
   //this.perfApp.requestBody.Role=roleCode.RoleCode;
   this.perfApp.requestBody.SelectedRoles=selectedRoles;
   

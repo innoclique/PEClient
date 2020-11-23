@@ -65,6 +65,7 @@ actor:any;
   msSelText="";
   msSelVal="";
   currEvaluation: any;
+  unSubmitedCount=0;
 
 
   
@@ -129,6 +130,7 @@ actor:any;
 
 
   initKPIForm() {
+    debugger
     this.kpiForm = this.fb.group({
 
       MeasurementCriteria: [this.kpiDetails.MeasurementCriteria ? this.kpiDetails.MeasurementCriteria : '',
@@ -147,7 +149,10 @@ actor:any;
       YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager : ''],
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
       Signoff: [this.kpiDetails.Owner?this.kpiDetails.Owner.FirstName:""],
-      ManagerSignOff: [this.loginUser.FirstName],
+    
+      ManagerSignOff:  [ this.kpiDetails.ManagerSignOff?
+        this.kpiDetails.ManagerSignOff.submited==false?  "" : this.kpiDetails.ManagerSignOff.SignOffBy
+      :""],
       CoachingReminder: [this.kpiDetails.CoachingReminder ? this.kpiDetails.CoachingReminder :this.loginUser.Organization.CoachingReminder],
 
       IsSubmit: ['false'],
@@ -178,7 +183,12 @@ actor:any;
 
 
   onCancle() {
-    this.router.navigate(['employee/review-evaluation-list']);
+    if(this.accessingFrom=='kpiReview'){
+    
+    this.router.navigate(['employee/review-perf-goals-list']);
+    }else{
+      this.router.navigate(['employee/review-evaluation-list']);
+    }
   }
 
   submitKpi() {
@@ -196,12 +206,17 @@ actor:any;
 
     this.kpiForm.patchValue({ IsSubmit: 'true' });
     this.kpiForm.patchValue({ IsDraft: 'false' });
-    this.openConfirmSubmitKpisDialog();
+    this.submitReview();
   }
 
 
   
   submitReview() {
+if(this.accessingFrom=="reviewEvaluation" && this.unSubmitedCount>0){
+this.snack.error("Please sign-off performance goals")
+return
+}
+
     this.perfApp.route = "app";
     this.perfApp.method = "UpdateKpiDataById";
     this.perfApp.requestBody = {};
@@ -210,7 +225,7 @@ actor:any;
     this.perfApp.requestBody.ManagerScore = this.kpiForm.get('ManagerScore').value;
     this.perfApp.requestBody.YECommManager = this.kpiForm.get('YECommManager').value;
     this.perfApp.requestBody.CoachingReminder = this.kpiForm.get('CoachingReminder').value;
-    this.perfApp.requestBody.IsManaFTSubmited = this.kpiForm.get('ManagerFTSubmitedOn').value ? false:true;
+    //this.perfApp.requestBody.IsManaFTSubmited = this.kpiForm.get('ManagerFTSubmitedOn').value ? false:true;
     this.perfApp.requestBody.Action='Review' ;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
     this.perfApp.CallAPI().subscribe(c => {
@@ -218,7 +233,7 @@ actor:any;
       if (c) {
 
       this.getAllKPIs();
-    this.snack.success(this.translate.instant(`Your sign-off is successful`));
+    this.snack.success(this.translate.instant(`Performance Goal Updated Successfully`));
         
       }
     })
@@ -412,12 +427,13 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
   submitAllKPIs() {
 
     this.perfApp.route = "app";
-    this.perfApp.method = "SubmitKpisForEvaluation",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id }
+    this.perfApp.method = "SubmitAllKpisByManager",
+      this.perfApp.requestBody = { 'empId': this.currentEmpId }
     this.perfApp.CallAPI().subscribe(c => {
 
      if (c) {
       this.snack.success(c.message);
+
      } else {
        
      }
@@ -449,6 +465,7 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
 
       this.setWeighting(c.filter(item => item.IsDraft === false).length);
       if (c && c.length > 0) {
+        this.unSubmitedCount=c.filter(e=>e.ManagerSignOff.submited ==false).length;
         this.empKPIData = c;
 
 
@@ -505,7 +522,7 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
 
 
   onKpiAutoSelected(event) {
-
+    this.selectedItems=[];
     var selkpi = event.option.value;
 
     selkpi.MeasurementCriteria.forEach(e => {
@@ -588,59 +605,6 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
   }
   
 
-  async toggleSelectAll(){
-    this.isAllSelected = !this.isAllSelected;
-  //   let len = this.selectedItems.length;
-  //   if ( this.isAllSelected ){
-  //         for ( let i=0; i++; i<len )
-  //           this.selectedItems[i].selected = true;
-  //         // this.selectedItems = data;
-  //     this.selectedItems = this.selectedItems;
-  //     // for ( let i=0; i++; i<len )
-  //     //   this.items[i].selected = true;
-  //     // this.selectedItems. = [...this.items];
-  // //    this.changeCallback( this.selectedItems );
-  // //    this.cd.markForCheck();
-  //     // this.itemControl.updateValueAndValidity();
-  //   } else {
-  //     this.selectedItems = [];
-  //     // for ( let i=0; i++; i<len )
-  //     // this.items[i].selected = false;
-
-  //   }
-  // //  this.changeCallback( this.selectedItems );
-
-
-
-
-this.selectedItems=[];
-this.msSelText="";
-if ( this.isAllSelected ){
-  
- await this.filteredOptionsTS.forEach(e => {
-    e.map(m => {
-
-         m.selected =this.isAllSelected;
-        this.selectedItems.push(m);
-        this.msSelText +=  m.Name+","
-    })
-
-  });
- 
-
-}else{
-  this.msSelText="";
-  this.filteredOptionsTS.forEach(e => {
-    e.map(m => {
-
-      // if (m._id == item._id)
-        m.selected =this.isAllSelected;
-    })
-
-  });
-
-}
-  }
 
   onFocusOut(){
 
@@ -687,7 +651,7 @@ this.msSelText="";
     dialogRef.afterClosed().subscribe(resp => {
      if (resp=='yes') {
       this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
-      this.submitReview();
+      this.submitAllKPIs();
      } else {
        
      }
@@ -710,7 +674,7 @@ this.msSelText="";
 
       
 this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactivated'} Successfully`));
-this.router.navigate(['em/review-kpi-list']);
+this.onCancle();
       }
     })
 

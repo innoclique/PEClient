@@ -118,7 +118,7 @@ public currentOrganization:any={}
       ],
 
       PhoneNumber: [this.empDetails.PhoneNumber?this.empDetails.PhoneNumber:'', Validators.compose([
-         Validators.minLength(6),
+         Validators.minLength(10),
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       ExtNumber: [this.empDetails.ExtNumber?this.empDetails.ExtNumber:'', Validators.compose([
@@ -126,7 +126,7 @@ public currentOrganization:any={}
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       AltPhoneNumber: [this.empDetails.AltPhoneNumber?this.empDetails.AltPhoneNumber:'', Validators.compose([
-        Validators.minLength(6),
+        Validators.minLength(10),
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       MobileNumber: [this.empDetails.MobileNumber?this.empDetails.MobileNumber:'', Validators.compose([
@@ -135,10 +135,11 @@ public currentOrganization:any={}
       ])],
       IsActive: [this.empDetails.IsActive+'',[Validators.required] ],
       IsSubmit: ['false'],
-      JobLevel: [this.empDetails.JobLevel?this.empDetails.JobLevel:'',[Validators.required] ],
+      IsDraft: ['false'],
+      JobLevel: [this.empDetails.JobLevel?this.empDetails.JobLevel:null,[Validators.required] ],
       JobRole: [this.empDetails.JobRole?this.empDetails.JobRole:'',[Validators.required] ],
       Department: [this.empDetails.Department?this.empDetails.Department:'',[Validators.required] ],
-      ApplicationRole: [this.empDetails.ApplicationRole?this.empDetails.ApplicationRole:'',[Validators.required] ],
+      ApplicationRole: [this.empDetails.ApplicationRole?this.empDetails.ApplicationRole:null,[Validators.required] ],
       ThirdSignatory: [this.empDetails.ThirdSignatory?this.empDetails.ThirdSignatory:'',],
       CopiesTo: [this.empDetails.CopiesTo?this.empDetails.CopiesTo:'', ],
       Manager: [this.empDetails.Manager?this.empDetails.Manager:'',[Validators.required]],
@@ -157,7 +158,27 @@ public currentOrganization:any={}
 
     });
   }
+  saveCreateEmployee(){
+    if(this.empForm.get('FirstName').value=="" || this.empForm.get('Email').value==""){
+    if(this.empForm.get('FirstName').value=="" && this.empForm.get('Email').value==""){
 
+      this.snack.error(this.translate.instant('First Name, Email is required'));
+      return
+    }
+    if(this.empForm.get('FirstName').value==""){
+      this.snack.error(this.translate.instant('First Name is required'));
+      return
+    }
+    if(this.empForm.get('Email').value==""){
+      this.snack.error(this.translate.instant('Email is required'));
+      return
+    }
+    
+  }
+
+    this.empForm.patchValue({IsDraft: 'true' });
+    this.saveEmployee();
+  }
 
   onCancle(){
     this.router.navigate(['ea/setup-employee']);
@@ -176,6 +197,7 @@ this.submitClicked=true;
       }
   
     this.empForm.patchValue({IsSubmit: 'true' });
+    this.empForm.patchValue({IsDraft: 'false' });
     this.saveEmployee();
   }
   
@@ -212,11 +234,13 @@ this.submitClicked=true;
       this.perfApp.requestBody.IgnoreEvalAdminCreated=false;
      // let roleCode= this.appRoles.filter(e=>e._id==this.perfApp.requestBody.ApplicationRole[0])[0];
       let selectedRoles= [];
+     if( this.perfApp.requestBody.ApplicationRole){
       this.perfApp.requestBody.ApplicationRole.forEach(element => {
             this.appRoles.filter(e=>
           {if (e._id==element)  selectedRoles.push( e.RoleCode)} )
             
       });
+    }
       this.perfApp.requestBody.Role='EO';
       this.perfApp.requestBody.SelectedRoles=selectedRoles;
       this.perfApp.requestBody.RoleEffFrom= this.perfApp.requestBody.JoiningDate;

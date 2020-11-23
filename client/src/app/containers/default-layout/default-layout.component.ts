@@ -149,15 +149,26 @@ export class DefaultLayoutComponent implements OnInit {
 
           if (this.user.SelectedRoles.indexOf('EM') > -1) {
             navigationMenu.push(
-              // {
+             
+
+   {
           
-              //   "IsActive": true,
-              //   "url": "/em/review-kpi-list",
-              //   "name": "Performance Goal Review",
-              //   "code": "KPISetting",
-              //   "icon": "icon-wrench"
-                
-              // },
+    "IsActive": true,
+    "url": "/employee/review-perf-goals-list",
+    "name": "Performance Goal Review",
+    "code": "KPISetting",
+    "icon": "icon-wrench"
+    
+  },
+  {
+
+    "IsActive": true,
+    "url": "/employee/review-action-plan-list",
+    "name": "Action Plan Review",
+    "code": "KPISetting",
+    "icon": "icon-layers"
+    
+  },
               {
                 "IsActive": true,
                 "url": "/employee/review-evaluation-list",
@@ -174,15 +185,26 @@ export class DefaultLayoutComponent implements OnInit {
           if (this.user.SelectedRoles.indexOf('TS') > -1) {
           navigationMenu.push(
          
-            // {
+         
+
+   {
           
-            //   "IsActive": true,
-            //   "url": "/em/review-kpi-list",
-            //   "name": "Performance Goal Review",
-            //   "code": "KPISetting",
-            //   "icon": "icon-wrench"
-              
-            // },
+    "IsActive": true,
+    "url": "/employee/review-perf-goals-list",
+    "name": "Performance Goal Review",
+    "code": "KPISetting",
+    "icon": "icon-wrench"
+    
+  },
+  {
+
+    "IsActive": true,
+    "url": "/employee/review-action-plan-list",
+    "name": "Action Plan Review",
+    "code": "KPISetting",
+    "icon": "icon-layers"
+    
+  },
             {
               "IsActive": true,
               "url": "/employee/review-evaluation-list",

@@ -136,7 +136,7 @@ Back to list
                               [ngClass]="{ 'is-invalid': (f.AltPhoneNumber.touched || submitClicked)  &&  f.AltPhoneNumber.invalid }"
                               formControlName="AltPhoneNumber"  name="AltPhoneNumber"  >
                               <div *ngIf="(f.AltPhoneNumber.touched || submitClicked) && f.AltPhoneNumber.invalid" class="invalid-feedback">
-                                <div *ngIf="f.AltPhoneNumber.errors.minlength">Alt. Phone must be at least 6 characters  </div>
+                                <div *ngIf="f.AltPhoneNumber.errors.minlength">Alt. Phone must be at least 10 characters  </div>
                                 <div *ngIf="f.AltPhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
                             </div>
                             
@@ -517,6 +517,7 @@ Back to list
                    
                 <div class="form-group form-actions pull-right">
                   <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>
+                  <button  class="btn btn-sm btn-primary" (click)="saveCreateEmployee()" >Save</button>
                   <button  class="btn btn-sm btn-primary" (click)="submitCreateEmployee()" >Submit</button>
                 </div>
   

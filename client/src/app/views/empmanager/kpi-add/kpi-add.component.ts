@@ -151,7 +151,7 @@ export class KpiAddComponent implements OnInit {
 
 
   onCancle() {
-    this.router.navigate(['employee/review-evaluation-list']);
+    this.router.navigate(['employee/review-perf-goals-list']);
   }
 
   submitKpi() {
@@ -241,7 +241,7 @@ export class KpiAddComponent implements OnInit {
 
         this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'add' ? 'Added' : 'Updated'}  Successfully`));
 
-        this.router.navigate(['employee/review-evaluation-list']);
+        this.router.navigate(['employee/review-perf-goals-list']);
       }
 
     }, error => {

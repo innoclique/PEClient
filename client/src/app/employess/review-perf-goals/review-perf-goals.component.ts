@@ -1,9 +1,10 @@
+
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-
+import { error } from 'console';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -13,15 +14,16 @@ import { AuthService } from '../../services/auth.service';
 import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
+import { ThemeService } from '../../services/theme.service';
 
 
 
 @Component({
-  selector: 'app-review-evaluation',
-  templateUrl: './review-evaluation.component.html',
-  styleUrls: ['./review-evaluation.component.css']
+  selector: 'app-review-perf-goals',
+  templateUrl: './review-perf-goals.component.html',
+  styleUrls: ['./review-perf-goals.component.css']
 })
-export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
+export class ReviewPerfGoalsComponent implements OnInit {
 
   loginUser: any;
   selectedUser: any;
@@ -50,7 +52,6 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   currentEmpId: any;
   currentAction: any;
   showCompetencySubmitForManager:Boolean=true;
-  isContentOpen: boolean = false;
   @ViewChild('evTabset') tabset: TabsetComponent;
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -84,34 +85,34 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
    
   }
 
-  ngAfterViewInit(){
-        this.goto(this.currentAction)
-  }
+  // ngAfterViewInit(){
+  //       this.goto(this.currentAction)
+  // }
 
   ngOnInit(): void {   
   }
 
 
-  callInitApis(){
-      this.initCompetencyForm();
-      this.initFinalRatingForm();
-      this.getTabsData();
-}
+//   callInitApis(){
+//       this.initCompetencyForm();
+//       this.initFinalRatingForm();
+//      // this.getTabsData();
+// }
 
 
-goto(selTab){
+// goto(selTab){
 
-  if (selTab=='reviewKPI') {
-    this.tabset.tabs[0].active = true;
-  } else  if (selTab=='reviewGoals') {
-    this.tabset.tabs[2].active = true;
-  }
-  else  if (selTab=='reviewEval') {
-    this.tabset.tabs[4].active = true;
-  }
+//   if (selTab=='reviewKPI') {
+//     this.tabset.tabs[0].active = true;
+//   } else  if (selTab=='reviewGoals') {
+//     this.tabset.tabs[3].active = true;
+//   }
+//   else  if (selTab=='reviewEval') {
+//     this.tabset.tabs[7].active = true;
+//   }
 
   
-}
+// }
 
 
   public columnDefs = [
@@ -121,7 +122,7 @@ goto(selTab){
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
       }
     },
-    { headerName: 'No.of Performance Goals', field: 'KpiCount', sortable: true, filter: true },
+    { headerName: 'No.of  Performance Goals', field: 'KpiCount', sortable: true, filter: true },
     // { headerName: 'Score (self)', field: 'Score', width: 150, sortable: true, filter: true },
     // { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
     // { headerName: 'Performance Goal Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
@@ -138,79 +139,79 @@ goto(selTab){
   ];
 
   /**To GET ALL  tabs data */
-  getTabsData() {
-    forkJoin(
-      this.getCurrentEvaluationDetails().pipe(catchError(error => of({ error: error, isError: true })))      
-    ).subscribe(([res1]) => {
+  // getTabsData() {
+  //   forkJoin(
+  //     this.getCurrentEvaluationDetails().pipe(catchError(error => of({ error: error, isError: true })))      
+  //   ).subscribe(([res1]) => {
       
-      if (res1 && !res1.isError) {
+  //     if (res1 && !res1.isError) {
 
-        this.evaluationForm = res1;
-        if (res1.Competencies.Employee) {
-          this.employeeCompetencyList = res1.Competencies.Employee.Competencies;
+  //       this.evaluationForm = res1;
+  //       if (res1.Competencies.Employee) {
+  //         this.employeeCompetencyList = res1.Competencies.Employee.Competencies;
           
-          // this.setCompetencies();
-         // this.prepareCompetencyQuestions();
-          this.prepareCompetencyQuestionsByManager();
-          console.log('the evauation form', this.evaluationForm)
-        }
-        if (res1.FinalRating) {
-          this.FinalRatingForm.controls["EmployeeComments"].setValue(res1.FinalRating.Self.YearEndComments)
-          this.FinalRatingForm.controls["EmployeeRevComments"].setValue(res1.FinalRating.Self.RevComments)
-          this.FinalRatingForm.controls["EmployeeOverallRating"].setValue(res1.FinalRating.Self.YearEndRating)
-          this.FinalRatingForm.controls["EmployeeIsDraft"].setValue(!res1.FinalRating.Self.IsSubmitted)
-          this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff)
-          this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
-          this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
+  //         // this.setCompetencies();
+  //         this.prepareCompetencyQuestions();
+  //         this.prepareCompetencyQuestionsByManager();
+  //         console.log('the evauation form', this.evaluationForm)
+  //       }
+  //       if (res1.FinalRating) {
+  //         this.FinalRatingForm.controls["EmployeeComments"].setValue(res1.FinalRating.Self.YearEndComments)
+  //         this.FinalRatingForm.controls["EmployeeRevComments"].setValue(res1.FinalRating.Self.RevComments)
+  //         this.FinalRatingForm.controls["EmployeeOverallRating"].setValue(res1.FinalRating.Self.YearEndRating)
+  //         this.FinalRatingForm.controls["EmployeeIsDraft"].setValue(!res1.FinalRating.Self.IsSubmitted)
+  //         this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff)
+  //         this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
+  //         this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
 
 
-          this.FinalRatingForm.controls["ManagerComments"].setValue(res1.FinalRating.Manager.YearEndComments)
-          this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1.FinalRating.Manager.YearEndRating)
-          this.FinalRatingForm.controls["ManagerIsDraft"].setValue(!res1.FinalRating.Manager.IsSubmitted)
-          this.FinalRatingForm.controls["ManagerSignOff"].setValue(res1.FinalRating.Manager.SignOff?res1.FinalRating.Manager.SignOff
-            :this.loginUser.FirstName+" "+this.loginUser.LastName)
-          this.FinalRatingForm.controls["ManagerSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Manager.SubmittedOn))
-          this.showManagerSubmit = !res1.FinalRating.Manager.IsSubmitted;
-          this.FinalRatingForm.controls["ManagerRevComments"].setValue(res1.FinalRating.Manager.RevComments)
-          this.FinalRatingForm.controls["ManagerReqRevision"].setValue(res1.FinalRating.Manager.ReqRevision)
+  //         this.FinalRatingForm.controls["ManagerComments"].setValue(res1.FinalRating.Manager.YearEndComments)
+  //         this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1.FinalRating.Manager.YearEndRating)
+  //         this.FinalRatingForm.controls["ManagerIsDraft"].setValue(!res1.FinalRating.Manager.IsSubmitted)
+  //         this.FinalRatingForm.controls["ManagerSignOff"].setValue(res1.FinalRating.Manager.SignOff?res1.FinalRating.Manager.SignOff
+  //           :this.loginUser.FirstName+" "+this.loginUser.LastName)
+  //         this.FinalRatingForm.controls["ManagerSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Manager.SubmittedOn))
+  //         this.showManagerSubmit = !res1.FinalRating.Manager.IsSubmitted;
+  //         this.FinalRatingForm.controls["ManagerRevComments"].setValue(res1.FinalRating.Manager.RevComments)
+  //         this.FinalRatingForm.controls["ManagerReqRevision"].setValue(res1.FinalRating.Manager.ReqRevision)
 
 
           
-          this.FinalRatingForm.controls["ThirdSignatoryComments"].setValue(res1.FinalRating.ThirdSignatory.YearEndComments)
-          this.FinalRatingForm.controls["ThirdSignatoryRevComments"].setValue(res1.FinalRating.ThirdSignatory.RevComments)
-          this.FinalRatingForm.controls["TSReqRevision"].setValue(res1.FinalRating.ThirdSignatory.ReqRevision)
-          this.FinalRatingForm.controls["ThirdSignatoryIsDraft"].setValue(!res1.FinalRating.ThirdSignatory.IsSubmitted)
-          this.FinalRatingForm.controls["ThirdSignatorySignOff"].setValue(res1.FinalRating.ThirdSignatory.SignOff?res1.FinalRating.ThirdSignatory.SignOff
-            :this.loginUser.FirstName+" "+this.loginUser.LastName)
-          this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.ThirdSignatory.SubmittedOn))
-          this.showThirdSignatorySubmit = !res1.FinalRating.ThirdSignatory.IsSubmitted;
+  //         this.FinalRatingForm.controls["ThirdSignatoryComments"].setValue(res1.FinalRating.ThirdSignatory.YearEndComments)
+  //         this.FinalRatingForm.controls["ThirdSignatoryRevComments"].setValue(res1.FinalRating.ThirdSignatory.RevComments)
+  //         this.FinalRatingForm.controls["TSReqRevision"].setValue(res1.FinalRating.ThirdSignatory.ReqRevision)
+  //         this.FinalRatingForm.controls["ThirdSignatoryIsDraft"].setValue(!res1.FinalRating.ThirdSignatory.IsSubmitted)
+  //         this.FinalRatingForm.controls["ThirdSignatorySignOff"].setValue(res1.FinalRating.ThirdSignatory.SignOff?res1.FinalRating.ThirdSignatory.SignOff
+  //           :this.loginUser.FirstName+" "+this.loginUser.LastName)
+  //         this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.ThirdSignatory.SubmittedOn))
+  //         this.showThirdSignatorySubmit = !res1.FinalRating.ThirdSignatory.IsSubmitted;
 
 
-        }
-        if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
-          this.PeerScoreCard = res1.PeerScoreCard;
-        }
-        if (res1 && Object.keys(res1.DirectReporteeScoreCard).length > 0) {
-          this.DirectReporteeScoreCard = res1.DirectReporteeScoreCard;
-        }
+  //       }
+  //       if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
+  //         this.PeerScoreCard = res1.PeerScoreCard;
+  //       }
+  //       if (res1 && Object.keys(res1.DirectReporteeScoreCard).length > 0) {
+  //         this.DirectReporteeScoreCard = res1.DirectReporteeScoreCard;
+  //       }
 
-      } else {
-        this.evaluationForm = null;
-      }
+  //     } else {
+  //       this.evaluationForm = null;
+  //     }
       
-    },error=>{
-      console.log('error while getting evaluation data',error)
-      this.evaluationForm=null;
-      this.snack.error('something went wrong')
-    });
+  //   },error=>{
+  //     console.log('error while getting evaluation data',error)
+  //     this.evaluationForm=null;
+  //     this.snack.error('something went wrong')
+  //   });
 
-  }
-  getCurrentEvaluationDetails() {
-    this.perfApp.route = "evaluation";
-    this.perfApp.method = "GetEmpCurrentEvaluation",
-      this.perfApp.requestBody = { EmployeeId: this.currentEmpId }
-    return this.perfApp.CallAPI()
-  }
+  // }
+  // getCurrentEvaluationDetails() {
+  //   this.perfApp.route = "evaluation";
+  //   this.perfApp.method = "GetEmpCurrentEvaluation",
+  //     this.perfApp.requestBody = { EmployeeId: this.currentEmpId }
+  //   return this.perfApp.CallAPI()
+  // }
 
  async GetEmployeeDetailsById() {
     this.perfApp.route = "app";
@@ -219,7 +220,7 @@ goto(selTab){
       this.perfApp.CallAPI().subscribe(x => {
       this.selectedUser =x;
 
-      this.callInitApis();
+     // this.callInitApis();
       }, error => {
         console.log('error', error)
         this.evaluationForm=null;
@@ -348,10 +349,7 @@ goto(selTab){
           options: q.Rating,
           order: 1,
           required: true,
-          value: q.SelectedRating,
-          showEmpRating:true,
-          empRating:this.getQuestionRating(q._id),
-          empKey:q._id
+          value: q.SelectedRating
         }))
 
       });
@@ -363,35 +361,11 @@ goto(selTab){
         Questions: questions,
         form: this.qcs.toFormGroup(questions),
         comments:element.Comments,
-        empComments:this.getEmpCommentsForCompetency(element.Competency._id),
-        CompetencyAvgRating:this.getCompetencyOverallRating(element.Competency._id)//element.CompetencyAvgRating
+        CompetencyAvgRating:element.CompetencyAvgRating
       })
 
     });
 
-  }
-  getCompetencyOverallRating(competencyId){
-    if(this.evaluationForm.OverallCompetencyRating){
-      var _rate=this.evaluationForm.OverallCompetencyRating.find(x=>x.competencyId===competencyId);
-      return _rate.overallScore||"Pending";
-    }
-  }
-  getQuestionRating(questionId){    
-    var ff=this.employeeCompetencyList.map(element => {return element.Questions.find(q=>q._id===questionId)})      
-      if(ff && ff[0]){
-        return ff[0].SelectedRating
-      }else{
-        return "Pending";
-      }
-  }
-  getEmpCommentsForCompetency(competencyId){    
-debugger
-    var ff=this.employeeCompetencyList.map(element => {return element.Competency._id===competencyId?element.Comments:""});
-      if(ff && ff[0]){
-        return ff[0]
-      }else{
-        return "";
-      }
   }
   cancelCompetencyRating() {
 
@@ -571,4 +545,5 @@ if (this.FinalRatingForm.value.TSReqRevision &&
     return avg;
   }
 }
+
 

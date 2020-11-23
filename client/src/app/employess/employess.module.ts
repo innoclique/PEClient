@@ -47,6 +47,8 @@ import { ReviewEvaluationComponent } from './review-evaluation/review-evaluation
 import { ReviewEvaluationListComponent } from './review-evaluation-list/review-evaluation-list.component';
 import { EmpmanagerModule } from '../views/empmanager/empmanager.module';
 import { DRReviewModule } from '../drreview/drreview.module';
+import { ReviewPerfGoalsListComponent } from './review-perf-goals-list/review-perf-goals-list.component';
+import { ReviewPerfGoalsComponent } from './review-perf-goals/review-perf-goals.component';
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
@@ -56,7 +58,9 @@ import { DRReviewModule } from '../drreview/drreview.module';
      KpiReviewComponent,
      KpiReviewListComponent,
      ReviewEvaluationComponent,
-     ReviewEvaluationListComponent
+     ReviewEvaluationListComponent,
+     ReviewPerfGoalsListComponent,
+     ReviewPerfGoalsComponent
     ],
   imports: [
     CommonModule,

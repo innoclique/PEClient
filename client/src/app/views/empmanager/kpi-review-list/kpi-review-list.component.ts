@@ -56,7 +56,7 @@ export class KpiReviewListComponent implements OnInit {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
       }
     },
-    { headerName: 'No.of Kpis', field: 'KpiCount', sortable: true, filter: true },
+    { headerName: 'No.of  Performance Goals', field: 'KpiCount', sortable: true, filter: true },
     // { headerName: 'Score (self)', field: 'Score', width: 150, sortable: true, filter: true },
     // { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
     // { headerName: 'Performance Goal Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
@@ -67,6 +67,10 @@ export class KpiReviewListComponent implements OnInit {
       
         return `<i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i>       
+        
+        <i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="VF" title="Review Performance Goal"></i>
+              
         `
        
        
@@ -154,8 +158,14 @@ this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activate
    
 
     this.router.navigate(['em/kpi-review',
-       {action:'view',id:this.currentRowItem[0]._id,empId:this.currentRowItem[0].Owner._id}
+       {action:'view',id:this.currentRowItem[0]._id,empId:this.currentRowItem[0].Owner._id,empManagerId:this.currentRowItem[0].Manager._id}
         ],{ skipLocationChange: true });
+
+      //   reviewEvalForm(action,actor) {
+      //     this.router.navigate(['employee/review-evaluation',
+      //      { action: action, empId: this.currentRowItem._id,actor:actor,empManagerId:this.currentRowItem.Manager }
+      //   ], { skipLocationChange: true });
+      // }
     
 }
   
@@ -169,7 +179,7 @@ this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activate
 
   getAllKpis() {
     this.perfApp.route = "app";
-    this.perfApp.method = "GetKpisByManager",
+    this.perfApp.method = "GetKpisByManagerId",
       this.perfApp.requestBody = { 'managerId': this.loginUser._id }
 
 

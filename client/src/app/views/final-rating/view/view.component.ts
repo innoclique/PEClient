@@ -45,7 +45,7 @@ export class ViewComponent implements OnInit {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
       }
     },
-    { headerName: 'No.of Kpis', field: 'KpiCount', sortable: true, filter: true },
+    { headerName: 'No.of  Performance Goals', field: 'KpiCount', sortable: true, filter: true },
     // { headerName: 'Score (self)', field: 'Score', width: 150, sortable: true, filter: true },
     // { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
     // { headerName: 'Performance Goal Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },

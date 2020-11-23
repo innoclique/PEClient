@@ -150,7 +150,7 @@
 
                         <div *ngIf="f.PhoneNumber.touched && f.PhoneNumber.invalid" class="invalid-feedback">
                           <!-- <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div> -->
-                          <div *ngIf="f.PhoneNumber.errors.minlength">Phone Number must be at least 6 characters  </div>
+                          <div *ngIf="f.PhoneNumber.errors.minlength">Phone Number must be at least 10 characters  </div>
                           <div *ngIf="f.PhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
 
                       </div>
@@ -166,7 +166,7 @@
                         [ngClass]="{ 'is-invalid': f.AltPhoneNumber.touched  &&  f.AltPhoneNumber.invalid }"
                         formControlName="AltPhoneNumber"  name="AltPhoneNumber"  >
                         <div *ngIf="f.AltPhoneNumber.touched && f.AltPhoneNumber.invalid" class="invalid-feedback">
-                          <div *ngIf="f.AltPhoneNumber.errors.minlength">Alt. Phone must be at least 6 characters  </div>
+                          <div *ngIf="f.AltPhoneNumber.errors.minlength">Alt. Phone must be at least 10 characters  </div>
                           <div *ngIf="f.AltPhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
                       </div>
                       
@@ -536,6 +536,7 @@
       <div *ngIf="currentAction != 'view'" class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="addEmployee.hide();closeForm()">Cancel</button>
         <!-- <button *ngIf="!currentRowItem?.IsSubmit" type="button" (click)="createEmployee()" class="btn btn-primary">Save changes</button> -->
+        <button *ngIf="!currentRowItem?.IsSubmit" class="btn  btn-primary" (click)="saveCreateEmployee()" >Save</button>
         <button type="button"  (click)="submitCreateEmployee()" class="btn btn-primary">
           {{currentAction == 'create'?'Submit':'Update'}}</button>
       </div>

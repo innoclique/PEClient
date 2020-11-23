@@ -2,14 +2,14 @@
     <div class="row" *ngIf="showKpiForm;else noRecordsFound" >
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
+                <div  *ngIf="accessingFrom!='reviewEvaluation' " class="card-header">
                     Performance Goal Review
 
                     <div class="form-group form-actions pull-right m-0">
                         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                        (click)="router.navigate(['employee/review-evaluation-list'])" ><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list </button>  
+                        (click)="onCancle()" ><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list </button>  
 
-                       
+                        <button *ngIf="accessingFrom=='kpiReview' " [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="openConfirmSubmitKpisDialog()" >Submit Performance Goals</button>
                     <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
                     font-size: 17px;"  (click)="trackKpi()"  title="Track Performance Goal" ></i>    
                     <i *ngIf="kpiDetails?.IsActive" class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -390,7 +390,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">Score (self)</span>
+                                            <span class="input-group-text">Score</span>
                                         </div>
                                         <select class="form-control"
                                             [ngClass]="{ 'is-invalid': f.ManagerScore.touched  &&  f.ManagerScore.invalid }"
@@ -405,7 +405,7 @@
                                     </div>
                                 </div>
 
-                                <div *ngIf="kpiDetails?.ManagerSignOff" class="form-group">
+                                <div *ngIf="kpiDetails?.ManagerSignOff?.SignOffBy" class="form-group">
                                     <div class="input-group ">
                                         <div class="input-group-prepend ml-2">
                                             <span class="input-group-text">Sign-off</span>
@@ -457,7 +457,7 @@
 
 
 
-                                <div *ngIf="kpiDetails?.ManagerSignOff" class="input-group">
+                                <div *ngIf="kpiDetails?.ManagerSignOff?.SignOffBy" class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text "> Date</span>
                                     </div>
@@ -494,7 +494,7 @@
                         <div *ngIf="kpiDetails?.IsActive && !kpiDetails?.IsDraftByManager && actor!='TS'  "  class="form-group form-actions pull-right">
                             <button class="btn btn-sm btn-primary" (click)="onCancle()">Cancel</button>
                             <button  class="btn btn-sm btn-primary"
-                                (click)="submitKpi()">{{currentAction=='edit'? 'Update' :'Submit' }}</button>
+                                (click)="submitKpi()">{{currentAction=='edit'? 'Update' :'Update' }}</button>
                           
                         </div>
 
