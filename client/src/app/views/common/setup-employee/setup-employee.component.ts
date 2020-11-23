@@ -181,17 +181,17 @@ export class SetupEmployeeComponent implements OnInit {
   }
 
   public columnDefs = [
-    {headerName: 'Employee', field: 'Name', width: 320, sortable: true, filter: true,
+    {headerName: 'Employee', field: 'Name', width: 300, sortable: true, filter: true,
     cellRenderer: (data) => {
       return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     }},
-    {headerName: 'Title', field: 'Title', sortable: true, width:200, filter: true },
+    {headerName: 'Title', field: 'Title', sortable: true, width:120, filter: true },
     // {headerName: 'Department', field: 'Department', sortable: true, filter: true },
     {headerName: 'Phone', field: 'PhoneNumber', sortable: true, filter: true },
-    {headerName: 'Draft', field: 'IsDraft',  width: 120, sortable: true, filter: true },
-    {headerName: 'Active', field: 'IsActive',  width: 190, sortable: true, filter: true },
+    {headerName: 'Draft', field: 'IsDraft',  width: 100, sortable: true, filter: true },
+    {headerName: 'Active', field: 'IsActive',  width: 100, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width: 300, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', width: 150, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';

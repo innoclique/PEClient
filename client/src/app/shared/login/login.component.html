@@ -11,7 +11,7 @@
                   <p class="text-muted">Sign In to your account</p>
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="icon-user"></i></span>
+                      <span class="input-group-text login-form"><i class="icon-user"></i></span>
                     </div>
                     <input class="form-control" [ngClass]="{ 'is-invalid': f.username.touched  &&  f.username.invalid }"
                       type="text" class="form-control" placeholder="Username" autocomplete="username"
@@ -28,7 +28,7 @@
                   </div>
                   <div class="input-group mb-4">
                     <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="icon-lock"></i></span>
+                      <span class="input-group-text login-form"><i class="icon-lock"></i></span>
                     </div>
                     <input type="password" class="form-control" (keyup.enter)="onSubmit()"
                       [ngClass]="{ 'is-invalid': f.password.touched  &&  f.password.invalid }" placeholder="Password"
