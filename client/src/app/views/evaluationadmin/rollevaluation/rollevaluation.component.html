@@ -6,8 +6,8 @@
                     Create New Evaluation
 
                     <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal"
-                        (click)="router.navigate(['ea/evaluation-list'])">
-                        Go to list
+                        (click)="router.navigate(['ea/evaluation-list'])"><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>
+                        Back to list
                     </button>
                 </div>
                 <div class="card-body">
@@ -30,8 +30,8 @@
                             </div>
                             
                             <div *ngIf="initializeFormFor==='kpionly'" class="col-md-6">
-                                <div class="form-group">
-                                    <label id="kpi-for-group">Performance Goal For</label>
+                                <div class="">
+                                    <label id="kpi-for-group" class="radio-combo-label">Performance Goal For</label>
                                     <mat-radio-group aria-labelledby="kpi-for-group" class="example-radio-group"
                                         formControlName="KPIFor">
                                         <mat-radio-button class="kpi-radio-button" *ngFor="let kpifor of kpiForList"
@@ -48,11 +48,11 @@
 
                         </div>
                         <!--Evaluation Details Begin-->
-                        <div class="form-group row">
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <span>Evaluation Period: </span>
-                                    <span class="font-weight-bold">
+                                    <span class="period-label">Evaluation Period: </span>
+                                    <span class="font-weight-bold period-value">
                                         {{currentOrganization?.EvaluationPeriod}}-{{currentOrganization?.StartMonth}}
                                         {{currentOrganization?.EndMonth}}
                                     </span>
@@ -60,13 +60,13 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <span> Evaluation Duration: </span>
-                                    <span class="font-weight-bold">{{currentOrganization?.EvaluationDuration}}</span>
+                                    <span class="period-label"> Evaluation Duration: </span>
+                                    <span class="font-weight-bold period-value">{{currentOrganization?.EvaluationDuration}}</span>
                                 </div>
                             </div>
 
                         </div>
-                        <div class="form-group row">
+                        <div class="row">
                             <div class="col-md-7">
                                 <div class="form-group">
                                     <div class="input-group">
