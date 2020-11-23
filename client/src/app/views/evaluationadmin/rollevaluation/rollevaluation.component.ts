@@ -656,7 +656,7 @@ export class RollevaluationComponent implements OnInit {
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.FirstName}-${data.data.LastName}</span>` }
       },
       {
-        headerName: 'Model',width:'150px', field: '', sortable: true, filter: true,
+        headerName: 'Model',width:150, field: '', sortable: true, filter: true,
         cellRenderer: (data) => {
           console.log('data for grid', data);
           if (this.initializeFormFor === 'kpionly') {
@@ -667,7 +667,7 @@ export class RollevaluationComponent implements OnInit {
         },
       },
       {
-        headerName: 'Manager',width:'150px', field: '', sortable: true, filter: true,
+        headerName: 'Manager',width:150, field: '', sortable: true, filter: true,
         cellRenderer: (data) => {
           var _name = data.data.Manager ? data.data.Manager.FirstName : ""
           return `${_name}`
@@ -675,7 +675,7 @@ export class RollevaluationComponent implements OnInit {
       },
 
       {
-        headerName: 'Peers',width:'150px', field: '', sortable: false, filter: false,
+        headerName: 'Peers',width:150, field: '', sortable: false, filter: false,
         cellRenderer: (data) => {
           if (this.initializeFormFor === 'kpionly') {
             return '';
@@ -699,7 +699,7 @@ export class RollevaluationComponent implements OnInit {
       },
       {
         headerName: "Actions",
-        width:'120px',
+        width:120,
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
