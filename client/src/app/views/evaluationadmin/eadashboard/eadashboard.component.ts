@@ -48,7 +48,7 @@ public barChartOptions: ChartOptions = {
     }
   }
 };
-public barChartLabels: Label[] = ['Active','inprogress','completed','not started'];
+public barChartLabels: Label[] = ['Active','inprogress','Completed','not started'];
 public barChartType: ChartType = 'bar';
 public barChartLegend = true;
 public barChartPlugins = [pluginDataLabels];

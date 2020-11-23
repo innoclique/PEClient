@@ -48,6 +48,7 @@ export class AuthService {
           localStorage.setItem('UserName', UserModel.UserName);
           localStorage.setItem('RefreshToken', UserModel.RefreshToken);
           localStorage.setItem('Role', UserModel.Role);
+          localStorage.setItem('SelectedRoles', UserModel.SelectedRoles);
           localStorage.setItem("User", JSON.stringify(UserModel.User));
           localStorage.setItem("NavigationMenu", JSON.stringify(UserModel.NavigationMenu));
           localStorage.setItem("Permissions", JSON.stringify(UserModel.Permissions));
