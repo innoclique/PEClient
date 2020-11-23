@@ -187,7 +187,7 @@ getOrganization(){
     return this.isMPGSubmitedSubject.asObservable();
   } 
   setManagerPGSubmitStatus(status){
-    this.isPGSubmitedSubject.next(status);
+    this.isMPGSubmitedSubject.next(status);
   }
   
 
