@@ -142,9 +142,11 @@ export class DoDrReviewComponent implements OnInit {
     let isvalid = true;
     this.competencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
+      var _lastitem = _qna.pop();
+      var _lastitem = _qna.pop();
       debugger
-      if (_qna && _qna.length > 0) {
-        var _lastitem = _qna.pop();
+      if (_qna && _qna.length > 0 && _qna.filter(x=>x[1]==="").length===0) {
+        
         var _avgScore = this.getAverage(_qna.map(x => x[1]));
         _qna.forEach(q => {
 

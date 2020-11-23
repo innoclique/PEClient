@@ -91,15 +91,12 @@ export class DoPeerReviewComponent implements OnInit {
           let cq = this.competencyList.Questions.find(x => x._id === q)
           var selectedAnswer = "-1";
           if (cq && _peer.QnA && _peer.QnA.length > 0) {
-
             var answer = this.competencyList.Peer[0].QnA.find(x => x.CompetencyId === c._id && x.QuestionId === q);
-
             if (answer) {
               selectedAnswer = answer.Answer ? answer.Answer : "-1"
               console.log('answer', answer.Answer);
             }
           }
-
           questions.push(new QuestionBase({
             key: cq._id,
             label: cq.Question,
@@ -137,9 +134,11 @@ export class DoPeerReviewComponent implements OnInit {
     let isvalid = true;
     this.competencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
-      debugger
-      if (_qna && _qna.length > 0) {
+      var _lastitem = _qna.pop();
         var _lastitem = _qna.pop();
+      debugger
+      if (_qna && _qna.length > 0 && _qna.filter(x=>x[1]==="").length===0) {
+        
         var _avgScore = this.getAverage(_qna.map(x => x[1]));
         _qna.forEach(q => {
 

@@ -335,7 +335,7 @@ goto(selTab){
   }
   prepareCompetencyQuestionsByManager() {
     var questions: CompetencyBase<string>[] = [];
-    debugger
+    
     this.managerCompetencyList = this.evaluationForm.ManagerCompetencies.Manager.Competencies;
     this.showCompetencySubmitForManager=!this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted;
    // console.log('this.managerCompetencyForm.value', this.managerCompetencyForm.value)
@@ -376,19 +376,25 @@ goto(selTab){
       return _rate.overallScore||"Pending";
     }
   }
-  getQuestionRating(questionId){    
+  getQuestionRating(questionId){        
     var ff=this.employeeCompetencyList.map(element => {return element.Questions.find(q=>q._id===questionId)})      
-      if(ff && ff[0]){
-        return ff[0].SelectedRating
-      }else{
-        return "Pending";
+      if(ff){
+        var _questionvalue=ff.find(x=>x)
+        if(_questionvalue){
+          return _questionvalue.SelectedRating
+        }
+        
       }
+      return "Pending"
   }
   getEmpCommentsForCompetency(competencyId){    
 debugger
     var ff=this.employeeCompetencyList.map(element => {return element.Competency._id===competencyId?element.Comments:""});
-      if(ff && ff[0]){
-        return ff[0]
+      if(ff){
+        var _competencyValue=ff.find(x=>x)
+        if(_competencyValue){
+          return _competencyValue;
+        }
       }else{
         return "";
       }
@@ -410,7 +416,8 @@ debugger
     this.managerCompetencyQuestionsList.forEach(element => {
       var _qna = Object.entries(element.form.value);
       var _lastitem = _qna.pop();
-      if (_qna && _qna.length > 0) {
+      var _lastitem = _qna.pop();
+      if (_qna && _qna.length > 0 && _qna.filter(x=>x[1]==="").length===0) {
         var _avgScore = this.getAverage(_qna.map(x => x[1]));
         _qna.forEach(q => {
           competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1], Comments: _lastitem ? _lastitem[1] : "", CompetencyAvgRating: _avgScore })
@@ -427,7 +434,7 @@ debugger
       this.snack.error('Please provide rating to all question(s) in each competency')
       return;
     }
-    debugger
+    
     competencyQA.Comments = this.selfCompetencyForm.value.OverallComments;
     competencyQA.OverallRating = this.selfCompetencyForm.value.OverallRating;
     competencyQA.EvaluationId = this.evaluationForm.Competencies.EvaluationId;
@@ -440,6 +447,7 @@ debugger
       this.perfApp.requestBody = competencyQA;// { TsId: this.loginUser._id }
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
+      this.snack.success(isDraft ? 'Competencies Rating Saved Successfully' : 'Competency Rating Submitted Successfully');
     }, error => {
       console.log('error', error)
     })

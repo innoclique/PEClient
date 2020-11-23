@@ -219,7 +219,7 @@ export class CurrentEvaluationComponent implements OnInit {
       var _lastitem = _qna.pop();
       debugger
 
-      if (_qna && _qna.length > 0) {
+      if (_qna && _qna.length > 0 && _qna.filter(x=>x[1]==="").length===0) {
         var _avgScore = this.getAverage(_qna.map(x => x[1]));
         _qna.forEach(q => {
           competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1], Comments: _lastitem ? _lastitem[1] : "", CompetencyAvgRating: _avgScore })
@@ -246,6 +246,8 @@ export class CurrentEvaluationComponent implements OnInit {
       this.perfApp.requestBody = competencyQA;// { TsId: this.loginUser._id }
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
+      //after successfully submitted hide submit button
+      this.showCompetencySubmit=false;
       this.snack.success(isDraft ? 'Competencies Rating Saved Successfully' : 'Competency Rating Submitted Successfully');
     }, error => {
       this.snack.error('something went wrong.')
@@ -326,6 +328,6 @@ export class CurrentEvaluationComponent implements OnInit {
     var avg = sum / arr.length;
     // const average= arr.reduce((p, c) => p + c, 0) / arr.length;
     console.log('avarage score :', avg);
-    return avg;
+    return parseFloat(avg.toFixed(2));
   }
 }

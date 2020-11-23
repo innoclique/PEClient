@@ -8,7 +8,7 @@
                             </tab>
                            
                             <tab>
-                                <ng-template tabHeading><i class="icon-hand-rock"></i>Manager Competencies</ng-template>
+                                <ng-template tabHeading><i class="icon-hand-rock"></i> Competencies</ng-template>
                                 <div [formGroup]="managerCompetencyForm">
                                     <accordion [closeOthers]="oneAtATime">
                                         <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of managerCompetencyQuestionsList">
@@ -17,7 +17,7 @@
                                                     <i  [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
                                                 </div>
                                                 <div>
-                                                    <span class="badge badge-secondary float-right pull-right avgScore"> Avarage Rating: {{c.CompetencyAvgRating||0}}</span>
+                                                    <span class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span>
                                                 </div>
                                               </button>  
                                             <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments" [empComments]="c.empComments">
