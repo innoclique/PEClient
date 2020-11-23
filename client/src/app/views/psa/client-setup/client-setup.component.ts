@@ -38,6 +38,8 @@ export class ClientSetupComponent implements OnInit {
   public monthList = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"]
     public resellerGridApi:any;
+    public clientGridColumnApi:any;
+    public resellerGridColumnApi:any;
     
     public clientGridOptions: GridOptions = {
       columnDefs: this.getColDef()      
@@ -64,15 +66,16 @@ export class ClientSetupComponent implements OnInit {
   getColDef(){
     return  [
       {
-        headerName: 'Client', field: 'Name', sortable: true, filter: true,  
+        headerName: 'Client', field: 'Name', sortable: true, width:240, filter: true,  
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
       },      
-      { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
-      { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
-      { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
+      { headerName: 'Industry', field: 'Industry', sortable: true, width:240, filter: true },
+      { headerName: 'Usage Type', field: 'UsageType', sortable: true, width:240, filter: true },
+      { headerName: 'Contact Person', field: 'ContactName', sortable: true, width:240, filter: true },
       {
         headerName: "Actions",
         suppressMenu: true,
+        width:240,
         Sorting: false,        
         cellRenderer: (data) => {
         console.log('column data', data)
@@ -212,11 +215,27 @@ export class ClientSetupComponent implements OnInit {
 
   onClientGridReady(params) {
     this.clientGridOptions.api = params.api; // To access the grids API
-    this.clientGridOptions.api.setDomLayout("autoHeight");
+    // this.clientGridOptions.api.setDomLayout("autoHeight");
+    this.clientGridOptions.rowHeight = 34;
+    // this.clientGridColumnApi = params.columnApi;
+    // var allColumnIds = [];
+    // this.clientGridColumnApi.getAllColumns().forEach(function (column) {
+    //   allColumnIds.push(column.colId);
+    // });
+    // this.clientGridColumnApi.autoSizeColumns(allColumnIds, false);
   }
   onResellerGridReady(params) {
     this.resellerGridOptions.api = params.api; // To access the grids API
-    this.resellerGridOptions.api.setDomLayout("autoHeight");
+    // this.resellerGridOptions.api.setDomLayout("autoHeight");
+    this.resellerGridOptions.rowHeight = 34;
+    // this.clientGridOptions.api.setDomLayout("autoHeight");
+
+    // this.resellerGridColumnApi = params.columnApi;
+    // var allColumnIds = [];
+    // this.resellerGridColumnApi.getAllColumns().forEach(function (column) {
+    //   allColumnIds.push(column.colId);
+    // });
+    // this.resellerGridColumnApi.autoSizeColumns(allColumnIds, false);
   }
 
 
