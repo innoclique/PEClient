@@ -184,13 +184,13 @@ export class SetupEmployeeComponent implements OnInit {
     cellRenderer: (data) => {
       return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     }},
-    {headerName: 'Title', field: 'Title', sortable: true, filter: true },
+    {headerName: 'Title', field: 'Title', sortable: true, width:200, filter: true },
     // {headerName: 'Department', field: 'Department', sortable: true, filter: true },
     {headerName: 'Phone', field: 'PhoneNumber', sortable: true, filter: true },
     // {headerName: 'IsDraft', field: 'IsDraft',  width: 120, sortable: true, filter: true },
-    {headerName: 'Active', field: 'IsActive',  width: 120, sortable: true, filter: true },
+    {headerName: 'Active', field: 'IsActive',  width: 190, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', width: 300, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';

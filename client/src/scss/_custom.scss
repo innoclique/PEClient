@@ -173,3 +173,182 @@
   .sidebar .nav-link {
     padding: 0.75rem 0.4rem;
   }
+
+
+// New Styles added as part of UI Fixes --- GOVIND
+.navbar-nav {
+  margin-right: 20px;
+}
+
+.user-info small {
+  color: #717171;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.user-info {
+  color: #000;
+  font-weight: 600;
+}
+
+.pro-tabs .tab-content {
+  border: none;
+}
+
+.pro-tabs .tab-content .tab-pane {
+  padding: 0px;
+}
+
+.nav-link {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-link .fa {
+  font-weight: 600;
+}
+
+.nav-tabs .nav-item {
+  background: #eff4f9;
+  border-radius: 4px;
+}
+
+.nav-link {
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 41px;
+}
+
+.nav-tabs .nav-link {
+  color: #717171;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #427cac !important;
+  color: #fff;
+}
+
+.add_newbuttons {
+  position: absolute;
+  top: 21px;
+  right: 20px;
+}
+
+.card-header {
+  font-size: 19px;
+  color: #026eb6;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.form-group-label {
+  font-size: 16px;
+  color: #000;
+  padding-bottom: 15px;
+  font-weight: 600;
+}
+
+.heading-with-margin {
+  font-size: 16px;
+  color: #000;
+  padding-bottom: 15px;
+  font-weight: 600;
+  margin: 20px;
+}
+
+.modal-title {
+  font-size: 18px;
+  line-height: 22px;
+  padding: 12px 0 0;
+}
+
+.modal-header .close {
+  font-size: 24px;
+  color: #fff;
+  padding: 25px 34px 0 !important;
+}
+
+.button:focus {
+  outline: 0px dotted;
+  outline: 0px auto -webkit-focus-ring-color;
+}
+
+.modal-dialog {
+  max-width: 1100px;
+}
+
+.form-check-inline .form-check-label {
+  font-size: 14px;
+  color: #000;
+}
+
+.radio-combo-label {
+  font-size: 15px;
+  color: #000;
+  /* margin-top: -7px; */
+  display: inline-block;
+  margin: 0 0 0 0;
+  position: relative;
+  top: -4px;
+}
+
+.mat-radio-label-content {
+  color: #000;
+}
+
+.period-label {
+  font-size: 16px;
+  color: #717171;
+  font-weight: 600;
+}
+
+.period-value {
+  color: #000;
+  font-size: 16px;
+}
+
+.strong-key {
+  font-size: 13px;
+  color: #000;
+  font-weight: 600 !important;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.span-value {
+  font-size: 13px;
+  color: #000;
+  font-weight: 400
+}
+
+.levarage_txt {
+  font-size: 14px;
+  color: #000;
+  font-weight: 600;
+  padding-bottom: 6px;
+  display: block;
+}
+
+accordion .panel-default {
+  margin-bottom: 10px;
+}
+
+.avgScore {
+  padding: 10px;
+  ;
+}
+
+.autoc-border .form-check-input {
+  margin-left: 30px;
+}
+
+.accordion {
+  background-color: lightgreen;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 2s;
+}
+
+.accordion.open {
+  max-height: 200px;
+}

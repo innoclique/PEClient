@@ -8,7 +8,7 @@
             Clients
   
             <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal"
-              (click)="router.navigate(['rsa/client-list'])">
+              (click)="router.navigate(['rsa/client-list'])"><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>
               Back to list
             </button>
           </div>
@@ -558,7 +558,7 @@
             </div>
   
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" #closeModal (click)="router.navigate(['rsa/list'])">Back To
+              <button type="button" class="btn btn-secondary" #closeModal (click)="router.navigate(['rsa/list'])"><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back To
                 List</button>
               <button *ngIf="isCreate" type="button" (click)="saveAsDraft()" class="btn btn-primary">Save as
                 Draft</button>

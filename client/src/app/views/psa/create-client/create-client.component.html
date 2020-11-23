@@ -9,13 +9,13 @@
 
           <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal"
             (click)="router.navigate(['psa/list'])">
-            Back to list
+            <i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list
           </button>
         </div>
         <div class="card-body">
 
           <form [formGroup]="clientForm" novalidate="" class="ng-untouched ng-pristine ng-valid">
-            <div class="form-group row">
+            <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <div class="input-group">
@@ -53,16 +53,16 @@
                 </div>
               </div>
             </div>
-            <h3>Organization Profile </h3>
+            <h3 class="form-group-label">Organization Profile </h3>
 
-            <div class="form-group row">
+            <div class="row" style="margin-bottom:0px;">
               <div class="col-md-12">
                 <app-csc [reset]="countyFormReset" [CSCData]='cscData' (onSelect)="onCSCSelect($event)">
                 </app-csc>
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
 
               <div class="col-md-4">
                 <div class="form-group">
@@ -102,7 +102,7 @@
               </div>
             </div>
            
-            <div class="form-group row">
+            <div class="row">
               <div class="col-md-4 ">
                 <div class="form-group">
                   <div class="input-group">
@@ -151,7 +151,7 @@
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
 
               <div class="form-group col-md-4 ">
                 <div class="field-group">
@@ -192,8 +192,8 @@
               </div>
             </div>
             <!--Admin Form fields-->
-            <h3>Admin Details </h3>
-            <div class="form-group row">
+            <h3 class="form-group-label">Admin Details </h3>
+            <div class="row">
               <div class="col-md-4 ">
                 <div class="form-group">
                   <div class="input-group">
@@ -267,10 +267,9 @@
               </div>
             </div>
 
-
-            <div class="form-group row">
-              <h3>Contact Person </h3>
-              <div class="col-md-9 col-form-label pull-left">
+            <h3 class="form-group-label pull-left">Contact Person </h3>
+            <div class="form-group row">              
+              <div class="col-md-9 col-form-label pull-left" style="padding:0 0 0 20px;">
                 <div class="form-check form-check-inline mr-1">
                   <input class="form-check-input" id="inline-checkbox1" formControlName="SameAsAdmin" type="checkbox"
                     value="option1">
@@ -278,7 +277,7 @@
                 </div>
               </div>
             </div>
-            <div formGroupName="contactPersonForm" class="form-group row">
+            <div formGroupName="contactPersonForm" class="row">
               <div class="col-md-4 ">
                 <div class="form-group">
                   <div class="input-group">
@@ -362,8 +361,8 @@
 
 
 
-            <h2>Evaluation Details</h2>
-            <div class="form-group row">
+            <h3 class="form-group-label">Evaluation Details</h3>
+            <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
                   <div class="input-group">
@@ -408,7 +407,7 @@
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
                   <div class="input-group">
@@ -474,7 +473,7 @@
               </div>
 
             </div>
-            <div class="form-group row">
+            <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
                   <div class="input-group">
@@ -542,7 +541,7 @@
 
             <div>
 
-              <!-- <div class="form-group row"> -->
+              <!-- <div class="row"> -->
 
 
             </div>
@@ -550,7 +549,7 @@
 
 
           </form>
-          <div *ngIf="errorOnSave" class="form-group row">
+          <div *ngIf="errorOnSave" class="row">
             <div class="alert alert-danger">
               <strong>Error:</strong> {{errorMessage}}
             </div>
@@ -558,7 +557,7 @@
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" #closeModal (click)="router.navigate(['psa/list'])">Back To
+            <button type="button" class="btn btn-secondary" #closeModal (click)="router.navigate(['psa/list'])"><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back To
               List</button>
             <button *ngIf="isCreate" type="button" (click)="saveAsDraft()" class="btn btn-primary">Save as
               Draft</button>
