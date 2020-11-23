@@ -49,6 +49,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   DirectReporteeScoreCard: any;
   currentEmpId: any;
   currentAction: any;
+  mpgSubmitStatus="";
   showCompetencySubmitForManager:Boolean=true;
   isContentOpen: boolean = false;
   @ViewChild('evTabset') tabset: TabsetComponent;
@@ -89,6 +90,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit(): void {   
+    this.authService.getManagerPGSubmitStatus().subscribe(status=>this.mpgSubmitStatus=status);
   }
 
 
@@ -168,7 +170,7 @@ goto(selTab){
           this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1.FinalRating.Manager.YearEndRating)
           this.FinalRatingForm.controls["ManagerIsDraft"].setValue(!res1.FinalRating.Manager.IsSubmitted)
           this.FinalRatingForm.controls["ManagerSignOff"].setValue(res1.FinalRating.Manager.SignOff?res1.FinalRating.Manager.SignOff
-            :this.loginUser.FirstName+" "+this.loginUser.LastName)
+            :"")
           this.FinalRatingForm.controls["ManagerSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Manager.SubmittedOn))
           this.showManagerSubmit = !res1.FinalRating.Manager.IsSubmitted;
           this.FinalRatingForm.controls["ManagerRevComments"].setValue(res1.FinalRating.Manager.RevComments)
@@ -181,7 +183,7 @@ goto(selTab){
           this.FinalRatingForm.controls["TSReqRevision"].setValue(res1.FinalRating.ThirdSignatory.ReqRevision)
           this.FinalRatingForm.controls["ThirdSignatoryIsDraft"].setValue(!res1.FinalRating.ThirdSignatory.IsSubmitted)
           this.FinalRatingForm.controls["ThirdSignatorySignOff"].setValue(res1.FinalRating.ThirdSignatory.SignOff?res1.FinalRating.ThirdSignatory.SignOff
-            :this.loginUser.FirstName+" "+this.loginUser.LastName)
+            :"")
           this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.ThirdSignatory.SubmittedOn))
           this.showThirdSignatorySubmit = !res1.FinalRating.ThirdSignatory.IsSubmitted;
 
@@ -455,7 +457,11 @@ debugger
   }
   /**For Self-Competency Rating End */
   submitFinalRating() {
-
+  
+    if(this.mpgSubmitStatus!='true'){
+      this.snack.error("Please score performance goals");
+      return;
+    }
     
 if (this.FinalRatingForm.value.TSReqRevision &&
   this.FinalRatingForm.value.ManagerRevComments.length==0) {

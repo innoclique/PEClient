@@ -31,6 +31,7 @@ export class CurrentEvaluationComponent implements OnInit {
   public PeerScoreCard: any;
   DirectReporteeScoreCard: any;
   isContentOpen: boolean = false;
+  pgSubmitStatus="";
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -49,6 +50,8 @@ export class CurrentEvaluationComponent implements OnInit {
     this.initCompetencyForm();
     this.initFinalRatingForm();
     this.getTabsData();
+
+    this.authService.getIsPGSubmitStatus().subscribe(status=>this.pgSubmitStatus=status);
 
   }
   public columnDefs = [
@@ -257,6 +260,10 @@ export class CurrentEvaluationComponent implements OnInit {
   }
   /**For Self-Competency Rating End */
   submitFinalRating() {
+        if(this.pgSubmitStatus!='true'){
+      this.snack.error("Please score performance goals")
+    return
+    }
     this.saveFinalRating(false)
   }
   draftFinalRating() {

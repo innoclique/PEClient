@@ -235,12 +235,12 @@ GetReporteeKpiRelesedDetails(){
   this.perfApp.method="GetReporteeReleasedKpiForm",
  this.perfApp.requestBody = { id: this.loginUser._id }
   this.perfApp.CallAPI().subscribe(c=>{
-    debugger
+    
     
     this.managerReporteesKpiRelData=c.map(row=> {
     //  let flatarray=row.Evaluation.flat()
 //let evaluation=flatarray.find(x=>x.Status==='Active')
-debugger
+
 let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).length;
      return  {
          Name:row.FirstName+' '+row.LastName,
@@ -265,7 +265,7 @@ GetReporteeEvaluationsDetails(){
   this.perfApp.method="GetReporteeEvaluations",
  this.perfApp.requestBody = { id: this.loginUser._id }
   this.perfApp.CallAPI().subscribe(c=>{
-    debugger
+    
     
     this.managerReporteesData =c.map(row=> {
       let flatarray=row.Evaluation.flat()
@@ -301,7 +301,7 @@ GetTSReporteeEvDetails(){
     
     
     this.tSReporteesData=c.map(row=> {
-      debugger
+      
 
       let flatarray=row.Evaluation.flat()
 let evaluation=flatarray.find(x=>x.Status==='Active')

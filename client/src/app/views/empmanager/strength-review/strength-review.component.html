@@ -1,6 +1,6 @@
 <div class="animated fadeIn">
     <div class="row">
-        <div class="col-md-12" >
+        <div class="col-md-12" *ngIf="showDevGoalsForm;else noRecordsFound" >
             <div class="card">
                 <div  *ngIf="accessingFrom!='reviewEvaluation' "   class="card-header">
                     Strength
@@ -167,7 +167,7 @@
     
             </div>
             <ng-template class="col-md-12"  #noRecordsFound>
-              <h3 class="heading-with-margin">No Devlopment Goals Found</h3>
+              <h3 class="heading-with-margin">No Strengths Found</h3>
           </ng-template>
         </div>
     </div>

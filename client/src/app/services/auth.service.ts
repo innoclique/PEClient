@@ -15,6 +15,9 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   currentUser: any ;
   navigationMenu:any;
+  isPGSubmitedSubject = new BehaviorSubject<string>("false");
+  isMPGSubmitedSubject = new BehaviorSubject<string>("false");
+  
   isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
   constructor(private Http: HttpClient) { }
   FindEmail(Email): Observable<UserModel> {
@@ -168,6 +171,25 @@ getOrganization(){
     console.log(errormgs);
     return throwError(errormgs);
   }
+
+
+
+  
+
+  getIsPGSubmitStatus(): Observable<string> {
+    return this.isPGSubmitedSubject.asObservable();
+  } 
+  setIsPGSubmitStatus(status){
+    this.isPGSubmitedSubject.next(status);
+  }
+
+  getManagerPGSubmitStatus(): Observable<string> {
+    return this.isMPGSubmitedSubject.asObservable();
+  } 
+  setManagerPGSubmitStatus(status){
+    this.isPGSubmitedSubject.next(status);
+  }
+  
 
   public logout() {
     this.isLoginSubject.next(false);

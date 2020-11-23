@@ -33,6 +33,8 @@ export class KpiSettingsComponent implements OnInit {
   currentAction = 'create';
   isAllSelected = false;
   addMCSwitch = true;
+  scoreUnSubmitedCount=0;
+  unSubmitedCount=0;
 
   filteredOptionsKPI: Observable<any[]>;
   public empKPIData: any[] = []
@@ -165,6 +167,11 @@ accessingFrom:any;
     }
 
     this.kpiForm.patchValue({ IsDraft: 'false' });
+
+    if (this.accessingFrom == "currEvaluation" && this.currentAction == 'edit' && this.unSubmitedCount > 0) {
+      this.snack.error("Please sign-off performance goals")
+      return;
+    }
     this.saveKpi();
   }
 
@@ -235,6 +242,7 @@ if(this.selectedItems.length==0) {
 
         this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Successfully`));
 
+        this.getAllKPIs();
         if (this.accessingFrom=='currEvaluation') {
           
           this.router.navigate(['employee/current-evaluation']);
@@ -432,6 +440,10 @@ conformSubmitKpis(){
       this.setWeighting(c.filter(item => item.IsDraft === false).length);
       if (c && c.length > 0) {
         this.empKPIData = c;
+        this.unSubmitedCount=c.filter(e=>e.IsSubmitedKPIs==false && e.IsDraft==false ).length;
+        this.scoreUnSubmitedCount=c.filter(e=>e.Score=="" && e.IsDraft==false ).length;
+if(this.scoreUnSubmitedCount==0)
+this.authService.setIsPGSubmitStatus("true");
 
 
 

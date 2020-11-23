@@ -30,6 +30,7 @@ export class KpiSetupComponent implements OnInit {
   public kpiListData: any
   isKpiActivated=false;
   unSubmitedCount=0;
+  scoreUnSubmitedCount=0;
 
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
   config = {
@@ -267,6 +268,9 @@ submitAllKPIs() {
 
       if (c && c.length > 0) {
 this.unSubmitedCount=c.filter(e=>e.IsSubmitedKPIs==false && e.IsDraft==false ).length;
+this.scoreUnSubmitedCount=c.filter(e=>e.Score=="" && e.IsDraft==false ).length;
+if(this.scoreUnSubmitedCount==0)
+this.authService.setIsPGSubmitStatus("true");
 
       this.kpiListData = c.map(function (row) {
 

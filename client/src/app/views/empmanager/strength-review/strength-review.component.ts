@@ -206,7 +206,7 @@ getAllStrengthDetails() {
     }
     else{
         
-      if (this.accessingFrom=='currEvaluation') {
+      if (this.accessingFrom=='reviewEvaluation') {
         this.showDevGoalsForm=false;
       }
     }

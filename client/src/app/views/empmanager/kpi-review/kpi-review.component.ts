@@ -66,6 +66,7 @@ actor:any;
   msSelVal="";
   currEvaluation: any;
   unSubmitedCount=0;
+  scoreUnSubmitedCount=0;
 
 
   
@@ -433,6 +434,7 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
 
      if (c) {
       this.snack.success(c.message);
+      this.onCancle();
 
      } else {
        
@@ -466,6 +468,9 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
       this.setWeighting(c.filter(item => item.IsDraft === false).length);
       if (c && c.length > 0) {
         this.unSubmitedCount=c.filter(e=>e.ManagerSignOff.submited ==false).length;
+        this.scoreUnSubmitedCount=c.filter(e=>e.ManagerScore=="" && e.IsDraft==false ).length;
+        if(this.scoreUnSubmitedCount==0)
+        this.authService.setIsPGSubmitStatus("true");
         this.empKPIData = c;
 
 
