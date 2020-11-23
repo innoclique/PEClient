@@ -7,22 +7,7 @@
           <div class="box_main clearfix">
             <div class="row">
               <!-- Box1 -->
-              <div class="box col-lg-3">
-                <div class="box_in">
-                  <h2 class="bg-blue">Current Status</h2>
-                  <div class="box_goalsetting box_rating clearfix">
-                    <h3 class="col-xs-12">Renewal Date: N/A</h3>
-                    <h3 class="col-xs-12">“Evaluation Completed: {{this.currentStatus.completed}}</h3>
-                    <h3 class="col-xs-12">Evaluation Left: {{this.currentStatus.inprogress}}</h3>
-                  </div> 
-                  <a (click)="showAlert('Comming Soon')" href="#/csa/dashboard" class="box_in_btns_view">Purchase Next License &#8594;</a>
-                  <div class="clear"></div>
-                </div>
-              </div>
-              
-              <!-- Box 2 -->
-              
-              <div class="box col-lg-9">
+              <div class="box col-lg-12">
                 <div class="box_in">
                   <h2 class="bg-blue">Evaluation Summary</h2>
                   <div class="box_goalsetting box_rating clearfix">
@@ -41,6 +26,20 @@
                   <div class="clear"></div>
                 </div>
               </div>
+            </div>
+              <div class="row">
+                <div class="box col-lg-6">
+                  <div class="box_in">
+                    <h2 class="bg-blue">Current Status</h2>
+                    <div class="box_goalsetting box_rating clearfix">
+                      <h3 class="col-xs-12">Renewal Date: N/A</h3>
+                      <h3 class="col-xs-12">Evaluation Completed: {{this.currentStatus.completed}}</h3>
+                      <h3 class="col-xs-12">Evaluation Left: {{this.currentStatus.inprogress}}</h3>
+                    </div> 
+                    <a (click)="showAlert('Comming Soon')" href="#/csa/dashboard" class="box_in_btns_view">Purchase Next License &#8594;</a>
+                    <div class="clear"></div>
+                  </div>
+                </div>
               <!-- Box 3 -->
               <div class="box col-lg-6">
                 <div class="box_in">

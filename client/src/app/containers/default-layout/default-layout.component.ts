@@ -44,8 +44,7 @@ export class DefaultLayoutComponent implements OnInit {
       if (this.user.SelectedRoles) {
         var navigationMenu = [];
         if(this.user.Role.indexOf('EO')>-1){
-        navigationMenu.push(
-          {
+          let dashboard = {
             "IsActive": true,
             "url": "/employee/dashboard",
             "name": "Dashboard",
@@ -58,7 +57,13 @@ export class DefaultLayoutComponent implements OnInit {
             "linkProps": {
               "routerLinkActive": "dashboard"
             }
-          },
+          };
+          if(this.user.SelectedRoles.indexOf("EA") !== -1){
+            dashboard.url = "/ea/dashboard";
+          }
+          
+        navigationMenu.push(
+          dashboard,
        {
           "IsActive": true,
           "url": "/employee/kpi-setup",

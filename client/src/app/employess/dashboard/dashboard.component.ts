@@ -18,9 +18,9 @@ export class DashboardComponent implements OnInit {
     'peer_review':'N/A'
   };
   peerreviewColumnDefs = [
-    { headerName:'Title',width:'300px',field: 'title',sortable: true},
-    { headerName:'Department',width:'300px', field: 'deparment' ,sortable: true,filter: true },
-    { headerName:'Rating',width:'200px', field: 'rating' ,sortable: true,filter: true }
+    { headerName:'Title',width:'400px',field: 'title',sortable: true},
+    { headerName:'Department',width:'350px', field: 'deparment' ,sortable: true,filter: true },
+    { headerName:'Rating',width:'230px', field: 'rating' ,sortable: true,filter: true }
   ];
   peerReviewRowData = [];
 
