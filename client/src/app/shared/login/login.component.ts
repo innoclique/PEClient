@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
     ignoreBackdropClick: true,
 
   };
+  loginText:any = 'Login';
   @ViewChild('tncModal') tncModalView: TemplateRef<any>;
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -67,7 +68,17 @@ export class LoginComponent implements OnInit {
     }
 
     try {
-      this.showSpinner = true;
+      this.loginSubmit();
+    } catch (err) {
+      this.snack.error(err.message)
+      this.showSpinner = false;
+    }
+
+
+  }
+
+  async loginSubmit(){
+    this.showSpinner = true;
       const email = this.loginForm.get('username').value;
       const password = this.loginForm.get('password').value;
       const LoginModel = { Email: email, Password: password };
@@ -77,32 +88,12 @@ export class LoginComponent implements OnInit {
           this.openDuplicateSessionDialog()
           return
         }
-        console.log('user ....', x)
         if (!x.User.TnCAccepted) {
           this.openTnCDialog();
           return;
         } else {
           this.logincallback(x)
         }
-
-        // if (!x.User.IsPswChangedOnFirstLogin) {
-        //   this.router.navigate(['resetPassword']);
-        // } else {
-        //   if (x.Role === 'CSA') {
-        //     this.router.navigate(['ea']);
-        //   }
-        //   if (x.Role === 'EA') {
-        //     this.router.navigate(['ea']);
-        //   } else if (x.Role === 'PSA') {
-        //     this.router.navigate(['psa/dashboard']);
-        //   }
-        //   else if (x.Role === 'RSA') {
-        //     this.router.navigate(['rsa/dashboard']);
-        //   }
-        //   else if (x.Role === 'EO') {
-        //     this.router.navigate(['employee/dashboard']);
-        //   }
-        //}
 
       }, error => {
         if (error.error.message === Constants.DuplicateSession) {
@@ -113,14 +104,7 @@ export class LoginComponent implements OnInit {
        // this.snack.error(this.translate.instant('Login.InvalidCredentials'));
        this.snack.error(this.translate.instant('Invalid Credentials'));
         this.showSpinner = false;
-      })
-
-    } catch (err) {
-      this.snack.error(err.message)
-      this.showSpinner = false;
-    }
-
-
+      });
   }
   openTnCDialog() {
     this.tncRef = this.modalService.show(this.tncModalView, this.config);
@@ -148,8 +132,13 @@ export class LoginComponent implements OnInit {
 
     var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(resp => {
-      this.authService.LogOut()
+      this.authService.LogOut();
       console.log('alert dialog', resp);
+      this.loginText = 'loading...'
+      setTimeout(()=>{ 
+        this.loginSubmit();
+      }, 700);
+      
     })
   }
   acceptTnC() {
