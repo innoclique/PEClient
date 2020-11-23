@@ -4,25 +4,22 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-header">
-          Clients
-
-         
-        </div>
-        <div class="card-body">
-         
+        <!-- <div class="card-header">
+          Clients -->
+        <div class="add_newbuttons">
           <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal" (click)="gotoCreate()">
             Add New Client
           </button>
           <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal" (click)="gotoResellerCreate()">
             Add New Reseller
           </button>
+        </div>
+        <div class="card-body">
           <tabset #staticTabs class="pro-tabs">
-           
             <tab [hidden]="(f.ClientType.value === 'Reseller' || currentUser.Role === 'RSA')">
   
               <ng-template tabHeading><i class="icon-user"></i> Client</ng-template>
-              <ag-grid-angular style="width: auto; height: 100%;" class="ag-theme-alpine" 
+              <ag-grid-angular style="width: 100%; height: 550px;" class="ag-theme-alpine" 
               
               [rowData]="clientData"
               [gridOptions]="clientGridOptions"
@@ -31,12 +28,12 @@
             (gridReady)="onClientGridReady($event)"
             (rowClicked)="onRowClicked($event)"
             >
-          </ag-grid-angular> 
+          </ag-grid-angular>
             </tab>
             <tab >
   
               <ng-template tabHeading><i class="icon-people"></i> Reseller</ng-template>
-              <ag-grid-angular style="width: auto; height: 100%;" class="ag-theme-alpine" [rowData]="resellerList"
+              <ag-grid-angular style="width: 100%; height: 550px;" class="ag-theme-alpine" [rowData]="resellerList"
             
             [gridOptions]="resellerGridOptions"
             [pagination]="true"
@@ -46,7 +43,6 @@
             >
           </ag-grid-angular>
             </tab>
-           
             
           </tabset>
           
@@ -63,7 +59,7 @@
 
 <ng-template #orgView   class="modal fade " tabindex="-1" role="dialog"
 aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-primary modal-xlg" role="document">
+  <div class="modal-primary" role="document">
     <div class="modal-content">
       <div class="modal-header modal-primary">
         <h4 class="modal-title">Client Details</h4>
@@ -75,7 +71,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
         <form [formGroup]="clientForm" novalidate="" class="ng-untouched ng-pristine ng-valid">
 
 
-          <div class="form-group row">
+          <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <div class="input-group">
@@ -113,16 +109,16 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               </div>
             </div>
           </div>
-          <h3>Organization Profile </h3>
+          <h3 class="form-group-label">Organization Profile </h3>
 
-          <div class="form-group row">
+          <div class="row">
             <div class="col-md-12">
               <app-csc [reset]="countyFormReset" [CSCData]='cscData' (onSelect)="onCSCSelect($event)">
               </app-csc>
             </div>
           </div> 
 
-          <div class="form-group row">
+          <div class="row">
 
             <div class="col-md-4">
               <div class="form-group">
@@ -162,7 +158,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
             </div>
           </div>
          
-          <div class="form-group row">
+          <div class="row">
             <div class="col-md-4 ">
               <div class="form-group">
                 <div class="input-group">
@@ -211,7 +207,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
             </div>
           </div>
 
-          <div class="form-group row">
+          <div class="row">
             <div class="form-group col-md-4 ">
               <label class="col-form-label redStar" for="inline-radios">Client Type:</label>
 
@@ -267,8 +263,8 @@ aria-labelledby="myModalLabel" aria-hidden="true">
             </div>
           </div>
           <!--Admin Form fields-->
-          <h3>Admin Details </h3>
-          <div class="form-group row">
+          <h3 class="form-group-label">Admin Details </h3>
+          <div class="row">
             <div class="col-md-4 ">
               <div class="form-group">
                 <div class="input-group">
@@ -342,10 +338,9 @@ aria-labelledby="myModalLabel" aria-hidden="true">
             </div>
           </div>
 
-
+          <h3 class="form-group-label">Contact Person </h3>
           <div class="form-group row">
-            <h3>Contact Person </h3>
-            <div class="col-md-9 col-form-label pull-left">
+            <div class="col-md-9 col-form-label pull-left" style="padding:0 0 0 20px;">
               <div class="form-check form-check-inline mr-1">
                 <input class="form-check-input" id="inline-checkbox1" formControlName="SameAsAdmin" type="checkbox"
                   value="option1">
@@ -353,7 +348,8 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               </div>
             </div>
           </div>
-          <div formGroupName="contactPersonForm" class="form-group row">
+         
+          <div formGroupName="contactPersonForm" class="row">
             <div class="col-md-4 ">
               <div class="form-group">
                 <div class="input-group">
@@ -437,8 +433,8 @@ aria-labelledby="myModalLabel" aria-hidden="true">
 
 
 
-          <h2>Evaluation Details</h2>
-          <div class="form-group row">
+          <h2 class="form-group-label">Evaluation Details</h2>
+          <div class="row">
             <div class="col-md-4">
               <div class="form-group">
                 <div class="input-group">
@@ -483,7 +479,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
             </div>
           </div>
 
-          <div class="form-group row">
+          <div class="row">
             <div class="col-md-4">
               <div class="form-group">
                 <div class="input-group">
@@ -546,7 +542,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
             </div>
 
           </div>
-          <div class="form-group row">
+          <div class="row">
             <div class="col-md-4">
               <div class="form-group">
                 <div class="input-group">
@@ -614,7 +610,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
 
           <div>
 
-            <!-- <div class="form-group row"> -->
+            <!-- <div class="row"> -->
 
 
           </div>
@@ -622,7 +618,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
 
 
         </form>
-        <div *ngIf="errorOnSave" class="form-group row">
+        <div *ngIf="errorOnSave" class="row">
           <div class="alert alert-danger">
             <strong>Error:</strong> {{errorMessage}}
           </div>
