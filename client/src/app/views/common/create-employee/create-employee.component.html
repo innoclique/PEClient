@@ -10,7 +10,7 @@
                         
             <div class="form-group form-actions pull-right m-0">
           <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-(click)="onCancle()" >
+(click)="onCancle()" ><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>
 Back to list
 </button>
             </div>
@@ -20,7 +20,7 @@ Back to list
    
               <form [formGroup]="empForm"  novalidate="" class="ng-untouched ng-pristine ng-valid">
                 
-                <div class="form-group row">
+                <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <div class="input-group">
@@ -86,7 +86,7 @@ Back to list
                   
                 </app-csc>
       
-                <div class="form-group row">
+                <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <div class="input-group">
@@ -182,7 +182,7 @@ Back to list
                     
                 </div>
       
-                <div class="form-group row">
+                <div class="row">
                  
                   <div class="col-md-4">
                     <div class="form-group">
@@ -248,7 +248,7 @@ Back to list
       
       
                       
-                <div class="form-group row">
+                <div class="row">
                    
   
                   <div class="col-md-4">
@@ -327,7 +327,7 @@ Back to list
                     
                 </div>
       
-                <div class="form-group row">
+                <div class="row">
       
                   <div class="col-md-4">
       
@@ -415,7 +415,7 @@ Back to list
                 </div>
       
       
-                <div class="form-group row">
+                <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <div class="input-group">
@@ -457,11 +457,32 @@ Back to list
                     </div>
                     
       
-                    <!-- <div class="form-group row"> -->
+                    <!-- <div class="row"> -->
                       <div class="col-md-4">
+                        <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Active</span>
+                          </div>
+                          <div class="autoc-border form-control">
+                            <div class="form-check form-check-inline  mr-1" id="inline-radios">
+                              <input class="form-check-input" id="inlineRadio1"
+                                name="IsActive" formControlName="IsActive"  type="radio" value="true"><label class="form-check-label" for="inlineRadio1">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline mr-1"><input class="form-check-input" id="inlineRadio2"
+                                name="IsActive"  formControlName="IsActive" type="radio" value="false"><label class="form-check-label" for="inlineRadio2">No</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+
+
+                      <!-- <div class="col-md-4">
                       <label class="col-md-4 col-form-label pull-left" for="inline-radios">Active</label>
                       <div class="col-md-9 col-form-label ">
-                        <div class="form-check form-check-inline mr-1" id="inline-radios"><input class="form-check-input" id="inlineRadio1"
+                        <div class="form-check form-check-inline mr-1" id="inline-radios">
+                          <input class="form-check-input" id="inlineRadio1"
                             name="IsActive" formControlName="IsActive"  type="radio" value="true"><label class="form-check-label" for="inlineRadio1">Yes</label>
                         </div>
                         <div class="form-check form-check-inline mr-1"><input class="form-check-input" id="inlineRadio2"
@@ -469,11 +490,11 @@ Back to list
                         </div>
                         
                       </div>
-                    </div>
+                    </div> -->
                     
                 </div>
       
-                <!-- <div class="form-group row">
+                <!-- <div class="row">
                   <div *ngIf="isRoleChanged" class="col-md-4">
                       <div class="form-group">
                           <div class="input-group">

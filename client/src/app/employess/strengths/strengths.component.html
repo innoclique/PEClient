@@ -7,7 +7,7 @@
 
                   <div class="form-group form-actions pull-right m-0">
                       <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                      (click)="navToStrengthList()" >Back to list </button>  
+                      (click)="navToStrengthList()" ><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list </button>  
 
                   </div>
                   
@@ -50,8 +50,79 @@
                   
 
                 </div>
+                
+                <div class="form-group row">
+                  <div class="col-md-3">
+                    <span class="levarage_txt redStar">How to Leverage</span>
+                    <div class="input-group">
+                      <input max="1000" maxlength="1000" class="form-control" type="text"
+                      
+                          [ngClass]="{ 'is-invalid': (f.Leverage.touched || submitClicked)  &&  f.Leverage.invalid }"
+                          formControlName="Leverage" name="Leverage" required>
 
-                <div   class="invitation_model_in_table table-responsive p-15">
+                      <div *ngIf=" (f.Leverage.touched || submitClicked) && f.Leverage.invalid" class="invalid-feedback">
+                        <div *ngIf="f.Leverage?.errors.required">How to Leverage is mandatory.</div>
+                          <div *ngIf="f.Leverage.errors.hasKPISplChars">How to Leverage can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/</div>
+                      </div>
+
+                  </div>
+  
+                  </div>
+                  <div class="col-md-3">
+                    <span class="levarage_txt redStar">Benefit (Self)</span>
+                    <div class="input-group">
+                                  
+                      <input max="1000" maxlength="1000" class="form-control" type="text"
+                      
+                          [ngClass]="{ 'is-invalid': (f.SelfBenifit.touched || submitClicked)  &&  f.SelfBenifit.invalid }"
+                          formControlName="SelfBenifit" name="SelfBenifit" required >
+
+                      <div *ngIf=" (f.SelfBenifit.touched || submitClicked) && f.SelfBenifit.invalid" class="invalid-feedback">
+                        <div *ngIf="f.SelfBenifit?.errors.required">Benefit (self) is mandatory.</div>
+                         
+                          <div *ngIf="f.SelfBenifit.errors.hasKPISplChars"> Benefit (self) can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/ </div>
+                      </div>
+
+                  </div>
+  
+                  </div>
+                  <div class="col-md-3">
+                    <span class="levarage_txt redStar">Benefit (team)</span>
+                    <div class="input-group">
+                                
+                      <input max="1000" maxlength="1000" class="form-control" type="text"
+                      
+                          [ngClass]="{ 'is-invalid': (f.TeamBenifit.touched || submitClicked)  &&  f.TeamBenifit.invalid }"
+                          formControlName="TeamBenifit" name="TeamBenifit" required >
+
+                          
+
+                      <div *ngIf=" (f.TeamBenifit.touched || submitClicked) && f.TeamBenifit.invalid" class="invalid-feedback">
+                        <div *ngIf="f.TeamBenifit?.errors.required">Benefit (team/org.) is mandatory.</div>
+                         
+                          <div *ngIf="f.TeamBenifit.errors.hasKPISplChars"> Benefit (team/org.) can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/ </div>
+                      </div>
+
+                  </div>
+  
+                  </div>
+                  <div class="col-md-3">
+                    <span class="levarage_txt">Progress Comments</span>
+                    <div class="input-group">
+                      <input  max="1000" maxlength="1000" formControlName="ProgressComments"      placeholder=""                class=" form-control">
+                      <div *ngIf=" (f.ProgressComments.touched || submitClicked) && f.ProgressComments.invalid" class="invalid-feedback">
+                         
+                          <div *ngIf="f.ProgressComments.errors.hasKPISplChars"> Progress Comments can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/ </div>
+                      </div>
+
+                  </div>
+  
+                  </div>
+
+                </div>
+
+
+                 <!-- <div   class="invitation_model_in_table table-responsive p-15">
                   <table   class="table table-bordered table-striped" style="margin-bottom: -2px;">
                      <thead>
                       <tr>
@@ -136,7 +207,7 @@
                     </tbody>
                   </table>
                   
-                </div> 
+                </div>   -->
 
                 <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
                   <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre Kpi</button>
@@ -166,7 +237,7 @@
   
           </div>
           <ng-template class="col-md-12"  #noRecordsFound>
-            <h3>No Devlopment Goals Found</h3>
+            <h3 class="heading-with-margin">No Devlopment Goals Found</h3>
         </ng-template>
       </div>
   </div>

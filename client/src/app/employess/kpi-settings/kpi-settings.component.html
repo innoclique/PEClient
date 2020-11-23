@@ -3,12 +3,12 @@
         <div class="col-md-12" *ngIf="showKpiForm;else noRecordsFound">
             <div class="card">
                 <div *ngIf="accessingFrom!='currEvaluation' " class="card-header">
-                    Employee Performance Goal Setting
+                    Performance Goals
 
                     <div class="form-group form-actions pull-right m-0">
                         <button type="button" class="btn btn-sm btn-primary" 
                         (click)="router.navigate(['employee/kpi-setup'])">
-                        Back to list
+                        <i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list
                       </button>
                     </div>
                     
@@ -19,71 +19,71 @@
                     <form [formGroup]="kpiForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
                      class="ng-untouched ng-pristine ng-valid">
 
-                        <div class="form-group row">
-                            <div class="col-md-3 kpi-fl ">
-                                <div class="col-md-6">
-                                    <strong>Evaluation Period: </strong> 
+                        <div class="row">
+                            <div class="col-md-6 kpi-fl ">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Evaluation Period: </strong> 
                                 </div>
-                                <div class="col-md-5"><span>{{currEvaluation?.EvaluationPeriod}}</span></div>
+                                <div class="col-md-5"><span span class="span-value" >{{currEvaluation?.EvaluationPeriod}}</span></div>
 
                             </div>
 
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Title: </strong>
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Title: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{loginUser?.Title}}</span></div>
+                                <div class="col-md-5"><span class="span-value">{{loginUser?.Title}}</span></div>
 
                             </div>
 
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Department: </strong>
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Department: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{loginUser?.Department}}</span></div>
+                                <div class="col-md-5"><span class="span-value">{{loginUser?.Department}}</span></div>
 
                             </div>
 
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Length of Service: </strong>
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Length of Service: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{ loginUser?.JoiningDate| dateAgo}}</span></div>
+                                <div class="col-md-5"><span class="span-value">{{ loginUser?.JoiningDate| dateAgo}}</span></div>
 
                             </div>
 
-                        </div>
+                        <!-- </div>
 
-                        <div class="form-group row">
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Manager: </strong>
+                        <div class="row"> -->
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Manager: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{loginUser?.Manager? loginUser?.Manager?.FirstName :'NA'}}</span></div>
+                                <div class="col-md-5"><span class="span-value">{{loginUser?.Manager? loginUser?.Manager?.FirstName :'NA'}}</span></div>
 
                             </div>
 
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Length of Time in Current Role: </strong>
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key" >Length of Time in Current Role: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{ loginUser?.RoleEffFrom | dateAgo}}</span></div>
+                                <div class="col-md-5"><span class="span-value" >{{ loginUser?.RoleEffFrom | dateAgo}}</span></div>
 
                             </div>
 
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Leadership Role: </strong>
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Leadership Role: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{loginUser?.DirectReports?'Yes':'No'}}</span></div>
+                                <div class="col-md-5"><span class="span-value">{{loginUser?.DirectReports?'Yes':'No'}}</span></div>
 
                             </div>
 
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Job Level: </strong>
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Job Level: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{loginUser?.JobLevel?.JobLevelName}}</span></div>
+                                <div class="col-md-5"><span class="span-value">{{loginUser?.JobLevel?.JobLevelName}}</span></div>
 
                             </div>
 
@@ -91,7 +91,7 @@
 
                         <hr>
 
-                        <div class="form-group row">
+                        <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -131,7 +131,7 @@
                         </div>
 
 
-                        <div class="form-group row">
+                        <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -194,7 +194,7 @@
 
 
 
-                        <div class="form-group row">
+                        <div class="row">
                           
               
                             <div class="col-md-4">
@@ -237,7 +237,7 @@
 
 
 
-                            <div class="col-md-4">
+                            <div class="col-md-4" style="margin-right: 30px;">
                                 <div class="form-group">
                                     <div class="input-group"  >
                                       <div class="input-group-prepend">
@@ -255,9 +255,19 @@
                                     </div>
                                     </div>
                                   </div>
-
-
-                                  <div class="form-group row">
+                                  <div class="form-group">
+                                    <div class="input-group"  >
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text ">Weighting</span>
+                                </div>
+                                <div class="autoc-border  form-control">
+                                    <input class="border-0 w-50" readonly  formControlName="Weighting"  name="Weighting"> 
+                                    <span class="mat-button-wrapper pull-right">%</span>
+                                </div>
+                            </div>
+                             </div>
+                            </div>
+                                  <div class="row">
                                    
                                     <div *ngIf="kpiDetails?.IsSubmitedKPIs"  class="input-group col-md-7">
                                       <div class="input-group-prepend ml-2">
@@ -266,34 +276,9 @@
                                       <input maxlength="12"  class="form-control"  type="text" disabled
                                       [ngClass]="{ 'is-invalid': f.Signoff.touched  &&  f.Signoff.invalid }"
                                       formControlName="Signoff"  name="Signoff"          >
-                                    
-                                    
-                                    
-                                   
                                     </div>
-
-                                    <div class="input-group col-md-5">
-                                        <!-- <div class="input-group-prepend">
-                                          <span class="input-group-text">Weighting</span>
-                                        </div>
-                                        <input maxlength="12"  class="form-control mr-2"  type="text"
-                                        [ngClass]="{ 'is-invalid': f.Weighting.touched  &&  f.Weighting.invalid }"
-                                        formControlName="Weighting"  name="Weighting"           > -->
-                                      
-                                        <div class="col-md-7">
-                                            <span>Weighting: </span>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <input class="border-0 w-50" readonly  formControlName="Weighting"  name="Weighting"   > 
-                                            <span >%</span></div>
-                                      
-                                     
-                                      </div>
-
                                   </div>
-                            </div>
-
-
+                            
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -312,44 +297,45 @@
                             
                             
                         </div>
-
+                        <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+                        <div class="clearfix"></div>
                         <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
                             <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre Kpi</button>
                             <button [disabled]='selIndex+1 == empKPIData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next Kpi</button>
                             
                           </div>
-                        <!-- <div class="clearfix"></div> -->
+                        <div class="clearfix"></div>
 
-                        <div *ngIf="kpiDetails.ManagerSignOff" class="form-group row ">
+                        <div *ngIf="kpiDetails.ManagerSignOff" class="row ">
                             <div class="col-md-2 kpi-fl ">
                                 <div class="col-md-9">
-                                    <strong>Score (manager):</strong> 
+                                    <strong class="strong-key">Score (manager):</strong> 
                                 </div>
-                                <div class="col-md-3"><span>{{kpiDetails.ManagerScore}}</span></div>
+                                <div class="col-md-3"><span class="span-value">{{kpiDetails.ManagerScore}}</span></div>
 
                             </div>
 
                             <div class="col-md-3 ">
                                 <div class="col-md-6">
-                                    <strong>Manager Sign-off: </strong>
+                                    <strong class="strong-key">Manager Sign-off: </strong>
                                 </div>
-                                <div class="col-md-6"><span>{{kpiDetails.ManagerSignOff.SignOffBy}}</span></div>
+                                <div class="col-md-6"><span class="span-value" >{{kpiDetails.ManagerSignOff.SignOffBy}}</span></div>
 
                             </div>
 
                             <div class="col-md-2 ">
                                 <div class="col-md-5">
-                                    <strong>Date: </strong>
+                                    <strong class="strong-key">Date: </strong>
                                 </div>
-                                <div class="col-md-7"><span>{{ kpiDetails.ManagerSignOff.SignOffOn | date}}</span></div>
+                                <div class="col-md-7"><span class="span-value">{{ kpiDetails.ManagerSignOff.SignOffOn | date}}</span></div>
 
                             </div>
 
                             <div class="col-md-5 ">
                                 <div class="col-md-6">
-                                    <strong>Year-end Comments (manager): </strong>
+                                    <strong class="strong-key">Year-end Comments (manager): </strong>
                                 </div>
-                                <div class="col-md-6"><span>{{kpiDetails.YECommManager}}</span></div>
+                                <div class="col-md-6"><span class="span-value">{{kpiDetails.YECommManager}}</span></div>
 
                             </div>
 
@@ -364,7 +350,12 @@
                             <!-- [disabled]="!kpiForm.valid" <button *ngIf="!kpiDetails?.IsSubmitedKPIs" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
                           </div>
             
-                          <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+                          <!-- <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p> -->
+                          <!-- <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
+                            <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre Kpi</button>
+                            <button [disabled]='selIndex+1 == empKPIData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next Kpi</button>
+                            
+                          </div> -->
 
                     </form>
                 </div>
@@ -373,7 +364,7 @@
         </div>
 
         <ng-template class="col-md-12"  #noRecordsFound>
-            <h3>No Performance Goals Found</h3>
+            <h3 class="heading-with-margin">No Performance Goals Found</h3>
         </ng-template>
     </div>
 </div>

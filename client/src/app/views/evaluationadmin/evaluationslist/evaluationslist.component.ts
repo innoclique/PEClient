@@ -205,30 +205,30 @@ export class EvaluationslistComponent implements OnInit {
   getGridColumnsForEmp() {
     return [
       {
-        headerName: 'Employee', sortable: true, filter: true,
+        headerName: 'Employee', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
         checkboxSelection: true,
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</span>` }
       },
       {
-        headerName: 'RolledOn', sortable: true, filter: true,
+        headerName: 'RolledOn', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
         cellRenderer: (data) => {
           if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
             return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
         }
       },
       {
-        headerName: 'Type', sortable: true, filter: true,
+        headerName: 'Type', sortable: true, width:100,wrapText: true, autoHeight: true,  filter: true,
         cellRenderer: (data) => { return "Regular" }
       },
       {
-        headerName: 'Evaluation Period', sortable: true, filter: true,
+        headerName: 'Evaluation Period', sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
         cellRenderer: (data) => {
           if (this.getNested(data.data.EvaluationRow, 'EvaluationPeriod')) // true
             return data.data.EvaluationRow.EvaluationPeriod
         }
       },
       {
-        headerName: 'Evaluation Duration', sortable: true, filter: true,
+        headerName: 'Evaluation Duration', sortable: true, width:180,wrapText: true, autoHeight: true,  filter: true,
         cellRenderer: (data) => {
           if (this.getNested(data.data.EvaluationRow, 'EvaluationDuration')) {
             return data.data.EvaluationRow.EvaluationDuration
@@ -236,7 +236,7 @@ export class EvaluationslistComponent implements OnInit {
         }
       },
       {
-        headerName: 'Model', field: '', sortable: true, filter: true,
+        headerName: 'Model', field: '', sortable: true, width:100,wrapText: true, autoHeight: true,  filter: true,
         cellRenderer: (data) => {
           if (this.getNested(data.data.EmployeeRow, 'Model', 'Name')) {
             return data.data.EmployeeRow.Model.Name
@@ -244,7 +244,7 @@ export class EvaluationslistComponent implements OnInit {
         }
       },
       {
-        headerName: 'Manager', field: '', sortable: true, filter: true,
+        headerName: 'Manager', field: '', sortable: true, width:120, wrapText: true, autoHeight: true, filter: true,
         cellRenderer: (data) => {
           if (this.getNested(data.data.Employee, 'Manager', 'FirstName')) {
             return `${data.data.Employee.Manager.FirstName} ${data.data.Employee.Manager.LastName}`
@@ -254,7 +254,7 @@ export class EvaluationslistComponent implements OnInit {
       },
 
       {
-        headerName: 'Peers', field: '', sortable: false, filter: false,
+        headerName: 'Peers', field: '', sortable: false, width:80, wrapText: true, autoHeight: true,  filter: false,
         cellRenderer: (data) => {
           if (this.getNested(data.data.EmployeeRow, 'Peers')){
             return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.Peers.length}</span>`
@@ -265,7 +265,7 @@ export class EvaluationslistComponent implements OnInit {
         }
       },
       {
-        headerName: 'Direct Report(s)', field: '', sortable: false, filter: false,
+        headerName: 'DirectReport(s)', field: '', width:130, wrapText: true, autoHeight: true,sortable: false, filter: false,
         
         cellRenderer: (data) => {
           if (this.getNested(data.data.EmployeeRow, 'DirectReportees')){
