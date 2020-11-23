@@ -188,7 +188,7 @@ export class SetupEmployeeComponent implements OnInit {
     // {headerName: 'Department', field: 'Department', sortable: true, filter: true },
     {headerName: 'Phone', field: 'PhoneNumber', sortable: true, filter: true },
     // {headerName: 'IsDraft', field: 'IsDraft',  width: 120, sortable: true, filter: true },
-    {headerName: 'IsActive', field: 'IsActive',  width: 120, sortable: true, filter: true },
+    {headerName: 'Active', field: 'IsActive',  width: 120, sortable: true, filter: true },
     {
       headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
