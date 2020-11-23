@@ -38,6 +38,43 @@
                                         </accordion-group>
 
                                     </accordion>
+                                    <div  class="row">
+                                        <div  class="col-md-6">
+                                            <ul class="list-group">                                            
+                                                <li class="list-group-item active" >
+                                                Peer Review List
+                                                </li>
+                                              </ul>
+                                            <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length>0" class="list-group">                                            
+                                                <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let peer of PeerScoreCard?.PeerList">
+                                                    {{peer.FirstName}} {{peer.LastName}}
+                                                </li>
+                                              </ul>
+                                              <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length===0" class="list-group">                                            
+                                                <li class="list-group-item list-group-item-action list-group-item-info" >
+                                                  <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span> 
+                                                </li>
+                                              </ul>
+                                            
+                                        </div>
+                                        <div  class="col-md-6">
+                                            <ul class="list-group">                                            
+                                                <li class="list-group-item active" >
+                                                Direct Report Review List
+                                                </li>
+                                              </ul>
+                                            <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0" class="list-group">                                            
+                                                <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">
+                                                    {{dr.FirstName}} {{dr.LastName}}
+                                                </li>
+                                              </ul>
+                                              <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length===0" class="list-group">                                            
+                                                <li class="list-group-item list-group-item-action list-group-item-info" >
+                                                  <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span> 
+                                                </li>
+                                              </ul>
+                                        </div>
+                                     </div>
                                     <div class="row">                                        
                                         <div class="col-md-12">
                                             <div *ngIf="showCompetencySubmit" class="pull-right form-group">
@@ -62,7 +99,6 @@
                                 <app-create-goals [accessingFrom]="'currEvaluation'" [currentAction]="'edit'" ></app-create-goals>
 
                             </tab>
-
                             <tab>
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Strengths
                                 </ng-template>
@@ -70,64 +106,7 @@
                                 <app-strengths [accessingFrom]="'currEvaluation'" [currentAction]="'edit'"></app-strengths>
 
                             </tab>
-                            
-                            <tab>
-                                <ng-template tabHeading><i class="icon-hand-rock"></i>Peer Rating</ng-template>
-                                <div *ngIf="PeerScoreCard && PeerScoreCard.PeerList.length===0" class="row">
-                                    <div class="col-md-12">
-                                        <h3>No Peer Review requested</h3>
-                                    </div>
-
-                                </div>
-                                <div *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length>0" class="row">
-                                    <div class="col-md-6">
-                                        <ul class="list-group">                                            
-                                            <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let peer of PeerScoreCard?.PeerList">
-                                                {{peer.FirstName}} {{peer.LastName}}
-                                            </li>
-                                          </ul>
-                                        
-                                    </div>
-                                    <div class="col-md-6">
-                                        <ul class="list-group">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                              Average Rating
-                                              <span class="ratingcard badge badge-primary badge-pill">{{PeerScoreCard?.averageScore|number:'1.2-2'}}</span>
-                                            </li>
-                                           
-                                          </ul>
-                                        
-                                    </div>
-                                </div>
-
-                            </tab>
-                            <tab>
-                                <ng-template tabHeading><i class="icon-hand-rock"></i>Direct Report(s) Rating</ng-template>
-                                <div *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList.length===0" class="row">
-                                    <div class="col-md-12">
-                                        <h3 class="heading-with-margin">No  Review requested</h3>
-                                    </div>
-
-                                </div>
-                                <div *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0" class="row">
-                                    <div class="col-md-6">
-                                        <ul class="list-group">                                            
-                                            <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">
-                                                {{dr.FirstName}} {{dr.LastName}}
-                                            </li>
-                                          </ul>                                        
-                                    </div>
-                                    <div class="col-md-6">
-                                        <ul class="list-group">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                              Average Rating
-                                              <span class="ratingcard badge badge-primary badge-pill">{{DirectReporteeScoreCard?.averageScore|number:'1.2-2'}}</span>
-                                            </li>
-                                          </ul>                                        
-                                    </div>
-                                </div>
-                            </tab>
-
+                                                      
                             <tab>
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
                                 <div [formGroup]="FinalRatingForm">

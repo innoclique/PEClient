@@ -25,6 +25,43 @@
                                         </accordion-group>
   
                                     </accordion>
+                                    <div  class="row">
+                                        <div  class="col-md-6">
+                                            <ul class="list-group">                                            
+                                                <li class="list-group-item active" >
+                                                Peer Review List
+                                                </li>
+                                              </ul>
+                                            <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length>0" class="list-group">                                            
+                                                <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let peer of PeerScoreCard?.PeerList">
+                                                    {{peer.FirstName}} {{peer.LastName}}
+                                                </li>
+                                              </ul>
+                                              <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length===0" class="list-group">                                            
+                                                <li class="list-group-item list-group-item-action list-group-item-info" >
+                                                  <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span> 
+                                                </li>
+                                              </ul>
+                                            
+                                        </div>
+                                        <div  class="col-md-6">
+                                            <ul class="list-group">                                            
+                                                <li class="list-group-item active" >
+                                                Direct Report Review List
+                                                </li>
+                                              </ul>
+                                            <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0" class="list-group">                                            
+                                                <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">
+                                                    {{dr.FirstName}} {{dr.LastName}}
+                                                </li>
+                                              </ul>
+                                              <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length===0" class="list-group">                                            
+                                                <li class="list-group-item list-group-item-action list-group-item-info" >
+                                                  <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span> 
+                                                </li>
+                                              </ul>
+                                        </div>
+                                     </div>
                                     <div *ngIf="showCompetencySubmitForManager" class="form-group row">
                                         <div class=" col-md-12">
                                             <div class="form-group">
