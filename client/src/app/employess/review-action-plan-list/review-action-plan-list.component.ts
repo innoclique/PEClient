@@ -90,18 +90,18 @@ export class ReviewActionPlanListComponent implements OnInit {
 
   
   public columnDefs = [
-    {headerName: 'Employee', field: 'Name', sortable: true, filter: true,
+    {headerName: 'Employee',width:200, field: 'Name', sortable: true, filter: true,
     // cellRenderer: (data) => {
     //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     // }
   },
     {headerName: 'No.of Dev Goals', width:300, field: 'NoOfKpis', sortable: true, filter: true },
-    {headerName: 'No.of Strengths', width:300, field: 'NoOfKpis', sortable: true, filter: true },
+    {headerName: 'No.of Strengths', width:200, field: 'NoOfKpis', sortable: true, filter: true },
     // {headerName: 'No.of  Reviewed', field: 'NoOfSignOff', sortable: true, filter: true },
     // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
     // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '',width:300, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '',width:200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
