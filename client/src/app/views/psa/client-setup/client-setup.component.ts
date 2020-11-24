@@ -66,16 +66,16 @@ export class ClientSetupComponent implements OnInit {
   getColDef(){
     return  [
       {
-        headerName: 'Client', field: 'Name', sortable: true, width:240, filter: true,  
+        headerName: 'Client', field: 'Name', sortable: true, width:220, filter: true,  
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
       },      
-      { headerName: 'Industry', field: 'Industry', sortable: true, width:240, filter: true },
-      { headerName: 'Usage Type', field: 'UsageType', sortable: true, width:240, filter: true },
-      { headerName: 'Contact Person', field: 'ContactName', sortable: true, width:240, filter: true },
+      { headerName: 'Industry', field: 'Industry', sortable: true, width:150, filter: true },
+      { headerName: 'Usage Type', field: 'UsageType', sortable: true, width:180, filter: true },
+      { headerName: 'Contact Person', field: 'ContactName', sortable: true, width:220, filter: true },
       {
         headerName: "Actions",
         suppressMenu: true,
-        width:240,
+        width:200,
         Sorting: false,        
         cellRenderer: (data) => {
         console.log('column data', data)

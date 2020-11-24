@@ -131,9 +131,7 @@ this.alert = new AlertDialog();
       ],
       OtherParticipants: ['',
       Validators.compose([
-        Validators.required, Validators.minLength(2),
-        CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
-      ])
+        ])
     ],
         TargetDate: ['', [Validators.required]],
         Status : ['', [Validators.required]],
@@ -190,7 +188,7 @@ get k (){
           '  </div>' +
           '</div>'
   }, field: 'ProgressIndicators', width: 190, autoHeight: true },
-    { headerName: 'Barriers', field: 'Barriers', width: 160, autoHeight: true },
+    { headerName: 'Barriers', field: 'Barriers', width: 100, autoHeight: true },
     { headerName: 'Target Date',
     headerComponentParams: {
       menuIcon: 'fa-bars',
@@ -201,7 +199,7 @@ get k (){
           '  <span ref="eText" class="ag-header-cell-text" role="columnheader"></span> <span class="redStar"></span>' +
           '  </div>' +
           '</div>'
-  }, field: 'TargetDate', width: 150, autoHeight: true ,
+  }, field: 'TargetDate', width: 170, autoHeight: true ,
     cellRenderer: (data) => { return new DatePipe('en-US').transform(data.data.TargetDate, 'MM-dd-yyyy')}
     
   },
@@ -216,7 +214,7 @@ get k (){
           '  <span ref="eText" class="ag-header-cell-text" role="columnheader"></span> <span class="redStar"></span>' +
           '  </div>' +
           '</div>'
-  }, field: 'Status', width: 120, autoHeight: true },
+  }, field: 'Status', width: 100, autoHeight: true },
     {
       headerName: "Action",
       suppressMenu: true,

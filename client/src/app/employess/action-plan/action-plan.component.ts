@@ -87,7 +87,7 @@ export class ActionPlanComponent implements OnInit {
         return data.data.IsDraft?'Yes':'No'
        }
       },
-       { headerName: 'Submited', field: 'IsGoalSubmited', width: 120, sortable: true, filter: true ,
+       { headerName: 'Submitted', field: 'IsGoalSubmited', width: 120, sortable: true, filter: true ,
        cellRenderer: (data) => {
          return data.data.IsGoalSubmited?'Yes':'No'
         }
