@@ -7,7 +7,7 @@
 
                     <div class="form-group form-actions pull-right m-0">
                         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                        (click)="onCancle()" ><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list </button>  
+                        (click)="onCancle()" ><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list </button>&nbsp;
 
                         <button *ngIf="accessingFrom=='kpiReview' " [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="openConfirmSubmitKpisDialog()" >Submit Performance Goals</button>
                     <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -30,78 +30,78 @@
                     <form [formGroup]="kpiForm" novalidate="" 
                         class="ng-untouched ng-pristine ng-valid">
 
-                        <div class="form-group row">
-                            <div class="col-md-3 kpi-fl ">
-                                <div class="col-md-6">
-                                    <strong>Evaluation Period: </strong>
+                        <div class="row">
+                            <div class="col-md-6 kpi-fl ">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Evaluation Period: </strong> 
                                 </div>
-                                <div class="col-md-5"><span>{{currEvaluation?.EvaluationPeriod}}</span></div>
+                                <div class="col-md-5"><span span class="span-value" >{{currEvaluation?.EvaluationPeriod}}</span></div>
 
                             </div>
 
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Title: </strong>
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Title: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{kpiDetails?.Owner?.Title}}</span></div>
+                                <div class="col-md-5"><span class="span-value">{{kpiDetails?.Owner?.Title}}</span></div>
 
                             </div>
 
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Department: </strong>
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Department: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{kpiDetails?.Owner?.Department}}</span></div>
+                                <div class="col-md-5"><span class="span-value">{{kpiDetails?.Owner?.Department}}</span></div>
 
                             </div>
 
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Length of Service: </strong>
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Length of Service: </strong>
                                 </div>
-                                <div class="col-md-5"><span>{{ kpiDetails?.Owner?.JoiningDate| dateAgo}}</span></div>
+                                <div class="col-md-5"><span class="span-value">{{ kpiDetails?.Owner?.JoiningDate| dateAgo}}</span></div>
+
+                            </div>
+
+                        <!-- </div>
+
+                        <div class="row"> -->
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Manager: </strong>
+                                </div>
+                                <div class="col-md-5"><span class="span-value">{{loginUser?.FirstName }}</span></div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key" >Length of Time in Current Role: </strong>
+                                </div>
+                                <div class="col-md-5"><span class="span-value" >{{ kpiDetails?.Owner?.RoleEffFrom | dateAgo}}</span></div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Leadership Role: </strong>
+                                </div>
+                                <div class="col-md-5"><span class="span-value">{{kpiDetails?.Owner?.DirectReports?'Yes':'No'}}</span></div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <strong class="strong-key">Job Level: </strong>
+                                </div>
+                                <div class="col-md-5"><span class="span-value">{{kpiDetails?.Owner?.JobLevel?.JobLevelName}}</span></div>
 
                             </div>
 
                         </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Manager: </strong>
-                                </div>
-                                <div class="col-md-5">
-                                    <span>{{loginUser?.FirstName }}</span></div>
-
-                            </div>
-
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Length of Time in Current Role: </strong>
-                                </div>
-                                <div class="col-md-5"><span>{{ kpiDetails?.Owner?.RoleEffFrom | dateAgo}}</span></div>
-
-                            </div>
-
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Leadership Role: </strong>
-                                </div>
-                                <div class="col-md-5"><span>{{kpiDetails?.Owner?.DirectReports?'Yes':'No'}}</span></div>
-
-                            </div>
-
-                            <div class="col-md-3 ">
-                                <div class="col-md-6">
-                                    <strong>Job Level: </strong>
-                                </div>
-                                <div class="col-md-5"><span>{{kpiDetails?.Owner?.JobLevel?.JobLevelName}}</span></div>
-
-                            </div>
-
-                        </div>
-
+                        <hr>
                         <br>
+                       
 
                     <div class="view-only">
 
@@ -377,7 +377,7 @@
 
                     </div>
                         <!-- <div class="clearfix"></div> -->
-                        <h4 *ngIf="kpiDetails?.IsActive && !kpiDetails?.IsDraftByManager "  >Manager</h4>
+                        <h4 class="heading-with-margin heading-with-margin1" *ngIf="kpiDetails?.IsActive && !kpiDetails?.IsDraftByManager "  >Manager</h4>
                       
 
 
@@ -438,12 +438,12 @@
                                             [ngClass]="{ 'is-invalid': f.CoachingReminder.touched  &&  f.CoachingReminder.invalid }"
                                             formControlName="CoachingReminder" name="CoachingReminder" >
                                             <option value="" disabled>Please select</option>
-                                            <option *ngFor="let e of coachingRemDays" [value]="e">{{e}}</option>
+                                            <option *ngFor="let e of coachingRemDays" [value]="e">{{e}} days</option>
 
                                         </select>
-                                        <div class="input-group-postpend">
+                                        <!--<div class="input-group-postpend">
                                             <span class="input-group-text">Days</span>
-                                        </div>
+                                        </div> -->
                                         <div *ngIf="f.CoachingReminder.touched && f.CoachingReminder.invalid" class="invalid-feedback">
                                             <div *ngIf="f.CoachingReminder.errors.required">Coaching Reminder is mandatory.</div>
                                         </div>
@@ -470,6 +470,11 @@
                             </div>
 
 
+                            
+
+
+                        </div>
+                        <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -485,14 +490,12 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
 
 
 
                         <div *ngIf="kpiDetails?.IsActive && !kpiDetails?.IsDraftByManager && actor!='TS'  "  class="form-group form-actions pull-right">
-                            <button class="btn btn-sm btn-primary" (click)="onCancle()">Cancel</button>
+                            <button class="btn btn-sm btn-primary" (click)="onCancle()">Cancel</button>&nbsp;
                             <button  class="btn btn-sm btn-primary"
                                 (click)="submitKpi()">{{currentAction=='edit'? 'Update' :'Update' }}</button>
                           

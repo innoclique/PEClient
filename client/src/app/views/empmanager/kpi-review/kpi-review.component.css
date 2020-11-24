@@ -65,3 +65,11 @@ h3:after {
 h3:after {
     margin: 0 0 0 20px;
 } */
+
+.heading-with-margin1 {
+    font-size: 16px;
+    color: #000;
+    padding-bottom: 15px;
+    font-weight: 600;
+    margin: 0px;
+}
