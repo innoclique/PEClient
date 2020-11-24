@@ -79,14 +79,15 @@ export class ReviewEvaluationListComponent implements OnInit {
   
   public columnDefs = [
     {headerName: 'Employee', field: 'Name', width: 250, sortable: true, filter: true,
-    cellRenderer: (data) => {
-      return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
-    }},
+    // cellRenderer: (data) => {
+    //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
+    // }
+  },
     {headerName: 'No.of  Performance Goals', field: 'NoOfKpis', sortable: true, filter: true },
     {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
     {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', width: 190, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -111,14 +112,15 @@ export class ReviewEvaluationListComponent implements OnInit {
   
 public tsColumnDefs = [
   {headerName: 'Employee', field: 'Name', width: 250, sortable: true, filter: true,
-  cellRenderer: (data) => {
-    return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
-  }},
+  // cellRenderer: (data) => {
+  //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
+  // }
+},
   {headerName: 'No.of  Performance Goals', field: 'NoOfKpis', sortable: true, filter: true },
   {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
   {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
   {
-    headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+    headerName: 'Action', field: '', width: 190, autoHeight: true, suppressSizeToFit: true,
     cellRenderer: (data) => {
 
       var returnString = '';

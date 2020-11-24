@@ -49,6 +49,8 @@ import { EmpmanagerModule } from '../views/empmanager/empmanager.module';
 import { DRReviewModule } from '../drreview/drreview.module';
 import { ReviewPerfGoalsListComponent } from './review-perf-goals-list/review-perf-goals-list.component';
 import { ReviewPerfGoalsComponent } from './review-perf-goals/review-perf-goals.component';
+import { ReviewActionPlanListComponent } from './review-action-plan-list/review-action-plan-list.component';
+import { ReviewActionPlanComponent } from './review-action-plan/review-action-plan.component';
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
@@ -60,7 +62,9 @@ import { ReviewPerfGoalsComponent } from './review-perf-goals/review-perf-goals.
      ReviewEvaluationComponent,
      ReviewEvaluationListComponent,
      ReviewPerfGoalsListComponent,
-     ReviewPerfGoalsComponent
+     ReviewPerfGoalsComponent,
+     ReviewActionPlanListComponent,
+     ReviewActionPlanComponent
     ],
   imports: [
     CommonModule,

@@ -262,7 +262,7 @@
                 </div>
 
 
-                <div *ngIf="currentAction != 'view'" class="form-group form-actions pull-right mt-2">
+                <div *ngIf="currentAction != 'view' && accessingFrom!='currEvaluation' " class="form-group form-actions pull-right mt-2">
                   <button class="btn btn-sm btn-primary" (click)="navToGoalsList()" >Cancel</button>&nbsp;
 
                   <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftDevGoal()" >Save</button>&nbsp;

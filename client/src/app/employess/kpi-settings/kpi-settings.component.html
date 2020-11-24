@@ -136,7 +136,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text redStar">Performance Goal</span>
+                                            <span class="input-group-text redStar">KPI</span>
                                         </div>
                                         <input *ngIf="addMCSwitch" max="500" maxlength="500" class="form-control" type="text"
                                        
@@ -307,7 +307,7 @@
                           </div>
                         <div class="clearfix"></div>
 
-                        <div *ngIf="kpiDetails.ManagerSignOff" class="row ">
+                        <div *ngIf="kpiDetails.ManagerSignOff?.SignOffBy" class="row ">
                             <div class="col-md-2 kpi-fl ">
                                 <div class="col-md-9">
                                     <strong class="strong-key">Score (manager):</strong> 
@@ -342,7 +342,7 @@
 
                         </div>
 
-                        <div *ngIf="currentAction != 'view'" class="form-group form-actions pull-right">
+                        <div *ngIf="currentAction != 'view' && !isEmpFRSignOff" class="form-group form-actions pull-right">
                             <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>&nbsp;
                             <button *ngIf="f?.IsDraft.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftKpi()" >Save</button>&nbsp;
                             <button  class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 

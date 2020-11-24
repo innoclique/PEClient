@@ -77,6 +77,7 @@ actor:any;
 
   };
   trackViewRef: BsModalRef;
+  isManagerFRSignOff=false;
 
 
   constructor(private fb: FormBuilder,
@@ -334,6 +335,8 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
           this.kpiStatus = c.KpiStatus;
           this.coachingRemDays = c.coachingRem;
           this.currEvaluation = c.evaluation;
+          if(c.evaluation)
+          this.isManagerFRSignOff=c.evaluation.Employees[0].FinalRating.Manager.SignOff.length>0;
         }
       })
   }
@@ -494,7 +497,7 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
 
       }else{
         
-        if (this.accessingFrom=='reviewEvaluation') {
+        if (this.accessingFrom=='reviewEvaluation' || this.accessingFrom=='kpiReview') {
           this.showKpiForm=false;
         }
       }

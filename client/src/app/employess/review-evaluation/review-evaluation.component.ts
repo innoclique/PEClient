@@ -53,6 +53,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   showCompetencySubmitForManager:Boolean=true;
   isContentOpen: boolean = false;
   @ViewChild('evTabset') tabset: TabsetComponent;
+  isReqRevDisabled=false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -160,8 +161,8 @@ goto(selTab){
           this.FinalRatingForm.controls["EmployeeComments"].setValue(res1.FinalRating.Self.YearEndComments)
           this.FinalRatingForm.controls["EmployeeRevComments"].setValue(res1.FinalRating.Self.RevComments)
           this.FinalRatingForm.controls["EmployeeOverallRating"].setValue(res1.FinalRating.Self.YearEndRating)
-          this.FinalRatingForm.controls["EmployeeIsDraft"].setValue(!res1.FinalRating.Self.IsSubmitted)
-          this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff)
+          this.FinalRatingForm.controls["EmployeeIsDraft"].setValue(!res1.FinalRating.Self.IsSubmitted);
+          this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff?res1.FinalRating.Self.SignOff:"")
           this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
           this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
 
@@ -181,6 +182,9 @@ goto(selTab){
           this.FinalRatingForm.controls["ThirdSignatoryComments"].setValue(res1.FinalRating.ThirdSignatory.YearEndComments)
           this.FinalRatingForm.controls["ThirdSignatoryRevComments"].setValue(res1.FinalRating.ThirdSignatory.RevComments)
           this.FinalRatingForm.controls["TSReqRevision"].setValue(res1.FinalRating.ThirdSignatory.ReqRevision)
+     
+          this.isReqRevDisabled =res1.FinalRating.FRReqRevision;
+          this.FinalRatingForm.controls["FRReqRevision"].setValue(res1.FinalRating.FRReqRevision)
           this.FinalRatingForm.controls["ThirdSignatoryIsDraft"].setValue(!res1.FinalRating.ThirdSignatory.IsSubmitted)
           this.FinalRatingForm.controls["ThirdSignatorySignOff"].setValue(res1.FinalRating.ThirdSignatory.SignOff?res1.FinalRating.ThirdSignatory.SignOff
             :"")
@@ -262,7 +266,7 @@ goto(selTab){
       EmployeeRevComments: [''],
       EmployeeOverallRating: [1, [Validators.required]],
       EmployeeIsDraft: [true],
-      EmployeeSignOff: [],
+      EmployeeSignOff: [""],
       EmployeeSubmittedOn: ['']
 
       ,ManagerComments: ['', [Validators.required]],
@@ -276,6 +280,7 @@ goto(selTab){
       ,ThirdSignatoryComments: ['', [Validators.required]],
       ThirdSignatoryRevComments: ['',],
       TSReqRevision: [false],
+      FRReqRevision: [false],
       ThirdSignatoryIsDraft: [true],
       ThirdSignatorySignOff: [],
       ThirdSignatorySubmittedOn: ['']
@@ -485,7 +490,7 @@ if (this.FinalRatingForm.value.TSReqRevision &&
         OverallRating: this.FinalRatingForm.value.ManagerOverallRating,
 
         RevComments: this.FinalRatingForm.value.ManagerRevComments,
-        ReqRevision: this.FinalRatingForm.value.ManagerReqRevision,
+      //  ReqRevision: this.FinalRatingForm.value.ManagerReqRevision,
 
         IsDraft: isDraft,
         SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
@@ -532,6 +537,7 @@ if (this.FinalRatingForm.value.TSReqRevision &&
         YearEndComments: this.FinalRatingForm.value.ThirdSignatoryComments,
         RevComments: this.FinalRatingForm.value.ThirdSignatoryRevComments,
         ReqRevision: this.FinalRatingForm.value.TSReqRevision,
+        FRReqRevision: this.FinalRatingForm.value.FRReqRevision,
         
         IsDraft: isDraft,
         SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
@@ -550,12 +556,12 @@ if (this.FinalRatingForm.value.TSReqRevision &&
 
   
   tsReqRevisionCheck(value) {
-    if (value.target.value) {
-      this.evaluationForm.controls['ThirdSignatoryRevComments'].setValidators(Validators.required);
+    debugger
+    if (value.target.value=='on') {
+      this.evaluationForm.controls['FRReqRevision'].setValue(true);
     } else {
-      this.evaluationForm.controls['ThirdSignatoryRevComments'].clearValidators();
-      this.evaluationForm.controls['ThirdSignatoryRevComments'].reset();
-      this.evaluationForm.controls['ThirdSignatoryRevComments'].setValue(null);
+     
+      this.evaluationForm.controls['FRReqRevision'].setValue(false);
     }
   }
 

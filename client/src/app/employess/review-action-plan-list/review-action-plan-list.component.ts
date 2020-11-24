@@ -16,11 +16,11 @@ import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
 
 @Component({
-  selector: 'app-review-perf-goals-list',
-  templateUrl: './review-perf-goals-list.component.html',
-  styleUrls: ['./review-perf-goals-list.component.css']
+  selector: 'app-review-action-plan-list',
+  templateUrl: './review-action-plan-list.component.html',
+  styleUrls: ['./review-action-plan-list.component.css']
 })
-export class ReviewPerfGoalsListComponent implements OnInit {
+export class ReviewActionPlanListComponent implements OnInit {
 
 
   public empForm: FormGroup;
@@ -90,30 +90,30 @@ export class ReviewPerfGoalsListComponent implements OnInit {
 
   
   public columnDefs = [
-    {headerName: 'Employee', field: 'Name',width:300, sortable: true, filter: true,
+    {headerName: 'Employee', field: 'Name', sortable: true, filter: true,
     // cellRenderer: (data) => {
     //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     // }
   },
-    {headerName: 'No.of  Performance Goals', width:300, field: 'NoOfKpis', sortable: true, filter: true },
-    {headerName: 'No.of  Reviewed Goals', field: 'NoOfSignOff', sortable: true, filter: true },
+    {headerName: 'No.of Dev Goals', width:300, field: 'NoOfKpis', sortable: true, filter: true },
+    {headerName: 'No.of Strengths', width:300, field: 'NoOfKpis', sortable: true, filter: true },
+    // {headerName: 'No.of  Reviewed', field: 'NoOfSignOff', sortable: true, filter: true },
     // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
     // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '',width:170, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '',width:300, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
         returnString += `
         
-        <i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i> 
+       
         
-        <i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="reviewKPI" title="Review Performance Goal"></i>
-        
-        <i class="cui-layers " hidden style="cursor:pointer; padding: 7px 20px 0 0;
+        <i class="cui-layers " style="cursor:pointer; padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
+
+        <i class="cui-drop " style="cursor:pointer; padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="reviewStrengths" title="Review Strengths"></i>
 
         `;
         return returnString;
@@ -129,19 +129,24 @@ public tsColumnDefs = [
   //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
   // }
 },
-  {headerName: 'No.of  Performance Goals', field: 'NoOfKpis', sortable: true, filter: true },
-  // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
+  {headerName: 'No.of Dev Goals', width:300, field: 'NoOfKpis', sortable: true, filter: true },
+    {headerName: 'No.of Strengths', width:300, field: 'NoOfKpis', sortable: true, filter: true },
+    // {headerName: 'No.of  Reviewed', field: 'NoOfSignOff', sortable: true, filter: true },
+   
   // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
   {
     headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
     cellRenderer: (data) => {
 
       var returnString = '';
-      returnString += `<i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
-      font-size: 17px;"   data-action-type="reviewKPI" title="ReviewPerformance Goal"></i>
+      returnString += `
       
-      <i class="cui-layers " hidden style="cursor:pointer; padding: 7px 20px 0 0;
+      
+      <i class="cui-layers "  style="cursor:pointer; padding: 7px 20px 0 0;
       font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
+
+      <i class="cui-drop " style="cursor:pointer; padding: 7px 20px 0 0;
+      font-size: 17px;"   data-action-type="reviewStrengths" title="Review Strengths"></i>
 
       `;
       return returnString;
@@ -167,6 +172,11 @@ public onEmpGridRowClick(e) {
           case "reviewGoals":
             this.reviewEvalForm('reviewGoals','Manager');
             break;
+
+            case "reviewStrengths":
+              this.reviewEvalForm('reviewStrengths','Manager');
+              break;
+            
             case "reviewEval":
               this.reviewEvalForm('reviewEval','Manager');
               break;
@@ -199,6 +209,9 @@ public onAsTSGridRowClick(e) {
           case "reviewGoals":
             this.reviewEvalForm('reviewGoals','TS');
             break;
+            case "reviewStrengths":
+              this.reviewEvalForm('reviewStrengths','TS');
+              break;
             case "reviewEval":
               this.reviewEvalForm('reviewEval','TS');
               break;
@@ -210,13 +223,13 @@ public onAsTSGridRowClick(e) {
 }
 
   reviewEvalForm(action,actor) {
-      this.router.navigate(['employee/review-perf-goals',
+      this.router.navigate(['employee/review-action-plan',
        { action: action, empId: this.currentRowItem._id,actor:actor,empManagerId:this.currentRowItem.Manager }
     ], { skipLocationChange: true });
   }
 
   viewEmpForm(action,actor) {
-     this.router.navigate(['employee/review-perf-goals',
+     this.router.navigate(['employee/review-action-plan',
        { action: action, empId: this.currentRowItem._id,actor:actor }
     ], { skipLocationChange: true });
   }
@@ -243,12 +256,12 @@ GetReporteeKpiRelesedDetails(){
     //  let flatarray=row.Evaluation.flat()
 //let evaluation=flatarray.find(x=>x.Status==='Active')
 
-let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).length;
+let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff.submited ==false).length;
      return  {
          Name:row.FirstName+' '+row.LastName,
-         NoOfKpis: row.KpiList.length,
-         NoOfSignOff:row.KpiList.length-unSubmitedCount,
-         NoOfDevGoals: row.GoalList.length,
+         NoOfKpis: row.GoalList.length,
+         NoOfSignOff:row.GoalList.length-unSubmitedCount,
+         NoOfStrengths: row.StrengthList.length,
         // FRStatus: evaluation ?evaluation.FinalRating.Status:'',
        
         RowData:row
@@ -272,10 +285,14 @@ GetReporteeEvaluationsDetails(){
     this.managerReporteesData =c.map(row=> {
       let flatarray=row.Evaluation.flat()
 let evaluation=flatarray.find(x=>x.Status==='Active')
+
+
+let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff.submited ==false).length;
      return  {
          Name:row.FirstName+' '+row.LastName,
-         NoOfKpis: row.KpiList.length,
-         NoOfDevGoals: row.GoalList.length,
+         NoOfKpis: row.GoalList.length,
+         NoOfSignOff:row.GoalList.length-unSubmitedCount,
+         NoOfStrengths: row.StrengthList.length,
          FRStatus: evaluation ?evaluation.FinalRating.Status:'',
        
         RowData:row
@@ -307,11 +324,13 @@ GetTSReporteeEvDetails(){
 
       let flatarray=row.Evaluation.flat()
 let evaluation=flatarray.find(x=>x.Status==='Active')
+let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff.submited ==false).length;
      return  {
          Name:row.FirstName+' '+row.LastName,
-         NoOfKpis: row.KpiList.length,
-         NoOfDevGoals: row.GoalList.length,
-         FRStatus: evaluation?evaluation.FinalRating.Status:'',
+         NoOfKpis: row.GoalList.length,
+         NoOfSignOff:row.GoalList.length-unSubmitedCount,
+         NoOfStrengths: row.StrengthList.length,
+        //  FRStatus: evaluation?evaluation.FinalRating.Status:'',
        
         RowData:row
       }
@@ -325,5 +344,6 @@ let evaluation=flatarray.find(x=>x.Status==='Active')
 
 
 }
+
 
 

@@ -369,7 +369,7 @@ private _filterDevGoals(name: string): any[] {
 
 getAllDevGoalsDetails() {
   this.perfApp.route = "app";
-  this.perfApp.method = "GetAllDevGoals",
+  this.perfApp.method = "GetAllDevGoalsByManger",
     this.perfApp.requestBody = { 'empId': this.currentEmpId,
     'fetchAll':true,'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
@@ -403,7 +403,7 @@ getAllDevGoalsDetails() {
     }
     else{
         
-      if (this.accessingFrom=='reviewEvaluation') {
+      if (this.accessingFrom=='reviewEvaluation' || this.accessingFrom=='reviewActionPlan') {
         this.showDevGoalsForm=false;
       }
     }
@@ -421,8 +421,15 @@ getAllDevGoalsDetails() {
 }
 
 
+
+
 navToGoalsList() {
-  this.router.navigate(['employee/review-evaluation-list']);
+  if(this.accessingFrom=='reviewActionPlan'){
+  
+  this.router.navigate(['employee/review-action-plan-list']);
+  }else{
+    this.router.navigate(['employee/review-evaluation-list']);
+  }
 }
 
 
@@ -486,7 +493,7 @@ callKpiApi() {
 
       this.snack.success(this.translate.instant(` Comments have been submitted successfully.`       ));
 
-      this.router.navigate(['employee/review-evaluation-list']);
+      this.navToGoalsList();
     }
 
   }, error => {

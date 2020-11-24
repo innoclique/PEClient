@@ -161,7 +161,7 @@ private _filterDevGoals(name: string): any[] {
 
 getAllStrengthDetails() {
   this.perfApp.route = "app";
-  this.perfApp.method = "GetAllStrengths",
+  this.perfApp.method = "GetAllStrengthsByManger",
     this.perfApp.requestBody = { 'empId': this.currentEmpId,
     'fetchAll':true,'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
@@ -206,7 +206,7 @@ getAllStrengthDetails() {
     }
     else{
         
-      if (this.accessingFrom=='reviewEvaluation') {
+      if (this.accessingFrom=='reviewEvaluation' || this.accessingFrom=='reviewActionPlan') {
         this.showDevGoalsForm=false;
       }
     }
@@ -224,9 +224,17 @@ getAllStrengthDetails() {
 }
 
 
+
+
 navToStrengthList() {
-  this.router.navigate(['employee/review-evaluation-list']);
+  if(this.accessingFrom=='reviewActionPlan'){
+  
+  this.router.navigate(['employee/review-action-plan-list']);
+  }else{
+    this.router.navigate(['employee/review-evaluation-list']);
+  }
 }
+
 
 submitGoal() {
 
@@ -288,7 +296,7 @@ callStregnthApi() {
 
       this.snack.success(this.translate.instant(` Strength has been ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)} successfully`       ));
 
-  this.router.navigate(['employee/review-evaluation-list']);
+  this.navToStrengthList();
      
 
     }

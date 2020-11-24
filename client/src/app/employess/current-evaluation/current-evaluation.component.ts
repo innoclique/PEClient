@@ -94,6 +94,7 @@ export class CurrentEvaluationComponent implements OnInit {
           this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff)
           this.FinalRatingForm.controls["EmployeeRevComments"].setValue(res1.FinalRating.Self.RevComments)
           this.FinalRatingForm.controls["IsManagerReqRev"].setValue(res1.FinalRating.Manager.ReqRevision)
+          this.FinalRatingForm.controls["IsManagerSubmited"].setValue(res1.FinalRating.Manager.IsSubmitted)
           this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
           this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
         }
@@ -141,6 +142,7 @@ export class CurrentEvaluationComponent implements OnInit {
       EmployeeOverallRating: [1, [Validators.required]],
       EmployeeIsDraft: [true],
       IsManagerReqRev: [false],
+      IsManagerSubmited: [false],
       EmployeeSignOff: [],
       EmployeeSubmittedOn: ['']
     })
@@ -287,6 +289,7 @@ export class CurrentEvaluationComponent implements OnInit {
         EvaluationId: this.evaluationForm.Competencies.EvaluationId,
         EmployeeId: this.loginUser._id,
         YearEndComments: this.FinalRatingForm.value.EmployeeComments,
+        IsManagerSubmited: this.FinalRatingForm.value.IsManagerSubmited,
         RevComments: this.FinalRatingForm.value.EmployeeRevComments,
         OverallRating: this.FinalRatingForm.value.EmployeeOverallRating,
         IsDraft: isDraft,
