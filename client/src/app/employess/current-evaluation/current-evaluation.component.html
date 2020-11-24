@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Rating View
+                    Performance Evaluation
                 </div>
                 <div class="card-body">
                     <div *ngIf="!evaluationForm">
@@ -30,7 +30,7 @@
                                                     <i  [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
                                                 </div>
                                                 <div>
-                                                    <span class="badge badge-secondary float-right pull-right avgScore"> Average Rating: {{c.CompetencyAvgRating||0}}</span>
+                                                    <span class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span>
                                                 </div>
                                               </button>
                                                  <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments">
@@ -80,9 +80,9 @@
                                             <div *ngIf="showCompetencySubmit" class="pull-right form-group">
                                                 <div>
                                                     <button (click)="cancelCompetencyRating()"
-                                                        class="btn btn-secondary">Cancel</button>
+                                                        class="btn btn-secondary">Cancel</button>&nbsp;
                                                     <button (click)="saveSelfCompetencyFormAsDraft()"
-                                                        class="btn btn-primary">Save</button>
+                                                        class="btn btn-primary">Save</button>&nbsp;
                                                     <button (click)="submitSelfCompetencyForm()"
                                                         class="btn btn-primary">Submit</button>
                                                 </div>
@@ -176,9 +176,9 @@
                                                 <div class="pull-right form-group">
                                                     <div class="">
                                                         <button (click)="cancelFinalRating()"
-                                                            class="btn btn-secondary">Cancel</button>
+                                                            class="btn btn-secondary">Cancel</button>&nbsp;
                                                         <button (click)="saveFinalRating()"
-                                                            class="btn btn-primary">Save</button>
+                                                            class="btn btn-primary">Save</button>&nbsp;
                                                         <button (click)="submitFinalRating()"
                                                             class="btn btn-primary">Submit
                                                             Final Rating</button>

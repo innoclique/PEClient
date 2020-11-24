@@ -1,8 +1,8 @@
 <mat-toolbar color="primary" role="toolbar" class="task-header">
     <h2 mat-dialog-title>{{data.Title}}</h2>
     <span class="fx-spacer"></span>
-    <button mat-icon-button  (click)="close()">
-        <mat-icon mat-list-icon>close</mat-icon>
+    <button class="close" mat-icon-button  (click)="close()">
+        X
     </button>
 </mat-toolbar>
 <!-- <div mat-dialog-content style="height: calc(100% - 110px);max-height: unset;padding-top: 3%;">     -->
@@ -11,8 +11,6 @@
         <div class="mat-dialog-content-body">
             {{data.Content}}
         </div>
-    
-    
     </mat-dialog-content>
   </div>
 
@@ -21,7 +19,7 @@
     
 <mat-dialog-actions>
     <button *ngIf="data.ShowCancelButton" color="primary" class="mat-raised-button"
-        (click)="close()">{{data.CancelButtonText}}</button>
+        (click)="close()">{{data.CancelButtonText}}</button>&nbsp;
     <button *ngIf="data.ShowConfirmButton" class="mat-raised-button mat-primary"
         (click)="save()">{{data.ConfirmButtonText}}</button>
 </mat-dialog-actions>

@@ -20,8 +20,12 @@
                   <h2 class="col-xs-6">Manager Sign-off<span>{{currentEvaluation?.Manager}}</span></h2>
                   <h2 class="col-xs-6">Third Signatory<span>{{currentEvaluation?.ThirdSignatory}}</span></h2>
                 </div> 
-                <div class="box_in_btns">
-                  <a href="#/employee/current-evaluation" class="box_in_btns_view">View Evaluation &#8594;</a>
+                <div *ngIf="(currentEvaluationProgress!=0)" class="box_in_btns">
+                  <a  href="#/employee/current-evaluation" class="box_in_btns_view">View Evaluation &#8594;</a>
+                  <div class="clear"></div>
+                </div>
+                <div *ngIf="(currentEvaluationProgress==0)" class="box_in_btns">
+                  <span class="box_in_btns_view" style="color: #717171;">View Evaluation &#8594;</span>
                   <div class="clear"></div>
                 </div> 
                 

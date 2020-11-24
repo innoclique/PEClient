@@ -99,21 +99,21 @@ export class DefaultLayoutComponent implements OnInit {
           "url": "/employee/accomplishments",
           "name": "Accomplishments",
           "code": "CurrentEvaluation",
-          "icon": "icon-code"
+          "icon": "icon-puzzle"
         },
         {
           "IsActive": true,
           "url": "/employee/peerreview",
           "name": "Peer Review",
           "code": "CurrentEvaluation",
-          "icon": "icon-code"
+          "icon": "icon-layers"
         },
         {
           "IsActive": true,
           "url": "/employee/drreview",
           "name": " Review Manager",
           "code": "CurrentEvaluation",
-          "icon": "icon-code"
+          "icon": "icon-layers"
         },
         {
           "IsActive": true,

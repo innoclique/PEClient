@@ -90,7 +90,7 @@ export class ReviewPerfGoalsListComponent implements OnInit {
 
   
   public columnDefs = [
-    {headerName: 'Employee', field: 'Name', sortable: true, filter: true,
+    {headerName: 'Employee', field: 'Name',width:300, sortable: true, filter: true,
     cellRenderer: (data) => {
       return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     }},
@@ -99,7 +99,7 @@ export class ReviewPerfGoalsListComponent implements OnInit {
     // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
     // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '',width:300, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '',width:170, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';

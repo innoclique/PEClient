@@ -16,77 +16,75 @@
 
                     <form [formGroup]="kpiForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
                      class="ng-untouched ng-pristine ng-valid">
-
-                        <div class="form-group row">
-                            <div class="col-md-6 kpi-fl ">
-                                <div class="col-md-6">
-                                    <strong>Evaluation Period: </strong> 
-                                </div>
-                                <div class="col-md-5"><span>{{currEvaluation?.EvaluationPeriod}}</span></div>
-
+                     <div class="row">
+                        <div class="col-md-6 kpi-fl ">
+                            <div class="col-md-4">
+                                <strong class="strong-key">Evaluation Period: </strong> 
                             </div>
-
-                            <div class="col-md-6 ">
-                                <div class="col-md-6">
-                                    <strong>Title: </strong>
-                                </div>
-                                <div class="col-md-5"><span>{{ownerInfo?.Title}}</span></div>
-
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="col-md-6">
-                                    <strong>Department: </strong>
-                                </div>
-                                <div class="col-md-5"><span>{{ownerInfo?.Department}}</span></div>
-
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="col-md-6">
-                                    <strong>Length of Service: </strong>
-                                </div>
-                                <div class="col-md-5"><span>{{ ownerInfo?.JoiningDate| dateAgo}}</span></div>
-
-                            </div>
+                            <div class="col-md-5"><span span class="span-value" >{{currEvaluation?.EvaluationPeriod}}</span></div>
 
                         </div>
 
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <div class="col-md-6">
-                                    <strong>Manager: </strong>
-                                </div>
-                                <div class="col-md-5"><span>{{ loginUser?.FirstName }}</span></div>
-
+                        <div class="col-md-6">
+                            <div class="col-md-4">
+                                <strong class="strong-key">Title: </strong>
                             </div>
-
-                            <div class="col-md-6">
-                                <div class="col-md-6">
-                                    <strong>Length of Time in Current Role: </strong>
-                                </div>
-                                <div class="col-md-5"><span>{{ ownerInfo?.RoleEffFrom | dateAgo}}</span></div>
-
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="col-md-6">
-                                    <strong>Leadership Role: </strong>
-                                </div>
-                                <div class="col-md-5"><span>{{ownerInfo?.DirectReports?'Yes':'No'}}</span></div>
-
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="col-md-6">
-                                    <strong>Job Level: </strong>
-                                </div>
-                                <div class="col-md-5"><span>{{ownerInfo?.JobLevel?.JobLevelName}}</span></div>
-
-                            </div>
+                            <div class="col-md-5"><span class="span-value">{{ownerInfo?.Title}}</span></div>
 
                         </div>
 
+                        <div class="col-md-6">
+                            <div class="col-md-4">
+                                <strong class="strong-key">Department: </strong>
+                            </div>
+                            <div class="col-md-5"><span class="span-value">{{ownerInfo?.Department}}</span></div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-4">
+                                <strong class="strong-key">Length of Service: </strong>
+                            </div>
+                            <div class="col-md-5"><span class="span-value">{{ ownerInfo?.JoiningDate| dateAgo}}</span></div>
+
+                        </div>
+
+                    <!-- </div>
+
+                    <div class="row"> -->
+                        <div class="col-md-6">
+                            <div class="col-md-4">
+                                <strong class="strong-key">Manager: </strong>
+                            </div>
+                            <div class="col-md-5"><span class="span-value">{{ loginUser?.FirstName }}</span></div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-4">
+                                <strong class="strong-key" >Length of Time in Current Role: </strong>
+                            </div>
+                            <div class="col-md-5"><span class="span-value" >{{ ownerInfo?.RoleEffFrom | dateAgo}}</span></div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-4">
+                                <strong class="strong-key">Leadership Role: </strong>
+                            </div>
+                            <div class="col-md-5"><span class="span-value">{{ownerInfo?.DirectReports?'Yes':'No'}}</span></div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-4">
+                                <strong class="strong-key">Job Level: </strong>
+                            </div>
+                            <div class="col-md-5"><span class="span-value">{{ownerInfo?.JobLevel?.JobLevelName}}</span></div>
+
+                        </div>
+
+                    </div>
                         <hr>
 
                         <div class="form-group row">
@@ -312,7 +310,7 @@
                     
 
                         <div *ngIf="currentAction != 'view'" class="form-group form-actions pull-right">
-                            <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>
+                            <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>&nbsp;
                             <!-- <button  class="btn btn-sm btn-primary" (click)="draftKpiByManager()" >Save</button> -->
                             <button  class="btn btn-sm btn-primary" (click)="submitKpi()" >Submit</button>
                             <!-- <button [disabled]="!kpiForm.valid" class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 'Update' :'Submit Kpi' }}</button> -->
