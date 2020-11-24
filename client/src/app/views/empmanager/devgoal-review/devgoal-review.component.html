@@ -132,7 +132,7 @@
   
                   <div  formGroupName="GoalActionItems" class="invitation_model_in_table table-responsive p-15">
                     <!-- <div style="height: calc(100% - 80px);"> -->
-                        <ag-grid-angular style="width: auto; height: 200px;" class="ag-theme-alpine" 
+                        <ag-grid-angular style="width: 970px; height: 200px;" class="ag-theme-alpine" 
                               
                         [rowData]="goalsItemRows"
                         [gridOptions]="goalsItemColumns"
@@ -150,8 +150,8 @@
   
   
                   <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
-                    <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre Kpi</button>
-                    <button [disabled]='selIndex+1 == empDevGoalsData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next Kpi</button>
+                    <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre</button>
+                    <button [disabled]='selIndex+1 == empDevGoalsData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next</button>
                     
                   </div>
   

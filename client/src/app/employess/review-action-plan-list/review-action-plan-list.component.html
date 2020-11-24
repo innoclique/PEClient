@@ -12,7 +12,7 @@
               <tab *ngIf="loginUser?.SelectedRoles?.includes('EM')">
     
                 <ng-template tabHeading><i ></i>As Manager</ng-template>
-                <ag-grid-angular style="width: auto; height: 500px;" 
+                <ag-grid-angular style="width: 970px; height: 500px;" 
                 class="ag-theme-alpine" [rowData]="managerReporteesDataRecords"
                   [columnDefs]="columnDefs"
                   [pagination]="true"
@@ -25,7 +25,7 @@
     
                 <ng-template tabHeading><i class="icon-hand-rock"></i>As Third Signatory</ng-template>
                
-                <ag-grid-angular style="width: auto; height: 500px;" 
+                <ag-grid-angular style="width: 970px; height: 500px;" 
                 class="ag-theme-alpine" [rowData]="tSReporteesData"
                   [columnDefs]="tsColumnDefs"
                   [pagination]="true"
