@@ -149,13 +149,17 @@
                                             name="MeasurementCriteria">
 
 
-                                        <input *ngIf="!addMCSwitch" max="500" maxlength="500"
+                                        <input hidden *ngIf="!addMCSwitch" max="500" maxlength="500"
                                             class="form-control text-capitalize" type="text"
                                             [ngClass]="{ 'is-invalid': f.MeasurementCriteria.touched  &&  selectedItems.length==0 }"
                                             formControlName="MeasurementCriteria" name="MeasurementCriteria"
                                             [matAutocomplete]="auto2" [placeholder]="msSelText">
 
 
+                                            <div *ngIf="selectedItems?.length > 0" class="container" style="border: 1px solid #ddd;padding:8px;">
+                                                <span *ngFor="let item of  selectedItems" class="sel-kpi" >{{item.Name}}</span>
+                                                
+                                              </div>
 
                                         <!-- <label *ngIf="currentAction != 'view'"
                                             class="switch switch-label switch-lg switch-primary input-group-postpend ml-2">
@@ -360,7 +364,7 @@
                                             <span class="input-group-text "> Date</span>
                                         </div>
                                         <input class="autoc-border  form-control"  readonly
-                                      [value]="kpiDetails?.Signoff?.SignOffOn | date" >
+                                      [value]="kpiDetails?.EmpFTSubmitedOn | date" >
 
                                         
                                     </div>

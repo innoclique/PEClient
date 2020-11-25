@@ -92,7 +92,7 @@
                         <hr>
 
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-10">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -132,7 +132,7 @@
 
 
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-10">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -144,22 +144,21 @@
                                            >
 
 
-                                            <input  *ngIf="!addMCSwitch" max="500" maxlength="500" 
+                                            <input  [hidden]="currentAction != 'create' " *ngIf="!addMCSwitch" max="500" maxlength="500" 
                                             class="form-control text-capitalize" type="text"
+                                            style=" text-overflow: ellipsis !important;"
                                             [readonly]="currentAction != 'create' "
                                             [ngClass]="{ 'is-invalid': f.MeasurementCriteria.touched  &&  selectedItems.length==0 }"
                                                 formControlName="MeasurementCriteria" name="MeasurementCriteria" 
                                                 [matAutocomplete]="auto2" [placeholder]="msSelText" 
                                                 >
-                                             
 
-                                           
-                                            <label *ngIf="currentAction == 'create'" class="switch switch-label switch-lg switch-primary input-group-postpend ml-2">
-                                                <input (change)="toggleSwitch()" [checked]="addMCSwitch" class="switch-input form-control" type="checkbox">
-                                                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span></label>
-
-                                            
-
+                                                <div *ngIf="selectedItems?.length > 0" class="container" style="border: 1px solid #ddd;padding:8px;">
+                                                    <span *ngFor="let item of  selectedItems" class="sel-kpi" >{{item.Name}}</span>
+                                                    
+                                                  </div>
+                                                                             
+                                                                                    
                                             <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn" >
                                              
                                                 
@@ -183,9 +182,13 @@
                                 </div>
                                 
                             </div>
-
-                            <div *ngIf="currentAction == 'create'" class="col-md-3">
-                                <button style="width: 100px !important;padding: 3px 0px;" class="btn btn-block btn-primary w-75" [disabled]="!addMCSwitch"
+                            <div class="col-md-1 " style="margin-left: -10px;" >
+                            <label *ngIf="currentAction == 'create'" class=" switch switch-label switch-lg switch-primary input-group-postpend ml-2">
+                                <input (change)="toggleSwitch()" [checked]="addMCSwitch" class="switch-input form-control" type="checkbox">
+                                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span></label>
+                            </div>
+                            <div *ngIf="currentAction == 'create'" class="col-md-1" style="margin-left: -10px;" >
+                                <button style="width: 88px !important;padding: 3px 0px;" class="btn btn-block btn-primary pull-left" [disabled]="!addMCSwitch"
                                  (click)="addMesurment()"  >+ Add KPI  </button>
                                 </div>
 
@@ -193,111 +196,140 @@
 
 
 
-
                         <div class="row">
-                          
-              
-                            <div class="col-md-4">
+
+
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <div class="input-group">
-                                      <div class="input-group-prepend">
-                                        <span class="input-group-text redStar"> Target Completion</span>
-                                      </div>
-                                      <input  class="autoc-border  form-control" (click)="currentAction == 'create' && picker.open()" readonly matInput  [matDatepicker]="picker"
-                                      formControlName="TargetCompletionDate" name="TargetCompletionDate"
-                                      [ngClass]="{ 'is-invalid': f.TargetCompletionDate.touched  &&  f.TargetCompletionDate.invalid }" required >
-                                      <mat-datepicker-toggle *ngIf="currentAction == 'create' " matSuffix [for]="picker"></mat-datepicker-toggle>
-                                      <mat-datepicker  #picker></mat-datepicker>
-              
-                                      <div *ngIf="f.TargetCompletionDate.touched && f.TargetCompletionDate.invalid" class="invalid-feedback">
-                                        <div *ngIf="f.TargetCompletionDate.errors.required">Target Completion is mandatory.</div>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar"> Target Completion</span>
+                                        </div>
+                                        <input class="autoc-border  form-control" (click)="currentAction == 'create' && picker.open()" readonly
+                                            matInput [matDatepicker]="picker" formControlName="TargetCompletionDate" name="TargetCompletionDate"
+                                            [ngClass]="{ 'is-invalid': f.TargetCompletionDate.touched  &&  f.TargetCompletionDate.invalid }"
+                                            required>
+                                        <mat-datepicker-toggle *ngIf="currentAction == 'create' " matSuffix [for]="picker">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+
+                                        <div *ngIf="f.TargetCompletionDate.touched && f.TargetCompletionDate.invalid" class="invalid-feedback">
+                                            <div *ngIf="f.TargetCompletionDate.errors.required">Target Completion is mandatory.</div>
+                                        </div>
                                     </div>
-                                    </div>
-                                  </div>
-                            
+                                </div>
+
                                 <div class="form-group">
                                     <div class="input-group">
-                                      <div class="input-group-prepend">
-                                        <span class="input-group-text ">Score (self)</span>
-                                      </div>
-                                      <input class="form-control" type="text" disabled *ngIf="currentAction == 'create'" style="background-color:#e4e7ea !important" />
-                                      <select class="form-control"   *ngIf="currentAction != 'create'"
-                                      [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }"
-                                      formControlName="Score"  name="Score"    >
-                                        <option value="" disabled >Please select</option>
-                                        <option  *ngFor="let e of appScores" [value]="e" >{{e}}</option>
-                                        
-                                      </select>
-                                      <div *ngIf="f.Score.touched && f.Score.invalid" class="invalid-feedback">
-                                        <div *ngIf="f.Score.errors.required">Score is mandatory.</div>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text ">Score (self)</span>
+                                        </div>
+                                        <input class="form-control" type="text" disabled *ngIf="currentAction == 'create'"
+                                            style="background-color:#e4e7ea !important" />
+                                        <select class="form-control" *ngIf="currentAction != 'create'"
+                                            [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }" formControlName="Score"
+                                            name="Score">
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of appScores" [value]="e">{{e}}</option>
+
+                                        </select>
+                                        <div *ngIf="f.Score.touched && f.Score.invalid" class="invalid-feedback">
+                                            <div *ngIf="f.Score.errors.required">Score is mandatory.</div>
+                                        </div>
                                     </div>
-                                    </div>
-                                  </div>
+                                </div>
                             </div>
 
 
 
                             <div class="col-md-4" style="margin-right: 30px;">
                                 <div class="form-group">
-                                    <div class="input-group"  >
-                                      <div class="input-group-prepend">
-                                        <span class="input-group-text redStar">Status</span>
-                                      </div>
-                                      <select class="form-control"
-                                      [ngClass]="{ 'is-invalid': f.Status.touched  &&  f.Status.invalid }"
-                                      formControlName="Status"  name="Status" required   >
-                                        <option value="" disabled >Please select</option>
-                                        <option *ngFor="let e of kpiStatus" [value]="e" >{{e}}</option>
-                                        
-                                      </select>
-                                      <div *ngIf="f.Status.touched && f.Status.invalid" class="invalid-feedback">
-                                        <div *ngIf="f.Status.errors.required">Status is mandatory.</div>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar">Status</span>
+                                        </div>
+                                        <select class="form-control" [ngClass]="{ 'is-invalid': f.Status.touched  &&  f.Status.invalid }"
+                                            formControlName="Status" name="Status" required>
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of kpiStatus" [value]="e">{{e}}</option>
+
+                                        </select>
+                                        <div *ngIf="f.Status.touched && f.Status.invalid" class="invalid-feedback">
+                                            <div *ngIf="f.Status.errors.required">Status is mandatory.</div>
+                                        </div>
                                     </div>
-                                    </div>
-                                  </div>
-                                  <div class="form-group">
-                                    <div class="input-group"  >
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text ">Weighting</span>
                                 </div>
-                                <div class="autoc-border  form-control">
-                                    <input class="border-0 w-50" readonly  formControlName="Weighting"  name="Weighting"> 
-                                    <span class="mat-button-wrapper pull-right">%</span>
-                                </div>
-                            </div>
-                             </div>
-                            </div>
-                                  <div class="col-md-4">
-                                   
-                                    <div *ngIf="kpiDetails?.IsSubmitedKPIs"  class="input-group">
-                                      <div class="input-group-prepend">
-                                        <span class="input-group-text">Sign-off</span>
-                                      </div>
-                                      <textarea maxlength="500" class="form-control"  cols="" rows="4"
-                                      disabled
-                                      [ngClass]="{ 'is-invalid': f.Signoff.touched  &&  f.Signoff.invalid }"
-                                      formControlName="Signoff"  name="Signoff"  >  </textarea>
-                                    </div>
-                                  </div>
-                            
-                            <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
-                                      <div class="input-group-prepend">
-                                        <span class="input-group-text">Year-end Comments</span>
-                                      </div>
-                                      <textarea maxlength="500" class="form-control"  cols="" rows="4"
-                                      [ngClass]="{ 'is-invalid': f.YearEndComments.touched  &&  f.YearEndComments.invalid }"
-                                      formControlName="YearEndComments"  name="YearEndComments"  >  </textarea>
-              
-                                    
-              
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text ">Weighting</span>
+                                        </div>
+                                        <div class="autoc-border  form-control">
+                                            <input class="border-0 w-50" readonly formControlName="Weighting" name="Weighting">
+                                            <span class="mat-button-wrapper pull-right">%</span>
+                                        </div>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
-                            
-                            
+                            <!-- <div class="col-md-4">
+
+                                <div *ngIf="kpiDetails?.IsSubmitedKPIs" class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Sign-off</span>
+                                    </div>
+                                    <input maxlength="500" class="form-control" cols="" rows="4" disabled
+                                        [ngClass]="{ 'is-invalid': f.Signoff.touched  &&  f.Signoff.invalid }" formControlName="Signoff"
+                                        name="Signoff">
+                                </div>
+                            </div> -->
+
+                            <div class="col-md-4 pull-left">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">Year-end Comments</span>
+                                                            </div>
+                                                            <textarea maxlength="500" class="form-control"  cols="" rows="4"
+                                                            [ngClass]="{ 'is-invalid': f.YearEndComments.touched  &&  f.YearEndComments.invalid }"
+                                                            formControlName="YearEndComments"  name="YearEndComments"  >  </textarea>
+                                    
+                                                            
+                                    
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                   
+
                         </div>
+<div class="row" *ngIf="kpiDetails?.IsSubmitedKPIs">
+    <div class="col-md-4" >
+
+        <div  class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Sign-off</span>
+            </div>
+            <input maxlength="500" class="form-control" cols="" rows="4" disabled
+           
+                formControlName="Signoff"
+                name="Signoff">
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text "> Date</span>
+                </div>
+                <input class="autoc-border  form-control"  readonly
+              [value]="kpiDetails?.EmpFTSubmitedOn | date" >
+
+                
+            </div>
+        </div>
+
+    </div>
+</div>
+
                         <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
                         <div class="clearfix"></div>
                         <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">

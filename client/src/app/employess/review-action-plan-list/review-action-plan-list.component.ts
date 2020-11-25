@@ -80,28 +80,27 @@ export class ReviewActionPlanListComponent implements OnInit {
 
  async callApis(){
    await this.GetReporteeKpiRelesedDetails();
-   await this.GetReporteeEvaluationsDetails();
+   await this.GetTSReporteeKpiRelesedDetails();
 
-  //  this.managerReporteesDataRecords=[...this.managerReporteesData,...this.managerReporteesKpiRelData]
-    this.GetTSReporteeEvDetails();
+
   }
 
 
 
   
   public columnDefs = [
-    {headerName: 'Employee',width:200, field: 'Name', sortable: true, filter: true,
+    {headerName: 'Employee', field: 'Name', sortable: true, filter: true,
     // cellRenderer: (data) => {
     //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     // }
   },
-    {headerName: 'No.of Dev Goals', width:300, field: 'NoOfKpis', sortable: true, filter: true },
-    {headerName: 'No.of Strengths', width:200, field: 'NoOfKpis', sortable: true, filter: true },
+    {headerName: 'No.of Dev Goals',  field: 'NoOfKpis', sortable: true, filter: true },
+    {headerName: 'No.of Strengths',  field: 'NoOfKpis', sortable: true, filter: true },
     // {headerName: 'No.of  Reviewed', field: 'NoOfSignOff', sortable: true, filter: true },
     // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
     // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '',width:270, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -244,6 +243,11 @@ public onAsTSGridRowClick(e) {
 
   }
 
+  onGridReady(params) {
+    debugger
+    params.api.sizeColumnsToFit();
+  }
+
 
 GetReporteeKpiRelesedDetails(){
   this.perfApp.route="app";
@@ -256,7 +260,7 @@ GetReporteeKpiRelesedDetails(){
     //  let flatarray=row.Evaluation.flat()
 //let evaluation=flatarray.find(x=>x.Status==='Active')
 
-let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff.submited ==false).length;
+let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
      return  {
          Name:row.FirstName+' '+row.LastName,
          NoOfKpis: row.GoalList.length,
@@ -275,46 +279,15 @@ let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff.submited ==false).le
 }
 
 
-GetReporteeEvaluationsDetails(){
+
+
+
+
+
+
+GetTSReporteeKpiRelesedDetails(){
   this.perfApp.route="app";
-  this.perfApp.method="GetReporteeEvaluations",
- this.perfApp.requestBody = { id: this.loginUser._id }
-  this.perfApp.CallAPI().subscribe(c=>{
-    
-    
-    this.managerReporteesData =c.map(row=> {
-      let flatarray=row.Evaluation.flat()
-let evaluation=flatarray.find(x=>x.Status==='Active')
-
-
-let unSubmitedCount=row.GoalList.filter(e=> e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
-     return  {
-         Name:row.FirstName+' '+row.LastName,
-         NoOfKpis: row.GoalList.length,
-         NoOfSignOff:row.GoalList.length-unSubmitedCount,
-         NoOfStrengths: row.StrengthList.length,
-         FRStatus: evaluation ?evaluation.FinalRating.Status:'',
-       
-        RowData:row
-      }
-    }
-    )
-
-   // this.managerReporteesDataRecords.push(this.managerReporteesData);
-   this.managerReporteesDataRecords=[...this.managerReporteesData,...this.managerReporteesKpiRelData]
-  })
-
-  
-}
-
-
-
-
-
-
-GetTSReporteeEvDetails(){
-  this.perfApp.route="app";
-  this.perfApp.method="GetTSReporteeEvaluations",
+  this.perfApp.method="GetTSReleasedKpiForm",
  this.perfApp.requestBody = { id: this.loginUser._id }
   this.perfApp.CallAPI().subscribe(c=>{
     
@@ -322,9 +295,9 @@ GetTSReporteeEvDetails(){
     this.tSReporteesData=c.map(row=> {
       
 
-      let flatarray=row.Evaluation.flat()
-let evaluation=flatarray.find(x=>x.Status==='Active')
-let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff.submited ==false).length;
+//       let flatarray=row.Evaluation.flat()
+// let evaluation=flatarray.find(x=>x.Status==='Active')
+let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
      return  {
          Name:row.FirstName+' '+row.LastName,
          NoOfKpis: row.GoalList.length,

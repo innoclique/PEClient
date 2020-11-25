@@ -76,16 +76,17 @@ export class ClientSetupComponent implements OnInit {
   getColDef(){
     return  [
       {
-        headerName: 'Client', field: 'Name', sortable: true, width:220, filter: true,  
+        headerName: 'Client', field: 'Name', sortable: true, filter: true,  
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
       },      
-      { headerName: 'Industry', field: 'Industry', sortable: true, width:150, filter: true },
-      { headerName: 'Usage Type', field: 'UsageType', sortable: true, width:180, filter: true },
-      { headerName: 'Contact Person', field: 'ContactName', sortable: true, width:220, filter: true },
+      { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
+      { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
+      { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
       {
         headerName: "Actions",
         suppressMenu: true,
-        width:200,
+        suppressSizeToFit: true,
+    
         Sorting: false,        
         cellRenderer: (data) => {
         console.log('column data', data)
@@ -111,6 +112,9 @@ export class ClientSetupComponent implements OnInit {
     ];
   
   }
+
+
+
   gotoCreate() {
     this.router.navigate(['/psa/setup-clients'])
   }
@@ -232,6 +236,7 @@ export class ClientSetupComponent implements OnInit {
     this.clientGridOptions.api = params.api; // To access the grids API
     // this.clientGridOptions.api.setDomLayout("autoHeight");
     this.clientGridOptions.rowHeight = 34;
+    params.api.sizeColumnsToFit();
     // this.clientGridColumnApi = params.columnApi;
     // var allColumnIds = [];
     // this.clientGridColumnApi.getAllColumns().forEach(function (column) {
@@ -243,6 +248,7 @@ export class ClientSetupComponent implements OnInit {
     this.resellerGridOptions.api = params.api; // To access the grids API
     // this.resellerGridOptions.api.setDomLayout("autoHeight");
     this.resellerGridOptions.rowHeight = 34;
+    params.api.sizeColumnsToFit();
     // this.clientGridOptions.api.setDomLayout("autoHeight");
 
     // this.resellerGridColumnApi = params.columnApi;

@@ -106,7 +106,7 @@ export class DefaultLayoutComponent implements OnInit {
           "url": "/employee/peerreview",
           "name": "Peer Review",
           "code": "CurrentEvaluation",
-          "icon": "icon-layers"
+          "icon": "icon-speedometer"
         },
         {
           "IsActive": true,
@@ -133,7 +133,7 @@ export class DefaultLayoutComponent implements OnInit {
               "url": "/ea/setup-employee",
               "name": "Set up Employees",
               "code": "Employees",
-              "icon": "icon-star",
+              "icon": "icon-user-follow",
               "linkProps": {
                   "routerLinkActive": "employee"
               }
@@ -152,7 +152,7 @@ export class DefaultLayoutComponent implements OnInit {
 
      
 
-          if (this.user.SelectedRoles.indexOf('EM') > -1) {
+          if (this.user.SelectedRoles.indexOf('EM') > -1 || this.user.SelectedRoles.indexOf('TS') > -1) {
             navigationMenu.push(
              
 
@@ -187,60 +187,7 @@ export class DefaultLayoutComponent implements OnInit {
             this.navItems = navigationMenu;
           }
 
-          if (this.user.SelectedRoles.indexOf('TS') > -1) {
-          navigationMenu.push(
-         
-         
-
-   {
-          
-    "IsActive": true,
-    "url": "/employee/review-perf-goals-list",
-    "name": "Performance Goal Review",
-    "code": "KPISetting",
-    "icon": "icon-wrench"
-    
-  },
-  {
-
-    "IsActive": true,
-    "url": "/employee/review-action-plan-list",
-    "name": "Action Plan Review",
-    "code": "KPISetting",
-    "icon": "icon-layers"
-    
-  },
-            {
-              "IsActive": true,
-              "url": "/employee/review-evaluation-list",
-              "name": "Review Evaluations",
-              "code": "Review Evaluations",
-              "icon": "icon-star"
-            }
-          )
-            this.navItems = navigationMenu;
-          }
-
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
 
         return  this.navItems;
         }

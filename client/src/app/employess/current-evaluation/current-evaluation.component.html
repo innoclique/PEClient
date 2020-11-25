@@ -22,7 +22,7 @@
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Competencies</ng-template>
 
 
-                                <div [formGroup]="selfCompetencyForm">
+                                <div [formGroup]="selfCompetencyForm" class="card col-lg-12 pt-3">
                                     <accordion [closeOthers]="oneAtATime">
                                        <accordion-group  #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of competencyQuestionsList">
                                             <button  class="btn btn-link btn-block clearfix" accordion-heading type="button">
@@ -109,7 +109,7 @@
                                                       
                             <tab>
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
-                                <div [formGroup]="FinalRatingForm">
+                                <div [formGroup]="FinalRatingForm" class="card col-lg-12 pt-3">
                                     <section>
                                         <h3 class="heading-with-margin">Employee Self Review</h3>
                                         <div class="form-group row">

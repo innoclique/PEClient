@@ -80,10 +80,10 @@ export class ReviewPerfGoalsListComponent implements OnInit {
 
  async callApis(){
    await this.GetReporteeKpiRelesedDetails();
-   await this.GetReporteeEvaluationsDetails();
+  
 
   //  this.managerReporteesDataRecords=[...this.managerReporteesData,...this.managerReporteesKpiRelData]
-    this.GetTSReporteeEvDetails();
+    this.GetTSReporteeKpiRelesedDetails();
   }
 
 
@@ -262,42 +262,14 @@ let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).len
 }
 
 
-GetReporteeEvaluationsDetails(){
+
+
+
+
+
+GetTSReporteeKpiRelesedDetails(){
   this.perfApp.route="app";
-  this.perfApp.method="GetReporteeEvaluations",
- this.perfApp.requestBody = { id: this.loginUser._id }
-  this.perfApp.CallAPI().subscribe(c=>{
-    
-    
-    this.managerReporteesData =c.map(row=> {
-      let flatarray=row.Evaluation.flat()
-let evaluation=flatarray.find(x=>x.Status==='Active')
-     return  {
-         Name:row.FirstName+' '+row.LastName,
-         NoOfKpis: row.KpiList.length,
-         NoOfDevGoals: row.GoalList.length,
-         FRStatus: evaluation ?evaluation.FinalRating.Status:'',
-       
-        RowData:row
-      }
-    }
-    )
-
-   // this.managerReporteesDataRecords.push(this.managerReporteesData);
-   this.managerReporteesDataRecords=[...this.managerReporteesData,...this.managerReporteesKpiRelData]
-  })
-
-  
-}
-
-
-
-
-
-
-GetTSReporteeEvDetails(){
-  this.perfApp.route="app";
-  this.perfApp.method="GetTSReporteeEvaluations",
+  this.perfApp.method="GetTSReleasedKpiForm",
  this.perfApp.requestBody = { id: this.loginUser._id }
   this.perfApp.CallAPI().subscribe(c=>{
     
@@ -305,16 +277,18 @@ GetTSReporteeEvDetails(){
     this.tSReporteesData=c.map(row=> {
       
 
-      let flatarray=row.Evaluation.flat()
-let evaluation=flatarray.find(x=>x.Status==='Active')
-     return  {
-         Name:row.FirstName+' '+row.LastName,
-         NoOfKpis: row.KpiList.length,
-         NoOfDevGoals: row.GoalList.length,
-         FRStatus: evaluation?evaluation.FinalRating.Status:'',
-       
+    //  let flatarray=row.Evaluation.flat()
+// let evaluation=flatarray.find(x=>x.Status==='Active')
+let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
+        return  {
+          Name:row.FirstName+' '+row.LastName,
+          NoOfKpis: row.KpiList.length,
+          NoOfSignOff:row.KpiList.length-unSubmitedCount,
+          NoOfDevGoals: row.GoalList.length,
+        // FRStatus: evaluation ?evaluation.FinalRating.Status:'',
+
         RowData:row
-      }
+        }
     }
     )
   })

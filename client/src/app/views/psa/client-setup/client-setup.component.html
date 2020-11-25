@@ -19,7 +19,7 @@
             <tab [hidden]="(f.ClientType.value === 'Reseller' || currentUser.Role === 'RSA')">
   
               <ng-template tabHeading><i ></i> Client</ng-template>
-              <ag-grid-angular  style="width: 970px; height: 440px;" class="ag-theme-alpine" 
+              <ag-grid-angular  style="width: 100;; height: 440px;" class="ag-theme-alpine" 
               
               [rowData]="clientData"
               [gridOptions]="clientGridOptions"
@@ -33,7 +33,7 @@
             <tab >
   
               <ng-template tabHeading><i ></i> Reseller</ng-template>
-              <ag-grid-angular style="width: 970px; height: 440px;" class="ag-theme-alpine" [rowData]="resellerList"
+              <ag-grid-angular style="width: 100;; height: 440px;" class="ag-theme-alpine" [rowData]="resellerList"
             
             [gridOptions]="resellerGridOptions"
             [pagination]="true"

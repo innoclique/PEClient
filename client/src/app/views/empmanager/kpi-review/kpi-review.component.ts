@@ -470,7 +470,7 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
 
       this.setWeighting(c.filter(item => item.IsDraft === false).length);
       if (c && c.length > 0) {
-        this.unSubmitedCount=c.filter(e=>e.ManagerSignOff.submited ==false).length;
+        this.unSubmitedCount=c.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
         this.scoreUnSubmitedCount=c.filter(e=>e.ManagerScore=="" && e.IsDraft==false ).length;
         if(this.scoreUnSubmitedCount==0)
         this.authService.setManagerPGSubmitStatus("true");

@@ -196,9 +196,9 @@ getAllStrengthDetails() {
             IsDraft: this.goalDetails.IsDraft
           });
           
-          // if (!this.kpiDetails.ViewedByEmpOn && this.kpiDetails.ManagerSignOff) {
-          //   this.updateKpiAsViewed();
-          // }
+          if (!this.goalDetails.ViewedByManagerOn) {
+            this.updateStrengthsAsViewed();
+          }
 
         }
        
@@ -224,6 +224,28 @@ getAllStrengthDetails() {
 }
 
 
+
+updateStrengthsAsViewed() {
+  debugger
+this.perfApp.route = "app";
+this.perfApp.method = this.currentAction ="UpdateStrengthById";
+
+
+  this.perfApp.requestBody = {} //fill body object with form    
+this.perfApp.requestBody.devGoalId = this.currentDevGoalId;
+this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+this.perfApp.requestBody.empId = this.currentEmpId;
+this.perfApp.requestBody.ViewedByManagerOn = true;
+  this.perfApp.requestBody.Action = 'Viewed';  
+  this.perfApp.CallAPI().subscribe(c => {
+    if (c.message == Constants.SuccessText) {
+     console.log(c)
+    } 
+  }, error => {
+
+  });
+
+}
 
 
 navToStrengthList() {

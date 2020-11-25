@@ -100,6 +100,7 @@
                                             formControlName="Kpi" name="Kpi" required
                                             [matAutocomplete]="kpiAuto">
 
+                                        
                                             <mat-autocomplete #kpiAuto="matAutocomplete" (optionSelected)="onKpiAutoSelected($event)" [displayWith]="displayKPIFn" >
                                                 <mat-option *ngFor="let option of filteredOptionsKPI | async" [value]="option">
                                                   {{option.Kpi}}
@@ -145,12 +146,15 @@
                                                 formControlName="MeasurementCriteria" name="MeasurementCriteria" 
                                                 [matAutocomplete]="auto2" [placeholder]="msSelText" 
                                                 >
+
+                                                <div *ngIf="selectedItems?.length > 0" class="container" style="border: 1px solid #ddd;padding:8px;">
+                                                    <span *ngFor="let item of  selectedItems" class="sel-kpi" >{{item.Name}}</span>
+                                                    
+                                                  </div>
                                              
 
                                            
-                                            <label *ngIf="currentAction != 'view'" class="switch switch-label switch-lg switch-primary input-group-postpend ml-2">
-                                                <input (change)="toggleSwitch()" [checked]="addMCSwitch" class="switch-input form-control" type="checkbox">
-                                                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span></label>
+                                          
 
                                             
 
@@ -176,6 +180,12 @@
                                     </div>
                                 </div>
                                 
+                            </div>
+
+                            <div class="col-md-1">
+                                <label *ngIf="currentAction != 'view'" class="switch switch-label switch-lg switch-primary input-group-postpend ml-2">
+                                    <input (change)="toggleSwitch()" [checked]="addMCSwitch" class="switch-input form-control" type="checkbox">
+                                    <span class="switch-slider" data-checked="On" data-unchecked="Off"></span></label>
                             </div>
 
                             <div *ngIf="currentAction != 'view'" class="col-md-3">

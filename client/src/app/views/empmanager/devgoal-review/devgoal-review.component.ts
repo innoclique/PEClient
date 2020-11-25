@@ -393,9 +393,11 @@ getAllDevGoalsDetails() {
           this.selIndex=  this.empDevGoalsData.findIndex(e=> e._id== this.currentDevGoalId);
 
        this.initDevGoalForm();
-          // if (!this.kpiDetails.ViewedByEmpOn && this.kpiDetails.ManagerSignOff) {
-          //   this.updateKpiAsViewed();
-          // }
+         if (!this.goalDetails.ViewedByManagerOn) {
+           debugger
+          if ( this.accessingFrom=='reviewActionPlan')
+            this.updateDevGoalAsViewed();
+         }
 
         }
        
@@ -422,6 +424,27 @@ getAllDevGoalsDetails() {
 
 
 
+updateDevGoalAsViewed() {
+    debugger
+  this.perfApp.route = "app";
+  this.perfApp.method = this.currentAction ="UpdateDevGoalById";
+
+
+    this.perfApp.requestBody = {} //fill body object with form    
+  this.perfApp.requestBody.devGoalId = this.currentDevGoalId;
+  this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+  this.perfApp.requestBody.empId = this.currentEmpId;
+  this.perfApp.requestBody.ViewedByManagerOn = true;
+    this.perfApp.requestBody.Action = 'Viewed';  
+    this.perfApp.CallAPI().subscribe(c => {
+      if (c.message == Constants.SuccessText) {
+       console.log(c)
+      } 
+    }, error => {
+
+    });
+
+}
 
 navToGoalsList() {
   if(this.accessingFrom=='reviewActionPlan'){

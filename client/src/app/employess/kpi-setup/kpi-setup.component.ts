@@ -66,17 +66,17 @@ export class KpiSetupComponent implements OnInit {
 
   public columnDefs = [
     {
-      headerName: 'Performance Goal', field: 'Name', width:220, sortable: true, filter: true,
+      headerName: 'Performance Goal', field: 'Name', suppressSizeToFit: true,  sortable: true, filter: true,
       cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
       }
     },
-    { headerName: 'Target Completion', field: 'TargetCompletionDate', width:180, sortable: true, filter: true },
-    { headerName: 'Draft', field: 'IsDraft', width:100, sortable: true, filter: true },
-    { headerName: 'Status', field: 'Status', width:150, sortable: true, filter: true },
-    { headerName: 'Submitted', field: 'IsSubmitedKPIs',  width:150, sortable: true, filter: true },
+    { headerName: 'Target Completion', field: 'TargetCompletionDate', suppressSizeToFit: true,  sortable: true, filter: true },
+    { headerName: 'Draft', field: 'IsDraft',  sortable: true, filter: true },
+    { headerName: 'Status', field: 'Status',  sortable: true, filter: true },
+    { headerName: 'Submitted', field: 'IsSubmitedKPIs',   sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width:170, autoHeight: true,  suppressSizeToFit: true,
+      headerName: 'Action', field: '',  autoHeight: true,  suppressSizeToFit: true,
       cellRenderer: (data) => {
  let actionlinks=''
        if (data.data.RowData.IsActive) {
@@ -110,6 +110,9 @@ export class KpiSetupComponent implements OnInit {
     }
   ];
 
+  onGridReady(params) {
+    params.api.sizeColumnsToFit();
+  }
 
 
   public onKpiGridRowClick(e) {
@@ -291,12 +294,15 @@ this.authService.setIsPGSubmitStatus("true");
 
     }else{ this.kpiListData=[] }
     }, error => {
-      if (error.error.message === Constants.KpiNotActivated) {
+      debugger
+      if (error.error.message == Constants.KpiNotActivated) {
         this.isKpiActivated=true;
         this.kpiListData=[];
         this.snack.error(error.error.message);
       } else {
 
+        this.isKpiActivated=true;
+        this.kpiListData=[];
       this.snack.error(error.error.message);
 
        }

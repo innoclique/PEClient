@@ -69,6 +69,7 @@ export class ClientListComponent implements OnInit {
       {
         headerName: "Actions",
         suppressMenu: true,
+        suppressSizeToFit: true,
         Sorting: false,        
         cellRenderer: (data) => {
         console.log('column data', data)
@@ -205,6 +206,7 @@ export class ClientListComponent implements OnInit {
 
   onClientGridReady(params) {
     this.clientGridOptions.api = params.api; // To access the grids API
+    params.api.sizeColumnsToFit();
   }
 
 

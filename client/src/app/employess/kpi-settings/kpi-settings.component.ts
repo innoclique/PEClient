@@ -125,7 +125,7 @@ accessingFrom:any;
       YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments :''],
       YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager :''],
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
-      Signoff: [this.kpiDetails.Signoff ? this.kpiDetails.Signoff.SignOffBy : null],
+      Signoff: [this.kpiDetails.Signoff ? this.kpiDetails.Signoff.SignOffBy : this.loginUser.FirstName],
 
       IsDraft: [this.kpiDetails.IsDraft ? 'true' : 'false'],
       Score: [this.kpiDetails.Score ? this.kpiDetails.Score : '', ],
