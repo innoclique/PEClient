@@ -2,13 +2,13 @@
                         <tabset #evTabset class="pro-tabs">
                           
                             <tab>
-                                <ng-template tabHeading><i class="icon-layers"></i>Performance Goals</ng-template>
+                                <ng-template tabHeading><i></i>Performance Goals</ng-template>
   
                                 <app-kpi-review-manager  [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole> </app-kpi-review-manager>
                             </tab>
                            
                             <tab>
-                                <ng-template tabHeading><i class="icon-hand-rock"></i> Competencies</ng-template>
+                                <ng-template tabHeading><i ></i> Competencies</ng-template>
                                 <div [formGroup]="managerCompetencyForm">
                                     <accordion [closeOthers]="oneAtATime">
                                         <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of managerCompetencyQuestionsList">

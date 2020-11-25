@@ -196,7 +196,7 @@ get k (){
     
   },
     { headerName: 'Other Participants', field: 'OtherParticipants', width: 170, autoHeight: true },
-    { headerName: 'Status', field: 'Status', width: 120, autoHeight: true },
+    { headerName: 'Status', field: 'Status', width: 140, autoHeight: true },
     // {
     //   headerName: "Action",
     //   suppressMenu: true,

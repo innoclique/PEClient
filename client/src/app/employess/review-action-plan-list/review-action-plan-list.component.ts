@@ -101,7 +101,7 @@ export class ReviewActionPlanListComponent implements OnInit {
     // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
     // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '',width:200, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '',width:270, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -287,7 +287,7 @@ GetReporteeEvaluationsDetails(){
 let evaluation=flatarray.find(x=>x.Status==='Active')
 
 
-let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff.submited ==false).length;
+let unSubmitedCount=row.GoalList.filter(e=> e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
      return  {
          Name:row.FirstName+' '+row.LastName,
          NoOfKpis: row.GoalList.length,

@@ -214,7 +214,7 @@ get k (){
           '  <span ref="eText" class="ag-header-cell-text" role="columnheader"></span> <span class="redStar"></span>' +
           '  </div>' +
           '</div>'
-  }, field: 'Status', width: 100, autoHeight: true },
+  }, field: 'Status', width: 120, autoHeight: true },
     {
       headerName: "Action",
       suppressMenu: true,
