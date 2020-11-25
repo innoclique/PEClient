@@ -18,7 +18,7 @@
                     <form [formGroup]="strengthBuildForm" novalidate="" 
                      class="ng-untouched ng-pristine ng-valid view-only">
   
-  
+                  <div *ngIf="currentAction != 'view'">
                      <div class="form-group row">
   
                       <div class="col-md-6">
@@ -51,42 +51,38 @@
                     
   
                   </div>
+                  
+                  <div class="form-group row">
   
-                  <div   class="invitation_model_in_table table-responsive p-15">
-                    <table *ngIf="currentAction != 'view'"  class="table table-bordered table-striped" style="margin-bottom: -2px;">
-                       <thead>
-                        <tr>
-                          <th class="">How To Leverage</th>
-                          <th class="">Benefit (Self)</th>
-                          <th class="">Benefit (team)</th>
-                          <th>Progress Comments</th>
-                          <th>Manager Comments</th>
-                        </tr>
-                      </thead> 
-                      <tbody>
-                        <tr>
-                          <td class="invitation_model_search">
-                            <div class="form-group">
-                              <div class="input-group">
-                                  <input max="500" maxlength="500" class="form-control" type="text"
-                                  
-                                      [ngClass]="{ 'is-invalid': (f.Leverage.touched || submitClicked)  &&  f.Leverage.invalid }"
-                                      formControlName="Leverage" name="Leverage" required>
-    
-                                  <div *ngIf=" (f.Leverage.touched || submitClicked) && f.Leverage.invalid" class="invalid-feedback">
-                                    <div *ngIf="f.Leverage?.errors.required">Please provide Leverage.</div>
-                                      <div *ngIf="f.Leverage.errors.hasKPISplChars">Allowed special characters are
-                                          (.,-,(,),&,#,:,/,?) </div>
-                                  </div>
-    
+                    <div class="col-md-4">
+                      <div class="form-group">
+                          <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text ">How To Leverage</span>
                               </div>
+                              <input max="500" maxlength="500" class="form-control" type="text"
+                                  
+                              [ngClass]="{ 'is-invalid': (f.Leverage.touched || submitClicked)  &&  f.Leverage.invalid }"
+                              formControlName="Leverage" name="Leverage" required>
+
+                          <div *ngIf=" (f.Leverage.touched || submitClicked) && f.Leverage.invalid" class="invalid-feedback">
+                            <div *ngIf="f.Leverage?.errors.required">Please provide Leverage.</div>
+                              <div *ngIf="f.Leverage.errors.hasKPISplChars">Allowed special characters are
+                                  (.,-,(,),&,#,:,/,?) </div>
                           </div>
-                          </td>
-                            <td class="invitation_model_search">
-                              <div class="form-group">
-                                <div class="input-group">
-                                    
-                                    <input max="500" maxlength="500" class="form-control" type="text"
+
+                          </div>
+                      </div>
+                  </div>
+
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text ">Benefit (Self)</span>
+                                </div>
+                                <input max="500" maxlength="500" class="form-control" type="text"
                                     
                                         [ngClass]="{ 'is-invalid': (f.SelfBenifit.touched || submitClicked)  &&  f.SelfBenifit.invalid }"
                                         formControlName="SelfBenifit" name="SelfBenifit" required >
@@ -97,15 +93,20 @@
                                         <div *ngIf="f.SelfBenifit.errors.hasKPISplChars">Allowed special characters are
                                             (.,-,(,),&,#,:,/,?) </div>
                                     </div>
-      
-                                </div>
+
+                                
+
                             </div>
-                          </td>
-                          <td class="invitation_model_search">
-                            <div class="form-group">
-                              <div class="input-group">
-                                  
-                                  <input max="500" maxlength="500" class="form-control" type="text"
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                          <div class="input-group">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text ">Benefit (team)</span>
+                              </div>
+                              
+                              <input max="500" maxlength="500" class="form-control" type="text"
                                   
                                       [ngClass]="{ 'is-invalid': (f.TeamBenifit.touched || submitClicked)  &&  f.TeamBenifit.invalid }"
                                       formControlName="TeamBenifit" name="TeamBenifit" required >
@@ -118,25 +119,45 @@
                                       <div *ngIf="f.TeamBenifit.errors.hasKPISplChars">Allowed special characters are
                                           (.,-,(,),&,#,:,/,?) </div>
                                   </div>
-    
-                              </div>
+                              
+
                           </div>
+                      </div>
+                  </div>
+                  
+
+
+                </div>
+                <div class="form-group row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text ">Progress Comments</span>
+                            </div>
                             
-                          </td>
-                          <td class="invitation_model_search">
                             <input  max="1000" maxlength="1000" formControlName="ProgressComments"      placeholder=""                class=" form-control">
                             
-                          </td>
-                          <td class="invitation_model_search " [ngClass]="{'all-events': actor!='TS'} " >
-                            <input  max="1000" maxlength="1000" formControlName="ManagerComments"      placeholder=""                class=" form-control">
+
+                        </div>
+                    </div>
+                </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text ">Manager Comments</span>
+                            </div>
                             
-                          </td>
-                          
-                        </tr>
-                      </tbody>
-                    </table>
-                    
-                  </div> 
+                            <input  max="1000" maxlength="1000" formControlName="ManagerComments"      placeholder=""                class=" form-control">
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+                  
   
                   <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
                     <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre</button>

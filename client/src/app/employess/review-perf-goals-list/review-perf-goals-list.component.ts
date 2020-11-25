@@ -124,12 +124,12 @@ export class ReviewPerfGoalsListComponent implements OnInit {
 
   
 public tsColumnDefs = [
-  {headerName: 'Employee', field: 'Name', width: 250, sortable: true, filter: true,
+  {headerName: 'Employee', field: 'Name', width: 400, sortable: true, filter: true,
   // cellRenderer: (data) => {
   //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
   // }
 },
-  {headerName: 'No.of  Performance Goals', field: 'NoOfKpis', sortable: true, filter: true },
+  {headerName: 'No.of  Performance Goals',width: 370, field: 'NoOfKpis', sortable: true, filter: true },
   // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
   // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
   {

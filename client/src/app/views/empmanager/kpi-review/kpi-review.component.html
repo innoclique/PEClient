@@ -1,6 +1,6 @@
 <div class="animated fadeIn">
-    <div class="row" *ngIf="showKpiForm;else noRecordsFound" >
-        <div class="col-md-12">
+    <div  *ngIf="showKpiForm;else noRecordsFound" >
+        <div >
             <div class="card">
                 <div  *ngIf="accessingFrom!='reviewEvaluation' " class="card-header">
                     Performance Goal Review
@@ -329,7 +329,7 @@
                                 <div class="form-group ">
 
                                     <div class="input-group ">
-                                        <div class="input-group-prepend ml-2">
+                                        <div class="input-group-prepend">
                                             <span class="input-group-text">Sign-off</span>
                                         </div>
                                         <input maxlength="12" class="form-control" type="text" disabled
