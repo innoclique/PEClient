@@ -455,11 +455,15 @@ debugger
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
       this.snack.success(isDraft ? 'Competencies Rating Saved Successfully' : 'Competency Rating Submitted Successfully');
+      this.refresh()
     }, error => {
       console.log('error', error)
     })
 
   }
+  refresh(): void {
+    this.router.navigate(['employee/review-evaluation']);
+}
   /**For Self-Competency Rating End */
   submitFinalRating() {
   

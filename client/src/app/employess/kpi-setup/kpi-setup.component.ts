@@ -74,7 +74,7 @@ export class KpiSetupComponent implements OnInit {
     { headerName: 'Target Completion', field: 'TargetCompletionDate', width:180, sortable: true, filter: true },
     { headerName: 'Draft', field: 'IsDraft', width:100, sortable: true, filter: true },
     { headerName: 'Status', field: 'Status', width:150, sortable: true, filter: true },
-    { headerName: 'Submited', field: 'IsSubmitedKPIs',  width:150, sortable: true, filter: true },
+    { headerName: 'Submitted', field: 'IsSubmitedKPIs',  width:150, sortable: true, filter: true },
     {
       headerName: 'Action', field: '', width:170, autoHeight: true,  suppressSizeToFit: true,
       cellRenderer: (data) => {

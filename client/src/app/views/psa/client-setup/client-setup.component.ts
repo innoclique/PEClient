@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router ,ActivatedRoute} from '@angular/router';
 import { GridOptions } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AuthService } from '../../../services/auth.service';
@@ -10,6 +10,8 @@ import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { CustomValidators } from '../../../shared/custom-validators';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
+
 @Component({
   selector: 'app-client-setup',
   templateUrl: './client-setup.component.html',
@@ -51,17 +53,25 @@ export class ClientSetupComponent implements OnInit {
   cscData:any=undefined;
   countyFormReset: boolean;
   currentOrganization:any;
+  activeTabIndex:any=0;
+  @ViewChild('staticTabs', { static: false }) staticTabs: TabsetComponent;
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
     private notification: NotificationService,
     private modalService: BsModalService,
     public authService: AuthService,
-    public router: Router
+    public router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
 
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
+    this.activatedRoute.params.subscribe(params => {
+      if (params['activeTab']) {
+        this.activeTabIndex = params['activeTab'];
+      }
+     });
   }
   getColDef(){
     return  [
@@ -113,6 +123,11 @@ export class ClientSetupComponent implements OnInit {
     this.getIndustries();
     this.sameAsContactChange()
     this.currentUser=this.authService.getCurrentUser();
+    
+    
+  }
+  selectTab(tabId: number) {
+    this.staticTabs.tabs[tabId].active = true;
   }
   initForm() {
     this.clientForm = this.formBuilder.group({
@@ -280,7 +295,7 @@ export class ClientSetupComponent implements OnInit {
         this.resellerGridOptions.api.setRowData(this.resellerList);
       
       }
-      
+      this.selectTab(this.activeTabIndex);
     })
   }
   saveClient() {

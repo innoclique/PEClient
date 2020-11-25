@@ -254,12 +254,16 @@ export class CurrentEvaluationComponent implements OnInit {
       //after successfully submitted hide submit button
       this.showCompetencySubmit=false;
       this.snack.success(isDraft ? 'Competencies Rating Saved Successfully' : 'Competency Rating Submitted Successfully');
+      this.refresh();
     }, error => {
       this.snack.error('something went wrong.')
       console.log('error', error)
     })
 
   }
+  refresh(): void {
+    window.location.reload();
+}
   /**For Self-Competency Rating End */
   submitFinalRating() {
         if(this.pgSubmitStatus!='true'){

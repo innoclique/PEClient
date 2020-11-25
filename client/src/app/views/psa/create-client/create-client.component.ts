@@ -111,7 +111,9 @@ export class CreateClientComponent implements OnInit {
       //this.notification.error(error.error.message)
     });
   }
-
+  navToList() {
+    this.router.navigate(['psa/list',{'activeTab':0}]);
+  }
   initForm() {
     this.clientForm = this.formBuilder.group({
       Name: [null, Validators.compose([
@@ -207,6 +209,8 @@ export class CreateClientComponent implements OnInit {
     debugger
     this.clientFormData.IsDraft = false;
     this.isFormSubmitted = true;
+    console.log(this.clientForm.valid);
+    console.log(this.clientForm);
     if (!this.clientForm.valid) {
       return;
     }
@@ -227,7 +231,7 @@ export class CreateClientComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Organization Addedd Successfully.')
-      this.router.navigate(['/psa/list'])
+      this.navToList();
       this.errorOnSave = false;
       this.errorMessage = "";
     }, error => {
@@ -343,13 +347,16 @@ export class CreateClientComponent implements OnInit {
         this.setValues(f, rowdata);
       } else {
         form.get(key).setValue(rowdata[key]);
+        if((key === "EmployeeBufferCount" || key === "DownloadBufferDays") && !rowdata[key]){
+          form.get(key).setValue("0");
+        }
 
       }
 
     }
   }
   public setContactPersonFields(form: FormGroup) {
-    form.controls["ContactPersonFirstName"].setValue(this.clientForm.get('AdminFirstName').value)
+    form.controls["ContactPersonFirstName"].setValue("-"+this.clientForm.get('AdminFirstName').value)
     form.controls["ContactPersonMiddleName"].setValue(this.clientForm.get('AdminMiddleName').value)
     form.controls["ContactPersonLastName"].setValue(this.clientForm.get('AdminLastName').value)
     form.controls["ContactPersonPhone"].setValue(this.clientForm.get('AdminPhone').value)
@@ -456,7 +463,7 @@ export class CreateClientComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {      
       console.log('updated', c)
       this.notification.success('Client details updated successfully')
-      this.router.navigate(['/psa/list'])
+      this.navToList();
 
     }, error => {      
       console.log('eror while updating orgnaizartion :', error)
@@ -489,13 +496,13 @@ action='Update'
 
   setContactPersonData(organization) {
     if (this.clientForm.get('SameAsAdmin').value) {
-      organization.ContactPersonFirstName = organization.AdminLastName;
+      organization.ContactPersonFirstName = organization.AdminFirstName;
       organization.ContactPersonMiddleName = organization.AdminMiddleName;
       organization.ContactPersonLastName = organization.AdminLastName;
       organization.ContactPersonPhone = organization.AdminPhone;
       organization.ContactPersonEmail = organization.AdminEmail;
     } else {
-      organization.ContactPersonFirstName = organization.ContactPersonLastName;
+      organization.ContactPersonFirstName = organization.ContactPersonFirstName;
       organization.ContactPersonMiddleName = organization.ContactPersonMiddleName;
       organization.ContactPersonLastName = organization.ContactPersonLastName;
       organization.ContactPersonPhone = organization.ContactPersonPhone;
