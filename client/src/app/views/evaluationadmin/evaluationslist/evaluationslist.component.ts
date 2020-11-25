@@ -540,7 +540,7 @@ export class EvaluationslistComponent implements OnInit {
       newdata.Peers=this.selectedEmployee.Peers;
       rowNode.setData(newdata);     
       this.EmpGridOptions.api.refreshCells(this.gridRefreshParams);
-      this.closePeersModel();
+      this.refresh();
       
     }, error => {
       this.closePeersModel();
@@ -549,6 +549,9 @@ export class EvaluationslistComponent implements OnInit {
     })
 
   }
+  refresh(): void {
+    window.location.reload();
+}
   updateEvaluation() {
     debugger
     const _evform = this.evaluationForm.value;

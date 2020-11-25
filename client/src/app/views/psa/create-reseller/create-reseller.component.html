@@ -8,8 +8,8 @@
             Reseller
   
             <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal"
-              (click)="router.navigate(['psa/list'])"><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>
-              Back to list
+              (click)="navToList()"><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>
+              Back To List
             </button>
           </div>
           <div class="card-body">
@@ -130,7 +130,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text">Ext Number</span>
                       </div>
-                      <input type="text" class="form-control" numbersOnly maxlength="5" formControlName="PhoneExt">
+                      <input type="text" class="form-control"   formControlName="PhoneExt">
                     </div>
                   </div>
   
@@ -333,7 +333,7 @@
   
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" #closeModal
-                (click)="router.navigate(['psa/list'])">Back To List</button>
+                (click)="navToList()">Back To List</button>
                 <button *ngIf="isCreate" type="button" (click)="saveAsDraft()" class="btn btn-primary">Save as Draft</button>
               <button type="button" (click)="createClient()" class="btn btn-primary">{{isCreate?'Create':'Update'}}</button>
             </div>

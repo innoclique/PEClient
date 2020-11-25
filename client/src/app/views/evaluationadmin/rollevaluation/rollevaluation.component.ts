@@ -83,11 +83,13 @@ export class RollevaluationComponent implements OnInit {
     this.disabledAddButton = false;
   }
   onEmployeeDeSelect(item: any) {
-    debugger
-    
-  var _index=  this.selectedEmployeeList.findIndex(x=>x._id===item.row._id);
+    console.log('onEmployeeDeSelect', item);
+    var _index=  this.selectedEmployeeList.findIndex(x=>x._id===item.row._id);
   this.selectedEmployeeList.splice(_index, 1);
-  this.selectedEmployeeList=[...this.selectedEmployeeList]
+  this.selectedEmployeeList=[...this.selectedEmployeeList];
+  var _indexSelectedEmployees=  this.selectedEmployees.findIndex(x=>x._id===item.row._id);
+  this.selectedEmployees.splice(_indexSelectedEmployees, 1);
+  this.selectedEmployees=[...this.selectedEmployees];
   }
   onDeSelectAllEmployees(items: any) {
     //this.selectedEmployees = items;

@@ -279,9 +279,15 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Weighting</span>
                                         </div>
-                                        <input maxlength="12" class="form-control mr-2" type="text"
+                                        <div class="autoc-border  form-control">
+                                            <input class="border-0 w-50" readonly  formControlName="Weighting"  
+                                            name="Weighting"> 
+                                            <span class="mat-button-wrapper pull-right">%</span>
+                                        </div>
+
+                                        <!--<input maxlength="12" class="form-control mr-2" type="text"
                                             [ngClass]="{ 'is-invalid': f.Weighting.touched  &&  f.Weighting.invalid }"
-                                            formControlName="Weighting" name="Weighting">
+                                            formControlName="Weighting" name="Weighting">-->
 
                                         <!-- <div class="col-md-5">
                                             <span>Weighting: </span>

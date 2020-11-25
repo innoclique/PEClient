@@ -63,6 +63,9 @@ export class CreateResellerComponent implements OnInit {
     this.clientForm.patchValue({ State: data.State.name });
    
   }
+  navToList() {
+    this.router.navigate(['psa/list',{'activeTab':1}]);
+  }
   ngOnInit(): void {
     this.subscription.add(this.activatedRoute.params.subscribe(params => {      
       if(params['id']){
@@ -117,9 +120,7 @@ export class CreateResellerComponent implements OnInit {
         Validators.minLength(12),        
         Validators.pattern(/[^0-9]*/g),        
       ])],
-      PhoneExt: [null, Validators.compose([
-        Validators.pattern("^[0-9]*$"),        
-      ])],
+      PhoneExt: ['', []],
       Email: ['', [Validators.required, Validators.email]],
       Country: ['', [Validators.required]],
       State: ['', [Validators.required]],
@@ -207,7 +208,7 @@ export class CreateResellerComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Reseller Addedd Successfully.')
-      this.router.navigate(['/psa/list'])
+      this.navToList();
     }, error => {
       this.errorOnSave = true;
       this.errorMessage = error.error ? error.error.message : error.message;
@@ -263,7 +264,9 @@ export class CreateResellerComponent implements OnInit {
         this.setValues(f, rowdata);
       } else {
         form.get(key).setValue(rowdata[key]);
-
+        if(key === "PhoneExt" && !rowdata[key]){
+          form.get(key).setValue("");
+        }
       }
 
     }
@@ -361,8 +364,9 @@ export class CreateResellerComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
       debugger
       console.log('updated', c)
-      this.notification.success('Reseller details updated successfully')
-      this.router.navigate(['/psa/list'])
+      this.notification.success('Reseller details updated successfully');
+      this.navToList();
+      
 
     }, error => {      
       console.log('eror while updating reseller :', error)
