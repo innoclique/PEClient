@@ -16,6 +16,7 @@
                 class="ag-theme-alpine" [rowData]="managerReporteesKpiRelData"
                   [columnDefs]="columnDefs"
                   [pagination]="true"
+                  (gridReady)="onGridReady($event)"
                   [paginationPageSize]="10"
                    (rowClicked)="onEmpGridRowClick($event)" >
                 </ag-grid-angular>
@@ -29,6 +30,7 @@
                 class="ag-theme-alpine" [rowData]="tSReporteesData"
                   [columnDefs]="tsColumnDefs"
                   [pagination]="true"
+                  (gridReady)="onTsGridReady($event)"
                   [paginationPageSize]="10"
                    (rowClicked)="onAsTSGridRowClick($event)" >
                 </ag-grid-angular>

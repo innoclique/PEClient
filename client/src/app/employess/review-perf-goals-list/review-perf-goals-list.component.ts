@@ -90,17 +90,17 @@ export class ReviewPerfGoalsListComponent implements OnInit {
 
   
   public columnDefs = [
-    {headerName: 'Employee', field: 'Name',width:300, sortable: true, filter: true,
+    {headerName: 'Employee', field: 'Name', sortable: true, filter: true,
     // cellRenderer: (data) => {
     //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     // }
   },
-    {headerName: 'No.of  Performance Goals', width:300, field: 'NoOfKpis', sortable: true, filter: true },
+    {headerName: 'No.of  Performance Goals',  field: 'NoOfKpis', sortable: true, filter: true },
     {headerName: 'No.of  Reviewed Goals', field: 'NoOfSignOff', sortable: true, filter: true },
     // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
-    // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
+    // {headerName: 'Final Rating Status', field: 'FRStatus',  , sortable: true, filter: true },
     {
-      headerName: 'Action', field: '',width:170, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -124,16 +124,16 @@ export class ReviewPerfGoalsListComponent implements OnInit {
 
   
 public tsColumnDefs = [
-  {headerName: 'Employee', field: 'Name', width: 400, sortable: true, filter: true,
+  {headerName: 'Employee', field: 'Name',  sortable: true, filter: true,
   // cellRenderer: (data) => {
   //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
   // }
 },
-  {headerName: 'No.of  Performance Goals',width: 370, field: 'NoOfKpis', sortable: true, filter: true },
+  {headerName: 'No.of  Performance Goals', field: 'NoOfKpis', sortable: true, filter: true },
   // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
-  // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
+  // {headerName: 'Final Rating Status', field: 'FRStatus',  , sortable: true, filter: true },
   {
-    headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+    headerName: 'Action', field: '',  autoHeight: true, suppressSizeToFit: true,
     cellRenderer: (data) => {
 
       var returnString = '';
@@ -263,7 +263,16 @@ let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).len
 
 
 
-
+onGridReady(params) {
+  params.api.sizeColumnsToFit();
+//  this.clientGridOptions.api = params.api; // To access the grids API
+//       this.clientGridOptions.rowHeight = 34;
+}
+onTsGridReady(params) {
+  params.api.sizeColumnsToFit();
+//  this.clientGridOptions.api = params.api; // To access the grids API
+//       this.clientGridOptions.rowHeight = 34;
+}
 
 
 

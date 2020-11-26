@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { GridOptions } from 'ag-grid-community';
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
@@ -180,18 +181,22 @@ export class SetupEmployeeComponent implements OnInit {
   this.emoModal.hide();
   }
 
-  public columnDefs = [
-    {headerName: 'Employee', field: 'Name', width: 300, sortable: true, filter: true,
+  public gridOptions: GridOptions = {
+    columnDefs: this.columnDefs()
+  }
+
+  public columnDefs (){ return [
+    {headerName: 'Employee',  field: 'Name',suppressSizeToFit: true,   sortable: true, filter: true,
     cellRenderer: (data) => {
       return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     }},
-    {headerName: 'Title', field: 'Title', sortable: true, width:120, filter: true },
+    {headerName: 'Title', field: 'Title',suppressSizeToFit: true, sortable: true, filter: true },
     // {headerName: 'Department', field: 'Department', sortable: true, filter: true },
-    {headerName: 'Phone', field: 'PhoneNumber', sortable: true, filter: true },
-    {headerName: 'Draft', field: 'IsDraft',  width: 100, sortable: true, filter: true },
-    {headerName: 'Active', field: 'IsActive',  width: 100, sortable: true, filter: true },
+    {headerName: 'Phone', field: 'PhoneNumber',  sortable: true, filter: true },
+    {headerName: 'Draft', field: 'IsDraft',   sortable: true, filter: true },
+    {headerName: 'Active', field: 'IsActive',   sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width: 150, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '', suppressSizeToFit: true, 
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -201,6 +206,7 @@ export class SetupEmployeeComponent implements OnInit {
       }
     }
 ];
+  }
 
 
 
@@ -251,6 +257,14 @@ openEmpForm() {
 
     this.initEmpForm();
       this.emoModal.show();
+  }
+
+
+  onGridReady(params) {
+    debugger
+    params.api.sizeColumnsToFit();
+	     this.gridOptions.api = params.api; // To access the grids API
+        this.gridOptions.rowHeight = 34;
   }
 
   viewEmpForm(data) {

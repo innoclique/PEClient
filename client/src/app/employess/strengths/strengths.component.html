@@ -216,8 +216,8 @@
                 </div>
 
                 <div *ngIf="currentAction != 'view' && accessingFrom!='currEvaluation' " class="form-group form-actions pull-right mt-2">
-                  <button class="btn btn-sm btn-primary" (click)="navToStrengthList()" >Cancel</button>
-                  <button  *ngIf="f?.IsDraft?.value==true || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftStrength()" >Save</button>
+                  <button class="btn btn-sm btn-primary" (click)="navToStrengthList()" >Cancel</button>&nbsp;
+                  <button  *ngIf="f?.IsDraft?.value==true || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftStrength()" >Save</button>&nbsp;
                 
                   <button  class="btn btn-sm btn-primary" (click)="submitGoal()" >{{currentAction=='edit'? 
                       f.IsDraft?.value==true ? 'Create': 'Update'

@@ -47,7 +47,7 @@ export class ClientSetupComponent implements OnInit {
       columnDefs: this.getColDef()      
     }
     public resellerGridOptions: GridOptions = {
-      columnDefs: this.getColDef()      
+      columnDefs: this.getReColDef()      
     }
     currentUser:any;
   cscData:any=undefined;
@@ -73,10 +73,11 @@ export class ClientSetupComponent implements OnInit {
       }
      });
   }
-  getColDef(){
+
+  getReColDef(){
     return  [
       {
-        headerName: 'Client', field: 'Name', sortable: true, filter: true,  
+        headerName: 'Client', field: 'Name', sortable: true,  suppressSizeToFit: true, filter: true,  
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
       },      
       { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
@@ -84,7 +85,47 @@ export class ClientSetupComponent implements OnInit {
       { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
       {
         headerName: "Actions",
-        suppressMenu: true,
+        // suppressMenu: true,
+        suppressSizeToFit: true,
+    
+        Sorting: false,        
+        cellRenderer: (data) => {
+        console.log('column data', data)
+          if(data && data.data && data.data.RowData && data.data.RowData.IsActive){
+            return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
+            font-size: 17px;"   data-action-type="suspendorg" title="Deactivate Client"></i>
+            <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+            font-size: 17px;"   data-action-type="edit" title="Edit Client" ></i>
+            `
+          }else{
+            return `<i class="icon-check" style="cursor:pointer ;padding: 7px 20px 0 0;
+    font-size: 17px;"   data-action-type="activateOrg" title="Activate Client"></i>
+    <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+    font-size: 17px;"   data-action-type="edit" title="Edit Client" ></i>
+    `
+          }
+          
+          //}
+        }
+  
+  
+      }
+    ];
+  
+  }
+
+  getColDef(){
+    return  [
+      {
+        headerName: 'Client', field: 'Name', sortable: true,  suppressSizeToFit: true, filter: true,  
+        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
+      },      
+      { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
+      { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
+      { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
+      {
+        headerName: "Actions",
+        // suppressMenu: true,
         suppressSizeToFit: true,
     
         Sorting: false,        
@@ -160,7 +201,7 @@ export class ClientSetupComponent implements OnInit {
       ClientType: ['', [Validators.required]],
       UsageType: ['', [Validators.required]],
       UsageCount: ['', [Validators.required]],
-      AdminFirstName: [null, Validators.compose([
+      AdminFirstName: ['', Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
         CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
@@ -181,7 +222,7 @@ export class ClientSetupComponent implements OnInit {
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
 
-        ContactPersonFirstName: [null, Validators.compose([
+        ContactPersonFirstName: ['', Validators.compose([
           Validators.required,
           CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
           CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
@@ -233,10 +274,11 @@ export class ClientSetupComponent implements OnInit {
   }
 
   onClientGridReady(params) {
+    params.api.sizeColumnsToFit();
     this.clientGridOptions.api = params.api; // To access the grids API
     // this.clientGridOptions.api.setDomLayout("autoHeight");
     this.clientGridOptions.rowHeight = 34;
-    params.api.sizeColumnsToFit();
+     
     // this.clientGridColumnApi = params.columnApi;
     // var allColumnIds = [];
     // this.clientGridColumnApi.getAllColumns().forEach(function (column) {
@@ -245,10 +287,11 @@ export class ClientSetupComponent implements OnInit {
     // this.clientGridColumnApi.autoSizeColumns(allColumnIds, false);
   }
   onResellerGridReady(params) {
+    params.api.sizeColumnsToFit();
     this.resellerGridOptions.api = params.api; // To access the grids API
     // this.resellerGridOptions.api.setDomLayout("autoHeight");
     this.resellerGridOptions.rowHeight = 34;
-    params.api.sizeColumnsToFit();
+    
     // this.clientGridOptions.api.setDomLayout("autoHeight");
 
     // this.resellerGridColumnApi = params.columnApi;
@@ -326,6 +369,7 @@ export class ClientSetupComponent implements OnInit {
   sameAsContactChange() {
     this.clientForm.get('SameAsAdmin').valueChanges
       .subscribe(value => {
+        debugger
         if (value === null || value === undefined) {
           return;
         }
@@ -434,6 +478,7 @@ export class ClientSetupComponent implements OnInit {
     }
   }
   public setContactPersonFields(form: FormGroup) {
+    debugger
     form.controls["ContactPersonFirstName"].setValue(this.clientForm.get('AdminFirstName').value)
     form.controls["ContactPersonMiddleName"].setValue(this.clientForm.get('AdminMiddleName').value)
     form.controls["ContactPersonLastName"].setValue(this.clientForm.get('AdminLastName').value)

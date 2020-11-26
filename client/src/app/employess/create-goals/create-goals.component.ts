@@ -187,8 +187,8 @@ get k (){
           '  <span ref="eText" class="ag-header-cell-text" role="columnheader"></span> <span class="redStar"></span>' +
           '  </div>' +
           '</div>'
-  }, field: 'ProgressIndicators', width: 190, autoHeight: true },
-    { headerName: 'Barriers', field: 'Barriers', width: 100, autoHeight: true },
+  }, field: 'ProgressIndicators', width: 180, autoHeight: true },
+    { headerName: 'Barriers', field: 'Barriers', width: 160, autoHeight: true },
     { headerName: 'Target Date',
     headerComponentParams: {
       menuIcon: 'fa-bars',
@@ -214,12 +214,12 @@ get k (){
           '  <span ref="eText" class="ag-header-cell-text" role="columnheader"></span> <span class="redStar"></span>' +
           '  </div>' +
           '</div>'
-  }, field: 'Status', width: 120, autoHeight: true },
+  }, field: 'Status', width: 100, autoHeight: true },
     {
       headerName: "Action",
       suppressMenu: true,
       Sorting: false,
-      width: 90,
+      width: 80,
       template: `
       
       <i class="cui-trash icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;

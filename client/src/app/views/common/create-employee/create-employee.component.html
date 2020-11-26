@@ -99,7 +99,7 @@ Back to list
       
                               <div *ngIf="(f.Address.touched || submitClicked) && f.Address.invalid" class="invalid-feedback">
                                 <div *ngIf="f.Address.errors.required">Address is required</div>
-                                <div *ngIf="f.Address.errors.minlength">First Name must be at least 4 characters  </div>
+                                <div *ngIf="f.Address.errors.minlength">Address must be at least 4 characters  </div>
                                 <div *ngIf="f.Address.errors.hasAddressSplChars">Allowed special characters are (.,-,(,),&,#,:,/)  </div>
                             </div>
       

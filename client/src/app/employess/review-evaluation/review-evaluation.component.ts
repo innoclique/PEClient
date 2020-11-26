@@ -157,12 +157,13 @@ goto(selTab){
           this.prepareCompetencyQuestionsByManager();
           console.log('the evauation form', this.evaluationForm)
         }
+        debugger
         if (res1.FinalRating) {
           this.FinalRatingForm.controls["EmployeeComments"].setValue(res1.FinalRating.Self.YearEndComments)
           this.FinalRatingForm.controls["EmployeeRevComments"].setValue(res1.FinalRating.Self.RevComments)
           this.FinalRatingForm.controls["EmployeeOverallRating"].setValue(res1.FinalRating.Self.YearEndRating)
           this.FinalRatingForm.controls["EmployeeIsDraft"].setValue(!res1.FinalRating.Self.IsSubmitted);
-          this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff?res1.FinalRating.Self.SignOff:"")
+          this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff)
           this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
           this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
 
@@ -266,8 +267,8 @@ goto(selTab){
       EmployeeRevComments: [''],
       EmployeeOverallRating: [1, [Validators.required]],
       EmployeeIsDraft: [true],
-      EmployeeSignOff: [""],
-      EmployeeSubmittedOn: ['']
+      EmployeeSignOff: [],
+      EmployeeSubmittedOn: []
 
       ,ManagerComments: ['', [Validators.required]],
       ManagerOverallRating: [1, [Validators.required]],

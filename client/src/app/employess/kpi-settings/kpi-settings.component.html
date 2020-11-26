@@ -182,13 +182,13 @@
                                 </div>
                                 
                             </div>
-                            <div class="col-md-1 " style="margin-left: -10px;" >
+                            <!-- <div class="col-md-1 " style="margin-left: -10px;" >
                             <label *ngIf="currentAction == 'create'" class=" switch switch-label switch-lg switch-primary input-group-postpend ml-2">
                                 <input (change)="toggleSwitch()" [checked]="addMCSwitch" class="switch-input form-control" type="checkbox">
                                 <span class="switch-slider" data-checked="On" data-unchecked="Off"></span></label>
-                            </div>
-                            <div *ngIf="currentAction == 'create'" class="col-md-1" style="margin-left: -10px;" >
-                                <button style="width: 88px !important;padding: 3px 0px;" class="btn btn-block btn-primary pull-left" [disabled]="!addMCSwitch"
+                            </div> -->
+                            <div *ngIf="currentAction == 'create'" class="col-md-1"  >
+                                <button style="width: 88px !important;padding: 3px 0px;" class="btn btn-block btn-primary pull-left" 
                                  (click)="addMesurment()"  >+ Add KPI  </button>
                                 </div>
 
@@ -199,7 +199,7 @@
                         <div class="row">
 
 
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -219,14 +219,14 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="accessingFrom =='currEvaluation' " >
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text ">Score (self)</span>
+                                            <span class="input-group-text redStar">Score (self)</span>
                                         </div>
-                                        <input class="form-control" type="text" disabled *ngIf="currentAction == 'create'"
-                                            style="background-color:#e4e7ea !important" />
-                                        <select class="form-control" *ngIf="currentAction != 'create'"
+                                        <!-- <input class="form-control" type="text" disabled *ngIf="currentAction == 'create'"
+                                            style="background-color:#e4e7ea !important" /> -->
+                                        <select class="form-control" 
                                             [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }" formControlName="Score"
                                             name="Score">
                                             <option value="" disabled>Please select</option>
@@ -242,7 +242,7 @@
 
 
 
-                            <div class="col-md-4" style="margin-right: 30px;">
+                            <div class="col-md-4 pull-right" >
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -283,7 +283,7 @@
                                 </div>
                             </div> -->
 
-                            <div class="col-md-4 pull-left">
+                            <div class="col-md-4 pull-left" *ngIf="accessingFrom=='currEvaluation' ">
                                                         <div class="form-group">
                                                             <div class="input-group">
                                                             <div class="input-group-prepend">
@@ -309,9 +309,7 @@
                 <span class="input-group-text">Sign-off</span>
             </div>
             <input maxlength="500" class="form-control" cols="" rows="4" disabled
-           
-                formControlName="Signoff"
-                name="Signoff">
+            [value]="kpiDetails?.Signoff?.SignOffBy"               >
         </div>
     </div>
     <div class="col-md-4">

@@ -108,10 +108,10 @@ export class ReviewActionPlanListComponent implements OnInit {
         
        
         
-        <i class="cui-layers " style="cursor:pointer; padding: 7px 20px 0 0;
+        <i class="cui-pie-chart" style="cursor:pointer; padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
 
-        <i class="cui-drop " style="cursor:pointer; padding: 7px 20px 0 0;
+        <i class="cui-shield " style="cursor:pointer; padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="reviewStrengths" title="Review Strengths"></i>
 
         `;
@@ -141,10 +141,10 @@ public tsColumnDefs = [
       returnString += `
       
       
-      <i class="cui-layers "  style="cursor:pointer; padding: 7px 20px 0 0;
+      <i class="cui-pie-chart"  style="cursor:pointer; padding: 7px 20px 0 0;
       font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
 
-      <i class="cui-drop " style="cursor:pointer; padding: 7px 20px 0 0;
+      <i class="cui-shield " style="cursor:pointer; padding: 7px 20px 0 0;
       font-size: 17px;"   data-action-type="reviewStrengths" title="Review Strengths"></i>
 
       `;

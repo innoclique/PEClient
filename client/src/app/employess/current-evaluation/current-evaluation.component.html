@@ -75,6 +75,7 @@
                                               </ul>
                                         </div>
                                      </div>
+                                     <br>
                                     <div class="row">                                        
                                         <div class="col-md-12">
                                             <div *ngIf="showCompetencySubmit" class="pull-right form-group">
@@ -111,7 +112,7 @@
                                 <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
                                 <div [formGroup]="FinalRatingForm" class="card col-lg-12 pt-3">
                                     <section>
-                                        <h3 class="heading-with-margin">Employee Self Review</h3>
+                                        <h3 class="heading-with-margin"></h3>
                                         <div class="form-group row">
                                             
                                             <div class="col-md-8 ">
@@ -150,21 +151,22 @@
 
                                         <div class="form-group row">
                                             <div *ngIf="!showEmployeeSubmit" class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="EmployeeSignOff">
-                                                        Employee Sign-Off:
-                                                    </label>
+                                                <div class="input-group">
+                                                   
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"> Employee Sign-Off:</span>
+                                                    </div>
                                                     <input type="text" readonly formControlName="EmployeeSignOff"
-                                                        name="EmployeeSignOff">
+                                                    class="form-control" name="EmployeeSignOff">
                                                 </div>
                                             </div>
                                             <div *ngIf="!showEmployeeSubmit" class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="EmployeeSubmittedOn">
-                                                        Submitted On:
-                                                    </label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"> Submitted On:</span>
+                                                    </div>
                                                     <input type="text" readonly formControlName="EmployeeSubmittedOn"
-                                                        name="EmployeeSubmittedOn">
+                                                    class="form-control"    name="EmployeeSubmittedOn">
                                                 </div>
                                             </div>
                                         </div>
@@ -178,12 +180,94 @@
                                                         <button (click)="saveFinalRating()"
                                                             class="btn btn-primary">Save</button>&nbsp;
                                                         <button (click)="submitFinalRating()"
-                                                            class="btn btn-primary">Submit
-                                                            Final Rating</button>
+                                                            class="btn btn-primary">Submit</button>
                                                     </div>
                                                 </div>
 
                                             </div>
+                                        </div>
+                                    </section>
+
+
+
+                                    
+                                    <section *ngIf="FinalRatingForm?.value?.ManagerSignOff" ngClass="view-only">
+                                        <h3>Manager Review</h3>
+                                        <div class="form-group row">
+                                            <div class="col-md-4 ">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text ">Rating</span>
+                                                        </div>
+                                                        <select formControlName="ManagerOverallRating"
+                                                            class="form-control" name="Score">
+                                                            <option value="" disabled>Please select</option>
+                                                            <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+  
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 ">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Comments</span>
+                                                        </div>
+                                                        <textarea maxlength="2000" formControlName="ManagerComments"
+                                                            class="form-control"></textarea>
+  
+                                                    </div>
+                                                </div>
+  
+                                            </div>
+  
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                          
+                                            <div class="col-md-8" *ngIf='FinalRatingForm?.value?.ManagerRevComments' > 
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text ">Revision Comments</span>
+                                                        </div>
+                                                        <textarea maxlength="2000" formControlName="ManagerRevComments"
+                                                            class="form-control"></textarea>
+  
+                                                    </div>
+                                                </div>
+                                            </div>
+  
+                                           
+                                        </div>
+  
+                                        <div class="form-group row">
+                                            <div *ngIf="!showManagerSubmit" class="col-md-4">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"> Manager Sign-Off:</span>
+                                                    </div>
+                                                    <input type="text" readonly formControlName="ManagerSignOff"
+                                                    class="form-control"   name="ManagerSignOff">
+                                                </div>
+                                            </div>
+                                            <div *ngIf="!showManagerSubmit" class="col-md-4">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"> Submitted On:</span>
+                                                    </div>
+                                                    <input type="text" readonly formControlName="ManagerSubmittedOn"
+                                                    class="form-control"   name="ManagerSubmittedOn">
+                                                </div>
+                                            </div>
+  
+                                           
                                         </div>
                                     </section>
 

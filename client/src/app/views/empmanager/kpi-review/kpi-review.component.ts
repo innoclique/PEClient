@@ -219,6 +219,11 @@ this.snack.error("Please sign-off performance goals")
 return
 }
 
+if (this.accessingFrom == "reviewEvaluation"  && this.kpiForm.get('ManagerScore').value=='') {
+  this.snack.error("Score is mandatory.")
+  return;
+}
+
     this.perfApp.route = "app";
     this.perfApp.method = "UpdateKpiDataById";
     this.perfApp.requestBody = {};

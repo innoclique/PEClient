@@ -62,14 +62,15 @@
                                               </ul>
                                         </div>
                                      </div>
+                                     <br>
                                     <div *ngIf="showCompetencySubmitForManager" class="form-group row">
                                         <div class=" col-md-12">
                                             <div class="form-group">
                                                 <div class="pull-right">
                                                     <button (click)="cancelCompetencyRating()"
-                                                        class="btn btn-secondary">Cancel</button>
+                                                        class="btn btn-secondary">Cancel</button>&nbsp;
                                                     <button (click)="saveManagerCompetencyFormAsDraft()"
-                                                        class="btn btn-primary">Save</button>
+                                                        class="btn btn-primary">Save</button>&nbsp;
                                                     <button (click)="submitManagerCompetencyForm()"
                                                         class="btn btn-primary">Submit</button>
                                                 </div>
@@ -124,7 +125,7 @@
                                                 <div class="form-group">
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
-                                                            <span class="input-group-text redStar">Revision Comments</span>
+                                                            <span class="input-group-text ">Revision Comments</span>
                                                         </div>
                                                         <textarea maxlength="2000" formControlName="EmployeeRevComments"
                                                             class="form-control"></textarea>
@@ -135,24 +136,24 @@
   
                                            
                                         </div>
-  
                                         <div class="form-group row">
                                             <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="EmployeeSignOff">
-                                                        Employee Sign-Off:
-                                                    </label>
-                                                    <input type="text" readonly formControlName="EmployeeSignOff"
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"> Employee Sign-Off:</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" readonly formControlName="EmployeeSignOff"
+                                                    [value]="FinalRatingForm?.value?.EmployeeSignOff"
                                                         name="EmployeeSignOff">
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="EmployeeSubmittedOn">
-                                                        Submitted On:
-                                                    </label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"> Submitted On:</span>
+                                                    </div>
                                                     <input type="text" readonly formControlName="EmployeeSubmittedOn"
-                                                        name="EmployeeSubmittedOn">
+                                                    class="form-control"    name="EmployeeSubmittedOn">
                                                 </div>
                                             </div>
   
@@ -243,21 +244,23 @@
   
                                         <div class="form-group row">
                                             <div *ngIf="!showManagerSubmit" class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="ManagerSignOff">
-                                                        Manager Sign-Off:
-                                                    </label>
+                                                <div class="input-group">
+                                                 
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"> Manager Sign-Off:</span>
+                                                    </div>
                                                     <input type="text" readonly formControlName="ManagerSignOff"
-                                                        name="ManagerSignOff">
+                                                    class="form-control" name="ManagerSignOff">
                                                 </div>
                                             </div>
                                             <div *ngIf="!showManagerSubmit" class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="ManagerSubmittedOn">
-                                                        Submitted On:
-                                                    </label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"> Submitted On:</span>
+                                                    </div>
+                                                   
                                                     <input type="text" readonly formControlName="ManagerSubmittedOn"
-                                                        name="ManagerSubmittedOn">
+                                                    class="form-control"   name="ManagerSubmittedOn">
                                                 </div>
                                             </div>
   
@@ -339,21 +342,22 @@
 
                                         <div  class="form-group row">
                                             <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="ThirdSignatorySignOff">
-                                                        Third Signatory Sign-Off:
-                                                    </label>
-                                                    <input type="text" readonly formControlName="ThirdSignatorySignOff"
-                                                        name="ThirdSignatorySignOff">
+                                                <div class="input-group">
+                                                   
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Third Signatory Sign-Off:</span>
+                                                    </div>
+                                                    <input class="form-control" type="text" readonly formControlName="ThirdSignatorySignOff"
+                                                     name="ThirdSignatorySignOff">
                                                 </div>
                                             </div>
                                             <div *ngIf="!showThirdSignatorySubmit" class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="ThirdSignatorySubmittedOn">
-                                                        Submitted On:
-                                                    </label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"> Submitted On:</span>
+                                                    </div>
                                                     <input type="text" readonly formControlName="ThirdSignatorySubmittedOn"
-                                                        name="ThirdSignatorySubmittedOn">
+                                                    class="form-control"   name="ThirdSignatorySubmittedOn">
                                                 </div>
                                             </div>
   

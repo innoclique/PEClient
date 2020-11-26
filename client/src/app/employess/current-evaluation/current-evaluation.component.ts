@@ -97,6 +97,15 @@ export class CurrentEvaluationComponent implements OnInit {
           this.FinalRatingForm.controls["IsManagerSubmited"].setValue(res1.FinalRating.Manager.IsSubmitted)
           this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
           this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
+
+debugger
+          this.FinalRatingForm.controls["ManagerComments"].setValue(res1.FinalRating.Manager.YearEndComments)
+          this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1.FinalRating.Manager.YearEndRating)
+          this.FinalRatingForm.controls["ManagerSignOff"].setValue(res1.FinalRating.Manager.SignOff)
+          this.FinalRatingForm.controls["ManagerSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Manager.SubmittedOn))
+          this.FinalRatingForm.controls["ManagerRevComments"].setValue(res1.FinalRating.Manager.RevComments)
+
+
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
           this.PeerScoreCard = res1.PeerScoreCard;
@@ -145,6 +154,14 @@ export class CurrentEvaluationComponent implements OnInit {
       IsManagerSubmited: [false],
       EmployeeSignOff: [],
       EmployeeSubmittedOn: ['']
+
+      ,ManagerComments: ['', ],
+      ManagerOverallRating: [],
+      ManagerRevComments: ['',],
+      // ManagerReqRevision: [false],
+      // ManagerIsDraft: [true],
+      ManagerSignOff: [],
+      ManagerSubmittedOn: ['']
     })
 
   }

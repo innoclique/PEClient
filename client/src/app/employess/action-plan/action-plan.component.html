@@ -19,11 +19,12 @@
     
                 <ng-template tabHeading>Developmental Goals</ng-template>
 
-          <ag-grid-angular style="width: 100;; height: 350px;" class="ag-theme-alpine" 
+          <ag-grid-angular style="width: 100;; height: 440px;" class="ag-theme-alpine" 
                             
           [rowData]="devGoalRecords"
           [gridOptions]="goalsItemColumns"
           [pagination]="true"
+          (gridReady)="onGridReady($event)"
           [paginationPageSize]="10"
          
           (rowClicked)="onDevGoalGridRowClick($event)"
@@ -33,11 +34,12 @@
               <tab >
     
                 <ng-template tabHeading>Strengths</ng-template>
-                <ag-grid-angular style="width: 100;; height: 350px;" class="ag-theme-alpine" 
+                <ag-grid-angular style="width: 100;; height: 440px;" class="ag-theme-alpine" 
                             
                 [rowData]="strengthRecords"
                 [gridOptions]="strengthItemColumns"
                 [pagination]="true"
+                (gridReady)="onStrengthsGridReady($event)"
                 [paginationPageSize]="10"
                
                 (rowClicked)="onStrengthGridRowClick($event)"

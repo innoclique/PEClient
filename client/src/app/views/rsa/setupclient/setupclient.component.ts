@@ -164,7 +164,7 @@ export class SetupclientComponent implements OnInit {
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
 
-        ContactPersonFirstName: [null, Validators.compose([
+        ContactPersonFirstName: ['', Validators.compose([
           Validators.required,
           CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
           CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
@@ -244,6 +244,7 @@ export class SetupclientComponent implements OnInit {
   sameAsContactChange() {
     this.clientForm.get('SameAsAdmin').valueChanges
       .subscribe(value => {
+        debugger
         if (value === null || value === undefined) {
           return;
         }
@@ -353,6 +354,7 @@ export class SetupclientComponent implements OnInit {
     }
   }
   public setContactPersonFields(form: FormGroup) {
+    debugger
     form.controls["ContactPersonFirstName"].setValue(this.clientForm.get('AdminFirstName').value)
     form.controls["ContactPersonMiddleName"].setValue(this.clientForm.get('AdminMiddleName').value)
     form.controls["ContactPersonLastName"].setValue(this.clientForm.get('AdminLastName').value)

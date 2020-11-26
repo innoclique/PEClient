@@ -199,7 +199,7 @@ export class DefaultLayoutComponent implements OnInit {
             "url": "/csa/dashboard",
             "name": "Dashboard",
             "code": "Dashboard",
-            "icon": "icon-star",
+            "icon": "icon-calculator",
             "badge": {
                 "variant": "info",
                 "text": "Home"
@@ -212,7 +212,7 @@ export class DefaultLayoutComponent implements OnInit {
             "url": "/ea/setup-employee",
             "name": "Set up Employees",
             "code": "Employees",
-            "icon": "icon-star",
+            "icon": "icon-user-follow",
             "linkProps": {
                 "routerLinkActive": "employee"
             }
@@ -227,26 +227,29 @@ export class DefaultLayoutComponent implements OnInit {
             "url": "/ea/settings",
             "name": "Backend Setup",
             "code": "BackendSetup",
-            "icon": "icon-star"
+            "icon": "icon-settings"
         }, {
             "IsActive": true,
             "url": "/ea/reports",
             "name": "Reports",
             "code": "Reports",
-            "icon": "icon-star"
+            "icon": "icon-list"
         }, {
             "IsActive": true,
             "url": "/ea/profile",
             "name": "Profile",
             "code": "Profile",
-            "icon": "icon-star"
-        }, {
-            "IsActive": true,
-            "url": "/logout",
-            "name": "Logout",
-            "code": "Logout",
-            "icon": "icon-star"
-        }]
+            "icon": "icon-user"
+        }, 
+      
+        // {
+        //     "IsActive": true,
+        //     "url": "/logout",
+        //     "name": "Logout",
+        //     "code": "Logout",
+        //     "icon": "icon-star"
+        // }
+      ]
         this.navItems=navigationMenu;
         }
 

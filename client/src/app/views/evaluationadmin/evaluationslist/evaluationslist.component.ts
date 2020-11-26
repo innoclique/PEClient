@@ -265,7 +265,7 @@ export class EvaluationslistComponent implements OnInit {
         }
       },
       {
-        headerName: 'DirectReport(s)', field: '', width:130, wrapText: true, autoHeight: true,sortable: false, filter: false,
+        headerName: 'Direct Report(s)', field: '', width:130, wrapText: true, autoHeight: true,sortable: false, filter: false,
         
         cellRenderer: (data) => {
           if (this.getNested(data.data.EmployeeRow, 'DirectReportees')){
@@ -617,17 +617,19 @@ export class EvaluationslistComponent implements OnInit {
   }
   public onPeersGridReady(params) {
     this.peersForEmpGridOptions.api = params.api;
+    params.api.sizeColumnsToFit();
   }
   getPeersForEmpCols() {
     return [
       {
-        headerName: 'Peer', sortable: true, filter: true,
+        headerName: 'Peer', sortable: true,width:300, filter: true, suppressSizeToFit: true, 
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.displayTemplate}</span>` }
       },
 
       {
         headerName: "Actions",
-        suppressMenu: true,
+        // suppressMenu: true,
+        // suppressSizeToFit: true, 
         Sorting: false,
         cellRenderer: (data) => {
           console.log('column data', data)

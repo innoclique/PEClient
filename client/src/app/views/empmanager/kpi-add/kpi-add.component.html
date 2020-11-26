@@ -182,14 +182,14 @@
                                 
                             </div>
 
-                            <div class="col-md-1">
+                            <!-- <div class="col-md-1">
                                 <label *ngIf="currentAction != 'view'" class="switch switch-label switch-lg switch-primary input-group-postpend ml-2">
                                     <input (change)="toggleSwitch()" [checked]="addMCSwitch" class="switch-input form-control" type="checkbox">
                                     <span class="switch-slider" data-checked="On" data-unchecked="Off"></span></label>
-                            </div>
+                            </div> -->
 
                             <div *ngIf="currentAction != 'view'" class="col-md-3">
-                                <button class="btn btn-block btn-primary w-75" [disabled]="!addMCSwitch"
+                                <button class="btn btn-block btn-primary w-75" 
                                  (click)="addMesurment()"  >+ Add KPI  </button>
                                 </div>
 

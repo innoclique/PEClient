@@ -74,20 +74,29 @@ export class ReviewEvaluationListComponent implements OnInit {
     this.GetTSReporteeEvDetails();
   }
 
-
+  onGridReady(params) {
+    params.api.sizeColumnsToFit();
+	//  this.clientGridOptions.api = params.api; // To access the grids API
+  //       this.clientGridOptions.rowHeight = 34;
+  }
+  onTsGridReady(params) {
+    params.api.sizeColumnsToFit();
+	//  this.clientGridOptions.api = params.api; // To access the grids API
+  //       this.clientGridOptions.rowHeight = 34;
+  }
 
   
   public columnDefs = [
-    {headerName: 'Employee', field: 'Name', width: 250, sortable: true, filter: true,
+    {headerName: 'Employee', field: 'Name',  sortable: true, filter: true,
     // cellRenderer: (data) => {
     //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     // }
   },
     {headerName: 'No.of  Performance Goals', field: 'NoOfKpis', sortable: true, filter: true },
-    {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
-    {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
+    {headerName: 'No.of Dev Goals', field: 'NoOfDevGoals', sortable: true, filter: true },
+    {headerName: 'Final Rating Status', field: 'FRStatus',   sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width: 190, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Action', field: '',  autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -97,7 +106,7 @@ export class ReviewEvaluationListComponent implements OnInit {
         <i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="reviewKPI" title="Review Performance Goal"></i>
         
-        <i class="cui-layers" style="cursor:pointer; padding: 7px 20px 0 0;
+        <i class="cui-pie-chart" style="cursor:pointer; padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
 
         <i class="cui-map" style="cursor:pointer; padding: 7px 20px 0 0;
@@ -111,23 +120,23 @@ export class ReviewEvaluationListComponent implements OnInit {
 
   
 public tsColumnDefs = [
-  {headerName: 'Employee', field: 'Name', width: 250, sortable: true, filter: true,
+  {headerName: 'Employee', field: 'Name',  sortable: true, filter: true,
   // cellRenderer: (data) => {
   //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
   // }
 },
   {headerName: 'No.of  Performance Goals', field: 'NoOfKpis', sortable: true, filter: true },
-  {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
-  {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
+  {headerName: 'No.of Dev Goals', field: 'NoOfDevGoals', sortable: true, filter: true },
+  {headerName: 'Final Rating Status', field: 'FRStatus',   sortable: true, filter: true },
   {
-    headerName: 'Action', field: '', width: 190, autoHeight: true, suppressSizeToFit: true,
+    headerName: 'Action', field: '',  autoHeight: true, suppressSizeToFit: true,
     cellRenderer: (data) => {
 
       var returnString = '';
       returnString += `<i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
       font-size: 17px;"   data-action-type="reviewKPI" title="ReviewPerformance Goal"></i>
       
-      <i class="cui-layers" style="cursor:pointer; padding: 7px 20px 0 0;
+      <i class="cui-pie-chart" style="cursor:pointer; padding: 7px 20px 0 0;
       font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
 
       <i class="cui-map" style="cursor:pointer; padding: 7px 20px 0 0;

@@ -125,7 +125,7 @@ accessingFrom:any;
       YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments :''],
       YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager :''],
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
-      Signoff: [this.kpiDetails.Signoff ? this.kpiDetails.Signoff.SignOffBy : this.loginUser.FirstName],
+   
 
       IsDraft: [this.kpiDetails.IsDraft ? 'true' : 'false'],
       Score: [this.kpiDetails.Score ? this.kpiDetails.Score : '', ],
@@ -171,6 +171,10 @@ accessingFrom:any;
 
     if (this.accessingFrom == "currEvaluation" && this.currentAction == 'edit' && this.unSubmitedCount > 0) {
       this.snack.error("Please sign-off performance goals")
+      return;
+    }
+    if (this.accessingFrom == "currEvaluation" && this.currentAction == 'edit' && this.kpiForm.get('Score').value=='') {
+      this.snack.error("Score is mandatory.")
       return;
     }
     this.saveKpi();
@@ -268,6 +272,7 @@ if(this.selectedItems.length==0) {
 
 
   addMesurment() {
+    debugger
 
 if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
 
@@ -443,6 +448,11 @@ conformSubmitKpis(){
 
       this.setWeighting(c.filter(item => item.IsDraft === false).length);
       if (c && c.length > 0) {
+        if (this.accessingFrom=='currEvaluation') {
+          this.empKPIData = c.filter(e=> e.IsDraft==false);
+        }else{
+          this.empKPIData = c;
+        }
         this.empKPIData = c;
         this.unSubmitedCount=c.filter(e=>e.IsSubmitedKPIs==false && e.IsDraft==false ).length;
         this.scoreUnSubmitedCount=c.filter(e=>e.Score=="" && e.IsDraft==false ).length;
@@ -522,8 +532,9 @@ this.authService.setIsPGSubmitStatus("true");
 
 
   setWeighting(length: any) {
+    debugger
     
-    this.weight = length==0? 100 :  Math.round( 100/length);
+    this.weight = length==0? 100 :  Math.round( 100/(length+1));
 
     this.kpiForm.patchValue({ Weighting: this.weight });
 

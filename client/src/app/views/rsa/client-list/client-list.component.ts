@@ -132,7 +132,7 @@ export class ClientListComponent implements OnInit {
       ClientType: ['', [Validators.required]],
       UsageType: ['', [Validators.required]],
       UsageCount: ['', [Validators.required]],
-      AdminFirstName: [null, Validators.compose([
+      AdminFirstName: ['', Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
         CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
@@ -153,7 +153,7 @@ export class ClientListComponent implements OnInit {
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
 
-        ContactPersonFirstName: [null, Validators.compose([
+        ContactPersonFirstName: ['', Validators.compose([
           Validators.required,
           CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
           CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
@@ -266,6 +266,7 @@ export class ClientListComponent implements OnInit {
   sameAsContactChange() {
     this.clientForm.get('SameAsAdmin').valueChanges
       .subscribe(value => {
+        debugger
         if (value === null || value === undefined) {
           return;
         }
@@ -374,6 +375,7 @@ export class ClientListComponent implements OnInit {
     }
   }
   public setContactPersonFields(form: FormGroup) {
+    debugger
     form.controls["ContactPersonFirstName"].setValue(this.clientForm.get('AdminFirstName').value)
     form.controls["ContactPersonMiddleName"].setValue(this.clientForm.get('AdminMiddleName').value)
     form.controls["ContactPersonLastName"].setValue(this.clientForm.get('AdminLastName').value)

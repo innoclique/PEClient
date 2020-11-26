@@ -71,23 +71,23 @@ export class ActionPlanComponent implements OnInit {
   
   getColDef(){
     return [
-       { headerName: 'Developmental Goals', field: 'DevGoal', width: 200, autoHeight: true ,
+       { headerName: 'Developmental Goals',suppressSizeToFit: true,  field: 'DevGoal' ,
        cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
        }
       } ,
-       { headerName: 'Desired Outcomes', field: 'DesiredOutcomes', width: 200, autoHeight: true },
-       { headerName: '# of Action Steps', field: 'GoalActionItems', width: 200, autoHeight: true ,
+       { headerName: 'Desired Outcomes', field: 'DesiredOutcomes' },
+       { headerName: '# of Action Steps', field: 'GoalActionItems' ,
        cellRenderer: (data) => {
         return data.data.GoalActionItems?data.data.GoalActionItems.length:0
        }
       },
-      { headerName: 'Draft', field: 'IsDraft', width: 100, sortable: true, filter: true ,
+      { headerName: 'Draft', field: 'IsDraft',  sortable: true, filter: true ,
       cellRenderer: (data) => {
         return data.data.IsDraft?'Yes':'No'
        }
       },
-       { headerName: 'Submitted', field: 'IsGoalSubmited', width: 120, sortable: true, filter: true ,
+       { headerName: 'Submitted', field: 'IsGoalSubmited',  sortable: true, filter: true ,
        cellRenderer: (data) => {
          return data.data.IsGoalSubmited?'Yes':'No'
         }
@@ -96,7 +96,7 @@ export class ActionPlanComponent implements OnInit {
          headerName: "Action",
          suppressMenu: true,
          Sorting: false,
-         width: 150,
+         
          template: `
          
          <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -113,21 +113,21 @@ export class ActionPlanComponent implements OnInit {
 
    getStrengthColDef(){
     return [
-       { headerName: 'Strength', field: 'Strength', width: 180, autoHeight: true ,
+       { headerName: 'Strength', field: 'Strength' ,
        cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
        }
       } ,
-       { headerName: 'Leverage', field: 'Leverage', width: 150, autoHeight: true },
-       { headerName: 'Team Benefit', field: 'TeamBenifit', width: 150, autoHeight: true },
-       { headerName: 'Self Benefit', field: 'SelfBenifit', width: 150, autoHeight: true },
+       { headerName: 'Leverage', field: 'Leverage' },
+       { headerName: 'Team Benefit', field: 'TeamBenifit' },
+       { headerName: 'Self Benefit', field: 'SelfBenifit' },
        
-      { headerName: 'Draft', field: 'IsDraft', width: 100, sortable: true, filter: true ,
+      { headerName: 'Draft', field: 'IsDraft',  sortable: true, filter: true ,
       cellRenderer: (data) => {
         return data.data.IsDraft?'Yes':'No'
        }
       },
-      { headerName: 'Submitted', field: 'IsStrengthSubmited', width: 120, sortable: true, filter: true ,
+      { headerName: 'Submitted', field: 'IsStrengthSubmited',  sortable: true, filter: true ,
       cellRenderer: (data) => {
         return data.data.IsStrengthSubmited?'Yes':'No'
        }
@@ -137,7 +137,7 @@ export class ActionPlanComponent implements OnInit {
          headerName: "Action",
          suppressMenu: true,
          Sorting: false,
-         width: 120,
+         
          template: `
          
          <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -160,6 +160,19 @@ export class ActionPlanComponent implements OnInit {
    openDevGoalForm(){
     this.router.navigate(['employee/dev-goal']);
    }
+
+   
+onGridReady(params) {
+  params.api.sizeColumnsToFit();
+ this.goalsItemColumns.api = params.api; // To access the grids API
+      this.goalsItemColumns.rowHeight = 34;
+}
+
+onStrengthsGridReady(params) {
+  params.api.sizeColumnsToFit();
+ this.strengthItemColumns.api = params.api; // To access the grids API
+      this.strengthItemColumns.rowHeight = 34;
+}
    
 getAllDevGoalsDetails() {
   this.perfApp.route = "app";
