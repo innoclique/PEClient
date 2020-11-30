@@ -1,13 +1,15 @@
 <div [formGroup]="competencyForm">
     <accordion [closeOthers]="oneAtATime">
-        <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of competencyQuestionsList"
-          >
-          <button  class="btn btn-link btn-block clearfix" accordion-heading type="button">
-            <div class="pull-left">
-                <i  [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
-            </div>
-            
-          </button>            <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments"></app-competency-wrapper>
+        <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of competencyQuestionsList"></accordion-group>
+            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                <div class="pull-left">
+                    <i [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i>
+                    {{c.CompetenyName}}
+                </div>
+
+            </button>
+            <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments">
+            </app-competency-wrapper>
         </accordion-group>
 
     </accordion>
@@ -18,8 +20,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text redStar">Rating</span>
                     </div>
-                    <select formControlName="OverallRating" class="form-control"
-                        name="Score">
+                    <select formControlName="OverallRating" class="form-control" name="Score">
                         <option value="" disabled>Please select</option>
                         <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
                         <option value="1">1</option>
@@ -36,8 +37,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">Comments</span>
                     </div>
-                    <textarea maxlength="500" formControlName="OverallComments"
-                        class="form-control"></textarea>
+                    <textarea maxlength="500" formControlName="OverallComments" class="form-control"></textarea>
 
                 </div>
             </div>
@@ -46,17 +46,13 @@
         <div class="pull-right col-md-12">
             <div class="form-group">
                 <div class="pull-right" *ngIf="!isSubmitted">
-                    <button (click)="cancelCompetencyRating()"
-                        class="btn btn-secondary">Cancel</button>&nbsp;
-                    <button (click)="savePeerCompetencyFormAsDraft()"
-                        class="btn btn-primary">Save</button>&nbsp;
-                    <button (click)="submitPeerCompetencyForm()"
-                        class="btn btn-primary">Submit</button>
+                    <button (click)="cancelCompetencyRating()" class="btn btn-secondary">Cancel</button>
+                    <button (click)="savePeerCompetencyFormAsDraft()" class="btn btn-primary">Save</button>
+                    <button (click)="submitPeerCompetencyForm()" class="btn btn-primary">Submit</button>
                 </div>
                 <div class="pull-right" *ngIf="isSubmitted">
-                    <button (click)="cancelCompetencyRating()"
-                        class="btn btn-secondary">Cancel</button>
-                   
+                    <button (click)="cancelCompetencyRating()" class="btn btn-secondary">Cancel</button>
+
                 </div>
             </div>
 
