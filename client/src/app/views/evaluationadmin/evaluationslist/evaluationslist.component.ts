@@ -206,8 +206,19 @@ export class EvaluationslistComponent implements OnInit {
     return [
       {
         headerName: 'Employee', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
-        checkboxSelection: true,
-        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</span>` }
+        // checkboxSelection: true,
+        cellRenderer: (data) => {
+          
+          if (data.data.Type == "K") {
+            return `  <input  data-action-type="orgView"  type="checkbox" id="scales" name="scales">
+           <label style="color:blue;cursor:pointer" for="scales">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</label>`
+          } else {
+            return `  <input   data-action-type="orgView"  type="checkbox" disabled id="scales" name="scales" >
+            <label style="color:blue;cursor:pointer" for="scales">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</label>`
+          }
+
+          //return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</span>` 
+        }
       },
       {
         headerName: 'RolledOn', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
@@ -753,6 +764,11 @@ export class EvaluationslistComponent implements OnInit {
       this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
     }
   }
+
+  public getRowHeight = function (params) {
+    return 34;
+  };
+
   deletePeer() {
     debugger
     var _p = this.selectedEmployee.Peers.indexOf(this.currentPeer);

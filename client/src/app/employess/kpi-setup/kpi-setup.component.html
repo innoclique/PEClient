@@ -15,12 +15,14 @@
               <!-- <div class="row"> -->
              
 
-              <ag-grid-angular style="width: 100; height: 400px;" 
+              <ag-grid-angular style="width: 100; height: 440px;" 
               class="ag-theme-alpine" [rowData]="kpiListData"
                 [columnDefs]="columnDefs"
                 [pagination]="true"
                 [paginationPageSize]="10"
-                (gridReady)="onGridReady($event)"
+                 [getRowHeight]="getRowHeight"  [enableBrowserTooltips]="true"
+                  (gridReady)="onGridReady($event)"
+                (gridSizeChanged)="onGridSizeChanged($event)"
                  (rowClicked)="onKpiGridRowClick($event)" >
               </ag-grid-angular>
     

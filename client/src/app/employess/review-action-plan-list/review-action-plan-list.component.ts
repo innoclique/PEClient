@@ -248,6 +248,15 @@ public onAsTSGridRowClick(e) {
     params.api.sizeColumnsToFit();
   }
 
+  onGridSizeChanged(params) {
+    debugger
+    params.api.sizeColumnsToFit();
+  }
+  public getRowHeight = function (params) {
+    return 34;
+  };
+  
+
 
 GetReporteeKpiRelesedDetails(){
   this.perfApp.route="app";

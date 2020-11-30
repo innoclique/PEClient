@@ -77,7 +77,7 @@ export class ClientSetupComponent implements OnInit {
   getReColDef(){
     return  [
       {
-        headerName: 'Client', field: 'Name', sortable: true,  suppressSizeToFit: true, filter: true,  
+        headerName: 'Client', field: 'Name', tooltipField: 'Name', sortable: true,  suppressSizeToFit: true, filter: true,  
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
       },      
       { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
@@ -117,7 +117,7 @@ export class ClientSetupComponent implements OnInit {
   getColDef(){
     return  [
       {
-        headerName: 'Client', field: 'Name', sortable: true,  suppressSizeToFit: true, filter: true,  
+        headerName: 'Client', field: 'Name', tooltipField: 'Name', sortable: true,  suppressSizeToFit: true, filter: true,  
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
       },      
       { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
@@ -303,6 +303,11 @@ export class ClientSetupComponent implements OnInit {
   }
 
 
+
+  
+  onGridSizeChanged(params) {
+    params.api.sizeColumnsToFit();
+}
 
   getClients() {
     this.perfApp.route = "app";

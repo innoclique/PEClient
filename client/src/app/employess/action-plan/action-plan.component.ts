@@ -71,13 +71,13 @@ export class ActionPlanComponent implements OnInit {
   
   getColDef(){
     return [
-       { headerName: 'Developmental Goals',suppressSizeToFit: true,  field: 'DevGoal' ,
+       { headerName: 'Developmental Goals',suppressSizeToFit: true,  field: 'DevGoal' , tooltipField: 'DevGoal',
        cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
        }
       } ,
-       { headerName: 'Desired Outcomes', field: 'DesiredOutcomes' },
-       { headerName: '# of Action Steps', field: 'GoalActionItems' ,
+       { headerName: 'Desired Outcomes', field: 'DesiredOutcomes' , tooltipField: 'DesiredOutcomes'},
+       { headerName: '# of Action Steps', field: 'GoalActionItems' , tooltipField: 'GoalActionItems',
        cellRenderer: (data) => {
         return data.data.GoalActionItems?data.data.GoalActionItems.length:0
        }
@@ -113,14 +113,14 @@ export class ActionPlanComponent implements OnInit {
 
    getStrengthColDef(){
     return [
-       { headerName: 'Strength', field: 'Strength' ,
+       { headerName: 'Strength', field: 'Strength' , tooltipField: 'Strength',
        cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
        }
       } ,
-       { headerName: 'Leverage', field: 'Leverage' },
-       { headerName: 'Team Benefit', field: 'TeamBenifit' },
-       { headerName: 'Self Benefit', field: 'SelfBenifit' },
+       { headerName: 'Leverage', field: 'Leverage' , tooltipField: 'Leverage' },
+       { headerName: 'Team Benefit', field: 'TeamBenifit', tooltipField: 'TeamBenifit' },
+       { headerName: 'Self Benefit', field: 'SelfBenifit', tooltipField: 'SelfBenifit' },
        
       { headerName: 'Draft', field: 'IsDraft',  sortable: true, filter: true ,
       cellRenderer: (data) => {
@@ -173,6 +173,16 @@ onStrengthsGridReady(params) {
  this.strengthItemColumns.api = params.api; // To access the grids API
       this.strengthItemColumns.rowHeight = 34;
 }
+
+
+onGridSizeChanged(params) {
+  params.api.sizeColumnsToFit();
+}
+
+public getRowHeight = function (params) {
+return 34;
+};
+
    
 getAllDevGoalsDetails() {
   this.perfApp.route = "app";

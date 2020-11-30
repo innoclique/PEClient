@@ -66,7 +66,7 @@ export class KpiSetupComponent implements OnInit {
 
   public columnDefs = [
     {
-      headerName: 'Performance Goal', field: 'Name', suppressSizeToFit: true,  sortable: true, filter: true,
+      headerName: 'Performance Goal', field: 'Name', tooltipField: 'Name', suppressSizeToFit: true,  sortable: true, filter: true,
       cellRenderer: (data) => {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
       }
@@ -111,7 +111,18 @@ export class KpiSetupComponent implements OnInit {
   ];
 
   onGridReady(params) {
+    debugger
     params.api.sizeColumnsToFit();
+    // params.api.setColumnDefs();
+   
+  }
+  public getRowHeight = function (params) {
+    return 34;
+  };
+
+  
+  onGridSizeChanged(params) {
+        params.api.sizeColumnsToFit();
   }
 
 

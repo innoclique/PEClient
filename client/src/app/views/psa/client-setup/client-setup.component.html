@@ -25,6 +25,8 @@
               [gridOptions]="clientGridOptions"
             [pagination]="true"
             [paginationPageSize]="10"
+            [enableBrowserTooltips]="true"
+            (gridSizeChanged)="onGridSizeChanged($event)"
             (gridReady)="onClientGridReady($event)"
             (rowClicked)="onRowClicked($event)"
             >
@@ -38,6 +40,8 @@
             [gridOptions]="resellerGridOptions"
             [pagination]="true"
             [paginationPageSize]="10"
+            [enableBrowserTooltips]="true"
+            (gridSizeChanged)="onGridSizeChanged($event)"
             (gridReady)="onResellerGridReady($event)"
             (rowClicked)="onResellerRowClicked($event)"
             >

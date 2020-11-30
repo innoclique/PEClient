@@ -115,6 +115,7 @@
                         <div class="col-md-12">
                             <ag-grid-angular style="width: 100; height: 200px;" class="ag-theme-alpine"
                                 [rowData]="selectedEmployee.Peers||[]" [gridOptions]="peersForEmpGridOptions"
+                                 [getRowHeight]="getRowHeight"  [enableBrowserTooltips]="true"
                                 [pagination]="true" [paginationPageSize]="10" (gridReady)="onPeersGridReady($event)"
                                 (rowClicked)="onPeersRowClicked($event)">
                             </ag-grid-angular>

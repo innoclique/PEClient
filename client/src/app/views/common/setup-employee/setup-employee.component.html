@@ -19,6 +19,8 @@
                 [gridOptions]="gridOptions"
                 [pagination]="true"
                 [paginationPageSize]="10"
+                [enableBrowserTooltips]="true"
+                (gridSizeChanged)="onGridSizeChanged($event)"
                 (gridReady)="onGridReady($event)"
                  (rowClicked)="onEmpGridRowClick($event)" >
               </ag-grid-angular>

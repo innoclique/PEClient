@@ -147,6 +147,13 @@ public tsColumnDefs = [
   }
 ];
 
+onGridSizeChanged(params) {
+  params.api.sizeColumnsToFit();
+}
+public getRowHeight = function (params) {
+return 34;
+};
+
 
 
 public onEmpGridRowClick(e) {

@@ -24,6 +24,8 @@
           [rowData]="devGoalRecords"
           [gridOptions]="goalsItemColumns"
           [pagination]="true"
+           [getRowHeight]="getRowHeight"  [enableBrowserTooltips]="true" 
+         (gridSizeChanged)="onGridSizeChanged($event)"
           (gridReady)="onGridReady($event)"
           [paginationPageSize]="10"
          
@@ -39,6 +41,8 @@
                 [rowData]="strengthRecords"
                 [gridOptions]="strengthItemColumns"
                 [pagination]="true"
+                 [getRowHeight]="getRowHeight"  [enableBrowserTooltips]="true" 
+               (gridSizeChanged)="onGridSizeChanged($event)"
                 (gridReady)="onStrengthsGridReady($event)"
                 [paginationPageSize]="10"
                

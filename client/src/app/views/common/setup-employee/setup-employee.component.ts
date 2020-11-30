@@ -186,11 +186,11 @@ export class SetupEmployeeComponent implements OnInit {
   }
 
   public columnDefs (){ return [
-    {headerName: 'Employee',  field: 'Name',suppressSizeToFit: true,   sortable: true, filter: true,
+    {headerName: 'Employee',  field: 'Name',suppressSizeToFit: true,   sortable: true, filter: true,tooltipField: 'Name',
     cellRenderer: (data) => {
       return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
     }},
-    {headerName: 'Title', field: 'Title',suppressSizeToFit: true, sortable: true, filter: true },
+    {headerName: 'Title', field: 'Title',suppressSizeToFit: true, sortable: true, tooltipField: 'Title', filter: true },
     // {headerName: 'Department', field: 'Department', sortable: true, filter: true },
     {headerName: 'Phone', field: 'PhoneNumber',  sortable: true, filter: true },
     {headerName: 'Draft', field: 'IsDraft',   sortable: true, filter: true },
@@ -266,6 +266,11 @@ openEmpForm() {
 	     this.gridOptions.api = params.api; // To access the grids API
         this.gridOptions.rowHeight = 34;
   }
+
+  
+  onGridSizeChanged(params) {
+    params.api.sizeColumnsToFit();
+}
 
   viewEmpForm(data) {
 

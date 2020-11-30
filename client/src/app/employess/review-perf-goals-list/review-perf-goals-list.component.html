@@ -12,11 +12,13 @@
               <tab *ngIf="loginUser?.SelectedRoles?.includes('EM')">
     
                 <ng-template tabHeading><i ></i>As Manager</ng-template>
-                <ag-grid-angular style="width: 100;; height: 500px;" 
+                <ag-grid-angular style="width: 100;; height: 440px;" 
                 class="ag-theme-alpine" [rowData]="managerReporteesKpiRelData"
                   [columnDefs]="columnDefs"
                   [pagination]="true"
                   (gridReady)="onGridReady($event)"
+                   [getRowHeight]="getRowHeight"  [enableBrowserTooltips]="true" 
+                 (gridSizeChanged)="onGridSizeChanged($event)"
                   [paginationPageSize]="10"
                    (rowClicked)="onEmpGridRowClick($event)" >
                 </ag-grid-angular>
@@ -26,11 +28,13 @@
     
                 <ng-template tabHeading><i class="icon-hand-rock"></i>As Third Signatory</ng-template>
                
-                <ag-grid-angular style="width: 100;; height: 500px;" 
+                <ag-grid-angular style="width: 100;; height: 440px;" 
                 class="ag-theme-alpine" [rowData]="tSReporteesData"
                   [columnDefs]="tsColumnDefs"
                   [pagination]="true"
                   (gridReady)="onTsGridReady($event)"
+                   [getRowHeight]="getRowHeight"  [enableBrowserTooltips]="true" 
+                (gridSizeChanged)="onGridSizeChanged($event)"      
                   [paginationPageSize]="10"
                    (rowClicked)="onAsTSGridRowClick($event)" >
                 </ag-grid-angular>

@@ -112,6 +112,16 @@ export class PeerReviewListComponent implements OnInit {
     this.subscriptions.forEach(s => s.unsubscribe())
   }
 
+  
+  onGridSizeChanged(params) {
+    params.api.sizeColumnsToFit();
+}
+
+public getRowHeight = function (params) {
+return 34;
+};
+
+
   onGridReady(params) {
     params.api.sizeColumnsToFit();
   }
