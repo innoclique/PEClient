@@ -211,10 +211,10 @@ export class EvaluationslistComponent implements OnInit {
           
           if (data.data.Type == "K") {
             return `  <input  data-action-type="orgView"  type="checkbox" id="scales" name="scales">
-           <label style="color:blue;cursor:pointer" for="scales">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</label>`
+           ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
           } else {
             return `  <input   data-action-type="orgView"  type="checkbox" disabled id="scales" name="scales" >
-            <label style="color:blue;cursor:pointer" for="scales">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</label>`
+            ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
           }
 
           //return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</span>` 

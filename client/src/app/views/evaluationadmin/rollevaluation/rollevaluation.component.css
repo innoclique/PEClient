@@ -6,5 +6,6 @@
   
   .kpi-radio-button {
     margin: 5px;
+  }::ng-deep .ag-center-cols-container{
+    width:inherit !important;
   }
-  

@@ -95,7 +95,6 @@ export const projectRoutes: Routes = [
 
 @NgModule({
   declarations: [ClientSetupComponent, CreateClientComponent, CreateResellerComponent,
-    
     DashboardComponent,
     ReportsComponent,
     ApplicationSettingsComponent,

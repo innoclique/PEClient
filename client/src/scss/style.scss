@@ -65,3 +65,7 @@
 .avgScore{
   font-size: small;
 }
+
+::ng-deep .ag-center-cols-container{
+  width:inherit !important;
+}

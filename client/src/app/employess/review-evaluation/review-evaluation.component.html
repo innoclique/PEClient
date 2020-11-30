@@ -150,7 +150,7 @@
                                             <div class="col-md-4">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text"> Submitted On:</span>
+                                                        <span class="input-group-text"> Signed-off On:</span>
                                                     </div>
                                                     <input type="text" readonly formControlName="EmployeeSubmittedOn"
                                                     class="form-control"    name="EmployeeSubmittedOn">
@@ -256,7 +256,7 @@
                                             <div *ngIf="!showManagerSubmit" class="col-md-4">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text"> Submitted On:</span>
+                                                        <span class="input-group-text"> Signed-off On:</span>
                                                     </div>
                                                    
                                                     <input type="text" readonly formControlName="ManagerSubmittedOn"
@@ -264,7 +264,10 @@
                                                 </div>
                                             </div>
   
-                                            <div *ngIf="showManagerSubmit && !showEmployeeSubmit && seletedTabRole=='Manager'" class="col-md-8">
+                                            <div *ngIf="showManagerSubmit 
+                                            && !showEmployeeSubmit 
+                                            && seletedTabRole=='Manager'" 
+                                            class="col-md-8">
                                                 <div class="pull-right form-group">
                                                     <div class="">
                                                         <button (click)="cancelFinalRating()"
@@ -354,7 +357,7 @@
                                             <div *ngIf="!showThirdSignatorySubmit" class="col-md-4">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text"> Submitted On:</span>
+                                                        <span class="input-group-text"> Signed-off On:</span>
                                                     </div>
                                                     <input type="text" readonly formControlName="ThirdSignatorySubmittedOn"
                                                     class="form-control"   name="ThirdSignatorySubmittedOn">
