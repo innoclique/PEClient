@@ -10,6 +10,7 @@ import { NumberDirective } from './numbersonly';
   ],
   imports: [
     CommonModule
-  ]
+  ],
+  exports:[NumberDirective]
 })
 export class AppDirectiveModule { }

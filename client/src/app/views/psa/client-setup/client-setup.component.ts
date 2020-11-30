@@ -343,7 +343,7 @@ export class ClientSetupComponent implements OnInit {
             })
           }        
         });
-        debugger
+        
         this.clientGridOptions.api.setRowData(this.clientData);
        
         this.resellerGridOptions.api.setRowData(this.resellerList);
@@ -572,7 +572,12 @@ export class ClientSetupComponent implements OnInit {
   }
   suspendOrg() {
     debugger
+    
     const cr = this.currentRowItem;
+    const confirmSuspend=window.confirm('Are you sure you want to deactivate '+cr.Name);
+    if(!confirmSuspend){
+      return;
+    }
     this.perfApp.route = "app";
     this.perfApp.method = "SuspendOrg",
       this.perfApp.requestBody = {id:cr._id}; //fill body object with form 
