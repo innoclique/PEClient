@@ -1,14 +1,12 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { countriesData } from '../../../shared/AppConstants/countries';
 import { stateData } from '../../../shared/AppConstants/states';
-
-
 
 @Component({
   selector: 'app-csc',
@@ -19,6 +17,9 @@ export class CSCComponent implements OnInit,OnChanges {
  
 @Input()
 showValidateMsg:boolean=false;
+
+isCSelect=false;
+isStateSelect=false;
 
 
 @Input() set reset(value: boolean) {
@@ -33,6 +34,9 @@ showValidateMsg:boolean=false;
 @Input() set CSCData(value) {
  
   if (value &&value.Country) {
+    this.isCSelect=true;
+    if (value &&value.State)
+    this.isStateSelect=true;
 
     let country=this.countries.filter(e=>e.name==value.Country)[0];
     this.countryForm.patchValue({Country:country});
@@ -141,11 +145,36 @@ showValidateMsg:boolean=false;
     return user && user.name ? user.name : '';
   }
 
+ 
+  cInputChange(){
+    this.isCSelect=false;
+  }
+  sInputChange(){
+    this.isStateSelect=false;
+  }
+
+  checkIsSelected(){
+    debugger
+   if(!this.isCSelect)
+   this.countryForm.patchValue({Country:''});
+  
+  }
+  checkIsStateSelected(){
+   
+    if(!this.isStateSelect)
+    this.countryForm.patchValue({State:''});
+ 
+   }
+
   onCountrySelected(event){
+
+    this.isCSelect=true;
 
    let selectedCountry = event.option.value;
    this.states=this.masterStates;
   
+   this.countryForm.patchValue({Country:selectedCountry});
+
    this.countryForm.patchValue({State:''});
    this.countryForm.patchValue({City:''});
 
@@ -156,6 +185,7 @@ showValidateMsg:boolean=false;
     map(value => this.state_filter(value))
   );
 
+  if(this.isCSelect)
     this.onSelect.emit(this.countryForm.value);
 
   }
@@ -163,6 +193,8 @@ showValidateMsg:boolean=false;
 
 
  async onStateSelected(event){
+   this.isStateSelect=true;
+   this.countryForm.patchValue({State:event.option.value});
     this.citys=this.citys.filter(s => s.state_code==event.option.value.state_code);
 
             this.countryForm.patchValue({City:''});

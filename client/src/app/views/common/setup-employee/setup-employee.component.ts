@@ -243,7 +243,7 @@ openEmpForm() {
 }
 
   editEmpForm(data) {
-
+debugger
     this.empForm.reset();
     this.countyFormReset=true;
     this.currentAction='edit'
@@ -280,6 +280,7 @@ openEmpForm() {
     this.cscData={Country:data.Country,State:data.State,City:data.City};
     this.empDetails=data;
     var depts= this.departments.filter(f=>f.DeptName==data.Department )[0];
+    if(depts)
     this.jobRoles=depts.JobRoles;
 
     this.initEmpForm();

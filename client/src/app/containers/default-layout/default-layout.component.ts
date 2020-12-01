@@ -67,7 +67,7 @@ export class DefaultLayoutComponent implements OnInit {
        {
           "IsActive": true,
           "url": "/employee/kpi-setup",
-          "name": "Performance Goal Setting",
+          "name": "Performance Goals",
           "code": "KPISetting",
           "icon": "icon-wrench"
         }, 
@@ -80,13 +80,7 @@ export class DefaultLayoutComponent implements OnInit {
         //   "icon": "icon-wrench"
           
         // },
-        {
-          "IsActive": true,
-          "url": "/employee/current-evaluation",
-          "name": "Current Evaluation",
-          "code": "CurrentEvaluation",
-          "icon": "icon-puzzle"
-        },
+       
         {
           "IsActive": true,
           "url": "/employee/action-plan",
@@ -96,10 +90,17 @@ export class DefaultLayoutComponent implements OnInit {
         },
         {
           "IsActive": true,
+          "url": "/employee/current-evaluation",
+          "name": "Current Evaluation",
+          "code": "CurrentEvaluation",
+          "icon": "icon-puzzle"
+        },
+        {
+          "IsActive": true,
           "url": "/employee/accomplishments",
           "name": "Accomplishments",
           "code": "CurrentEvaluation",
-          "icon": "icon-puzzle"
+          "icon": "cui-tags"
         },
         {
           "IsActive": true,
@@ -115,13 +116,13 @@ export class DefaultLayoutComponent implements OnInit {
           "code": "CurrentEvaluation",
           "icon": "icon-layers"
         },
-        {
-          "IsActive": true,
-          "url": "/employee/reports",
-          "name": "Reports",
-          "code": "Reports",
-          "icon": "icon-list"
-        }
+        // {
+        //   "IsActive": true,
+        //   "url": "/employee/reports",
+        //   "name": "Reports",
+        //   "code": "Reports",
+        //   "icon": "icon-list"
+        // }
         )
         this.navItems=navigationMenu;
 
@@ -187,6 +188,17 @@ export class DefaultLayoutComponent implements OnInit {
             this.navItems = navigationMenu;
           }
 
+          navigationMenu.push(
+        {
+          "IsActive": true,
+          "url": "/employee/reports",
+          "name": "Reports",
+          "code": "Reports",
+          "icon": "icon-list"
+        })
+
+          this.navItems = navigationMenu;
+
         
 
         return  this.navItems;
@@ -234,12 +246,6 @@ export class DefaultLayoutComponent implements OnInit {
             "name": "Reports",
             "code": "Reports",
             "icon": "icon-list"
-        }, {
-            "IsActive": true,
-            "url": "/ea/profile",
-            "name": "Profile",
-            "code": "Profile",
-            "icon": "icon-user"
         }, 
       
         // {

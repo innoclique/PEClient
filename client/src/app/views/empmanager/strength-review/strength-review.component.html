@@ -3,6 +3,7 @@
         <div class="col-md-12" *ngIf="showDevGoalsForm;else noRecordsFound" >
             <div class="card">
                 <div  *ngIf="accessingFrom!='reviewEvaluation' "   class="card-header">
+                  <span style="color: #717171;">{{currentEmpName}} -</span>
                     Strength
   
                     <div class="form-group form-actions pull-right m-0">
@@ -15,7 +16,7 @@
                 <div class="card-body">
   
   
-                    <form [formGroup]="strengthBuildForm" novalidate="" 
+                    <form  autocomplete="off"  [formGroup]="strengthBuildForm" novalidate="" 
                      class="ng-untouched ng-pristine ng-valid view-only">
   
                   <div *ngIf="currentAction != 'view'">
@@ -60,10 +61,10 @@
                               <div class="input-group-prepend">
                                   <span class="input-group-text ">How To Leverage</span>
                               </div>
-                              <input max="500" maxlength="500" class="form-control" type="text"
+                              <textarea max="500" maxlength="500" class="form-control" type="text"
                                   
                               [ngClass]="{ 'is-invalid': (f.Leverage.touched || submitClicked)  &&  f.Leverage.invalid }"
-                              formControlName="Leverage" name="Leverage" required>
+                              formControlName="Leverage" name="Leverage" required> </textarea>
 
                           <div *ngIf=" (f.Leverage.touched || submitClicked) && f.Leverage.invalid" class="invalid-feedback">
                             <div *ngIf="f.Leverage?.errors.required">Please provide Leverage.</div>
@@ -82,10 +83,10 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text ">Benefit (Self)</span>
                                 </div>
-                                <input max="500" maxlength="500" class="form-control" type="text"
+                                <textarea max="500" maxlength="500" class="form-control" type="text"
                                     
                                         [ngClass]="{ 'is-invalid': (f.SelfBenifit.touched || submitClicked)  &&  f.SelfBenifit.invalid }"
-                                        formControlName="SelfBenifit" name="SelfBenifit" required >
+                                        formControlName="SelfBenifit" name="SelfBenifit" required > </textarea>
       
                                     <div *ngIf=" (f.SelfBenifit.touched || submitClicked) && f.SelfBenifit.invalid" class="invalid-feedback">
                                       <div *ngIf="f.SelfBenifit?.errors.required">Please provide SelfBenifit.</div>
@@ -106,10 +107,10 @@
                                   <span class="input-group-text ">Benefit (team)</span>
                               </div>
                               
-                              <input max="500" maxlength="500" class="form-control" type="text"
+                              <textarea max="500" maxlength="500" class="form-control" type="text"
                                   
                                       [ngClass]="{ 'is-invalid': (f.TeamBenifit.touched || submitClicked)  &&  f.TeamBenifit.invalid }"
-                                      formControlName="TeamBenifit" name="TeamBenifit" required >
+                                      formControlName="TeamBenifit" name="TeamBenifit" required > </textarea>
     
                                       
     
@@ -136,7 +137,7 @@
                                 <span class="input-group-text ">Progress Comments</span>
                             </div>
                             
-                            <input  max="1000" maxlength="1000" formControlName="ProgressComments"      placeholder=""                class=" form-control">
+                            <textarea  max="1000" maxlength="1000" formControlName="ProgressComments"      placeholder=""                class=" form-control"> </textarea>
                             
 
                         </div>
@@ -144,13 +145,13 @@
                 </div>
 
                   <div class="col-md-4">
-                    <div class="form-group">
-                        <div class="input-group">
+                    <div class="form-group all-events">
+                        <div class="input-group ">
                             <div class="input-group-prepend">
                                 <span class="input-group-text ">Manager Comments</span>
                             </div>
                             
-                            <input  max="1000" maxlength="1000" formControlName="ManagerComments"      placeholder=""                class=" form-control">
+                            <textarea  max="1000" maxlength="1000" formControlName="ManagerComments"      placeholder=""                class=" form-control"></textarea>
 
                         </div>
                     </div>
@@ -160,7 +161,7 @@
                   
   
                   <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
-                    <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre</button>
+                    <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Previous</button>
                     <button [disabled]='selIndex+1 == empDevGoalsData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next</button>
                     
                   </div>

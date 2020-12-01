@@ -35,6 +35,7 @@ export class DevgoalReviewComponent implements OnInit {
   showDevGoalForm=true;
   currentDevGoalId: any;
   currentEmpId: any;
+  currentEmpName: any;
   selIndex: any;
 
   public alert: AlertDialog;
@@ -92,6 +93,7 @@ export class DevgoalReviewComponent implements OnInit {
       if (params['action']) {
        this.currentDevGoalId = params['id'];
        this.currentEmpId = params['empId'];
+       this.currentEmpName = params['empName'];
        this.currentAction = params['action'];
       }
       

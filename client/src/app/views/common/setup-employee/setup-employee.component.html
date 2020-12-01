@@ -50,7 +50,7 @@
       <div class="modal-body">
         
        
-        <form [formGroup]="empForm"   [ngClass]="{ 'view-only': currentAction == 'view' }"
+        <form  autocomplete="off"  [formGroup]="empForm"   [ngClass]="{ 'view-only': currentAction == 'view' }"
          novalidate="" class="ng-untouched ng-pristine ng-valid">
               
           <div class="form-group row">
@@ -494,7 +494,7 @@
                       <div class="input-group-prepend">
                         <span style="padding: 5px 10px !important;" class="input-group-text ">Active</span>
                       </div>
-                      <div class="form-check form-check-inline " id="inline-radios"><input class="form-check-input" id="inlineRadio1"
+                      <div class="form-check form-check-inline ml-1" id="inline-radios"><input class="form-check-input" id="inlineRadio1"
                         name="IsActive" formControlName="IsActive"  type="radio" value="true"><label class="form-check-label" for="inlineRadio1">Yes</label>
                     </div>
                     <div class="form-check form-check-inline mr-1"><input class="form-check-input" id="inlineRadio2"
@@ -557,8 +557,9 @@
         <button type="button" class="btn btn-secondary" (click)="addEmployee.hide();closeForm()">Cancel</button>
         <!-- <button *ngIf="!currentRowItem?.IsSubmit" type="button" (click)="createEmployee()" class="btn btn-primary">Save changes</button> -->
         <button *ngIf="!currentRowItem?.IsSubmit" class="btn  btn-primary" (click)="saveCreateEmployee()" >Save</button>
-        <button type="button"  (click)="submitCreateEmployee()" class="btn btn-primary">
+        <button *ngIf="f?.IsDraft?.value=='false' " type="button"  (click)="submitCreateEmployee()" class="btn btn-primary">
           {{currentAction == 'create'?'Submit':'Update'}}</button>
+          <button *ngIf="f?.IsDraft?.value==true" type="button"  (click)="submitCreateEmployee()" class="btn btn-primary">Submit</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

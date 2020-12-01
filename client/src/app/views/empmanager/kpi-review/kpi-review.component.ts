@@ -318,7 +318,7 @@ if (this.accessingFrom == "reviewEvaluation"  && this.kpiForm.get('ManagerScore'
       if (c) {
 
         this.getMeasurementCriterias();
-this.snack.success(this.translate.instant(`KPI Created Successfully`));
+this.snack.success(this.translate.instant(`KPI added Successfully`));
         
       }
     })
@@ -582,7 +582,7 @@ this.snack.success(this.translate.instant(`KPI Created Successfully`));
   }
 
   toggleSelection(item) {
-    item.selected = !item.selected;
+    item.selected = true;
     if (item.selected) {
       this.selectedItems.push(item);
       // this.changeCallback( this.selectedItems );

@@ -278,7 +278,7 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
       if (c) {
 
         this.getMeasurementCriterias();
-this.snack.success(this.translate.instant(`KPI Created Successfully`));
+this.snack.success(this.translate.instant(`KPI added Successfully`));
 c.selected=false;
 this.toggleSelection(c);
         

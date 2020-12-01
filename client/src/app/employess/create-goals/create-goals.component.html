@@ -15,7 +15,7 @@
               <div class="card-body">
 
 
-                  <form [formGroup]="goalsBuildForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
+                  <form  autocomplete="off"  [formGroup]="goalsBuildForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
                    class="ng-untouched ng-pristine ng-valid">
 
 
@@ -260,7 +260,7 @@
 
 
                 <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
-                  <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre</button>
+                  <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Previous</button>
                   <button [disabled]='selIndex+1 == empDevGoalsData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next</button>
                   
                 </div>

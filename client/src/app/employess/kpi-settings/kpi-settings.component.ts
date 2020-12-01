@@ -295,7 +295,7 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
       
         // this.kpiForm.get('MeasurementCriteria').setErrors(null);
         // this.kpiForm.get('MeasurementCriteria').markAsUntouched;
-this.snack.success(this.translate.instant(`KPI Created Successfully`));
+this.snack.success(this.translate.instant(`KPI added Successfully`));
 c.selected=false;
 this.toggleSelection(c);
         
@@ -516,6 +516,7 @@ this.authService.setIsPGSubmitStatus("true");
 
       this.perfApp.requestBody = {} //fill body object with form    
     this.perfApp.requestBody.kpiId = this.currentKpiId;
+    this.perfApp.requestBody.UpdatedBy = this.loginUser._id; //as a actor for track
     this.perfApp.requestBody.ViewedByEmpOn = true;
       this.perfApp.requestBody.Action = 'Viewed';  
       this.perfApp.CallAPI().subscribe(c => {

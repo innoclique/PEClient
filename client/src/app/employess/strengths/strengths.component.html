@@ -15,7 +15,7 @@
               <div class="card-body">
 
 
-                  <form [formGroup]="strengthBuildForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
+                  <form  autocomplete="off"  [formGroup]="strengthBuildForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
                    class="ng-untouched ng-pristine ng-valid">
 
 
@@ -55,10 +55,10 @@
                   <div class="col-md-3">
                     <span class="levarage_txt redStar">How to Leverage</span>
                     <div class="input-group">
-                      <input max="1000" maxlength="1000" class="form-control" type="text"
+                      <textarea max="1000" maxlength="1000" class="form-control" type="text"
                       
                           [ngClass]="{ 'is-invalid': (f.Leverage.touched || submitClicked)  &&  f.Leverage.invalid }"
-                          formControlName="Leverage" name="Leverage" required>
+                          formControlName="Leverage" name="Leverage" required> </textarea>
 
                       <div *ngIf=" (f.Leverage.touched || submitClicked) && f.Leverage.invalid" class="invalid-feedback">
                         <div *ngIf="f.Leverage?.errors.required">How to Leverage is mandatory.</div>
@@ -72,10 +72,10 @@
                     <span class="levarage_txt redStar">Benefit (Self)</span>
                     <div class="input-group">
                                   
-                      <input max="1000" maxlength="1000" class="form-control" type="text"
+                      <textarea max="1000" maxlength="1000" class="form-control" type="text"
                       
                           [ngClass]="{ 'is-invalid': (f.SelfBenifit.touched || submitClicked)  &&  f.SelfBenifit.invalid }"
-                          formControlName="SelfBenifit" name="SelfBenifit" required >
+                          formControlName="SelfBenifit" name="SelfBenifit" required > </textarea>
 
                       <div *ngIf=" (f.SelfBenifit.touched || submitClicked) && f.SelfBenifit.invalid" class="invalid-feedback">
                         <div *ngIf="f.SelfBenifit?.errors.required">Benefit (self) is mandatory.</div>
@@ -90,10 +90,10 @@
                     <span class="levarage_txt redStar">Benefit (team)</span>
                     <div class="input-group">
                                 
-                      <input max="1000" maxlength="1000" class="form-control" type="text"
+                      <textarea max="1000" maxlength="1000" class="form-control" type="text"
                       
                           [ngClass]="{ 'is-invalid': (f.TeamBenifit.touched || submitClicked)  &&  f.TeamBenifit.invalid }"
-                          formControlName="TeamBenifit" name="TeamBenifit" required >
+                          formControlName="TeamBenifit" name="TeamBenifit" required > </textarea>
 
                           
 
@@ -109,7 +109,7 @@
                   <div class="col-md-3">
                     <span class="levarage_txt">Progress Comments</span>
                     <div class="input-group">
-                      <input  max="1000" maxlength="1000" formControlName="ProgressComments"      placeholder=""                class=" form-control">
+                      <textarea  max="1000" maxlength="1000" formControlName="ProgressComments"      placeholder=""                class=" form-control"> </textarea>
                       <div *ngIf=" (f.ProgressComments.touched || submitClicked) && f.ProgressComments.invalid" class="invalid-feedback">
                          
                           <div *ngIf="f.ProgressComments.errors.hasKPISplChars"> Progress Comments can accept only a-z, A-Z, 0-9, .,-,(,),&,#,:,/ </div>
@@ -210,7 +210,7 @@
                 </div>   -->
 
                 <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
-                  <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Pre</button>
+                  <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Previous</button>
                   <button [disabled]='selIndex+1 == empDevGoalsData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next</button>
                   
                 </div>

@@ -279,7 +279,7 @@ export class KpiReviewComponent implements OnInit {
       if (c) {
 
         this.getMeasurementCriterias();
-this.snack.success(this.translate.instant(`KPI Created Successfully`));
+this.snack.success(this.translate.instant(`KPI added Successfully`));
         
       }
     })

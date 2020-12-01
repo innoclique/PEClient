@@ -18,7 +18,7 @@ Back to list
             <div class="card-body">
              
    
-              <form [formGroup]="empForm"  novalidate="" class="ng-untouched ng-pristine ng-valid">
+              <form  autocomplete="off"  [formGroup]="empForm"  novalidate="" class="ng-untouched ng-pristine ng-valid">
                 
                 <div class="row">
                     <div class="col-md-4">
@@ -466,7 +466,7 @@ Back to list
                             
                           </div>
                           
-                            <div class="form-check form-check-inline  mr-1" id="inline-radios">
+                            <div class="form-check form-check-inline ml-1  mr-1" id="inline-radios">
                               <input class="form-check-input" id="inlineRadio1"
                                 name="IsActive" formControlName="IsActive"  type="radio" value="true"><label class="form-check-label" for="inlineRadio1">Yes</label>
                             </div>

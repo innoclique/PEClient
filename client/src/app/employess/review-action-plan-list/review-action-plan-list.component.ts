@@ -95,7 +95,7 @@ export class ReviewActionPlanListComponent implements OnInit {
     // }
   },
     {headerName: 'No.of Dev Goals',  field: 'NoOfKpis', sortable: true, filter: true },
-    {headerName: 'No.of Strengths',  field: 'NoOfKpis', sortable: true, filter: true },
+    {headerName: 'No.of Strengths',  field: 'NoOfStrengths', sortable: true, filter: true },
     // {headerName: 'No.of  Reviewed', field: 'NoOfSignOff', sortable: true, filter: true },
     // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
     // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
@@ -129,7 +129,7 @@ public tsColumnDefs = [
   // }
 },
   {headerName: 'No.of Dev Goals', width:300, field: 'NoOfKpis', sortable: true, filter: true },
-    {headerName: 'No.of Strengths', width:300, field: 'NoOfKpis', sortable: true, filter: true },
+    {headerName: 'No.of Strengths', width:300, field: 'NoOfStrengths', sortable: true, filter: true },
     // {headerName: 'No.of  Reviewed', field: 'NoOfSignOff', sortable: true, filter: true },
    
   // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
@@ -222,14 +222,15 @@ public onAsTSGridRowClick(e) {
 }
 
   reviewEvalForm(action,actor) {
+    debugger
       this.router.navigate(['employee/review-action-plan',
-       { action: action, empId: this.currentRowItem._id,actor:actor,empManagerId:this.currentRowItem.Manager }
+       { action: action, empId: this.currentRowItem._id,actor:actor,empManagerId:this.currentRowItem.Manager ,empName: this.currentRowItem.Name}
     ], { skipLocationChange: true });
   }
 
   viewEmpForm(action,actor) {
      this.router.navigate(['employee/review-action-plan',
-       { action: action, empId: this.currentRowItem._id,actor:actor }
+       { action: action, empId: this.currentRowItem._id,actor:actor,empName: this.currentRowItem.Name }
     ], { skipLocationChange: true });
   }
 
@@ -270,8 +271,9 @@ GetReporteeKpiRelesedDetails(){
 //let evaluation=flatarray.find(x=>x.Status==='Active')
 
 let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
-     return  {
-         Name:row.FirstName+' '+row.LastName,
+row.Name= row.FirstName+' '+row.LastName;
+return  {
+         Name:row.Name,
          NoOfKpis: row.GoalList.length,
          NoOfSignOff:row.GoalList.length-unSubmitedCount,
          NoOfStrengths: row.StrengthList.length,
@@ -307,8 +309,9 @@ GetTSReporteeKpiRelesedDetails(){
 //       let flatarray=row.Evaluation.flat()
 // let evaluation=flatarray.find(x=>x.Status==='Active')
 let unSubmitedCount=row.GoalList.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
-     return  {
-         Name:row.FirstName+' '+row.LastName,
+row.Name= row.FirstName+' '+row.LastName;    
+return  {
+         Name:row.Name,
          NoOfKpis: row.GoalList.length,
          NoOfSignOff:row.GoalList.length-unSubmitedCount,
          NoOfStrengths: row.StrengthList.length,
