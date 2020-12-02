@@ -395,8 +395,7 @@ goto(selTab){
       }
       return "Pending"
   }
-  getEmpCommentsForCompetency(competencyId){    
-debugger
+  getEmpCommentsForCompetency(competencyId){   
     var ff=this.employeeCompetencyList.map(element => {return element.Competency._id===competencyId?element.Comments:""});
       if(ff){
         var _competencyValue=ff.find(x=>x)
@@ -561,7 +560,7 @@ if (this.FinalRatingForm.value.TSReqRevision &&
 
   
   tsReqRevisionCheck(value) {
-    debugger
+    
     if (value.target.value=='on') {
       this.evaluationForm.controls['FRReqRevision'].setValue(true);
     } else {

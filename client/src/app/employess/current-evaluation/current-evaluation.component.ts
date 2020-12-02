@@ -214,11 +214,18 @@ debugger
         Questions: questions,
         form: this.qcs.toFormGroup(questions),
         comments: element.Comments,
-        CompetencyAvgRating:element.CompetencyAvgRating
+        CompetencyAvgRating:this.getCompetencyOverallRating(element.Competency._id)
       })
 
     });
 
+  }
+  
+  getCompetencyOverallRating(competencyId){
+    if(this.evaluationForm.OverallCompetencyRating){
+      var _rate=this.evaluationForm.OverallCompetencyRating.find(x=>x.competencyId===competencyId);
+      return _rate.overallScore||"Pending";
+    }
   }
   cancelCompetencyRating() {
 
