@@ -26,6 +26,7 @@ export class DoDrReviewComponent implements OnInit {
   public oneAtATime: boolean = true;
   isSubmitted: Boolean = false;
   isContentOpen:Boolean=false;
+  public forEmployee:any;
   constructor(private authService: AuthService,
     private router: Router,
     private snack: NotificationService,
@@ -67,6 +68,9 @@ export class DoDrReviewComponent implements OnInit {
       if (c) {
         this.competencyList = c;
         console.table(c)
+        this.forEmployee=c.ForEmployee[0]
+        this.forEmployee.EvaluationPeriod=c.EvaluationPeriod;
+        this.forEmployee.EvaluationDuration=c.EvaluationDuration;
         this.prepareCompetencyQuestions();
       }
     }, error => {
@@ -118,8 +122,8 @@ export class DoDrReviewComponent implements OnInit {
           //CompetencyRowId: element._id,
           Questions: questions,
           form: this.qcs.toFormGroup(questions),
-          comments: cc?cc.Comments:"",
-          CompetencyAvgRating:cc.CompetencyAvgRating
+          comments: cc?cc.Comments:""
+          
           // Comments: this.evaluationForm.Competencies.Employees[0].CompetencyComments,
           // OverallRating: this.evaluationForm.Competencies.Employees[0].OverallRating,
           // IsDraft: !this.evaluationForm.Competencies.Employees[0].CompetencySubmitted

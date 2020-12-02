@@ -1,4 +1,24 @@
 <div [formGroup]="competencyForm">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <th>Employee</th>
+                    <th>Email</th>
+                    <th>Evaluation Period</th>
+                    <th>Evaluation Duration</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{forEmployee?.FirstName}}-{{forEmployee?.LastName}}</td>
+                        <td>{{forEmployee?.Email}}</td>
+                        <td>{{forEmployee?.EvaluationPeriod}}</td>
+                        <td>{{forEmployee?.EvaluationDuration}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <accordion [closeOthers]="oneAtATime">
         <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of competencyQuestionsList">
             <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
@@ -14,35 +34,7 @@
 
     </accordion>
     <div class="form-group row">
-        <div class="col-md-4 ">
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text redStar">Rating</span>
-                    </div>
-                    <select formControlName="OverallRating" class="form-control" name="Score">
-                        <option value="" disabled>Please select</option>
-                        <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8 ">
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Comments</span>
-                    </div>
-                    <textarea maxlength="500" formControlName="OverallComments" class="form-control"></textarea>
-
-                </div>
-            </div>
-
-        </div>
+        
         <div class="pull-right col-md-12">
             <div class="form-group">
                 <div class="pull-right" *ngIf="!isSubmitted">

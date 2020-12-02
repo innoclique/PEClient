@@ -1,12 +1,30 @@
 <div [formGroup]="peerCompetencyForm">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <th>Employee</th>
+                    <th>Email</th>
+                    <th>Evaluation Period</th>
+                    <th>Evaluation Duration</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{forEmployee?.FirstName}}-{{forEmployee?.LastName}}</td>
+                        <td>{{forEmployee?.Email}}</td>
+                        <td>{{forEmployee?.EvaluationPeriod}}</td>
+                        <td>{{forEmployee?.EvaluationDuration}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <accordion [closeOthers]="oneAtATime">
-        <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of competencyQuestionsList"
-            >
+        <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of competencyQuestionsList">
             <button  class="btn btn-link btn-block clearfix" accordion-heading type="button">
                 <div class="pull-left">
                     <i  [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
-                </div>
-                
+                </div>                
               </button>
             <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments"></app-competency-wrapper>
         </accordion-group>

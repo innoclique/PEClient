@@ -25,6 +25,7 @@ export class DoPeerReviewComponent implements OnInit {
   public oneAtATime: boolean = true;
   isSubmitted: Boolean = false;
   isContentOpen:Boolean=false;
+  public forEmployee:any;
   constructor(private authService: AuthService,
     private router: Router,
     private snack: NotificationService,
@@ -66,6 +67,10 @@ export class DoPeerReviewComponent implements OnInit {
       if (c) {
         this.competencyList = c;
         console.table(c)
+        
+        this.forEmployee=c.ForEmployee[0]
+        this.forEmployee.EvaluationPeriod=c.EvaluationPeriod;
+        this.forEmployee.EvaluationDuration=c.EvaluationDuration;
         this.prepareCompetencyQuestions();
       }
     }, error => {
