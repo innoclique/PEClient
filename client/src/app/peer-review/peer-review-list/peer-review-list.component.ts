@@ -56,7 +56,7 @@ export class PeerReviewListComponent implements OnInit {
       headerName: 'Action', field: '', width: 150, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
         debugger
-        if(data.data.IsRatingSubmitted && data.data.IsRatingSubmitted){
+        if(!data.data.IsRatingSubmitted){
         return `<i class="icon-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="doreview" title="Submit Review"></i>       
         `

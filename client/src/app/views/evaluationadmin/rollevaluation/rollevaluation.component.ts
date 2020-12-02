@@ -161,7 +161,7 @@ export class RollevaluationComponent implements OnInit {
       return;
     }
     if (!this.selectedEmployee.Peers || this.selectedEmployee.Peers.length < 2) {
-      this.notification.error('Peers should be minimum two members');
+      this.notification.error('At least two peers must be selected');
       return;
     }
     this.selectedEmployee.Peers.map(element => {
@@ -783,7 +783,7 @@ export class RollevaluationComponent implements OnInit {
   }
   saveDirectReportees() {
     if (!this.selectedEmployee.DirectReportees || this.selectedEmployee.DirectReportees.length < 2) {
-      this.notification.error('Please select minimum two Direct Report(s)');
+      this.notification.error('At least two direct reports must be selected');
       return;
     }
     if (this.seletedDirectReporteeCompetencyList.length === 0) {

@@ -118,9 +118,11 @@ export class CreateClientComponent implements OnInit {
     this.clientForm = this.formBuilder.group({
       Name: [null, Validators.compose([
         Validators.required,
+        Validators.pattern("^[a-zA-Z0-9#\\&\\-()/._,:]+$"),
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
         CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-        Validators.minLength(2)])
+        Validators.minLength(2),
+        Validators.maxLength(500)])
       ],
       Industry: ['', [Validators.required]],
       Address: [null, Validators.compose([
@@ -128,53 +130,59 @@ export class CreateClientComponent implements OnInit {
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/])/, { hasAddressSplChars: true }, 'hasAddressSplChars'),
       ])],
       Phone: [null, Validators.compose([
-        Validators.required, Validators.minLength(12),
-        Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+        Validators.required, Validators.maxLength(13),
+        Validators.pattern("^[0-9]{2}-[0-9]{10}$")
+      ])],
+      PhoneExt: [null, Validators.compose([
+        Validators.required, Validators.maxLength(5),
+        Validators.pattern("^((\d{1}-\d{5}-?)|0)?[0-9]{5}$")
 
       ])],
-      PhoneExt: ["", []],
-      Email: ['', [Validators.required, Validators.email]],
+      Email: [null, Validators.compose([
+        Validators.required, Validators.maxLength(500),
+        Validators.pattern("^[a-zA-Z0-9\@/.-]+$")
+
+      ])],
       Country: ['', [Validators.required]],
       State: ['', [Validators.required]],
       City: ['', [Validators.required]],
       ZipCode: ['', [Validators.required]],
       ClientType: ['Client',[]],
       UsageType: ['License', [Validators.required]],
-      UsageCount: [0, []],
-      AdminFirstName: [null, Validators.compose([
-        Validators.required,
-        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-        Validators.minLength(2)])
+      UsageCount: [1, []],
+      AdminFirstName: ['', Validators.compose([
+        Validators.required,                
+        Validators.pattern("^[a-zA-Z0-9.,-:()]+$"),        
+        Validators.maxLength(200)])
       ],
       AdminLastName: ['', Validators.compose([
         Validators.required,
-        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-        Validators.minLength(2)])
+        Validators.pattern("^[a-zA-Z0-9-().,:]+$")
+        ])
       ],
-      AdminMiddleName: ['', []],
+      AdminMiddleName: ['', Validators.compose([    
+        Validators.pattern("^[a-zA-Z0-9-().,:]+$"),                 
+        ])],
       AdminEmail: ['', [Validators.required, Validators.email]],
       AdminPhone: [null, Validators.compose([
-        Validators.required, Validators.minLength(10),
-        Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+        Validators.required, Validators.maxLength(13),
+        Validators.pattern("^[0-9]{2}-[0-9]{10}$")
       ])],
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
-
-        ContactPersonFirstName: ['', Validators.compose([
-          Validators.required,
-          CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-          CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-          Validators.minLength(2)])
+        ContactPersonFirstName: [null, Validators.compose([
+          Validators.required,                
+          Validators.pattern("^[a-zA-Z0-9.,-:()]+$"),        
+          Validators.maxLength(200)])
         ],
-        ContactPersonLastName: [null, Validators.compose([
+        ContactPersonLastName: ['', Validators.compose([
           Validators.required,
-          CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-          CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-          Validators.minLength(2)])
+          Validators.pattern("^[a-zA-Z0-9-().,:]+$")
+          ])
         ],
-        ContactPersonMiddleName: ['', []],
+        ContactPersonMiddleName: ['', Validators.compose([    
+          Validators.pattern("^[a-zA-Z0-9-().,:]+$"),                 
+          ])],
         ContactPersonEmail: ['', [Validators.required, Validators.email]],
         ContactPersonPhone: [null, Validators.compose([
           Validators.required, Validators.minLength(10),
@@ -313,6 +321,7 @@ export class CreateClientComponent implements OnInit {
           this.clientForm.controls['UsageCount'].setValue(0);
         } else {         
           this.clientForm.controls['UsageCount'].setValidators(Validators.required);
+          this.clientForm.controls['UsageCount'].setValue(1);
         }
 
 
@@ -367,19 +376,19 @@ export class CreateClientComponent implements OnInit {
 
 
   validationType = {
-    ContactPersonFirstName: ['', Validators.compose([
-      Validators.required,
-      CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-      CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-      Validators.minLength(2)])
+    ContactPersonFirstName: [null, Validators.compose([
+      Validators.required,                
+      Validators.pattern("^[a-zA-Z0-9.,-:()]+$"),        
+      Validators.maxLength(200)])
     ],
     ContactPersonLastName: ['', Validators.compose([
       Validators.required,
-      CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-      CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-      Validators.minLength(2)])
+      Validators.pattern("^[a-zA-Z0-9-().,:]+$")
+      ])
     ],
-    ContactPersonMiddleName: ['', []],
+    ContactPersonMiddleName: ['', Validators.compose([    
+      Validators.pattern("^[a-zA-Z0-9-().,:]+$"),                 
+      ])],
     ContactPersonEmail: ['', [Validators.required, Validators.email]],
     ContactPersonPhone: ['', Validators.compose([
       Validators.required, Validators.minLength(10),
@@ -513,8 +522,21 @@ action='Update'
   }
   saveAsDraft() {
     this.clientFormData.IsDraft = true;
-    this.isFormSubmitted = true;
-    if (!this.clientForm.valid) {
+    //this.isFormSubmitted = true;
+    // if (!this.clientForm.valid) {
+    //   return;
+    // }
+    debugger
+    if(this.clientForm.value.Name==="" || this.clientForm.value.Industry===""){
+      this.notification.error('Organization Name is required')
+      return;
+    }
+    if( this.clientForm.value.Industry===""){
+      this.notification.error('Industry is required')
+      return;
+    }
+    if(!this.clientForm.value.Email){
+      this.notification.error('Email is required')
       return;
     }
     this.saveClient();
