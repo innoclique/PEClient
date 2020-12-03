@@ -4,7 +4,14 @@
   <!--Section1 Start Here-->
     <div class="container clearfix">
         <div class="box_main clearfix">
+          <div class="widget-parent">
+            <div class="row">
+              <h2 class="widget-heading">Employee Dashboard</h2>
+            </div>
+          
+          
           <div class="row">
+            
             <!-- Box1 -->
             <div class="box col-lg-6">
               <div class="box_in">
@@ -56,14 +63,16 @@
                     style="width: 980px; height: 180px;"
                     class="ag-theme-alpine"
                     [rowData]="peerReviewRowData"
-                    [columnDefs]="peerreviewColumnDefs">
+                    [columnDefs]="peerreviewColumnDefs"
+                    (rowClicked)="onGridRowClick($event)"
+                    >
                   </ag-grid-angular>
                 </div> 
                 <div class="clear"></div>
               </div>
             </div>
           </div>
-
+          </div>
           
         </div>
      </div>

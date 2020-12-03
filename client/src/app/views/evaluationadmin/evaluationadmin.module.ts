@@ -130,7 +130,8 @@ const routes: Routes = [
     MatGridListModule,
     MatDividerModule,
     TabsModule
-  ]
+  ],
+  exports:[EadashboardComponent]
 })
 export class EvaluationadminModule { 
   /**
