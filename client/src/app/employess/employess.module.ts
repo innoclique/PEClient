@@ -23,7 +23,7 @@ import { AccomplishmentsComponent } from './accomplishments/accomplishments.comp
 import { CurrentEvaluationComponent } from './current-evaluation/current-evaluation.component';
 import { ActionPlanComponent } from './action-plan/action-plan.component';
 
-import{DashboardComponent} from '../employess/dashboard/dashboard.component'
+import{EmployeeDashboardComponent} from '../employess/dashboard/dashboard.component'
 import { SharedModule } from '../shared/shared.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { CreateGoalsComponent } from './create-goals/create-goals.component';
@@ -55,7 +55,7 @@ import { ReviewActionPlanComponent } from './review-action-plan/review-action-pl
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
      AccomplishmentsComponent, CurrentEvaluationComponent, 
-     ActionPlanComponent,DashboardComponent, CreateGoalsComponent, GoalsComponent, 
+     ActionPlanComponent,EmployeeDashboardComponent, CreateGoalsComponent, GoalsComponent, 
      StrengthsComponent,
      KpiReviewComponent,
      KpiReviewListComponent,
@@ -97,7 +97,8 @@ import { ReviewActionPlanComponent } from './review-action-plan/review-action-pl
 DRReviewModule
   ],
   exports: [
-    ModalModule
+    ModalModule,
+    EmployeeDashboardComponent
 ],
 providers:[DatePipe]
 })

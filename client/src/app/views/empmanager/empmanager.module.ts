@@ -44,6 +44,6 @@ import { StrengthReviewComponent } from './strength-review/strength-review.compo
     ModalModule.forRoot(),
     SharedModule
   ],
-  exports:[KpiReviewComponent,DevgoalReviewComponent,StrengthReviewComponent]
+  exports:[ManagerDashboardComponent,KpiReviewComponent,DevgoalReviewComponent,StrengthReviewComponent]
 })
 export class EmpmanagerModule { }

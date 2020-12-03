@@ -179,11 +179,13 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['rsa/dashboard']);
       }
       else if (x.Role === 'EO') {
-        if(x.SelectedRoles.indexOf("EA")!==-1){
+        /*if(x.SelectedRoles.indexOf("EA")!==-1){
           this.router.navigate(['ea/dashboard']);
         }else{
           this.router.navigate(['employee/dashboard']);
-        }
+        }*/
+        this.router.navigate(['dashboard']);
+        //this.router.navigate(['em/dashboard']);
         
       }
 

@@ -1,1 +1,72 @@
-<p>dashboard works!</p>
+<div class="wrapper"> 
+  
+       
+    <!--Section1 Start Here-->
+      <div class="container clearfix">
+          <div class="box_main clearfix">
+            <div class="widget-parent">
+            <div class="row">
+                <h2 class="widget-heading">Third Signatory Dashboard</h2>
+              </div>
+            <div class="row">
+              <!-- Box1 -->
+              <div class="box col-lg-6">
+                <div class="box_in">
+                  <h2 class="bg-blue">Current Evaluation Progress</h2>
+                  
+                  <ag-grid-angular
+                      style="width: 495px; height: 220px;"
+                      class="ag-theme-alpine"
+                      [rowData]="tsEvaluationsRowData"
+                      [columnDefs]="tsEvaluationsColumnDefs"
+                      (rowClicked)="onGridRowClick($event)"
+                      >
+                    </ag-grid-angular>
+                  
+                </div>
+              </div>
+              <!-- Box 2 -->
+              <div class="box col-lg-6">
+                <div class="box_in">
+                  <h2 class="bg-blue">Direct Reports</h2>
+                  
+                  <div class="box_goalsetting box_rating clearfix">
+                    <div style="display: block;">
+                        <div class="middle">
+                          <h1>COMING SOON</h1>
+                          <hr>
+                        </div>
+                        </div>
+                 </div> 
+                  <div class="clear"></div>
+                </div>
+              </div>
+              
+            </div>
+            <div class="row">
+              <!-- Box 3 -->
+              <div class="box col-lg-12">
+                <div class="box_in">
+                  <h2 class="bg-blue">Peer Review</h2>
+                  <div class="box_goalsetting box_rating clearfix">
+                    <ag-grid-angular
+                    style="width: 980px; height: 180px;"
+                    class="ag-theme-alpine"
+                    [rowData]="tsPeerReviewRowData"
+                    [columnDefs]="tsPeerreviewColumnDefs"
+                    (rowClicked)="onGridRowClick($event)"
+                    >
+                  </ag-grid-angular>
+                  </div> 
+                  <div class="clear"></div>
+                </div>
+              </div>
+            </div>
+  
+            </div>
+          </div>
+       </div>
+    <!--Section1 End Here-->
+     
+  </div>
+  

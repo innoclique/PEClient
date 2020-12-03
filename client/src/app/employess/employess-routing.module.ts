@@ -11,7 +11,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ReportsComponent } from './reports/reports.component';
 import { StrengthsComponent } from './strengths/strengths.component';
 
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { EmployeeDashboardComponent } from './dashboard/dashboard.component';
 
 
 import {KpiReviewComponent} from './kpi-review/kpi-review.component';
@@ -60,7 +60,7 @@ const routes: Routes = [
       },
       {
         path:'dashboard',
-        component:DashboardComponent,
+        component:EmployeeDashboardComponent,
         data:{title:'Dashboard'}
       }, {
         path:'action-plan',

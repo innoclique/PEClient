@@ -98,3 +98,20 @@ p											{  font-size:15px; line-height:21px; font-weight:400; color:#717171;
     content:'';position:absolute; top:5px; left:0px; width:5px; height:5px; background:#000; border-radius:100%; 
 }
 
+.widget-heading{
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 32px;
+    margin: 10px 6px 10px;
+    display: block;
+    background-color: #2b9ef7;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.widget-parent{
+    margin-top: 20px;
+}
+
