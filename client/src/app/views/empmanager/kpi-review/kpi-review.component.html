@@ -96,6 +96,40 @@
                             </div>
 
                         </div>
+                        <div class="row" *ngIf="kpiDetails?.IsActive && !kpiDetails?.IsDraftByManager && accessingFrom =='reviewEvaluation' ">
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-6">
+                            <div class="form-group ">
+                              
+
+                                
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Coaching Reminder</span>
+                                    </div>
+                                    <select class="form-control"
+                                        [ngClass]="{ 'is-invalid': f.CoachingReminder.touched  &&  f.CoachingReminder.invalid }"
+                                        formControlName="CoachingReminder" name="CoachingReminder" >
+                                        <option value="" disabled>Please select</option>
+                                        <option *ngFor="let e of coachingRemDays" [value]="e">{{e}} days</option>
+
+                                    </select>
+                                    <!--<div class="input-group-postpend">
+                                        <span class="input-group-text">Days</span>
+                                    </div> -->
+                                    <div *ngIf="f.CoachingReminder.touched && f.CoachingReminder.invalid" class="invalid-feedback">
+                                        <div *ngIf="f.CoachingReminder.errors.required">Coaching Reminder is mandatory.</div>
+                                    </div>
+                                </div>
+
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
                         <hr>
                         <br>
                        
@@ -231,47 +265,6 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" *ngIf="accessingFrom =='reviewEvaluation' " >
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Score</span>
-                                        </div>
-                                        <select class="form-control"
-                                            [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }"
-                                            formControlName="Score" name="Score" >
-                                            <option value="" disabled>Please select</option>
-                                            <option *ngFor="let e of appScores" [value]="e">{{e}}</option>
-
-                                        </select>
-                                        <div *ngIf="f.Score.touched && f.Score.invalid" class="invalid-feedback">
-                                            <div *ngIf="f.Score.errors.required">Score is mandatory.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Status</span>
-                                        </div>
-                                        <select class="form-control"
-                                            [ngClass]="{ 'is-invalid': f.Status.touched  &&  f.Status.invalid }"
-                                            formControlName="Status" name="Status" required>
-                                            <option value="" disabled>Please select</option>
-                                            <option *ngFor="let e of kpiStatus" [value]="e">{{e}}</option>
-
-                                        </select>
-                                        <div *ngIf="f.Status.touched && f.Status.invalid" class="invalid-feedback">
-                                            <div *ngIf="f.Status.errors.required">Status is mandatory.</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
                                 <div class="form-group ">
 
 
@@ -301,8 +294,67 @@
                                     </div>
 
                                 </div>
+
+                              
                             </div>
 
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Status</span>
+                                        </div>
+                                        <select class="form-control"
+                                            [ngClass]="{ 'is-invalid': f.Status.touched  &&  f.Status.invalid }"
+                                            formControlName="Status" name="Status" required>
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of kpiStatus" [value]="e">{{e}}</option>
+
+                                        </select>
+                                        <div *ngIf="f.Status.touched && f.Status.invalid" class="invalid-feedback">
+                                            <div *ngIf="f.Status.errors.required">Status is mandatory.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" *ngIf="accessingFrom =='reviewEvaluation' " >
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Score</span>
+                                        </div>
+                                        <select class="form-control"
+                                            [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }"
+                                            formControlName="Score" name="Score" >
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of appScores" [value]="e">{{e}}</option>
+
+                                        </select>
+                                        <div *ngIf="f.Score.touched && f.Score.invalid" class="invalid-feedback">
+                                            <div *ngIf="f.Score.errors.required">Score is mandatory.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+
+
+                            <div class="col-md-4" *ngIf="accessingFrom=='kpiReview' ">
+                                <div class="form-group all-events">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Manager Comments</span>
+                                        </div>
+                                        <textarea maxlength="500" class="form-control" cols="" rows="4"
+                                            [ngClass]="{ 'is-invalid': f.ManagerComments.touched  &&  f.ManagerComments.invalid }"
+                                            formControlName="ManagerComments" name="ManagerComments">  </textarea>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="col-md-4" *ngIf="accessingFrom =='reviewEvaluation' " >
                                 <div class="form-group">
@@ -340,8 +392,8 @@
                                             <span class="input-group-text">Sign-off</span>
                                         </div>
                                         <input maxlength="12" class="form-control" type="text" disabled
-                                            [ngClass]="{ 'is-invalid': f.Signoff.touched  &&  f.Signoff.invalid }"
-                                            formControlName="Signoff" name="Signoff">
+                                           
+                                            [value]="kpiDetails?.Signoff?.SignOffBy" >
 
 
 
@@ -368,6 +420,8 @@
                                 </div>
 
                             </div>
+
+                           
 
 
                         </div>
@@ -412,69 +466,12 @@
                                     </div>
                                 </div>
 
-                                <div *ngIf="kpiDetails?.ManagerSignOff?.SignOffBy" class="form-group">
-                                    <div class="input-group ">
-                                        <div class="input-group-prepend ml-2">
-                                            <span class="input-group-text">Sign-off</span>
-                                        </div>
-                                        <input maxlength="12" class="form-control" type="text" disabled
-                                            [ngClass]="{ 'is-invalid': f.ManagerSignOff.touched  &&  f.ManagerSignOff.invalid }"
-                                            formControlName="ManagerSignOff" name="ManagerSignOff">
-
-
-
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                            <div class="col-md-4">
-
-
-
-                                <div class="form-group ">
-
-
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Coaching Reminder</span>
-                                        </div>
-                                        <select class="form-control"
-                                            [ngClass]="{ 'is-invalid': f.CoachingReminder.touched  &&  f.CoachingReminder.invalid }"
-                                            formControlName="CoachingReminder" name="CoachingReminder" >
-                                            <option value="" disabled>Please select</option>
-                                            <option *ngFor="let e of coachingRemDays" [value]="e">{{e}} days</option>
-
-                                        </select>
-                                        <!--<div class="input-group-postpend">
-                                            <span class="input-group-text">Days</span>
-                                        </div> -->
-                                        <div *ngIf="f.CoachingReminder.touched && f.CoachingReminder.invalid" class="invalid-feedback">
-                                            <div *ngIf="f.CoachingReminder.errors.required">Coaching Reminder is mandatory.</div>
-                                        </div>
-                                    </div>
-
-
-
-
-                                </div>
-
-
-
-
-                                <div *ngIf="kpiDetails?.ManagerSignOff?.SignOffBy" class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text "> Date</span>
-                                    </div>
-                                    <input class="autoc-border  form-control"  readonly
-                                          [value]="kpiDetails?.ManagerSignOff?.SignOffOn | date"   >
-                                   
-                                </div>
-
                                 
                             </div>
+
+
+
+                           
 
 
                             <div class="col-md-4">
@@ -491,6 +488,42 @@
 
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="col-md-4">
+
+
+
+                               
+                                <div *ngIf="kpiDetails?.ManagerSignOff?.SignOffBy" class="form-group">
+                                    <div class="input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text">Sign-off</span>
+                                        </div>
+                                        <input maxlength="12" class="form-control" type="text" disabled
+                                            [ngClass]="{ 'is-invalid': f.ManagerSignOff.touched  &&  f.ManagerSignOff.invalid }"
+                                            formControlName="ManagerSignOff" name="ManagerSignOff">
+
+
+
+
+                                    </div>
+                                </div>
+
+
+
+                                <div *ngIf="kpiDetails?.ManagerSignOff?.SignOffBy" class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text "> Date</span>
+                                    </div>
+                                    <input class="autoc-border  form-control"  readonly
+                                          [value]="kpiDetails?.ManagerSignOff?.SignOffOn | date"   >
+                                   
+                                </div>
+
+                               
+
+                                
                             </div>
 
 

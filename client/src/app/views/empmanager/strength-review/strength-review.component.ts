@@ -318,7 +318,7 @@ callStregnthApi() {
 
     if (c.message == Constants.SuccessText) {
 
-      this.snack.success(this.translate.instant(` Strength has been ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)} successfully`       ));
+      this.snack.success(this.translate.instant(`Strength Comments have been submitted successfully.` ));
 
   this.navToStrengthList();
      

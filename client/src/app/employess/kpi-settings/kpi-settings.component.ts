@@ -124,6 +124,7 @@ accessingFrom:any;
       TargetCompletionDate: [this.kpiDetails.TargetCompletionDate ? new Date(this.kpiDetails.TargetCompletionDate) : '', [Validators.required]],
       YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments :''],
       YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager :''],
+      ManagerComments: [this.kpiDetails.ManagerComments ? this.kpiDetails.ManagerComments :''],
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
    
 
@@ -133,8 +134,9 @@ accessingFrom:any;
 
     });
 
-   
+    this.selectedItems=[];
     this.kpiDetails.MeasurementCriteria.forEach(e => {
+      e.measureId.selected = true;
       this.toggleSelection(e.measureId);
     });
 
@@ -221,6 +223,7 @@ if(this.selectedItems.length==0) {
     this.perfApp.requestBody.kpiId = this.kpiDetails._id?  this.kpiDetails._id : '';
     this.perfApp.requestBody.MeasurementCriteria = Measurements;
 
+    if (this.currentAction =='create') 
     this.perfApp.requestBody.Weighting = this.weight;
    if(this.currEvaluation)
     this.perfApp.requestBody.EvaluationId = this.currEvaluation._id;
@@ -230,8 +233,9 @@ if(this.selectedItems.length==0) {
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
     this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id;
 
+    delete this.perfApp.requestBody.ManagerComments;
+
     if (this.kpiForm.get('IsDraft').value=='true') {
-      this.perfApp.requestBody.Weighting = '';
       this.perfApp.requestBody.Action = 'Draft';
     }
 
@@ -446,7 +450,9 @@ conformSubmitKpis(){
       this.perfApp.requestBody = { 'empId': this.loginUser._id,'orgId':this.authService.getOrganization()._id}
     this.perfApp.CallAPI().subscribe(c => {
 
-      this.setWeighting(c.filter(item => item.IsDraft === false).length);
+      // this.setWeighting(c.filter(item => item.IsDraft === false).length);
+      if (this.currentAction =='create')
+        this.setWeighting(c.length);
       if (c && c.length > 0) {
         if (this.accessingFrom=='currEvaluation') {
           this.empKPIData = c.filter(e=> e.IsDraft==false);
@@ -475,7 +481,7 @@ this.authService.setIsPGSubmitStatus("true");
             this.selIndex=  this.empKPIData.findIndex(e=> e._id== this.currentKpiId);
 
 
-            if (!this.kpiDetails.ViewedByEmpOn && this.kpiDetails.ManagerSignOff) {
+            if (!this.kpiDetails.ViewedByEmpOn && this.kpiDetails.ManagerSignOff.SignOffBy) {
               this.updateKpiAsViewed();
             }
 
@@ -511,7 +517,7 @@ this.authService.setIsPGSubmitStatus("true");
   updateKpiAsViewed() {
     
     this.perfApp.route = "app";
-    this.perfApp.method = this.currentAction ="UpdateKpiDataById";
+    this.perfApp.method  ="UpdateKpiDataById";
 
 
       this.perfApp.requestBody = {} //fill body object with form    
@@ -599,8 +605,11 @@ this.authService.setIsPGSubmitStatus("true");
   }
 
   toggleSelection(item) {
-    let f=!item.selected;
+    let f;
+    if(this.currentAction=='create'){
+     f=!item.selected;
     item.selected = !item.selected;
+    }
     if (item.selected) {
       this.selectedItems.push(item);
       // this.changeCallback( this.selectedItems );
@@ -735,6 +744,7 @@ this.msSelText="";
 
   nextKpi(){
 
+    debugger
    this.selIndex=this.selIndex+1;
     this.kpiDetails=  this.empKPIData[this.selIndex];
     this.initKPIForm();
@@ -742,7 +752,7 @@ this.msSelText="";
   }
 
   priKpi(){
-
+debugger
     this.selIndex=this.selIndex-1;
     this.kpiDetails=  this.empKPIData[this.selIndex];
     this.initKPIForm();

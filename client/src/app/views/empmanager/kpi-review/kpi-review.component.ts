@@ -149,8 +149,9 @@ actor:any;
       TargetCompletionDate: [this.kpiDetails.TargetCompletionDate ? new Date(this.kpiDetails.TargetCompletionDate) : '', [Validators.required]],
       YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments : ''],
       YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager : ''],
+      ManagerComments: [this.kpiDetails.ManagerComments ? this.kpiDetails.ManagerComments :''], 
       Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
-      Signoff: [this.kpiDetails.Owner?this.kpiDetails.Owner.FirstName:""],
+     // Signoff: [this.kpiDetails.Signoff.SignOffBy?this.kpiDetails.Signoff.SignOffBy:""],
     
       ManagerSignOff:  [ this.kpiDetails.ManagerSignOff?
         this.kpiDetails.ManagerSignOff.submited==false?  "" : this.kpiDetails.ManagerSignOff.SignOffBy
@@ -231,6 +232,7 @@ if (this.accessingFrom == "reviewEvaluation"  && this.kpiForm.get('ManagerScore'
     this.perfApp.requestBody.IsActive = this.kpiForm.get('IsActive').value;
     this.perfApp.requestBody.ManagerScore = this.kpiForm.get('ManagerScore').value;
     this.perfApp.requestBody.YECommManager = this.kpiForm.get('YECommManager').value;
+    this.perfApp.requestBody.ManagerComments = this.kpiForm.get('ManagerComments').value;
     this.perfApp.requestBody.CoachingReminder = this.kpiForm.get('CoachingReminder').value;
     //this.perfApp.requestBody.IsManaFTSubmited = this.kpiForm.get('ManagerFTSubmitedOn').value ? false:true;
     this.perfApp.requestBody.Action='Review' ;

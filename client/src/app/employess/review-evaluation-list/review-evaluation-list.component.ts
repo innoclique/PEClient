@@ -216,13 +216,15 @@ public onAsTSGridRowClick(e) {
 
   reviewEvalForm(action,actor) {
       this.router.navigate(['employee/review-evaluation',
-       { action: action, empId: this.currentRowItem._id,actor:actor,empManagerId:this.currentRowItem.Manager }
+       { action: action, empId: this.currentRowItem._id,actor:actor,empManagerId:this.currentRowItem.Manager 
+        ,empName: this.currentRowItem.Name}
     ], { skipLocationChange: true });
   }
 
   viewEmpForm(action,actor) {
      this.router.navigate(['employee/review-evaluation',
-       { action: action, empId: this.currentRowItem._id,actor:actor }
+       { action: action, empId: this.currentRowItem._id,actor:actor
+        ,empName: this.currentRowItem.Name }
     ], { skipLocationChange: true });
   }
 
@@ -247,8 +249,9 @@ GetReporteeEvaluationsDetails(){
     this.managerReporteesData=c.map(row=> {
       let flatarray=row.Evaluation.flat()
 let evaluation=flatarray.find(x=>x.Status==='Active')
+row.Name= row.FirstName+' '+row.LastName;    
      return  {
-         Name:row.FirstName+' '+row.LastName,
+         Name:row.Name,
          NoOfKpis: row.KpiList.length,
          NoOfDevGoals: row.GoalList.length,
          FRStatus: evaluation ?evaluation.FinalRating.Status:'',
@@ -277,8 +280,9 @@ GetTSReporteeEvDetails(){
 
       let flatarray=row.Evaluation.flat()
 let evaluation=flatarray.find(x=>x.Status==='Active')
+row.Name= row.FirstName+' '+row.LastName;    
      return  {
-         Name:row.FirstName+' '+row.LastName,
+         Name:row.Name,
          NoOfKpis: row.KpiList.length,
          NoOfDevGoals: row.GoalList.length,
          FRStatus: evaluation?evaluation.FinalRating.Status:'',

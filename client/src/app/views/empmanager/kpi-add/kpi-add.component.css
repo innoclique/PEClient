@@ -42,3 +42,9 @@ strong {
     background-color: #fff !important;
    
 }
+
+.tab_name {
+    font-size:16px;
+    color: #717171;
+    font-weight: 600;
+}

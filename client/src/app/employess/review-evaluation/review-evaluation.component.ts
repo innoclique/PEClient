@@ -54,6 +54,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   isContentOpen: boolean = false;
   @ViewChild('evTabset') tabset: TabsetComponent;
   isReqRevDisabled=false;
+  currentEmpName: any;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -73,6 +74,8 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
        this.currentEmpId = params['empId'];
        this.currentAction = params['action'];
        this.seletedTabRole = params['actor'];  
+       this.currentEmpName = params['empName'];
+  
        this.GetEmployeeDetailsById();
       }
       })

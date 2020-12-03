@@ -516,7 +516,7 @@ callKpiApi() {
 
     if (c.message == Constants.SuccessText) {
 
-      this.snack.success(this.translate.instant(` Comments have been submitted successfully.`       ));
+      this.snack.success(this.translate.instant(`Development Goal comments have been submitted successfully.`       ));
 
       this.navToGoalsList();
     }

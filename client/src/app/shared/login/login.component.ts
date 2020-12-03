@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
   openDuplicateSessionDialog() {
     this.alert.Title = "Alert";
     this.alert.Content = "We found that you have already logged in some where. Please logout from other session, to continue click on logout";
-    this.alert.ShowCancelButton = false;
+    this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";
     this.alert.ConfirmButtonText = "Logout";
@@ -132,12 +132,16 @@ export class LoginComponent implements OnInit {
 
     var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(resp => {
+      if (resp=='yes') {
       this.authService.LogOut();
       console.log('alert dialog', resp);
       this.loginText = 'loading...'
       setTimeout(()=>{ 
         this.loginSubmit();
       }, 700);
+    }else{
+
+    }
       
     })
   }

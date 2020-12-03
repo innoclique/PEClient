@@ -167,6 +167,7 @@ get k (){
   getColDef(){
  return [
     { headerName: 'Action Step',
+    tooltipField: 'ActionStep',
      headerComponentParams: {
       menuIcon: 'fa-bars',
       template:
@@ -178,6 +179,7 @@ get k (){
           '</div>'
   }, field: 'ActionStep', width: 160, autoHeight: true },
     { headerName: 'Progress Indicators',
+    tooltipField: 'ProgressIndicators',
     headerComponentParams: {
       menuIcon: 'fa-bars',
       template:
@@ -188,8 +190,8 @@ get k (){
           '  </div>' +
           '</div>'
   }, field: 'ProgressIndicators', width: 180, autoHeight: true },
-    { headerName: 'Barriers', field: 'Barriers', width: 160, autoHeight: true },
-    { headerName: 'Target Date',
+    { headerName: 'Barriers',tooltipField: 'Barriers', field: 'Barriers', width: 160, autoHeight: true },
+    { headerName: 'Target Date', tooltipField: 'TargetDate',
     headerComponentParams: {
       menuIcon: 'fa-bars',
       template:
@@ -203,8 +205,8 @@ get k (){
     cellRenderer: (data) => { return new DatePipe('en-US').transform(data.data.TargetDate, 'MM-dd-yyyy')}
     
   },
-    { headerName: 'Other Participants', field: 'OtherParticipants', width: 170, autoHeight: true },
-    { headerName: 'Status',
+    { headerName: 'Other Participants',tooltipField: 'OtherParticipants', field: 'OtherParticipants', width: 170, autoHeight: true },
+    { headerName: 'Status',tooltipField: 'Status',
     headerComponentParams: {
       menuIcon: 'fa-bars',
       template:

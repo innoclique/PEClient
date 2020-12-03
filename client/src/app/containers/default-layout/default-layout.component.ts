@@ -112,7 +112,7 @@ export class DefaultLayoutComponent implements OnInit {
         {
           "IsActive": true,
           "url": "/employee/drreview",
-          "name": " Review Manager",
+          "name": "Review Manager",
           "code": "CurrentEvaluation",
           "icon": "icon-layers"
         },

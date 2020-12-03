@@ -134,7 +134,7 @@ export class KpiAddComponent implements OnInit {
 
     });
 
-   
+    this.selectedItems=[];
     this.kpiDetails.MeasurementCriteria.forEach(e => {
       this.toggleSelection(e.measureId);
     });
@@ -215,6 +215,7 @@ export class KpiAddComponent implements OnInit {
     this.perfApp.requestBody.kpiId = this.kpiDetails._id?  this.kpiDetails._id : '';
     this.perfApp.requestBody.MeasurementCriteria = Measurements;
     this.perfApp.requestBody.Weighting = this.weight;
+    if(this.currEvaluation)
     this.perfApp.requestBody.EvaluationId = this.currEvaluation._id;
     //this.perfApp.requestBody.Signoff = this.loginUser._id;
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
@@ -225,7 +226,6 @@ export class KpiAddComponent implements OnInit {
 
     
     if (this.kpiForm.get('IsDraftByManager').value=='true') {
-      this.perfApp.requestBody.Weighting = '';
       this.perfApp.requestBody.Action = 'Draft';
     }
 
@@ -399,7 +399,7 @@ this.toggleSelection(c);
       'orgId':this.authService.getOrganization()._id }
     this.perfApp.CallAPI().subscribe(c => {
 
-      this.setWeighting(c.filter(item => item.IsDraft === false).length);
+      this.setWeighting(c.length);
       if (c && c.length > 0) {
         this.empKPIData = c;
         this.ownerInfo=c[0].Owner;
@@ -438,7 +438,7 @@ this.toggleSelection(c);
   }
   setWeighting(length: any) {
     
-    this.weight = length==0? 100 :  Math.round( 100/length);
+    this.weight = length==0? 100 :  Math.round( 100/(length+1));
 
     this.kpiForm.patchValue({ Weighting: this.weight });
 

@@ -144,7 +144,7 @@
 
 
                 <div  formGroupName="GoalActionItems" class="invitation_model_in_table table-responsive p-15">
-                  <table *ngIf="currentAction != 'view'"  class="table table-bordered table-striped" style="margin-bottom: -2px;">
+                  <table *ngIf="currentAction != 'view' && accessingFrom!='currEvaluation' "  class="table table-bordered table-striped" style="margin-bottom: -2px;">
                     <!-- <thead>
                       <tr>
                         <th>Action Step</th>
@@ -185,7 +185,7 @@
                         </td>
                         <td class=" mat-date-class input-group  p-0">
                           <input  [ngClass]="{ 'is-invalid': rowItemSubmitted && k.TargetDate?.errors }" formControlName="TargetDate"
-                            class="form-control  " (click)="picker.open()" placeholder="Target Date"
+                            class="form-control  dev-goal-date" (click)="picker.open()" placeholder="Target Date"
                             style="margin-bottom: 11px;                           
                             margin-top: 10px;"
                             (click)="picker.open()" readonly matInput  [matDatepicker]="picker">
@@ -219,8 +219,8 @@
                           </mat-autocomplete>
                         
                         </td> -->
-                        <td class="invitation_model_search">
-                          <select class="form-control" placeholder="Status"
+                        <td class="invitation_model_search p-0">
+                          <select class="form-control" placeholder="Status" style="padding: 3px 12px 13px; height: 58px;"
                                                     [ngClass]="{ 'is-invalid': rowItemSubmitted  &&  k.Status.invalid }"
                                                     formControlName="Status"  name="Status" required   >
                                                       <option value="" disabled >Please select</option>
@@ -246,7 +246,7 @@
                             
                       [rowData]="goalsItemRows"
                       [gridOptions]="goalsItemColumns"
-                      
+                      [enableBrowserTooltips]="true" 
                       (gridReady)="onActionItemsGridReady($event)"
                       (rowClicked)="onRowActionItemsClicked($event)"
                       >

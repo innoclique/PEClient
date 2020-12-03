@@ -220,25 +220,19 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" *ngIf="accessingFrom =='currEvaluation' " >
+                                <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text redStar">Score (self)</span>
+                                            <span class="input-group-text ">Weighting</span>
                                         </div>
-                                        <!-- <input class="form-control" type="text" disabled *ngIf="currentAction == 'create'"
-                                            style="background-color:#e4e7ea !important" /> -->
-                                        <select class="form-control" 
-                                            [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }" formControlName="Score"
-                                            name="Score">
-                                            <option value="" disabled>Please select</option>
-                                            <option *ngFor="let e of appScores" [value]="e">{{e}}</option>
-
-                                        </select>
-                                        <div *ngIf="f.Score.touched && f.Score.invalid" class="invalid-feedback">
-                                            <div *ngIf="f.Score.errors.required">Score is mandatory.</div>
+                                        <div class="autoc-border  form-control">
+                                            <input class="border-0 w-50" readonly formControlName="Weighting" name="Weighting">
+                                            <span class="mat-button-wrapper pull-right">%</span>
                                         </div>
                                     </div>
                                 </div>
+
+                              
                             </div>
 
 
@@ -260,14 +254,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="accessingFrom =='currEvaluation' " >
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text ">Weighting</span>
+                                            <span class="input-group-text redStar">Score (self)</span>
                                         </div>
-                                        <div class="autoc-border  form-control">
-                                            <input class="border-0 w-50" readonly formControlName="Weighting" name="Weighting">
-                                            <span class="mat-button-wrapper pull-right">%</span>
+                                        <!-- <input class="form-control" type="text" disabled *ngIf="currentAction == 'create'"
+                                            style="background-color:#e4e7ea !important" /> -->
+                                        <select class="form-control" 
+                                            [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }" formControlName="Score"
+                                            name="Score">
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of appScores" [value]="e">{{e}}</option>
+
+                                        </select>
+                                        <div *ngIf="f.Score.touched && f.Score.invalid" class="invalid-feedback">
+                                            <div *ngIf="f.Score.errors.required">Score is mandatory.</div>
                                         </div>
                                     </div>
                                 </div>
@@ -300,6 +302,22 @@
                                                         </div>
                                                     </div>
                                                    
+
+                                                    <div class="col-md-4 pull-left" *ngIf="accessingFrom!='currEvaluation' && kpiDetails.ManagerSignOff?.SignOffBy ">
+                                                        <div class="form-group view-only">
+                                                            <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">Manager Comments</span>
+                                                            </div>
+                                                            <textarea maxlength="500" class="form-control"  cols="" rows="4"
+                                                            [ngClass]="{ 'is-invalid': f.ManagerComments.touched  &&  f.ManagerComments.invalid }"
+                                                            formControlName="ManagerComments"  name="ManagerComments"  >  </textarea>
+                                    
+                                                            
+                                    
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                         </div>
 <div class="row" *ngIf="kpiDetails?.IsSubmitedKPIs">
@@ -339,14 +357,7 @@
                         <div class="clearfix"></div>
 
                         <div *ngIf="kpiDetails.ManagerSignOff?.SignOffBy" class="row ">
-                            <div class="col-md-2 kpi-fl ">
-                                <div class="col-md-9">
-                                    <strong class="strong-key">Score (manager):</strong> 
-                                </div>
-                                <div class="col-md-3"><span class="span-value">{{kpiDetails.ManagerScore}}</span></div>
-
-                            </div>
-
+                           
                             <div class="col-md-3 ">
                                 <div class="col-md-6">
                                     <strong class="strong-key">Manager Sign-off: </strong>
@@ -363,7 +374,15 @@
 
                             </div>
 
-                            <div class="col-md-5 ">
+                            <div class="col-md-2 kpi-fl " *ngIf="kpiDetails.ManagerScore?.length>0 && accessingFrom =='currEvaluation' " >
+                                <div class="col-md-9">
+                                    <strong class="strong-key">Score (manager):</strong> 
+                                </div>
+                                <div class="col-md-3"><span class="span-value">{{kpiDetails.ManagerScore}}</span></div>
+
+                            </div>
+
+                            <div class="col-md-5 " *ngIf="kpiDetails.ManagerScore?.length>0 && accessingFrom =='currEvaluation' "  >
                                 <div class="col-md-6">
                                     <strong class="strong-key">Year-end Comments (manager): </strong>
                                 </div>
@@ -374,11 +393,10 @@
                         </div>
 
                         <div *ngIf="currentAction != 'view' && !isEmpFRSignOff" class="form-group form-actions pull-right">
-                            <button class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>&nbsp;
-                            <button *ngIf="f?.IsDraft.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftKpi()" >Save</button>&nbsp;
-                            <button  class="btn btn-sm btn-primary" (click)="submitKpi()" >{{currentAction=='edit'? 
-                                f.IsDraft.value=='true' ? 'Create': 'Update'
-                                 :'Create' }}</button>
+                            <button *ngIf="accessingFrom!='currEvaluation' " class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>&nbsp;
+                            <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftKpi()" >Save</button>&nbsp;
+                            <button  *ngIf="currentAction == 'edit' && f?.IsDraft?.value=='false' " class="btn btn-sm btn-primary" (click)="submitKpi()" >Update</button>
+                                 <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create'  " class="btn btn-sm btn-primary" (click)="submitKpi()" >Create</button>
                             <!-- [disabled]="!kpiForm.valid" <button *ngIf="!kpiDetails?.IsSubmitedKPIs" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
                           </div>
             
