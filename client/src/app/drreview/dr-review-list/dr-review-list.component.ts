@@ -42,7 +42,7 @@ export class DrReviewListComponent implements OnInit {
     },
     { headerName: 'Evaluation Period', width: 220, field: 'EvaluationPeriod', sortable: true, filter: true },
     { headerName: 'Evaluation Duration',width: 220, field: 'EvaluationDuration', sortable: true, filter: true },
-    { headerName: 'Status',width: 120, field: 'Status', sortable: true, filter: true,
+    { headerName: 'Status',width: 220, field: 'Status', sortable: true, filter: true,
     cellRenderer: (data) => {
       debugger
       if(data.data.IsRatingSubmitted && data.data.IsRatingSubmitted){
@@ -57,11 +57,11 @@ export class DrReviewListComponent implements OnInit {
       cellRenderer: (data) => {
         debugger
         if(!data.data.IsRatingSubmitted){
-        return `<i class="icon-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+        return `<i class="icon-cursor font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="doreview" title="Submit Review"></i>       
         `
         }else{
-          return `<i class="icon-eye font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+          return `<i class="icon-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;" data-action-type="doreview" title="View Rating"></i>       
           ` 
         }

@@ -69,21 +69,14 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
 
 
     this.activatedRoute.params.subscribe(  params => {
-      
       if (params['action']) {
        this.currentEmpId = params['empId'];
        this.currentAction = params['action'];
-       this.seletedTabRole = params['actor'];
-  
+       this.seletedTabRole = params['actor'];  
        this.GetEmployeeDetailsById();
-       
-
       }
       })
-
       this.loginUser = this.authService.getCurrentUser();
-    
-   
   }
 
   ngAfterViewInit(){
