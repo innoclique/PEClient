@@ -118,7 +118,7 @@ export class CreateClientComponent implements OnInit {
     this.clientForm = this.formBuilder.group({
       Name: [null, Validators.compose([
         Validators.required,
-        Validators.pattern("^[a-zA-Z0-9#\\&\\-()/._,:]+$"),
+        Validators.pattern("^[a-zA-Z0-9#\\&\\-()/._,: ]+$"),
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
         CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
         Validators.minLength(2),
@@ -134,7 +134,7 @@ export class CreateClientComponent implements OnInit {
         Validators.pattern("^[0-9]{2}-[0-9]{10}$")
       ])],
       PhoneExt: [null, Validators.compose([
-        Validators.required, Validators.maxLength(5),
+         Validators.maxLength(5),
         Validators.pattern("^((\d{1}-\d{5}-?)|0)?[0-9]{5}$")
 
       ])],
@@ -152,16 +152,16 @@ export class CreateClientComponent implements OnInit {
       UsageCount: [1, []],
       AdminFirstName: ['', Validators.compose([
         Validators.required,                
-        Validators.pattern("^[a-zA-Z0-9.,-:()]+$"),        
+        Validators.pattern("^[a-zA-Z0-9.,-:() ]+$"),        
         Validators.maxLength(200)])
       ],
       AdminLastName: ['', Validators.compose([
         Validators.required,
-        Validators.pattern("^[a-zA-Z0-9-().,:]+$")
+        Validators.pattern("^[a-zA-Z0-9-().,: ]+$")
         ])
       ],
       AdminMiddleName: ['', Validators.compose([    
-        Validators.pattern("^[a-zA-Z0-9-().,:]+$"),                 
+        Validators.pattern("^[a-zA-Z0-9-().,: ]+$"),                 
         ])],
       AdminEmail: ['', [Validators.required, Validators.email]],
       AdminPhone: [null, Validators.compose([
@@ -172,16 +172,16 @@ export class CreateClientComponent implements OnInit {
       contactPersonForm: this.formBuilder.group({
         ContactPersonFirstName: [null, Validators.compose([
           Validators.required,                
-          Validators.pattern("^[a-zA-Z0-9.,-:()]+$"),        
+          Validators.pattern("^[a-zA-Z0-9.,-:() ]+$"),        
           Validators.maxLength(200)])
         ],
         ContactPersonLastName: ['', Validators.compose([
           Validators.required,
-          Validators.pattern("^[a-zA-Z0-9-().,:]+$")
+          Validators.pattern("^[a-zA-Z0-9-().,: ]+$")
           ])
         ],
         ContactPersonMiddleName: ['', Validators.compose([    
-          Validators.pattern("^[a-zA-Z0-9-().,:]+$"),                 
+          Validators.pattern("^[a-zA-Z0-9-().,: ]+$"),                 
           ])],
         ContactPersonEmail: ['', [Validators.required, Validators.email]],
         ContactPersonPhone: [null, Validators.compose([

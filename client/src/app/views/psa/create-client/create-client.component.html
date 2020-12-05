@@ -250,12 +250,13 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Phone</span>
                     </div>
-                    <input numbersOnly maxlength="12" class="form-control" type="text"
+                    <input numbersOnly maxlength="13" class="form-control" type="text"
                       [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.AdminPhone.errors }"
                       formControlName="AdminPhone">
                     <div *ngIf="isFormSubmitted && f.AdminPhone.errors" class="invalid-feedback">
                       <div *ngIf="f.AdminPhone.errors.required">Admin Phone is required</div>
-                      <div *ngIf="f.AdminPhone.errors.pattern">Admin Phone Number must be 10 digit Number.</div>
+                      <div *ngIf="f.AdminPhone.errors.pattern">Phone can accept only 0-9 and - format should be
+                        (01-1234567890).</div>
                     </div>
                   </div>
                 </div>
@@ -362,8 +363,8 @@
                       <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors"
                         class="invalid-feedback">
                         <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is required</div>
-                        <div *ngIf="a.ContactPersonPhone.errors.pattern">Contact Person Phone Number must be 10 digit
-                          Number.</div>
+                        <div *ngIf="a.ContactPersonPhone.errors.pattern">Phone can accept only 0-9 and - format should be
+                          (01-1234567890).</div>
                       </div>
                     </div>
                   </div>
