@@ -6,42 +6,16 @@
             <!-- Box1 -->
             <div class="box col-lg-6">
               <div class="box_in">
-                <h2>Reseller Info<span>History of the Reseller</span></h2>
-                <div class="box_in_bar">
-                  <div class="box_in_bar_total">
-                    <div class="box_in_bar_total_blue"></div>
-                    <strong>Total Clients</strong>
-                    <h3>{{dashboardData.ResellerStatus.total}}</h3>
-                  </div>
-                  <div class="box_in_bar_total">
-                    <div class="box_in_bar_total_green"></div>
-                    <strong>Active Clients</strong>
-                    <h3>{{dashboardData.ResellerStatus.active}}</h3>
-                  </div>
-                  <div class="box_in_bar_total">
-                    <div class="box_in_bar_total_grey"></div>
-                    <strong>InActive Clients</strong>
-                    <h3>{{dashboardData.ResellerStatus.inactive}}</h3>
-                  </div>
-                  <div class="clear"></div>
-                </div>
-                <!--<div class="box_in_bar_revenue clearfix">
-                  <div class="box_in_bar_text">
-                    <h2><span>No of Licence Sold</span>12,250</h2>
-                  </div>
-                  <div class="box_in_bar_text">
-                    <h2><span>Total reseller revenue</span>$25000.00</h2>
-                  </div>
-                </div>-->
-                <div class="box_in_btns">
-                  <a href="#/psa/setup-reseller" class="box_in_btns_add">Add New Reseller +</a>
-                  <a href="#/psa/list" class="box_in_btns_view">View details &#8594;</a>
-                  <div class="clear"></div>
-                </div> 
-                
-                <div class="clear"></div>
-              </div>
+                <app-client-summary [chartTypeInput]="'CLIENT_SUMMARY'" [userType]="'Client'"></app-client-summary>
             </div>
+            </div>
+            <div class="box col-lg-6">
+              <div class="box_in">
+                <app-client-summary [chartTypeInput]="'STATUS'" [userType]="'Client'"></app-client-summary>
+            </div>
+            </div>
+          </div>
+          <div class="row">
             <!-- Box 2 -->
             <div class="box col-lg-6">
               <div class="box_in">

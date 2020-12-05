@@ -13,8 +13,8 @@ export class PsaService {
 
   constructor(private Http: HttpClient) { }
 
-  psaDashboard():Observable<any> {
-    return this.Http.post<any>(environment.ApiPath + 'psa/dashboard',{})
+  psaDashboardClientSummary(payload):Observable<any> {
+    return this.Http.post<any>(environment.ApiPath + 'psa/dashboard/client/summary',payload)
       .pipe(retry(1), catchError(this.errorHandle));
   }
 

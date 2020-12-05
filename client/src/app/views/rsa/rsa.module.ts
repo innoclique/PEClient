@@ -19,6 +19,8 @@ import { CustomMaterialModule } from '../../custom-material/custom-material.modu
 import { EvalCommonModule } from '../common/common.module';
 import { projectRoutes } from '../psa/psa.module';
 import { ClientListComponent } from './client-list/client-list.component';
+import { DashboardChartsModule } from "../charts/charts.module";
+import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
 
 
 export const rsaRoutes: Routes = [
@@ -92,6 +94,8 @@ export const rsaRoutes: Routes = [
     ModalModule.forRoot(),
     EvalCommonModule,
     TabsModule,
-  ]
+    DashboardChartsModule
+  ],
+  exports:[ClientSummaryComponent]
 })
 export class RsaModule { }

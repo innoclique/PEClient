@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit,ViewChild,Input } from '@angular/core';
 import {PsaService} from '../../../services/psa.service';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
@@ -10,13 +10,8 @@ import * as pluginAnnotations from 'chartjs-plugin-annotation';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  dashboardData:any;
-  constructor(public psaService:PsaService) { 
-    this.psaService.psaDashboard().subscribe(apiResponse => {
-      this.dashboardData = apiResponse;
-    });
+  constructor() { 
   }
-
   ngOnInit(): void {
   }
 
