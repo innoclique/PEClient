@@ -96,7 +96,7 @@ export class ClientListComponent implements OnInit {
   
   }
   gotoCreate() {
-    this.router.navigate(['rsa/setup-client'])
+    this.router.navigate(['rsa/setup-clients'])
   }
   ngOnInit(): void {
     this.getClients();

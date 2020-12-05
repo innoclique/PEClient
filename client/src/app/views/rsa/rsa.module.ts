@@ -36,7 +36,7 @@ export const rsaRoutes: Routes = [
         component: DashboardComponent
       },
       {
-        path:'setup-client/:id',
+        path:'setup-clients/:id',
         component:SetupclientComponent,
         data:{title:'Update'}
       },
@@ -46,6 +46,9 @@ export const rsaRoutes: Routes = [
           title: 'View All'
         }
       },
+      { path: 'list', component: ClientListComponent,data: {
+        title: 'View All'
+      }},  
       {
         path: 'setup-clients',
         component: SetupclientComponent,

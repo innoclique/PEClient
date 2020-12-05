@@ -19,8 +19,6 @@ import { CustomValidators } from '../../../shared/custom-validators';
   styleUrls: ['./setupclient.component.css']
 })
 export class SetupclientComponent implements OnInit {
-
-
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
@@ -50,7 +48,6 @@ export class SetupclientComponent implements OnInit {
     public router: Router,
     public activatedRoute: ActivatedRoute
   ) {
-
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
 
@@ -115,14 +112,18 @@ export class SetupclientComponent implements OnInit {
       //this.notification.error(error.error.message)
     });
   }
-
+  navToList() {
+    this.router.navigate(['rsa/list',{'activeTab':0}]);
+  }
   initForm() {
     this.clientForm = this.formBuilder.group({
       Name: [null, Validators.compose([
         Validators.required,
+        Validators.pattern("^[a-zA-Z0-9#\\&\\-()/._,: ]+$"),
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
         CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-        Validators.minLength(2)])
+        Validators.minLength(2),
+        Validators.maxLength(500)])
       ],
       Industry: ['', [Validators.required]],
       Address: [null, Validators.compose([
@@ -130,53 +131,59 @@ export class SetupclientComponent implements OnInit {
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/])/, { hasAddressSplChars: true }, 'hasAddressSplChars'),
       ])],
       Phone: [null, Validators.compose([
-        Validators.required, Validators.minLength(12),
-        Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+        Validators.required, Validators.maxLength(13),
+        Validators.pattern("^[0-9]{2}-[0-9]{10}$")
+      ])],
+      PhoneExt: [null, Validators.compose([
+         Validators.maxLength(5),
+        Validators.pattern("^((\d{1}-\d{5}-?)|0)?[0-9]{5}$")
 
       ])],
-      PhoneExt: ["", []],
-      Email: ['', [Validators.required, Validators.email]],
+      Email: [null, Validators.compose([
+        Validators.required, Validators.maxLength(500),
+        Validators.pattern("^[a-zA-Z0-9\@/.-]+$")
+
+      ])],
       Country: ['', [Validators.required]],
       State: ['', [Validators.required]],
       City: ['', [Validators.required]],
       ZipCode: ['', [Validators.required]],
       ClientType: ['Client',[]],
       UsageType: ['License', [Validators.required]],
-      UsageCount: [0, []],
-      AdminFirstName: [null, Validators.compose([
-        Validators.required,
-        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-        Validators.minLength(2)])
+      UsageCount: [1, []],
+      AdminFirstName: ['', Validators.compose([
+        Validators.required,                
+        Validators.pattern("^[a-zA-Z0-9.,-:() ]+$"),        
+        Validators.maxLength(200)])
       ],
       AdminLastName: ['', Validators.compose([
         Validators.required,
-        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-        Validators.minLength(2)])
+        Validators.pattern("^[a-zA-Z0-9-().,: ]+$")
+        ])
       ],
-      AdminMiddleName: ['', []],
+      AdminMiddleName: ['', Validators.compose([    
+        Validators.pattern("^[a-zA-Z0-9-().,: ]+$"),                 
+        ])],
       AdminEmail: ['', [Validators.required, Validators.email]],
       AdminPhone: [null, Validators.compose([
-        Validators.required, Validators.minLength(10),
-        Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+        Validators.required, Validators.maxLength(13),
+        Validators.pattern("^[0-9]{2}-[0-9]{10}$")
       ])],
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
-
-        ContactPersonFirstName: ['', Validators.compose([
-          Validators.required,
-          CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-          CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-          Validators.minLength(2)])
+        ContactPersonFirstName: [null, Validators.compose([
+          Validators.required,                
+          Validators.pattern("^[a-zA-Z0-9.,-:() ]+$"),        
+          Validators.maxLength(200)])
         ],
-        ContactPersonLastName: [null, Validators.compose([
+        ContactPersonLastName: ['', Validators.compose([
           Validators.required,
-          CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-          CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-          Validators.minLength(2)])
+          Validators.pattern("^[a-zA-Z0-9-().,: ]+$")
+          ])
         ],
-        ContactPersonMiddleName: ['', []],
+        ContactPersonMiddleName: ['', Validators.compose([    
+          Validators.pattern("^[a-zA-Z0-9-().,: ]+$"),                 
+          ])],
         ContactPersonEmail: ['', [Validators.required, Validators.email]],
         ContactPersonPhone: [null, Validators.compose([
           Validators.required, Validators.minLength(10),
@@ -211,6 +218,8 @@ export class SetupclientComponent implements OnInit {
     debugger
     this.clientFormData.IsDraft = false;
     this.isFormSubmitted = true;
+    console.log(this.clientForm.valid);
+    console.log(this.clientForm);
     if (!this.clientForm.valid) {
       return;
     }
@@ -231,7 +240,7 @@ export class SetupclientComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Organization Addedd Successfully.')
-      this.router.navigate(['/rsa/client-list'])
+      this.navToList();
       this.errorOnSave = false;
       this.errorMessage = "";
     }, error => {
@@ -313,6 +322,7 @@ export class SetupclientComponent implements OnInit {
           this.clientForm.controls['UsageCount'].setValue(0);
         } else {         
           this.clientForm.controls['UsageCount'].setValidators(Validators.required);
+          this.clientForm.controls['UsageCount'].setValue(1);
         }
 
 
@@ -348,14 +358,16 @@ export class SetupclientComponent implements OnInit {
         this.setValues(f, rowdata);
       } else {
         form.get(key).setValue(rowdata[key]);
+        if((key === "EmployeeBufferCount" || key === "DownloadBufferDays") && !rowdata[key]){
+          form.get(key).setValue("0");
+        }
 
       }
 
     }
   }
   public setContactPersonFields(form: FormGroup) {
-    debugger
-    form.controls["ContactPersonFirstName"].setValue(this.clientForm.get('AdminFirstName').value)
+    form.controls["ContactPersonFirstName"].setValue(""+this.clientForm.get('AdminFirstName').value)
     form.controls["ContactPersonMiddleName"].setValue(this.clientForm.get('AdminMiddleName').value)
     form.controls["ContactPersonLastName"].setValue(this.clientForm.get('AdminLastName').value)
     form.controls["ContactPersonPhone"].setValue(this.clientForm.get('AdminPhone').value)
@@ -365,19 +377,19 @@ export class SetupclientComponent implements OnInit {
 
 
   validationType = {
-    ContactPersonFirstName: ['', Validators.compose([
-      Validators.required,
-      CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-      CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-      Validators.minLength(2)])
+    ContactPersonFirstName: [null, Validators.compose([
+      Validators.required,                
+      Validators.pattern("^[a-zA-Z0-9.,-:()]+$"),        
+      Validators.maxLength(200)])
     ],
     ContactPersonLastName: ['', Validators.compose([
       Validators.required,
-      CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-      CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
-      Validators.minLength(2)])
+      Validators.pattern("^[a-zA-Z0-9-().,:]+$")
+      ])
     ],
-    ContactPersonMiddleName: ['', []],
+    ContactPersonMiddleName: ['', Validators.compose([    
+      Validators.pattern("^[a-zA-Z0-9-().,:]+$"),                 
+      ])],
     ContactPersonEmail: ['', [Validators.required, Validators.email]],
     ContactPersonPhone: ['', Validators.compose([
       Validators.required, Validators.minLength(10),
@@ -462,7 +474,7 @@ export class SetupclientComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {      
       console.log('updated', c)
       this.notification.success('Client details updated successfully')
-      this.router.navigate(['/psa/list'])
+      this.navToList();
 
     }, error => {      
       console.log('eror while updating orgnaizartion :', error)
@@ -495,13 +507,13 @@ action='Update'
 
   setContactPersonData(organization) {
     if (this.clientForm.get('SameAsAdmin').value) {
-      organization.ContactPersonFirstName = organization.AdminLastName;
+      organization.ContactPersonFirstName = organization.AdminFirstName;
       organization.ContactPersonMiddleName = organization.AdminMiddleName;
       organization.ContactPersonLastName = organization.AdminLastName;
       organization.ContactPersonPhone = organization.AdminPhone;
       organization.ContactPersonEmail = organization.AdminEmail;
     } else {
-      organization.ContactPersonFirstName = organization.ContactPersonLastName;
+      organization.ContactPersonFirstName = organization.ContactPersonFirstName;
       organization.ContactPersonMiddleName = organization.ContactPersonMiddleName;
       organization.ContactPersonLastName = organization.ContactPersonLastName;
       organization.ContactPersonPhone = organization.ContactPersonPhone;
@@ -511,8 +523,21 @@ action='Update'
   }
   saveAsDraft() {
     this.clientFormData.IsDraft = true;
-    this.isFormSubmitted = true;
-    if (!this.clientForm.valid) {
+    //this.isFormSubmitted = true;
+    // if (!this.clientForm.valid) {
+    //   return;
+    // }
+    debugger
+    if(this.clientForm.value.Name==="" || this.clientForm.value.Industry===""){
+      this.notification.error('Organization Name is required')
+      return;
+    }
+    if( this.clientForm.value.Industry===""){
+      this.notification.error('Industry is required')
+      return;
+    }
+    if(!this.clientForm.value.Email){
+      this.notification.error('Email is required')
       return;
     }
     this.saveClient();
