@@ -20,7 +20,8 @@ import { PaymentSettingsComponent } from './payment-settings/payment-settings.co
 import { ProfileComponent } from './profile/profile.component';
 import { ChartsModule } from "ng2-charts";
 import { AppDirectiveModule } from '../../directives/app-directive.module';
-
+import { DashboardChartsModule } from "../charts/charts.module";
+import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -113,8 +114,10 @@ export const projectRoutes: Routes = [
     EvalCommonModule,
     TabsModule,
     ChartsModule,
-    AppDirectiveModule
-  ]
+    AppDirectiveModule,
+    DashboardChartsModule
+  ],
+  exports:[ ClientSummaryComponent]
 })
 export class PSAModule {
   /**
