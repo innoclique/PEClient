@@ -12,6 +12,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartsModule } from "ng2-charts";
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AppDirectiveModule } from '../../directives/app-directive.module';
+import { DashboardChartsModule } from "../charts/charts.module";
+import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
+
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -41,6 +44,7 @@ export const projectRoutes: Routes = [
     
   ],
   imports: [
+    DashboardChartsModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -53,7 +57,8 @@ export const projectRoutes: Routes = [
     ChartsModule,
     FlashMessagesModule.forRoot(),
     AppDirectiveModule
-  ]
+  ],
+  exports:[ClientSummaryComponent]
 })
 export class CSAModule {
   /**

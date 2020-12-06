@@ -18,32 +18,6 @@ export class DashboardComponent implements OnInit {
     inprogress:'N/A'
   }
 
-  /**
- * Bar chat
- */
-
-public barChartOptions: ChartOptions = {
-  responsive: true,
-  // We use these empty structures as placeholders for dynamic theming.
-  scales: { xAxes: [{}], yAxes: [{}] },
-  plugins: {
-    datalabels: {
-      anchor: 'end',
-      align: 'end',
-    }
-  }
-};
-public barChartLabels: Label[] = ['Active'];
-public barChartType: ChartType = 'bar';
-public barChartLegend = true;
-public barChartPlugins = [pluginDataLabels];
-
-public barChartData: ChartDataSets[] = [
-  { data: [0], label: 'Total' }
-  
-];
-
-
   constructor(
     private _flashMessagesService: FlashMessagesService,
     public authService: AuthService,
@@ -65,9 +39,6 @@ public barChartData: ChartDataSets[] = [
     reqBody.userId = this.currentUser._id;
     this.csaService.psaDashboard(reqBody).subscribe(c => {
       this.currentStatus = c.current_status;
-      let evaluation_summary = c.evaluation_summary;
-      this.barChartLabels = evaluation_summary.years;
-      this.barChartData = evaluation_summary.dataSets;
     });
   }
   chartClicked(event){

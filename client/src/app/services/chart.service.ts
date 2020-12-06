@@ -9,11 +9,14 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class PsaService {
+export class ChartService {
 
   constructor(private Http: HttpClient) { }
 
-  
+  chartSummary(payload):Observable<any> {
+    return this.Http.post<any>(environment.ApiPath + 'chart/dashboard',payload)
+      .pipe(retry(1), catchError(this.errorHandle));
+  }
 
   errorHandle(error) {
     let errormgs = {};

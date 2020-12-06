@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { Label } from 'ng2-charts';
-import {PsaService} from '../../../services/psa.service';
+import {ChartService} from '../../../services/chart.service';
 import { AuthService } from '../../../services/auth.service';
 import * as moment from 'moment'
 
@@ -43,7 +43,7 @@ public clientSummaryBarChartData: ChartDataSets[] = [];
  * =========End===========
  */
 
-  constructor(public psaService:PsaService,private authService: AuthService) {
+  constructor(public chartService:ChartService,private authService: AuthService) {
     
    }
 
@@ -67,6 +67,12 @@ public clientSummaryBarChartData: ChartDataSets[] = [];
         { data: [0, 0, 0, 0], label: 'Inactive' }
       ];
       this.clientSummaryChartOptions.title.text="Reseller Summary - Status"
+    }else if(this.chartTypeInput === 'EVALUATION_SUMMARY'){
+      this.clientSummaryBarChartData=[
+        { data: [0, 0, 0, 0], label: 'Year-end' }
+        
+      ];
+      this.clientSummaryChartOptions.title.text="Evaluation Summary"
     }
 
     this.getClientSummaryChatData(this.chartTypeInput);
@@ -81,8 +87,8 @@ public clientSummaryBarChartData: ChartDataSets[] = [];
       chartType:chartType,
       userType:this.userType
     };
-    this.psaService.psaDashboardClientSummary(reqBody).subscribe(apiResponse => {
-      let {ClientSummary} = apiResponse;
+    this.chartService.chartSummary(reqBody).subscribe(apiResponse => {
+      let {ClientSummary,Evaluation} = apiResponse;
       if(this.chartTypeInput==='CLIENT_SUMMARY'){
         let {usage} =ClientSummary;
         this.clientSummaryBarChartData=usage.chartDataSets;
@@ -91,6 +97,10 @@ public clientSummaryBarChartData: ChartDataSets[] = [];
         let {status} =ClientSummary;
         this.clientSummaryBarChartData=status.chartDataSets;
         this.clientSummaryBarChartLabels=status.Label;
+      }else if(this.chartTypeInput === 'EVALUATION_SUMMARY'){
+        let {summary} =Evaluation;
+        this.clientSummaryBarChartData=summary.chartDataSets;
+        this.clientSummaryBarChartLabels=summary.Label;
       }
       
     });

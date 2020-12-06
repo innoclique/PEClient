@@ -7,39 +7,28 @@
           <div class="box_main clearfix">
             <div class="row">
               <!-- Box1 -->
-              <div class="box col-lg-12">
+              <div class="box col-lg-6">
                 <div class="box_in">
-                  <h2 class="bg-blue">Evaluation Summary</h2>
+                  <app-client-summary [chartTypeInput]="'EVALUATION_SUMMARY'" [userType]="'Client'"></app-client-summary>
+                  <div class="clear"></div>
+                </div>
+                
+              </div>
+              <div class="box col-lg-6">
+                <div class="box_in">
+                  <h2 class="bg-blue">Current Status</h2>
                   <div class="box_goalsetting box_rating clearfix">
-                    <canvas baseChart height="80"
-                    [datasets]="barChartData"
-                    [labels]="barChartLabels"
-                    [options]="barChartOptions"
-                    [plugins]="barChartPlugins"
-                    [legend]="barChartLegend"
-                    [chartType]="barChartType"
-                    (chartClick)="chartClicked($event)"
-                    >
-                    
-                  </canvas>
+                    <h3 class="col-xs-12">Renewal Date: N/A</h3>
+                    <h3 class="col-xs-12">Evaluations Completed: {{this.currentStatus.completed}}</h3>
+                    <h3 class="col-xs-12">Evaluations Left: {{this.currentStatus.inprogress}}</h3>
                   </div> 
+                  <a (click)="showAlert('Comming Soon')" href="#/csa/dashboard" class="box_in_btns_view">Purchase Next License &#8594;</a>
                   <div class="clear"></div>
                 </div>
               </div>
             </div>
               <div class="row">
-                <div class="box col-lg-6">
-                  <div class="box_in">
-                    <h2 class="bg-blue">Current Status</h2>
-                    <div class="box_goalsetting box_rating clearfix">
-                      <h3 class="col-xs-12">Renewal Date: N/A</h3>
-                      <h3 class="col-xs-12">Evaluations Completed: {{this.currentStatus.completed}}</h3>
-                      <h3 class="col-xs-12">Evaluations Left: {{this.currentStatus.inprogress}}</h3>
-                    </div> 
-                    <a (click)="showAlert('Comming Soon')" href="#/csa/dashboard" class="box_in_btns_view">Purchase Next License &#8594;</a>
-                    <div class="clear"></div>
-                  </div>
-                </div>
+                
               <!-- Box 3 -->
               <div class="box col-lg-6">
                 <div class="box_in">
