@@ -22,6 +22,10 @@ import { ChartsModule } from "ng2-charts";
 import { AppDirectiveModule } from '../../directives/app-directive.module';
 import { DashboardChartsModule } from "../charts/charts.module";
 import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
+import { ResellerInfoComponent} from "./reports/info/reseller/resellerInfo.component";
+import {ClientInfoComponent} from "./reports/info/client/clientInfo.component";
+import {ResellerRevenueInfoComponent} from "./reports/revenue/reseller/resellerRevenueInfo.component";
+import {ClientRevenueInfoComponent} from "./reports/revenue/client/clientRevenueInfo.component";
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -69,6 +73,26 @@ export const projectRoutes: Routes = [
       data:{title:'Reports'}
     },
     {
+      path:'reports/info/client',
+      component:ClientInfoComponent,
+      data:{title:'ClientInfo'}
+    },
+    {
+      path:'reports/info/reseller',
+      component:ResellerInfoComponent,
+      data:{title:'ResellerInfo'}
+    },
+    {
+      path:'reports/revenue/client',
+      component:ClientRevenueInfoComponent,
+      data:{title:'ClientRevenueInfo'}
+    },
+    {
+      path:'reports/revenue/reseller',
+      component:ResellerRevenueInfoComponent,
+      data:{title:'ResellerRevenueInfo'}
+    },
+    {
       path:'application-settings',
       component:ApplicationSettingsComponent,
       data:{title:'Application-Settings'}
@@ -101,7 +125,11 @@ export const projectRoutes: Routes = [
     ApplicationSettingsComponent,
     EvaluationSettingsComponent,
     PaymentSettingsComponent,
-    ProfileComponent
+    ProfileComponent,
+    ResellerInfoComponent,
+    ClientInfoComponent,
+    ResellerRevenueInfoComponent,
+    ClientRevenueInfoComponent,
   ],
   imports: [
     CommonModule,
