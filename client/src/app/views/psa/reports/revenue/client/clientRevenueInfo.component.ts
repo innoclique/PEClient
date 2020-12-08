@@ -175,7 +175,7 @@ export class ClientRevenueInfoComponent {
         });
     }
 
-    private onReady(params: any) {
+     onReady(params: any) {
         this.api = params.api;
         console.log('onReady');
         this.api.sizeColumnsToFit();
