@@ -72,7 +72,7 @@ export class CSAPaymentSummary {
     };
     this.api.exportDataAsExcel(params);
   }
-  private onReady(params: any) {
+   onReady(params: any) {
     this.api = params.api;
     console.log('onReady');
     this.api.sizeColumnsToFit();
