@@ -6,7 +6,7 @@
             Client Revenue
             <div _ngcontent-fha-c25="" class="reports-buttons pull-right">
               <div style="float: left; margin-left: 20px">
-                <input (keyup)="onQuickFilterChanged($event)" id="quickFilterInput"
+                <input  id="quickFilterInput"
                   style="width: 300px;margin-right: 5px;" class="form-control" placeholder="Type text to filter..." />
               </div>
               <button (click)="gotoDashboard()" ngcontent-fha-c25="" class="btn btn-primary mr-1 pull-right"
@@ -21,13 +21,13 @@
             <div style="width: 100%;">
               <div>
                 <ag-grid-angular style="width: 100%; height: 425px;" class="ag-theme-alpine" [gridOptions]="gridOptions"
-                  [sideBar]="showToolPanel" [rowData]="rowData" [modules]="modules" [pagination]="true"
+                   [rowData]="rowData"  [pagination]="true"
                   [paginationPageSize]="10" (gridReady)="onReady($event)"
-                  [animateRows]="true" [isExternalFilterPresent]="isExternalFilterPresent" 
+                  [animateRows]="true"  
                   defaultColDef="defaultColDef"
                   [masterDetail]="true"
                   [detailCellRendererParams]="detailCellRendererParams"
-                  [doesExternalFilterPass]="doesExternalFilterPass" suppressRowClickSelection rowSelection="multiple">
+                   suppressRowClickSelection rowSelection="multiple">
                 </ag-grid-angular>
               </div>
             </div>

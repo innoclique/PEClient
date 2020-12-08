@@ -13,7 +13,7 @@ import ReportTemplates from '../../../../psa/reports/data/reports-templates';
 export class CSAPaymentSummary {
   public gridOptions: GridOptions;
   public showGrid: boolean;
-  private rowData: any[];
+  public rowData: any[];
   private api: GridApi;
   detailCellRendererParams: any;
   defaultColDef: any;

@@ -19,7 +19,7 @@ export class ClientInfoComponent {
 
     public gridOptions: GridOptions;
     public showGrid: boolean;
-    private rowData: any[];
+    public rowData: any[];
     private api: GridApi;
     detailCellRendererParams: any;
     defaultColDef:any;
@@ -172,7 +172,7 @@ export class ClientInfoComponent {
         });
     }
 
-    private onReady(params: any) {
+    onReady(params: any) {
         this.api = params.api;
         console.log('onReady');
         this.api.sizeColumnsToFit();
