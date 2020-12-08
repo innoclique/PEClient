@@ -8,8 +8,7 @@ import ReportTemplates from '../../../../psa/reports/data/reports-templates';
 
 @Component({
   selector: 'app-reports',
-  templateUrl: './csaPaymentSummary.component.html',
-  styleUrls: ['./csaPaymentSummary.component.css']
+  templateUrl: './csaPaymentSummary.component.html'
 })
 export class CSAPaymentSummary {
   public gridOptions: GridOptions;
