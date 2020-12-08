@@ -8,8 +8,7 @@ import ReportTemplates from '../../../../psa/reports/data/reports-templates';
 
 @Component({
   selector: 'app-reports',
-  templateUrl: './csaEvaluationSummary.component.html',
-  styleUrls: ['./csaEvaluationSummary.component.css']
+  templateUrl: './csaEvaluationSummary.component.html'
 })
 export class CSAEvaluationsSummary {
   public gridOptions: GridOptions;
