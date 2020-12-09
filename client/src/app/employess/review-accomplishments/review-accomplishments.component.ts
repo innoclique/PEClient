@@ -1,4 +1,5 @@
 
+
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -21,11 +22,12 @@ import { Constants } from '../../shared/AppConstants';
 import { CustomValidators } from '../../shared/custom-validators';
 
 @Component({
-  selector: 'app-accomplishments',
-  templateUrl: './accomplishments.component.html',
-  styleUrls: ['./accomplishments.component.css']
+  selector: 'app-review-accomplishments',
+  templateUrl: './review-accomplishments.component.html',
+  styleUrls: ['./review-accomplishments.component.css']
 })
-export class AccomplishmentsComponent implements OnInit {
+
+export class ReviewAccomplishmentsComponent implements OnInit {
 
 
   public kpiForm: FormGroup;
@@ -65,6 +67,9 @@ accessingFrom:any;
   isFirstTimeCreateing=false;
 
   @ViewChild('sgsgggjsr', {static: false}) content: ElementRef;
+  seletedTabRole: any;
+  currentEmpId: any;
+  currentEmpName: any;
 
 
 
@@ -84,8 +89,11 @@ accessingFrom:any;
     this.activatedRoute.params.subscribe(params => {
      
      if (params['action']) {
-      this.currentKpiId = params['id'];
+     
+      this.currentEmpId = params['empId'];
+      this.currentEmpName = params['empName'];
       this.currentAction = params['action'];
+      this.seletedTabRole = params['actor'];
      }
      
     });   
@@ -148,7 +156,7 @@ accessingFrom:any;
 
 
   onCancle() {
-    this.router.navigate(['employee/accomplishments-list']);
+    this.router.navigate(['employee/review-accomplishments-list']);
   }
 
   submitKpi() {
@@ -167,62 +175,16 @@ accessingFrom:any;
     this.kpiForm.patchValue({ IsDraft: 'false' });
 
   
-    this.saveKpi();
+    // this.saveKpi();
   }
 
 
   draftKpi(){
     this.kpiForm.patchValue({ IsDraft: 'true' });
-    this.saveKpi();
+    // this.saveKpi();
   }
 
 
-  saveKpi() {
-
-if (!this.kpiForm.get('Accomplishment').value) {
-  this.snack.error('Accomplishment is required');
-  return
-}
-
-
-
-
-    this.perfApp.route = "app";
-    this.perfApp.method = this.currentAction == 'create' ? "AddAccomplishment" : "UpdateAccomplishmentDataById",
-
-
-      this.perfApp.requestBody = this.kpiForm.value; //fill body object with form 
-
-     
-
-    this.perfApp.requestBody.Accomplishment = this.perfApp.requestBody.Accomplishment.Accomplishment?
-                                    this.perfApp.requestBody.Accomplishment.Accomplishment :this.perfApp.requestBody.Accomplishment;
-    // this.perfApp.requestBody.MeasurementCriteria = this.selectedItems.map(e => { e.measureId=e._id});
-    this.perfApp.requestBody.AccompId = this.kpiDetails._id?  this.kpiDetails._id : '';
-    this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
-
-    if (this.currentAction=='create'){
-    this.perfApp.requestBody.CreatedBy = this.loginUser._id;
-    this.perfApp.requestBody.Owner = this.loginUser._id;
-    this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id;
-    
-    }else if (this.currentAction=='edit'){
-      this.perfApp.requestBody.isFirstTimeCreateing = this.isFirstTimeCreateing;
-      this.perfApp.requestBody.Action = 'Update';
-    }
-
-   
-
-    if (this.kpiForm.get('IsDraft').value=='true' && this.currentAction=='create') {
-      this.perfApp.requestBody.Action = 'Draft';
-    }
-
-    if (this.currentAction=='create' && this.kpiForm.get('IsDraft').value=='false') {
-      this.openConfirmSubmitKpisDialog();
-    }else{
-    this.callKpiApi();
-    }
-  }
 
   callKpiApi() {
 
@@ -237,7 +199,7 @@ if (!this.kpiForm.get('Accomplishment').value) {
           
           this.router.navigate(['employee/current-evaluation']);
         } else {         
-        this.router.navigate(['employee/accomplishments-list']);
+        this.router.navigate(['employee/review-accomplishments-list']);
         }
       }
 
@@ -268,7 +230,7 @@ if (!this.kpiForm.get('Accomplishment').value) {
   getAllKpiBasicData() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpiSetupBasicData";
-    this.perfApp.requestBody = { 'empId': this.loginUser._id ,
+    this.perfApp.requestBody = { 'empId': this.currentEmpId ,
     'orgId':this.authService.getOrganization()._id
   }
       this.perfApp.CallAPI().subscribe(c => {
@@ -326,7 +288,7 @@ if (!this.kpiForm.get('Accomplishment').value) {
   GetAllAccomplishmentsDetails() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllAccomplishments",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id,'orgId':this.authService.getOrganization()._id}
+      this.perfApp.requestBody = { 'empId': this.currentEmpId,'orgId':this.authService.getOrganization()._id}
     this.perfApp.CallAPI().subscribe(c => {
 
      
@@ -354,9 +316,8 @@ if (!this.kpiForm.get('Accomplishment').value) {
 
       }else{
         
-        if (this.accessingFrom=='currEvaluation') {
           this.showKpiForm=false;
-        }
+        
       }
 
     }
@@ -536,3 +497,4 @@ if (!this.kpiForm.get('Accomplishment').value) {
 
 
 }
+

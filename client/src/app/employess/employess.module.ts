@@ -51,6 +51,9 @@ import { ReviewPerfGoalsListComponent } from './review-perf-goals-list/review-pe
 import { ReviewPerfGoalsComponent } from './review-perf-goals/review-perf-goals.component';
 import { ReviewActionPlanListComponent } from './review-action-plan-list/review-action-plan-list.component';
 import { ReviewActionPlanComponent } from './review-action-plan/review-action-plan.component';
+import { AccomplishmentsListComponent } from './accomplishments/accomplishments-list/accomplishments-list.component';
+import { ReviewAccompListComponent } from './review-accomp-list/review-accomp-list.component';
+import { ReviewAccomplishmentsComponent } from './review-accomplishments/review-accomplishments.component';
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
@@ -64,7 +67,10 @@ import { ReviewActionPlanComponent } from './review-action-plan/review-action-pl
      ReviewPerfGoalsListComponent,
      ReviewPerfGoalsComponent,
      ReviewActionPlanListComponent,
-     ReviewActionPlanComponent
+     ReviewActionPlanComponent,
+     AccomplishmentsListComponent,
+     ReviewAccompListComponent,
+     ReviewAccomplishmentsComponent
     ],
   imports: [
     CommonModule,

@@ -1,0 +1,40 @@
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+                Employee Accomplishments
+            
+            <div class="form-group form-actions pull-right m-0">
+              <button [disabled]='isKpiActivated' class="btn btn-sm btn-primary" data-toggle="modal" (click)="createAccomplishment()">&#x271A; New Accomplishment</button>
+            </div>
+            </div>
+            <div class="card-body">
+              <!-- <div class="row"> -->
+             
+
+              <ag-grid-angular style="width: 100; height: 440px;" 
+              class="ag-theme-alpine" [rowData]="kpiListData"
+                [columnDefs]="columnDefs"
+                [pagination]="true"
+                [paginationPageSize]="10"
+                 [getRowHeight]="getRowHeight"  [enableBrowserTooltips]="true"
+                  (gridReady)="onGridReady($event)"
+                (gridSizeChanged)="onGridSizeChanged($event)"
+                 (rowClicked)="onKpiGridRowClick($event)" >
+              </ag-grid-angular>
+    
+    
+                  
+              <!-- </div> -->
+              <br>
+             
+            </div>
+          </div>
+        </div><!--/.col-->
+      </div><!--/.row-->
+    </div>
+
+
+

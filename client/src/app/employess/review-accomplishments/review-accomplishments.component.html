@@ -3,7 +3,7 @@
         <div *ngIf="showKpiForm;else noRecordsFound">
             <div class="card">
                 <div *ngIf="accessingFrom!='currEvaluation' " class="card-header">
-                    Employee Accomplishments
+                    <span style="color: #717171;">{{currentEmpName}} -</span> Accomplishments
 
                     <div class="form-group form-actions pull-right m-0">
                         <button type="button" class="btn btn-sm btn-primary"
@@ -103,7 +103,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text redStar">
+                                            <span class="input-group-text ">
                                                 Accomplishment</span>
                                         </div>
                                         <textarea max="2000" maxlength="2000" class="form-control" type="text"
@@ -147,7 +147,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text redStar">Completion Date</span>
+                                            <span class="input-group-text ">Completion Date</span>
                                         </div>
                                         <input class="autoc-border  form-control"
                                             (click)=" picker.open()" readonly matInput
@@ -217,7 +217,7 @@
                         </div>
 
 
-                        <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+                        <!-- <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p> -->
                         <div class="clearfix"></div>
                         <div *ngIf="currentAction != 'create'"
                             class=" row form-group form-actions clearfix w-100 d-block all-events ">
@@ -228,23 +228,7 @@
 
                         </div>
 
-                        <div *ngIf="currentAction != 'view' "
-                            class="form-group form-actions pull-right">
-                            <button *ngIf="accessingFrom!='currEvaluation' " class="btn btn-sm btn-primary"
-                                (click)="onCancle()">Cancel</button>&nbsp;
-                            <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' "
-                                class="btn btn-sm btn-primary" (click)="draftKpi()">Save</button>&nbsp;
-                            <button *ngIf="(currentAction == 'edit' && f?.IsDraft?.value=='false' )"
-                                class="btn btn-sm btn-primary" (click)="submitKpi()">Update</button>
-                            <button *ngIf="(f?.IsDraft?.value=='true' || currentAction == 'create' ) "
-                                class="btn btn-sm btn-primary" (click)="submitKpi()">Add Accomplishment</button>
                       
-                      
-                                <!-- <button id="btnPrintPRForm" type="button" class="btn btn-danger" (click)="downloadPDF()"
-                                style="background-color: #326cab!important; border-color:#326cab!important;cursor:pointer;">Print</button> -->
-                      
-                           
-                            </div>
 
 
 
