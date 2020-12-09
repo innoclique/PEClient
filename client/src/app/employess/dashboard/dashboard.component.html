@@ -17,15 +17,15 @@
               <div class="box_in">
                 <h2 class="bg-blue">Current Evaluation Progress</h2>
                 <div class="box_progressbar">
-                  <progress-bar [progress]="currentEvaluationProgress" 
+                  <progress-bar  title="Test" [progress]="currentEvaluationProgress" 
         [color-degraded]="{'0': 'red',  '15': '#f9c3d3', '25': '#92d892'}">
         </progress-bar>
                 </div>
                 <div class="box_goalsetting clearfix">
                   <!--<h2 class="col-xs-6">Goal Setting<span>Completed</span></h2>-->
-                  <h2 class="col-xs-6">Final Rating<span>{{currentEvaluation?.FinalRating}}</span></h2>
-                  <h2 class="col-xs-6">Manager Sign-off<span>{{currentEvaluation?.Manager}}</span></h2>
-                  <h2 class="col-xs-6">Third Signatory<span>{{currentEvaluation?.ThirdSignatory}}</span></h2>
+                  <h2 class="col-xs-6">Performance Goals<span>{{currentEvaluation?.FinalRating}}</span></h2>
+                  <h2 class="col-xs-6">Evaluation<span>{{currentEvaluation?.Manager}}</span></h2>
+                  <h2 class="col-xs-6">Action Plan<span>{{currentEvaluation?.ThirdSignatory}}</span></h2>
                 </div> 
                 <div *ngIf="(currentEvaluationProgress!=0)" class="box_in_btns">
                   <a  href="#/employee/current-evaluation" class="box_in_btns_view">View Evaluation &#8594;</a>

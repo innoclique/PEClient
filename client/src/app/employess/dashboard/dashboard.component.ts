@@ -53,7 +53,9 @@ export class EmployeeDashboardComponent implements OnInit {
     let requestBody:any={userId:_id}
     this.employeeService.dashboard(requestBody).subscribe(dashboardResponse => {
       console.log(dashboardResponse);
-      this.peerReviewRowData = dashboardResponse['peer_review']['list'];
+      if(dashboardResponse['peer_review'] &&  dashboardResponse['peer_review']['list']){
+        this.peerReviewRowData = dashboardResponse['peer_review']['list'];
+      }
       this.currentEvaluation = dashboardResponse['current_evaluation'];
       this.previousEvaluation = dashboardResponse['previous_evaluation'];
 
