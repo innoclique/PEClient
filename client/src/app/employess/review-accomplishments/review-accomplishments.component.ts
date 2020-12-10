@@ -288,7 +288,9 @@ accessingFrom:any;
   GetAllAccomplishmentsDetails() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllAccomplishments",
-      this.perfApp.requestBody = { 'empId': this.currentEmpId,'orgId':this.authService.getOrganization()._id}
+      this.perfApp.requestBody = { 'empId': this.currentEmpId,
+      'orgId':this.authService.getOrganization()._id,
+        "reqFrom":'review'}
     this.perfApp.CallAPI().subscribe(c => {
 
      

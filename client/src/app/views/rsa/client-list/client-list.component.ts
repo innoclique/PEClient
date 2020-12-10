@@ -252,7 +252,7 @@ export class ClientListComponent implements OnInit {
       
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
-      this.notification.success('Organization Addedd Successfully.')
+      this.notification.success('Organization Added Successfully.')
       this.errorOnSave = false;
       this.errorMessage = "";
     }, error => {
@@ -327,6 +327,7 @@ export class ClientListComponent implements OnInit {
     for (const key in form.controls) {
       form.get(key).clearValidators();
       form.get(key).updateValueAndValidity();
+      form.get(key).setErrors(null);
     }
   }
   public addValidators(form: FormGroup) {
@@ -471,7 +472,7 @@ export class ClientListComponent implements OnInit {
   }
   editClient(){
     const cr = this.currentRowItem;
-    this.router.navigate(['/rsa/setup-client/'+cr._id], { skipLocationChange: true });      
+    this.router.navigate(['/rsa/setup-clients/'+cr._id], { skipLocationChange: true });      
       return;
     
   }
@@ -479,7 +480,7 @@ export class ClientListComponent implements OnInit {
     debugger
     const cr = this.currentRowItem;
     if(cr.IsDraft){
-      this.router.navigate(['/rsa/setup-client/'+cr._id])
+      this.router.navigate(['/rsa/setup-clients/'+cr._id])
       return;
     }else{
       this.orgViewRef = this.modalService.show(this.orgView, this.config);

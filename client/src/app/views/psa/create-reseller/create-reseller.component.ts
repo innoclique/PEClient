@@ -212,7 +212,7 @@ export class CreateResellerComponent implements OnInit {
       this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
-      this.notification.success('Reseller Addedd Successfully.')
+      this.notification.success('Reseller Added Successfully.')
       this.navToList();
     }, error => {
       this.errorOnSave = true;
@@ -244,6 +244,7 @@ export class CreateResellerComponent implements OnInit {
     for (const key in form.controls) {
       form.get(key).clearValidators();
       form.get(key).updateValueAndValidity();
+      form.get(key).setErrors(null);
     }
   }
   public addValidators(form: FormGroup) {

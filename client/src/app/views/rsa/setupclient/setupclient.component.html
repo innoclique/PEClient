@@ -125,7 +125,7 @@
                       <span class="input-group-text">Ext Number</span>
                     </div>
                     <input maxlength="5" numbersOnly type="text" class="form-control" formControlName="PhoneExt"
-                      numbersOnly required>
+                      numbersOnly >
                   </div>
                 </div>
 
@@ -357,7 +357,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text ">Phone</span>
                       </div>
-                      <input numbersOnly class="form-control" type="text"
+                      <input numbersOnly maxlength="13" numbersOnly  class="form-control" type="text"
                         [ngClass]="{ 'is-invalid': !f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors}"
                         formControlName="ContactPersonPhone">
                       <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors"

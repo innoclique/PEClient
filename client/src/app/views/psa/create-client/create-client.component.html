@@ -125,7 +125,7 @@
                       <span class="input-group-text">Ext Number</span>
                     </div>
                     <input maxlength="5" numbersOnly type="text" class="form-control" formControlName="PhoneExt"
-                      numbersOnly required>
+                      numbersOnly >
                   </div>
                 </div>
 
@@ -141,8 +141,8 @@
                       required>
                     <div *ngIf="isFormSubmitted   && f.Email.errors" class="invalid-feedback">
                       <div *ngIf="f.Email.errors.required">Email is mandatory</div>
-                      <div *ngIf="f.Email.errors.pattern">Email can be 500 characters long and accepts a-z,A-Z,0-9,.,-,@
-                        characters only. </div>
+                      <div *ngIf="f.Email.errors.maxlength">Email can be 500 characters long.</div>
+                      <div *ngIf="f.Email.errors.email">Email accepts a-z,A-Z,0-9,.,-,@ characters only. </div>
                     </div>
                   </div>
                 </div>
@@ -271,7 +271,8 @@
                       [ngClass]="{ 'is-invalid': isFormSubmitted &&  f.AdminEmail.errors }"
                       formControlName="AdminEmail">
                     <div *ngIf="isFormSubmitted && f.AdminEmail.errors" class="invalid-feedback">
-                      <div *ngIf="f.AdminEmail.errors.required">Admin Email is required</div>
+                      <div *ngIf="f.AdminEmail.errors.maxlength">Email can be 500 characters long.</div>
+                      <div *ngIf="f.AdminEmail.errors.email">Email accepts a-z,A-Z,0-9,.,-,@ characters only. </div>
                     </div>
                   </div>
                 </div>
