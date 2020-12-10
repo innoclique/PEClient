@@ -27,6 +27,9 @@ import { ReviewPerfGoalsListComponent } from './review-perf-goals-list/review-pe
 import { ReviewPerfGoalsComponent } from './review-perf-goals/review-perf-goals.component';
 import { ReviewActionPlanListComponent } from './review-action-plan-list/review-action-plan-list.component';
 import { ReviewActionPlanComponent } from './review-action-plan/review-action-plan.component';
+import { AccomplishmentsListComponent } from './accomplishments/accomplishments-list/accomplishments-list.component';
+import { ReviewAccompListComponent } from './review-accomp-list/review-accomp-list.component';
+import { ReviewAccomplishmentsComponent } from './review-accomplishments/review-accomplishments.component';
 
 
 
@@ -88,6 +91,11 @@ const routes: Routes = [
       {
         path:'accomplishments',
         component:AccomplishmentsComponent,
+        data:{title:'Accomplishments'}
+      },
+      {
+        path:'accomplishments-list',
+        component:AccomplishmentsListComponent,
         data:{title:'Accomplishments'}
       },
       {
@@ -155,6 +163,23 @@ const routes: Routes = [
           title: 'Performance Goals Review'
         }
       },
+
+      {
+        path: 'review-accomplishments',
+        component: ReviewAccomplishmentsComponent,
+        data: {
+          title: 'Accomplishments Review'
+        }
+      },
+      {
+        path: 'review-accomplishments-list',
+        component: ReviewAccompListComponent,
+        data: {
+          title: 'Accomplishments Review'
+        }
+      },
+
+      
       {
         path: 'review-perf-goals',
         component: ReviewPerfGoalsComponent,

@@ -97,9 +97,9 @@ export class DefaultLayoutComponent implements OnInit {
         },
         {
           "IsActive": true,
-          "url": "/employee/accomplishments",
+           "url": "/employee/accomplishments-list",
           "name": "Accomplishments",
-          "code": "CurrentEvaluation",
+          "code": "Accomplishments",
           "icon": "cui-tags"
         },
         {
@@ -174,6 +174,14 @@ export class DefaultLayoutComponent implements OnInit {
     "code": "KPISetting",
     "icon": "icon-layers"
     
+  },
+
+  {
+    "IsActive": true,
+    "url": "/employee/review-accomplishments-list",
+    "name": "Review Accomplishments",
+    "code": "Review Accomplishments",
+    "icon": "cui-tags"
   },
               {
                 "IsActive": true,
