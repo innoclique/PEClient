@@ -360,7 +360,7 @@ export class ClientSetupComponent implements OnInit {
       
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
-      this.notification.success('Organization Addedd Successfully.')
+      this.notification.success('Organization Added Successfully.')
       this.errorOnSave = false;
       this.errorMessage = "";
     }, error => {
@@ -433,8 +433,9 @@ export class ClientSetupComponent implements OnInit {
 
   public removeValidators(form: FormGroup) {
     for (const key in form.controls) {
-      form.get(key).clearValidators();
-      form.get(key).updateValueAndValidity();
+      // form.get(key).clearValidators();
+      // form.get(key).updateValueAndValidity();
+      form.get(key).setErrors(null);
     }
   }
   public addValidators(form: FormGroup) {

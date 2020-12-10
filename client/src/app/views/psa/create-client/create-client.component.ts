@@ -139,8 +139,9 @@ export class CreateClientComponent implements OnInit {
 
       ])],
       Email: [null, Validators.compose([
-        Validators.required, Validators.maxLength(500),
-        Validators.pattern("^[a-zA-Z0-9\@/.-]+$")
+        Validators.required,
+        Validators.email, Validators.maxLength(500),
+        //Validators.pattern("^[a-zA-Z0-9\@/.-]+$")
 
       ])],
       Country: ['', [Validators.required]],
@@ -238,7 +239,7 @@ export class CreateClientComponent implements OnInit {
       this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
-      this.notification.success('Organization Addedd Successfully.')
+      this.notification.success('Organization Added Successfully.')
       this.navToList();
       this.errorOnSave = false;
       this.errorMessage = "";
@@ -331,6 +332,8 @@ export class CreateClientComponent implements OnInit {
     for (const key in form.controls) {
       form.get(key).clearValidators();
       form.get(key).updateValueAndValidity();
+      form.get(key).setErrors(null);
+      
     }
   }
   public addValidators(form: FormGroup) {

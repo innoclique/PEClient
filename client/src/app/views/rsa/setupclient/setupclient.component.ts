@@ -186,8 +186,8 @@ export class SetupclientComponent implements OnInit {
           ])],
         ContactPersonEmail: ['', [Validators.required, Validators.email]],
         ContactPersonPhone: [null, Validators.compose([
-          Validators.required, Validators.minLength(10),
-          Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+          Validators.required, Validators.maxLength(13),
+          Validators.pattern("^[0-9]{2}-[0-9]{10}$")
         ])]
       }),
       CoachingReminder: ['', []],
@@ -239,7 +239,7 @@ export class SetupclientComponent implements OnInit {
       this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
-      this.notification.success('Organization Addedd Successfully.')
+      this.notification.success('Organization Added Successfully.')
       this.navToList();
       this.errorOnSave = false;
       this.errorMessage = "";
@@ -330,8 +330,9 @@ export class SetupclientComponent implements OnInit {
   }
   public removeValidators(form: FormGroup) {
     for (const key in form.controls) {
-      form.get(key).clearValidators();
-      form.get(key).updateValueAndValidity();
+      // form.get(key).clearValidators();
+      // form.get(key).updateValueAndValidity();
+      form.get(key).setErrors(null); 
     }
   }
   public addValidators(form: FormGroup) {
@@ -392,8 +393,8 @@ export class SetupclientComponent implements OnInit {
       ])],
     ContactPersonEmail: ['', [Validators.required, Validators.email]],
     ContactPersonPhone: ['', Validators.compose([
-      Validators.required, Validators.minLength(10),
-      CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      Validators.required, Validators.maxLength(13),
+      Validators.pattern("^[0-9]{2}-[0-9]{10}$")
     ])]
   }
   resetForm() {
