@@ -84,7 +84,7 @@ export class AccomplishmentsListComponent implements OnInit {
  let actionlinks=''
        if (data.data.RowData.IsActive) {
         actionlinks= `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="EF" title="EditPerformance Goal" ></i>    
+        font-size: 17px;"   data-action-type="EF" title="Edit Accomplishment" ></i>    
         
        
         

@@ -699,6 +699,7 @@ onCSCSelect(data){
     var organization = this.clientForm.value;
     if (action === 'Create') {
       organization.IsActive = true;
+      organization.UsageCount= organization.UsageType=='License'?0:organization.UsageCount;
       organization.CreatedBy = this.authService.getCurrentUser()._id;
       organization.CreatedOn = new Date();
     } else {

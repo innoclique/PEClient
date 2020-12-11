@@ -81,28 +81,28 @@ export class KpiSetupComponent implements OnInit {
  let actionlinks=''
        if (data.data.RowData.IsActive) {
         actionlinks= `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="EF" title="EditPerformance Goal" ></i>    
+        font-size: 17px;"   data-action-type="EF" title="Edit Performance Goal" ></i>    
         
         <i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="deActiveKPI" title="DeactivatePerformance Goal"></i>
+        font-size: 17px;"   data-action-type="deActiveKPI" title="Deactivate Performance Goal"></i>
        
         <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="Track" title="TrackPerformance Goal" ></i>    
+        font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>    
         
         `
        } else {
         actionlinks= `<i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="activeKPI" title="activatePerformance Goal"></i>       
+        font-size: 17px;"   data-action-type="activeKPI" title="activate Performance Goal"></i>       
       
         <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="Track" title="TrackPerformance Goal" ></i>   
+        font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>   
        
         `
        }
 
       //  actionlinks=  actionlinks+`
       //  <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-      //  font-size: 17px;"   data-action-type="EF" title="EditPerformance Goal" ></i>    
+      //  font-size: 17px;"   data-action-type="EF" title="Edit Performance Goal" ></i>    
       //  `
        return actionlinks
        ;

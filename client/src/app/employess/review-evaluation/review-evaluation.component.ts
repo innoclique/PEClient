@@ -555,26 +555,17 @@ if (this.FinalRatingForm.value.TSReqRevision &&
   }
 
   
-  tsReqRevisionCheck(value) {
+  // tsReqRevisionCheck(value) {
     
-    if (value.target.value=='on') {
-      this.evaluationForm.controls['FRReqRevision'].setValue(true);
-    } else {
+  //   if (value.target.value=='on') {
+  //     this.FinalRatingForm.controls['FRReqRevision'].setValue(true);
+  //   } else {
      
-      this.evaluationForm.controls['FRReqRevision'].setValue(false);
-    }
-  }
+  //     this.FinalRatingForm.controls['FRReqRevision'].setValue(false);
+  //   }
+  // }
 
   
-  managerReqRevisionCheck(value) {
-    if (value.target.value) {
-      this.evaluationForm.controls['ManagerRevComments'].setValidators(Validators.required);
-    } else {
-      this.evaluationForm.controls['ManagerRevComments'].clearValidators();
-      this.evaluationForm.controls['ManagerRevComments'].reset();
-      this.evaluationForm.controls['ManagerRevComments'].setValue(null);
-    }
-  }
   cancelFinalRating() {
 
   }
