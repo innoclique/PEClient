@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
-import { Label } from 'ng2-charts';
+import { Label,Color } from 'ng2-charts';
 import {ChartService} from '../../../services/chart.service';
 import { AuthService } from '../../../services/auth.service';
 import * as moment from 'moment'
@@ -39,6 +39,10 @@ public clientSummaryBarChartType: ChartType = 'bar';
 public clientSummaryBarChartLegend = true;
 public clientSummaryBarChartPlugins = [pluginDataLabels];
 public clientSummaryBarChartData: ChartDataSets[] = [];
+public barChartColors: Color[] = [
+  { backgroundColor: '#006ba9' },
+  { backgroundColor: '#67b262' },
+]
 /**
  * =========End===========
  */
@@ -54,6 +58,7 @@ public clientSummaryBarChartData: ChartDataSets[] = [];
         { data: [0, 0, 0, 0], label: 'License' },
         { data: [0, 0, 0, 0], label: 'Employees' }
       ];
+      
       this.clientSummaryChartOptions.title.text="Client Summary - by usage";
     }else if(this.chartTypeInput==='STATUS' && this.userType==='Client'){
       this.clientSummaryBarChartData=[

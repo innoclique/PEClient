@@ -46,7 +46,7 @@ export class DefaultLayoutComponent implements OnInit {
         if(this.user.Role.indexOf('EO')>-1){
           let dashboard = {
             "IsActive": true,
-            "url": "/employee/dashboard",
+            "url": "/dashboard",
             "name": "Dashboard",
             "code": "Dashboard",
             "icon": "icon-calculator",
