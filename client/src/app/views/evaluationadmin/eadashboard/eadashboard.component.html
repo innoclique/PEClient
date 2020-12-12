@@ -17,6 +17,7 @@
                     <canvas height="140" baseChart
                     [datasets]="barChartData"
                     [labels]="barChartLabels"
+                    [colors]="barChartColors"
                     [options]="barChartOptions"
                     [plugins]="barChartPlugins"
                     [legend]="barChartLegend"
@@ -27,16 +28,6 @@
                   </canvas>
                   </div>
                   <button [disabled]="enableDownload" (click)="downloadCanvas()" id="exportButton" type="button">Export as PDF</button>     
-      
-                  <!--<canvas height="200" baseChart
-                    [data]=pieChartData
-                    [labels]=pieChartLabels
-                    chartType={{pieChartType}}
-                    [options]=pieChartOptions
-                    [plugins]=pieChartPlugins
-                    [colors]=pieChartColors
-                    [legend]=pieChartLegend>
-                  </canvas>-->
                 </div>
                 <div class="clear"></div>
               </div>

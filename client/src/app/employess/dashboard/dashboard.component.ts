@@ -14,6 +14,7 @@ export class EmployeeDashboardComponent implements OnInit {
   peerReview:any;
   currentEvaluation:any;
   currentEvaluationProgress:any=0;
+  currentEvaluationProgressTitle:any='N/A';
   previousEvaluation:any={
     'period':'N/A',
     'rating':'N/A',
@@ -58,8 +59,8 @@ export class EmployeeDashboardComponent implements OnInit {
       }
       this.currentEvaluation = dashboardResponse['current_evaluation'];
       this.previousEvaluation = dashboardResponse['previous_evaluation'];
-
       this.currentEvaluationProgress = this.currentEvaluation.status;
+      this.currentEvaluationProgressTitle = this.currentEvaluation.status_title || "N/A";
 
     })
   }
