@@ -10,8 +10,7 @@ import { ReportsService } from '../../../services/reports.service';
 
 @Component({
   selector: 'app-reports',
-  templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.css']
+  templateUrl: './reports.component.html'
 })
 export class ReportsComponent {
   public gridOptions: GridOptions;
