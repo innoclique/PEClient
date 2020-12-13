@@ -1,19 +1,18 @@
-
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import "ag-grid-community";
 import { GridApi, GridOptions } from 'ag-grid-community';
-import { AuthService } from '../../../services/auth.service';
-import RefData from "../../psa/reports/data/refData";
-import ReportTemplates from '../../psa/reports/data/reports-templates';
-import { ReportsService } from '../../../services/reports.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../../../../services/auth.service';
+import { ReportsService } from '../../../../../../services/reports.service';
+import ReportTemplates from '../../../data/reports-templates';
+import RefData from '../../../data/refData';
 
 @Component({
   selector: 'app-reports',
-  templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.css']
+  templateUrl: './resellerRevenueDetails.html'
 })
-export class ReportsComponent {
+export class ResellerRevenueDetails {
   public gridOptions: GridOptions;
   public showGrid: boolean;
   public rowData: any[];
@@ -25,39 +24,32 @@ export class ReportsComponent {
   currentOrganization: any;
   detailCellRenderer: any;
   frameworkComponents: any;
+  resellerInfo: any;
+  resellerRow: any;
+  clientInfo: any;
+  clientRow: any;
+  subscription: Subscription = new Subscription();
   constructor(
     public authService: AuthService,
-    public router: Router,
     public reportService: ReportsService,
+    public router: Router,
     private activatedRoute: ActivatedRoute, ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     this.gridOptions = <GridOptions>{};
     this.gridOptions = {
-      columnDefs: this.getCSAPaymentsSummaryColumnDefs(),
+      columnDefs: this.getResellerRevenueDetailsColumnDefs(),
     }
     this.defaultColDef = ReportTemplates.defaultColDef;
   }
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
-    this.getEvaluationsSummary();
-  }
-
-  getEvaluationsSummary() {
-    console.log(this.currentUser);
-    let {  _id } = this.currentUser;
-    let orgId = _id;
-
-    let reqBody: any = {
-      orgId: orgId,
-      reportType: 'EA_EVALUATIONS'
-    };
-    this.reportService.getReport(reqBody).subscribe(apiResponse => {
-      console.log('EA_EVALUATIONS : ', apiResponse);
-      this.createRowData(apiResponse);
-    });
-
+    this.subscription.add(this.activatedRoute.params.subscribe(params => {
+      if (params['resellerId']) {
+        this.getResellerRevenueDetails(params['resellerId']);
+      }
+    }));
   }
 
   public headerHeightSetter() {
@@ -65,44 +57,54 @@ export class ReportsComponent {
     var height = ReportTemplates.headerHeightGetter() + padding;
     this.api.setHeaderHeight(height);
     this.api.resetRowHeights();
+}
+
+  getResellerRevenueDetails(resellerId) {
+    console.log('resellerId : ', resellerId)
+    let reqBody: any = {
+      orgId: resellerId,
+      reportType: 'RESELLER_REVENUE_DETAILS'
+    };
+    this.reportService.getReport(reqBody).subscribe(apiResponse => {
+      console.log('RESELLER_REVENUE_DETAILS : ', apiResponse);
+      this.createRowData(apiResponse);
+    });
   }
 
-  getCSAPaymentsSummaryColumnDefs() {
-    return  [
-      { headerName: 'Employee', field: 'emp' },
-      { headerName: 'Employee Manager', field: 'mgr', sortable: true, minWidth: 50, width: 128, resizable: true, filter: true },
-      { headerName: 'Department', field: 'dept', minWidth: 50, width: 128, resizable: true, sortable: true, filter: true },
-      { headerName: 'Title', field: 'title', sortable: true, minWidth: 50, width: 128, resizable: true, filter: true },
-      { headerName: 'Length of Service', field: 'servicePeriod' },
-      { headerName: 'Length of Service in Current Role', field: 'currentRoleServicePeriod' },
-      { headerName: 'Evaluation Status', field: 'status' },
-  ];
+  getResellerRevenueDetailsColumnDefs() {
+    return [
+      { headerName: 'Date of Purchase', field: 'purchasedOn' },
+      { headerName: 'Usage Type', field: 'usageType' },
+      { headerName: 'Revenue from Licenses (CAD)', field: 'licPurchasesCount' },
+      { headerName: 'Revenue from # of Employees (CAD)', field: 'licPurchasesCount', },
+    ];
   }
 
-  createRowData(eaEvaluations:any) {
+   createRowData(history: any) {
     const rowData: any[] = [];
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+
+    this.resellerInfo = history.resellerInfo;
+    this.resellerRow = {
+      'Name': this.resellerInfo.Name,
+      'year': new Date(this.resellerInfo.CreatedOn).toLocaleDateString(undefined, options),
+      'active': this.resellerInfo.IsActive ? 'Yes' : 'No',
+    };
+
     for (let i = 0; i < 20; i++) {
       rowData.push({
         evaluationPeriod: "JAN'20-DEC'20",
         purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
-        evaluationsType: RefData.evaluationTypes[0],
-        licPurchasesCount: Math.round(Math.random() * 10),
-        emp:'David Fletcher',
-        mgr:'Andrew Sandieago',
-        dept:'Dev',
-        title:'SSE',
-        servicePeriod:'3 Months',
-        currentRoleServicePeriod:'1 Month',
-        status:'in Progress',
-
+        evaluationsType: this.resellerInfo.EvaluationPeriod,
+        usageType: RefData.usageTypes[Math.random() < 0.5 ? 1 : 0],
+        licPurchasesCount: Math.round(Math.random() * 10000),
       });
     }
     this.rowData = rowData;
   }
 
-  gotoDashboard() {
-    this.router.navigate(['/ea/dashboard'])
+  gotoResellers() {
+    this.router.navigate(['/psa/reports/revenue/reseller'])
   }
 
   onBtExport() {
@@ -116,7 +118,6 @@ export class ReportsComponent {
     };
     this.api.exportDataAsExcel(params);
   }
-
   onReady(params: any) {
     this.api = params.api;
     console.log('onReady');
@@ -128,7 +129,6 @@ export class ReportsComponent {
 
   onQuickFilterChanged($event: any) {
     this.api.setQuickFilter($event.target.value);
-  }
-
 }
 
+}

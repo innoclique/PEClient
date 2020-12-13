@@ -3,10 +3,10 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-header">
-            Evaluations Summary
+            Reseller Revenue
             <div _ngcontent-fha-c25="" class="reports-buttons pull-right">
               <div style="float: left; margin-left: 20px">
-                <input  id="quickFilterInput" (input) = onQuickFilterChanged($event)
+                <input  id="quickFilterInput" (input)=onQuickFilterChanged($event) 
                   style="width: 300px;margin-right: 5px;" class="form-control" placeholder="Type text to filter..." />
               </div>
               <button (click)="gotoDashboard()" ngcontent-fha-c25="" class="btn btn-primary mr-1 pull-right"
@@ -24,9 +24,8 @@
                    [rowData]="rowData"  [pagination]="true"
                   [paginationPageSize]="10" (gridReady)="onReady($event)"
                   [animateRows]="true"  
-                  [defaultColDef]="defaultColDef"
-                  (firstDataRendered)="headerHeightSetter($event)"
-                  (columnResized)="headerHeightSetter($event)"
+                  [defaultColDef]="defaultColDef" (firstDataRendered)="headerHeightSetter($event)"
+                (columnResized)="headerHeightSetter($event)"
                    suppressRowClickSelection rowSelection="multiple">
                 </ag-grid-angular>
               </div>
