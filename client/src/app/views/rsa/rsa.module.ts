@@ -21,6 +21,7 @@ import { projectRoutes } from '../psa/psa.module';
 import { ClientListComponent } from './client-list/client-list.component';
 import { DashboardChartsModule } from "../charts/charts.module";
 import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
+import { ClientPurchaseHistory } from './reports/purchaseHistory/client/clientPurchaseHIstory';
 
 
 export const rsaRoutes: Routes = [
@@ -69,6 +70,11 @@ export const rsaRoutes: Routes = [
         component: ReportsComponent,
         data: { title: 'Reports' }
       },
+       {
+        path: 'reports/client-purchase-history/:clientId',
+        component: ClientPurchaseHistory,
+        data: { title: 'RSA Client Purchase History' }
+      },
       {
         path: 'setup-model',
         component: SetupModelComponent,
@@ -81,7 +87,7 @@ export const rsaRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [DashboardComponent, SetupclientComponent, AppsettingsComponent, EvaluationsettingsComponent, ReportsComponent, SetupModelComponent, ClientListComponent],
+  declarations: [DashboardComponent, SetupclientComponent, AppsettingsComponent, EvaluationsettingsComponent, ReportsComponent, SetupModelComponent, ClientPurchaseHistory, ClientListComponent],
   imports: [
     CommonModule,
 
