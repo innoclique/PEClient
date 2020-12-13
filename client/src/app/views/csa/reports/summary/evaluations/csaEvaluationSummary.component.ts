@@ -42,7 +42,7 @@ export class CSAEvaluationsSummary {
     this.getEvaluationsSummary();
   }
 
-  public headerHeightSetter() {
+  public headerHeightSetter(event) {
     var padding = 20;
     var height = ReportTemplates.headerHeightGetter() + padding;
     this.api.setHeaderHeight(height);

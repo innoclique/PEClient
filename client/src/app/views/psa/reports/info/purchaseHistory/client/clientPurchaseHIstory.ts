@@ -51,7 +51,7 @@ export class ClientPurchaseHistory {
     }));
   }
 
-  public headerHeightSetter() {
+   headerHeightSetter(event) {
     var padding = 20;
     var height = ReportTemplates.headerHeightGetter() + padding;
     this.api.setHeaderHeight(height);

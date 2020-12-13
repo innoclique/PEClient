@@ -43,7 +43,7 @@ export class ResellerClientInfoComponent {
         this.defaultColDef = ReportTemplates.defaultColDef;
     }
 
-    public headerHeightSetter() {
+     headerHeightSetter(event) {
         var padding = 20;
         var height = ReportTemplates.headerHeightGetter() + padding;
         this.api.setHeaderHeight(height);

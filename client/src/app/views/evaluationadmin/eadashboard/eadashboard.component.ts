@@ -106,5 +106,9 @@ public barChartColors: Color[] = [
 
   
 
+chartClicked(event){
+  console.log(event)
+}
+
 
 }
