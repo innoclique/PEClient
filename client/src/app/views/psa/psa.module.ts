@@ -22,6 +22,15 @@ import { ChartsModule } from "ng2-charts";
 import { AppDirectiveModule } from '../../directives/app-directive.module';
 import { DashboardChartsModule } from "../charts/charts.module";
 import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
+import { ResellerInfoComponent} from "./reports/info/reseller/resellerInfo.component";
+import {ClientInfoComponent} from "./reports/info/client/clientInfo.component";
+import {ClientPurchaseHistory} from "./reports/info/purchaseHistory/client/clientPurchaseHIstory";
+import {ResellerClientInfoComponent} from "./reports/info/reseller-clients/resellerClientsInfo.component";
+import {ResellerClientPurchaseHistory} from "./reports/info/purchaseHistory/reseller-client/resellerClientPurchaseHIstory";
+import {ResellerRevenueInfoComponent} from "./reports/revenue/reseller/resellerRevenueInfo.component";
+import {ClientRevenueInfoComponent} from "./reports/revenue/client/clientRevenueInfo.component";
+import {ClientRevenueDetails} from "./reports/revenue/details/client/clientRevenueDetails";
+import {ResellerRevenueDetails} from "./reports/revenue/details/reseller/resellerRevenueDetails";
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -68,6 +77,52 @@ export const projectRoutes: Routes = [
       component:ReportsComponent,
       data:{title:'Reports'}
     },
+     {
+      path:'reports/info/client',
+      component:ClientInfoComponent,
+      data:{title:'ClientInfo'}
+    },
+    {
+      path:'reports/info/client/purchase-history/:clientId',
+      component:ClientPurchaseHistory,
+      data:{title:'Client Purchase History'}
+    },
+    {
+      path:'reports/info/reseller',
+      component:ResellerInfoComponent,
+      data:{title:'ResellerInfo'}
+    },
+    {
+      path:'reports/info/reseller/clients/:resellerId',
+      component:ResellerClientInfoComponent,
+      data:{title:'Reseller Clients Info'}
+    },
+    
+    {
+      path:'reports/info/reseller/clients/purchase-history/:clientId',
+      component:ResellerClientPurchaseHistory,
+      data:{title:'Reseller Client Purchase History'}
+    },
+    {
+      path:'reports/revenue/client',
+      component:ClientRevenueInfoComponent,
+      data:{title:'ClientRevenueInfo'}
+    },
+    {
+      path:'reports/revenue/reseller',
+      component:ResellerRevenueInfoComponent,
+      data:{title:'ResellerRevenueInfo'}
+    },
+    {
+      path:'reports/revenue/client/details/:clientId',
+      component:ClientRevenueDetails,
+      data:{title:'ClientRevenueInfo'}
+    },
+    {
+      path:'reports/revenue/reseller/details/:resellerId',
+      component:ResellerRevenueDetails,
+      data:{title:'ResellerRevenueInfo'}
+    },
     {
       path:'application-settings',
       component:ApplicationSettingsComponent,
@@ -101,7 +156,16 @@ export const projectRoutes: Routes = [
     ApplicationSettingsComponent,
     EvaluationSettingsComponent,
     PaymentSettingsComponent,
-    ProfileComponent
+    ProfileComponent,
+     ResellerInfoComponent,
+    ClientInfoComponent,
+    ClientPurchaseHistory,
+    ResellerRevenueInfoComponent,
+    ResellerClientInfoComponent,
+    ResellerClientPurchaseHistory,
+    ClientRevenueInfoComponent,
+    ClientRevenueDetails,
+    ResellerRevenueDetails
   ],
   imports: [
     CommonModule,
