@@ -365,3 +365,31 @@ accordion .panel-default {
 .accordion-header-padding {
   padding-top: 6px;
 }
+
+.grid-metadata-wrapper  {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.grid-metadata-header span {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  width: 170px;
+  margin: 1rem;
+  font-size: 13px;
+  line-height: 20px;
+  color: #000;
+  font-weight: 600;
+  padding: 10px 0 0;
+  // float: left;
+}
+
+
+.grid-metadata-header label {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
+  line-height: 20px;
+  color: #000;
+  font-weight: 500;
+  // float: left;
+}
