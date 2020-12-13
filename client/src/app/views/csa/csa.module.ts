@@ -14,6 +14,8 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AppDirectiveModule } from '../../directives/app-directive.module';
 import { DashboardChartsModule } from "../charts/charts.module";
 import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
+import { CSAPaymentSummary } from "./reports/summary/payment/csaPaymentSummary.component";
+import { CSAEvaluationsSummary } from "./reports/summary/evaluations/csaEvaluationSummary.component";
 
 export const projectRoutes: Routes = [
   
@@ -27,7 +29,16 @@ export const projectRoutes: Routes = [
       path: '',
       redirectTo: 'dashboard'
     },
-    
+     {
+      path: 'reports/paymentSummary',
+      component: CSAPaymentSummary,
+      data: { title: 'Payment Summary' }
+    },
+    {
+      path: 'reports/evaluationsSummary',
+      component: CSAEvaluationsSummary,
+      data: { title: 'Evaluation Summary' }
+    },
     { path: 'dashboard', component: DashboardComponent,data: {
       title: 'Dashboard'
     }},
@@ -41,6 +52,8 @@ export const projectRoutes: Routes = [
   declarations: [
    
     DashboardComponent,
+     CSAPaymentSummary,
+    CSAEvaluationsSummary
     
   ],
   imports: [
