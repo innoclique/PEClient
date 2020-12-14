@@ -35,6 +35,10 @@ export class DefaultLayoutComponent implements OnInit {
     this.router.navigate([_role.toLowerCase() + '/profile'])
   }
 
+  gotoMessages(){
+    
+  }
+
   switchLang(lang: string) {
     this.translate.use(lang);
   }

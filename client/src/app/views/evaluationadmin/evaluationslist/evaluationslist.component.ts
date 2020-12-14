@@ -62,6 +62,10 @@ export class EvaluationslistComponent implements OnInit {
     force: true,
     suppressFlash: false
   };
+
+  
+  public monthList = ["January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December"]
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -213,7 +217,7 @@ export class EvaluationslistComponent implements OnInit {
             return `  <input  data-action-type="orgView"  type="checkbox" id="scales" name="scales">
            ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
           } else {
-            return `  <input   data-action-type="orgView"  type="checkbox" disabled id="scales" name="scales" >
+            return `  <input   data-action-type="orgView" title="This employee already rolled out" type="checkbox" disabled id="scales" name="scales" >
             ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
           }
 
@@ -227,15 +231,15 @@ export class EvaluationslistComponent implements OnInit {
             return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
         }
       },
-      {
-        headerName: 'Type', sortable: true, width:100,wrapText: true, autoHeight: true,  filter: true,
-        cellRenderer: (data) => { return "Regular" }
-      },
+      // {
+      //   headerName: 'Type', sortable: true, width:100,wrapText: true, autoHeight: true,  filter: true,
+      //   cellRenderer: (data) => { return "Regular" }
+      // },
       {
         headerName: 'Evaluation Period', sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
         cellRenderer: (data) => {
           if (this.getNested(data.data.EvaluationRow, 'EvaluationPeriod')) // true
-            return data.data.EvaluationRow.EvaluationPeriod
+            return this.getEVPeriod(data.data.EvaluationRow);
         }
       },
       {
@@ -918,6 +922,18 @@ export class EvaluationslistComponent implements OnInit {
   initiateEvaluation() {
     this.router.navigate(['ea/rollout', { allKpi: 'true' }], { skipLocationChange: true });
 
+  }
+
+  
+  getEVPeriod(evRow){
+
+    let year= new Date (evRow.CreatedDate);
+    if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
+    return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} - ${this.currentOrganization.EndMonth.substring(0, 3)} ${year.getFullYear()+1}`
+    }else{
+      return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} - ${this.currentOrganization.EndMonth.substring(0, 3)} ${year.getFullYear()}`
+
+    }
   }
 
 

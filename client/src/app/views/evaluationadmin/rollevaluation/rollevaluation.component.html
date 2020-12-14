@@ -52,9 +52,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <span class="period-label">Evaluation Period: </span>
-                                    <span class="font-weight-bold period-value">
-                                        {{currentOrganization?.EvaluationPeriod}}-{{currentOrganization?.StartMonth}}
-                                        {{currentOrganization?.EndMonth}}
+                                    <span class="font-weight-bold period-value"> {{getEVPeriod()}}
+                                       
                                     </span>
                                 </div>
                             </div>

@@ -56,6 +56,7 @@ accessingFrom:any;
   currEvaluation: any;
   showKpiForm=true;
   isEmpFRSignOff=false;
+  currentOrganization: any;
 
 
 
@@ -70,6 +71,7 @@ accessingFrom:any;
     private perfApp: PerfAppService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
 
     this.initApicallsForKpi();
 

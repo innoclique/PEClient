@@ -451,6 +451,7 @@ export class ClientSetupComponent implements OnInit {
   }
   public enableFields(form: FormGroup) {
     for (const key in form.controls) {
+      form.get(key).reset();
       form.get(key).enable();
     }
   }

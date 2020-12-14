@@ -52,6 +52,7 @@ export class KpiAddComponent implements OnInit {
   msSelVal="";
   ownerInfo: any;
   currEvaluation: any;
+  currentOrganization: any;
 
 
 
@@ -66,6 +67,7 @@ export class KpiAddComponent implements OnInit {
     private perfApp: PerfAppService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
 
     
 
