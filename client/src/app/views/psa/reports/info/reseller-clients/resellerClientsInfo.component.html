@@ -21,36 +21,36 @@
 
           <div class="grid-metadata-wrapper" *ngIf="resellerRow">
             <div class="grid-metadata-header">
-              <span>
-                Reseller :
-              </span>
-              <label> {{resellerRow.Name}}</label>
-              <span>
-                Since :
-              </span>
-              <label> {{ resellerRow.year}}</label>
-              <span>
-                Active :
-              </span>
-              <label> {{resellerRow.active}}</label>
+              <div class="col-lg-4 pull-left"><span>
+                  Reseller :
+                </span>
+                <label> {{resellerRow.Name}}</label></div>
+              <div class="col-lg-4 pull-left"><span>
+                  Since :
+                </span>
+                <label> {{ resellerRow.year}}</label></div>
+              <div class="col-lg-4 pull-left"><span>
+                  Active :
+                </span>
+                <label> {{resellerRow.active}}</label></div>
 
-              <span>
-                Phone :
-              </span>
-              <label>{{resellerInfo.Phone}}</label>
+              <div class="col-lg-4 pull-left"><span>
+                  Phone :
+                </span>
+                <label>{{resellerInfo.Phone}}</label></div>
 
-              <span>
-                Email :
-              </span>
-              <label>{{resellerInfo.Email}}</label>
+              <div class="col-lg-4 pull-left"><span>
+                  Email :
+                </span>
+                <label>{{resellerInfo.Email}}</label></div>
 
             </div>
           </div>
 
-          <div style="width: 100%;">
+          <div style="width: 100%;margin-top: 10px;">
             <div>
-              <ag-grid-angular style="width: 100%; height: 425px;" class="ag-theme-alpine" [gridOptions]="gridOptions"
-                [rowData]="rowData" [pagination]="true" [paginationPageSize]="10" (gridReady)="onReady($event)"
+              <ag-grid-angular style="width: 100%; height: 350px;" class="ag-theme-alpine" [gridOptions]="gridOptions"
+                [rowData]="rowData" [pagination]="true" [paginationPageSize]="5" (gridReady)="onReady($event)"
                 [animateRows]="true" [defaultColDef]="defaultColDef" (firstDataRendered)="headerHeightSetter($event)"
                 (columnResized)="headerHeightSetter($event)" suppressRowClickSelection rowSelection="multiple">
                 >
