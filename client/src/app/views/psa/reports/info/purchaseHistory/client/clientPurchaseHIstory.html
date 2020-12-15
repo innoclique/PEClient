@@ -1,140 +1,86 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import "ag-grid-community";
-import { GridApi, GridOptions } from 'ag-grid-community';
-import { Subscription } from 'rxjs';
-import { AuthService } from '../../../../../../services/auth.service';
-import { ReportsService } from '../../../../../../services/reports.service';
-import ReportTemplates from '../../../data/reports-templates';
-
-@Component({
-  selector: 'app-reports',
-  templateUrl: './clientPurchaseHistory.html'
-})
-export class ClientPurchaseHistory {
-  public gridOptions: GridOptions;
-  public showGrid: boolean;
-  public rowData: any[];
-  private api: GridApi;
-  detailCellRendererParams: any;
-  defaultColDef: any;
-  currentUser: any;
-  cscData: any = undefined;
-  currentOrganization: any;
-  detailCellRenderer: any;
-  frameworkComponents: any;
-  resellerInfo: any;
-  resellerRow: any;
-  clientInfo: any;
-  clientRow: any;
-  subscription: Subscription = new Subscription();
-  constructor(
-    public authService: AuthService,
-    public reportService: ReportsService,
-    public router: Router,
-    private activatedRoute: ActivatedRoute, ) {
-    this.currentUser = this.authService.getCurrentUser();
-    this.currentOrganization = this.authService.getOrganization();
-    this.gridOptions = <GridOptions>{};
-    this.gridOptions = {
-      columnDefs: this.getClientPurchaseHistoryColumnDefs(),
-    }
-    this.defaultColDef = ReportTemplates.defaultColDef;
-  }
-
-  ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    this.subscription.add(this.activatedRoute.params.subscribe(params => {
-      if (params['clientId']) {
-        this.getPurchaseHistoryInfo(params['clientId']);
-      }
-    }));
-  }
-
-  headerHeightSetter(event) {
-    var padding = 20;
-    var height = ReportTemplates.headerHeightGetter() + padding;
-    this.api.setHeaderHeight(height);
-    this.api.resetRowHeights();
-    this.api.sizeColumnsToFit();
-  }
-
-  getPurchaseHistoryInfo(clientId) {
-    console.log('clientId : ', clientId)
-    let reqBody: any = {
-      orgId: clientId,
-      reportType: 'CLIENT_PURCHASE_HISTORY'
-    };
-    this.reportService.getReport(reqBody).subscribe(apiResponse => {
-      console.log('CLIENT_PURCHASE_HISTORY : ', apiResponse);
-      this.createRowData(apiResponse);
-    });
-  }
-
-  getClientPurchaseHistoryColumnDefs() {
-    return [
-      { headerName: 'Date of Purchase', field: 'purchasedOn' },
-      { headerName: 'Type of Evaluation', field: 'evaluationsType' },
-      { headerName: '#s Purchased (Employees)', field: 'licPurchasesCount', type: 'rightAligned', },
-      { headerName: '#s Purchased (License)', field: 'licPurchasesCount', type: 'rightAligned', },
-    ];
-  }
-
-  createRowData(history: any) {
-    const rowData: any[] = [];
-    var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-
-    this.resellerInfo = history.resellerInfo;
-    this.resellerRow = {
-      'Name': this.resellerInfo.Name,
-      'year': new Date(this.resellerInfo.CreatedOn).toLocaleDateString(undefined, options),
-      'active': this.resellerInfo.IsActive ? 'Yes' : 'No',
-    };
-
-    this.clientInfo = history.clientInfo;
-    this.clientRow = {
-      'Name': this.clientInfo.Name,
-      'year': new Date(this.clientInfo.CreatedOn).toLocaleDateString(undefined, options),
-      'active': this.clientInfo.IsActive ? 'Yes' : 'No',
-      'usageType': this.clientInfo.UsageType,
-      'evaluationsType': this.clientInfo.EvaluationPeriod,
-      'evaluationPeriod': ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
-    };
-
-    for (let i = 0; i < 20; i++) {
-      rowData.push({
-        evaluationPeriod: "JAN'20-DEC'20",
-        purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
-        evaluationsType: 'Year - end',
-        licPurchasesCount: Math.round(Math.random() * 10),
-      });
-    }
-    this.rowData = rowData;
-  }
-
-  gotoDashboard() {
-    this.router.navigate(['/psa/reports/info/client'])
-  }
-
-  onBtExport() {
-    var params = {
-      columnWidth: parseFloat('200'),
-      sheetName: 'Client-Info',
-      exportMode: undefined,
-      suppressTextAsCDATA: false,
-      rowHeight: undefined,
-      headerRowHeight: undefined,
-    };
-    this.api.exportDataAsExcel(params);
-  }
-  onReady(params: any) {
-    this.api = params.api;
-    console.log('onReady');
-    this.gridOptions.rowHeight = 40;
-  }
-
-  onQuickFilterChanged($event: any) {
-    this.api.setQuickFilter($event.target.value);
-  }
-
-}
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          Purchase History
+          <div _ngcontent-fha-c25="" class="reports-buttons pull-right">
+            <div style="float: left; margin-left: 20px">
+              <input id="quickFilterInput"  (input) = onQuickFilterChanged($event) style="width: 300px;margin-right: 5px;" class="form-control"
+                placeholder="Type text to filter..." />
+            </div>
+            <button (click)="gotoDashboard()" ngcontent-fha-c25="" class="btn btn-primary mr-1 pull-right"
+              data-toggle="modal" type="button">
+              <i class="fa fa-arrow-left"></i>
+            </button>
+            <button (click)="onBtExport()" ngcontent-fha-c25="" class="btn btn-primary mr-1 pull-right" type="button">
+              <i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="grid-metadata-wrapper" *ngIf="clientRow">
+            <div class="grid-metadata-header">
+              <div class="col-lg-3 pull-left">
+              <span>
+                Client :
+              </span>
+              <label> {{clientRow.Name}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
+              <span>
+                Since :
+              </span>
+              <label> {{ clientRow.year}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
+              <span>
+                Active :
+              </span>
+              <label> {{clientRow.active}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
+              <span>
+                Usage Type :
+              </span>
+              <label> {{ clientRow.usageType}}</label>
+            </div>
+            <div class="grid-metadata-header">
+            <div class="col-lg-3 pull-left">
+              <span>
+                Evaluation Period :
+              </span>
+              <label> {{clientRow.evaluationPeriod}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
+              <span>
+                Phone :
+              </span>
+              <label>{{clientInfo.Phone}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
+              <span>
+                Email :
+              </span>
+              <label>{{clientInfo.Email}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
+            </div>
+          </div>
+            </div>
+          <div style="width: 100%; margin-top: 20px;">
+            <div>
+              <ag-grid-angular style="width: 100%; height: 350px;" class="ag-theme-alpine" [gridOptions]="gridOptions"
+                [rowData]="rowData" [pagination]="true" [paginationPageSize]="5" (gridReady)="onReady($event)"
+                [animateRows]="true" 
+                [defaultColDef]="defaultColDef"
+                  (firstDataRendered)="headerHeightSetter($event)"
+                  (columnResized)="headerHeightSetter($event)"
+                suppressRowClickSelection rowSelection="multiple">
+              </ag-grid-angular>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
