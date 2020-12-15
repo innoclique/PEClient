@@ -27,7 +27,7 @@ export class ResellerInfoComponent {
     frameworkComponents: any;
     constructor(
         public authService: AuthService,
-        public reportService:ReportsService,
+        public reportService: ReportsService,
         public router: Router,
         private activatedRoute: ActivatedRoute, ) {
         this.currentUser = this.authService.getCurrentUser();
@@ -39,44 +39,45 @@ export class ResellerInfoComponent {
         this.defaultColDef = ReportTemplates.defaultColDef;
         // this.createResellerRowData();
     }
-     headerHeightSetter(event) {
+    headerHeightSetter(event) {
         var padding = 20;
         var height = ReportTemplates.headerHeightGetter() + padding;
         this.api.setHeaderHeight(height);
         this.api.resetRowHeights();
+        this.api.sizeColumnsToFit();
     }
 
     ngOnInit(): void {
         this.currentUser = this.authService.getCurrentUser();
         this.getResellerInfo();
     }
-    getResellerInfo(){
-        let {Organization,_id} = this.currentUser;
+    getResellerInfo() {
+        let { Organization, _id } = this.currentUser;
         let orgId = Organization._id;
 
-        let reqBody:any = {
-          orgId:orgId,
-          reportType:'RESELLER_INFO'
+        let reqBody: any = {
+            orgId: orgId,
+            reportType: 'RESELLER_INFO'
         };
         this.reportService.getReport(reqBody).subscribe(apiResponse => {
-          console.log('RESELLER_INFO : ',apiResponse);
-          this.createResellerRowData(apiResponse);
+            console.log('RESELLER_INFO : ', apiResponse);
+            this.createResellerRowData(apiResponse);
         });
-      }
+    }
 
-    private createResellerRowData(resellerInfo:any) {
+    private createResellerRowData(resellerInfo: any) {
         const rowData: any[] = [];
         //  resellerInfo = resellerInfo.ClientSummary.usage;
         var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
         console.log('inside createRowData : ');
-        for (let i = 0; i < resellerInfo.length; i++) {                                                           
+        for (let i = 0; i < resellerInfo.length; i++) {
             rowData.push({
                 reSellerName: resellerInfo[i].Name,
                 year: new Date(resellerInfo[i].CreatedOn).toLocaleDateString(undefined, options),
                 purchasedOn: RefData.DOBs[i % RefData.DOBs.length].getFullYear(),
-                active: resellerInfo[i].IsActive?'Yes':'No',
-                resellerId:resellerInfo[i]._id,
+                active: resellerInfo[i].IsActive ? 'Yes' : 'No',
+                resellerId: resellerInfo[i]._id,
                 purchasesCount: Math.round(Math.random() * 1000),//dummy data
             });
         }
@@ -88,8 +89,8 @@ export class ResellerInfoComponent {
             { headerName: 'Reseller', field: 'reSellerName', tooltipField: 'reSellerName', minWidth: 200 },
             { headerName: 'Reseller Since', field: 'year', minWidth: 50 },
             { headerName: 'Active', field: 'active', minWidth: 50 },
-            { headerName: '#s Purchased (License)', field: 'purchasesCount',minWidth:220 },
-            { headerName: '#s Purchased (# of Employees)', field: 'purchasesCount',minWidth:300  }, ,
+            { headerName: '#s Purchased (License)', field: 'purchasesCount', minWidth: 220, type: 'rightAligned' },
+            { headerName: '#s Purchased (Employees)', field: 'purchasesCount', minWidth: 300, type: 'rightAligned' },
             {
                 headerName: "Actions", sorting: false, filter: false, onCellClicked: this.gotoClients.bind(this),
                 cellRenderer: (data) => {
@@ -102,11 +103,11 @@ export class ResellerInfoComponent {
 
     gotoClients(event) {
         console.log(event);
-        const cr= event.data;
-        this.router.navigate(['/psa/reports/info/reseller/clients/'+cr.resellerId])
+        const cr = event.data;
+        this.router.navigate(['/psa/reports/info/reseller/clients/' + cr.resellerId])
         return;
     }
-    
+
     gotoDashboard() {
         this.router.navigate(['/psa/dashboard'])
     }
@@ -126,8 +127,7 @@ export class ResellerInfoComponent {
     onReady(params: any) {
         this.api = params.api;
         console.log('onReady');
-        this.api.sizeColumnsToFit();
-        this.gridOptions.rowHeight = 34;
+        this.gridOptions.rowHeight = 40;
     }
 
     onQuickFilterChanged($event: any) {
