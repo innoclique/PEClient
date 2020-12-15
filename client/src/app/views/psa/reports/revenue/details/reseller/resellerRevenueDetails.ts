@@ -52,12 +52,13 @@ export class ResellerRevenueDetails {
     }));
   }
 
-   headerHeightSetter(event) {
+  headerHeightSetter(event) {
     var padding = 20;
     var height = ReportTemplates.headerHeightGetter() + padding;
     this.api.setHeaderHeight(height);
     this.api.resetRowHeights();
-}
+    this.api.sizeColumnsToFit();
+  }
 
   getResellerRevenueDetails(resellerId) {
     console.log('resellerId : ', resellerId)
@@ -75,12 +76,12 @@ export class ResellerRevenueDetails {
     return [
       { headerName: 'Date of Purchase', field: 'purchasedOn' },
       { headerName: 'Usage Type', field: 'usageType' },
-      { headerName: 'Revenue from Licenses (CAD)', field: 'licPurchasesCount' },
-      { headerName: 'Revenue from # of Employees (CAD)', field: 'licPurchasesCount', },
+      { headerName: 'Revenue(Licenses)(CAD)', field: 'licPurchasesCount', type: 'rightAligned', valueFormatter: params => params.data.licPurchasesCount.toFixed(2) },
+      { headerName: 'Revenue(Employees)(CAD)', field: 'licPurchasesCount', type: 'rightAligned', valueFormatter: params => params.data.licPurchasesCount.toFixed(2) },
     ];
   }
 
-   createRowData(history: any) {
+  createRowData(history: any) {
     const rowData: any[] = [];
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
@@ -122,13 +123,11 @@ export class ResellerRevenueDetails {
     this.api = params.api;
     console.log('onReady');
     this.api.sizeColumnsToFit();
-    this.gridOptions.rowHeight = 34;
-    this.gridOptions.groupMultiAutoColumn = true;
-    this.gridOptions.columnApi.setColumnVisible('isPastData', false);
+    this.gridOptions.rowHeight = 40;
   }
 
   onQuickFilterChanged($event: any) {
     this.api.setQuickFilter($event.target.value);
-}
+  }
 
 }
