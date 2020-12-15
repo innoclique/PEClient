@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import "ag-grid-community";
 import { GridApi, GridOptions } from 'ag-grid-community';
-import { AuthService } from './../../../../../services/auth.service';
 import RefData from "../../../../psa/reports/data/refData";
 import ReportTemplates from '../../../../psa/reports/data/reports-templates';
+import { AuthService } from './../../../../../services/auth.service';
 
 @Component({
   selector: 'app-reports',
@@ -42,14 +42,21 @@ export class CSAPaymentSummary {
     this.currentUser = this.authService.getCurrentUser();
   }
 
-   headerHeightSetter(event) {
+  headerHeightSetter(event) {
     var padding = 20;
     var height = ReportTemplates.headerHeightGetter() + padding;
     this.api.setHeaderHeight(height);
     this.api.resetRowHeights();
+    this.api.sizeColumnsToFit();
   }
   getCSAPaymentsSummaryColumnDefs() {
-    return ReportTemplates.csaPaymentsSummaryColumnDefs.columnDefs;
+    return [
+      { headerName: 'Payment Date', field: 'purchasedOn' },
+      { headerName: 'Evaluation Period', field: 'evaluationPeriod', },
+      { headerName: 'Type of Evaluations', field: 'evaluationsType', },
+      { headerName: '# of Evaluations', field: 'licPurchasesCount', },
+      { headerName: 'Amount(CAD)', field: 'licPurchasesCount', type: 'rightAligned', valueFormatter: params => params.data.licPurchasesCount.toFixed(2) },
+    ];
   }
 
   createRowData() {
@@ -58,10 +65,10 @@ export class CSAPaymentSummary {
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
     for (let i = 0; i < 20; i++) {
       rowData.push({
-        evaluationPeriod: "JAN'20-DEC'20",
+        evaluationPeriod: "Jan'20 To Dec'20",
         purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
         evaluationsType: RefData.evaluationTypes[0],
-        licPurchasesCount: Math.round(Math.random() * 10),
+        licPurchasesCount: Math.round(Math.random() * 1000),
       });
     }
     this.rowData = rowData;
@@ -86,10 +93,7 @@ export class CSAPaymentSummary {
   onReady(params: any) {
     this.api = params.api;
     console.log('onReady');
-    this.api.sizeColumnsToFit();
-    this.gridOptions.rowHeight = 34;
-    this.gridOptions.groupMultiAutoColumn = true;
-    this.gridOptions.columnApi.setColumnVisible('isPastData', false);
+    this.gridOptions.rowHeight = 40;
   }
 
   onQuickFilterChanged($event: any) {
