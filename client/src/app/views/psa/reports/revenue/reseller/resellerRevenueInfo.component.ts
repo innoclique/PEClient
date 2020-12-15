@@ -1,15 +1,11 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import "ag-grid-community";
 import { GridApi, GridOptions } from 'ag-grid-community';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { AuthService } from '../../../../../services/auth.service';
-import { NotificationService } from '../../../../../services/notification.service';
-import { PerfAppService } from '../../../../../services/perf-app.service';
+import { ReportsService } from '../../../../../services/reports.service';
 import RefData from "../../data/refData";
 import ReportTemplates from '../../data/reports-templates';
-import { ReportsService } from '../../../../../services/reports.service';
 
 @Component({
     selector: 'my-app',
@@ -22,16 +18,16 @@ export class ResellerRevenueInfoComponent {
     public rowData: any[];
     private api: GridApi;
     detailCellRendererParams: any;
-    defaultColDef:any;
+    defaultColDef: any;
     currentUser: any;
     cscData: any = undefined;
     currentOrganization: any;
-    detailCellRenderer:any;
-    frameworkComponents:any;
+    detailCellRenderer: any;
+    frameworkComponents: any;
     constructor(
         public authService: AuthService,
         public router: Router,
-        public reportService:ReportsService,
+        public reportService: ReportsService,
         private activatedRoute: ActivatedRoute, ) {
         this.currentUser = this.authService.getCurrentUser();
         this.currentOrganization = this.authService.getOrganization();
@@ -48,66 +44,64 @@ export class ResellerRevenueInfoComponent {
     }
 
 
-    getResellerInfo(){
-        let {Organization,_id} = this.currentUser;
+    getResellerInfo() {
+        let { Organization, _id } = this.currentUser;
         let orgId = Organization._id;
 
-        let reqBody:any = {
-          orgId:orgId,
-          reportType:'RESELLER_INFO'
+        let reqBody: any = {
+            orgId: orgId,
+            reportType: 'RESELLER_INFO'
         };
         this.reportService.getReport(reqBody).subscribe(apiResponse => {
-          console.log('RESELLER_INFO : ',apiResponse);
-          this.getResellerRevenueRowData(apiResponse);
+            console.log('RESELLER_INFO : ', apiResponse);
+            this.getResellerRevenueRowData(apiResponse);
         });
-      }
+    }
 
-      private getResellerRevenueRowData(resellerInfo:any) {
+    private getResellerRevenueRowData(resellerInfo: any) {
         const rowData: any[] = [];
         //  resellerInfo = resellerInfo.ClientSummary.usage;
         var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
         console.log('inside getResellerRevenueRowData : ');
-        for (let i = 0; i < resellerInfo.length; i++) {                                                           
+        for (let i = 0; i < resellerInfo.length; i++) {
             rowData.push({
                 reSellerName: resellerInfo[i].Name,
                 year: new Date(resellerInfo[i].CreatedOn).toLocaleDateString(undefined, options),
                 purchasedOn: RefData.DOBs[i % RefData.DOBs.length].getFullYear(),
-                active: resellerInfo[i].IsActive?'Yes':'No',
-                resellerId:resellerInfo[i]._id,
+                active: resellerInfo[i].IsActive ? 'Yes' : 'No',
+                resellerId: resellerInfo[i]._id,
                 purchasesCount: Math.round(Math.random() * 1000),//dummy data
-                paymentTypes:RefData.paymentTypes[Math.random() < 0.5 ? 1 : 0],
+                paymentTypes: RefData.paymentTypes[Math.random() < 0.5 ? 1 : 0],
             });
         }
         this.rowData = rowData;
     }
 
-     headerHeightSetter(event) {
+    headerHeightSetter(event) {
         var padding = 20;
         var height = ReportTemplates.headerHeightGetter() + padding;
         this.api.setHeaderHeight(height);
         this.api.resetRowHeights();
+        this.api.sizeColumnsToFit();
     }
 
     getPsaResellerRevenueInfoColumnDefs() {
-        return  [
-            {
-                headerName: 'Reseller', field: 'reSellerName', tooltipField: 'Client', minWidth: 200, width: 128, resizable: true, sortable: true, suppressSizeToFit: true, filter: true,
-                cellRenderer: 'agGroupCellRenderer'
-            },
-            { headerName: 'Active', field: 'active', sortable: true, minWidth: 50, resizable: true, width: 128, filter: true },
-            { headerName: 'Revenue (all years)', field: 'purchasesCount', sortable: true, minWidth: 50, width: 128, resizable: true, filter: true },
-            { headerName: 'Payment Type (Monthly/Yearly)', field: 'paymentTypes', sortable: true, minWidth: 50, width: 128, resizable: true, filter: true },
+        return [
+            { headerName: 'Reseller', field: 'reSellerName', },
+            { headerName: 'Active', field: 'active', },
+            { headerName: 'Revenue (CAD)', field: 'purchasesCount', type: 'rightAligned', valueFormatter: params => params.data.purchasesCount.toFixed(2) },
+            { headerName: 'Payment Type', field: 'paymentTypes', },
             {
                 headerName: "Actions", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoResellerRevenueDetails.bind(this),
                 cellRenderer: () => {
                     return `  <i class="fa fa-bars"   style="cursor:pointer ;padding: 7px 20px 0 0;
-                font-size: 17px; color:blue"   title="view Reseller Revenue Details" > Revenue Details</i>`
+                font-size: 17px;"   title="view Reseller Revenue Details" ></i>`
                 }
             }
         ];
     }
-   
+
     gotoDashboard() {
         this.router.navigate(['/psa/dashboard'])
     }
@@ -135,8 +129,7 @@ export class ResellerRevenueInfoComponent {
     onReady(params: any) {
         this.api = params.api;
         console.log('onReady');
-        this.api.sizeColumnsToFit();
-        this.gridOptions.rowHeight = 34;
+        this.gridOptions.rowHeight = 40;
     }
 
     onQuickFilterChanged($event: any) {
