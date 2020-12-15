@@ -43,11 +43,12 @@ export class ResellerClientInfoComponent {
         this.defaultColDef = ReportTemplates.defaultColDef;
     }
 
-     headerHeightSetter(event) {
+    headerHeightSetter(event) {
         var padding = 20;
         var height = ReportTemplates.headerHeightGetter() + padding;
         this.api.setHeaderHeight(height);
         this.api.resetRowHeights();
+        this.api.sizeColumnsToFit();
     }
 
     ngOnInit(): void {
@@ -101,8 +102,8 @@ export class ResellerClientInfoComponent {
                 active: resellerClientsInfo[i].IsActive ? 'Yes' : 'No',
                 clientId: resellerClientsInfo[i]._id,
                 usageType: resellerClientsInfo[i].UsageType,
-                evaluationsType: resellerClientsInfo[i].EvaluationPeriod,
-                evaluationPeriod: "JAN'20-DEC'20",
+                evaluationsType: 'Year - end',
+                evaluationPeriod: "Jan'20 To Dec'20",
                 empPurchasesCount: Math.round(Math.random() * 100),
                 licPurchasesCount: Math.round(Math.random() * 10),
                 purchasesCount: Math.round(Math.random() * 1000),
@@ -119,8 +120,8 @@ export class ResellerClientInfoComponent {
             { headerName: 'Usage Type', field: 'usageType', minWidth: 130 },
             { headerName: 'Evaluations Type', field: 'evaluationsType', minWidth: 150 },
             { headerName: 'Evaluation Period', field: 'evaluationPeriod', minWidth: 150 },
-            { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 150 },
-            { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 150 },
+            { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 150, type: 'rightAligned' },
+            { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 150, type: 'rightAligned' },
             {
                 headerName: "Actions", filter: false, Sorting: false, onCellClicked: this.gotoPurchaseHistory.bind(this),
                 cellRenderer: () => {
@@ -150,8 +151,7 @@ export class ResellerClientInfoComponent {
     onReady(params: any) {
         this.api = params.api;
         console.log('onReady');
-        this.api.sizeColumnsToFit();
-        this.gridOptions.rowHeight = 34;
+        this.gridOptions.rowHeight = 40;
     }
 
     onQuickFilterChanged($event: any) {
