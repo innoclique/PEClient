@@ -99,11 +99,11 @@ export class ClientRevenueInfoComponent {
             { headerName: 'Client', field: 'name' },
             { headerName: 'Active', field: 'active' },
             { headerName: 'Usage Type', field: 'usageType' },
-            { headerName: 'Type of Evaluations', field: 'evaluationsType' },
+            { headerName: 'Type of Evaluations', field: 'evaluationsType',minWidth:200 },
             { headerName: 'Revenue (CAD)', field: 'purchasesCount', type: 'rightAligned', valueFormatter: params => params.data.purchasesCount.toFixed(2) },
             { headerName: 'Payment Type', field: 'paymentTypes' },
             {
-                headerName: "Actions", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoClientRevenueDetails.bind(this),
+                headerName: "Actions",  filter: false, sorting: false, onCellClicked: this.gotoClientRevenueDetails.bind(this),
                 cellRenderer: () => {
                     return `  <i class="fa fa-bars"   style="cursor:pointer ;padding: 7px 10px 0 0;
             font-size: 17px; "   title="view Client Revenue Details" ></i>`
