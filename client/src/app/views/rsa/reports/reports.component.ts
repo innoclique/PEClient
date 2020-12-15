@@ -23,14 +23,14 @@ export class ReportsComponent {
     currentUser: any;
     cscData: any = undefined;
     currentOrganization: any;
-    currentOrganizationRow:any;
+    currentOrganizationRow: any;
     detailCellRenderer: any;
     frameworkComponents: any;
     subscription: Subscription = new Subscription();
     constructor(
         public authService: AuthService,
         public router: Router,
-        public reportService:ReportsService,
+        public reportService: ReportsService,
         private activatedRoute: ActivatedRoute, ) {
         this.currentUser = this.authService.getCurrentUser();
         this.currentOrganization = this.authService.getOrganization();
@@ -41,33 +41,34 @@ export class ReportsComponent {
         this.defaultColDef = ReportTemplates.defaultColDef;
     }
 
-     headerHeightSetter(event) {
+    headerHeightSetter(event) {
         var padding = 20;
         var height = ReportTemplates.headerHeightGetter() + padding;
         this.api.setHeaderHeight(height);
         this.api.resetRowHeights();
+        this.api.sizeColumnsToFit();
     }
 
     ngOnInit(): void {
         this.currentUser = this.authService.getCurrentUser();
-       this.getClientsInfo();
+        this.getClientsInfo();
     }
 
-    getClientsInfo(){
-        let {Organization,_id} = this.currentUser;
+    getClientsInfo() {
+        let { Organization, _id } = this.currentUser;
         let orgId = Organization._id;
 
-        let reqBody:any = {
-          orgId:orgId,
-          reportType:'CLIENTS_INFO'
+        let reqBody: any = {
+            orgId: orgId,
+            reportType: 'CLIENTS_INFO'
         };
-         this.reportService.getReport(reqBody).subscribe(apiResponse => {
-           console.log('CLIENTS_INFO : ',apiResponse);
-           this.createClientRowData(apiResponse);
-         });
-     }
+        this.reportService.getReport(reqBody).subscribe(apiResponse => {
+            console.log('CLIENTS_INFO : ', apiResponse);
+            this.createClientRowData(apiResponse);
+        });
+    }
 
-    private createClientRowData(clientsInfo:any) {
+    private createClientRowData(clientsInfo: any) {
         const rowData: any[] = [];
         var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
         // console.log('inside createRowData : ');
@@ -82,19 +83,19 @@ export class ReportsComponent {
                 name: clientsInfo[i].Name,
                 year: new Date(clientsInfo[i].CreatedOn).toLocaleDateString(undefined, options),
                 purchasedOn: RefData.DOBs[i % RefData.DOBs.length].getFullYear(),
-                active: clientsInfo[i].IsActive?'Yes':'No',
-                clientId:clientsInfo[i]._id,
+                active: clientsInfo[i].IsActive ? 'Yes' : 'No',
+                clientId: clientsInfo[i]._id,
                 usageType: clientsInfo[i].UsageType,
-                evaluationsType: clientsInfo[i].EvaluationPeriod,
-                evaluationPeriod:ReportTemplates.months[clientsInfo[i].StartMonth]+"'"+ReportTemplates.getYear()+' To '+ clientsInfo[i].EndMonth.substring(0,3)+"'"+ReportTemplates.getYear(),
+                evaluationsType: 'Year - end',
+                evaluationPeriod: ReportTemplates.months[clientsInfo[i].StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + clientsInfo[i].EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
                 empPurchasesCount: Math.round(Math.random() * 100),
                 licPurchasesCount: Math.round(Math.random() * 10),
                 purchasesCount: Math.round(Math.random() * 1000),
             });
         }
-        this.rowData =  rowData;
+        this.rowData = rowData;
     }
-    
+
     getPsaClientInfoColumnDefs() {
         return [
             { headerName: 'Client', field: 'name', tooltipField: 'name', minWidth: 150 },
@@ -103,9 +104,10 @@ export class ReportsComponent {
             { headerName: 'Usage Type', field: 'usageType', minWidth: 130 },
             { headerName: 'Evaluations Type', field: 'evaluationsType', minWidth: 150 },
             { headerName: 'Evaluation Period', field: 'evaluationPeriod', minWidth: 150 },
-            { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 150 },
-            { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 150 },
-            { headerName: "Actions", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoPurchaseHistory.bind(this),
+            { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 150 , type: 'rightAligned', valueFormatter: params => params.data.licPurchasesCount.toFixed(2) },
+            { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 150 , type: 'rightAligned', valueFormatter: params => params.data.empPurchasesCount.toFixed(2) },
+            {
+                headerName: "Actions", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoPurchaseHistory.bind(this),
                 cellRenderer: (data) => {
                     return `  <i class="fa fa-history"   style="cursor:pointer ;padding: 7px 20px 0 0;
                     font-size: 17px;"   data-action-type="edit" title="view purchase history" ></i>`
@@ -121,8 +123,8 @@ export class ReportsComponent {
 
     gotoPurchaseHistory(event) {
         console.log(event);
-        const cr= event.data;
-        this.router.navigate(['/rsa/reports/client-purchase-history/'+cr.clientId]);
+        const cr = event.data;
+        this.router.navigate(['/rsa/reports/client-purchase-history/' + cr.clientId]);
         return;
     }
 
@@ -141,10 +143,7 @@ export class ReportsComponent {
     onReady(params: any) {
         console.log('onReady');
         this.api = params.api;
-        this.api.sizeColumnsToFit();
-        this.gridOptions.rowHeight = 34;
-        this.gridOptions.groupMultiAutoColumn = true;
-        this.gridOptions.columnApi.setColumnVisible('isPastData', false);
+        this.gridOptions.rowHeight = 40;
     }
 
     onQuickFilterChanged($event: any) {
