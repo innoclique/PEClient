@@ -325,9 +325,14 @@ this.toggleSelection(c);
           this.kpiStatus = c.KpiStatus;
           this.coachingRemDays = c.coachingRem;
           this.currEvaluation = c.evaluation;
+          if(c.evaluation){
+            let {Employees} = c.evaluation;
+            let empFinalRatingSelfSignoff = Employees.find(employee=>employee._id==this.loginUser._id);
+            if(empFinalRatingSelfSignoff)
+              this.isEmpFRSignOff=empFinalRatingSelfSignoff.FinalRating.Self.SignOff.length>0;
+          }
           debugger
-          if(c.evaluation)
-          this.isEmpFRSignOff=c.evaluation.Employees[0].FinalRating.Self.SignOff.length>0;
+          
         }
       })
   }

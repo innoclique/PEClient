@@ -1,1 +1,125 @@
-<p>payment-settings works!</p>
+<tabset #tabset>
+    <tab heading="Client Organizations">
+        <div>
+            <div class="payment_section clearfix">
+              <h3>Payment Settings</h3>
+                <div class="row">
+                  <div class="col-lg-6 payment_section_in">
+                    <p>Usage type</p>
+                    <select class="form-control" [(ngModel)]="clientOrgModel.PaymentUserType">
+                      <option value="">Select</option>
+                      <option value="Employee">Employee</option>
+                      <option value="License">License</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-6 payment_section_in">
+                    <p>Payment Duration</p>
+                    <select class="form-control" [(ngModel)]="clientOrgModel.PaymentDuration">
+                      <option value="0">Select</option>
+                      <option value="1">1 Month</option>
+                      <option value="12">12 Months</option>
+                      <option value="24">24 MOnths</option>
+                    </select>
+                  </div>
+                </div>
+                <br><br>
+                <h3>Regular Cost Configuration</h3>
+                <div class="row">
+                  <div class="col-lg-6 payment_section_in">
+                    <p>Range</p>
+                    <select class="form-control" [(ngModel)]="clientOrgModel.RegularCostRange" >
+                      <option value="">Select</option>
+                      <option value="1-10">1 - 10</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-6 payment_section_in">
+                    <p>Cost/Employee/Year ($)</p>
+                    <input type="text" [(ngModel)]="clientOrgModel.RegularCost"/>
+                    
+                  </div>
+                  <div class="col-lg-6 payment_section_in">
+                    <p>% discount for annual payment</p>
+                    <input type="text" [(ngModel)]="clientOrgModel.RegularCostAnualDiscount"/>
+                  </div>
+                </div>
+                <div class="payment_section_btn pull-right clearfix">
+                  <button class="btn btn-primary" (click)="saveClientOrgData()">Save</button>
+                  <!--<button class="btn btn-primary">Submit</button>-->
+                  <button (click)="resetClientData()" class="btn btn-light">Reset</button>
+                </div>
+            </div>
+            <flash-messages></flash-messages>
+        </div>
+
+    </tab>
+    
+    <tab heading="Resellers">
+        <div >
+            <div class="payment_section clearfix">
+                <h3>Payment Settings</h3>
+                  <div class="row">
+                    <div class="col-lg-6 payment_section_in">
+                      <p>Usage type</p>
+                      <select class="form-control" [(ngModel)]="resellerModel.PaymentUserType">
+                        <option value="">Select</option>
+                        <option value="Employee">Employee</option>
+                        <option value="License">License</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-6 payment_section_in">
+                      <p>Payment Duration</p>
+                      <select class="form-control" [(ngModel)]="resellerModel.PaymentDuration">
+                        <option value="0">Select</option>
+                        <option value="1">1 Month</option>
+                        <option value="12">12 Months</option>
+                        <option value="24">24 MOnths</option>
+                      </select>
+                    </div>
+                  </div>
+                  <br> <br> 
+                  <h3>Regular Cost Configuration</h3>
+                  <div class="row">
+                    <div class="col-lg-6 payment_section_in">
+                      <p>Range</p>
+                      <select class="form-control" [(ngModel)]="resellerModel.RegularCostRange" >
+                        <option value="">Select</option>
+                        <option value="1-10">1 - 10</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-6 payment_section_in">
+                      <p>Cost/Employee/Year ($)</p>
+                      <input type="text" [(ngModel)]="resellerModel.RegularCost"/>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 payment_section_in">
+                      <p>% discount for annual payment </p>
+                      <input type="text" [(ngModel)]="resellerModel.RegularCostAnualDiscount"/>
+                    </div>
+                    <div class="col-lg-6 payment_section_in">
+                      <p>Annual Commitment to Sell (C2S)</p>
+                      <select class="form-control" [(ngModel)]="resellerModel.RegularCostAnualC2S">
+                        <option value="0">Select</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 payment_section_in">
+                      <p>% discount for C2S </p>
+                      <input type="text" [(ngModel)]="resellerModel.RegularCostAnualDiscountC2S"/>
+                    </div>
+                  </div>
+                  <div class="payment_section_btn pull-right clearfix">
+                    <button class="btn btn-primary" (click)="saveResellerData()">Save</button>
+                  <!--<button class="btn btn-primary">Submit</button>-->
+                  <button (click)="resetResellerData()" class="btn btn-light">Reset</button>
+                  </div>
+              </div>
+              <flash-messages></flash-messages>
+          </div>
+    </tab>
+    
+  </tabset>
+  

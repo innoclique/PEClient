@@ -15,7 +15,8 @@ export class DashboardComponent implements OnInit {
   currentUser:any;
   currentStatus:any = {
     completed:'N/A',
-    inprogress:'N/A'
+    inprogress:'N/A',
+    evaluations_left:'N/A'
   }
 
   constructor(

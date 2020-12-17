@@ -14,14 +14,14 @@ export class ManagerDashboardComponent implements OnInit {
   dashboardData:any;
   loginUser: any;
   evaluationsColumnDefs = [
-    { headerName:'Name',width:'130px',field: 'name',sortable: true},
-    { headerName:'Status',width:'150px',field: 'status',sortable: true},
+    { headerName:'Name',width:'100px',field: 'name',sortable: true},
+    { headerName:'Status',width:'180px',field: 'status',sortable: true},
     { headerName:'Action',width:'280px',
     cellRenderer: (data) => {
       let actionlinks=''
              actionlinks= `
             
-             <a href="#">View</> |  <a href="#">Sign-off</a> | <a href="#">Request Peer Review<a/>
+             <a href="javascript:void(0)">View</> |  <a href="javascript:void(0)">Sign-off</a> | <a href="javascript:void(0)">Request Peer Review<a/>
              
              `
             return actionlinks

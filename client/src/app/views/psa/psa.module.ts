@@ -31,6 +31,8 @@ import {ResellerRevenueInfoComponent} from "./reports/revenue/reseller/resellerR
 import {ClientRevenueInfoComponent} from "./reports/revenue/client/clientRevenueInfo.component";
 import {ClientRevenueDetails} from "./reports/revenue/details/client/clientRevenueDetails";
 import {ResellerRevenueDetails} from "./reports/revenue/details/reseller/resellerRevenueDetails";
+import { FlashMessagesModule } from 'angular2-flash-messages';
+
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -179,7 +181,8 @@ export const projectRoutes: Routes = [
     TabsModule,
     ChartsModule,
     AppDirectiveModule,
-    DashboardChartsModule
+    DashboardChartsModule,
+    FlashMessagesModule
   ],
   exports:[ ClientSummaryComponent]
 })
