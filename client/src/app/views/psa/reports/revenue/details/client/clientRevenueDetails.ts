@@ -74,7 +74,7 @@ export class ClientRevenueDetails {
   getClientRevenueDetailsColumnDefs() {
     return [
       { headerName: 'Evaluation Period', field: 'evaluationPeriod' },
-      { headerName: 'Type of Evaluation', field: 'evaluationsType' },
+      { headerName: 'Evaluations Type', field: 'evaluationsType' },
       { headerName: '#s Purchased', field: 'licPurchasesCount', type: 'rightAligned' },
       { headerName: 'Amount (CAD)', field: 'amount', type: 'rightAligned', valueFormatter: params => params.data.amount.toFixed(2) },
     ];
