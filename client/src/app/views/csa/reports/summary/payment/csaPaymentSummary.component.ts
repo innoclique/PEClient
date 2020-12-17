@@ -53,7 +53,7 @@ export class CSAPaymentSummary {
     return [
       { headerName: 'Payment Date', field: 'purchasedOn' },
       { headerName: 'Evaluation Period', field: 'evaluationPeriod', },
-      { headerName: 'Type of Evaluations', field: 'evaluationsType', },
+      { headerName: 'Evaluations Type', field: 'evaluationsType', },
       { headerName: '# of Evaluations', field: 'licPurchasesCount', type: 'rightAligned', },
       { headerName: 'Amount(CAD)', field: 'licPurchasesCount', type: 'rightAligned', valueFormatter: params => params.data.licPurchasesCount.toFixed(2) },
     ];
