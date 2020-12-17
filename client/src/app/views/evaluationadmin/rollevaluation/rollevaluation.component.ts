@@ -30,6 +30,8 @@ export class RollevaluationComponent implements OnInit {
   public currentOrganization: any;
   currentUser: any;
 
+  public monthList = ["January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December"]
   kpiForList: string[] = ['Employee', 'Manager', 'EA'];
   modelsList: any[];
   config = {
@@ -886,5 +888,17 @@ export class RollevaluationComponent implements OnInit {
     })
 
 
+  }
+
+
+  getEVPeriod(){
+
+    let year= new Date (this.currentOrganization.CreatedOn);
+    if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
+    return `${this.currentOrganization.EvaluationPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } To ${this.currentOrganization.EndMonth}`
+    }else{
+      return `${this.currentOrganization.EvaluationPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } To ${this.currentOrganization.EndMonth}`
+
+    }
   }
 }

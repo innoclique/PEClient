@@ -64,6 +64,7 @@ export class KpiReviewComponent implements OnInit {
 
   };
   trackViewRef: BsModalRef;
+  currentOrganization: any;
 
 
   constructor(private fb: FormBuilder,
@@ -77,6 +78,7 @@ export class KpiReviewComponent implements OnInit {
     private perfApp: PerfAppService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
 
     
 

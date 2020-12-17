@@ -24,6 +24,7 @@ export class ViewComponent implements OnInit {
   weight: number;
   kpiForm: FormGroup;
   competencyList:any=[];
+  currentOrganization: any;
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -32,6 +33,7 @@ export class ViewComponent implements OnInit {
     public translate: TranslateService,
     private fb: FormBuilder,) {
     this.loginUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
   }
 
   ngOnInit(): void {

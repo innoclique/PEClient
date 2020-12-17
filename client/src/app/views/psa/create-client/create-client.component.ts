@@ -171,7 +171,7 @@ export class CreateClientComponent implements OnInit {
       ])],
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
-        ContactPersonFirstName: [null, Validators.compose([
+        ContactPersonFirstName: ['', Validators.compose([
           Validators.required,                
           Validators.pattern("^[a-zA-Z0-9.,-:() ]+$"),        
           Validators.maxLength(200)])
@@ -349,6 +349,7 @@ export class CreateClientComponent implements OnInit {
   }
   public enableFields(form: FormGroup) {
     for (const key in form.controls) {
+      form.get(key).reset();
       form.get(key).enable();
     }
   }
@@ -379,7 +380,7 @@ export class CreateClientComponent implements OnInit {
 
 
   validationType = {
-    ContactPersonFirstName: [null, Validators.compose([
+    ContactPersonFirstName: ['', Validators.compose([
       Validators.required,                
       Validators.pattern("^[a-zA-Z0-9.,-:()]+$"),        
       Validators.maxLength(200)])

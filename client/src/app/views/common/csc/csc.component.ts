@@ -49,13 +49,14 @@ isStateSelect=false;
    );
     this.countryForm.patchValue({State:this.masterStates.filter(e=>e.name==value.State)[0]});
   
+     this.countryForm.patchValue({City:value.City});
   
-    this.sHttp.get<any>(`assets/sgcitys${this.getFileByCountryId(country.id)}.ts`).subscribe((data)=>{
+    // this.sHttp.get<any>(`assets/sgcitys${this.getFileByCountryId(country.id)}.ts`).subscribe((data)=>{
 
-      const citys = data;
-      this.countryForm.patchValue({City:citys.filter(e=>e.name==value.City)[0]});
+    //   const citys = data;
+    //   this.countryForm.patchValue({City:citys.filter(e=>e.name==value.City)[0]});
 
-    } )
+    // } )
   
   }
  }
@@ -154,7 +155,7 @@ isStateSelect=false;
   }
 
   checkIsSelected(){
-    debugger
+    
    if(!this.isCSelect)
    this.countryForm.patchValue({Country:''});
   
@@ -199,19 +200,19 @@ isStateSelect=false;
 
             this.countryForm.patchValue({City:''});
 
-const fileNo= this.getFileByCountryId(event.option.value.country_id);
+// const fileNo= this.getFileByCountryId(event.option.value.country_id);
 
-            this.sHttp.get<any>(`assets/sgcitys${fileNo}.ts`).subscribe((data)=>{
+//             this.sHttp.get<any>(`assets/sgcitys${fileNo}.ts`).subscribe((data)=>{
 
-             this.citys = data;
-           this.citys=this.citys.filter(s => s.state_code==event.option.value.state_code);
+//              this.citys = data;
+//            this.citys=this.citys.filter(s => s.state_code==event.option.value.state_code);
 
-           this.filteredCitys = this.countryForm.controls['City'].valueChanges.pipe(
-            startWith(''),
-            map(value => this.city_filter(value))
-          ); 
+//            this.filteredCitys = this.countryForm.controls['City'].valueChanges.pipe(
+//             startWith(''),
+//             map(value => this.city_filter(value))
+//           ); 
 
-           } )
+//            } )
         
 
 
@@ -224,8 +225,9 @@ const fileNo= this.getFileByCountryId(event.option.value.country_id);
    
    onCitySelected(event){
 
- 
-     this.onSelect.emit(this.countryForm.value);
+    let cscObject=this.countryForm.value;
+    cscObject.City={name:event.target.value}
+     this.onSelect.emit(cscObject);
  
    }
 

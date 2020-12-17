@@ -78,6 +78,7 @@ actor:any;
   };
   trackViewRef: BsModalRef;
   isManagerFRSignOff=false;
+  currentOrganization: any;
 
 
   constructor(private fb: FormBuilder,
@@ -91,6 +92,7 @@ actor:any;
     private perfApp: PerfAppService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
 
     
 

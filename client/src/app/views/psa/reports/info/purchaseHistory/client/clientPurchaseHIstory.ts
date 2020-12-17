@@ -51,12 +51,13 @@ export class ClientPurchaseHistory {
     }));
   }
 
-   headerHeightSetter(event) {
+  headerHeightSetter(event) {
     var padding = 20;
     var height = ReportTemplates.headerHeightGetter() + padding;
     this.api.setHeaderHeight(height);
     this.api.resetRowHeights();
-}
+    this.api.sizeColumnsToFit();
+  }
 
   getPurchaseHistoryInfo(clientId) {
     console.log('clientId : ', clientId)
@@ -74,12 +75,12 @@ export class ClientPurchaseHistory {
     return [
       { headerName: 'Date of Purchase', field: 'purchasedOn' },
       { headerName: 'Type of Evaluation', field: 'evaluationsType' },
-      { headerName: '#s Purchased (# of Employees)', field: 'licPurchasesCount' },
-      { headerName: '#s Purchased (License)', field: 'licPurchasesCount', },
+      { headerName: '#s Purchased (Employees)', field: 'licPurchasesCount', type: 'rightAligned', },
+      { headerName: '#s Purchased (License)', field: 'licPurchasesCount', type: 'rightAligned', },
     ];
   }
 
-   createRowData(history: any) {
+  createRowData(history: any) {
     const rowData: any[] = [];
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
@@ -97,14 +98,14 @@ export class ClientPurchaseHistory {
       'active': this.clientInfo.IsActive ? 'Yes' : 'No',
       'usageType': this.clientInfo.UsageType,
       'evaluationsType': this.clientInfo.EvaluationPeriod,
-      'evaluationPeriod':ReportTemplates.months[this.clientInfo.StartMonth]+"'"+ReportTemplates.getYear()+' To '+ this.clientInfo.EndMonth.substring(0,3)+"'"+ReportTemplates.getYear(),
+      'evaluationPeriod': ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
     };
 
     for (let i = 0; i < 20; i++) {
       rowData.push({
         evaluationPeriod: "JAN'20-DEC'20",
         purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
-        evaluationsType: this.clientInfo.EvaluationPeriod,
+        evaluationsType: 'Year - end',
         licPurchasesCount: Math.round(Math.random() * 10),
       });
     }
@@ -129,14 +130,11 @@ export class ClientPurchaseHistory {
   onReady(params: any) {
     this.api = params.api;
     console.log('onReady');
-    this.api.sizeColumnsToFit();
-    this.gridOptions.rowHeight = 34;
-    this.gridOptions.groupMultiAutoColumn = true;
-    this.gridOptions.columnApi.setColumnVisible('isPastData', false);
+    this.gridOptions.rowHeight = 40;
   }
 
   onQuickFilterChanged($event: any) {
     this.api.setQuickFilter($event.target.value);
-}
+  }
 
 }

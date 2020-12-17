@@ -53,12 +53,13 @@ export class ResellerClientPurchaseHistory {
     }));
   }
 
-   headerHeightSetter(event) {
+  headerHeightSetter(event) {
     var padding = 20;
     var height = ReportTemplates.headerHeightGetter() + padding;
     this.api.setHeaderHeight(height);
     this.api.resetRowHeights();
-}
+    this.api.sizeColumnsToFit();
+  }
 
   getPurchaseHistoryInfo(clientId) {
     console.log('clientId : ', clientId)
@@ -76,8 +77,8 @@ export class ResellerClientPurchaseHistory {
     return [
       { headerName: 'Date of Purchase', field: 'purchasedOn' },
       { headerName: 'Type of Evaluation', field: 'evaluationsType' },
-      { headerName: '#s Purchased (# of Employees)', field: 'licPurchasesCount' },
-      { headerName: '#s Purchased (License)', field: 'licPurchasesCount', },
+      { headerName: '#s Purchased (# of Employees)', field: 'licPurchasesCount', type: 'rightAligned' },
+      { headerName: '#s Purchased (License)', field: 'licPurchasesCount', type: 'rightAligned' },
     ];
   }
 
@@ -98,7 +99,7 @@ export class ResellerClientPurchaseHistory {
       'year': new Date(this.clientInfo.CreatedOn).toLocaleDateString(undefined, options),
       'active': this.clientInfo.IsActive ? 'Yes' : 'No',
       'usageType': this.clientInfo.UsageType,
-      'evaluationsType': this.clientInfo.EvaluationPeriod,
+      'evaluationsType': 'Year - end',
       'evaluationPeriod': ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
     };
 
@@ -134,13 +135,11 @@ export class ResellerClientPurchaseHistory {
     this.api = params.api;
     console.log('onReady');
     this.api.sizeColumnsToFit();
-    this.gridOptions.rowHeight = 34;
-    this.gridOptions.groupMultiAutoColumn = true;
-    this.gridOptions.columnApi.setColumnVisible('isPastData', false);
+    this.gridOptions.rowHeight = 39;
   }
 
   onQuickFilterChanged($event: any) {
     this.api.setQuickFilter($event.target.value);
-}
+  }
 
 }

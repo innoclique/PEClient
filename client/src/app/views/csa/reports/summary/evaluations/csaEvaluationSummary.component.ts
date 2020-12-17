@@ -47,7 +47,9 @@ export class CSAEvaluationsSummary {
     var height = ReportTemplates.headerHeightGetter() + padding;
     this.api.setHeaderHeight(height);
     this.api.resetRowHeights();
-}
+    this.api.sizeColumnsToFit();
+    this.api.sizeColumnsToFit();
+  }
   getEvaluationsSummary() {
     let { Organization, _id } = this.currentUser;
     let orgId = Organization._id;
@@ -67,7 +69,7 @@ export class CSAEvaluationsSummary {
     return [
       { headerName: 'Evaluation Period', field: 'evaluationPeriod' },
       { headerName: 'Type of Evaluations', field: 'evaluationsType' },
-      { headerName: '# of Evaluations', field: 'evaluationsCount' },
+      { headerName: '# of Evaluations', field: 'evaluationsCount', type: 'rightAligned', },
     ];
   }
 
@@ -101,10 +103,7 @@ export class CSAEvaluationsSummary {
   onReady(params: any) {
     this.api = params.api;
     console.log('onReady');
-    this.api.sizeColumnsToFit();
-    this.gridOptions.rowHeight = 34;
-    this.gridOptions.groupMultiAutoColumn = true;
-    this.gridOptions.columnApi.setColumnVisible('isPastData', false);
+    this.gridOptions.rowHeight = 40;
   }
 
   onQuickFilterChanged($event: any) {

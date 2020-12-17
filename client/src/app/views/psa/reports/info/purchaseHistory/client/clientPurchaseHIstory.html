@@ -20,42 +20,57 @@
         <div class="card-body">
           <div class="grid-metadata-wrapper" *ngIf="clientRow">
             <div class="grid-metadata-header">
+              <div class="col-lg-3 pull-left">
               <span>
                 Client :
               </span>
               <label> {{clientRow.Name}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
               <span>
                 Since :
               </span>
               <label> {{ clientRow.year}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
               <span>
                 Active :
               </span>
               <label> {{clientRow.active}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
               <span>
                 Usage Type :
               </span>
               <label> {{ clientRow.usageType}}</label>
             </div>
             <div class="grid-metadata-header">
+            <div class="col-lg-3 pull-left">
               <span>
                 Evaluation Period :
               </span>
               <label> {{clientRow.evaluationPeriod}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
               <span>
                 Phone :
               </span>
               <label>{{clientInfo.Phone}}</label>
+            </div>
+            <div class="col-lg-3 pull-left">
               <span>
                 Email :
               </span>
               <label>{{clientInfo.Email}}</label>
             </div>
+            <div class="col-lg-3 pull-left">
+            </div>
           </div>
-          <div style="width: 100%;">
+            </div>
+          <div style="width: 100%; margin-top: 20px;">
             <div>
-              <ag-grid-angular style="width: 100%; height: 425px;" class="ag-theme-alpine" [gridOptions]="gridOptions"
-                [rowData]="rowData" [pagination]="true" [paginationPageSize]="10" (gridReady)="onReady($event)"
+              <ag-grid-angular style="width: 100%; height: 350px;" class="ag-theme-alpine" [gridOptions]="gridOptions"
+                [rowData]="rowData" [pagination]="true" [paginationPageSize]="5" (gridReady)="onReady($event)"
                 [animateRows]="true" 
                 [defaultColDef]="defaultColDef"
                   (firstDataRendered)="headerHeightSetter($event)"
