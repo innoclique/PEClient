@@ -107,7 +107,7 @@ export class ResellerClientPurchaseHistory {
       rowData.push({
         evaluationPeriod: "JAN'20-DEC'20",
         purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
-        evaluationsType: this.clientInfo.EvaluationPeriod,
+        evaluationsType: 'Year - end',
         licPurchasesCount: Math.round(Math.random() * 10),
       });
     }
