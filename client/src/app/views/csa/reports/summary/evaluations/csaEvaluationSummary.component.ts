@@ -68,7 +68,7 @@ export class CSAEvaluationsSummary {
   getCSAEvaluationsSummaryColumnDefs() {
     return [
       { headerName: 'Evaluation Period', field: 'evaluationPeriod' },
-      { headerName: 'Type of Evaluations', field: 'evaluationsType' },
+      { headerName: 'Evaluations Type', field: 'evaluationsType' },
       { headerName: '# of Evaluations', field: 'evaluationsCount', type: 'rightAligned', },
     ];
   }
