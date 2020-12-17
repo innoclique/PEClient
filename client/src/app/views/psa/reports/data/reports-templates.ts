@@ -245,6 +245,7 @@ export default class RSAReportTemplates {
         // autoHeight: true,
         sortable: true,
         filter: true,
+        menuTabs: ['filterMenuTab',],
         headerComponentParams: {
             template:
                 '<div class="ag-cell-label-container" role="presentation">' +
