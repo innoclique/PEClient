@@ -76,7 +76,7 @@ export class ResellerClientPurchaseHistory {
   getClientPurchaseHistoryColumnDefs() {
     return [
       { headerName: 'Date of Purchase', field: 'purchasedOn' },
-      { headerName: 'Type of Evaluation', field: 'evaluationsType' },
+      { headerName: 'Evaluations Type', field: 'evaluationsType' },
       { headerName: '#s Purchased (# of Employees)', field: 'licPurchasesCount', type: 'rightAligned' },
       { headerName: '#s Purchased (License)', field: 'licPurchasesCount', type: 'rightAligned' },
     ];
