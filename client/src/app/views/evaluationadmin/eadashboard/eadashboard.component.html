@@ -14,7 +14,7 @@
               <div class="box_in">
                 <div class="chart">
                   <div id="htmlData">
-                    <canvas height="140" baseChart
+                    <!--<canvas height="140" baseChart
                     [datasets]="barChartData"
                     [labels]="barChartLabels"
                     [colors]="barChartColors"
@@ -25,7 +25,16 @@
                     (chartClick)="chartClicked($event)"
                     >
                     
-                  </canvas>
+                  </canvas>-->
+                  <canvas height="140" baseChart
+        [data]="pieChartData"
+        [labels]="pieChartLabels"
+        [chartType]="pieChartType"
+        [options]="pieChartOptions"
+        [plugins]="pieChartPlugins"
+        [colors]="pieChartColors"
+        [legend]="pieChartLegend">
+      </canvas>
                   </div>
                   <button [disabled]="enableDownload" (click)="downloadCanvas()" id="exportButton" type="button">Export as PDF</button>     
                 </div>

@@ -26,40 +26,63 @@ export class EadashboardComponent implements OnInit {
 
 rowData = [];
 
+
+
 /**
- * Bar chat
+ * 
+ * Pie Chart
  */
 
-public barChartOptions: ChartOptions = {
+ // Pie
+ public pieChartOptions: ChartOptions = {
   responsive: true,
-  // We use these empty structures as placeholders for dynamic theming.
-  scales: { xAxes: [{}], yAxes: [{}] },
+  legend: {
+    position: 'top',
+  },
   plugins: {
     datalabels: {
-      anchor: 'end',
-      align: 'end',
-    }
+      formatter: (value, ctx) => {
+        const label = ctx.chart.data.labels[ctx.dataIndex];
+        return value;
+      },
+    },
   }
 };
-public barChartLabels: Label[] = ['Active','inprogress','Completed','not started'];
-public barChartType: ChartType = 'bar';
-public barChartLegend = true;
-public barChartPlugins = [pluginDataLabels];
 
-public barChartData: ChartDataSets[] = [
-  { data: [0, 0, 0, 0], label: 'Status' }
-  
+/*public pieChartLabels: Label[] = ['Employee Goals Completed', 'In Progress', 'Employee Goals Completed Test'];
+public pieChartData: number[] = [300, 500, 100];
+public pieChartType: ChartType = 'pie';
+public pieChartLegend = true;*/
+
+public pieChartLabels: Label[] = [];
+public pieChartData: number[] = [];
+public pieChartType: ChartType='pie';
+public pieChartLegend=true;
+
+public pieChartPlugins = [pluginDataLabels];
+public pieChartColors = [
+  {
+    backgroundColor: ['rgba(255,0,0,0.3)', 'rgba(0,255,0,0.3)', 'rgba(0,0,255,0.3)'],
+  },
 ];
-public barChartColors: Color[] = [
-  { backgroundColor: '#006ba9' },
-  { backgroundColor: '#67b262' },
-  { backgroundColor: '#FF9033' },
-  { backgroundColor: '#F487E5' }
-]
+// End Pie Chart
+loadPieChat(labels:Label[],values:number[]){
+  this.pieChartLabels = labels;
+  this.pieChartData = values;
+  this.pieChartType = 'pie';
+  this.pieChartLegend = true;
+  
+  this.pieChartColors = [
+    {
+      backgroundColor: [
+        '#006ba9','#67b262','#00FFFF','#7FFFD4','#808000','#5F9EA0',
+        '#6495ED','#008B8B','#B8860B','#006400','#BDB76B','#8FBC8F',
+        '#1E90FF','#CD5C5C','#F0E68C','#20B2AA','#00FA9A','#808000'
 
-
-
-
+      ],
+    },
+  ]
+}
   constructor(
     public router: Router,
     public evaluationadminService:EvaluationadminService,
@@ -70,32 +93,26 @@ public barChartColors: Color[] = [
    }
    
   ngOnInit(): void {
+    
   }
   getEvalutionDashboardData = ():any=>{
     let {_id} = this.loginUser;
     let requestBody:any={userId:_id}
      this.evaluationadminService.evaluationDashboard(requestBody).subscribe(evDashboardResponse => {
-      let {chart} = evDashboardResponse;
+      let {pieChart} = evDashboardResponse;
+      this.loadPieChat(pieChart.labels,pieChart.numbers);
+      if(pieChart && pieChart.labels && pieChart.labels.length>0){
+        this.enableDownload=false;
+      }
       this.nextEvaluationObj = evDashboardResponse.next_evaluation;
       this.rowData = evDashboardResponse.overdue_evaluation;
       
-      let barchatDataArray:any =[];
-      this.barChartLabels.forEach((element,index) => {
-        console.log(`element = ${element} ,i = ${index}`);
-        let obj = chart.find(obj=>obj._id === element);
-        console.log(obj);
-        barchatDataArray[index]=obj.count;
-      });
-      let reducer = barchatDataArray.reduce((total,currentval)=>total+currentval);
-      if(reducer>0){
-        this.enableDownload = false;
-      }
-      
-      this.barChartData[0].data = barchatDataArray;
-      //this.loadPie();
      });
      
-  }
+  };
+
+  
+  
 
   downloadCanvas() {
     var pdf = new jsPDF('p', 'mm', 'a4');
