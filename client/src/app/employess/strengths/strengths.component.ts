@@ -279,6 +279,10 @@ return
   this.perfApp.requestBody.Employee = this.loginUser._id;
    this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id; 
    this.perfApp.requestBody.Owner = this.loginUser._id;
+
+   if (this.strengthBuildForm.get('IsDraft').value=='true' && this.currentAction=='create') {
+    this.perfApp.requestBody.Action = 'Draft';
+  }
   console.log(this.perfApp.requestBody)
   this.callStregnthApi();
   
@@ -377,6 +381,7 @@ callStregnthApi() {
 
 
   getActionString(currentAction,subAction) {
+    debugger
     if (currentAction=='create' && subAction=='Draft') {
       return 'saved'
     } else  if (currentAction=='create') {

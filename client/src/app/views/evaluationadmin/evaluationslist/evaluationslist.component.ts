@@ -64,7 +64,7 @@ export class EvaluationslistComponent implements OnInit {
   };
 
   
-  public monthList = ["January", "February", "March", "April", "May", "June", "July",
+  public monthList = ["","January", "February", "March", "April", "May", "June", "July",
   "August", "September", "October", "November", "December"]
   constructor(
     private formBuilder: FormBuilder,
@@ -217,7 +217,7 @@ export class EvaluationslistComponent implements OnInit {
             return `  <input  data-action-type="orgView"  type="checkbox" id="scales" name="scales">
            ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
           } else {
-            return `  <input   data-action-type="orgView" title="This employee already rolled out" type="checkbox" disabled id="scales" name="scales" >
+            return `  <input   data-action-type="orgView" title="Evaluation for the employee has already been rolled-out." type="checkbox" disabled id="scales" name="scales" >
             ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
           }
 
@@ -269,7 +269,7 @@ export class EvaluationslistComponent implements OnInit {
       },
 
       {
-        headerName: 'Peers', field: '', sortable: false, width:80, wrapText: true, autoHeight: true,  filter: false,
+        headerName: 'Peers', field: '', sortable: false, width:100, wrapText: true, autoHeight: true,  filter: false,
         cellRenderer: (data) => {
           if (this.getNested(data.data.EmployeeRow, 'Peers')){
             return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.Peers.length}</span>`
@@ -931,12 +931,14 @@ export class EvaluationslistComponent implements OnInit {
 
   
   getEVPeriod(evRow){
+debugger
 
     let year= new Date (evRow.CreatedDate);
     if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
-    return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} - ${this.currentOrganization.EndMonth.substring(0, 3)} ${year.getFullYear()+1}`
+    return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} 
+    ${this.currentOrganization.StartMonth=='1' ? year.getFullYear() :year.getFullYear()+1}`
     }else{
-      return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} - ${this.currentOrganization.EndMonth.substring(0, 3)} ${year.getFullYear()}`
+      return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} ${year.getFullYear()}`
 
     }
   }

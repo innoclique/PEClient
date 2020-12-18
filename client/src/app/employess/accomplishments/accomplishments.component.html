@@ -151,7 +151,7 @@
                                         </div>
                                         <input class="autoc-border  form-control"
                                             (click)=" picker.open()" readonly matInput
-                                            [matDatepicker]="picker" formControlName="CompletionDate"
+                                         [max]="today"   [matDatepicker]="picker" formControlName="CompletionDate"
                                             name="CompletionDate"
                                             [ngClass]="{ 'is-invalid': f.CompletionDate.touched  &&  f.CompletionDate.invalid }"
                                             required>

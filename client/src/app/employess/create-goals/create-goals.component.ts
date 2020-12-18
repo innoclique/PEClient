@@ -206,7 +206,7 @@ get k (){
     
   },
     { headerName: 'Other Participants',tooltipField: 'OtherParticipants', field: 'OtherParticipants', width: 170, autoHeight: true },
-    { headerName: 'Status',tooltipField: 'Status',
+    { headerName: 'Status',tooltipField: 'Status', suppressSizeToFit:true,
     headerComponentParams: {
       menuIcon: 'fa-bars',
       template:
@@ -216,16 +216,23 @@ get k (){
           '  <span ref="eText" class="ag-header-cell-text" role="columnheader"></span> <span class="redStar"></span>' +
           '  </div>' +
           '</div>'
-  }, field: 'Status', width: 100, autoHeight: true },
+  }, field: 'Status', width: 120, autoHeight: true },
     {
       headerName: "Action",
       suppressMenu: true,
       Sorting: false,
       width: 80,
-      template: `
-      
-      <i class="cui-trash icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="remove"  ></i>  `
+      cellRenderer: (data) => {
+
+        if (this.currentAction=='view'){
+          return `NA `
+          }
+        
+        else{ 
+           return ` <i class="cui-trash icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="remove"  ></i>  `
+        }
+      },
 
     }
 

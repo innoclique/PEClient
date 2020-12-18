@@ -21,11 +21,11 @@ import { Constants } from '../../shared/AppConstants';
 import { CustomValidators } from '../../shared/custom-validators';
 
 @Component({
-  selector: 'app-accomplishments',
-  templateUrl: './accomplishments.component.html',
-  styleUrls: ['./accomplishments.component.css']
+  selector: 'app-private-notes',
+  templateUrl: './private-notes.component.html',
+  styleUrls: ['./private-notes.component.css']
 })
-export class AccomplishmentsComponent implements OnInit {
+export class PrivateNotesComponent implements OnInit {
 
 
   public kpiForm: FormGroup;
@@ -41,7 +41,6 @@ export class AccomplishmentsComponent implements OnInit {
   addMCSwitch = true;
   scoreUnSubmitedCount=0;
   unSubmitedCount=0;
-  today = new Date();
 
   filteredOptionsKPI: Observable<any[]>;
   public empKPIData: any[] = []
@@ -65,9 +64,10 @@ accessingFrom:any;
   isEmpFRSignOff=false;
   isFirstTimeCreateing=false;
 
-  @ViewChild('sgsgggjsr', {static: false}) content: ElementRef;
+  
   currentOrganization: any;
-
+  filteredOptionsDR: Observable<any[]>;
+  public employeeDirReportData :any[]=[]
 
 
   constructor(private fb: FormBuilder,
@@ -100,7 +100,7 @@ accessingFrom:any;
 
     
     await this.getAllKpiBasicData();
-    await this.GetAllAccomplishmentsDetails();
+    await this.GetAllNotesDetails();
     
 
   }
@@ -110,6 +110,8 @@ accessingFrom:any;
 
 
     this.initKPIForm()
+    this.GetImmediateApprCircleDetails();
+
 
     this.alert = new AlertDialog();
   }
@@ -123,15 +125,18 @@ accessingFrom:any;
 
     
 
-      Accomplishment: [this.kpiDetails.Accomplishment ? this.kpiDetails.Accomplishment : '', Validators.compose([
-        Validators.required, Validators.minLength(2),
+     
+     
+      Note: [this.kpiDetails.Note ? this.kpiDetails.Note :'',
+      Validators.compose([
+        Validators.required,
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
       ])
-      ],
-      CompletionDate: [this.kpiDetails.CompletionDate ? new Date(this.kpiDetails.CompletionDate) : '', [Validators.required]],
-      Comments: [this.kpiDetails.Comments ? this.kpiDetails.Comments :''],
+      
+    ],
+      DiscussedWith: [this.kpiDetails.DiscussedWith?this.kpiDetails.DiscussedWith:null],
       IsDraft: [this.kpiDetails.IsDraft ? 'true' : 'false'],
-      ShowToManager: [this.kpiDetails.ShowToManager ],
+     
 
     });
 
@@ -151,7 +156,7 @@ accessingFrom:any;
 
 
   onCancle() {
-    this.router.navigate(['employee/accomplishments-list']);
+    this.router.navigate(['employee/private-notes-list']);
   }
 
   submitKpi() {
@@ -182,8 +187,8 @@ accessingFrom:any;
 
   saveKpi() {
 
-if (!this.kpiForm.get('Accomplishment').value) {
-  this.snack.error('Accomplishment is required');
+if (!this.kpiForm.get('Note').value) {
+  this.snack.error('Note is required');
   return
 }
 
@@ -191,23 +196,23 @@ if (!this.kpiForm.get('Accomplishment').value) {
 
 
     this.perfApp.route = "app";
-    this.perfApp.method = this.currentAction == 'create' ? "AddAccomplishment" : "UpdateAccomplishmentDataById",
+    this.perfApp.method = this.currentAction == 'create' ? "AddNote" : "UpdateNoteDataById",
 
 
       this.perfApp.requestBody = this.kpiForm.value; //fill body object with form 
 
      
-
-    this.perfApp.requestBody.Accomplishment = this.perfApp.requestBody.Accomplishment.Accomplishment?
-                                    this.perfApp.requestBody.Accomplishment.Accomplishment :this.perfApp.requestBody.Accomplishment;
+      if(this.perfApp.requestBody.DiscussedWith)  this.perfApp.requestBody.DiscussedWith=this.perfApp.requestBody.DiscussedWith._id;
+    this.perfApp.requestBody.Note = this.perfApp.requestBody.Note.Note?
+                                    this.perfApp.requestBody.Note.Note :this.perfApp.requestBody.Note;
     // this.perfApp.requestBody.MeasurementCriteria = this.selectedItems.map(e => { e.measureId=e._id});
-    this.perfApp.requestBody.AccompId = this.kpiDetails._id?  this.kpiDetails._id : '';
+    this.perfApp.requestBody.NoteId = this.kpiDetails._id?  this.kpiDetails._id : '';
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
 
     if (this.currentAction=='create'){
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
     this.perfApp.requestBody.Owner = this.loginUser._id;
-    this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id;
+    // this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id;
     
     }else if (this.currentAction=='edit'){
       this.perfApp.requestBody.isFirstTimeCreateing = this.isFirstTimeCreateing;
@@ -233,19 +238,21 @@ if (!this.kpiForm.get('Accomplishment').value) {
 
       if (c.message == Constants.SuccessText) {
 
-        this.snack.success(this.translate.instant(` The accomplishment has been  ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)}  successfully.`));
+        if(!this.perfApp.requestBody.DiscussedWith) delete this.perfApp.requestBody.DiscussedWith;
+
+        this.snack.success(this.translate.instant(` The note has been  ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)}  successfully.`));
        this.selectedItems=[];
-       // this.GetAllAccomplishmentsDetails();
+       // this.GetAllNotesDetails();
         if (this.accessingFrom=='currEvaluation') {
           
           this.router.navigate(['employee/current-evaluation']);
         } else {         
-        this.router.navigate(['employee/accomplishments-list']);
+        this.router.navigate(['employee/private-notes-list']);
         }
       }
 
     }, error => {
-      this.snack.error(this.translate.instant(`Accomplishment not  ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)}, please try again.`));
+      this.snack.error(this.translate.instant(`Note not  ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)}, please try again.`));
 
 
     });
@@ -296,39 +303,9 @@ if (!this.kpiForm.get('Accomplishment').value) {
   }
 
 
-  displayFn(user: any): string {
-    return user && user.Name ? user.Name : '';
-  }
-
-
-
-  private _filterTD(name: string): any[] {
-    const filterValue = this._normalizeValue(name);
-
-    return this.empMeasuCriData.filter(option => this._normalizeValue(option.Name).includes(filterValue));
-  }
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-  
-
-  GetAllAccomplishmentsDetails() {
+  GetAllNotesDetails() {
     this.perfApp.route = "app";
-    this.perfApp.method = "GetAllAccomplishments",
+    this.perfApp.method = "GetAllNotes",
       this.perfApp.requestBody = { 'empId': this.loginUser._id,'orgId':this.authService.getOrganization()._id}
     this.perfApp.CallAPI().subscribe(c => {
 
@@ -379,9 +356,42 @@ if (!this.kpiForm.get('Accomplishment').value) {
   }
 
 
+  
+  private _filterDR(name: string): any[] {
+    const filterValue = this._normalizeValue(name);
+  
+    return this.employeeDirReportData.filter(option => this._normalizeValue(option.FirstName).includes(filterValue) );
+  } 
+
+  displayFn(user: any): string {
+    return user && user.FirstName ? user.FirstName : '';
+  }
 
 
+  GetImmediateApprCircleDetails(){
+    this.perfApp.route="app";
+    this.perfApp.method="GetImmediateApprCircle",
+    this.perfApp.requestBody = { companyId: this.currentOrganization._id,
+    empId: this.loginUser._id }
+    // this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+    this.perfApp.CallAPI().subscribe(c=>{
+      
+      console.log('lients data',c);
+      if(c && c.length>0){
+        
+        this.employeeDirReportData=c;
+        this.filteredOptionsDR = this.kpiForm.controls['DiscussedWith'].valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value :  value? value.FirstName:""),
+          map(name => name ? this._filterDR(name) : this.employeeDirReportData.slice())
+        );
+      }
+     
+       
+    })
 
+  }
 
 
 
@@ -396,7 +406,7 @@ if (!this.kpiForm.get('Accomplishment').value) {
    /**To alert user for submit kpis */
    openConfirmSubmitKpisDialog() {
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to add the accomplishment?";
+    this.alert.Content = "Are you sure you want to add the note?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";
@@ -444,98 +454,5 @@ if (!this.kpiForm.get('Accomplishment').value) {
 
 
 
-  public downloadPDF1() {
-    const doc = new jsPDF();
-
-    const specialElementHandlers = {
-      '#editor': function (element, renderer) {
-        return true;
-      }
-    };
-
-    const content = this.content.nativeElement;
-  
-    // doc.fromHTML(content.innerHTML, 15, 15, { 
-    //   width: 190,
-    //   'elementHandlers': specialElementHandlers 
-    // });
-
-    doc.save('test.pdf');
-  }
-
-
-  downloadPDF() { 
-    // get the `<a>` element from click event
-    //var anchor = event.target;
-    // get the canvas, I'm getting it by tag name, you can do by id
-    // and set the href of the anchor to the canvas dataUrl
-   // anchor.href = document.getElementsByTagName('canvas')[0].toDataURL();
-    // set the anchors 'download' attibute (name of the file to be downloaded)
-    //anchor.download = "test.png";
-    debugger
-    
-    var pdf = new jsPDF('p', 'mm', 'a4');
-    var image=document.getElementById('sgsgggjsr')[0].toDataURL();
-    pdf.addImage(image, 'JPEG', 0, 0,0,0);
-    pdf.save("evaluations.pdf"); 
-    
 }
- 
 
-  downloadPDF3() {
-    
-   
-    const div = document.getElementById('printToPDF');
-    
-    const button = document.getElementById('btnPrintPRForm');
-    const btnPRFormClose = document.getElementById('btnPRFormClose');
-    // button.style.display = 'none';
-    // btnPRFormClose.style.display = 'none';
-    debugger
-    var HTML_Width = div.clientWidth;
-    var HTML_Height = div.clientHeight;
-    var top_left_margin = 1;
-    var PDF_Width = HTML_Width + (top_left_margin * 2);
-    var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
-    var canvas_image_width = HTML_Width;
-    var canvas_image_height = HTML_Height;
-
-    var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
-
-    
-    html2canvas(div, { allowTaint: false,useCORS : true, }).then(function (canvas) {
-      canvas.getContext('2d');
-      
-      console.log(canvas.height + "  " + canvas.width);
-
-
-      var imgData = canvas.toDataURL("image/PNG", 1.0);
-      var pdf = new jsPDF('landscape', 'in', [PDF_Width, PDF_Height]);
-
-    //  var pdf = new jsPDF();
-      //  const pdf = new jsPDF({
-      //   orientation: "landscape",
-      //   unit: "in",
-      //   format: [4, 2]
-      // });
-      
-      
-      pdf.addImage(imgData, 'PNG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
-
-
-      // for (var i = 1; i <= totalPDFPages; i++) {
-      //   pdf.addPage( [PDF_Width, PDF_Height]);
-      //   pdf.addImage(imgData, 'PNG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
-      // }
-
-      pdf.save("PurchageRequest.pdf");
-    });
-    // button.style.display = 'block';
-    // btnPRFormClose.style.display = 'block';
-
- 
-  }
-
-
-
-}

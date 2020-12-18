@@ -1,0 +1,135 @@
+<div class="animated fadeIn" >
+    <div>
+        <div >
+            <div class="card">
+                <div *ngIf="accessingFrom!='currEvaluation' " class="card-header">
+                    Employee Notes
+
+                    <div class="form-group form-actions pull-right m-0">
+                        <button type="button" class="btn btn-sm btn-primary"
+                            (click)="onCancle()">
+                            <i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list
+                        </button>
+                    </div>
+
+                </div>
+                <div class="card-body" >
+
+
+                    <form autocomplete="off" [formGroup]="kpiForm" novalidate="" 
+                        [ngClass]="{ 'view-only': currentAction == 'view' }" class="ng-untouched ng-pristine ng-valid">
+
+                       
+
+                        <div class="row">
+                           
+                           
+                            <div class="col-md-6">
+      
+      
+                                <div class="form-group">
+                                  <div class="input-group">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">Discussed With</span>
+                                    </div>
+                                    <input type="text" class=" form-control"
+                                    placeholder="Search for a Discussed With" 
+                                  
+                                    [matAutocomplete]="auto3"
+                                       formControlName="DiscussedWith" name="DiscussedWith"
+                                        [formControl]="f.DiscussedWith" 
+                                        >
+                             <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn" >
+                              <mat-option *ngFor="let option of filteredOptionsDR | async" [value]="option">
+                                {{option.FirstName}}
+                              </mat-option>
+                             </mat-autocomplete>
+                  
+                              
+                            
+                                  </div>
+                                </div>
+                              </div>
+
+
+
+                        </div>
+
+
+
+
+
+                        <div class="row">
+
+                           
+
+
+
+
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar">Note</span>
+                                        </div>
+                                        <textarea maxlength="2000" class="form-control" cols="" rows="6"
+                                            [ngClass]="{ 'is-invalid': f.Note.touched  &&  f.Note.invalid }"
+                                            formControlName="Note" name="Note">  </textarea>
+
+                                            <div *ngIf="f.Note.touched && f.Note.invalid" class="invalid-feedback">
+                                                <div *ngIf="f.Note.errors?.required">Note  is mandatory.</div>
+                                                <div *ngIf="f.Note.errors.hasKPISplChars">Note can accept only .,-,(,),&,#,:,/,?</div>
+                                            </div>
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+                        <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+                        <div class="clearfix"></div>
+                        <div *ngIf="currentAction != 'create'"
+                            class=" row form-group form-actions clearfix w-100 d-block all-events ">
+                            <button [disabled]='selIndex==0' class="btn btn-link pull-left"
+                                (click)="priKpi()">Previous</button>
+                            <button [disabled]='selIndex+1 == empKPIData.length' class="btn btn-link pull-right"
+                                (click)="nextKpi()">Next</button>
+
+                        </div>
+
+                        <div *ngIf="currentAction != 'view' "
+                            class="form-group form-actions pull-right">
+                            <button *ngIf="accessingFrom!='currEvaluation' " class="btn btn-sm btn-primary"
+                                (click)="onCancle()">Cancel</button>&nbsp;
+                            <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' "
+                                class="btn btn-sm btn-primary" (click)="draftKpi()">Save</button>&nbsp;
+                            <button *ngIf="(currentAction == 'edit' && f?.IsDraft?.value=='false' )"
+                                class="btn btn-sm btn-primary" (click)="submitKpi()">Update</button>
+                            <button *ngIf="(f?.IsDraft?.value=='true' || currentAction == 'create' ) "
+                                class="btn btn-sm btn-primary" (click)="submitKpi()">Add Note</button>
+                      
+                      
+                                <!-- <button id="btnPrintPRForm" type="button" class="btn btn-danger" (click)="downloadPDF()"
+                                style="background-color: #326cab!important; border-color:#326cab!important;cursor:pointer;">Print</button> -->
+                      
+                           
+                            </div>
+
+
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

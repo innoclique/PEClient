@@ -251,7 +251,7 @@ if(this.selectedItems.length==0) {
 
       if (c.message == Constants.SuccessText) {
 
-        this.snack.success(this.translate.instant(`Performance Goal ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Successfully`));
+        this.snack.success(this.translate.instant(`Performance Goal ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)} Successfully`));
        this.selectedItems=[];
         this.getAllKPIs();
         if (this.accessingFrom=='currEvaluation') {
@@ -764,6 +764,21 @@ debugger
     this.kpiDetails=  this.empKPIData[this.selIndex];
     this.initKPIForm();
     this.currentKpiId=this.kpiDetails._id;
+  }
+
+
+  
+  getActionString(currentAction,subAction) {
+    debugger
+    if (currentAction=='create' && subAction=='Draft') {
+      return 'saved'
+    } else  if (currentAction=='create') {
+      return 'created '
+    }else  if (currentAction=='edit') {
+      return 'updated'
+    }
+    
+   
   }
 
 

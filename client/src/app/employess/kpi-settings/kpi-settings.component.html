@@ -100,7 +100,7 @@
                                                 Performance Goal</span>
                                         </div>
                                         <input max="500" maxlength="500" class="form-control" type="text"
-                                        [readonly]="currentAction != 'create' "
+                                        [readonly]="currentAction == 'edit' && f?.IsDraft?.value=='false' "
                                             [ngClass]="{ 'is-invalid': f.Kpi.touched  &&  f.Kpi.invalid }"
                                             formControlName="Kpi" name="Kpi" required
                                             [matAutocomplete]="kpiAuto">
@@ -206,7 +206,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text redStar"> Target Completion</span>
                                         </div>
-                                        <input class="autoc-border  form-control" (click)="currentAction == 'create' && picker.open()" readonly
+                                        <input class="autoc-border  form-control" (click)=" (currentAction == 'create' || (currentAction == 'edit' && f?.IsDraft?.value=='true') ) && picker.open()" readonly
                                             matInput [matDatepicker]="picker" formControlName="TargetCompletionDate" name="TargetCompletionDate"
                                             [ngClass]="{ 'is-invalid': f.TargetCompletionDate.touched  &&  f.TargetCompletionDate.invalid }"
                                             required>

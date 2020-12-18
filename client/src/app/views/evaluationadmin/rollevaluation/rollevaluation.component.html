@@ -109,11 +109,16 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text redStar">Select Model</span>
                                         </div>
-                                        <select class="form-control" (change)="onModelChange($event)"
+                                        <select *ngIf="initializeFormFor==='evaluation'" class="form-control" (change)="onModelChange($event)"
                                             formControlName="Model">
                                             <option *ngFor="let model of modelsList" [value]="model._id">{{model.Name}}
                                             </option>
                                         </select>
+
+                                        <select disabled *ngIf="initializeFormFor==='kpionly'" class="form-control" (change)="onModelChange($event)"
+                                        formControlName="Model">
+                                       
+                                    </select>
 
                                     </div>
                                 </div>

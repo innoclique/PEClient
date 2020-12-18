@@ -1,3 +1,4 @@
+
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -31,7 +32,7 @@ export class RollevaluationComponent implements OnInit {
   public currentOrganization: any;
   currentUser: any;
 
-  public monthList = ["January", "February", "March", "April", "May", "June", "July",
+  public monthList = ["","January", "February", "March", "April", "May", "June", "July",
   "August", "September", "October", "November", "December"]
   kpiForList: string[] = ['Employee', 'Manager', 'EA'];
   modelsList: any[];
@@ -483,7 +484,8 @@ export class RollevaluationComponent implements OnInit {
         if(this.rollEvaluationEdit){
           this.notification.success('Evaluation Updated Successfully.')
         }else{
-          this.notification.success('Evaluation Created Successfully.')
+          this.notification.success(`The Evaluations/Performance Goals Setting have been
+          successfully setup to be rolled out on ${new DatePipe('en-US').transform(new Date(), 'MM-dd-yyyy')}.`)
         }
         
         this.router.navigate(['ea/evaluation-list'])
@@ -925,7 +927,8 @@ export class RollevaluationComponent implements OnInit {
     this.perfApp.route = "evaluation"
     this.perfApp.CallAPI().subscribe(x => {
       console.log('added evaluation', x)
-      this.notification.success('Evaluation Created Successfully.')
+      this.notification.success(`The Evaluations/Performance Goals Setting have been
+       successfully setup to be rolled out on ${new DatePipe('en-US').transform(new Date(), 'MM-dd-yyyy')}.`)
       this.router.navigate(['ea/evaluation-list'])
     }, error => {
       console.log('error while adding eval', error)
@@ -940,9 +943,9 @@ export class RollevaluationComponent implements OnInit {
 
     let year= new Date (this.currentOrganization.CreatedOn);
     if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
-    return `${this.currentOrganization.EvaluationPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } To ${this.currentOrganization.EndMonth}`
+    return `${this.currentOrganization.EvaluationPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
     }else{
-      return `${this.currentOrganization.EvaluationPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } To ${this.currentOrganization.EndMonth}`
+      return `${this.currentOrganization.EvaluationPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
 
     }
   }

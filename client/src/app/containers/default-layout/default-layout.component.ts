@@ -140,7 +140,7 @@ export class DefaultLayoutComponent implements OnInit {
           "name": "Accomplishments",
           "code": "Accomplishments",
           "icon": "cui-tags"
-        },
+         },      
         {
           "IsActive": true,
           "url": "/employee/peerreview",
@@ -154,6 +154,13 @@ export class DefaultLayoutComponent implements OnInit {
           "name": "Review Manager",
           "code": "CurrentEvaluation",
           "icon": "icon-layers"
+        },
+        {
+          "IsActive": true,
+           "url": "/employee/private-notes-list",
+          "name": "Notes",
+          "code": "Notes",
+          "icon": "icon-note"
         },
         // {
         //   "IsActive": true,

@@ -91,10 +91,11 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Pin/Zip Code</span>
                     </div>
-                    <input numbersOnly maxlength="8" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.ZipCode.errors }"
+                    <input  maxlength="8" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.ZipCode.errors }"
                       formControlName="ZipCode" class="form-control">
                     <div *ngIf=" isFormSubmitted && f.ZipCode.errors" class="invalid-feedback">
                       <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is required</div>
+                      <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                     </div>
                   </div>
                 </div>

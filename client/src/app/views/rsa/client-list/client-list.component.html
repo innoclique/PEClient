@@ -138,6 +138,7 @@
   
                     <div *ngIf=" isFormSubmitted && f.ZipCode.errors" class="invalid-feedback">
                       <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is required</div>
+                      <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                     </div>
                   </div>
                 </div>

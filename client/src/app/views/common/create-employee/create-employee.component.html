@@ -113,7 +113,7 @@ Back to list
                               <div class="input-group-prepend">
                                 <span class="input-group-text redStar">Phone</span>
                               </div>
-                              <input maxlength="12"  type="text" class="form-control"  
+                              <input maxlength="13"  type="text" class="form-control"  
                               [ngClass]="{ 'is-invalid': (f.PhoneNumber.touched || submitClicked)  &&  f.PhoneNumber.invalid }"
                               formControlName="PhoneNumber"  name="PhoneNumber"  
                               >
@@ -132,7 +132,7 @@ Back to list
                               <div class="input-group-prepend">
                                 <span class="input-group-text">Alt. Phone</span>
                               </div>
-                              <input maxlength="12"  class="form-control"  type="text"
+                              <input maxlength="13"  class="form-control"  type="text"
                               [ngClass]="{ 'is-invalid': (f.AltPhoneNumber.touched || submitClicked)  &&  f.AltPhoneNumber.invalid }"
                               formControlName="AltPhoneNumber"  name="AltPhoneNumber"  >
                               <div *ngIf="(f.AltPhoneNumber.touched || submitClicked) && f.AltPhoneNumber.invalid" class="invalid-feedback">
@@ -165,7 +165,7 @@ Back to list
                               <div class="input-group-prepend">
                                 <span class="input-group-text">Mobile</span>
                               </div>
-                              <input maxlength="12"  class="form-control"  type="text"
+                              <input maxlength="13"  class="form-control"  type="text"
                               [ngClass]="{ 'is-invalid': (f.MobileNumber.touched || submitClicked)  &&  f.MobileNumber.invalid }"
                               formControlName="MobileNumber"  name="MobileNumber"           >
                             

@@ -128,7 +128,11 @@ export class ClientListComponent implements OnInit {
       Country: ['', [Validators.required]],
       State: ['', [Validators.required]],
       City: ['', [Validators.required]],
-      ZipCode: ['', [Validators.required]],
+      ZipCode: ['', Validators.compose([
+        Validators.required,
+        CustomValidators.patternValidator(/[^A-Za-z0-9\s]+/g, { isInValidZip: true }, 'isInValidZip'),
+      ])
+      ],
       ClientType: ['', [Validators.required]],
       UsageType: ['', [Validators.required]],
       UsageCount: ['', [Validators.required]],

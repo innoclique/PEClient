@@ -30,6 +30,8 @@ import { ReviewActionPlanComponent } from './review-action-plan/review-action-pl
 import { AccomplishmentsListComponent } from './accomplishments/accomplishments-list/accomplishments-list.component';
 import { ReviewAccompListComponent } from './review-accomp-list/review-accomp-list.component';
 import { ReviewAccomplishmentsComponent } from './review-accomplishments/review-accomplishments.component';
+import { PrivateNotesComponent } from './private-notes/private-notes.component';
+import { PrivateNotesListComponent } from './private-notes-list/private-notes-list.component';
 
 
 
@@ -98,6 +100,18 @@ const routes: Routes = [
         component:AccomplishmentsListComponent,
         data:{title:'Accomplishments'}
       },
+      {
+        path:'private-notes',
+        component:PrivateNotesComponent,
+        data:{title:'Private Notes'}
+      },
+      {
+        path:'private-notes-list',
+        component:PrivateNotesListComponent,
+        data:{title:'Private Notes List'}
+      },
+
+      
       {
         path:'peerreview',
         component:PeerReviewListComponent,
