@@ -22,6 +22,7 @@ export class CSAPaymentSummary {
   currentOrganization: any;
   detailCellRenderer: any;
   frameworkComponents: any;
+  clientRow: any;
   constructor(
     public authService: AuthService,
     public router: Router,
@@ -61,17 +62,23 @@ export class CSAPaymentSummary {
 
   createRowData() {
     const rowData: any[] = [];
+    this.clientRow = {};
+    var totalExpenditure = 0.00;
     // console.log('inside createHistoryData : ');
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
     for (let i = 0; i < 20; i++) {
+      var licPurchasesCount = Math.round(Math.random() * 1000);
       rowData.push({
         evaluationPeriod: "Jan'20 To Dec'20",
         purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
         evaluationsType: RefData.evaluationTypes[0],
-        licPurchasesCount: Math.round(Math.random() * 1000),
+        licPurchasesCount: licPurchasesCount,
       });
+      totalExpenditure = totalExpenditure + licPurchasesCount;
     }
     this.rowData = rowData;
+    this.clientRow.totalExpenditure =totalExpenditure;
+    console.log('totalExpenditure : ',this.clientRow.totalExpenditure);
   }
 
   gotoDashboard() {
