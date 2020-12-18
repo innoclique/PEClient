@@ -88,6 +88,7 @@ export class LoginComponent implements OnInit {
           this.openDuplicateSessionDialog()
           return
         }
+        debugger
         if (!x.User.TnCAccepted) {
           this.openTnCDialog();
           return;
@@ -151,9 +152,11 @@ export class LoginComponent implements OnInit {
     this.perfApp.requestBody = {}
     this.perfApp.CallAPI().subscribe(res => {
       /**conforming TnC dialog */
+      debugger
+      this.authService.setLSObject("User",res);
       this.tncRef.hide();
       var currentUser = this.authService.getCurrentUser();
-      this.logincallback(currentUser)
+      this.logincallback({User:currentUser,Role:currentUser.Role})
 
     })
   }

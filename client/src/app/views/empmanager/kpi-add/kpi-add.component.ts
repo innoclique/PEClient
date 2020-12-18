@@ -639,5 +639,29 @@ if (c) {
   }
 
 
+
+
+  public monthList = ["","January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December"];
+  getEVPeriod(){
+    debugger
+    
+        let year= this.currEvaluation? new Date (this.currEvaluation.CreatedDate) : new Date();
+        if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
+        return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} 
+              ${this.currentOrganization.StartMonth=='1' ? year.getFullYear() :year.getFullYear()+1}`
+       
+      }else{
+          return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} ${year.getFullYear()}`
+    
+        }
+      }
+
+
+
+
+
+
+
 }
 
