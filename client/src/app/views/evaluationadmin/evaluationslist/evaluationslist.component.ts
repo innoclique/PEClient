@@ -428,8 +428,9 @@ export class EvaluationslistComponent implements OnInit {
     var selectedRows = this.EmpGridOptions.api.getSelectedRows();
     let selectedEvaluation={};
     selectedEvaluation['EvaluationRow'] = data.EvaluationRow;
+    selectedEvaluation['Manager']=data.EmployeeRow.Manager;
     selectedEvaluation['empId']=data.EmployeeRow._id._id;
-    //this.router.navigate(['ea/rollout', {editEvaluation:JSON.stringify(selectedEvaluation), rollEvaluationEdit:true,allKpi: selectedRows.length>0,list:selectedRows.map(x=>x.Employee._id) }], { skipLocationChange: true });
+    this.router.navigate(['ea/rollout', {editEvaluation:JSON.stringify(selectedEvaluation), rollEvaluationEdit:true,allKpi: selectedRows.length>0,list:selectedRows.map(x=>x.Employee._id) }], { skipLocationChange: true });
     }
   openDirectReporteesView() {
     debugger
