@@ -61,6 +61,7 @@ export class RollevaluationComponent implements OnInit {
   public disabledAddButton: Boolean = false;
   allKpi: Boolean=false;
   rollEvaluationEdit:Boolean=false;
+  readonlyEmployee:any={};
   editEvaluation:any;
   kpiSelectedEmployees:any=[];
   gridRefreshParams = {
@@ -298,7 +299,7 @@ export class RollevaluationComponent implements OnInit {
       this.getEmployees();
       this.getModels();
       if(params['rollEvaluationEdit'] && params['editEvaluation']){
-        debugger
+        this.rollEvaluationEdit=true;
         let evalationData=JSON.parse(params['editEvaluation']);
         let empId = evalationData.empId;
         let employeesList = evalationData.EvaluationRow.Employees;
@@ -306,9 +307,16 @@ export class RollevaluationComponent implements OnInit {
         let {Model} = employee;
         this.evaluationForm.controls["Model"].setValue(Model._id);
         //let selectedModel = evalationData.EvaluationRow.Model;
-        let employess = this.getEmployees();
-        console.log(employess);
+        employee.EmployeeId=employee._id._id;
+        employee.FirstName=employee._id.FirstName;
+        employee.LastName=employee._id.LastName;
+        employee.Email=employee._id.LastName;
+        employee.Manager=employee._id.Manager;
+        this.readonlyEmployee.name = `${employee._id.FirstName}-${employee._id.LastName}-${employee._id.Email}`;
+        this.readonlyEmployee.evaluationId = evalationData.EvaluationRow._id;
+        this.disabledAddButton = true;
         debugger
+        this.selectedEmployeeList.push(employee);
         
       }
      });   
@@ -441,33 +449,48 @@ export class RollevaluationComponent implements OnInit {
     })
   }
   submitEvaluation() {
-    this.isFormSubmitted = true;
-    debugger
-    if (this.evaluationForm.invalid)
-      return;
-    const _evform = this.evaluationForm.value;
-
-
+    if(this.rollEvaluationEdit){
+      debugger
+      let formdata = this.evaluationForm.value;
+      formdata.EvaluationId = this.readonlyEmployee.evaluationId;
+      this.submitValidEvaluation();
+    }else{
+      this.isFormSubmitted = true;
+      debugger
+      if (this.evaluationForm.invalid)
+        return;
+      const _evform = this.evaluationForm.value;
+  
+      this.submitValidEvaluation();
+      
+    }
+    
+  }
+  submitValidEvaluation(){
     this.evaluationForm.value.CreatedBy = this.currentUser._id;
-    this.evaluationForm.value.Company = this.currentOrganization._id;
-
-    // this.setEmployeeIds();
-    //this.setModelIds();
-    this.evaluationForm.value.Employees = this.selectedEmployeeList;
-    console.log('evaluation form', this.evaluationForm.value);
-    this.perfApp.method = "CreateEvaluation";
-    this.perfApp.requestBody = this.evaluationForm.value;
-    this.perfApp.route = "evaluation"
-    this.perfApp.CallAPI().subscribe(x => {
-      console.log('added evaluation', x)
-      this.notification.success('Evaluation Created Successfully.')
-      this.router.navigate(['ea/evaluation-list'])
-    }, error => {
-
-      console.log('error while adding eval', error)
-      this.notification.error(error.error.message)
-    })
-
+      this.evaluationForm.value.Company = this.currentOrganization._id;
+  
+      // this.setEmployeeIds();
+      //this.setModelIds();
+      this.evaluationForm.value.Employees = this.selectedEmployeeList;
+      console.log('evaluation form', this.evaluationForm.value);
+      this.perfApp.method = "CreateEvaluation";
+      this.perfApp.requestBody = this.evaluationForm.value;
+      this.perfApp.route = "evaluation"
+      this.perfApp.CallAPI().subscribe(x => {
+        console.log('added evaluation', x);
+        if(this.rollEvaluationEdit){
+          this.notification.success('Evaluation Updated Successfully.')
+        }else{
+          this.notification.success('Evaluation Created Successfully.')
+        }
+        
+        this.router.navigate(['ea/evaluation-list'])
+      }, error => {
+  
+        console.log('error while adding eval', error)
+        this.notification.error(error.error.message)
+      });
   }
   reset() {
     this.evaluationForm.reset();
