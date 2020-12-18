@@ -16,6 +16,7 @@ import { PerfAppService } from '../../../services/perf-app.service';
   styleUrls: ['./rollevaluation.component.css']
 })
 export class RollevaluationComponent implements OnInit {
+
   public evaluationForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
@@ -59,6 +60,8 @@ export class RollevaluationComponent implements OnInit {
   public selectedEmployeesForEvaluation: any = [];
   public disabledAddButton: Boolean = false;
   allKpi: Boolean=false;
+  rollEvaluationEdit:Boolean=false;
+  editEvaluation:any;
   kpiSelectedEmployees:any=[];
   gridRefreshParams = {
     force: true,
@@ -283,7 +286,7 @@ export class RollevaluationComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     this.activatedRoute.params.subscribe(params => {
-     debugger
+     
       if (params['allKpi']) {
        this.allKpi = params['allKpi'];
        this.initializeFormFor=this.allKpi?'evaluation':'kpionly'
@@ -293,7 +296,21 @@ export class RollevaluationComponent implements OnInit {
       }
       this.initForm();
       this.getEmployees();
-      this.getModels();  
+      this.getModels();
+      if(params['rollEvaluationEdit'] && params['editEvaluation']){
+        debugger
+        let evalationData=JSON.parse(params['editEvaluation']);
+        let empId = evalationData.empId;
+        let employeesList = evalationData.EvaluationRow.Employees;
+        let employee = employeesList.find(empdata=>empdata._id._id==empId);
+        let {Model} = employee;
+        this.evaluationForm.controls["Model"].setValue(Model._id);
+        //let selectedModel = evalationData.EvaluationRow.Model;
+        let employess = this.getEmployees();
+        console.log(employess);
+        debugger
+        
+      }
      });   
  
     

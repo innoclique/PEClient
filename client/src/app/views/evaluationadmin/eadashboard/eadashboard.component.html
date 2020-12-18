@@ -12,31 +12,27 @@
             <!-- Box1 -->
             <div class="box col-lg-6">
               <div class="box_in">
-                <div class="chart">
+                <div class="chart" *ngIf="pieChartLabels.length>0">
                   <div id="htmlData">
-                    <!--<canvas height="140" baseChart
-                    [datasets]="barChartData"
-                    [labels]="barChartLabels"
-                    [colors]="barChartColors"
-                    [options]="barChartOptions"
-                    [plugins]="barChartPlugins"
-                    [legend]="barChartLegend"
-                    [chartType]="barChartType"
-                    (chartClick)="chartClicked($event)"
-                    >
-                    
-                  </canvas>-->
-                  <canvas height="140" baseChart
-        [data]="pieChartData"
-        [labels]="pieChartLabels"
-        [chartType]="pieChartType"
-        [options]="pieChartOptions"
-        [plugins]="pieChartPlugins"
-        [colors]="pieChartColors"
-        [legend]="pieChartLegend">
-      </canvas>
+                    <canvas height="140" baseChart
+                      [data]="pieChartData"
+                      [labels]="pieChartLabels"
+                      [chartType]="pieChartType"
+                      [options]="pieChartOptions"
+                      [plugins]="pieChartPlugins"
+                      [colors]="pieChartColors"
+                      [legend]="pieChartLegend">
+                    </canvas>
                   </div>
                   <button [disabled]="enableDownload" (click)="downloadCanvas()" id="exportButton" type="button">Export as PDF</button>     
+                </div>
+                <div class="empty-chart" *ngIf="pieChartLabels.length === 0">
+                  <span>
+                    <em></em>
+                    <small>No Evaluations</small>
+                    <div class="clear"></div>
+                  </span>
+                  <div class="empty-chart_circle"></div>
                 </div>
                 <div class="clear"></div>
               </div>
