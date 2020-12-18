@@ -344,8 +344,12 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
           this.kpiStatus = c.KpiStatus;
           this.coachingRemDays = c.coachingRem;
           this.currEvaluation = c.evaluation;
-          if(c.evaluation)
-          this.isManagerFRSignOff=c.evaluation.Employees[0].FinalRating.Manager.SignOff.length>0;
+          if(c.evaluation){
+            //this.currentEmpId;
+            let employee = c.evaluation.Employees.find(emp=>emp._id==this.currentEmpId);
+            this.isManagerFRSignOff=employee.FinalRating.Manager.SignOff.length>0;
+          }
+          
         }
       })
   }
