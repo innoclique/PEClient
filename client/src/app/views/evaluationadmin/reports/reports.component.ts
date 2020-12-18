@@ -7,6 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import RefData from "../../psa/reports/data/refData";
 import ReportTemplates from '../../psa/reports/data/reports-templates';
 import { ReportsService } from '../../../services/reports.service';
+import { PerfAppService } from '../../../services/perf-app.service';
 
 @Component({
   selector: 'app-reports',
@@ -24,10 +25,14 @@ export class ReportsComponent {
   currentOrganization: any;
   detailCellRenderer: any;
   frameworkComponents: any;
+  employeesList$: any = [];
+  selectedEmployeesList: any = [];
+  selectedEmployeeList: any = [];
   constructor(
     public authService: AuthService,
     public router: Router,
     public reportService: ReportsService,
+    private perfApp: PerfAppService,
     private activatedRoute: ActivatedRoute, ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
@@ -40,26 +45,16 @@ export class ReportsComponent {
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
     this.getEvaluationsSummary();
   }
 
   getEvaluationsSummary() {
-    console.log(this.currentUser);
-    let {  _id } = this.currentUser;
-    let orgId = _id;
-
-    let reqBody: any = {
-      orgId: orgId,
-      reportType: 'EA_EVALUATIONS'
-    };
-    this.reportService.getReport(reqBody).subscribe(apiResponse => {
-      console.log('EA_EVALUATIONS : ', apiResponse);
-      this.createRowData(apiResponse);
-    });
+    this.getEvaluationList();
 
   }
 
-   headerHeightSetter(event) {
+  headerHeightSetter(event) {
     var padding = 20;
     var height = ReportTemplates.headerHeightGetter() + padding;
     this.api.setHeaderHeight(height);
@@ -67,33 +62,41 @@ export class ReportsComponent {
   }
 
   getCSAPaymentsSummaryColumnDefs() {
-    return  [
-      { headerName: 'Employee', field: 'emp' },
+    return [
+      {
+        headerName: 'Employee', field: 'emp',
+      },
       { headerName: 'Employee Manager', field: 'mgr', sortable: true, minWidth: 50, width: 128, resizable: true, filter: true },
       { headerName: 'Department', field: 'dept', minWidth: 50, width: 128, resizable: true, sortable: true, filter: true },
       { headerName: 'Title', field: 'title', sortable: true, minWidth: 50, width: 128, resizable: true, filter: true },
       { headerName: 'Length of Service', field: 'servicePeriod' },
       { headerName: 'Length of Service in Current Role', field: 'currentRoleServicePeriod' },
       { headerName: 'Evaluation Status', field: 'status' },
-  ];
+    ];
   }
-
-  createRowData(eaEvaluations:any) {
+  getLengthOfService(joiningDate) {
+    console.log(joiningDate);
+    let dateTo = new Date();
+    let dateFrom = new Date(joiningDate);
+    let months = dateTo.getMonth() - dateFrom.getMonth() + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
+    if (((months % 12) - 1) > 0) {
+      return (months - (months % 12)) / 12 + 'years, ' + ((months % 12) - 1) + ' months';
+    } else {
+      return (months - (months % 12)) / 12 + 'years, 0 months';
+    }
+  }
+  createRowData(eaEvaluations: any) {
     const rowData: any[] = [];
-    var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < eaEvaluations.length; i++) {
+      this.getLengthOfService(eaEvaluations[i].Employee.JoiningDate);
       rowData.push({
-        evaluationPeriod: "JAN'20-DEC'20",
-        purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
-        evaluationsType: RefData.evaluationTypes[0],
-        licPurchasesCount: Math.round(Math.random() * 10),
-        emp:'David Fletcher',
-        mgr:'Andrew Sandieago',
-        dept:'Dev',
-        title:'SSE',
-        servicePeriod:'3 Months',
-        currentRoleServicePeriod:'1 Month',
-        status:'in Progress',
+        emp: eaEvaluations[i].Employee.FirstName + "-" + eaEvaluations[i].Employee.LastName,
+        mgr: eaEvaluations[i].Employee.Manager.FirstName + "-" + eaEvaluations[i].Employee.Manager.LastName,
+        dept: eaEvaluations[i].Employee.Department,
+        title: eaEvaluations[i].Employee.Title,
+        servicePeriod: this.getLengthOfService(eaEvaluations[i].Employee.JoiningDate),
+        currentRoleServicePeriod: '1 Month',
+        status: eaEvaluations[i].EvaluationRow.status,
 
       });
     }
@@ -128,6 +131,61 @@ export class ReportsComponent {
   onQuickFilterChanged($event: any) {
     this.api.setQuickFilter($event.target.value);
   }
+
+
+  getEvaluationList() {
+    this.selectedEmployeesList = [];
+    this.perfApp.route = "evaluation";
+    this.perfApp.method = "GetEvaluations",
+      this.perfApp.requestBody = { clientId: this.authService.getOrganization()._id }
+    this.perfApp.CallAPI().subscribe(c => {
+      console.log('evaluationList data', c);
+      if (c) {
+        // this.selectedEmployeesList = [];
+        c.map(row => {
+          if (row.Type === 'K') {
+            this.selectedEmployeesList.push({
+              Type: row.Type,
+              EmployeeRow: row.Employee[0],
+              EvaluationRow: row,
+              Peers: [],
+              DirectReportees: [],
+              Model: '',
+              Employee: row.Employee[0],
+              PeersCompetencyMessage: '',
+              DirectReporteeComptencyMessage: '',
+              PeersCompetencyList: [],
+              DirectReporteeCompetencyList: []
+            });
+
+          } else {
+            var _f = Object.assign({}, row);
+            row.Employees.map(x => {
+              var _e = Object.assign({}, x);
+              this.selectedEmployeesList.push({
+                EmployeeRow: _e,
+                EvaluationRow: _f,
+                Peers: x.Peers,
+                DirectReportees: x.DirectReportees,
+                Model: x.Model,
+                Employee: x._id,
+                PeersCompetencyMessage: x.PeersCompetencyMessage,
+                DirectReporteeComptencyMessage: x.DirectReporteeComptencyMessage,
+                PeersCompetencyList: x.PeersCompetencyList,
+                DirectReporteeCompetencyList: x.DirectReporteeCompetencyList
+              });
+            })
+
+          }
+        })
+
+      }
+      this.createRowData(this.selectedEmployeesList);
+      // this.getEmployees(this.selectedEmployeesList);
+    })
+
+  }
+
 
 }
 
