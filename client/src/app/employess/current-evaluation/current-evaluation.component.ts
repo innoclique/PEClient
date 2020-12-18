@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { debug } from 'console';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CompetencyBase } from '../../Models/CompetencyFormModel';
@@ -98,7 +99,7 @@ export class CurrentEvaluationComponent implements OnInit {
           this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
           this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
 
-debugger
+
           this.FinalRatingForm.controls["ManagerComments"].setValue(res1.FinalRating.Manager.YearEndComments)
           this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1.FinalRating.Manager.YearEndRating)
           this.FinalRatingForm.controls["ManagerSignOff"].setValue(res1.FinalRating.Manager.SignOff)
@@ -108,6 +109,9 @@ debugger
 
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
+          debugger
+          console.log(res1.PeerScoreCard);
+          debugger
           this.PeerScoreCard = res1.PeerScoreCard;
         }
         if (res1 && Object.keys(res1.DirectReporteeScoreCard).length > 0) {

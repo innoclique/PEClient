@@ -1,3 +1,9 @@
 .my-grid-tile {
     margin-top: 24px !important;
 }
+/*Chart Start*/
+.empty-chart { width: 260px; margin: 20px auto; display: block;}
+.empty-chart span { display: block;margin-left: 50px;}
+.empty-chart span em { width: 30px; height: 12px; background: #ddd;float: left; display:block; margin: 3px 9px 0 0;}
+.empty-chart span small { font-size: 12px; color: #000; padding: 0; float: left;display: block; font-weight: 600;}
+.empty-chart_circle  { width: 200px; height: 200px; border-radius: 100%; background: #ddd; margin: 20px 0 0;}

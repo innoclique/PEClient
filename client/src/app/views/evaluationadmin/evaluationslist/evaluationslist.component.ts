@@ -280,7 +280,7 @@ export class EvaluationslistComponent implements OnInit {
         }
       },
       {
-        headerName: 'Direct Report(s)', field: '', width:130, wrapText: true, autoHeight: true,sortable: false, filter: false,
+        headerName: 'Direct Report(s)', field: '', width:180, wrapText: true, autoHeight: true,sortable: false, filter: false,
         
         cellRenderer: (data) => {
           if (this.getNested(data.data.EmployeeRow, 'DirectReportees')){
@@ -292,19 +292,20 @@ export class EvaluationslistComponent implements OnInit {
         }
       },
 
-      // {
-      //   headerName: "Actions",
-      //   suppressMenu: true,
-      //   Sorting: false,
-      //   cellRenderer: (data) => {
-      //     console.log('column data', data)
+       {
+         headerName: "Actions",
+         width:100,
+         suppressMenu: true,
+         Sorting: false,
+         cellRenderer: (data) => {
+           console.log('column data', data)
 
-      //     return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-      //       font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
-      //       `
-      //     //}
-      //   }
-      // }
+           return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+             font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
+             `
+           }
+         }
+       
     ];
 
   }
@@ -408,7 +409,6 @@ export class EvaluationslistComponent implements OnInit {
       //this.currentRowItem = data.RowData;
       this.selectedEmployee = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
-
       switch (actionType) {
         // case "deleteEmp":
         //   return this.toggleSelection(this.selectedEmployee);
@@ -419,14 +419,18 @@ export class EvaluationslistComponent implements OnInit {
         case "deleteEmp":
           return this.deleteEmpFromList();
         case "changeModel":
-          return this.changeModel();
+          return this.changeModel(data);
 
       }
     }
   }
-  changeModel() {
-
-  }
+  changeModel(data:any) {
+    var selectedRows = this.EmpGridOptions.api.getSelectedRows();
+    let selectedEvaluation={};
+    selectedEvaluation['EvaluationRow'] = data.EvaluationRow;
+    selectedEvaluation['empId']=data.EmployeeRow._id._id;
+    //this.router.navigate(['ea/rollout', {editEvaluation:JSON.stringify(selectedEvaluation), rollEvaluationEdit:true,allKpi: selectedRows.length>0,list:selectedRows.map(x=>x.Employee._id) }], { skipLocationChange: true });
+    }
   openDirectReporteesView() {
     debugger
     if (this.selectedEmployee.DirectReportees && this.selectedEmployee.DirectReportees.length > 0) {
