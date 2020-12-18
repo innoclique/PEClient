@@ -107,6 +107,7 @@ export class RollevaluationComponent implements OnInit {
     console.log('selected model', event)
     this.selectedModel = event.target.value;
     this.getCompetencyList();
+      
   }
 
   onPeerSelect(item) {
@@ -529,7 +530,11 @@ export class RollevaluationComponent implements OnInit {
       debugger
       var clonedArray2 = c.map((_arrayElement) => Object.assign({}, _arrayElement));
       this.peersCompetencyList = clonedArray2;
-      this.disabledAddButton = false;
+      if(this.rollEvaluationEdit){
+        this.disabledAddButton = true;
+      }else{
+        this.disabledAddButton = false;
+      }
     }, error => {
       debugger
       console.log('competencyList error ', error)
