@@ -5,6 +5,7 @@ import { GridApi, GridOptions } from 'ag-grid-community';
 import RefData from "../../../../psa/reports/data/refData";
 import ReportTemplates from '../../../../psa/reports/data/reports-templates';
 import { AuthService } from './../../../../../services/auth.service';
+import { ReportsService } from '../../../../../services/reports.service';
 
 @Component({
   selector: 'app-reports',
@@ -25,6 +26,7 @@ export class CSAPaymentSummary {
   clientRow: any;
   constructor(
     public authService: AuthService,
+    public reportService: ReportsService,
     public router: Router,
     private activatedRoute: ActivatedRoute, ) {
     this.currentUser = this.authService.getCurrentUser();
@@ -36,11 +38,13 @@ export class CSAPaymentSummary {
       columnDefs: this.getCSAPaymentsSummaryColumnDefs(),
     }
     this.defaultColDef = ReportTemplates.defaultColDef;
-    this.createRowData();
   }
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
+    let { Organization, _id } = this.currentUser;
+        let orgId = Organization._id;
+    this.getPurchaseHistoryInfo(orgId);
   }
 
   headerHeightSetter(event) {
@@ -49,6 +53,18 @@ export class CSAPaymentSummary {
     this.api.setHeaderHeight(height);
     this.api.resetRowHeights();
     this.api.sizeColumnsToFit();
+  }
+
+  getPurchaseHistoryInfo(clientId) {
+    console.log('clientId : ', clientId)
+    let reqBody: any = {
+      orgId: clientId,
+      reportType: 'CLIENT_PURCHASE_HISTORY'
+    };
+    this.reportService.getReport(reqBody).subscribe(apiResponse => {
+      console.log('CLIENT_PURCHASE_HISTORY : ', apiResponse);
+      this.createRowData(apiResponse);
+    });
   }
   getCSAPaymentsSummaryColumnDefs() {
     return [
@@ -60,9 +76,15 @@ export class CSAPaymentSummary {
     ];
   }
 
-  createRowData() {
+  createRowData(apiResponse:any) {
     const rowData: any[] = [];
-    this.clientRow = {};
+    this.clientRow = {
+      'Name': apiResponse.clientInfo.Name,
+      'year': new Date(apiResponse.clientInfo.CreatedOn).toLocaleDateString(undefined, options),
+      'active': apiResponse.clientInfo.IsActive ? 'Yes' : 'No',
+      'usageType': apiResponse.clientInfo.UsageType,
+      'evaluationsType': apiResponse.clientInfo.EvaluationPeriod,
+    };
     var totalExpenditure = 0.00;
     // console.log('inside createHistoryData : ');
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
