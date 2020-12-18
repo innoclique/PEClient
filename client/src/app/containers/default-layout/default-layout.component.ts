@@ -184,7 +184,13 @@ export class DefaultLayoutComponent implements OnInit {
               "code": "Evaluations",
               "icon": "icon-star"
           }
-
+          ,{
+            "IsActive": true,
+            "url": "/ea/reports",
+            "name": "Reports",
+            "code": "Reports",
+            "icon": "icon-list"
+          },
 
           )
           this.navItems = navigationMenu;
