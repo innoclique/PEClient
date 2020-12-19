@@ -84,4 +84,11 @@ export class EmployeeDashboardComponent implements OnInit {
     this.router.navigate(['employee/submitpeerreview', { EvaluationId: this.currentRowItem.EvaluationId,
       EmployeeId:this.currentRowItem.employeeId }], { skipLocationChange: true });
   }
+
+    reviewEvalForm(action,actor) {
+      this.router.navigate(['employee/review-evaluation',
+      { action: action, empId: this.currentRowItem._id,actor:actor,empManagerId:this.currentRowItem.Manager 
+        ,empName: this.currentRowItem.Name}
+    ], { skipLocationChange: true });
+  }
 }
