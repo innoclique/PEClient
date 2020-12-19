@@ -156,13 +156,7 @@ export class DefaultLayoutComponent implements OnInit {
               "code": "Evaluations",
               "icon": "icon-star"
           }
-          ,{
-            "IsActive": true,
-            "url": "/ea/reports",
-            "name": "Reports",
-            "code": "Reports",
-            "icon": "icon-list"
-          },
+         
 
           )
           this.navItems = navigationMenu;
@@ -213,14 +207,33 @@ export class DefaultLayoutComponent implements OnInit {
             this.navItems = navigationMenu;
           }
 
+      if (this.user.SelectedRoles.indexOf('EA') > -1) {
           navigationMenu.push(
         {
           "IsActive": true,
           "url": "/employee/reports",
           "name": "Reports",
           "code": "Reports",
-          "icon": "icon-list"
+          "icon": "icon-list",
+          "children":[ {
+            "IsActive": true,
+            "url": "/ea/reports",
+            "name": "Evaluations",
+            "code": "EvaluationsReports",
+            "icon": "icon-list",
+            
+          }]
         })
+      }else{
+        navigationMenu.push(
+          {
+            "IsActive": true,
+            "url": "/employee/reports",
+            "name": "Reports",
+            "code": "Reports",
+            "icon": "icon-list"
+          })
+      }
 
           this.navItems = navigationMenu;
 
