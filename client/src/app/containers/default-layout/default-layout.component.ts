@@ -270,22 +270,21 @@ export class DefaultLayoutComponent implements OnInit {
             "url": "/ea/reports",
             "name": "Reports",
             "code": "Reports",
-            "icon": "icon-list"
+            "icon": "icon-list",
+          "children":[ {
+              "IsActive": true,
+              "url": "/csa/reports/evaluationsSummary",
+              "name": "Evaluations Summary",
+              "code": "evaluationsSummary",
+            },
+            {
+              "IsActive": true,
+              "url": "/csa/reports/paymentSummary",
+              "name": "Payment Summary",
+              "code": "paymentSummary",
+            },]
         }, 
-          {
-          "IsActive": true,
-          "url": "/csa/reports/evaluationsSummary",
-          "name": "Evaluations Summary",
-          "code": "evaluationsSummary",
-          "icon": "icon-list"
-        },
-        {
-          "IsActive": true,
-          "url": "/csa/reports/paymentSummary",
-          "name": "Payment Summary",
-          "code": "paymentSummary",
-          "icon": "icon-list"
-        },
+         
       
         // {
         //     "IsActive": true,
