@@ -47,41 +47,6 @@ export class DefaultLayoutComponent implements OnInit {
     if (this.user) {
       if (this.user.SelectedRoles) {
         var navigationMenu = [];
-         if (this.user.Role === 'PSA') {
-          navigationMenu = JSON.parse(localStorage.getItem('NavigationMenu'));
-          navigationMenu.push(
-            {
-              "IsActive": true,
-              "url": "/psa/reports/revenue/client",
-              "name": "Client Revenue",
-              "code": "ClientRevenueInfo",
-              "icon": "icon-list"
-            },
-            {
-              "IsActive": true,
-              "url": "/psa/reports/revenue/reseller",
-              "name": "Reseller Revenue",
-              "code": "ResellerRevenueInfo",
-              "icon": "icon-list"
-            },
-            {
-              "IsActive": true,
-              "url": "/psa/reports/info/reseller",
-              "name": "Resellers",
-              "code": "ResellerInfo",
-              "icon": "icon-list"
-            },
-            {
-              "IsActive": true,
-              "url": "/psa/reports/info/client",
-              "name": "Clients",
-              "code": "ClientInfo",
-              "icon": "icon-list"
-            }
-
-          );
-          this.navItems = navigationMenu;
-        }
         if(this.user.Role.indexOf('EO')>-1){
           let dashboard = {
             "IsActive": true,
