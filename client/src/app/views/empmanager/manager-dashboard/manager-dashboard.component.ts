@@ -21,7 +21,7 @@ export class ManagerDashboardComponent implements OnInit {
       let actionlinks=''
              actionlinks= `
             
-             <a href="javascript:void(0)">View</> |  <a href="javascript:void(0)">Sign-off</a> | <a href="javascript:void(0)">Request Peer Review<a/>
+             <a data-action-type="doevaluationreview" href="javascript:void(0)">View</> |  <a data-action-type="doevaluationreview" href="javascript:void(0)">Sign-off</a> | <a href="javascript:void(0)">Request Peer Review<a/>
              
              `
             return actionlinks
@@ -56,7 +56,7 @@ export class ManagerDashboardComponent implements OnInit {
   constructor(private router: Router,public emService:EmService,private authService: AuthService) {
     
    }
-
+   
   ngOnInit(): void {
     this.loginUser = this.authService.getCurrentUser();
     this.loadDashboard();
@@ -75,13 +75,16 @@ export class ManagerDashboardComponent implements OnInit {
   public onGridRowClick(e) {
     if (e.event.target !== undefined) {
       this.currentRowItem = e.data;
-
+      //doevaluationreview
       let actionType = e.event.target.getAttribute("data-action-type");
+      console.log(actionType)
       switch (actionType) {
-
         case "doreview":
           this.doReview();
           break;
+        case "doevaluationreview":
+          this.reviewEvalForm('reviewEval','Manager');
+            break;
         default:
       }
     }
@@ -91,5 +94,12 @@ export class ManagerDashboardComponent implements OnInit {
     this.router.navigate(['employee/submitpeerreview', { EvaluationId: this.currentRowItem.EvaluationId,
       EmployeeId:this.currentRowItem.employeeId }], { skipLocationChange: true });
   }
+  reviewEvalForm(action,actor) {
+    let {Organization,_id} = this.loginUser;
+    this.router.navigate(['employee/review-evaluation',
+     { action: action, empId: this.currentRowItem.employeeId,actor:actor,empManagerId:_id 
+      ,empName: this.currentRowItem.name}
+  ], { skipLocationChange: true });
+}
 
 }
