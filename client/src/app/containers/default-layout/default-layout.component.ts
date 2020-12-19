@@ -220,7 +220,7 @@ export class DefaultLayoutComponent implements OnInit {
             "url": "/ea/reports",
             "name": "Evaluations",
             "code": "EvaluationsReports",
-            "icon": "icon-list",
+           
             
           }]
         })
