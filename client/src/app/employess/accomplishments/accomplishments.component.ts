@@ -540,7 +540,7 @@ if (!this.kpiForm.get('Accomplishment').value) {
   public monthList = ["","January", "February", "March", "April", "May", "June", "July",
   "August", "September", "October", "November", "December"];
   getEVPeriod(){
-    debugger
+    
     
         let year= this.currEvaluation? new Date (this.currEvaluation.CreatedDate) : new Date();
         if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
@@ -553,6 +553,11 @@ if (!this.kpiForm.get('Accomplishment').value) {
         }
       }
 
+
+      
+  printPage() {
+    window.print();
+  }
 
 
 }

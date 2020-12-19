@@ -396,6 +396,9 @@ callStregnthApi() {
 
 
 
+  printPage() {
+    window.print();
+  }
 
 
 

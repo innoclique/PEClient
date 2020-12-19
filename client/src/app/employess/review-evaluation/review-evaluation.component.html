@@ -17,7 +17,7 @@
                                                     <i  [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
                                                 </div>
                                                 <div>
-                                                    <span class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span>
+                                                    <span title="" class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span>
                                                 </div>
                                               </button>  
                                             <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments" [empComments]="c.empComments">

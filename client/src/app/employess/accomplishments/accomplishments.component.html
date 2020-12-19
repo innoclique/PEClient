@@ -3,13 +3,15 @@
         <div *ngIf="showKpiForm;else noRecordsFound">
             <div class="card">
                 <div *ngIf="accessingFrom!='currEvaluation' " class="card-header">
-                    Employee Accomplishments
+                    {{loginUser?.FirstName}} {{ loginUser?.LastName}} - Accomplishments
 
                     <div class="form-group form-actions pull-right m-0">
                         <button type="button" class="btn btn-sm btn-primary"
                             (click)="onCancle()">
                             <i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list
                         </button>
+
+                        &nbsp;<i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
                     </div>
 
                 </div>
@@ -217,7 +219,7 @@
                         </div>
 
 
-                        <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+                        <p class="pull-left  hide-print"> <strong>Note: </strong> All fields marked with * are mandatory</p>
                         <div class="clearfix"></div>
                         <div *ngIf="currentAction != 'create'"
                             class=" row form-group form-actions clearfix w-100 d-block all-events ">

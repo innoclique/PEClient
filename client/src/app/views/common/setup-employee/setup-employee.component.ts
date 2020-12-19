@@ -594,4 +594,9 @@ getAllDepartments(){
 
 
 
+printPage() {
+  window.print();
+}
+
+
 }

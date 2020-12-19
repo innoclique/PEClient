@@ -3,13 +3,14 @@
         <div *ngIf="showKpiForm;else noRecordsFound">
             <div class="card">
                 <div *ngIf="accessingFrom!='currEvaluation' " class="card-header">
-                    Performance Goals
+                    {{loginUser?.FirstName}} {{ loginUser?.LastName}} - Performance Goals
 
                     <div class="form-group form-actions pull-right m-0">
                         <button type="button" class="btn btn-sm btn-primary" 
                         (click)="router.navigate(['employee/kpi-setup'])">
                         <i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list
                       </button>
+                      <i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
                     </div>
                     
                 </div>
@@ -347,7 +348,7 @@
     </div>
 </div>
 
-                        <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+                        <p class="pull-left  hide-print"> <strong>Note: </strong> All fields marked with * are mandatory</p>
                         <div class="clearfix"></div>
                         <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
                             <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Previous</button>
@@ -400,7 +401,7 @@
                             <!-- [disabled]="!kpiForm.valid" <button *ngIf="!kpiDetails?.IsSubmitedKPIs" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
                           </div>
             
-                          <!-- <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p> -->
+                          <!-- <p class="pull-left  hide-print"> <strong>Note: </strong> All fields marked with * are mandatory</p> -->
                           <!-- <div *ngIf="currentAction != 'create'" class=" row form-group form-actions clearfix w-100 d-block all-events ">
                             <button [disabled]='selIndex==0' class="btn btn-link pull-left" (click)="priKpi()" >Previous Kpi</button>
                             <button [disabled]='selIndex+1 == empKPIData.length'  class="btn btn-link pull-right" (click)="nextKpi()" >Next Kpi</button>

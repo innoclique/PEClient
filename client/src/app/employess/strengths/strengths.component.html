@@ -8,6 +8,7 @@
                   <div class="form-group form-actions pull-right m-0">
                       <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
                       (click)="navToStrengthList()" ><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list </button>  
+                      <i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
 
                   </div>
                   
@@ -226,7 +227,7 @@
                   <!-- <button class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Create Performance Goals</button> -->
                 </div>
   
-                <p class="pull-left "> <strong>Note: </strong> All fields marked with * are mandatory</p>
+                <p class="pull-left  hide-print"> <strong>Note: </strong> All fields marked with * are mandatory</p>
 
 
 

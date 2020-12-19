@@ -386,6 +386,9 @@ nextKpi(){
 
 
 
+  printPage() {
+    window.print();
+  }
 
 
 

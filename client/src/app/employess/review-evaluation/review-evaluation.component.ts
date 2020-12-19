@@ -467,6 +467,21 @@ goto(selTab){
       this.snack.error("Please score performance goals");
       return;
     }
+
+    if(this.PeerScoreCard){
+      const peers=this.PeerScoreCard.Employees.Peers;
+      if(peers[0].CompetencySubmitted==false || peers[0].CompetencySubmitted==false ){
+      this.snack.error("Peer competency not submitted");
+      return;
+      }
+    }
+    if(this.DirectReporteeScoreCard){
+      const direReportee=this.DirectReporteeScoreCard.Employees.DirectReportees;
+      if(direReportee[0].CompetencySubmitted==false || direReportee[0].CompetencySubmitted==false ){
+      this.snack.error("Direct Reportee competency not submitted");
+      return;
+      }
+    }
     
 if (this.FinalRatingForm.value.TSReqRevision &&
   this.FinalRatingForm.value.ManagerRevComments.length==0) {

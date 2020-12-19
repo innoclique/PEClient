@@ -452,6 +452,10 @@ if (!this.kpiForm.get('Note').value) {
     this.currentKpiId=this.kpiDetails._id;
   }
 
+  printPage() {
+    window.print();
+  }
+
 
 
 }

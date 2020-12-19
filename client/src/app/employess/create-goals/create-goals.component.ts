@@ -720,4 +720,11 @@ nextKpi(){
    this.currentDevGoalId=this.goalDetails._id;
  }
 
+
+ 
+ printPage() {
+  window.print();
+}
+
+
 }

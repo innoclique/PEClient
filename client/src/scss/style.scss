@@ -15,6 +15,26 @@
   }
 
 
+  
+@media print {
+  button {
+    display: none !important;
+  }
+}
+
+@media print {
+  .hide-print {
+    display: none !important;
+  }
+}
+
+@media print {
+  ul.nav.nav-tabs {
+    display: none !important;
+  }
+}
+
+
   /* You can add global styles to this file, and also import other style files */
 // @import './app/material-theme.scss';
 

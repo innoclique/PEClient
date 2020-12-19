@@ -43,6 +43,8 @@
       <div class="modal-header pt-1 pr-1">
         <h5 *ngIf="currentAction != 'view'" class="modal-title"> {{currentAction == 'create'?'Create a new Employee':'Update Employee'}}</h5>
         <h5 *ngIf="currentAction == 'view'" class="modal-title"> Employee</h5>
+       
+        <i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
         <button type="button" class="close" (click)="addEmployee.hide();closeForm()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
