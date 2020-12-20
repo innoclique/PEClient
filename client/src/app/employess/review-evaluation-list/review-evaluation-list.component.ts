@@ -254,7 +254,7 @@ row.Name= row.FirstName+' '+row.LastName;
          Name:row.Name,
          NoOfKpis: row.KpiList.length,
          NoOfDevGoals: row.GoalList.length,
-         FRStatus: evaluation ?evaluation.FinalRating.Status:'',
+         FRStatus: row.FRStatus,
        
         RowData:row
       }
@@ -285,7 +285,7 @@ row.Name= row.FirstName+' '+row.LastName;
          Name:row.Name,
          NoOfKpis: row.KpiList.length,
          NoOfDevGoals: row.GoalList.length,
-         FRStatus: evaluation?evaluation.FinalRating.Status:'',
+         FRStatus: row.FRStatus,
        
         RowData:row
       }
