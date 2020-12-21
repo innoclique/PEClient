@@ -20,7 +20,7 @@ export class ThirdSignDashboardComponent implements OnInit {
       let actionlinks=''
              actionlinks= `
             
-             <a href="#">View</> |  <a href="#">Sign-off</a> | <a href="#">Request Peer Review<a/>
+             <a data-action-type="doevaluationreview" href="javascript:void(0)">View</> |  <a data-action-type="doevaluationreview" href="javascript:void(0)">Sign-off</a> | <a href="javascript:void(0)">Request Peer Review<a/>
              
              `
             return actionlinks
@@ -64,7 +64,7 @@ export class ThirdSignDashboardComponent implements OnInit {
     let {Organization,_id} = this.loginUser;
     console.log(JSON.stringify(this.loginUser,null,5))
     let orgId = Organization._id;
-    let payload:any={userId:_id,orgId:orgId}
+    let payload:any={userId:_id,orgId:orgId,type:'TS'}
     this.emService.emDashboard(payload).subscribe(apiResponse => {
       this.tsEvaluationsRowData = apiResponse.current_evaluation.list;
       this.tsPeerReviewRowData = apiResponse['peer_review']['list'];
@@ -81,6 +81,10 @@ export class ThirdSignDashboardComponent implements OnInit {
         case "doreview":
           this.doReview();
           break;
+        case "doevaluationreview":
+          this.reviewEvalForm('reviewEval','TS');
+          break;
+
         default:
       }
     }
@@ -90,6 +94,12 @@ export class ThirdSignDashboardComponent implements OnInit {
     this.router.navigate(['employee/submitpeerreview', { EvaluationId: this.currentRowItem.EvaluationId,
       EmployeeId:this.currentRowItem.employeeId }], { skipLocationChange: true });
   }
-
+  reviewEvalForm(action,actor) {
+    let {Organization,_id} = this.loginUser;
+    this.router.navigate(['employee/review-evaluation',
+     { action: action, empId: this.currentRowItem.employeeId,actor:actor,empManagerId:_id 
+      ,empName: this.currentRowItem.name}
+  ], { skipLocationChange: true });
+}
 
 }

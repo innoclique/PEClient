@@ -1,0 +1,129 @@
+
+  <div class="wrapper"> 
+  
+    <div class="release_method_cont">
+      <div class="release_method_cont_in paymentinfo">
+        <h3 class="wow fadeIn" data-wow-delay="0.2s">Release Payment info - Client Organization</h3>
+        <div class="release_method_space">
+          <div class="row m-b15">
+            <div class="col-lg-12">
+              <label>Organisation</label>
+              <select name="organization" class="form-control" (change)="orgnizationDetails($event.target.value)">
+                <option>Select Organisation</option>
+                <option *ngFor="let item of organizationList" [value]="item._id">{{item.Name}}</option>
+              </select>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+          </div>
+          <div class="row m-b15">
+            <div class="col-lg-6">
+              <label>Usage type</label>
+              <input readonly class="form-control" name="" value="{{selectedOrganizationObj?.UsageType}}" />
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="col-lg-6">
+               <div class="">
+                  <label>Payment Duration</label>
+                   <select class="form-control">
+                      <option>12 Months</option>
+                      <option>1 Months</option>
+                    </select>
+                    <i class="fa fa-chevron-down"></i>
+                </div>
+            </div>
+          </div>
+          <div class="row m-b15">
+            <div class="col-lg-6">
+              <label>Of Employees</label>
+              <input readonly class="form-control" name="" value="{{selectedOrganizationObj?.UsageCount}}" />
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="col-lg-6">
+               <div class="">
+                  <label>Range</label>
+                   <select class="form-control">
+                      <option>10-100</option>
+                      <option>100-200</option>
+                    </select>
+                    <i class="fa fa-chevron-down"></i>
+                </div>
+            </div>
+          </div>
+          <div class="row m-b15">
+            <div class="col-lg-6">
+              <label>Effective Date</label>
+              <input class="release_method_date" type="text" id="datepicker2">
+            </div>
+            <div class="col-lg-6">
+                <div class="release_cont_freqency clearfix">
+                  <label>Payment Frequency</label>
+                  <div class="col-lg-6 no_pad m-t10">
+                    <label class="container1">Annual
+                      <input type="radio" checked="checked" name="radio" >
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="col-lg-6 no_pad m-t10">
+                    <label class="container1">Monthly
+                      <input type="radio" name="radio" value="radio2">
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>  
+    </div>
+    <div class="release_method_cont">
+      <div class="release_method_cont_in release_method_list paymentinfo">
+        <h3 class="release_payment_bg  wow fadeIn" data-wow-delay="0.2s">Payment Breakup</h3>
+          <div class="release_cost_list release_method_list">
+            <ul>
+              <li>
+                <h6>Cost<strong>Cost for the year per employee</strong></h6>
+                <span>240<em>,00</em></span>
+                <div class="clear"></div>
+              </li>
+              <li>
+                <h6>Discount<strong>Discount for annual payment (per employee)</strong></h6>
+                <span>2<em>,40</em></span>
+                <div class="clear"></div>
+              </li>
+              <li>
+                <h6>Total<strong>Total Amount (per employee)</strong></h6>
+                <span>237<em>,60</em></span>
+                <div class="clear"></div>
+              </li>
+              <li>
+                <h6>Due<strong>Amount due (annual payment)</strong></h6>
+                <span>308<em>,00</em></span>
+                <div class="clear"></div>
+              </li>
+              <li>
+                <h6>Tax<strong>Tax(13%)</strong></h6>
+                <span>2376<em>,60</em></span>
+                <div class="clear"></div>
+              </li>
+              <li>
+                <h6>Total<strong>Total Amount Payable (for annual payments)</strong></h6>
+                <span>2384<em>,60</em></span>
+                <div class="clear"></div>
+              </li>
+              <li>
+                <h6>Summary<strong>Amount payable is cost per employee per year, after discount,  number of employees  + taxes.</strong></h6>
+                <div class="clear"></div>
+              </li>
+            </ul>
+          </div>
+          <div class="release_method_buttons">
+            <a href="#" class="release_buttons_save">Save</a>
+            <a href="#" class="release_buttons_submit">Submit</a>
+            <a href="#" class="release_buttons_cancel">Cancel</a>
+            <div class="clear"></div>
+          </div>
+      </div>
+    </div>
+
+</div>

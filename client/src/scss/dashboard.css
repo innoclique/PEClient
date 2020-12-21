@@ -115,3 +115,1033 @@ p											{  font-size:15px; line-height:21px; font-weight:400; color:#717171;
     margin-top: 20px;
 }
 
+.payment_main {
+    display : block;
+    padding : 10px;
+    }
+    .payment_block {
+    margin : 0 0 15px;
+    }
+    .payment_block p {
+    font-size : 13px;
+    line-height : 16px;
+    color : #000;
+    font-weight : 600;
+    padding : 10px 0 0;
+    width : 170px;
+    display : block;
+    float : left;
+    }
+    .payment_block input {
+    font-size : 13px;
+    line-height : 16px;
+    color : #000;
+    font-weight : 600;
+    padding : 10px;
+    background : #fff;
+    border : #d0d2d4 solid 1px;
+    border-radius : 6px;
+    width : 260px;
+    display : block;
+    float : left;
+    position : relative;
+    }
+    .payment_block span {
+    width : 260px;
+    font-size : 14px;
+    line-height : 16px;
+    color : #000;
+    display : block;
+    padding : 10px;
+    background : #fff;
+    border : #d0d2d4 solid 1px;
+    border-radius : 6px;
+    float : left;
+    margin : 0;
+    }
+    .payment_calender {
+    width : 50%;
+    font-size : 14px;
+    line-height : 16px;
+    color : #000;
+    display : block;
+    padding : 10px;
+    background : #fff;
+    border : #d0d2d4 solid 1px;
+    border-radius : 6px;
+    float : left;
+    margin : 0;
+    }
+    .payment_block_cost {
+    font-size : 14px;
+    line-height : 16px;
+    color : #000;
+    display : block;
+    padding : 10px;
+    background : #dcdcdc;
+    border : #d0d2d4 solid 1px;
+    border-radius : 6px;
+    margin : 0 0 10px;
+    }
+    .payment_block_radio .st_checkbox {
+    width : 150px;
+    display : block;
+    float : left;
+    }
+    .payment_block_radio .st_checkbox span {
+    width : auto;
+    background : none;
+    border : none;
+    }
+    .payment_block_radio .st_checkbox input {
+    width : 50px;
+    display : inline-block;
+    margin-left : -10px;
+    }
+    .payment_content {
+    padding : 15px;
+    margin-bottom : 20px;
+    background : #fff;
+    border-radius : 3px;
+    border : #e2e7eb solid 1px;
+    }
+    .payment_tabs {
+    display : block;
+    padding : 0;
+    margin : 0 0 0;
+    }
+    .payment_nav {
+    border-bottom : 0 solid #b2b2b2;
+    display : block;
+    padding : 0;
+    margin : 0 0 0;
+    }
+    .payment_nav .nav-tabs {
+    background : #eff4f9;
+    }
+    .payment_nav ul {
+    border : #e2e7eb solid 1px !important ;
+    border-bottom : 1px solid #e2e7eb !important ;
+    display : inline-block;
+    border-radius : 4px 4px 0 4px;
+    margin : 0 0 -5px;
+    }
+    .payment_nav ul li {
+    float : left;
+    display : block;
+    border-right : 1px solid #e2e7eb;
+    padding : 0;
+    margin-bottom : 0;
+    }
+    .payment_nav ul li a {
+    font-size : 13px;
+    line-height : 26px;
+    color : #717171;
+    font-weight : 600;
+    padding : 6px 50px;
+    margin-right : 0;
+    border : none;
+    transition : all 0.4s ease-in-out;
+    display : flex;
+    }
+    .payment_nav ul li:hover a {
+    color : #fff !important ;
+    background : #427cac;
+    border-radius : 0;
+    }
+    .payment_nav ul li a.active {
+    color : #fff !important ;
+    background-color : #427cac !important ;
+    border-radius : 0;
+    }
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    background : #427cac;
+    color : #fff !important ;
+    border : none;
+    border-radius : 0;
+    }
+    .nav > li > a:hover, .nav > li > a:focus {
+    background-color : inherit;
+    }
+    .payment_section_in {
+    margin : 0 0 15px;
+    }
+    .payment_section h3 {
+    margin : 0 0 15px;
+    color : #0063af;
+    font-size : 14px;
+    }
+    .payment_section_in p {
+    font-size : 13px;
+    line-height : 16px;
+    color : #000;
+    font-weight : 600;
+    padding : 10px 0 0;
+    width : 170px;
+    display : block;
+    float : left;
+    }
+    .payment_section_in select {
+    width : 260px;
+    font-size : 14px;
+    line-height : 16px;
+    color : #000;
+    display : block;
+    padding : 0 10px;
+    background : #fff;
+    border : #d0d2d4 solid 1px;
+    border-radius : 6px;
+    float : left;
+    margin : 0;
+    }
+    .payment_section_in span {
+    width : 260px;
+    font-size : 14px;
+    line-height : 16px;
+    color : #000;
+    display : block;
+    padding : 10px;
+    background : #fff;
+    border : #d0d2d4 solid 1px;
+    border-radius : 6px;
+    float : left;
+    margin : 0;
+    }
+    .payment_section_btn {
+    margin : 20px 0 0;
+    }
+    .pagination li a {
+    color : #717171;
+    font-weight : 600;
+    padding : 10px 12px;
+    }
+    .pagination li a.active, .pagination li a:hover {
+    color : #286090;
+    }
+    .clientinfo_main {
+    display : block;
+    padding : 10px;
+    }
+    .clientinfo_main h3 {
+    font-size : 16px;
+    line-height : 18px;
+    color : #0063af;
+    display : block;
+    padding : 0 0 10px;
+    }
+    .clientinfo_block {
+    margin : 0 0 10px;
+    }
+    .clientinfo_block p {
+    font-size : 13px;
+    line-height : 16px;
+    color : #000;
+    font-weight : 600;
+    padding : 10px 0 0;
+    width : 90px;
+    display : block;
+    float : left;
+    }
+    .clientinfo_block span {
+    width : 170px;
+    font-size : 14px;
+    line-height : 16px;
+    color : #000;
+    display : block;
+    padding : 10px;
+    float : left;
+    margin : 0;
+    }
+    .content_block {
+    width : 100%;
+    margin : 65px 20px 0 -70px;
+    float : right;
+    transition : all 0.4s ease-in-out;
+    }
+    .content_block_in {
+    width : 93.4%;
+    float : right;
+    }
+    .payment_info_tabs {
+    display : block;
+    padding : 0;
+    margin : 0 0 0;
+    }
+    .payment_info_nav {
+    border-bottom : 0 solid #b2b2b2;
+    display : block;
+    padding : 0;
+    margin : 0 40px 20px;
+    }
+    .payment_info_nav .nav-tabs {
+    width : 100%;
+    background : #f3f5f9;
+    }
+    .payment_info_nav ul {
+    border : #e2e7eb solid 1px !important ;
+    border-bottom : 1px solid #e2e7eb !important ;
+    display : inline-block;
+    border-radius : 4px 4px 0 4px;
+    margin : 0 0 -5px;
+    }
+    .payment_info_nav ul li {
+    width : 25%;
+    float : left;
+    display : block;
+    border-right : 1px solid #e2e7eb;
+    padding : 0;
+    margin-bottom : 0;
+    }
+    .payment_info_nav ul li a {
+    font-size : 16px;
+    line-height : 26px;
+    color : #b6b7ba;
+    font-weight : 400;
+    padding : 13px 0 17px;
+    margin-right : 0;
+    border : none;
+    transition : all 0.4s ease-in-out;
+    text-align : center;
+    display : block;
+    }
+    .payment_info_nav ul li:hover a {
+    color : #000 !important ;
+    background : #fff;
+    border-radius : 0;
+    }
+    .payment_info_nav ul li a.active {
+    color : #000 !important ;
+    background-color : #fff !important ;
+    border-radius : 0;
+    }
+    .payment_arrow {
+    opacity : 0;
+    position : absolute;
+    bottom : -15px;
+    left : 50%;
+    font-size : 15px;
+    }
+    .payment_info_nav ul li.active .payment_arrow {
+    opacity : 1;
+    }
+    .payment_arrow_gren {
+    color : #86de82;
+    }
+    .payment_arrow_pink {
+    color : #ffcaca;
+    }
+    .payment_info_nav .nav-tabs > li.active > a, .payment_info_nav .nav-tabs > li.active > a:hover, .payment_info_nav .nav-tabs > li.active > a:focus {
+    background : #ffffff;
+    color : #000 !important ;
+    border : none;
+    border-radius : 0;
+    }
+    .nav > li > a:hover, .nav > li > a:focus {
+    background-color : inherit;
+    }
+    .payment_tabcont {
+    padding : 15px;
+    margin-bottom : 20px;
+    background : inherit;
+    }
+    .release_cont {
+    width : 34%;
+    float : left;
+    margin-right : 20px;
+    }
+    .release_cont_in {
+    background : #fff;
+    border-radius : 6px;
+    padding : 15px;
+    }
+    .release_cont h3 {
+    font-size : 17px;
+    line-height : 23px;
+    color : #000;
+    display : block;
+    padding : 0 0 20px;
+    }
+    .release_cont label {
+    font-size : 14px;
+    color : #8095b3;
+    display : block;
+    font-weight : 400;
+    padding : 0;
+    }
+    .release_cont select {
+    font-size : 14px;
+    color : #353f55;
+    border : #8095b3 solid 1px;
+    border-radius : 4px;
+    background : #f9faff;
+    display : block;
+    padding : 10px;
+    height : 39px !important ;
+    }
+    .release_cont .form-control option {
+    border-bottom : 1px solid #000;
+    padding : 10px 0;
+    }
+    .release_cont_freqency h4 {
+    font-size : 15px;
+    line-height : 18px;
+    color : #000;
+    display : block;
+    padding : 0 0 20px;
+    }
+    .release_cont_freqency .container1 {
+    display : block;
+    position : relative;
+    padding-left : 26px;
+    margin-bottom : 12px;
+    cursor : pointer;
+    font-size : 15px;
+    user-select : none;
+    }
+    .release_cont_freqency .container1 input {
+    position : absolute;
+    opacity : 0;
+    cursor : pointer;
+    }
+    .checkmark {
+    position : absolute;
+    top : 0;
+    left : 0;
+    height : 20px;
+    width : 20px;
+    border : #b9c6ef solid 1px;
+    background-color : #f9faff;
+    border-radius : 50%;
+    }
+    .release_cont_freqency .container1:hover input ~ .checkmark {
+    background-color : #ccc;
+    }
+    .release_cont_freqency .container1 input:checked ~ .checkmark {
+    background-color : #2196F3;
+    }
+    .release_cont_freqency .checkmark:after {
+    content : "";
+    position : absolute;
+    display : none;
+    }
+    .release_cont_freqency .container1 input:checked ~ .checkmark:after {
+    display : block;
+    }
+    .release_cont_freqency .container1 .checkmark:after {
+    top : 5px;
+    left : 5px;
+    width : 8px;
+    height : 8px;
+    border-radius : 50%;
+    background : white;
+    }
+    .release_payment {
+    padding : 0;
+    }
+    .release_payment h3 {
+    padding : 15px 15px 0 15px;
+    }
+    .release_cost_list {
+    display : block;
+    }
+    .release_cost_list ul li {
+    display : block;
+    border-bottom : 1px solid #b7c5ef;
+    padding : 15px;
+    }
+    .release_cost_list ul li:nth-child(even) {
+    background : #f9faff;
+    }
+    .release_cost_list ul li h6 {
+    font-size : 14px;
+    line-height : 16px;
+    color : #000;
+    display : block;
+    float : left;
+    }
+    .release_cost_list ul li h6 strong {
+    display : block;
+    font-size : 13px;
+    line-height : 16px;
+    color : #717171;
+    font-weight : 400;
+    }
+    .release_cost_list ul li span {
+    font-size : 15px;
+    line-height : 18px;
+    color : #000;
+    font-weight : 600;
+    padding : 8px 0 0;
+    display : block;
+    float : right;
+    }
+    .release_cost_list ul li span em {
+    font-size : 12px;
+    line-height : 14px;
+    color : #717171;
+    }
+    .payment_method_main h4 {
+    color : #127cc2;
+    font-size : 19px;
+    line-height : 22px;
+    display : block;
+    padding : 20px 20px 10px;
+    }
+    .payment_method_block {
+    margin : 65px 0 0 -50px;
+    }
+    .payment_method_block_in {
+    width : 96%;
+    }
+    .payment_method_tabs {
+    display : block;
+    padding : 0;
+    margin : 0 0 0 20px;
+    }
+    .payment_method_nav {
+    border-bottom : 0 solid #b2b2b2;
+    display : block;
+    padding : 0;
+    margin : 0 0 15px;
+    }
+    .payment_method_nav .nav-tabs {
+    width : 100%;
+    background : none;
+    }
+    .payment_method_nav ul {
+    border : #e2e7eb solid 0 !important ;
+    border-bottom : 0 solid #e2e7eb !important ;
+    display : inline-block;
+    }
+    .payment_method_nav ul li {
+    float : left;
+    display : block;
+    border-bottom : 0 solid #e2e7eb;
+    padding : 0;
+    margin-bottom : 0;
+    }
+    .payment_method_nav ul li a {
+    font-size : 15px;
+    line-height : 22px;
+    color : #000;
+    font-weight : 400;
+    padding : 0 0 4px;
+    margin-right : 50px;
+    border : none;
+    transition : all 0.4s ease-in-out;
+    text-align : center;
+    display : block;
+    border-bottom : 2px solid #e6eff6 !important ;
+    }
+    .payment_method_nav ul li:hover a {
+    color : #127cc2 !important ;
+    border-radius : 0;
+    border-bottom : 2px solid #127cc2 !important ;
+    }
+    .payment_method_nav ul li a.active {
+    color : #127cc2 !important ;
+    border-radius : 0;
+    border-bottom : 2px solid #127cc2 !important ;
+    }
+    .payment_method_main {
+    float : left;
+    width : 80%;
+    }
+    .payment_method_nav .nav-tabs > li.active > a, .payment_method_nav .nav-tabs > li.active > a:hover, .payment_method_nav .nav-tabs > li.active > a:focus {
+    background : none;
+    color : #127cc2 !important ;
+    border-bottom : 2px solid #127cc2 !important ;
+    }
+    .payment_method_tabcont {
+    padding : 0;
+    margin-bottom : 20px;
+    background : inherit;
+    margin-right : 20px;
+    }
+    .release_method_cont {
+    width : 49%;
+    float : left;
+    margin-right : 0;
+    border-right : 1px solid #7dc4f2;
+    }
+    .release_method_cont_in {
+    background : #fff;
+    border-radius : 0;
+    padding : 0;
+    min-height : 930px;
+    position : relative;
+    }
+    .release_method_cont h3 {
+    font-size : 16px;
+    line-height : 21px;
+    color : #fff;
+    display : block;
+    padding : 15px 20px;
+    background : #66bef8;
+    position : relative;
+    }
+    .release_method_cont label {
+    font-size : 14px;
+    color : #8095b3;
+    display : block;
+    font-weight : 400;
+    padding : 0;
+    }
+    .release_method_cont input {
+    font-size : 14px;
+    color : #353f55;
+    border : #ccc solid 1px;
+    border-radius : 4px;
+    background : #f9faff;
+    display : block;
+    padding : 10px 15px;
+    width : 100%;
+    height : 39px !important ;
+    }
+    .release_method_cont input:focus, .release_method_cont select:focus {
+    border : #c2e5fc solid 1px;
+    box-shadow : 0 0 5px #c2e5fc;
+    }
+    .release_method_cont select {
+    font-size : 14px;
+    color : #353f55;
+    border : #ccc solid 1px;
+    border-radius : 4px;
+    background : #f9faff;
+    display : block;
+    padding : 10px 15px;
+    height : 39px !important ;
+    }
+    .release_method_date {
+    font-size : 14px;
+    color : #353f55;
+    border : #ccc solid 1px;
+    border-radius : 4px;
+    display : block;
+    padding : 10px;
+    width : 100%;
+    height : 39px !important ;
+    }
+    .release_method_cont .form-control option {
+    border-bottom : 1px solid #000;
+    padding : 10px 0;
+    }
+    .release_method_space {
+    padding : 15px;
+    }
+    .release_cont_freqency .container1 {
+    display : block;
+    position : relative;
+    padding-left : 26px;
+    margin-bottom : 12px;
+    cursor : pointer;
+    font-size : 15px;
+    user-select : none;
+    }
+    .release_method_freqency .container1 input {
+    position : absolute;
+    opacity : 0;
+    cursor : pointer;
+    }
+    .checkmark {
+    position : absolute;
+    top : 0;
+    left : 0;
+    height : 20px;
+    width : 20px;
+    border : #b9c6ef solid 1px;
+    background-color : #f9faff;
+    border-radius : 50%;
+    }
+    .release_method_freqency .container1:hover input ~ .checkmark {
+    background-color : #ccc;
+    }
+    .release_method_freqency .container1 input:checked ~ .checkmark {
+    background-color : #2196F3;
+    }
+    .release_method_freqency .checkmark:after {
+    content : "";
+    position : absolute;
+    display : none;
+    }
+    .release_method_freqency .container1 input:checked ~ .checkmark:after {
+    display : block;
+    }
+    .release_method_freqency .container1 .checkmark:after {
+    top : 4px;
+    left : 4px;
+    width : 10px;
+    height : 10px;
+    border-radius : 50%;
+    background : white;
+    }
+    .release_cont_freqency label {
+    color : #000;
+    }
+    .release_method_list {
+    border-top : 1px solid #b7c5ef;
+    }
+    .release_method_list h4 {
+    color : #000;
+    font-size : 18px;
+    line-height : 22px;
+    padding : 14px 15px 10px;
+    }
+    .release_payment_bg {
+    background : #127cc2 !important ;
+    }
+    .release_method_checkbox .custom-control-input {
+    width : 4%;
+    display : inline-block;
+    height : 18px !important ;
+    border : #ccc solid 1px !important ;
+    border-radius : 6px !important ;
+    margin-left : 14px;
+    margin-right : 10px;
+    background : #f9faff !important ;
+    }
+    .release_method_checkbox .custom-control-input:focus {
+    border : #c2e5fc solid 1px;
+    box-shadow : 0 0 5px #c2e5fc;
+    }
+    .release_method_checkbox label {
+    display : inline-block;
+    color : #000;
+    position : relative;
+    top : -4px;
+    }
+    .release_method_buttons {
+    display : block;
+    float : right;
+    position : absolute;
+    bottom : 20px;
+    right : 0;
+    }
+    .release_buttons_cancel {
+    font-size : 14px;
+    text-align : center;
+    color : #7d7d7d;
+    border : #999999 solid 1px;
+    border-radius : 4px;
+    display : block;
+    float : left;
+    padding : 10px 15px;
+    margin-left : 12px;
+    margin-right : 15px;
+    }
+    .release_buttons_submit {
+    font-size : 14px;
+    text-align : center;
+    color : #fff;
+    border : #127cc2 solid 1px;
+    background : #127cc2;
+    border-radius : 4px;
+    display : block;
+    float : left;
+    padding : 10px 15px;
+    margin-left : 12px;
+    }
+    .release_buttons_cancel:hover {
+    background : #e7e0e0;
+    color : #000;
+    }
+    .release_buttons_submit:hover {
+    background : #0a5180;
+    color : #fff;
+    }
+    .release_buttons_save {
+    font-size : 14px;
+    text-align : center;
+    color : #fff;
+    border : #4bc745 solid 1px;
+    background : #4bc745;
+    border-radius : 4px;
+    display : block;
+    float : left;
+    padding : 10px 15px;
+    margin-left : 12px;
+    }
+    .release_buttons_save:hover {
+    background : #309f2a;
+    color : #fff;
+    }
+    .payment_method_right {
+    float : right;
+    width : 20%;
+    background : #fff;
+    height : 100vh;
+    position : fixed;
+    right : 0;
+    }
+    .payment_method_right h5 {
+    color : #000;
+    font-size : 17px;
+    line-height : 22px;
+    padding : 14px 20px 20px;
+    }
+    .payment_method_right img {
+    display : block;
+    width : 100%;
+    height : auto;
+    }
+    .payment_right_blue {
+    background : #127cc2;
+    padding : 15px 20px;
+    }
+    .payment_right_blue h6 {
+    color : #fff;
+    font-size : 24px;
+    line-height : 28px;
+    padding : 0;
+    display : block;
+    }
+    .payment_right_blue h6 small {
+    font-size : 11px;
+    display : block;
+    color : #fff;
+    }
+    .payment_right_blue span {
+    color : #fff;
+    font-size : 16px;
+    line-height : 20px;
+    padding : 15px 0 0;
+    display : block;
+    }
+    .payment_right_white {
+    background : #fff;
+    }
+    .payment_right_white h6, .payment_right_white h6 small, .payment_right_white span {
+    color : #127cc2;
+    }
+    .payment_info_links {
+    border-top : 1px solid #ddd;
+    padding : 0;
+    }
+    .payment_info_links_payment {
+    color : #127cc2;
+    padding : 0 0 20px 20px;
+    display : block;
+    font-size : 14px;
+    line-height : 16px;
+    }
+    .payment_info_links_payment em {
+    width : 30px;
+    height : 30px;
+    border-radius : 40px;
+    background : #e6eaf3;
+    display : block;
+    padding : 6px;
+    float : left;
+    }
+    .payment_info_links_payment em img {
+    width : 100%;
+    height : auto;
+    }
+    .payment_info_links_payment strong {
+    padding : 5px 0 0 40px;
+    display : block;
+    }
+    .payment_info_links_payment:hover {
+    color : #06263c;
+    }
+    .new_dropdown {
+    display : none;
+    width : 350px;
+    position : absolute;
+    top : 53px;
+    right : 0;
+    background : #fff;
+    border : #ddd solid 1px;
+    border-radius : 4px;
+    }
+    .new_dropdown_top {
+    display : block;
+    padding : 0;
+    }
+    .new_dropdown_top_lft {
+    width : 70px;
+    height : 70px;
+    border : #d7dfeb solid 1px;
+    background : #f9fbff;
+    border-radius : 100%;
+    float : left;
+    margin : 15px 0 0 15px;
+    }
+    .new_dropdown_top_lft h4 {
+    font-size : 26px;
+    line-height : 66px;
+    color : #000;
+    text-align : center;
+    font-weight : 700;
+    }
+    .new_dropdown_top_lft img {
+    width : 100%;
+    height : auto;
+    padding : 15px;
+    }
+    .new_dropdown_top_rht {
+    float : right;
+    display : block;
+    padding : 15px 15px 0 0;
+    }
+    .new_dropdown_top_rht h6 {
+    font-size : 13px;
+    line-height : 20px;
+    color : #000;
+    display : block;
+    font-weight : 600;
+    padding-top : 10px;
+    }
+    .new_dropdown_top_rht a {
+    padding : 0 !important ;
+    width : auto !important ;
+    height : auto !important ;
+    font-size : 13px;
+    line-height : 20px;
+    color : #000;
+    display : block;
+    font-weight : 400;
+    }
+    .new_dropdown_top_rht em {
+    font-size : 13px;
+    line-height : 20px;
+    color : #000;
+    display : block;
+    font-weight : 400;
+    padding : 20px 0 30px;
+    }
+    .new_dropdown_btm {
+    display : block;
+    border-top : 1px solid #ddd;
+    padding : 0 15px;
+    margin-top : 10px;
+    }
+    .new_dropdown_profile {
+    width : 50% !important ;
+    height : auto !important ;
+    font-size : 13px;
+    line-height : 18px;
+    color : #000;
+    display : block;
+    font-weight : 600;
+    border-right : 1px solid #ddd;
+    float : left;
+    padding : 20px 0 20px 20px !important ;
+    }
+    .new_dropdown_profile img {
+    float : left;
+    width : 20px;
+    height : 20px;
+    padding : 0;
+    margin-right : 10px;
+    }
+    .new_dropdown_singout {
+    width : 50% !important ;
+    height : auto !important ;
+    font-size : 13px;
+    line-height : 18px;
+    color : #ec5a02;
+    display : block;
+    font-weight : 600;
+    float : left;
+    padding : 20px 0 20px 30px !important ;
+    }
+    .new_dropdown_profile .fas, .new_dropdown_singout .fas, .new_dropdown_singout .fab {
+    font-size : 15px;
+    padding-right : 10px;
+    display : block;
+    float : left;
+    padding-top : 2px;
+    }
+    select {
+    appearance : none;
+    }
+    select::-ms-expand {
+    display : none;
+    }
+    select option {
+    font-family : 'Lato', sans-serif !important ;
+    }
+    select + i.fa {
+    float : right;
+    margin-top : -26px;
+    margin-right : 10px;
+    pointer-events : none;
+    background-color : transparent;
+    padding-right : 5px;
+    }
+    .backend_main {
+    width : 100%;
+    }
+    .backend_main_in {
+    width : 98%;
+    margin : 0 10px;
+    }
+    .backend_main_block {
+    margin : 65px -35px 0 0;
+    }
+    .backend_main_height {
+    min-height : 460px;
+    position : relative;
+    }
+    .override_btn {
+    font-size : 13px;
+    color : #000;
+    margin : 0 0 20px;
+    float : right;
+    display : block;
+    clear : both;
+    border : #c1dff3 solid 1px;
+    background : #e6eff6;
+    padding : 8px 15px;
+    border-radius : 4px;
+    position : absolute;
+    right : 12px;
+    top : 7px;
+    }
+    .current_main {
+    width : 96%;
+    margin : 0 0 0 17px;
+    }
+    .current_main_in {
+    display : block;
+    background : #fff;
+    padding : 20px;
+    margin : 0 20px;
+    border-radius : 4px;
+    }
+    .current_block {
+    margin : 0 0 15px;
+    }
+    .current_block p {
+    font-size : 13px;
+    line-height : 16px;
+    color : #000;
+    font-weight : 600;
+    padding : 10px 0 0;
+    width : 170px;
+    display : block;
+    float : left;
+    }
+    .current_block span {
+    width : 260px;
+    font-size : 14px;
+    line-height : 16px;
+    color : #000;
+    display : block;
+    padding : 10px;
+    background : #f5f5f5;
+    border : #d0d2d4 solid 1px;
+    border-radius : 6px;
+    float : left;
+    margin : 0;
+    }
+    .paymentinfo {
+    min-height : 630px;
+    border : none;
+    }
+    .content {
+        margin-left: 0px;
+        padding: 0px;
+    }
+
