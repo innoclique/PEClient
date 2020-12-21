@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
+import { ChartDataSets, ChartOptions, ChartScales, ChartType } from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { Label,Color } from 'ng2-charts';
 import {ChartService} from '../../../services/chart.service';
@@ -77,7 +77,16 @@ public barChartColors: Color[] = [
         { data: [0, 0, 0, 0], label: 'Year-end' }
         
       ];
-      this.clientSummaryChartOptions.title.text="Evaluation Summary"
+      this.clientSummaryChartOptions.title.text="Evaluation Summary";
+      let scales = { xAxes: [{scaleLabel: {
+        display: true,
+        labelString: "Evaluation Period",
+       },}], yAxes: [{display: true,
+        scaleLabel: {
+         display: true,
+         labelString: "Number of Evaluations",
+        },}] };
+       this.clientSummaryChartOptions.scales=scales;
     }
 
     this.getClientSummaryChatData(this.chartTypeInput);
