@@ -32,6 +32,7 @@ import {ClientRevenueInfoComponent} from "./reports/revenue/client/clientRevenue
 import {ClientRevenueDetails} from "./reports/revenue/details/client/clientRevenueDetails";
 import {ResellerRevenueDetails} from "./reports/revenue/details/reseller/resellerRevenueDetails";
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { PaymentReleaseComponent } from './payment-release/payment-release.component';
 
 export const projectRoutes: Routes = [
   
@@ -146,6 +147,11 @@ export const projectRoutes: Routes = [
       component:ProfileComponent,
       data:{title:'Profile'}
     },
+    {
+      path:'payment-release',
+      component:PaymentReleaseComponent,
+      data:{title:'Payment-Release'}
+    },
   ]
 },
   
@@ -167,7 +173,8 @@ export const projectRoutes: Routes = [
     ResellerClientPurchaseHistory,
     ClientRevenueInfoComponent,
     ClientRevenueDetails,
-    ResellerRevenueDetails
+    ResellerRevenueDetails,
+    PaymentReleaseComponent
   ],
   imports: [
     CommonModule,

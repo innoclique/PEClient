@@ -84,7 +84,7 @@ export class ManagerDashboardComponent implements OnInit {
           break;
         case "doevaluationreview":
           this.reviewEvalForm('reviewEval','Manager');
-            break;
+          break;
         default:
       }
     }
