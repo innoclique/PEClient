@@ -76,14 +76,7 @@ export class ReportsComponent {
   }
   getLengthOfService(joiningDate) {
     console.log(joiningDate);
-    let dateTo = new Date();
-    let dateFrom = new Date(joiningDate);
-    let months = dateTo.getMonth() - dateFrom.getMonth() + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()));
-    if (((months % 12) - 1) > 0) {
-      return (months - (months % 12)) / 12 + 'years, ' + ((months % 12) - 1) + ' months';
-    } else {
-      return (months - (months % 12)) / 12 + 'years, 0 months';
-    }
+    return new DateAgoPipe().transform(joiningDate);
   }
   createRowData(eaEvaluations: any) {
     const rowData: any[] = [];
@@ -95,7 +88,7 @@ export class ReportsComponent {
         dept: eaEvaluations[i].Employee.Department,
         title: eaEvaluations[i].Employee.Title,
         servicePeriod: this.getLengthOfService(eaEvaluations[i].Employee.JoiningDate),
-        currentRoleServicePeriod: '1 Month',
+        currentRoleServicePeriod: this.getLengthOfService(eaEvaluations[i].Employee.RoleEffFrom),
         status: eaEvaluations[i].EvaluationRow.status,
 
       });
