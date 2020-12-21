@@ -5,6 +5,7 @@ import { CsaService } from '../../../services/csa.service';
 import { ChartDataSets,ChartType, ChartOptions } from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { Label } from 'ng2-charts';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +21,7 @@ export class DashboardComponent implements OnInit {
   }
 
   constructor(
+    private router: Router,
     private _flashMessagesService: FlashMessagesService,
     public authService: AuthService,
     private csaService: CsaService,
@@ -45,4 +47,9 @@ export class DashboardComponent implements OnInit {
   chartClicked(event){
 console.log(event)
   }
+
+  navigateEvaluation(){
+    this.router.navigate(['csa/reports/evaluationsSummary',{}],{ skipLocationChange: true });
+  }
+
 }
