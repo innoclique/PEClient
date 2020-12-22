@@ -7,6 +7,7 @@
         <div class="card-header">
           Clients
 
+          &nbsp;<i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print pull-right" style="font-size:21px;color:red"></i>
           <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal" (click)="navToList()">
             <i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back To List
           </button>
@@ -582,10 +583,10 @@
             <button type="button" class="btn btn-secondary" #closeModal (click)="navToList()"><i
                 class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back To
               List</button>
-            <button *ngIf="isCreate" type="button" (click)="saveAsDraft()" class="btn btn-primary">Save as
+            <button *ngIf="(isCreate|| isDraft)" type="button" (click)="saveAsDraft()" class="btn btn-primary">Save as
               Draft</button>
             <button type="button" (click)="createClient()"
-              class="btn btn-primary">{{isCreate?'Create':'Update'}}</button>
+              class="btn btn-primary">{{(isCreate|| isDraft)?'Create':'Update'}}</button>
           </div>
         </div>
       </div>

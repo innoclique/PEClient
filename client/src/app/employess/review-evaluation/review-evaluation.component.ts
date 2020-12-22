@@ -343,7 +343,8 @@ goto(selTab){
     this.managerCompetencyList = this.evaluationForm.ManagerCompetencies.Manager.Competencies;
     this.showCompetencySubmitForManager=!this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted;
    // console.log('this.managerCompetencyForm.value', this.managerCompetencyForm.value)
-    this.managerCompetencyList.forEach(element => {
+   this.managerCompetencyQuestionsList=[];
+   this.managerCompetencyList.forEach(element => {
       questions = [];
       element.Questions.forEach(q => {
         questions.push(new QuestionBase({
@@ -451,7 +452,8 @@ goto(selTab){
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
       this.snack.success(isDraft ? 'Competencies Rating Saved Successfully' : 'Competency Rating Submitted Successfully');
-      this.refresh()
+     this.getTabsData();
+      // this.refresh()
     }, error => {
       console.log('error', error)
     })
@@ -470,14 +472,14 @@ goto(selTab){
 
     if(this.PeerScoreCard){
       const peers=this.PeerScoreCard.Employees.Peers;
-      if(peers[0].CompetencySubmitted==false || peers[0].CompetencySubmitted==false ){
+      if(peers.length>0 && ( peers[0].CompetencySubmitted==false || peers[1].CompetencySubmitted==false ) ){
       this.snack.error("Peer competency not submitted");
       return;
       }
     }
     if(this.DirectReporteeScoreCard){
       const direReportee=this.DirectReporteeScoreCard.Employees.DirectReportees;
-      if(direReportee[0].CompetencySubmitted==false || direReportee[0].CompetencySubmitted==false ){
+      if(direReportee.length>0 && ( direReportee[0].CompetencySubmitted==false || direReportee[1].CompetencySubmitted==false  ) ){
       this.snack.error("Direct Reportee competency not submitted");
       return;
       }

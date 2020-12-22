@@ -39,6 +39,7 @@ export class CreateResellerComponent implements OnInit {
   evaluationPeriods: any;
   clientFormData: any = {};
   currentOrganization:any;
+  isDraft=false;
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -90,6 +91,7 @@ export class CreateResellerComponent implements OnInit {
       this.perfApp.requestBody = { id: this.currentRecord.id }; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.currentRecord = c;
+      this.isDraft=c.IsDraft;
       this.countyFormReset=true; 
       this.cscData={Country:c.Country,State:c.State,City:c.City};
       console.info('client record', c);
@@ -428,7 +430,7 @@ action='Update'
   }
   saveAsDraft() {
     this.clientFormData.IsDraft = true;
-    this.isFormSubmitted = true;
+    //this.isFormSubmitted = true;
     // if (!this.clientForm.valid) {
     //   return;
     // }
@@ -444,6 +446,22 @@ action='Update'
       this.notification.error('Email is required')
       return;
     }
+
+debugger
+    if(!this.clientForm.value.AdminEmail){
+      this.notification.error('Admin Email is required')
+      return;
+    }
+
     this.saveClient();
   }
+
+
+  
+  printPage() {
+    window.print();
+  }
+
+
+
 }

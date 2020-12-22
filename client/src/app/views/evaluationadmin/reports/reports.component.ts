@@ -8,6 +8,7 @@ import RefData from "../../psa/reports/data/refData";
 import ReportTemplates from '../../psa/reports/data/reports-templates';
 import { ReportsService } from '../../../services/reports.service';
 import { PerfAppService } from '../../../services/perf-app.service';
+import { DateAgoPipe } from '../../../pipes/DateAgoPipe';
 
 @Component({
   selector: 'app-reports',

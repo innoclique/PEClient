@@ -148,10 +148,10 @@ isStateSelect=false;
 
  
   cInputChange(){
-    this.isCSelect=false;
+    if(this.countryForm.get('Country').value=='' )  this.isCSelect=false;
   }
   sInputChange(){
-    this.isStateSelect=false;
+    if(this.countryForm.get('State').value=='' ) this.isStateSelect=false;
   }
 
   checkIsSelected(){
@@ -168,6 +168,7 @@ isStateSelect=false;
    }
 
   onCountrySelected(event){
+    
 
     this.isCSelect=true;
 

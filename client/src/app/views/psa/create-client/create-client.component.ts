@@ -38,6 +38,7 @@ export class CreateClientComponent implements OnInit {
   isCreate:Boolean=true;
   models:any=[];
   currentOrganization:any;
+  isDraft=false;
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -99,6 +100,8 @@ export class CreateClientComponent implements OnInit {
       this.perfApp.requestBody = { id: this.currentRecord.id }; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.currentRecord = c;
+      debugger
+      this.isDraft=c.IsDraft;
       this.countyFormReset=true; 
       this.cscData={Country:c.Country,State:c.State,City:c.City};
       console.info('client record', c);
@@ -548,6 +551,17 @@ action='Update'
       this.notification.error('Email is required')
       return;
     }
+    if(!this.clientForm.value.AdminEmail){
+      this.notification.error('Admin Email is required')
+      return;
+    }
+
     this.saveClient();
+  }
+
+
+  
+  printPage() {
+    window.print();
   }
 }
