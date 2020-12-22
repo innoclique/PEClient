@@ -50,7 +50,7 @@
           <div style="width: 100%;margin-top: 10px;">
             <div>
               <ag-grid-angular style="width: 100%; height: 350px;" class="ag-theme-alpine" [gridOptions]="gridOptions"
-                [rowData]="rowData" [pagination]="true" [paginationPageSize]="5" (gridReady)="onReady($event)"
+                [rowData]="rowData" [pagination]="true" [paginationPageSize]="10" (gridReady)="onReady($event)"
                 [animateRows]="true" [defaultColDef]="defaultColDef" (firstDataRendered)="headerHeightSetter($event)"
                 (columnResized)="headerHeightSetter($event)" suppressRowClickSelection rowSelection="multiple">
                 >
