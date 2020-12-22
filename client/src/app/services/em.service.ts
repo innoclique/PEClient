@@ -18,6 +18,11 @@ export class EmService {
       .pipe(retry(1), catchError(this.errorHandle));
   }
 
+  directReports(request:any):Observable<any> {
+    return this.Http.post<any>(environment.ApiPath + 'em/direct/reports',request)
+      .pipe(retry(1), catchError(this.errorHandle));
+  }
+
   errorHandle(error) {
     let errormgs = {};
     if (error.error instanceof ErrorEvent) {

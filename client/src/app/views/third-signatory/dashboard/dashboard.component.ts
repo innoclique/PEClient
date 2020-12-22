@@ -28,6 +28,13 @@ export class ThirdSignDashboardComponent implements OnInit {
            },
           }
   ];
+  directReportColumnDefs = [
+    { headerName:'Name',width:'100px',field: 'name',sortable: true},
+    { headerName:'Start date',width:'120px',field: 'joiningDate',sortable: true},
+    { headerName:'Last Rating',width:'100px',field: 'lastRating',sortable: true},
+    { headerName:'# of Evaluations',width:'13 0px',field: 'noOfEvaluations',sortable: true},
+  ];
+  directReportsRowData = [];
   tsEvaluationsRowData = [];
 
   tsPeerreviewColumnDefs = [
@@ -59,7 +66,18 @@ export class ThirdSignDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loginUser = this.authService.getCurrentUser();
     this.loadDashboard();
+    this.loadDirectReports();
   }
+  loadDirectReports(){
+    let {Organization,_id} = this.loginUser;
+    console.log(JSON.stringify(this.loginUser,null,5))
+    let orgId = Organization._id;
+    let payload:any={userId:_id,orgId:orgId,type:'TS'}
+    this.emService.directReports(payload).subscribe(apiResponse => {
+      this.directReportsRowData = apiResponse.list;
+    });
+  }
+
   loadDashboard(){
     let {Organization,_id} = this.loginUser;
     console.log(JSON.stringify(this.loginUser,null,5))

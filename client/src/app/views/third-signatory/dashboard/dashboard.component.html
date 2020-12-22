@@ -29,16 +29,14 @@
               <div class="box col-lg-6">
                 <div class="box_in">
                   <h2 class="bg-blue">Direct Reports</h2>
-                  
-                  <div class="box_goalsetting box_rating clearfix">
-                    <div style="display: block;">
-                        <div class="middle">
-                          <h1>COMING SOON</h1>
-                          <hr>
-                        </div>
-                        </div>
-                 </div> 
-                  <div class="clear"></div>
+                  <ag-grid-angular
+                      style="width: 495px; height: 220px;"
+                      class="ag-theme-alpine"
+                      [rowData]="directReportsRowData"
+                      [columnDefs]="directReportColumnDefs"
+                      
+                      >
+                    </ag-grid-angular>
                 </div>
               </div>
               

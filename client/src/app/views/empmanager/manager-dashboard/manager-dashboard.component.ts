@@ -52,6 +52,14 @@ export class ManagerDashboardComponent implements OnInit {
   ];
   peerReviewRowData = [];
 
+  directReportColumnDefs = [
+    { headerName:'Name',width:'100px',field: 'name',sortable: true},
+    { headerName:'Start date',width:'120px',field: 'joiningDate',sortable: true},
+    { headerName:'Last Rating',width:'100px',field: 'lastRating',sortable: true},
+    { headerName:'# of Evaluations',width:'13 0px',field: 'noOfEvaluations',sortable: true},
+  ];
+  directReportsRowData = [];
+
 
   constructor(private router: Router,public emService:EmService,private authService: AuthService) {
     
@@ -60,6 +68,7 @@ export class ManagerDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loginUser = this.authService.getCurrentUser();
     this.loadDashboard();
+    this.loadDirectReports();
   }
   loadDashboard(){
     let {Organization,_id} = this.loginUser;
@@ -69,6 +78,15 @@ export class ManagerDashboardComponent implements OnInit {
     this.emService.emDashboard(payload).subscribe(apiResponse => {
       this.evaluationsRowData = apiResponse.current_evaluation.list;
       this.peerReviewRowData = apiResponse['peer_review']['list'];
+    });
+  }
+  loadDirectReports(){
+    let {Organization,_id} = this.loginUser;
+    console.log(JSON.stringify(this.loginUser,null,5))
+    let orgId = Organization._id;
+    let payload:any={userId:_id,orgId:orgId,type:'EM'}
+    this.emService.directReports(payload).subscribe(apiResponse => {
+      this.directReportsRowData = apiResponse.list;
     });
   }
 
@@ -101,5 +119,7 @@ export class ManagerDashboardComponent implements OnInit {
       ,empName: this.currentRowItem.name}
   ], { skipLocationChange: true });
 }
+
+
 
 }
