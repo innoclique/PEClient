@@ -20,7 +20,7 @@ export class ThirdSignDashboardComponent implements OnInit {
       let actionlinks=''
              actionlinks= `
             
-             <a data-action-type="doevaluationreview" href="javascript:void(0)">View</> |  <a data-action-type="doevaluationreview" href="javascript:void(0)">Sign-off</a> | <a href="javascript:void(0)">Request Peer Review<a/>
+             <a data-action-type="doevaluationreview" href="javascript:void(0)">View</> |  <a data-action-type="doevaluationreview" href="javascript:void(0)">Sign-off</a>
              
              `
             return actionlinks

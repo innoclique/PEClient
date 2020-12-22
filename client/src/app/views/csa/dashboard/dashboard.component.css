@@ -6,13 +6,5 @@
     text-align: center;
 }
 
-.box_in {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: #fff;
-    min-height: 290px;
-    margin: 0 6px;
-    display: block;
-    position: relative;
-}
+
 
