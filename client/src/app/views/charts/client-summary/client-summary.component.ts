@@ -81,11 +81,25 @@ public barChartColors: Color[] = [
       let scales = { xAxes: [{scaleLabel: {
         display: true,
         labelString: "Evaluation Period",
-       },}], yAxes: [{display: true,
-        scaleLabel: {
-         display: true,
-         labelString: "Number of Evaluations",
-        },}] };
+       },}], yAxes: [
+         {
+            display: true,
+            scaleLabel: {
+            display: true,
+            labelString: "Number of Evaluations",
+              },
+              ticks: {
+                beginAtZero: true,
+                userCallback: function(label, index, labels) {
+                  // when the floored value is the same as the value we have a whole number
+                  if (Math.floor(label) === label) {
+                      return label;
+                  }
+
+              },
+              }
+            }
+      ] };
        this.clientSummaryChartOptions.scales=scales;
     }
 

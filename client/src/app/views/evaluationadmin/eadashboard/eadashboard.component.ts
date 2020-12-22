@@ -75,7 +75,7 @@ loadPieChat(labels:Label[],values:number[]){
   this.pieChartColors = [
     {
       backgroundColor: [
-        '#006ba9','#67b262','#00FFFF','#7FFFD4','#808000','#5F9EA0',
+        '#F0E68C','#67b262','#00FFFF','#7FFFD4','#808000','#5F9EA0',
         '#6495ED','#008B8B','#B8860B','#006400','#BDB76B','#8FBC8F',
         '#1E90FF','#CD5C5C','#F0E68C','#20B2AA','#00FA9A','#808000'
 

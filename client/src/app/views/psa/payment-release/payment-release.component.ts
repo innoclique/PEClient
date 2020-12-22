@@ -15,6 +15,7 @@ export class PaymentReleaseComponent implements OnInit {
   organization:any;
   userType:any;
   selectedOrganizationObj:any;
+  paymentScale:any;
 
 
   constructor(public router: Router,public authService: AuthService,private perfApp: PerfAppService,) {
@@ -37,8 +38,24 @@ export class PaymentReleaseComponent implements OnInit {
   orgnizationDetails(selectedOrgnization){
     console.log(selectedOrgnization);
     this.selectedOrganizationObj = this.organizationList.find(org=>org._id==selectedOrgnization);
-    //console.log(selectedOrgObj);
-    //this.userType=selectedOrgObj.ClientType
-    //ClientType//UsageCount
+    this.getPaymentReleaseCost();
+  }
+  getPaymentReleaseCost(){
+    let paymentReleaseOptions:any={};
+    paymentReleaseOptions.ClientType=this.selectedOrganizationObj.ClientType;
+    paymentReleaseOptions.UsageType=this.selectedOrganizationObj.UsageType;
+    paymentReleaseOptions.UsageCount=this.selectedOrganizationObj.UsageCount;
+    paymentReleaseOptions.Type="Default"
+    if(this.selectedOrganizationObj.Range){
+      paymentReleaseOptions.Type="Range";
+    };
+
+    this.perfApp.route = "payments";
+    this.perfApp.method = "Scale",
+    this.perfApp.requestBody = paymentReleaseOptions;
+    this.perfApp.CallAPI().subscribe(paymentScale => {
+      this.paymentScale=paymentScale;
+      console.log(this.paymentScale);
+    })
   }
 }
