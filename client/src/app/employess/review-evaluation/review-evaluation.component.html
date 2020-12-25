@@ -17,7 +17,7 @@
                                                     <i  [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
                                                 </div>
                                                 <div>
-                                                    <span title="" class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span>
+                                                    <span tooltip="Overall Rating is calculated and displayed after all the required ratings (from Manager, Peer, Direct Report) have been submitted." class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span>
                                                 </div>
                                               </button>  
                                             <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments" [empComments]="c.empComments">
@@ -230,7 +230,7 @@
                                         </div>
   
                                         <div class="form-group row">
-                                            <div *ngIf="!showManagerSubmit" class="col-md-4">
+                                            <div  class="col-md-4">
                                                 <div class="input-group">
                                                  
                                                     <div class="input-group-prepend">
@@ -274,7 +274,8 @@
 
 
                                     
-                                    <section *ngIf="!showEmployeeSubmit || !showManagerSubmit" [ngClass]="{ 'view-only': seletedTabRole !='TS' }" >
+                                    <section *ngIf="!showEmployeeSubmit || !showManagerSubmit" 
+                                    [hidden]="seletedTabRole !='TS' && showThirdSignatorySubmit" [ngClass]="{ 'view-only': seletedTabRole !='TS' }" >
                                         <h3>Third Signatory Review</h3>
                                         <div class="form-group row">
                                            

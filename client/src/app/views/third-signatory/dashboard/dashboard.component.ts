@@ -113,9 +113,10 @@ export class ThirdSignDashboardComponent implements OnInit {
       EmployeeId:this.currentRowItem.employeeId }], { skipLocationChange: true });
   }
   reviewEvalForm(action,actor) {
+    debugger
     let {Organization,_id} = this.loginUser;
     this.router.navigate(['employee/review-evaluation',
-     { action: action, empId: this.currentRowItem.employeeId,actor:actor,empManagerId:_id 
+     { action: action, empId: this.currentRowItem.employeeId,actor:actor,empManagerId:this.currentRowItem.managerId 
       ,empName: this.currentRowItem.name}
   ], { skipLocationChange: true });
 }

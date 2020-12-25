@@ -26,6 +26,7 @@
                             <ag-grid-angular style="width: auto; height: 500px;" class="ag-theme-alpine"
                                 [rowData]="selectedEmployeesList" [gridOptions]="EmpGridOptions" [pagination]="true"
                                 [paginationPageSize]="10" (gridReady)="onEmpGridReady($event)"
+                                (gridSizeChanged)="onGridSizeChanged($event)"
                                 [rowSelection]="rowSelection" [suppressMenuHide]="true"
                                 [getRowNodeId]="getRowNodeId"
                                 [isRowSelectable]="isRowSelectable" (rowClicked)="onEmpRowClicked($event)">

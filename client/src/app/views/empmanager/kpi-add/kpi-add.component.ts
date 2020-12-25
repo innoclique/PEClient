@@ -53,6 +53,7 @@ export class KpiAddComponent implements OnInit {
   ownerInfo: any;
   currEvaluation: any;
   currentOrganization: any;
+  selectedUser: any;
 
 
 
@@ -78,6 +79,7 @@ export class KpiAddComponent implements OnInit {
       this.currentKpiId = params['id'];
       this.currentAction = params['action'];
      }
+     this.GetEmployeeDetailsById();
 
      this.initApicallsForKpi();
      
@@ -421,6 +423,11 @@ this.toggleSelection(c);
           }
 
       }
+      else{
+
+        this.ownerInfo=this.selectedUser;
+
+      }
 
     }
     
@@ -446,6 +453,20 @@ this.toggleSelection(c);
 
    
   }
+
+  
+ async GetEmployeeDetailsById() {
+  this.perfApp.route = "app";
+  this.perfApp.method = "GetEmployeeDataById",
+    this.perfApp.requestBody = { id: this.currentOwnerId }
+    this.perfApp.CallAPI().subscribe(x => {
+    this.selectedUser =x;
+
+    }, error => {
+      console.log('error', error)
+    
+    })
+}
 
 
   onKpiAutoSelected(event) {

@@ -49,7 +49,7 @@ actor:any;
   @Input()
   accessingFrom:any;
 
-  showKpiForm=true;
+  showKpiForm=false;
 
 
 
@@ -121,7 +121,6 @@ actor:any;
 
   ngOnInit(): void {
     
-
     this.initApicallsForKpi();
 
     this.initKPIForm()
@@ -507,6 +506,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
 
           
           this.getMeasurementCriterias();
+          this.showKpiForm=true;
 
       }else{
         

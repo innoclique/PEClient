@@ -478,6 +478,14 @@ getAllDepartments(){
       this.appRoles=c.AppRoles;
       this.jobLevels=c.JobLevels;
       console.log('lients data snnn',this.jobRoles);
+
+      this.appRoles.filter(e=>{ 
+        debugger
+        if (e.RoleName=="Employee") {
+          this.empForm.patchValue({ApplicationRole: [e._id] });
+        }   
+        
+      } )
     }
   })
 }

@@ -145,10 +145,10 @@
                                            >
 
 
-                                            <input  [hidden]="currentAction != 'create' " *ngIf="!addMCSwitch" max="500" maxlength="500" 
+                                            <input  [hidden]="currentAction == 'view' || accessingFrom=='currEvaluation' " *ngIf="!addMCSwitch" max="500" maxlength="500" 
                                             class="form-control text-capitalize" type="text"
                                             style=" text-overflow: ellipsis !important;"
-                                            [readonly]="currentAction != 'create' "
+                                            [readonly]="currentAction == 'view' || accessingFrom=='currEvaluation' "
                                             [ngClass]="{ 'is-invalid': f.MeasurementCriteria.touched  &&  selectedItems.length==0 }"
                                                 formControlName="MeasurementCriteria" name="MeasurementCriteria" 
                                                 [matAutocomplete]="auto2" 
@@ -168,7 +168,7 @@
                                                  
                                                   <div (click)="optionClicked($event, option);">
                                                     <mat-checkbox [checked]="option?.selected" class="text-capitalize"
-                                                 (change)="toggleSelection(option)" (click)="$event.stopPropagation()">
+                                                 (change)="toggleSelection(option,$event)" (click)="$event.stopPropagation()">
                                                         {{option.Name}}
                                                     </mat-checkbox>
                                                 </div>
@@ -189,7 +189,7 @@
                                 <input (change)="toggleSwitch()" [checked]="addMCSwitch" class="switch-input form-control" type="checkbox">
                                 <span class="switch-slider" data-checked="On" data-unchecked="Off"></span></label>
                             </div> -->
-                            <div *ngIf="currentAction == 'create'" class="col-md-1"  >
+                            <div *ngIf="currentAction != 'view' && accessingFrom!='currEvaluation' " class="col-md-1"  >
                                 <button style="width: 88px !important;padding: 3px 0px;" class="btn btn-block btn-primary pull-left" 
                                  (click)="addMesurment()"  >+ Add KPI  </button>
                                 </div>

@@ -45,7 +45,7 @@ export class SetupEmployeeComponent implements OnInit {
   @ViewChild("addEmployee", { static: true }) emoModal: ModalDirective;
   viewEmpFormRef: BsModalRef;
   countyFormReset: boolean;
-  isRoleChanged: boolean;
+  isRoleChanged=false;
   empDetails: any={}
   currentAction='create';
   cscData:any=undefined;
@@ -152,7 +152,7 @@ export class SetupEmployeeComponent implements OnInit {
       State: [this.empDetails.State?this.empDetails.State:'',],
       City: [this.empDetails.City?this.empDetails.City:'',],
       JoiningDate: [this.empDetails.JoiningDate?new Date (this.empDetails.JoiningDate):'',[Validators.required]],
-      RoleEffFrom: [''],
+      RoleEffFrom: [this.empDetails.RoleEffFrom?new Date (this.empDetails.RoleEffFrom):''],
       ZipCode: [this.empDetails.ZipCode?this.empDetails.ZipCode:'', Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/[^A-Za-z0-9\s]+/g, { isInValidZip: true }, 'isInValidZip'),
@@ -253,6 +253,8 @@ debugger
     var depts= this.departments.filter(f=>f.DeptName==data.Department )[0];
     if(depts)
     this.jobRoles=depts.JobRoles;
+    
+    this.getManagersEmps();
 
 
     this.initEmpForm();
@@ -339,8 +341,11 @@ getManagersEmps(){
     
     console.log('lients data',c);
     if(c && c.length>0){
-      
-      this.employeeDirReportData=c;
+      if(this.currentRowItem){
+      this.employeeDirReportData=c.filter(e=>e._id != this.currentRowItem._id);
+      }else{
+        this.employeeDirReportData=c;
+      }
       this.filteredOptionsDR = this.empForm.controls['Manager'].valueChanges
       .pipe(
         startWith(''),
@@ -556,6 +561,7 @@ if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
 
 
 onJobRole(event){
+  debugger
 
   if (this.currentAction=='create') return;
   let val = event.target.value;

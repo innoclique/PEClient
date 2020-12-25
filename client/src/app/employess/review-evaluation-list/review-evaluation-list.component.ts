@@ -94,7 +94,7 @@ export class ReviewEvaluationListComponent implements OnInit {
   },
     {headerName: 'No.of  Performance Goals', field: 'NoOfKpis', sortable: true, filter: true },
     {headerName: 'No.of Dev Goals', field: 'NoOfDevGoals', sortable: true, filter: true },
-    {headerName: 'Final Rating Status', field: 'FRStatus',   sortable: true, filter: true },
+    {headerName: 'Evaluation Status', field: 'FRStatus', tooltipField:"FRStatus",   sortable: true, filter: true },
     {
       headerName: 'Action', field: '',  autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
@@ -127,7 +127,7 @@ public tsColumnDefs = [
 },
   {headerName: 'No.of  Performance Goals', field: 'NoOfKpis', sortable: true, filter: true },
   {headerName: 'No.of Dev Goals', field: 'NoOfDevGoals', sortable: true, filter: true },
-  {headerName: 'Final Rating Status', field: 'FRStatus',   sortable: true, filter: true },
+  {headerName: 'Evaluation Status', field: 'FRStatus', tooltipField:"FRStatus",    sortable: true, filter: true },
   {
     headerName: 'Action', field: '',  autoHeight: true, suppressSizeToFit: true,
     cellRenderer: (data) => {

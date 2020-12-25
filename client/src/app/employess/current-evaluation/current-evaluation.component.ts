@@ -1,17 +1,20 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { debug } from 'console';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AlertDialog } from '../../Models/AlertDialog';
 import { CompetencyBase } from '../../Models/CompetencyFormModel';
 import { QuestionBase } from '../../Models/QuestionBase';
 import { AuthService } from '../../services/auth.service';
 import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
+import { AlertComponent } from '../../shared/alert/alert.component';
 
 @Component({
   selector: 'app-current-evaluation',
@@ -33,6 +36,7 @@ export class CurrentEvaluationComponent implements OnInit {
   DirectReporteeScoreCard: any;
   isContentOpen: boolean = false;
   pgSubmitStatus="";
+  public alert =new AlertDialog();
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -40,6 +44,7 @@ export class CurrentEvaluationComponent implements OnInit {
     private perfApp: PerfAppService,
     public translate: TranslateService,
     private fb: FormBuilder,
+    public dialog: MatDialog,
     private qcs: CompetencyFormService,
     private datePipe: DatePipe
   ) {
@@ -259,6 +264,11 @@ export class CurrentEvaluationComponent implements OnInit {
         });
        
       } else {
+
+        _qna.forEach(q => {
+          competencyQA.QnA.push({ CompetencyRowId: element.CompetencyRowId, CompetencyId: element.CompetencyId, QuestionId: q[0], Answer: q[1], Comments: _lastitem ? _lastitem[1] : "" })
+        });
+
         if (!isDraft) {
           isvalid = false;
         }
@@ -281,8 +291,10 @@ export class CurrentEvaluationComponent implements OnInit {
       console.log(x)
       //after successfully submitted hide submit button
       this.showCompetencySubmit=false;
-      this.snack.success(isDraft ? 'Competencies Rating Saved Successfully' : 'Competency Rating Submitted Successfully');
-      this.refresh();
+ const snref=     this.snack.success(isDraft ? 'Competencies Rating Saved Successfully' : 'Competency Rating Submitted Successfully');
+      snref.afterDismissed().subscribe(() => {
+        window.location.reload();
+      }); 
     }, error => {
       this.snack.error('something went wrong.')
       console.log('error', error)
@@ -332,26 +344,69 @@ export class CurrentEvaluationComponent implements OnInit {
     if (isDraft) {
       this.perfApp.CallAPI().subscribe(x => {
         console.log(x)
-        this.snack.success('Successfully Submitted Final Rating');
-        window.location.reload();
+    const snref=    this.snack.success('Evaluation has been successfully saved.');
+        snref.afterDismissed().subscribe(() => {
+          window.location.reload();
+        }); 
       }, error => {
         console.log('error', error)
-        this.snack.error('Something went wrong')
+        this.snack.error('Evaluation not saved, please try again.')
       })
     } else {
-      var confirm = window.confirm('Are you sure, you want to submit Final Rating?')
+    //  var confirm = window.confirm('Are you sure, you want to submit Final Rating?')
 
-      if (confirm) {
-        this.perfApp.CallAPI().subscribe(x => {
-          console.log(x)
-          this.snack.success('Successfully Submitted Final Rating');
+
+      
+   /**To alert user for submit Final Rating */
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit your evaluation?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.perfApp.CallAPI().subscribe(x => {
+        console.log(x)
+        const snref=   this.snack.success('Evaluation has been successfully submitted.');
+        snref.afterDismissed().subscribe(() => {
           window.location.reload();
-        }, error => {
-          console.log('error', error)
-          this.snack.error('Something went wrong')
-        })
+        }); 
+      }, error => {
+        console.log('error', error)
+        this.snack.error('Evaluation not submitted, please try again.')
+      })
 
-      }
+     } else {
+       
+     }
+    })
+      
+
+     // if (confirm) {
+        // this.perfApp.CallAPI().subscribe(x => {
+        //   console.log(x)
+        //   this.snack.success('Successfully Submitted Final Rating');
+        //   window.location.reload();
+        // }, error => {
+        //   console.log('error', error)
+        //   this.snack.error('Something went wrong')
+        // })
+
+      //}
     }
 
 
