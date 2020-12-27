@@ -1145,3 +1145,32 @@ p											{  font-size:15px; line-height:21px; font-weight:400; color:#717171;
         padding: 0px;
     }
 
+/*Chart Start*/
+.chart { width: 260px; margin: 20px auto; display: block;}
+.chart span { display: block;margin-left: 50px;}
+.chart span em { width: 30px; height: 12px; background: #ddd;float: left; display:block; margin: 3px 9px 0 0;}
+.chart span small { font-size: 12px; color: #000; padding: 0; float: left;display: block; font-weight: 600;}
+.chart_circle  { width: 200px; height: 200px; border-radius: 100%; background: #ddd; margin: 20px 0 0;}
+
+
+.release_cont_box  { padding: 10px;min-height: 40px;margin-top: 26px; background: #f5f5f5;
+    border: 1px solid #d0d2d4;
+    border-radius: 6px;}
+.payment_method_main_width { width: 100%;}
+.payment_method_margin { margin-right: 0px; }
+
+.adhoc_purchase  { margin: 0 15px 0 20px;}
+.release_txt_nonedit { font-size: 14px; color: #353f55;font-style: normal; border: 1px solid #ccc; border-radius: 4px; background: #f9faff; display: block; padding: 10px 15px;width: 100%; height: 39px !important;}
+.adhoc_height { min-height: 680px;}
+.adhoc_table  { display: block; width: 98%; background: #ffffff; border: 1px solid #ddd; border-radius: 5px;}
+.adhoc_table_action .far { font-size: 16px;margin-right: 8px; color: #008000}
+.adhoc_table_action .fa-times-circle { color: #ff2929;}
+.adhoc_table table { margin: 0px;}
+.adhoc_model  { padding: 15px;}
+.adhoc_model_head  { font-size:16px; color:#309f2a; padding: 6px 0 0; line-height: 18px;}
+.adhoc_table_open { cursor: pointer;}
+.adhoc_model_edit { font-size: 14px;color: #353f55;border: 1px solid #ccc;border-radius: 4px;background: #f9faff;display: block;
+padding: 10px 15px;width: 100%;height: 39px !important;}
+
+.release_method_comment  { font-size: 14px;color: #353f55;border: 1px solid #ccc;border-radius: 4px;background: #f9faff;display: block;
+padding: 10px 15px;width: 100%; resize:none; min-height: 100px;}

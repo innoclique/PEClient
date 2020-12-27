@@ -8,8 +8,8 @@
           <div class="row m-b15">
             <div class="col-lg-12">
               <label>Organisation</label>
-              <select name="organization" class="form-control" (change)="orgnizationDetails($event.target.value)">
-                <option>Select Organisation</option>
+              <select [(ngModel)]="paymentModel.Organization"  class="form-control" (change)="orgnizationDetails($event.target.value)">
+                <option value="">Select Organisation</option>
                 <option *ngFor="let item of organizationList" [value]="item._id">{{item.Name}}</option>
               </select>
               <i class="fa fa-chevron-down"></i>
@@ -18,25 +18,23 @@
           <div class="row m-b15">
             <div class="col-lg-6">
               <label>Usage type</label>
-              <input readonly class="form-control" name="" value="{{selectedOrganizationObj?.UsageType}}" />
-              <i class="fa fa-chevron-down"></i>
+              <input  readonly class="form-control" [(ngModel)]="paymentModel.UserType" name="userType"  />
+              
             </div>
             <div class="col-lg-6">
                <div class="">
-                  <label>Payment Duration</label>
-                   <select class="form-control">
-                      <option value="12">12 Months</option>
-                      <option value="1">1 Months</option>
-                    </select>
-                    <i class="fa fa-chevron-down"></i>
+                  <label># of months to end of year</label>
+                  <input  readonly class="form-control" [(ngModel)]="paymentModel.NoOfMonthsLable"   />
+                   
                 </div>
             </div>
           </div>
           <div class="row m-b15">
             <div class="col-lg-6">
-              <label>Of Employees</label>
-              <input readonly class="form-control" name="" value="{{selectedOrganizationObj?.UsageCount}}" />
-              <i class="fa fa-chevron-down"></i>
+              <label>Activation Date</label>
+              <input [min]="paymentModel.ActivationDate" (dateInput)="onActivationDate($event.value)" [(ngModel)]="paymentModel.ActivationDate" (click)="picker.open()" readonly matInput [matDatepicker]="picker" >
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker ></mat-datepicker>
             </div>
             <div class="col-lg-6">
                <div class="">
@@ -46,36 +44,46 @@
                       <option>100-200</option>
                     </select>-->
                     
-                    <input type="text" readonly class="form-control" value="{{paymentScale?.Range}}" />
-                    <i class="fa fa-chevron-down"></i>
+                    <input [(ngModel)]="paymentModel.Range" type="text" readonly class="form-control"  />
+                    
                 </div>
             </div>
           </div>
           <div class="row m-b15">
-            <div class="col-lg-6">
-              <label>Effective Date</label>
-              <input (click)="picker.open()" readonly matInput [matDatepicker]="picker" name="TargetCompletionDate">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
+            <div class="col-lg-6" *ngIf="useageTypeEmployee">
+              <label># Of Employees</label>
+              <input class="form-control" [(ngModel)]="paymentModel.NoOfEmployees"  />
             </div>
+            
             <div class="col-lg-6">
                 <div class="release_cont_freqency clearfix">
                   <label>Payment Frequency</label>
                   <div class="col-lg-6 no_pad m-t10">
                     <label class="container1">Annual
-                      <input type="radio" checked="checked" name="radio" >
+                      <input (change)="onChangeFrequency()" [(ngModel)]="paymentModel.isAnnualPayment"  name="isAnnualPayment" type="radio"  name="payment_frequency" [value]="true">
                       <span class="checkmark"></span>
                     </label>
                   </div>
                   <div class="col-lg-6 no_pad m-t10">
                     <label class="container1">Monthly
-                      <input type="radio" name="radio" value="radio2">
+                      <input (change)="onChangeFrequency()" [(ngModel)]="paymentModel.isAnnualPayment" name="isAnnualPayment" type="radio" name="payment_frequency" [value]="false">
                       <span class="checkmark"></span>
                     </label>
                   </div>
                 </div>
             </div>
+            
           </div>
+
+          <div class="row m-b15">
+            <div class="col-lg-6" *ngIf="isReseller">
+              <label>#s needed</label>
+              <input type="text"  class="form-control" [(ngModel)]="paymentModel.NoNeeded" />
+            </div>
+            
+            
+          </div>
+
         </div>
         
       </div>  
@@ -86,33 +94,33 @@
           <div class="release_cost_list release_method_list">
             <ul>
               <li>
-                <h6>Cost<strong>Cost for the year per employee</strong></h6>
-                <span>240<em>,00</em></span>
+                <h6>Cost<strong>Cost for the year</strong></h6>
+                <span>{{paymentStructure?paymentStructure.COST_PER_PA:0}}</span>
                 <div class="clear"></div>
               </li>
               <li>
-                <h6>Discount<strong>Discount for annual payment (per employee)</strong></h6>
-                <span>2<em>,40</em></span>
+                <h6>Discount<strong>Discount for annual payment</strong></h6>
+                <span>{{paymentStructure?paymentStructure.DISCOUNT_PA_PAYMENT:0}}</span>
                 <div class="clear"></div>
               </li>
               <li>
-                <h6>Total<strong>Total Amount (per employee)</strong></h6>
-                <span>237<em>,60</em></span>
+                <h6>Total<strong>Total Amount</strong></h6>
+                <span>{{paymentStructure?paymentStructure.TOTAL_AMOUNT:0}}</span>
                 <div class="clear"></div>
               </li>
               <li>
-                <h6>Due<strong>Amount due (annual payment)</strong></h6>
-                <span>308<em>,00</em></span>
+                <h6>Due<strong *ngIf="paymentModel.isAnnualPayment">Amount due (annual payment)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Amount due (monthly payment)</strong></h6>
+                <span>{{paymentSummary?paymentSummary.DUE_AMOUNT:0}}</span>
                 <div class="clear"></div>
               </li>
               <li>
-                <h6>Tax<strong>Tax(13%)</strong></h6>
-                <span>2376<em>,60</em></span>
+                <h6>Tax<strong>Tax({{paymentScale?paymentScale.Tax:0}}%)</strong></h6>
+                <span>{{paymentSummary?paymentSummary.TAX_AMOUNT:0}}</span>
                 <div class="clear"></div>
               </li>
               <li>
-                <h6>Total<strong>Total Amount Payable (for annual payments)</strong></h6>
-                <span>2384<em>,60</em></span>
+                <h6>Total<strong *ngIf="paymentModel.isAnnualPayment">Total Amount Payable (for annual payments)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Total Amount Payable (for monthly payments)</strong></h6>
+                <span>{{paymentSummary?paymentSummary.TOTAL_PAYABLE_AMOUNT:0}}</span>
                 <div class="clear"></div>
               </li>
               <li>
@@ -122,12 +130,12 @@
             </ul>
           </div>
           <div class="release_method_buttons">
-            <a href="#" class="release_buttons_save">Save</a>
-            <a href="#" class="release_buttons_submit">Submit</a>
-            <a href="#" class="release_buttons_cancel">Cancel</a>
+            <button (click)="savePayment()" class="release_buttons_save">Save</button>
+            <button (click)="paymentReleaseInfo()" class="release_buttons_save">Release Info</button>
+            <a href="javscript:void(0)" class="release_buttons_cancel">Cancel</a>
             <div class="clear"></div>
           </div>
       </div>
     </div>
-
 </div>
+

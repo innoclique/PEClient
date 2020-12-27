@@ -1,21 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router ,ActivatedRoute} from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { PaymentCaluculationService } from '../../../services/payment-caluculation.service';
 import * as moment from 'moment/moment';
+import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../../services/notification.service';
-
 @Component({
-  selector: 'app-payment-release',
-  templateUrl: './payment-release.component.html',
-  styleUrls: ['./payment-release.component.css']
+  selector: 'app-adhoc-payment',
+  templateUrl: './adhoc-payment.component.html',
+  styleUrls: ['./adhoc-payment.component.css']
 })
-export class PaymentReleaseComponent implements OnInit {
-  
-  organizationList:any;
+export class AdhocPaymentComponent implements OnInit {
+  otherTextValue:any;
+  paymentOption:any;
   currentUser:any;
   currentOrganization:any;
+  paymentDate:any = moment().format("MM/DD/YYYY")
+  checkoutActivationDate:any = moment().format("MM/DD/YYYY")
   paymentModel:any={
     Organization:"",
     isAnnualPayment:true,
@@ -27,7 +29,9 @@ export class PaymentReleaseComponent implements OnInit {
     RangeId:"",
     NoOfEmployees:0,
     NoNeeded:0,
-    Status:""
+    Status:"",
+    Duration:"",
+    Purpose:""
   };
   useageTypeEmployee:Boolean=false;
   isReseller:Boolean=false;
@@ -45,6 +49,15 @@ export class PaymentReleaseComponent implements OnInit {
     TOTAL_PAYABLE_AMOUNT:0
   };
   selectedOrganizationObj:any;
+  isActiveDateDisabled:Boolean=false;
+  isPaymentFrequencyDisabled:Boolean=false;
+  paymentReleaseData:any;
+  isinitialPaymentDone:Boolean=false;
+  isCheckout:Boolean=false;
+  isOtherText:Boolean=false;
+
+
+  @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
 
   constructor(
     public router: Router,
@@ -55,77 +68,64 @@ export class PaymentReleaseComponent implements OnInit {
     ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
-    
    }
 
   ngOnInit(): void {
-    this.getClients();
+    //console.log(this.currentOrganization._id)
     this.currentUser=this.authService.getCurrentUser();
-
+    //this.paymentModel.Organization = this.currentOrganization.Name;
+    this.findInitialPayments(this.currentOrganization._id);
   }
   
-  getClients() {
-    this.perfApp.route = "app";
-    this.perfApp.method = "GetAllOrganizations",
-    this.perfApp.requestBody = { 'companyId': this.currentOrganization._id }
-    this.perfApp.CallAPI().subscribe(c => {
-      this.organizationList = c;
-    })
-  }
-
-  orgnizationDetails(selectedOrgnization){
-    console.log(selectedOrgnization);
-    this.useageTypeEmployee=false;
-    this.paymentModel.NoOfEmployees=0;
-  
-    this.isReseller = false;
-    this.paymentModel.NoNeeded=0;
-  
-    this.paymentStructure=null;
-    this.paymentScale=null;
-    this.paymentSummary=null;
-  
-    if(selectedOrgnization!=""){
-      this.selectedOrganizationObj = this.organizationList.find(org=>org._id==selectedOrgnization);
-      let _requestBody={
-        Organization:selectedOrgnization,
-        Status:'Draft',
-        Type:'initial'
-      }
-      this.perfApp.route = "payments";
-      this.perfApp.method = "release/organization";
-      this.perfApp.requestBody = _requestBody;
-      this.perfApp.CallAPI().subscribe(paymentRelease => {
-        console.log("=========");
-        console.log(paymentRelease);
-        if(!paymentRelease){
+  findInitialPayments(selectedOrgnization){
+    let _requestBody={
+      Organization:selectedOrgnization,
+      Type:"Initial"
+    }
+    this.perfApp.route = "payments";
+    this.perfApp.method = "release/organization";
+    this.perfApp.requestBody = _requestBody;
+    this.perfApp.CallAPI().subscribe(paymentRelease => {
+      if(paymentRelease){
+        this.paymentReleaseData = paymentRelease;
+        if(paymentRelease.Status === "Complete"){
+          this.isinitialPaymentDone = true;
           this.loadOrganizationDefaultData(selectedOrgnization);
         }else{
-          let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status} = paymentRelease;
-          let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = paymentRelease;
-          let {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT} = paymentRelease;
-          this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
-          this.paymentModel.paymentreleaseId = paymentRelease._id;
-          this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
-          this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT}
+          this.notification.error(`Adhoc payment not allowed.`);
         }
-      });
-      
-    }
+        
+      }else{
+        this.notification.error(`Adhoc payment not allowed.`);
+      }
+    });
+  }
+  
+  orgnizationDetails(){
+    this.paymentReleaseData;
+      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
+      this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
+      let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
+      let {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT} = this.paymentReleaseData;
+      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
+      this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
+      this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
+      this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
+      console.log(JSON.stringify(this.paymentSummary));
   }
 
   loadOrganizationDefaultData(selectedOrgnization){
-    console.log("Inside:loadOrganizationDefaultData")
+    this.selectedOrganizationObj = this.currentOrganization;
     this.caluculateNoOfMonths();
     this.paymentModel.UserType = this.selectedOrganizationObj.UsageType;
-    if(this.selectedOrganizationObj.UsageType === "Employees"){
-      this.useageTypeEmployee=true;
-      this.paymentModel.NoOfEmployees=this.selectedOrganizationObj.UsageCount;
+  }
+  onSearchChange(searchValue: string): void {
+    if(searchValue && searchValue!="" && searchValue!="0"){
+      console.log(searchValue);
+      this.getPaymentReleaseCost();
+    }else{
+      this.refreshForm();
     }
-    if(this.selectedOrganizationObj.ClientType === "Reseller"){
-      this.isReseller=true;
-    }
-    this.getPaymentReleaseCost();
   }
 
   caluculateNoOfMonths(){
@@ -150,36 +150,25 @@ export class PaymentReleaseComponent implements OnInit {
   getPaymentReleaseCost(){
     let paymentReleaseOptions:any={};
     paymentReleaseOptions.Organization=this.selectedOrganizationObj._id;
-    paymentReleaseOptions.ClientType=this.selectedOrganizationObj.ClientType;
-    paymentReleaseOptions.UsageType=this.selectedOrganizationObj.UsageType;
-    paymentReleaseOptions.UsageCount=this.selectedOrganizationObj.UsageCount;
-    paymentReleaseOptions.Type="Default"
-    if(this.selectedOrganizationObj.Range){
-      paymentReleaseOptions.Type="Range";
-    };
+    paymentReleaseOptions.noOfEmployess=Number(this.paymentModel.NoOfEmployees)
 
     this.perfApp.route = "payments";
-    this.perfApp.method = "Scale",
+    this.perfApp.method = "employee/scale",
     this.perfApp.requestBody = paymentReleaseOptions;
     this.perfApp.CallAPI().subscribe(paymentScale => {
       if(paymentScale){
         this.paymentScale=paymentScale;
         this.paymentModel.Range = this.paymentScale.Range;
         this.paymentStructure = this.paymentCaluculationService.GetLicenceBreakdownPayment(this.paymentScale);
-        /*if(this.selectedOrganizationObj.UsageType === "License"){
-          this.paymentStructure = this.paymentCaluculationService.GetLicenceBreakdownPayment(this.paymentScale);
-        }
-        if(this.selectedOrganizationObj.UsageType === "Employees"){
-          this.paymentScale.orgnization_noOfEmp = this.paymentModel.NoOfEmployees;
-          this.paymentStructure = this.paymentCaluculationService.GetEmployeeBreakdownPayment(this.paymentScale);
-        }*/
         if(this.paymentStructure){
           this.getPaymentSummary();
         }
         
       }else{
+        this.notification.error("Range not found")
         this.paymentStructure=null;
         this.paymentScale=null;
+        this.refreshForm();
       }
       
     });
@@ -201,55 +190,62 @@ export class PaymentReleaseComponent implements OnInit {
   }
 
   refreshForm(){
-    this.paymentModel={
-      Organization:"",
-      isAnnualPayment:true,
-      NoOfMonths:"0",
-      UserType:"",
-      ActivationDate:new Date(),
-      Range:"",
-      NoOfEmployees:0,
-      NoNeeded:0
+    
+    this.paymentStructure={
+      COST_PER_PA:0,
+      COST_PER_MONTH:0,
+      DISCOUNT_PA_PAYMENT:0,
+      TOTAL_AMOUNT:0,
+      COST_PER_MONTH_ANNUAL_DISCOUNT:0
     };
+    this.paymentSummary={
+      DUE_AMOUNT:0,
+      TAX_AMOUNT:0,
+      TOTAL_PAYABLE_AMOUNT:0
+    };
+
   }
   public onActivationDate(event): void {
     if(this.paymentModel.Organization!=""){
-      this.orgnizationDetails(this.paymentModel.Organization);
+      this.orgnizationDetails();
     }
   }
-  savePayment(){
-    this.paymentModel.Status="Draft";
-    this.savePaymentReleaseInfo();
-  }
-  paymentReleaseInfo(){
-    console.log(":")
-    this.paymentModel.Status="Pending";
-    this.savePaymentReleaseInfo();
+  
+  printPDFPage() {
+    window.print();
   }
   
-  savePaymentReleaseInfo(){
-    console.log(this.paymentModel.Status);
+  sendAdhocRequest(){
+    if(this.isOtherText){
+      this.paymentModel.Purpose = this.otherTextValue
+    }
+    this.paymentModel.Organization=this.currentOrganization._id;
+    this.paymentModel.Status="Pending";
     let requestBody:any={...this.paymentModel,...this.paymentStructure,...this.paymentSummary};
     requestBody.RangeId=this.paymentScale?this.paymentScale._id:this.paymentModel.RangeId;
     requestBody.Range=this.paymentScale?this.paymentScale.Range:this.paymentModel.Range;
-    requestBody.Type="Initial"
+    requestBody.Type="Adhoc"
     console.log(requestBody);
      this.perfApp.route = "payments";
      this.perfApp.method = "/release/save",
      this.perfApp.requestBody = requestBody
      this.perfApp.CallAPI().subscribe(c => {
      if(c){
-       if(this.paymentModel.Status === "Pending"){
-          this.notification.success(`Payment Released to ${this.selectedOrganizationObj.Name}`)
-      }
-      if(this.paymentModel.Status === "Draft"){
-          this.notification.success(`${this.selectedOrganizationObj.Name} payment release saved.`);
-      }
-       
+      this.notification.success(`Request Sent To Admin.`);
      }else{
        this.notification.error("Record not saved.")
      }
+     window.location.reload();
      });
+  };
+
+  onchangePurpose(optionVal){
+    if(optionVal === "Others"){
+      this.isOtherText=true;
+    }else{
+      this.isOtherText=false;
+    }
+    
   }
 
 }
