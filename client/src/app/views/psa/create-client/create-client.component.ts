@@ -60,6 +60,7 @@ export class CreateClientComponent implements OnInit {
   subscription: Subscription = new Subscription();
   currentRecord: any = {};
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  rangeList:any=[];
   onCSCSelect(data) {
     this.clientForm.patchValue({ City: data.City.name });
     this.clientForm.patchValue({ Country: data.Country.name });
@@ -93,6 +94,13 @@ export class CreateClientComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
     this.mandateUsageCount()
     this.getEvaluationCategories();
+
+    let rangeOptions={
+      UsageType:"License",
+      "Type" : "Range"
+    }
+
+    this.getRangeList(rangeOptions);
   }
   getClientDataById() {
     this.perfApp.route = "app";
@@ -157,6 +165,7 @@ export class CreateClientComponent implements OnInit {
       ],
       ClientType: ['Client',[]],
       UsageType: ['License', [Validators.required]],
+      Range:[null,[]],
       UsageCount: [1, []],
       AdminFirstName: ['', Validators.compose([
         Validators.required,                
@@ -210,6 +219,33 @@ export class CreateClientComponent implements OnInit {
     });
   }
 
+  getRangeList(options){
+    this.perfApp.route = "payments";
+    this.perfApp.method = "range/list";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(_rangeList => {
+      this.rangeList = _rangeList;
+    });
+}
+
+  onCheckEmployee(){
+    console.log("Employee checked");
+    this.clientForm.get('Range').setValidators(null); 
+    this.clientForm.get('Range').setErrors(null);
+    this.clientForm.controls['Range'].setValue(null);
+  }
+  requiredIfValidator(predicate) {
+    return (formControl => {
+      if (!formControl.parent) {
+        return null;
+      }
+      if (predicate()) {
+        return Validators.required(formControl); 
+      }
+      return null;
+    })
+  }
+
   get f() {
     return this.clientForm.controls;
   }
@@ -230,6 +266,12 @@ export class CreateClientComponent implements OnInit {
     if (!this.clientForm.valid) {
       return;
     }
+    if(this.clientForm.get("UsageType").value==="License"){
+      let range = this.clientForm.get("Range").value;
+      let rangeObj = this.rangeList.find(rangObj=>rangObj._id==range);
+      this.clientForm.controls['UsageCount'].setValue(rangeObj.RangeTo);
+    }
+    
     if(this.currentRecord && this.currentRecord._id){
       this.updateClient();
     }else{
@@ -243,13 +285,14 @@ export class CreateClientComponent implements OnInit {
     this.clientFormData = Object.assign(this.clientFormData, this.prepareOrgData());
     this.perfApp.route = "app";
     this.perfApp.method = "AddOrganization",
-      this.perfApp.requestBody = this.clientFormData; //fill body object with form 
+    this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Organization Added Successfully.')
-      this.navToList();
       this.errorOnSave = false;
       this.errorMessage = "";
+      this.router.navigate(['psa/payment-release',{email:this.clientFormData.Email}],{ skipLocationChange: true });
+      
     }, error => {
       this.errorOnSave = true;
       this.errorMessage = error.error ? error.error.message : error.message;
@@ -501,7 +544,7 @@ action='Update'
     }
     if (action === 'Create') {
       organization.IsActive = true;
-      organization.UsageCount= organization.UsageType=='License'?0:organization.UsageCount;
+      //organization.UsageCount= organization.UsageType=='License'?0:organization.UsageCount;
       organization.CreatedBy = this.authService.getCurrentUser()._id;
       organization.CreatedOn = new Date();
     } else {      
