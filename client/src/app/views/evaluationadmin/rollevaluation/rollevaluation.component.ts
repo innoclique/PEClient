@@ -942,10 +942,18 @@ export class RollevaluationComponent implements OnInit {
   getEVPeriod(){
 
     let year= new Date (this.currentOrganization.CreatedOn);
+    console.log("EVALUTION PERIOD", this.currentOrganization.EvaluationPeriod)
+    console.log("EVALUTION PERIOD ARRAY", this.currentOrganization)
+    let evPeriod = this.currentOrganization.EvaluationPeriod;
+    if(evPeriod=="FiscalYear")
+    evPeriod="Fiscal Year"
+    if(evPeriod=="CalendarYear")
+    evPeriod="Calendar Year"
+
     if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
-    return `${this.currentOrganization.EvaluationPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
+    return `${evPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
     }else{
-      return `${this.currentOrganization.EvaluationPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
+      return `${evPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
 
     }
   }
