@@ -278,7 +278,15 @@ export class DefaultLayoutComponent implements OnInit {
             "name": "Backend Setup",
             "code": "BackendSetup",
             "icon": "icon-settings"
-        }, {
+        },
+        {
+          "IsActive": true,
+          "url": "/csa/payments",
+          "name": "Payments",
+          "code": "Payments",
+          "icon": "icon-star"
+      },
+         {
             "IsActive": true,
             "url": "/ea/reports",
             "name": "Reports",

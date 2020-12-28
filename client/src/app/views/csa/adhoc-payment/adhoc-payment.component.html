@@ -1,81 +1,58 @@
 <div class="payment_method_main">
   <div class="wrapper"> 
-  
     <div class="release_method_cont">
+      
       <div class="release_method_cont_in paymentinfo">
-        <h3 class="wow fadeIn" data-wow-delay="0.2s">Release Payment info - Client Organization</h3>
+        
+        <h3 class="wow fadeIn" data-wow-delay="0.2s">Adhoc Payment</h3>
         <div class="release_method_space">
-          <div class="row m-b15">
-            <div class="col-lg-12">
-              <label>Organisation</label>
-              <select [(ngModel)]="paymentModel.Organization"  class="form-control" (change)="orgnizationDetails($event.target.value)">
-                <option value="">Select Organisation</option>
-                <option *ngFor="let item of organizationList" [value]="item._id">{{item.Name}}</option>
-              </select>
-              <i class="fa fa-chevron-down"></i>
-            </div>
-          </div>
+            
           <div class="row m-b15">
             <div class="col-lg-6">
               <label>Usage type</label>
-              <input  readonly class="form-control" [(ngModel)]="paymentModel.UserType" name="userType"  />
+              <input readonly class="form-control" [(ngModel)]="paymentModel.UserType" name="userType"  />
               
             </div>
-            <div class="col-lg-6">
-               <div class="">
-                  <label># of months to end of year</label>
-                  <input  readonly class="form-control" [(ngModel)]="paymentModel.NoOfMonthsLable"   />
-                   
-                </div>
-            </div>
-          </div>
-          <div class="row m-b15">
-            <div class="col-lg-6">
-              <label>Activation Date</label>
-              <input [min]="paymentModel.ActivationDate" (dateInput)="onActivationDate($event.value)" [(ngModel)]="paymentModel.ActivationDate" (click)="picker.open()" readonly matInput [matDatepicker]="picker" >
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker ></mat-datepicker>
-            </div>
-            <div class="col-lg-6">
-               <div class="">
-                  <label>Range</label>
-                  <div *ngIf="isRangeSelectVisible">
-                   <select  class="form-control" [(ngModel)]="paymentModel.Range" (change)="onSelectRange($event.target.value)">
-                     <option>Select</option>
-                      <option *ngFor="let range of rangeList" [value]="range._id">{{range.Range}}</option>
-                    </select>
-                    <i class="fa fa-chevron-down"></i>
-                  </div>
-                    <input *ngIf="isRangeSelectBox" [(ngModel)]="paymentModel.Range" type="text" readonly class="form-control"  />
-                    
-                </div>
-            </div>
-          </div>
-          <div class="row m-b15">
-            <div class="col-lg-6" *ngIf="useageTypeEmployee">
+            <div class="col-lg-6" >
               <label># Of Employees</label>
-              <input class="form-control" (input)="onChangeEmployee($event.target.value)" [(ngModel)]="paymentModel.NoOfEmployees"  />
-            </div>
-            
-            <div class="col-lg-6">
-                <div class="release_cont_freqency clearfix">
-                  <label>Payment Frequency</label>
-                  <div class="col-lg-6 no_pad m-t10">
-                    <label class="container1">Annual
-                      <input (change)="onChangeFrequency()" [(ngModel)]="paymentModel.isAnnualPayment"  name="isAnnualPayment" type="radio"  name="payment_frequency" [value]="true">
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-                  <div class="col-lg-6 no_pad m-t10">
-                    <label class="container1">Monthly
-                      <input (change)="onChangeFrequency()" [(ngModel)]="paymentModel.isAnnualPayment" name="isAnnualPayment" type="radio" name="payment_frequency" [value]="false">
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-                </div>
+              <input class="form-control" (input)="onSearchChange($event.target.value)" [(ngModel)]="paymentModel.NoOfEmployees"  />
             </div>
             
           </div>
+          <div class="row m-b15">
+            <div class="col-lg-6">
+              <label>Duration</label>
+              <select class="form-control" [(ngModel)]="paymentModel.Duration">
+                <option value="">Select Month</option>
+                <option value="1">1 Month</option>
+                <option value="2">2 Months</option>
+                <option value="3">3 Months</option>
+                <option value="6">6 Months</option>
+                <option value="12">12 Months</option>
+              </select>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="col-lg-6">
+              <label>Purpose</label>
+              <select (change)="onchangePurpose($event.target.value)" class="form-control" [(ngModel)]="paymentModel.Purpose">
+                <option value="">Please Select</option>
+                <option value="Prohibitionary Evaluation">Prohibitionary Evaluation</option>
+                <option value="Prohibitionary Evaluation">New Employees</option>
+                <option value="Others">Others</option>
+              </select>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            
+          </div>
+          <div class="row m-b15">
+            <div class="col-lg-6 ">
+            </div>
+            <div *ngIf="isOtherText" class="col-lg-6">
+              <label>&nbsp;</label>
+              <input [(ngModel)]="otherTextValue" type="text"  class="form-control"  />
+            </div>
+          </div>
+          
 
           <div class="row m-b15">
             <div class="col-lg-6" *ngIf="isReseller">
@@ -85,9 +62,56 @@
             
             
           </div>
-
+          
         </div>
-        
+        <div class="release_cost_list release_method_list">
+          <h4>Pricing Information</h4>
+          <div class="release_method_space">
+            <div class="row m-b15">
+              <div class="col-lg-6">
+                <label>Payment Date</label>
+                <i class="release_txt_nonedit">Dec 21 2019</i>
+              </div>
+              <div class="col-lg-6">
+                <label>Activation Date</label>
+                <input [disabled]="isActiveDateDisabled" [min]="paymentModel.ActivationDate" (dateInput)="onActivationDate($event.value)" [(ngModel)]="paymentModel.ActivationDate" (click)="picker.open()" readonly matInput [matDatepicker]="picker" >
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker ></mat-datepicker>
+              </div>
+            </div>
+            <div class="row m-b15">
+              <div class="col-lg-6">
+                <div class="release_cont_freqency clearfix">
+                  <label>Payment Frequency</label>
+                  <div class="col-lg-6 no_pad m-t10">
+                    <label class="container1">Annual
+                      <input [disabled]="isPaymentFrequencyDisabled" (change)="onChangeFrequency()" [(ngModel)]="paymentModel.isAnnualPayment"  name="isAnnualPayment" type="radio"  name="payment_frequency" [value]="true">
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="col-lg-6 no_pad m-t10">
+                    <label class="container1">Monthly
+                      <input [disabled]="isPaymentFrequencyDisabled" (change)="onChangeFrequency()" [(ngModel)]="paymentModel.isAnnualPayment" name="isAnnualPayment" type="radio" name="payment_frequency" [value]="false">
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+              <label># of months to end of year</label>
+              <input  readonly class="form-control" [(ngModel)]="paymentModel.NoOfMonthsLable"   />
+           
+        </div>
+            </div>
+            <div class="row m-b15">
+              <div class="col-lg-12">
+                <label>Comments</label>
+                <textarea col="6" row="6" class="release_method_comment" ></textarea>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>  
     </div>
     <div class="release_method_cont release_method_cont_middle">
@@ -131,16 +155,14 @@
               </li>
             </ul>
           </div>
-          <div class="release_method_buttons">
-            <button (click)="savePayment()" class="release_buttons_save">Save</button>
-            <button (click)="paymentReleaseInfo()" class="release_buttons_save">Release Info</button>
+          <div  class="release_method_buttons">
+            <button (click)="sendAdhocRequest()" class="release_buttons_save">Submit</button>
             <a href="javscript:void(0)" class="release_buttons_cancel">Cancel</a>
             <div class="clear"></div>
           </div>
       </div>
     </div>
-</div>
-<!-- Right Content -->
+    <!-- Right Content -->
 <div class="payment_method_right">
   <h5 class="wow fadeIn" data-wow-delay="0.2s">Costing per Employee</h5>
   <div class="wow fadeIn" data-wow-delay="0.4s"><img src="assets/payments/costing_img.png"  alt="img"></div>
@@ -176,4 +198,4 @@
 </div>
 <!--End Right content-->
 </div>
-
+</div>

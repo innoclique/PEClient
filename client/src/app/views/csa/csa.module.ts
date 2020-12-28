@@ -16,6 +16,8 @@ import { DashboardChartsModule } from "../charts/charts.module";
 import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
 import { CSAPaymentSummary } from "./reports/summary/payment/csaPaymentSummary.component";
 import { CSAEvaluationsSummary } from "./reports/summary/evaluations/csaEvaluationSummary.component";
+import { PaymentComponent } from './payment/payment.component';
+import { AdhocPaymentComponent } from './adhoc-payment/adhoc-payment.component';
 
 export const projectRoutes: Routes = [
   
@@ -33,6 +35,16 @@ export const projectRoutes: Routes = [
       path: 'reports/paymentSummary',
       component: CSAPaymentSummary,
       data: { title: 'Payment Summary' }
+    },
+    {
+      path: 'payments',
+      component: PaymentComponent,
+      data: { title: 'Payment' }
+    },
+    {
+      path: 'adhoc-payment',
+      component: AdhocPaymentComponent,
+      data: { title: 'Payment' }
     },
     {
       path: 'reports/evaluationsSummary',
@@ -53,7 +65,9 @@ export const projectRoutes: Routes = [
    
     DashboardComponent,
      CSAPaymentSummary,
-    CSAEvaluationsSummary
+    CSAEvaluationsSummary,
+    PaymentComponent,
+    AdhocPaymentComponent
     
   ],
   imports: [
