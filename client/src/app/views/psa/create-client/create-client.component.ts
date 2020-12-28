@@ -285,7 +285,7 @@ export class CreateClientComponent implements OnInit {
     this.clientFormData = Object.assign(this.clientFormData, this.prepareOrgData());
     this.perfApp.route = "app";
     this.perfApp.method = "AddOrganization",
-      this.perfApp.requestBody = this.clientFormData; //fill body object with form 
+    this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Organization Added Successfully.')
@@ -544,7 +544,7 @@ action='Update'
     }
     if (action === 'Create') {
       organization.IsActive = true;
-      organization.UsageCount= organization.UsageType=='License'?0:organization.UsageCount;
+      //organization.UsageCount= organization.UsageType=='License'?0:organization.UsageCount;
       organization.CreatedBy = this.authService.getCurrentUser()._id;
       organization.CreatedOn = new Date();
     } else {      
