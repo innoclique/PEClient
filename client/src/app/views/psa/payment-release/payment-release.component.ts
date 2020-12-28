@@ -56,6 +56,7 @@ export class PaymentReleaseComponent implements OnInit {
     private perfApp: PerfAppService,
     private paymentCaluculationService:PaymentCaluculationService,
     private notification: NotificationService,
+    private activatedRoute: ActivatedRoute,
     ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
@@ -65,7 +66,20 @@ export class PaymentReleaseComponent implements OnInit {
   ngOnInit(): void {
     this.getClients();
     this.currentUser=this.authService.getCurrentUser();
-
+     
+  }
+  onloadOrgEMail(){
+    this.activatedRoute.params.subscribe(params => {
+      if (params['email']) {
+        let matchOrgObj = this.organizationList.find(orgObj=>orgObj.Email==params['email']);
+        console.log(matchOrgObj);
+        if(matchOrgObj){
+          this.paymentModel.Organization=matchOrgObj._id;
+          this.orgnizationDetails(matchOrgObj._id);
+        }
+      }
+      
+     });  
   }
   
   getClients() {
@@ -74,6 +88,7 @@ export class PaymentReleaseComponent implements OnInit {
     this.perfApp.requestBody = { 'companyId': this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c => {
       this.organizationList = c;
+      this.onloadOrgEMail();
     })
   }
   getRangeList(options){
@@ -85,6 +100,7 @@ export class PaymentReleaseComponent implements OnInit {
       });
   }
   orgnizationDetails(selectedOrgnization){
+    console.log("On Select Organization")
     console.log(selectedOrgnization);
     this.useageTypeEmployee=false;
     this.paymentModel.NoOfEmployees=0;

@@ -168,7 +168,7 @@
                   <label class="form-control" class="radio-inline ml-2">
                     <input formControlName="UsageType" name="UsageType"
                       [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
-                      value="Employees"> # of Employees
+                      value="Employees" (click)="onCheckEmployee()"> # of Employees
                   </label>
 
                   <div *ngIf="isFormSubmitted && f.UsageType.errors" class="invalid-feedback">
@@ -189,6 +189,24 @@
 
                     <div *ngIf=" isFormSubmitted  && f.UsageCount.errors" class="invalid-feedback">
                       <div *ngIf="f.UsageCount.errors.required">Count of Employees is mandatory</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="f.UsageType.value==='License'" class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Range</span>
+                    </div>
+                      <select formControlName="Range" [required]="f.UsageType.value==='License' ? true : null "   class="form-control" [(ngModel)]="Range" >
+                        <option>Select</option>
+                         <option *ngFor="let range of rangeList" [value]="range._id">{{range.Range}}</option>
+                       </select>
+                       
+                    <div *ngIf=" isFormSubmitted  && f.Range.errors" class="invalid-feedback">
+                      <div *ngIf="f.Range.errors.required">Range Mandatory</div>
                     </div>
                   </div>
                 </div>

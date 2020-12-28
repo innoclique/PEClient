@@ -511,6 +511,9 @@ action='Update'
     organization = this.setContactPersonData(organization);
     organization.ParentOrganization=this.currentOrganization._id;
     delete organization.contactPersonForm;
+    if(organization.UsageType==="License"){
+      organization.UsageType.UsageCount = Number(organization.UsageType.UsageCount);
+    }
     return organization;
   }
 
