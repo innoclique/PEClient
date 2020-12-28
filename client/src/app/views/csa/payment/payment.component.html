@@ -1,4 +1,4 @@
-
+<div class="payment_method_main">
   <div class="wrapper"> 
     <div>
       <a href="#/csa/adhoc-payment">Adhoc-Payment</a>
@@ -7,7 +7,7 @@
       
       <div class="release_method_cont_in paymentinfo">
         
-        <h3 class="wow fadeIn" data-wow-delay="0.2s">Release Payment info - Client Organization</h3>
+        <h3 class="wow fadeIn" data-wow-delay="0.2s">Payment info - Client Organization</h3>
         <div class="release_method_space">
             <div class="row m-b15">
                 <div class="col-lg-12">
@@ -103,7 +103,7 @@
         
       </div>  
     </div>
-    <div class="release_method_cont">
+    <div class="release_method_cont release_method_cont_middle ">
       <div class="release_method_cont_in release_method_list paymentinfo">
         <h3 class="release_payment_bg  wow fadeIn" data-wow-delay="0.2s">Payment Breakup</h3>
           <div class="release_cost_list release_method_list">
@@ -214,11 +214,22 @@
                               <span>{{paymentStructure?paymentStructure.TOTAL_AMOUNT:0}}</span>
                               <div class="clear"></div>
                             </li>
+
+                            <li>
+                              <h6>Due<strong *ngIf="paymentModel.isAnnualPayment">Amount due (annual payment)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Amount due (monthly payment)</strong></h6>
+                              <span>{{paymentStructure?paymentStructure.DUE_AMOUNT:0}}</span>
+                              <div class="clear"></div>
+                            </li>
                            
                             <li>
-                                <h6>Total<strong *ngIf="paymentModel.isAnnualPayment">Total Amount Payable (for annual payments)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Total Amount Payable (for monthly payments)</strong></h6>
-                                <span>{{paymentSummary?paymentSummary.TOTAL_PAYABLE_AMOUNT:0}}</span>
+                              <h6>Tax<strong>Tax({{paymentScale?paymentScale.Tax:0}}%)</strong></h6>
+                                <span>{{paymentSummary?paymentSummary.TAX_AMOUNT:0}}</span>
                                 <div class="clear"></div>
+                            </li>
+                            <li>
+                              <h6>Total<strong *ngIf="paymentModel.isAnnualPayment">Total Amount Payable (for annual payments)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Total Amount Payable (for monthly payments)</strong></h6>
+                              <span>{{paymentSummary?paymentSummary.TOTAL_PAYABLE_AMOUNT:0}}</span>
+                              <div class="clear"></div>
                             </li>
                           </ul>
                         </div>
@@ -238,4 +249,39 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-
+  <!-- Right Content -->
+<div class="payment_method_right">
+  <h5 class="wow fadeIn" data-wow-delay="0.2s">Costing per Employee</h5>
+  <div class="wow fadeIn" data-wow-delay="0.4s"><img src="assets/payments/costing_img.png"  alt="img"></div>
+  <div class="payment_right_blue wow fadeIn" data-wow-delay="0.6s">
+    <h6>19.80 <small>per year</small></h6>
+    <span>Cost per employee per month (annual discount)</span>
+  </div>
+  <div class="payment_right_blue payment_right_white wow fadeIn" data-wow-delay="0.8s">
+    <h6>19.80 <small>per year</small></h6>
+    <span>Cost per employee per month (annual discount)</span>
+  </div>
+  <div class="payment_info_links">
+    <h5 class="wow fadeIn" data-wow-delay="1.2s">Information Links</h5>
+    <div class="wow fadeIn" data-wow-delay="1.4s">
+      <a href="javascript:void(0)" class="payment_info_links_payment">
+        <em><img src="assets/payments/bill.png"  alt="Bill"></em>
+        <strong>Payment History</strong>
+      </a>
+      <a href="#/csa/adhoc-payment" class="payment_info_links_payment">
+        <em><img src="assets/payments/purchase.png"  alt="Purchase"></em>
+        <strong>Make Adhoc Purchase</strong>
+      </a>
+      <a href="javascript:void(0)" class="payment_info_links_payment">
+        <em><img src="assets/payments/pricing.png" alt="Pricing"></em>
+        <strong>View Pricing</strong>
+      </a>
+      <a href="javascript:void(0)" class="payment_info_links_payment">
+        <em><img src="assets/payments/purchase.png" alt="Purchase"></em>
+        <strong>Current Contract</strong>
+      </a>
+    </div>
+  </div>
+</div>
+<!--End Right content-->
+</div>

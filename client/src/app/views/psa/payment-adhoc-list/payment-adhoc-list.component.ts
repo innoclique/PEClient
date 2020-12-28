@@ -66,7 +66,9 @@ export class PaymentAdhocListComponent implements OnInit {
       }, 
       //{ headerName: 'Client', field: 'clientName', sortable: true, filter: true },     
       { headerName: 'Active Since', field: 'activeSince', sortable: true, filter: true },
-      { headerName: '# Of Request', field: 'requestRange', sortable: true, filter: true },
+      { headerName: 'Total Request', field: 'totalRequest', sortable: true, filter: true },
+      { headerName: 'Current Request', field: 'noOfEmployees', sortable: true, filter: true },
+      { headerName: 'Purpose', field: 'purpose', sortable: true, filter: true },
       { headerName: 'Amount', field: 'amount', sortable: true, filter: true },
       {
         headerName: "Actions",
@@ -74,24 +76,11 @@ export class PaymentAdhocListComponent implements OnInit {
     
         Sorting: false,        
         cellRenderer: (data) => {
-          console.log(data);
-          if(data && data.data){
-            let {status} = data.data;
-            switch (status) {
-              case 'Pending':
-                
-                return `<i class="icon-minus" style="cursor:pointer ;padding: 7px 20px 0 0;
-                      font-size: 17px;"   data-action-type="suspendorg" title="No Actions"></i>
+          return `<i class="icon-minus" style="cursor:check ;padding: 7px 20px 0 0;
+                      font-size: 17px;"   data-action-type="suspendorg" title="Approved"></i>
+                      <i class="icon-close" style="cursor:check ;padding: 7px 20px 0 0;
+                      font-size: 17px;"   data-action-type="suspendorg" title="Disapproved"></i>
                       `
-              case 'Approved':
-                return `<i class="icon-check" style="cursor:pointer ;padding: 7px 20px 0 0;
-                font-size: 17px;"   data-action-type="suspendorg" title="Approved"></i>`;
-              
-                case 'Disapproved':
-                  return `<i class="icon-close" style="cursor:pointer ;padding: 7px 20px 0 0;
-                  font-size: 17px;"   data-action-type="suspendorg" title="Disapproved"></i>`;
-              }
-          }
         }
   
   
@@ -105,8 +94,8 @@ export class PaymentAdhocListComponent implements OnInit {
     this.perfApp.method = "adhoc/request/list",
     this.perfApp.requestBody = {  }
     this.perfApp.CallAPI().subscribe(adhocList => {
-      //this._getAdhocRequestList(adhocList);
-      adhocList.map(row=>{
+      this.adhocRequestList = adhocList;
+      /*adhocList.map(row=>{
         let adhocObj=row;
         let createdYear = moment(adhocObj.Organization.CreatedOn).format("YYYY");
         this.adhocRequestList.push({
@@ -117,8 +106,8 @@ export class PaymentAdhocListComponent implements OnInit {
           requestRange:adhocObj.Range,
           amount:adhocObj.TOTAL_PAYABLE_AMOUNT,
           status:adhocObj.Status
-        })
-      });
+        });
+      });*/
       this.AdhocGridOptions.api.setRowData(this.adhocRequestList);
     })
   }

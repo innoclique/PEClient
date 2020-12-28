@@ -96,6 +96,8 @@ export class PaymentComponent implements OnInit {
             this.orgnizationDetails();
             this.isActiveDateDisabled=true;
             this.isPaymentFrequencyDisabled=true;
+          }else{
+            this.notification.error("Initial payment was not found.")
           }
           break;
         case 'renewal_pay':
@@ -132,7 +134,6 @@ export class PaymentComponent implements OnInit {
         if(paymentRelease.Status === "Complete"){
           this.isinitialPaymentDone = true;
         }
-        
       }
     });
   }
@@ -281,8 +282,10 @@ export class PaymentComponent implements OnInit {
     }
   }
   checkout(){
-    if(this.paymentOption && this.paymentOption!=""){
+    if(this.paymentOption && this.paymentOption!="" && this.paymentReleaseData){
       this.emoModal.show();
+    }else{
+      this.notification.error("No Payment Available.");
     }
   }
   printPDFPage() {
