@@ -247,5 +247,8 @@ export class AdhocPaymentComponent implements OnInit {
     }
     
   }
+  loadPaymentHistory(){
+    this.router.navigate(['csa/payment-history',{Organization:this.currentOrganization._id}],{ skipLocationChange: true });
+  }
 
 }

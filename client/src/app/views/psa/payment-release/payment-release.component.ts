@@ -332,5 +332,12 @@ export class PaymentReleaseComponent implements OnInit {
      }
      });
   }
-
+  loadPaymentHistory(){
+    if(this.selectedOrganizationObj && this.selectedOrganizationObj._id!=""){
+      this.router.navigate(['psa/payment-history',{Organization:this.currentOrganization._id}],{ skipLocationChange: true });
+    }else{
+      this.notification.error("Please select Organization");
+    }
+    
+  }
 }

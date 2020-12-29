@@ -34,7 +34,7 @@ import {ResellerRevenueDetails} from "./reports/revenue/details/reseller/reselle
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { PaymentReleaseComponent } from './payment-release/payment-release.component';
 import { PaymentAdhocListComponent } from './payment-adhoc-list/payment-adhoc-list.component';
-
+import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -80,6 +80,11 @@ export const projectRoutes: Routes = [
       path:'reports',
       component:ReportsComponent,
       data:{title:'Reports'}
+    },
+    {
+      path:'payment-history',
+      component:PaymentHistoryComponent,
+      data:{title:'Payment History'}
     },
      {
       path:'reports/info/client',
