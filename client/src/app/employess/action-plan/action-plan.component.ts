@@ -36,7 +36,9 @@ export class ActionPlanComponent implements OnInit {
   currentRowItem: any;
   alert = new AlertDialog();
   unSubmitedCount=0;
+  addedGoalCount=0;
   unSubmitedStrenthCount=0;
+  addedStrenthCount=0;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -193,6 +195,7 @@ getAllDevGoalsDetails() {
   this.perfApp.CallAPI().subscribe(c => {
 
     this.unSubmitedCount=c.filter(e=>e.IsGoalSubmited==false && e.IsDraft==false ).length;
+    this.addedGoalCount= c.filter(e=>e.IsDraft==false ).length;
       this.devGoalRecords=c;
     
 
@@ -219,6 +222,7 @@ getAllStrengthDetails() {
   this.perfApp.CallAPI().subscribe(c => {
 
     this.unSubmitedStrenthCount=c.filter(e=>e.IsStrengthSubmited==false && e.IsDraft==false ).length;
+    this.addedStrenthCount=c.filter(e=>e.IsDraft==false ).length;
     this.strengthRecords=c;
       this.selectTab(this.activeTabIndex);
 
@@ -327,6 +331,13 @@ public onStrengthGridRowClick(e) {
 
    /**To alert user for submit */
    openConfirmSubmitDialog() {
+
+    if(this.addedGoalCount==0 || this.addedStrenthCount==0){
+      this.snack.error("At least one goal, one strength must be added before submission");
+      return
+    }
+
+
     this.alert.Title = "Alert";
     this.alert.Content = "Are you sure you want to submit the action plan?";
     this.alert.ShowCancelButton = true;

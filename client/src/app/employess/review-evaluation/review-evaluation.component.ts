@@ -39,6 +39,9 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   employeeCompetencyList: any;
   managerCompetencyList: any;
   questions$: Observable<CompetencyBase<any>[]>;
+  appScores: any = [];
+  kpiStatus: any = [];
+  coachingRemDays: any = [];
   currEvaluation: any;
   public oneAtATime: boolean = true;
   public FinalRatingForm: FormGroup;
@@ -92,6 +95,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
 
 
   callInitApis(){
+  this.getAllKpiBasicData();
       this.initCompetencyForm();
       this.initFinalRatingForm();
       this.getTabsData();
@@ -168,7 +172,7 @@ goto(selTab){
           this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1.FinalRating.Manager.YearEndRating)
           this.FinalRatingForm.controls["ManagerIsDraft"].setValue(!res1.FinalRating.Manager.IsSubmitted)
           this.FinalRatingForm.controls["ManagerSignOff"].setValue(res1.FinalRating.Manager.SignOff?res1.FinalRating.Manager.SignOff
-            :"")
+            :this.selectedUser.Manager.FirstName+" "+this.selectedUser.Manager.LastName)
           this.FinalRatingForm.controls["ManagerSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Manager.SubmittedOn))
           this.showManagerSubmit = !res1.FinalRating.Manager.IsSubmitted;
           this.FinalRatingForm.controls["ManagerRevComments"].setValue(res1.FinalRating.Manager.RevComments)
@@ -184,7 +188,7 @@ goto(selTab){
           this.FinalRatingForm.controls["FRReqRevision"].setValue(res1.FinalRating.FRReqRevision)
           this.FinalRatingForm.controls["ThirdSignatoryIsDraft"].setValue(!res1.FinalRating.ThirdSignatory.IsSubmitted)
           this.FinalRatingForm.controls["ThirdSignatorySignOff"].setValue(res1.FinalRating.ThirdSignatory.SignOff?res1.FinalRating.ThirdSignatory.SignOff
-            :"")
+            :this.selectedUser.ThirdSignatory?this.selectedUser.ThirdSignatory.FirstName+" "+this.selectedUser.ThirdSignatory.LastName:"")
           this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.ThirdSignatory.SubmittedOn))
           this.showThirdSignatorySubmit = !res1.FinalRating.ThirdSignatory.IsSubmitted;
 
@@ -521,8 +525,10 @@ if (this.FinalRatingForm.value.TSReqRevision &&
     console.log('final rating form', this.perfApp.requestBody)
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
-      this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
-      window.location.reload();
+   const snref=   this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
+      snref.afterDismissed().subscribe(() => {
+        window.location.reload();
+      }); 
     }, error => {
       console.log('error', error)
       this.snack.error('Something went wrong')
@@ -562,8 +568,12 @@ if (this.FinalRatingForm.value.TSReqRevision &&
     console.log('final rating form', this.perfApp.requestBody)
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
-      this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
-      window.location.reload();
+    const snref=  this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
+     
+      snref.afterDismissed().subscribe(() => {
+        window.location.reload();
+      }); 
+
     }, error => {
       console.log('error', error)
       this.snack.error('Something went wrong')
@@ -586,6 +596,29 @@ if (this.FinalRatingForm.value.TSReqRevision &&
   cancelFinalRating() {
 
   }
+
+  
+
+  getAllKpiBasicData() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetKpiSetupBasicData";
+    this.perfApp.requestBody = { 'empId': this.loginUser._id ,
+    'orgId':this.authService.getOrganization()._id
+  }
+      this.perfApp.CallAPI().subscribe(c => {
+
+        if (c) {
+
+          this.appScores = c.KpiScore;
+          this.kpiStatus = c.KpiStatus;
+          this.coachingRemDays = c.coachingRem;
+          this.currEvaluation = c.evaluation;         
+          
+        }
+      })
+  }
+
+
   getAverage(arr) {
     
     var sum = 0;

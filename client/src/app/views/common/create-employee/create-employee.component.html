@@ -388,8 +388,12 @@ Back to list
       
                    
                     <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="input-group"  tooltip="Application Role. tooltip">
+                        <div class="form-group" tooltip="This is where you can define what role the employee will play in this system.
+                        Employee is the user being evaluated.
+                        Employee Manager is the employee who will participate in the evaluation of their Direct Reports.
+                        Evaluation Administrator is the employee who will be responsible for setting up employees and rolling-out evaluations for your organization.
+                        ">
+                            <div class="input-group"  >
                               <div class="input-group-prepend">
                                 <span class="input-group-text redStar">Application Role</span>
                               </div>
@@ -403,7 +407,7 @@ Back to list
                                <mat-select  class="form-control"  multiple 
                                [ngClass]="{ 'is-invalid':( f.ApplicationRole.touched || submitClicked)  &&  f.ApplicationRole.invalid }"
                                  formControlName="ApplicationRole"  name="ApplicationRole" required >
-                                <mat-option *ngFor="let e of appRoles" [value]="e._id">{{e.RoleName}}</mat-option>
+                                <mat-option [disabled]="e.RoleName=='Employee' "   *ngFor="let e of appRoles" [value]="e._id">{{e.RoleName}}</mat-option>
                               </mat-select> 
                               <div *ngIf="(f.ApplicationRole.touched || submitClicked) && f.ApplicationRole.invalid" class="invalid-feedback">
                                 <div *ngIf="f.ApplicationRole.errors.required">Application Role is required</div>

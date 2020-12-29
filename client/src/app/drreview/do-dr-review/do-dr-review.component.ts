@@ -205,6 +205,7 @@ export class DoDrReviewComponent implements OnInit {
     debugger
     var sum = 0;
     for (var i = 0; i < arr.length; i++) {
+      if(arr[i] != '-1')
       sum += parseInt(arr[i], 10); //don't forget to add the base
     }
 

@@ -16,7 +16,7 @@
               <div class="card-body">
 
 
-                  <form  autocomplete="off"  [formGroup]="strengthBuildForm" novalidate="" [ngClass]="{ 'view-only': currentAction == 'view' }"
+                  <form  autocomplete="off"  [formGroup]="strengthBuildForm" novalidate="" [ngClass]="{ 'view-only': (currentAction == 'view' || accessingFrom =='currEvaluation' )}"
                    class="ng-untouched ng-pristine ng-valid">
 
 

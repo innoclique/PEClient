@@ -1,3 +1,4 @@
+import { isDataSource } from '@angular/cdk/collections';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -57,6 +58,7 @@ accessingFrom:any;
   showKpiForm=true;
   isEmpFRSignOff=false;
   currentOrganization: any;
+  IsDraftDBVal: any;
 
 
 
@@ -99,7 +101,7 @@ accessingFrom:any;
   ngOnInit(): void {
 
 
-
+    if(this.accessingFrom == "currEvaluation") this.showKpiForm=false;
     this.initKPIForm()
 
     this.alert = new AlertDialog();
@@ -127,7 +129,7 @@ accessingFrom:any;
       YearEndComments: [this.kpiDetails.YearEndComments ? this.kpiDetails.YearEndComments :''],
       YECommManager: [this.kpiDetails.YECommManager ? this.kpiDetails.YECommManager :''],
       ManagerComments: [this.kpiDetails.ManagerComments ? this.kpiDetails.ManagerComments :''],
-      Weighting: [this.kpiDetails.Weighting ? this.kpiDetails.Weighting : ""],
+      Weighting: [this.kpiDetails.Weighting || this.kpiDetails.Weighting==0  ? this.kpiDetails.Weighting : ""],
    
 
       IsDraft: [this.kpiDetails.IsDraft ? 'true' : 'false'],
@@ -139,8 +141,10 @@ accessingFrom:any;
     this.selectedItems=[];
     this.kpiDetails.MeasurementCriteria.forEach(e => {
       e.measureId.selected = true;
-      this.toggleSelection(e.measureId);
+      this.toggleSelection(e.measureId,null);
     });
+
+    this.IsDraftDBVal=this.kpiDetails.IsDraft
 
   }
 
@@ -226,7 +230,7 @@ if(this.selectedItems.length==0) {
     this.perfApp.requestBody.MeasurementCriteria = Measurements;
 
     if (this.currentAction =='create') 
-    this.perfApp.requestBody.Weighting = this.weight;
+    this.perfApp.requestBody.Weighting = this.kpiForm.get('IsDraft').value=='true'? 0: this.weight;
    if(this.currEvaluation)
     this.perfApp.requestBody.EvaluationId = this.currEvaluation._id;
 
@@ -241,6 +245,11 @@ if(this.selectedItems.length==0) {
       this.perfApp.requestBody.Action = 'Draft';
     }
 
+    if (this.currentAction=='edit' && this.kpiForm.get('IsDraft').value=='false'
+    && this.perfApp.requestBody.Weighting==0){
+      this.perfApp.requestBody.Weighting =this.weight;
+    }
+
     this.callKpiApi();
 
   }
@@ -251,7 +260,8 @@ if(this.selectedItems.length==0) {
 
       if (c.message == Constants.SuccessText) {
 
-        this.snack.success(this.translate.instant(`Performance Goal ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)} Successfully`));
+        this.snack.success(this.translate.instant(`Performance Goal 
+        ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action,this.IsDraftDBVal)} Successfully`));
        this.selectedItems=[];
         this.getAllKPIs();
         if (this.accessingFrom=='currEvaluation') {
@@ -297,13 +307,17 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
       if (c) {
 
      
-        this.getMeasurementCriterias();
+        this.getMeasurementCriterias("KpiAdding");
       
         // this.kpiForm.get('MeasurementCriteria').setErrors(null);
         // this.kpiForm.get('MeasurementCriteria').markAsUntouched;
 this.snack.success(this.translate.instant(`KPI added Successfully`));
-c.selected=false;
-this.toggleSelection(c);
+// if (this.currentAction=='create') {
+// c.selected=false;
+// }else if (this.currentAction=='edit') {
+  c.selected=true;
+ // }
+this.toggleSelection(c,null);
         
       }
     })
@@ -359,7 +373,7 @@ this.toggleSelection(c);
 
 
 
-  getMeasurementCriterias() {
+  getMeasurementCriterias(reqFrom) {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllMeasurementCriterias",
       this.perfApp.requestBody = { 'empId': this.loginUser._id }
@@ -388,7 +402,7 @@ this.toggleSelection(c);
             });
           }
 
-          if (this.currentAction!='create') {
+          if (this.currentAction!='create' && reqFrom !="KpiAdding") {
             this.initKPIForm();
           }
 
@@ -458,15 +472,15 @@ conformSubmitKpis(){
     this.perfApp.CallAPI().subscribe(c => {
 
       // this.setWeighting(c.filter(item => item.IsDraft === false).length);
-      if (this.currentAction =='create')
-        this.setWeighting(c.length);
+      debugger
+     // if (this.currentAction =='create')
+        this.setWeighting(c.filter(item => item.IsDraft === false).length, this.currentAction);
       if (c && c.length > 0) {
         if (this.accessingFrom=='currEvaluation') {
           this.empKPIData = c.filter(e=> e.IsDraft==false);
         }else{
           this.empKPIData = c;
         }
-        this.empKPIData = c;
         this.unSubmitedCount=c.filter(e=>e.IsSubmitedKPIs==false && e.IsDraft==false ).length;
         this.scoreUnSubmitedCount=c.filter(e=>e.Score=="" && e.IsDraft==false ).length;
 if(this.scoreUnSubmitedCount==0)
@@ -494,7 +508,8 @@ this.authService.setIsPGSubmitStatus("true");
 
           }
 
-           this.getMeasurementCriterias();
+           this.getMeasurementCriterias("");
+           this.showKpiForm=true;
 
       }else{
         
@@ -545,11 +560,11 @@ this.authService.setIsPGSubmitStatus("true");
 
 
 
-  setWeighting(length: any) {
+  setWeighting(length: any,currentAction) {
     debugger
     
     this.weight = length==0? 100 :  Math.round( 100/(length+1));
-
+    if(currentAction =='create')
     this.kpiForm.patchValue({ Weighting: this.weight });
 
    
@@ -568,7 +583,7 @@ this.authService.setIsPGSubmitStatus("true");
   });
     selkpi.MeasurementCriteria.forEach(e => {
       e.measureId.selected=false;
-      this.toggleSelection(e.measureId);
+      this.toggleSelection(e.measureId,null);
     });
 
 
@@ -606,22 +621,23 @@ this.authService.setIsPGSubmitStatus("true");
   }
 
 
-  optionClicked(event: Event, item) {
+  optionClicked(event, item) {
     event.stopPropagation();
-    this.toggleSelection(item);
+  //  this.toggleSelection(item);
   }
 
-  toggleSelection(item) {
+  toggleSelection(item,event) {
     let f;
+  if(event)  item.selected=event.checked;
     if(this.currentAction=='create'){
-     f=!item.selected;
-    item.selected = !item.selected;
+     f=item.selected;
+    item.selected = item.selected;
     }
-    if (item.selected) {
+    if ( item.selected==true) {
       this.selectedItems.push(item);
       // this.changeCallback( this.selectedItems );
-    } else {
-      const i = this.selectedItems.findIndex(value => value.item === item.item);
+    } else if (item.selected==false) {
+      const i = this.selectedItems.findIndex(value => value._id === item._id);
       this.selectedItems.splice(i, 1);
       //this.changeCallback( this.selectedItems );
     }
@@ -630,7 +646,7 @@ this.authService.setIsPGSubmitStatus("true");
       e.map(m => {
 
         if (m._id == item._id)
-          m.selected = f;
+          m.selected = f || m._id == item._id;
       })
 
     });
@@ -768,12 +784,16 @@ debugger
 
 
   
-  getActionString(currentAction,subAction) {
+  getActionString(currentAction,subAction,IsDraftDBVal) {
     debugger
     if (currentAction=='create' && subAction=='Draft') {
       return 'saved'
     } else  if (currentAction=='create') {
       return 'created '
+    }else  if (currentAction=='edit' && IsDraftDBVal==true && subAction=='Draft')  {
+      return 'saved'
+    }else  if (currentAction=='edit' && IsDraftDBVal==true && subAction!='Draft')  {
+      return 'created'
     }else  if (currentAction=='edit') {
       return 'updated'
     }

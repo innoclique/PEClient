@@ -105,7 +105,7 @@
                               
 
                                 
-                                <div class="input-group">
+                                <div class="input-group" [ngClass]="{ 'view-only': actor=='TS' }" >
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Coaching Reminder</span>
                                     </div>
@@ -113,7 +113,7 @@
                                         [ngClass]="{ 'is-invalid': f.CoachingReminder.touched  &&  f.CoachingReminder.invalid }"
                                         formControlName="CoachingReminder" name="CoachingReminder" >
                                         <option value="" disabled>Please select</option>
-                                        <option *ngFor="let e of coachingRemDays" [value]="e">{{e}} days</option>
+                                        <option *ngFor="let e of coachingRemDays" [value]="e.value">{{e.Text}}</option>
 
                                     </select>
                                     <!--<div class="input-group-postpend">
@@ -329,7 +329,8 @@
                                             [ngClass]="{ 'is-invalid': f.Score.touched  &&  f.Score.invalid }"
                                             formControlName="Score" name="Score" >
                                             <option value="" disabled>Please select</option>
-                                            <option *ngFor="let e of appScores" [value]="e">{{e}}</option>
+                                            <option *ngFor="let e of appScores" [value]="e.value">{{e.value}}-{{e.Text}}</option>
+                                            <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
 
                                         </select>
                                         <div *ngIf="f.Score.touched && f.Score.invalid" class="invalid-feedback">
@@ -458,7 +459,8 @@
                                             [ngClass]="{ 'is-invalid': f.ManagerScore.touched  &&  f.ManagerScore.invalid }"
                                             formControlName="ManagerScore" name="ManagerScore" >
                                             <option value="" disabled>Please select</option>
-                                            <option *ngFor="let e of appScores" [value]="e">{{e}}</option>
+                                            <option *ngFor="let e of appScores" [value]="e.value">{{e.value}}-{{e.Text}}</option>
+                                            <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
 
                                         </select>
                                         <div *ngIf="f.ManagerScore.touched && f.ManagerScore.invalid" class="invalid-feedback">

@@ -32,6 +32,7 @@ import { ReviewAccompListComponent } from './review-accomp-list/review-accomp-li
 import { ReviewAccomplishmentsComponent } from './review-accomplishments/review-accomplishments.component';
 import { PrivateNotesComponent } from './private-notes/private-notes.component';
 import { PrivateNotesListComponent } from './private-notes-list/private-notes-list.component';
+import { SnGuardService } from '../services/sn-guard.service';
 
 
 
@@ -50,6 +51,7 @@ const routes: Routes = [
       {
         path: 'kpi-setting',
         component: KpiSettingsComponent,
+        canActivate: [SnGuardService] ,
         data: {
           title: 'KPI Setting'
         }
@@ -58,6 +60,7 @@ const routes: Routes = [
       {
         path: 'kpi-setup',
         component: KpiSetupComponent,
+        canActivate: [SnGuardService] ,
         data: {
           title: 'KPI Setup'
         }
@@ -70,6 +73,7 @@ const routes: Routes = [
       }, {
         path:'action-plan',
         component:ActionPlanComponent,
+        canActivate: [SnGuardService] ,
         data:{title:'Action-Plan'}
       },
       {
@@ -98,6 +102,7 @@ const routes: Routes = [
       {
         path:'accomplishments-list',
         component:AccomplishmentsListComponent,
+        canActivate: [SnGuardService] ,
         data:{title:'Accomplishments'}
       },
       {

@@ -224,7 +224,7 @@ get k (){
       width: 80,
       cellRenderer: (data) => {
 
-        if (this.currentAction=='view'){
+        if (this.currentAction=='view' || this.accessingFrom == "currEvaluation"){
           return `NA `
           }
         

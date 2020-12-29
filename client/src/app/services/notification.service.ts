@@ -9,14 +9,14 @@ export class NotificationService {
   constructor(public snackBar: MatSnackBar ) {}
 
   config: MatSnackBarConfig = {
-    duration: 5000,
+    duration: 1000,
     horizontalPosition: 'center',
     verticalPosition: 'bottom'    
   }
 
   success(msg:string) {
     this.config['panelClass'] = ['success-snackbar']
-    this.snackBar.open(msg,'', this.config)
+   return this.snackBar.open(msg,'', this.config)
   }
 
   error(msg:string) {

@@ -110,7 +110,8 @@
                           <div class="input-group-prepend">
                             <span style="width: 158px !important;" class="input-group-text">Manager's Comments</span>
                           </div>
-                          <textarea maxlength="2000" class="form-control all-events"  cols="" rows="2" 
+                          <textarea maxlength="2000" class="form-control"  cols="" rows="2" 
+                          [ngClass]="{ 'all-events': accessingFrom!='reviewEvaluation' }"
                           [ngClass]="{ 'is-invalid': (f.ManagerComments?.touched || submitClicked) &&  f.ManagerComments.invalid }"
                           formControlName="ManagerComments"  name="ManagerComments"  >  </textarea>
 

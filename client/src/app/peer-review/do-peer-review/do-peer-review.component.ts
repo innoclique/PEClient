@@ -178,8 +178,12 @@ export class DoPeerReviewComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(x => {
 
       console.log(x)
-      this.snack.success('Peer Review Submitted Successfully');
-      this.router.navigate(['employee/peerreview']);
+  const snref=  this.snack.success(`Peer Review ${isDraft?'Saved':'Submitted'} Successfully`);
+  snref.afterDismissed().subscribe(() => {
+    console.log('The snack-bar was dismissed sgsgggsjr');
+    this.router.navigate(['employee/peerreview']);
+  });  
+ 
     }, error => {
       this.snack.error('Something went wrong');
       console.log('error', error)
@@ -198,6 +202,7 @@ export class DoPeerReviewComponent implements OnInit {
     debugger
     var sum = 0;
     for (var i = 0; i < arr.length; i++) {
+      if(arr[i] != '-1')
       sum += parseInt(arr[i], 10); //don't forget to add the base
     }
     var avg = sum / arr.length;

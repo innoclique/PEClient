@@ -484,7 +484,7 @@ export class RollevaluationComponent implements OnInit {
         if(this.rollEvaluationEdit){
           this.notification.success('Evaluation Updated Successfully.')
         }else{
-          this.notification.success(`The Evaluations/Performance Goals Setting have been
+          this.notification.success(`The Evaluations Setting have been
           successfully setup to be rolled out on ${new DatePipe('en-US').transform(new Date(), 'MM-dd-yyyy, h:mm a')}.`)
         }
         
@@ -927,7 +927,7 @@ export class RollevaluationComponent implements OnInit {
     this.perfApp.route = "evaluation"
     this.perfApp.CallAPI().subscribe(x => {
       console.log('added evaluation', x)
-      this.notification.success(`The Evaluations/Performance Goals Setting have been
+      this.notification.success(`The Performance Goals Setting have been
        successfully setup to be rolled out on ${new DatePipe('en-US').transform(new Date(), 'MM-dd-yyyy, h:mm a')}.`)
       this.router.navigate(['ea/evaluation-list'])
     }, error => {

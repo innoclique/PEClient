@@ -228,7 +228,7 @@ this.submitClicked=true;
       if(this.perfApp.requestBody.Manager)  this.perfApp.requestBody.Manager=this.perfApp.requestBody.Manager._id;
 
       this.perfApp.requestBody.CreatedBy=this.loginUser._id;
-      this.perfApp.requestBody.Organization=this.loginUser.Organization?this.loginUser.Organization._id:null ;
+      this.perfApp.requestBody.Organization=this.currentOrganization?this.currentOrganization._id:null ;
       this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
       this.perfApp.requestBody.ParentUser=this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id;
       this.perfApp.requestBody.IgnoreEvalAdminCreated=false;
@@ -478,6 +478,14 @@ getAllDepartments(){
       this.appRoles=c.AppRoles;
       this.jobLevels=c.JobLevels;
       console.log('lients data snnn',this.jobRoles);
+
+      this.appRoles.filter(e=>{ 
+        debugger
+        if (e.RoleName=="Employee") {
+          this.empForm.patchValue({ApplicationRole: [e._id] });
+        }   
+        
+      } )
     }
   })
 }

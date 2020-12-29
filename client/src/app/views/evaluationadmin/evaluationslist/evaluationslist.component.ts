@@ -161,7 +161,7 @@ export class EvaluationslistComponent implements OnInit {
   getGridColumnsForEmpKpi() {
     return [
       {
-        headerName: 'Employee', sortable: true, filter: true,
+        headerName: 'Employee', suppressSizeToFit:true, sortable: true, filter: true,
 
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee[0].FirstName}-${data.data.Employee[0].LastName}</span>` }
       },
@@ -209,7 +209,7 @@ export class EvaluationslistComponent implements OnInit {
   getGridColumnsForEmp() {
     return [
       {
-        headerName: 'Employee', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
+        headerName: 'Employee', sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
         // checkboxSelection: true,
         cellRenderer: (data) => {
           
@@ -402,6 +402,7 @@ export class EvaluationslistComponent implements OnInit {
   onEmpGridReady(params) {
     debugger
     this.EmpGridOptions.api = params.api; // To access the grids API
+    // params.api.sizeColumnsToFit();
   }
   public onEmpRowClicked(e) {
     if (e.event.target !== undefined) {
@@ -929,6 +930,10 @@ export class EvaluationslistComponent implements OnInit {
 
   }
 
+
+  onGridSizeChanged(params) {
+   // params.api.sizeColumnsToFit();
+}
   
   getEVPeriod(evRow){
 debugger

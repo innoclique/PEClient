@@ -16,13 +16,18 @@ export class PeerReviewListComponent implements OnInit {
   peerReviewList: any = [];
   currentRowItem: any = {};
   loginUser: any;
+  
+  public monthList = ["","January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December"]
   private subscriptions: Subscription[] = [];
+  currentOrganization: any;
   constructor(private authService: AuthService,
     private router: Router,
     private snack: NotificationService,
     private perfApp: PerfAppService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
 
   }
 
@@ -40,7 +45,10 @@ export class PeerReviewListComponent implements OnInit {
         return `${data.data.Manager[0].FirstName} ${data.data.Manager[0].LastName}`
       }
     },
-    { headerName: 'Evaluation Period', width: 240,field: 'EvaluationPeriod', sortable: true, filter: true },
+    { headerName: 'Evaluation Period', width: 240,field: 'EvaluationPeriod', sortable: true, filter: true
+    ,cellRenderer: (data) => {
+        return this.getEVPeriod();
+    } },
     { headerName: 'Evaluation Duration',width: 240, field: 'EvaluationDuration', sortable: true, filter: true },
     { headerName: 'Status', field: 'Status',width: 150, sortable: true, filter: true,
     cellRenderer: (data) => {
@@ -124,6 +132,18 @@ return 34;
 
   onGridReady(params) {
     params.api.sizeColumnsToFit();
+  }
+
+  
+  getEVPeriod(){
+
+    let year= new Date (this.currentOrganization.CreatedOn);
+    if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
+    return `${this.currentOrganization.EvaluationPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
+    }else{
+      return `${this.currentOrganization.EvaluationPeriod} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
+
+    }
   }
   
 }

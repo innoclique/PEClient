@@ -47,17 +47,17 @@ export class DefaultLayoutComponent implements OnInit {
     if (this.user) {
       if (this.user.SelectedRoles) {
         var navigationMenu = [];
-        if(this.user.Role.indexOf('EO')>-1){
+        if(this.user.Role.indexOf('EO')>-1  || this.user.SelectedRoles.indexOf("EO") !== -1){
           let dashboard = {
             "IsActive": true,
             "url": "/dashboard",
             "name": "Dashboard",
             "code": "Dashboard",
             "icon": "icon-calculator",
-            "badge": {
-              "variant": "info",
-              "text": "Home"
-            },
+            // "badge": {
+            //   "variant": "info",
+            //   "text": "Home"
+            // },
             "linkProps": {
               "routerLinkActive": "dashboard"
             }
@@ -138,7 +138,7 @@ export class DefaultLayoutComponent implements OnInit {
         this.navItems=navigationMenu;
 
 
-        if (this.user.SelectedRoles.indexOf('EA') > -1) {
+        if (this.user.SelectedRoles.indexOf('EA') > -1 || this.user.Role==='CSA') {
           navigationMenu.push(
             {
               "IsActive": true,
@@ -239,7 +239,7 @@ export class DefaultLayoutComponent implements OnInit {
 
         
 
-        return  this.navItems;
+       // return  this.navItems;
         }
         
         if(this.user.Role==='CSA'){
@@ -247,32 +247,35 @@ export class DefaultLayoutComponent implements OnInit {
             "IsActive": true,
             "__v": 0,
             "url": "/csa/dashboard",
-            "name": "Dashboard",
-            "code": "Dashboard",
+            "name": "CSA Dashboard",
+            "code": "CSA Dashboard",
             "icon": "icon-calculator",
-            "badge": {
-                "variant": "info",
-                "text": "Home"
-            },
+            // "badge": {
+            //     "variant": "info",
+            //     "text": "Home"
+            // },
             "linkProps": {
                 "routerLinkActive": "dashboard"
             }
-        }, {
-            "IsActive": true,
-            "url": "/ea/setup-employee",
-            "name": "Set up Employees",
-            "code": "Employees",
-            "icon": "icon-user-follow",
-            "linkProps": {
-                "routerLinkActive": "employee"
-            }
-        }, {
-            "IsActive": true,
-            "url": "/ea/evaluation-list",
-            "name": "Evaluations",
-            "code": "Evaluations",
-            "icon": "icon-star"
-        }, {
+        }, 
+        // {
+        //     "IsActive": true,
+        //     "url": "/ea/setup-employee",
+        //     "name": "Set up Employees",
+        //     "code": "Employees",
+        //     "icon": "icon-user-follow",
+        //     "linkProps": {
+        //         "routerLinkActive": "employee"
+        //     }
+        // }, {
+        //     "IsActive": true,
+        //     "url": "/ea/evaluation-list",
+        //     "name": "Evaluations",
+        //     "code": "Evaluations",
+        //     "icon": "icon-star"
+        // },
+        
+        {
             "IsActive": true,
             "url": "/ea/settings",
             "name": "Backend Setup",
@@ -289,8 +292,8 @@ export class DefaultLayoutComponent implements OnInit {
          {
             "IsActive": true,
             "url": "/ea/reports",
-            "name": "Reports",
-            "code": "Reports",
+            "name": "CSA Reports",
+            "code": "CSA Reports",
             "icon": "icon-list",
           "children":[ {
               "IsActive": true,
@@ -315,12 +318,12 @@ export class DefaultLayoutComponent implements OnInit {
         //     "icon": "icon-star"
         // }
       ]
-        this.navItems=navigationMenu;
+        this.navItems=[...navigationMenu, ...this.navItems];
         }
 
       
         
-      
+        return  this.navItems; 
       }
     }
   }
