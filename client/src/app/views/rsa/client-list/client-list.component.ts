@@ -32,6 +32,9 @@ export class ClientListComponent implements OnInit {
 
   };
   industries: any;
+  appScores: any = [];
+  kpiStatus: any = [];
+  coachingRemDays: any = [];
   
   public clientData: any=[]
   public monthList = ["January", "February", "March", "April", "May", "June", "July",
@@ -99,9 +102,10 @@ export class ClientListComponent implements OnInit {
     this.router.navigate(['rsa/setup-clients'])
   }
   ngOnInit(): void {
+    this.getAllBasicData();
     this.getClients();
     this.initForm();
-    this.getIndustries();
+    //this.getIndustries();
     this.sameAsContactChange()
     this.currentUser=this.authService.getCurrentUser();
   }
@@ -525,6 +529,24 @@ onCSCSelect(data){
     }, error => {
       this.notification.error(error.error.message)
     });
+  }
+
+  
+  getAllBasicData() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetSetupBasicData",
+    this.perfApp.requestBody = {}
+      this.perfApp.CallAPI().subscribe(c => {
+
+        if (c) {
+
+          this.industries = c.Industries;
+          this.appScores = c.KpiScore;
+          this.kpiStatus = c.KpiStatus;
+          this.coachingRemDays = c.coachingRem;
+          
+        }
+      })
   }
   //#region  update client related
   public updateClient() {

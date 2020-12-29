@@ -34,6 +34,9 @@ export class SetupclientComponent implements OnInit {
 
   };
   industries: any;
+  appScores: any = [];
+  kpiStatus: any = [];
+  coachingRemDays: any = [];
   evaluationPeriods: any;
   clientFormData: any = {};
   isCreate:Boolean=true;
@@ -87,7 +90,8 @@ export class SetupclientComponent implements OnInit {
     }));
 
     this.initForm();
-    this.getIndustries();
+    this.getAllBasicData();
+    // this.getIndustries();
     this.sameAsContactChange();
     this.mandateStartMonth();
     this.setEndMonth();
@@ -555,6 +559,28 @@ action='Update'
     }
 
     this.saveClient();
+  }
+
+
+
+
+
+  
+  getAllBasicData() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetSetupBasicData",
+    this.perfApp.requestBody = {}
+      this.perfApp.CallAPI().subscribe(c => {
+
+        if (c) {
+
+          this.industries = c.Industries;
+          this.appScores = c.KpiScore;
+          this.kpiStatus = c.KpiStatus;
+          this.coachingRemDays = c.coachingRem;
+          
+        }
+      })
   }
 
 

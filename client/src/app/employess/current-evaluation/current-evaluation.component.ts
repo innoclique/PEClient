@@ -36,6 +36,9 @@ export class CurrentEvaluationComponent implements OnInit {
   DirectReporteeScoreCard: any;
   isContentOpen: boolean = false;
   pgSubmitStatus="";
+  appScores: any = [];
+  kpiStatus: any = [];
+  coachingRemDays: any = [];
   public alert =new AlertDialog();
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -53,6 +56,7 @@ export class CurrentEvaluationComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.getAllKpiBasicData();
     this.initCompetencyForm();
     this.initFinalRatingForm();
     this.getTabsData();
@@ -411,6 +415,29 @@ export class CurrentEvaluationComponent implements OnInit {
 
 
   }
+
+
+
+
+  getAllKpiBasicData() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetKpiSetupBasicData";
+    this.perfApp.requestBody = { 'empId': this.loginUser._id ,
+    'orgId':this.authService.getOrganization()._id
+  }
+      this.perfApp.CallAPI().subscribe(c => {
+
+        if (c) {
+
+          this.appScores = c.KpiScore;
+          this.kpiStatus = c.KpiStatus;
+          this.coachingRemDays = c.coachingRem;
+          this.currEvaluation = c.evaluation;         
+          
+        }
+      })
+  }
+
   cancelFinalRating() {
 
   }

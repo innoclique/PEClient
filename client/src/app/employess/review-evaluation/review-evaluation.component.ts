@@ -39,6 +39,9 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   employeeCompetencyList: any;
   managerCompetencyList: any;
   questions$: Observable<CompetencyBase<any>[]>;
+  appScores: any = [];
+  kpiStatus: any = [];
+  coachingRemDays: any = [];
   currEvaluation: any;
   public oneAtATime: boolean = true;
   public FinalRatingForm: FormGroup;
@@ -92,6 +95,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
 
 
   callInitApis(){
+  this.getAllKpiBasicData();
       this.initCompetencyForm();
       this.initFinalRatingForm();
       this.getTabsData();
@@ -592,6 +596,29 @@ if (this.FinalRatingForm.value.TSReqRevision &&
   cancelFinalRating() {
 
   }
+
+  
+
+  getAllKpiBasicData() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetKpiSetupBasicData";
+    this.perfApp.requestBody = { 'empId': this.loginUser._id ,
+    'orgId':this.authService.getOrganization()._id
+  }
+      this.perfApp.CallAPI().subscribe(c => {
+
+        if (c) {
+
+          this.appScores = c.KpiScore;
+          this.kpiStatus = c.KpiStatus;
+          this.coachingRemDays = c.coachingRem;
+          this.currEvaluation = c.evaluation;         
+          
+        }
+      })
+  }
+
+
   getAverage(arr) {
     
     var sum = 0;

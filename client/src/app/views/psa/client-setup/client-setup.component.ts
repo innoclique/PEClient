@@ -35,6 +35,9 @@ export class ClientSetupComponent implements OnInit {
 
   };
   industries: any;
+  appScores: any = [];
+  kpiStatus: any = [];
+  coachingRemDays: any = [];
   public resellerList: any=[];
   public clientData: any=[]
   public monthList = ["January", "February", "March", "April", "May", "June", "July",
@@ -163,9 +166,10 @@ export class ClientSetupComponent implements OnInit {
     this.router.navigate(['/psa/setup-reseller'])
   }
   ngOnInit(): void {
+    this.getAllBasicData();
     this.getClients();
     this.initForm();
-    this.getIndustries();
+    // this.getIndustries();
     this.sameAsContactChange()
     this.currentUser=this.authService.getCurrentUser();
     
@@ -677,6 +681,25 @@ onCSCSelect(data){
       this.notification.error(error.error.message)
     });
   }
+
+  getAllBasicData() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetSetupBasicData",
+    this.perfApp.requestBody = {}
+      this.perfApp.CallAPI().subscribe(c => {
+
+        if (c) {
+
+          this.industries = c.Industries;
+          this.appScores = c.KpiScore;
+          this.kpiStatus = c.KpiStatus;
+          this.coachingRemDays = c.coachingRem;
+          
+        }
+      })
+  }
+
+
   //#region  update client related
   public updateClient() {
     if (this.clientForm.invalid) {

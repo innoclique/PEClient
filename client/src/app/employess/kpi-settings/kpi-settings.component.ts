@@ -312,11 +312,11 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
         // this.kpiForm.get('MeasurementCriteria').setErrors(null);
         // this.kpiForm.get('MeasurementCriteria').markAsUntouched;
 this.snack.success(this.translate.instant(`KPI added Successfully`));
-if (this.currentAction=='create') {
-c.selected=false;
-}else if (this.currentAction=='edit') {
+// if (this.currentAction=='create') {
+// c.selected=false;
+// }else if (this.currentAction=='edit') {
   c.selected=true;
-  }
+ // }
 this.toggleSelection(c,null);
         
       }
@@ -630,14 +630,14 @@ this.authService.setIsPGSubmitStatus("true");
     let f;
   if(event)  item.selected=event.checked;
     if(this.currentAction=='create'){
-     f=!item.selected;
-    item.selected = !item.selected;
+     f=item.selected;
+    item.selected = item.selected;
     }
     if ( item.selected==true) {
       this.selectedItems.push(item);
       // this.changeCallback( this.selectedItems );
     } else if (item.selected==false) {
-      const i = this.selectedItems.findIndex(value => value.item === item.item);
+      const i = this.selectedItems.findIndex(value => value._id === item._id);
       this.selectedItems.splice(i, 1);
       //this.changeCallback( this.selectedItems );
     }
