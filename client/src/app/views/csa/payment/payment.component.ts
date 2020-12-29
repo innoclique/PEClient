@@ -293,7 +293,8 @@ export class PaymentComponent implements OnInit {
   }
   
   proceedToPay(){
-    let requestBody:any={
+    this.router.navigate(['csa/dopayment',{totalAmount:this.paymentSummary.TOTAL_PAYABLE_AMOUNT,paymentreleaseId:this.paymentModel.paymentreleaseId}],{ skipLocationChange: true });
+    /*let requestBody:any={
       Status:'Complete',
       paymentreleaseId:this.paymentModel.paymentreleaseId
     }
@@ -304,10 +305,12 @@ export class PaymentComponent implements OnInit {
       this.notification.success(`Payment Success.`);
       this.emoModal.hide();
       window.location.reload();
-     })
+     })*/
   }
   closeForm(){
     this.emoModal.hide();
   }
-  
+  loadPaymentHistory(){
+    this.router.navigate(['csa/payment-history',{Organization:this.currentOrganization._id}],{ skipLocationChange: true });
+  }
 }

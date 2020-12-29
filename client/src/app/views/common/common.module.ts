@@ -12,11 +12,12 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CreateEmployeeComponent } from './create-employee/create-employee.component';
 import { CustomMaterialModule } from '../../custom-material/custom-material.module';
+import { PaymentHistoryComponent } from './payment-history/payment-history.component';
 
 
 
 @NgModule({
-  declarations: [ CSCComponent, SetupEmployeeComponent, CreateEmployeeComponent ],
+  declarations: [ CSCComponent, SetupEmployeeComponent, CreateEmployeeComponent, PaymentHistoryComponent ],
   imports: [
     CommonModule,
     FormsModule,

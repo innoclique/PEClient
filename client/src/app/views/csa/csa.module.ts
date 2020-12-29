@@ -18,7 +18,8 @@ import { CSAPaymentSummary } from "./reports/summary/payment/csaPaymentSummary.c
 import { CSAEvaluationsSummary } from "./reports/summary/evaluations/csaEvaluationSummary.component";
 import { PaymentComponent } from './payment/payment.component';
 import { AdhocPaymentComponent } from './adhoc-payment/adhoc-payment.component';
-
+import { PaymentGatewayComponent } from './payment-gateway/payment-gateway.component';
+import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -47,9 +48,19 @@ export const projectRoutes: Routes = [
       data: { title: 'Payment' }
     },
     {
+      path: 'payment-history',
+      component: PaymentHistoryComponent,
+      data: { title: 'Payment history' }
+    },
+    {
       path: 'reports/evaluationsSummary',
       component: CSAEvaluationsSummary,
       data: { title: 'Evaluation Summary' }
+    },
+    {
+      path: 'dopayment',
+      component: PaymentGatewayComponent,
+      data: { title: 'Payment Gateway' }
     },
     { path: 'dashboard', component: DashboardComponent,data: {
       title: 'Dashboard'
@@ -67,7 +78,8 @@ export const projectRoutes: Routes = [
      CSAPaymentSummary,
     CSAEvaluationsSummary,
     PaymentComponent,
-    AdhocPaymentComponent
+    AdhocPaymentComponent,
+    PaymentGatewayComponent
     
   ],
   imports: [
