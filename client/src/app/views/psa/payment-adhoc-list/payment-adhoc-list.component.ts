@@ -26,7 +26,8 @@ export class PaymentAdhocListComponent implements OnInit {
     RangeId:"",
     NoOfEmployees:0,
     NoNeeded:0,
-    Status:""
+    Status:"",
+    Paymentdate:moment().toDate()
   };
   paymentStructure:any={
     COST_PER_PA:0,
@@ -47,6 +48,7 @@ export class PaymentAdhocListComponent implements OnInit {
   }
   currentOrganization:any={};
   isActionButtonEnabled:Boolean=false;
+  paymentDate:any;
   constructor(
     private perfApp: PerfAppService,
     private notification: NotificationService,
@@ -157,8 +159,11 @@ export class PaymentAdhocListComponent implements OnInit {
 
   orgnizationDetails(){
       this.paymentReleaseData;
-      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
+      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,Paymentdate} = this.paymentReleaseData;
       this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
+      if(Paymentdate){
+        this.paymentDate = moment(Paymentdate).format("MM/DD/YYYY");
+      }
       let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
       let {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT} = this.paymentReleaseData;
       this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};

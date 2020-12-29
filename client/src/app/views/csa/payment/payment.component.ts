@@ -306,5 +306,8 @@ export class PaymentComponent implements OnInit {
       window.location.reload();
      })
   }
+  closeForm(){
+    this.emoModal.hide();
+  }
   
 }
