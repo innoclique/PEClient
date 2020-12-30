@@ -66,7 +66,7 @@ actor:any;
   msSelVal="";
   currEvaluation: any;
   unSubmitedCount=0;
-  scoreUnSubmitedCount=0;
+  scoreUnSubmitedCount:any;
 
 
   

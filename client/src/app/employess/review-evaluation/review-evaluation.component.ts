@@ -494,6 +494,12 @@ if (this.FinalRatingForm.value.TSReqRevision &&
     this.snack.error('Revision Comments is mandatory')
     return;
 }
+
+if(this.FinalRatingForm.value.ManagerOverallRating==''){
+  this.snack.error('Rating is mandatory')
+  return;
+}
+
     this.saveFinalRating(false)
   }
   draftFinalRating() {
