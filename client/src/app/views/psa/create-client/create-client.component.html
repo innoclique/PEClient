@@ -51,7 +51,7 @@
                       <option *ngFor="let i of industries" [value]="i.Code">{{i.Name}}</option>
                     </select>
                     <div *ngIf=" isFormSubmitted &&   f.Industry.errors" class="invalid-feedback">
-                      <div *ngIf="f.Industry.errors.required">Industry is required</div>
+                      <div *ngIf="f.Industry.errors.required">Industry is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -78,7 +78,7 @@
                       [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Address.errors }" formControlName="Address"
                       name="Address" required>  </textarea>
                     <div *ngIf="isFormSubmitted && f.Address.errors" class="invalid-feedback">
-                      <div *ngIf="f.Address.errors.required">Address is required</div>
+                      <div *ngIf="f.Address.errors.required">Address is mandatory</div>
                       <div *ngIf="f.Address.errors.minlength">Address must be at least 4 characters </div>
                       <div *ngIf="f.Address.errors.hasAddressSplChars">Allowed special characters are
                         (.,-,(,),&,#,:,/) </div>
@@ -97,7 +97,7 @@
                     <input  maxlength="8" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.ZipCode.errors }"
                       formControlName="ZipCode" class="form-control">
                     <div *ngIf=" isFormSubmitted && f.ZipCode.errors" class="invalid-feedback">
-                      <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is required</div>
+                      <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is mandatory</div>
                       <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                     </div>
                   </div>
@@ -183,9 +183,9 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Count</span>
                     </div>
-                    <input type="number" class="form-control" min="1"
+                    <input type="test" class="form-control" maxlength="5" numbersOnly type="text" 
                       [ngClass]="{ 'is-invalid': isFormSubmitted  && f.UsageCount.errors}" formControlName="UsageCount"
-                      name="UsageCount">
+                      name="UsageCount" (keypress)="keyPressNumbers($event)">
 
                     <div *ngIf=" isFormSubmitted  && f.UsageCount.errors" class="invalid-feedback">
                       <div *ngIf="f.UsageCount.errors.required">Count of Employees is mandatory</div>
@@ -258,7 +258,7 @@
                       [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.AdminPhone.errors }"
                       formControlName="AdminPhone">
                     <div *ngIf="isFormSubmitted && f.AdminPhone.errors" class="invalid-feedback">
-                      <div *ngIf="f.AdminPhone.errors.required">Admin Phone is required</div>
+                      <div *ngIf="f.AdminPhone.errors.required">Admin Phone is mandatory</div>
                       <div *ngIf="f.AdminPhone.errors.pattern">Phone can accept only 0-9 and - format should be
                         (01-1234567890).</div>
                     </div>
@@ -273,10 +273,13 @@
                     </div>
                     <input class="form-control" type="text"
                       [ngClass]="{ 'is-invalid': isFormSubmitted &&  f.AdminEmail.errors }"
-                      formControlName="AdminEmail">
+                      formControlName="AdminEmail"
+                      (keypress)="keyPressEmail($event)" required
+                      >
                     <div *ngIf="isFormSubmitted && f.AdminEmail.errors" class="invalid-feedback">
                       <div *ngIf="f.AdminEmail.errors.maxlength">Email can be 500 characters long.</div>
                       <div *ngIf="f.AdminEmail.errors.email">Email accepts a-z,A-Z,0-9,.,-,@ characters only. </div>
+                      <div *ngIf="f.AdminEmail.errors.required">Admin Email is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -298,14 +301,14 @@
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text ">First Name</span>
+                      <span class="input-group-text redStar">First Name</span>
                     </div>
                     <input maxlength="200" type="text" class="form-control"
                       [ngClass]="{ 'is-invalid': !f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonFirstName.errors }"
                       formControlName="ContactPersonFirstName" required>
                     <div *ngIf="isFormSubmitted && !f.SameAsAdmin.value && a.ContactPersonFirstName.errors"
                       class="invalid-feedback">
-                      <div *ngIf="a.ContactPersonFirstName.errors.required">Contact Person FirstName is mandatory</div>
+                      <div *ngIf="a.ContactPersonFirstName.errors.required">Contact Person First Name is mandatory</div>
                       <div *ngIf="a.ContactPersonFirstName.errors.minlength"> First Name can be atleast 2 characters
                         long</div>
                       <div *ngIf="a.ContactPersonFirstName.errors.maxlength"> First Name can be 200 characters long
@@ -339,14 +342,14 @@
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text ">Last Name</span>
+                        <span class="input-group-text redStar">Last Name</span>
                       </div>
                       <input class="form-control" type="text"
                         [ngClass]="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonLastName.errors "
                         formControlName="ContactPersonLastName">
                       <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted && a.ContactPersonLastName.errors"
                         class="invalid-feedback">
-                        <div *ngIf="a.ContactPersonLastName.errors.required">Contact Person LastName is mandatory</div>
+                        <div *ngIf="a.ContactPersonLastName.errors.required">Contact Person Last Name is mandatory</div>
 
                         <div *ngIf="a.ContactPersonLastName.errors.maxlength"> Last Name can be 200 characters long
                         </div>
@@ -360,14 +363,14 @@
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text ">Phone</span>
+                        <span class="input-group-text redStar">Phone</span>
                       </div>
                       <input numbersOnly class="form-control" type="text"
                         [ngClass]="{ 'is-invalid': !f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors}"
                         formControlName="ContactPersonPhone">
                       <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors"
                         class="invalid-feedback">
-                        <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is required</div>
+                        <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is mandatory</div>
                         <div *ngIf="a.ContactPersonPhone.errors.pattern">Phone can accept only 0-9 and - format should be
                           (01-1234567890).</div>
                       </div>
@@ -378,14 +381,16 @@
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text ">Email</span>
+                        <span class="input-group-text redStar">Email</span>
                       </div>
                       <input class="form-control" type="text"
                         [ngClass]="{ 'is-invalid': (!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonEmail.errors )}"
-                        formControlName="ContactPersonEmail">
+                        formControlName="ContactPersonEmail"
+                        (keypress)="keyPressEmail($event)">
                       <div *ngIf="isFormSubmitted && !f.SameAsAdmin.value && a.ContactPersonEmail.errors"
                         class="invalid-feedback">
-                        <div *ngIf="a.ContactPersonEmail.errors.required">Contact Person Email is required</div>
+                        <div *ngIf="a.ContactPersonEmail.errors.required">Contact Person Email is mandatory</div>
+                        <div *ngIf="a.ContactPersonEmail.errors.email">Email accepts a-z,A-Z,0-9,.,-,@ characters only. </div>
                       </div>
                     </div>
                   </div>
@@ -426,7 +431,7 @@
                       </mat-select>
 
                       <div *ngIf="isFormSubmitted && f.EvaluationModels.errors" class="invalid-feedback">
-                        <div *ngIf="f.EvaluationModels.errors.required">Evaluation Model is required</div>
+                        <div *ngIf="f.EvaluationModels.errors.required">Evaluation Model is mandatory</div>
                       </div>
                     </div>
                   </div>
@@ -450,7 +455,7 @@
 
                       </select>
                       <div *ngIf="isFormSubmitted && f.EvaluationPeriod.errors" class="invalid-feedback">
-                        <div *ngIf="f.EvaluationPeriod.errors.required">Evalution Period is required</div>
+                        <div *ngIf="f.EvaluationPeriod.errors.required">Evalution Period is mandatory</div>
                       </div>
                     </div>
                   </div>
@@ -480,7 +485,7 @@
                         <option value='12'>December</option>
                       </select>
                       <div *ngIf="isFormSubmitted && f.StartMonth.errors" class="invalid-feedback">
-                        <div *ngIf="f.StartMonth.errors.required">Start Month is required</div>
+                        <div *ngIf="f.StartMonth.errors.required">Start Month is mandatory</div>
                       </div>
 
                     </div>

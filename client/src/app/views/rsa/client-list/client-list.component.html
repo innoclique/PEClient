@@ -66,7 +66,7 @@
                     <input max="500" class="form-control" type="text" formControlName="Name" name="Name"
                       [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Name.errors }" required>
                     <div *ngIf=" isFormSubmitted  && f.Name.errors" class="invalid-feedback">
-                      <div *ngIf="f.Name.errors.required">Organization Name is required</div>
+                      <div *ngIf="f.Name.errors.required">Organization Name is mandatory</div>
                       <div *ngIf="f.Name.errors.minlength">Organization Name must be at least 2 characters </div>
                       <div *ngIf="f.Name.errors.hasFirstCharNum">First character should be character </div>
                       <div *ngIf="f.Name.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:) </div>
@@ -88,7 +88,7 @@
                       <option *ngFor="let i of industries" [value]="i.Code">{{i.Name}}</option>
                     </select>
                     <div *ngIf=" isFormSubmitted &&   f.Industry.errors" class="invalid-feedback">
-                      <div *ngIf="f.Industry.errors.required">Industry is required</div>
+                      <div *ngIf="f.Industry.errors.required">Industry is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -116,7 +116,7 @@
                       [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Address.errors }" formControlName="Address"
                       name="Address" required>  </textarea>
                     <div *ngIf="isFormSubmitted && f.Address.errors" class="invalid-feedback">
-                      <div *ngIf="f.Address.errors.required">Address is required</div>
+                      <div *ngIf="f.Address.errors.required">Address is mandatory</div>
                       <div *ngIf="f.Address.errors.minlength">Address must be at least 4 characters </div>
                       <div *ngIf="f.Address.errors.hasAddressSplChars">Allowed special characters are
                         (.,-,(,),&,#,:,/) </div>
@@ -137,7 +137,7 @@
   
   
                     <div *ngIf=" isFormSubmitted && f.ZipCode.errors" class="invalid-feedback">
-                      <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is required</div>
+                      <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is mandatory</div>
                       <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                     </div>
                   </div>
@@ -155,7 +155,7 @@
                     <input maxlength="12" type="text" class="form-control"
                       [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Phone.errors }" formControlName="Phone" required>
                     <div *ngIf="isFormSubmitted  && f.Phone.errors" class="invalid-feedback">
-                      <div *ngIf="f.Phone.errors.required">Phone Number is required</div>
+                      <div *ngIf="f.Phone.errors.required">Phone Number is mandatory</div>
   
                       <div *ngIf="f.Phone.errors.pattern">Phone Number must be 10 digit Number.</div>
   
@@ -185,7 +185,7 @@
                       [ngClass]="{ 'is-invalid':isFormSubmitted && f.Email.errors}" formControlName="Email" name="Email"
                       required>
                     <div *ngIf="isFormSubmitted   && f.Email.errors" class="invalid-feedback">
-                      <div *ngIf="f.Email.errors.required">Email is required</div>
+                      <div *ngIf="f.Email.errors.required">Email is mandatory</div>
                       <div *ngIf="f.Email.errors.email">Email Must be a valid email address </div>
                     </div>
                   </div>
@@ -208,7 +208,7 @@
                 </label>
   
                 <div *ngIf="isFormSubmitted && f.ClientType.errors" class="invalid-feedback">
-                  <div *ngIf="f.ClientType.errors.required">Client Type is required</div>
+                  <div *ngIf="f.ClientType.errors.required">Client Type is mandatory</div>
                 </div>
   
               </div>
@@ -243,7 +243,7 @@
                       name="UsageCount">
   
                     <div *ngIf=" isFormSubmitted  && f.UsageCount.errors" class="invalid-feedback">
-                      <div *ngIf="f.UsageCount.errors.required">Usage Count is required</div>
+                      <div *ngIf="f.UsageCount.errors.required">Usage Count is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -262,7 +262,7 @@
                       [ngClass]="{ 'is-invalid': isFormSubmitted && f.AdminFirstName.invalid }"
                       formControlName="AdminFirstName" required>
                     <div *ngIf="isFormSubmitted && f.AdminFirstName.errors" class="invalid-feedback">
-                      <div *ngIf="f.AdminFirstName.errors.required">Admin First Name is required</div>
+                      <div *ngIf="f.AdminFirstName.errors.required">Admin First Name is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -287,7 +287,7 @@
                       [ngClass]="{ 'is-invalid': isFormSubmitted   &&  f.AdminLastName.errors}"
                       formControlName="AdminLastName">
                     <div *ngIf="isFormSubmitted && f.AdminLastName.errors" class="invalid-feedback">
-                      <div *ngIf="f.AdminLastName.errors.required">Admin LastName is required</div>
+                      <div *ngIf="f.AdminLastName.errors.required">Admin Last Name is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -302,7 +302,7 @@
                       [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.AdminPhone.errors }"
                       formControlName="AdminPhone">
                     <div *ngIf="isFormSubmitted && f.AdminPhone.errors" class="invalid-feedback">
-                      <div *ngIf="f.AdminPhone.errors.required">Admin Phone is required</div>
+                      <div *ngIf="f.AdminPhone.errors.required">Admin Phone is mandatory</div>
                       <div *ngIf="f.AdminPhone.errors.pattern">Admin Phone Number must be 10 digit Number.</div>
                     </div>
                   </div>
@@ -318,7 +318,7 @@
                       [ngClass]="{ 'is-invalid': isFormSubmitted &&  f.AdminEmail.errors }"
                       formControlName="AdminEmail">
                     <div *ngIf="isFormSubmitted && f.AdminEmail.errors" class="invalid-feedback">
-                      <div *ngIf="f.AdminEmail.errors.required">Admin Email is required</div>
+                      <div *ngIf="f.AdminEmail.errors.required">Admin Email is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -348,7 +348,7 @@
                       formControlName="ContactPersonFirstName" required>
                     <div *ngIf="isFormSubmitted && !f.SameAsAdmin.value && a.ContactPersonFirstName.errors"
                       class="invalid-feedback">
-                      <div *ngIf="a.ContactPersonFirstName.errors.required">Contact Person FirstName is required</div>
+                      <div *ngIf="a.ContactPersonFirstName.errors.required">Contact Person FirstName is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -374,7 +374,7 @@
                       formControlName="ContactPersonLastName">
                     <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted && a.ContactPersonLastName.errors"
                       class="invalid-feedback">
-                      <div *ngIf="a.ContactPersonLastName.errors.required">Contact Person LastName is required</div>
+                      <div *ngIf="a.ContactPersonLastName.errors.required">Contact Person LastName is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -390,7 +390,7 @@
                       formControlName="ContactPersonPhone">
                     <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors"
                       class="invalid-feedback">
-                      <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is required</div>
+                      <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is mandatory</div>
                       <div *ngIf="a.ContactPersonPhone.errors.pattern">Contact Person Phone Number must be 10 digit
                         Number.</div>
                     </div>
@@ -408,7 +408,7 @@
                       formControlName="ContactPersonEmail">
                     <div *ngIf="isFormSubmitted && !f.SameAsAdmin.value && a.ContactPersonEmail.errors"
                       class="invalid-feedback">
-                      <div *ngIf="a.ContactPersonEmail.errors.required">Admin Email is required</div>
+                      <div *ngIf="a.ContactPersonEmail.errors.required">Admin Email is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -455,7 +455,7 @@
                       <option value="3">Option #3</option>
                     </select>
                     <div *ngIf="isFormSubmitted && f.EvaluationModels.errors" class="invalid-feedback">
-                      <div *ngIf="f.EvaluationModels.errors.required">Evaluation Model is required</div>
+                      <div *ngIf="f.EvaluationModels.errors.required">Evaluation Model is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -477,7 +477,7 @@
   
                     </select>
                     <div *ngIf="isFormSubmitted && f.EvaluationPeriod.errors" class="invalid-feedback">
-                      <div *ngIf="f.EvaluationPeriod.errors.required">Evalution Period is required</div>
+                      <div *ngIf="f.EvaluationPeriod.errors.required">Evalution Period is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -506,7 +506,7 @@
                       <option value='12'>December</option>
                     </select>
                     <div *ngIf="isFormSubmitted && f.StartMonth.errors" class="invalid-feedback">
-                      <div *ngIf="f.StartMonth.errors.required">Start Month is required</div>
+                      <div *ngIf="f.StartMonth.errors.required">Start Month is mandatory</div>
                     </div>
   
                   </div>
@@ -584,7 +584,7 @@
                 </label>
   
                 <!-- <div *ngIf="isFormSubmitted && f.IsActive.errors" class="invalid-feedback">
-          <div *ngIf="f.IsActive.errors.required">Client Type is required</div>
+          <div *ngIf="f.IsActive.errors.required">Client Type is mandatory</div>
         </div> -->
   
               </div>

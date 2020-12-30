@@ -542,19 +542,19 @@ action='Update'
     // }
     debugger
     if(this.clientForm.value.Name==="" || this.clientForm.value.Industry===""){
-      this.notification.error('Organization Name is required')
+      this.notification.error('Organization Name is mandatory')
       return;
     }
     if( this.clientForm.value.Industry===""){
-      this.notification.error('Industry is required')
+      this.notification.error('Industry is mandatory')
       return;
     }
     if(!this.clientForm.value.Email){
-      this.notification.error('Email is required')
+      this.notification.error('Email is mandatory')
       return;
     }
     if(!this.clientForm.value.AdminEmail){
-      this.notification.error('Admin Email is required')
+      this.notification.error('Admin Email is mandatory')
       return;
     }
 

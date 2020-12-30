@@ -67,7 +67,7 @@
                         formControlName="FirstName"  name="FirstName" required  >
                      
                         <div *ngIf="f.FirstName.touched && f.FirstName.invalid" class="invalid-feedback">
-                          <div *ngIf="f.FirstName.errors.required">First Name is required</div>
+                          <div *ngIf="f.FirstName.errors.required">First Name is mandatory</div>
                           <div *ngIf="f.FirstName.errors.minlength">First Name must be at least 2 characters  </div>
                           <div *ngIf="f.FirstName.errors.hasFirstCharNum">First character should be character  </div>
                           <div *ngIf="f.FirstName.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)   </div>
@@ -106,7 +106,7 @@
                         formControlName="LastName"  name="LastName" required >
 
                         <div *ngIf="f.LastName.touched && f.LastName.invalid" class="invalid-feedback">
-                          <div *ngIf="f.LastName.errors.required">Last Name is required</div>
+                          <div *ngIf="f.LastName.errors.required">Last Name is mandatory</div>
                           <div *ngIf="f.LastName.errors.minlength">Last Name must be at least 1 characters  </div>
                           <div *ngIf="f.LastName.errors.hasFirstCharNum">First character should be character  </div>
                           <div *ngIf="f.LastName.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)   </div>
@@ -133,7 +133,7 @@
                         formControlName="Address"  name="Address" required >  </textarea>
 
                         <div *ngIf="f.Address.touched && f.Address.invalid" class="invalid-feedback">
-                          <div *ngIf="f.Address.errors.required">Address is required</div>
+                          <div *ngIf="f.Address.errors.required">Address is mandatory</div>
                           <div *ngIf="f.Address.errors.minlength">First Name must be at least 4 characters  </div>
                           <div *ngIf="f.Address.errors.hasAddressSplChars">Allowed special characters are (.,-,(,),&,#,:,/)  </div>
                       </div>
@@ -154,7 +154,7 @@
                         >
 
                         <div *ngIf="f.PhoneNumber.touched && f.PhoneNumber.invalid" class="invalid-feedback">
-                          <!-- <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div> -->
+                          <!-- <div *ngIf="f.PhoneNumber.errors.required">Phone Number is mandatory</div> -->
                           <div *ngIf="f.PhoneNumber.errors.minlength">Phone Number must be at least 10 characters  </div>
                           <div *ngIf="f.PhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
 
@@ -229,7 +229,7 @@
                     [ngClass]="{ 'is-invalid': f.ZipCode.touched  &&  f.ZipCode.invalid }"
                     formControlName="ZipCode"  name="ZipCode" required  >
                     <div *ngIf="f.ZipCode.touched && f.ZipCode.invalid" class="invalid-feedback">
-                      <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is required</div>
+                      <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is mandatory</div>
                      <div *ngIf="f.ZipCode.errors.minlength">Pin/Zip Code must be at least 5 characters  </div>
                       <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                   </div>
@@ -250,7 +250,7 @@
                     formControlName="Email"  name="Email" required >
                   
                     <div *ngIf="f.Email.touched && f.Email.invalid" class="invalid-feedback">
-                      <div *ngIf="f.Email.errors.required">Email is required</div>
+                      <div *ngIf="f.Email.errors.required">Email is mandatory</div>
                       <div *ngIf="f.Email.errors.email">Email Must be a valid email address </div>
                   </div>
                   </div>
@@ -269,7 +269,7 @@
                         formControlName="Title"  name="Title" required  >
                      
                         <div *ngIf="f.Title.touched && f.Title.invalid" class="invalid-feedback">
-                          <div *ngIf="f.Title.errors.required">Title is required</div>
+                          <div *ngIf="f.Title.errors.required">Title is mandatory</div>
                           <div *ngIf="f.Title.errors.minlength">Title must be at least 2 characters  </div>
                          
                       </div>
@@ -299,7 +299,7 @@
                       
                     </select>
                     <div *ngIf="f.Department.touched && f.Department.invalid" class="invalid-feedback">
-                      <div *ngIf="f.Department.errors.required">Department is required</div>
+                      <div *ngIf="f.Department.errors.required">Department is mandatory</div>
                   </div>
                   </div>
                 </div>
@@ -328,7 +328,7 @@
                           
                         </select>
                     <div *ngIf="f.JobRole.touched && f.JobRole.invalid" class="invalid-feedback">
-                      <div *ngIf="f.JobRole.errors.required">Job Role is required</div>
+                      <div *ngIf="f.JobRole.errors.required">Job Role is mandatory</div>
                   </div>
                   </div>
                 </div>
@@ -348,7 +348,7 @@
                       
                     </select>
                     <div *ngIf="f.JobLevel.touched && f.JobLevel.invalid" class="invalid-feedback">
-                      <div *ngIf="f.JobLevel.errors.required">Job Level is required</div>
+                      <div *ngIf="f.JobLevel.errors.required">Job Level is mandatory</div>
                   </div>
                   </div>
                 </div>
@@ -384,7 +384,7 @@
            </mat-autocomplete>
 
            <div *ngIf="(f.Manager.touched) && f.Manager.invalid" class="invalid-feedback">
-            <div *ngIf="f.Manager.errors.required">Manager is required</div>
+            <div *ngIf="f.Manager.errors.required">Manager is mandatory</div>
           </div>
                 </div>
               </div>
@@ -412,7 +412,7 @@
                   </mat-option>
                  </mat-autocomplete>
                  <!-- <div *ngIf="f.CopiesTo.touched && f.CopiesTo.invalid" class="invalid-feedback">
-                  <div *ngIf="f.CopiesTo.errors.required">Copies To is required</div>
+                  <div *ngIf="f.CopiesTo.errors.required">Copies To is mandatory</div>
                 </div> -->
                       </div>
                     </div>
@@ -444,7 +444,7 @@
                        </mat-select> 
 
                         <div *ngIf="f.ApplicationRole.touched && f.ApplicationRole.invalid" class="invalid-feedback">
-                          <div *ngIf="f.ApplicationRole.errors.required">Application Role is required</div>
+                          <div *ngIf="f.ApplicationRole.errors.required">Application Role is mandatory</div>
                       </div>
                       </div>
                     </div>
@@ -467,7 +467,7 @@
                         <mat-datepicker #picker></mat-datepicker>
 
                         <div *ngIf="f.JoiningDate.touched && f.JoiningDate.invalid" class="invalid-feedback">
-                          <div *ngIf="f.JoiningDate.errors.required">Start Date is required</div>
+                          <div *ngIf="f.JoiningDate.errors.required">Start Date is mandatory</div>
                       </div>
                       </div>
                     </div>
@@ -542,7 +542,7 @@
                       <mat-datepicker #RoleEffpicker></mat-datepicker>
 
                       <div *ngIf="f.RoleEffFrom.touched && f.RoleEffFrom.invalid" class="invalid-feedback">
-                        <div *ngIf="f.RoleEffFrom.errors.required">Role Effective From is required</div>
+                        <div *ngIf="f.RoleEffFrom.errors.required">Role Effective From is mandatory</div>
                     </div>
                     </div>
                   </div>

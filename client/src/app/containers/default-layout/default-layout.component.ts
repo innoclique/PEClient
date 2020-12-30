@@ -313,7 +313,49 @@ export class DefaultLayoutComponent implements OnInit {
         this.navItems=[...navigationMenu, ...this.navItems];
         }
 
-      
+      console.log(this.navItems);
+      if(this.user.Role=="CSA"){
+        for (var i =0; i < this.navItems.length; i++)
+        if (this.navItems[i].name === "CSA Dashboard") {
+           this.navItems.splice(i,1);
+           break;
+        }
+        for (var i =0; i < this.navItems.length; i++)
+        if (this.navItems[i].name === "CSA Reports") {
+           this.navItems.splice(i,1);
+           break;
+        }
+        for (var i =0; i < this.navItems.length; i++)
+        if (this.navItems[i].name === "Reports") {
+           this.navItems.splice(i,1);
+           break;
+        }
+        navigationMenu= [
+          {
+                     "IsActive": true,
+                     "url": "/ea/reports",
+                     "name": "Reports",
+                     "code": "CSA Reports",
+                     "icon": "icon-list",
+                   "children":[ {
+                       "IsActive": true,
+                       "url": "/csa/reports/evaluationsSummary",
+                       "name": "Evaluations Summary",
+                       "code": "evaluationsSummary",
+                     },
+                     {
+                       "IsActive": true,
+                       "url": "/csa/reports/paymentSummary",
+                       "name": "Payment Summary",
+                       "code": "paymentSummary",
+                     },]
+                 }
+                  
+               ]
+               this.navItems=[...this.navItems, ...navigationMenu];      
+
+        console.log("------------------->", this.navItems)
+      }
         
         return  this.navItems; 
       }

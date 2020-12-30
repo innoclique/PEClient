@@ -16,7 +16,7 @@
                     </mat-option>
                 </mat-autocomplete>
                 <div *ngIf="(f.Country.touched  || showValidateMsg)&& f.Country.invalid" class="invalid-feedback">
-                    <div *ngIf="f.Country.errors.required">Country is required</div>
+                    <div *ngIf="f.Country.errors.required">Country is mandatory</div>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                     </mat-option>
                 </mat-autocomplete>
                 <div *ngIf=" (f.State.touched  || showValidateMsg)&& f.State.invalid" class="invalid-feedback">
-                    <div *ngIf="f.State.errors.required">Province/State is required</div>
+                    <div *ngIf="f.State.errors.required">Province/State is mandatory</div>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
 
 
                 <div *ngIf="(f.City.touched  || showValidateMsg)&& f.City.invalid" class="invalid-feedback">
-                    <div *ngIf="f.City.errors.required">City is required</div>
+                    <div *ngIf="f.City.errors.required">City is mandatory</div>
                 </div>
             </div>
         </div>
