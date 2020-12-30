@@ -35,6 +35,7 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
 import { PaymentReleaseComponent } from './payment-release/payment-release.component';
 import { PaymentAdhocListComponent } from './payment-adhoc-list/payment-adhoc-list.component';
 import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
+import { PriceListComponent } from "../common/price-list/price-list.component";
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -80,6 +81,11 @@ export const projectRoutes: Routes = [
       path:'reports',
       component:ReportsComponent,
       data:{title:'Reports'}
+    },
+    {
+      path:'price-list',
+      component:PriceListComponent,
+      data:{title:'Price List'}
     },
     {
       path:'payment-history',

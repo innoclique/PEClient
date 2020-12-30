@@ -51,5 +51,7 @@ console.log(event)
   navigateEvaluation(){
     this.router.navigate(['csa/reports/evaluationsSummary',{}],{ skipLocationChange: true });
   }
-
+  loadPriceListPage(){
+    this.router.navigate(['psa/price-list'],{ skipLocationChange: true });
+  }
 }

@@ -20,6 +20,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { AdhocPaymentComponent } from './adhoc-payment/adhoc-payment.component';
 import { PaymentGatewayComponent } from './payment-gateway/payment-gateway.component';
 import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
+import { PriceListComponent } from "../common/price-list/price-list.component";
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -36,6 +37,11 @@ export const projectRoutes: Routes = [
       path: 'reports/paymentSummary',
       component: CSAPaymentSummary,
       data: { title: 'Payment Summary' }
+    },
+    {
+      path: 'price-list',
+      component: PriceListComponent,
+      data: { title: 'Price List' }
     },
     {
       path: 'payments',
