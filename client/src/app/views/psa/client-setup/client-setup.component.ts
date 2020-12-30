@@ -542,7 +542,7 @@ export class ClientSetupComponent implements OnInit {
     }
   }
   public onRowClicked(e) {
-    if (e.event.target !== undefined) {
+        if (e.event.target !== undefined) {
       let data = e.data;
       this.currentRowItem = data.RowData;
 
@@ -561,11 +561,13 @@ export class ClientSetupComponent implements OnInit {
     }
   }
   public onResellerRowClicked(e){
+    
     if (e.event.target !== undefined) {
       let data = e.data;
       this.currentRowItem = data.RowData;
-
+      
       let actionType = e.event.target.getAttribute("data-action-type");
+      
       switch (actionType) {
         case "orgView":
           return this.openResellerview();
@@ -633,7 +635,6 @@ export class ClientSetupComponent implements OnInit {
     
   }
   openOrgView() {
-    debugger
     const cr = this.currentRowItem;
     if(cr.IsDraft){
       this.router.navigate(['/psa/setup-clients/'+cr._id])

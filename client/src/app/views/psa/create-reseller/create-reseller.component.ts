@@ -439,7 +439,7 @@ action='Update'
       return;
     }
     if( this.clientForm.value.Industry===""){
-      this.notification.error('Industry is required')
+      this.notification.error('Industry is mandatory')
       return;
     }
     if(!this.clientForm.value.Email){

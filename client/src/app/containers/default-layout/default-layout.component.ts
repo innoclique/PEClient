@@ -17,8 +17,6 @@ export class DefaultLayoutComponent implements OnInit {
     private router: Router,
     public translate: TranslateService) {
     this.navItems = JSON.parse(localStorage.getItem('NavigationMenu'));
-    console.log("-------------------->",navItems)
-    debugger;
 
     this.user = JSON.parse(localStorage.getItem('User'));
     translate.addLangs(['en', 'fr']);
@@ -47,8 +45,6 @@ export class DefaultLayoutComponent implements OnInit {
   ngOnInit() {
     
     if (this.user) {
-      console.log("-------------------->", this.user)
-      
       if (this.user.SelectedRoles) {
         var navigationMenu = [];
         if(this.user.Role.indexOf('EO')>-1  || this.user.SelectedRoles.indexOf("EO") !== -1){
@@ -131,14 +127,13 @@ export class DefaultLayoutComponent implements OnInit {
           "code": "Notes",
           "icon": "icon-note"
         },
-         {
-           "IsActive": true,
-           "url": "/csa/reports/evaluationsSummary",
-           "name": "Reports",
-           "code": "Reports",
-           "icon": "icon-list"
-           
-         }
+        // {
+        //   "IsActive": true,
+        //   "url": "/employee/reports",
+        //   "name": "Reports",
+        //   "code": "Reports",
+        //   "icon": "icon-list"
+        // }
         )
         this.navItems=navigationMenu;
 
@@ -214,7 +209,7 @@ export class DefaultLayoutComponent implements OnInit {
 
       if (this.user.SelectedRoles.indexOf('EA') > -1) {
           navigationMenu.push(
-         {
+        {
           "IsActive": true,
           "url": "/employee/reports",
           "name": "Reports",
@@ -222,38 +217,21 @@ export class DefaultLayoutComponent implements OnInit {
           "icon": "icon-list",
           "children":[ {
             "IsActive": true,
-            "url": "/csa/reports/evaluationsSummary",
-            "name": "Evaluations Summary",
-            "code": "evaluationsSummary",
-          },
-          {
-            "IsActive": true,
-            "url": "/csa/reports/paymentSummary",
-            "name": "Payment Summary",
-            "code": "paymentSummary",
-          },]
-        } )
-      }else  if(this.user.Role==='CSA'){
+            "url": "/ea/reports",
+            "name": "Evaluations",
+            "code": "EvaluationsReports",
+           
+            
+          }]
+        })
+      }else{
         navigationMenu.push(
           {
             "IsActive": true,
             "url": "/employee/reports",
             "name": "Reports",
             "code": "Reports",
-            "icon": "icon-list",
-            "children":[ {
-              "IsActive": true,
-              "url": "/csa/reports/evaluationsSummary",
-              "name": "Evaluations Summary",
-              "code": "evaluationsSummary",
-            },
-            {
-              "IsActive": true,
-              "url": "/csa/reports/paymentSummary",
-              "name": "Payment Summary",
-              "code": "paymentSummary",
-            },]
-
+            "icon": "icon-list"
           })
       }
 
@@ -303,7 +281,25 @@ export class DefaultLayoutComponent implements OnInit {
             "name": "Backend Setup",
             "code": "BackendSetup",
             "icon": "icon-settings"
-        } 
+        }, {
+            "IsActive": true,
+            "url": "/ea/reports",
+            "name": "CSA Reports",
+            "code": "CSA Reports",
+            "icon": "icon-list",
+          "children":[ {
+              "IsActive": true,
+              "url": "/csa/reports/evaluationsSummary",
+              "name": "Evaluations Summary",
+              "code": "evaluationsSummary",
+            },
+            {
+              "IsActive": true,
+              "url": "/csa/reports/paymentSummary",
+              "name": "Payment Summary",
+              "code": "paymentSummary",
+            },]
+        }, 
          
       
         // {
@@ -316,8 +312,43 @@ export class DefaultLayoutComponent implements OnInit {
       ]
         this.navItems=[...navigationMenu, ...this.navItems];
         }
+console.log("------------------------------------------?", this.user.Role)
+        if (this.user.Role==="CSA"){
 
-      
+          for (let order of this.navItems) {
+            // if(order.url=="/csa/reports/evaluationsSummary"){
+            //   this.navItems.splice(this.navItems.indexOf(order), 1);
+            // }
+
+            console.log("----------------------->", order.name)
+            
+            if (order.name == "CSA Dashboard" || order.name == "CSA Reports" || order.url=="/csa/reports/evaluationsSummary") {
+                this.navItems.splice(this.navItems.indexOf(order), 1);
+                
+            }      
+        }
+        navigationMenu= [{
+          "IsActive": true,
+                      "url": "/ea/reports",
+                      "name": "abc Reports",
+                      "code": "Reports",
+                      "icon": "icon-list",
+                    "children":[ {
+                        "IsActive": true,
+                        "url": "/csa/reports/evaluationsSummary",
+                        "name": "Evaluations Summary",
+                        "code": "evaluationsSummary",
+                      },
+                      {
+                        "IsActive": true,
+                        "url": "/csa/reports/paymentSummary",
+                        "name": "Payment Summary",
+                        "code": "paymentSummary",
+                      }
+          ]
+        }]
+        this.navItems=[...navigationMenu, ...this.navItems];
+      }
         
         return  this.navItems; 
       }

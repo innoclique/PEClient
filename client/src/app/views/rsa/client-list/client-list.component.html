@@ -47,7 +47,7 @@
     <div class="modal-primary modal-xlg" role="document">
       <div class="modal-content">
         <div class="modal-header modal-primary">
-          <h4 class="modal-title">Client Details</h4>
+          <h4 class="modal-title">Clients Details</h4>
           <button type="button" class="close" (click)="hideorgView()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -88,7 +88,7 @@
                       <option *ngFor="let i of industries" [value]="i.Code">{{i.Name}}</option>
                     </select>
                     <div *ngIf=" isFormSubmitted &&   f.Industry.errors" class="invalid-feedback">
-                      <div *ngIf="f.Industry.errors.required">Industry is required</div>
+                      <div *ngIf="f.Industry.errors.required">Industry is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -116,7 +116,7 @@
                       [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Address.errors }" formControlName="Address"
                       name="Address" required>  </textarea>
                     <div *ngIf="isFormSubmitted && f.Address.errors" class="invalid-feedback">
-                      <div *ngIf="f.Address.errors.required">Address is required</div>
+                      <div *ngIf="f.Address.errors.required">Address is mandatory</div>
                       <div *ngIf="f.Address.errors.minlength">Address must be at least 4 characters </div>
                       <div *ngIf="f.Address.errors.hasAddressSplChars">Allowed special characters are
                         (.,-,(,),&,#,:,/) </div>
@@ -137,7 +137,7 @@
   
   
                     <div *ngIf=" isFormSubmitted && f.ZipCode.errors" class="invalid-feedback">
-                      <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is required</div>
+                      <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is mandatory</div>
                       <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                     </div>
                   </div>
@@ -302,7 +302,7 @@
                       [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.AdminPhone.errors }"
                       formControlName="AdminPhone">
                     <div *ngIf="isFormSubmitted && f.AdminPhone.errors" class="invalid-feedback">
-                      <div *ngIf="f.AdminPhone.errors.required">Admin Phone is required</div>
+                      <div *ngIf="f.AdminPhone.errors.required">Admin Phone is mandatory</div>
                       <div *ngIf="f.AdminPhone.errors.pattern">Admin Phone Number must be 10 digit Number.</div>
                     </div>
                   </div>
@@ -390,7 +390,7 @@
                       formControlName="ContactPersonPhone">
                     <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors"
                       class="invalid-feedback">
-                      <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is required</div>
+                      <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is mandatory</div>
                       <div *ngIf="a.ContactPersonPhone.errors.pattern">Contact Person Phone Number must be 10 digit
                         Number.</div>
                     </div>
@@ -459,7 +459,7 @@
                       <option value="3">Option #3</option>
                     </select>
                     <div *ngIf="isFormSubmitted && f.EvaluationModels.errors" class="invalid-feedback">
-                      <div *ngIf="f.EvaluationModels.errors.required">Evaluation Model is required</div>
+                      <div *ngIf="f.EvaluationModels.errors.required">Evaluation Model is mandatory</div>
                     </div>
                   </div>
                 </div>
@@ -481,7 +481,7 @@
   
                     </select>
                     <div *ngIf="isFormSubmitted && f.EvaluationPeriod.errors" class="invalid-feedback">
-                      <div *ngIf="f.EvaluationPeriod.errors.required">Evalution Period is required</div>
+                      <div *ngIf="f.EvaluationPeriod.errors.required">Evalution Period is mandatory</div>
                     </div>
                   </div>
                 </div>

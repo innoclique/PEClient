@@ -13,6 +13,9 @@ import { PerfAppService } from '../../../services/perf-app.service';
 import { CustomValidators } from '../../../shared/custom-validators';
 
 
+
+
+
 @Component({
   selector: 'app-setupclient',
   templateUrl: './setupclient.component.html',
@@ -70,9 +73,6 @@ export class SetupclientComponent implements OnInit {
      ${data.State.name ? data.State.name + "," : ""}
       ${data.Country.name ? data.Country.name : ""}
      `
-    //  if(data.City.name)
-   // this.clientForm.patchValue({ Address: add });
-
   }
   ngOnInit(): void {
     this.subscription.add(this.activatedRoute.params.subscribe(params => {
@@ -83,7 +83,6 @@ export class SetupclientComponent implements OnInit {
       this.isCreate=false;
       
       }
-
     }));
 
     this.initForm();
@@ -140,10 +139,10 @@ export class SetupclientComponent implements OnInit {
          Validators.maxLength(5),
         Validators.pattern("^((\d{1}-\d{5}-?)|0)?[0-9]{5}$")
 
-      ])],
+      ])], 
       Email: [null, Validators.compose([
         Validators.required, Validators.maxLength(500),
-        Validators.pattern("^[a-zA-Z0-9\@/.-]+$")
+        Validators.pattern("/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/")
 
       ])],
       Country: ['', [Validators.required]],
@@ -203,8 +202,8 @@ export class SetupclientComponent implements OnInit {
       EmployeeBufferCount: ['', []],
       DownloadBufferDays: ['', []],
       IsActive: ['', []],
-      StartMonth: ['', []],
-      EndMonth: ['', []]
+      StartMonth: ['', [Validators.required]],
+      EndMonth: ['', [Validators.required]]
 
     });
   }
@@ -217,11 +216,13 @@ export class SetupclientComponent implements OnInit {
   }
 
   public hasError = (controlName: string, errorName: string) => {
+    console.log("----------------------->",errorName)
+
     return this.clientForm.controls[controlName].hasError(errorName);
   }
 
   public createClient = () => {
-    debugger
+      
     this.clientFormData.IsDraft = false;
     this.isFormSubmitted = true;
     console.log(this.clientForm.valid);
@@ -542,7 +543,7 @@ action='Update'
       return;
     }
     if( this.clientForm.value.Industry===""){
-      this.notification.error('Industry is required')
+      this.notification.error('Industry is mandatory')
       return;
     }
     if(!this.clientForm.value.Email){
@@ -553,8 +554,7 @@ action='Update'
       this.notification.error('Admin Email is required')
       return;
     }
-
-    this.saveClient();
+    
   }
 
 

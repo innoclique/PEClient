@@ -85,7 +85,8 @@ public currentOrganization:any={}
   
   initEmpForm() {
     this.empForm = this.fb.group({
-      Email: [this.empDetails.Email?this.empDetails.Email:'', [Validators.required, Validators.email]],
+      Email: [this.empDetails.Email?this.empDetails.Email:'', [Validators.required, 
+        Validators.email]],
       LastName: [this.empDetails.LastName?this.empDetails.LastName:'', Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
@@ -121,10 +122,11 @@ public currentOrganization:any={}
          Validators.minLength(10),
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
-      ExtNumber: [this.empDetails.ExtNumber?this.empDetails.ExtNumber:'', Validators.compose([
-        Validators.minLength(2),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
-      ])],
+      ExtNumber: [null, Validators.compose([
+        Validators.maxLength(5),
+       Validators.pattern("^((\d{1}-\d{5}-?)|0)?[0-9]{5}$")
+
+     ])],
       AltPhoneNumber: [this.empDetails.AltPhoneNumber?this.empDetails.AltPhoneNumber:'', Validators.compose([
         Validators.minLength(10),
         CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
@@ -158,6 +160,43 @@ public currentOrganization:any={}
 
     });
   }
+  // Only Numbers with Decimals
+  keyPressNumbersDecimal(event) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode != 46 && charCode > 31
+      && (charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  // for email
+    // Only Numbers with Decimals
+    keyPressEmail(event) {
+      var charCode = (event.which) ? event.which : event.keyCode;
+      console.log("------------->", charCode)
+      if (charCode >= 97 && charCode <= 122){
+        return true;
+   
+      } else if(charCode>=65 && charCode<=90){
+        return true;
+
+      }    if(charCode >= 48 && charCode <= 57) {
+        return true
+        
+      }else if(charCode == 46 || charCode == 64){
+return true;
+      }
+      else 
+      
+      {
+        event.preventDefault();
+        return false;
+      }
+      return true;
+    }
+
   saveCreateEmployee(){
     if(this.empForm.get('FirstName').value=="" || this.empForm.get('Email').value==""){
     if(this.empForm.get('FirstName').value=="" && this.empForm.get('Email').value==""){
