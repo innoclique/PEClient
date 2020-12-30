@@ -1,0 +1,30 @@
+<div class="card">
+    <div class="card-header">
+        Price List
+    </div>
+    <div class="card-body">
+        <!---->
+        <tabset #staticTabs class="pro-tabs">
+            <tab >
+        
+              <ng-template tabHeading><i ></i> License</ng-template>
+              <ag-grid-angular  style="width: 100;; height: 440px;" 
+                    class="ag-theme-alpine" 
+                    [rowData]="licensePriceList"
+                    [gridOptions]="PaymentGridOptions"
+        ></ag-grid-angular>
+            </tab>
+            <tab >
+        
+              <ng-template tabHeading><i ></i> Employees</ng-template>
+              <ag-grid-angular  style="width: 100;; height: 440px;" 
+                    class="ag-theme-alpine" 
+                    [rowData]="employeesPriceList"
+                    [gridOptions]="PaymentGridOptions"
+                    ></ag-grid-angular>
+            </tab>
+            
+          </tabset>
+    </div>
+</div>
+

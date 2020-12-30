@@ -313,4 +313,8 @@ export class PaymentComponent implements OnInit {
   loadPaymentHistory(){
     this.router.navigate(['csa/payment-history',{Organization:this.currentOrganization._id}],{ skipLocationChange: true });
   }
+
+  loadPriceListPage(){
+    this.router.navigate(['psa/price-list'],{ skipLocationChange: true });
+  }
 }

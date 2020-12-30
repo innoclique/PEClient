@@ -4,6 +4,7 @@ import { PerfAppService } from '../../../services/perf-app.service';
 import * as moment from 'moment/moment';
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../../services/notification.service';
+import { Router ,ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-payment-adhoc-list',
@@ -52,6 +53,7 @@ export class PaymentAdhocListComponent implements OnInit {
   constructor(
     private perfApp: PerfAppService,
     private notification: NotificationService,
+    public router: Router,
     ) {
     
    }
@@ -209,4 +211,5 @@ export class PaymentAdhocListComponent implements OnInit {
 
 
   }
+ 
 }
