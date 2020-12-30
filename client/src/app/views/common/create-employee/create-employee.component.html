@@ -32,7 +32,7 @@ Back to list
                               formControlName="FirstName"  name="FirstName" required  >
                            
                               <div *ngIf=" (f.FirstName.touched|| submitClicked) && f.FirstName.invalid" class="invalid-feedback">
-                                <div *ngIf="f.FirstName.errors.required">First Name is required</div>
+                                <div *ngIf="f.FirstName.errors.required">First Name is mandatory</div>
                                 <div *ngIf="f.FirstName.errors.minlength">First Name must be at least 2 characters  </div>
                                 <div *ngIf="f.FirstName.errors.hasFirstCharNum">First character should be character  </div>
                                 <div *ngIf="f.FirstName.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)   </div>
@@ -71,7 +71,7 @@ Back to list
                               formControlName="LastName"  name="LastName" required >
       
                               <div *ngIf="(f.LastName.touched || submitClicked) && f.LastName.invalid" class="invalid-feedback">
-                                <div *ngIf="f.LastName.errors.required">Last Name is required</div>
+                                <div *ngIf="f.LastName.errors.required">Last Name is mandatory</div>
                                 <div *ngIf="f.LastName.errors.minlength">Last Name must be at least 1 characters  </div>
                                 <div *ngIf="f.LastName.errors.hasFirstCharNum">First character should be character  </div>
                                 <div *ngIf="f.LastName.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:)   </div>
@@ -98,7 +98,7 @@ Back to list
                               formControlName="Address"  name="Address" required >  </textarea>
       
                               <div *ngIf="(f.Address.touched || submitClicked) && f.Address.invalid" class="invalid-feedback">
-                                <div *ngIf="f.Address.errors.required">Address is required</div>
+                                <div *ngIf="f.Address.errors.required">Address is mandatory</div>
                                 <div *ngIf="f.Address.errors.minlength">Address must be at least 4 characters  </div>
                                 <div *ngIf="f.Address.errors.hasAddressSplChars">Allowed special characters are (.,-,(,),&,#,:,/)  </div>
                             </div>
@@ -116,10 +116,9 @@ Back to list
                               <input maxlength="13"  type="text" class="form-control"  
                               [ngClass]="{ 'is-invalid': (f.PhoneNumber.touched || submitClicked)  &&  f.PhoneNumber.invalid }"
                               formControlName="PhoneNumber"  name="PhoneNumber"  
-                              >
-      
+                              numbersOnly (keypress)="keyPressNumbersDecimal($event)">
                               <div *ngIf="(f.PhoneNumber.touched || submitClicked) && f.PhoneNumber.invalid" class="invalid-feedback">
-                                <!-- <div *ngIf="f.PhoneNumber.errors.required">Phone Number is required</div> -->
+                                <!-- <div *ngIf="f.PhoneNumber.errors.required">Phone Number is mandatory</div> -->
                                 <div *ngIf="f.PhoneNumber.errors.minlength">Phone Number must be at least 10 characters  </div>
                                 <div *ngIf="f.PhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
       
@@ -134,7 +133,8 @@ Back to list
                               </div>
                               <input maxlength="13"  class="form-control"  type="text"
                               [ngClass]="{ 'is-invalid': (f.AltPhoneNumber.touched || submitClicked)  &&  f.AltPhoneNumber.invalid }"
-                              formControlName="AltPhoneNumber"  name="AltPhoneNumber"  >
+                              formControlName="AltPhoneNumber"  name="AltPhoneNumber"
+                               (keypress)="keyPressNumbersDecimal($event)"  >
                               <div *ngIf="(f.AltPhoneNumber.touched || submitClicked) && f.AltPhoneNumber.invalid" class="invalid-feedback">
                                 <div *ngIf="f.AltPhoneNumber.errors.minlength">Alt. Phone must be at least 10 characters  </div>
                                 <div *ngIf="f.AltPhoneNumber.errors.hasPhoneSplChars">Invalid phone number Allowed Numeric and ( - )</div>
@@ -152,7 +152,8 @@ Back to list
                               </div>
                               <input max="5" maxlength="5" class="form-control"  type="text"
                               [ngClass]="{ 'is-invalid': (f.ExtNumber.touched || submitClicked)  &&  f.ExtNumber.invalid }"
-                              formControlName="ExtNumber"  name="ExtNumber"  >
+                              formControlName="ExtNumber"  name="ExtNumber" 
+                               (keypress)="keyPressNumbersDecimal($event)" >
       
                               <div *ngIf="(f.ExtNumber.touched || submitClicked) && f.ExtNumber.invalid" class="invalid-feedback">
                                 <div *ngIf="f.ExtNumber.errors.minlength">Extension Phone must be at least 2 characters  </div>
@@ -167,7 +168,8 @@ Back to list
                               </div>
                               <input maxlength="13"  class="form-control"  type="text"
                               [ngClass]="{ 'is-invalid': (f.MobileNumber.touched || submitClicked)  &&  f.MobileNumber.invalid }"
-                              formControlName="MobileNumber"  name="MobileNumber"           >
+                              formControlName="MobileNumber"  name="MobileNumber" 
+                               (keypress)="keyPressNumbersDecimal($event)"          >
                             
                             
                               <div *ngIf="(f.MobileNumber.touched || submitClicked) && f.MobileNumber.invalid" class="invalid-feedback">
@@ -192,9 +194,10 @@ Back to list
                           </div>
                           <input max="8" maxlength="8" class="form-control"  type="text"
                           [ngClass]="{ 'is-invalid':( f.ZipCode.touched || submitClicked)  &&  f.ZipCode.invalid }"
-                          formControlName="ZipCode"  name="ZipCode" required  >
+                          formControlName="ZipCode"  name="ZipCode" required 
+                           (keypress)="keyPressNumbers($event)" >
                           <div *ngIf="(f.ZipCode.touched || submitClicked) && f.ZipCode.invalid" class="invalid-feedback">
-                            <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is required</div>
+                            <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is mandatory</div>
                            <div *ngIf="f.ZipCode.errors.minlength">Pin/Zip Code must be at least 5 characters  </div>
                             <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                         </div>
@@ -212,10 +215,11 @@ Back to list
                           </div>
                           <input class="form-control"  [readonly]="currentAction == 'edit'" type="text"
                           [ngClass]="{ 'is-invalid': (f.Email.touched || submitClicked)  &&  f.Email.invalid }"
-                          formControlName="Email"  name="Email" required >
+                          formControlName="Email"  name="Email" required 
+                          (keypress)="keyPressEmail($event)">
                         
                           <div *ngIf="(f.Email.touched || submitClicked) && f.Email.invalid" class="invalid-feedback">
-                            <div *ngIf="f.Email.errors.required">Email is required</div>
+                            <div *ngIf="f.Email.errors.required">Email is mandatory</div>
                             <div *ngIf="f.Email.errors.email">Email Must be a valid email address </div>
                         </div>
                         </div>
@@ -234,7 +238,7 @@ Back to list
                               formControlName="Title"  name="Title" required  >
                            
                               <div *ngIf="(f.Title.touched || submitClicked) && f.Title.invalid" class="invalid-feedback">
-                                <div *ngIf="f.Title.errors.required">Title is required</div>
+                                <div *ngIf="f.Title.errors.required">Title is mandatory</div>
                                 <div *ngIf="f.Title.errors.minlength">Title must be at least 2 characters  </div>
                                
                             </div>
@@ -265,7 +269,7 @@ Back to list
                             
                           </select>
                           <div *ngIf="(f.Department.touched || submitClicked) && f.Department.invalid" class="invalid-feedback">
-                            <div *ngIf="f.Department.errors.required">Department is required</div>
+                            <div *ngIf="f.Department.errors.required">Department is mandatory</div>
                         </div>
                         </div>
                       </div>
@@ -295,7 +299,7 @@ Back to list
                           </select>
   
                           <div *ngIf="(f.JobRole.touched || submitClicked) && f.JobRole.invalid" class="invalid-feedback">
-                            <div *ngIf="f.JobRole.errors.required">Job Role is required</div>
+                            <div *ngIf="f.JobRole.errors.required">Job Role is mandatory</div>
                         </div>
                         </div>
                       </div>
@@ -315,7 +319,7 @@ Back to list
                             
                           </select>
                           <div *ngIf="(f.JobLevel.touched || submitClicked) && f.JobLevel.invalid" class="invalid-feedback">
-                            <div *ngIf="f.JobLevel.errors.required">Job Level is required</div>
+                            <div *ngIf="f.JobLevel.errors.required">Job Level is mandatory</div>
                         </div>
                         </div>
                       </div>
@@ -351,7 +355,7 @@ Back to list
                  </mat-autocomplete>
       
                    <div *ngIf="(f.Manager.touched || submitClicked) && f.Manager.invalid" class="invalid-feedback">
-                        <div *ngIf="f.Manager.errors.required">Manager is required</div>
+                        <div *ngIf="f.Manager.errors.required">Manager is mandatory</div>
                       </div>
                 
                       </div>
@@ -380,7 +384,7 @@ Back to list
                         </mat-option>
                        </mat-autocomplete>
                        <!-- <div *ngIf="(f.CopiesTo.touched || submitClicked) && f.CopiesTo.invalid" class="invalid-feedback">
-                        <div *ngIf="f.CopiesTo.errors.required">Copies To is required</div>
+                        <div *ngIf="f.CopiesTo.errors.required">Copies To is mandatory</div>
                       </div> -->
                             </div>
                           </div>
@@ -410,7 +414,7 @@ Back to list
                                 <mat-option [disabled]="e.RoleName=='Employee' "   *ngFor="let e of appRoles" [value]="e._id">{{e.RoleName}}</mat-option>
                               </mat-select> 
                               <div *ngIf="(f.ApplicationRole.touched || submitClicked) && f.ApplicationRole.invalid" class="invalid-feedback">
-                                <div *ngIf="f.ApplicationRole.errors.required">Application Role is required</div>
+                                <div *ngIf="f.ApplicationRole.errors.required">Application Role is mandatory</div>
                             </div>
                             </div>
                           </div>
@@ -433,7 +437,7 @@ Back to list
                               <mat-datepicker #picker></mat-datepicker>
       
                               <div *ngIf="(f.JoiningDate.touched || submitClicked) && f.JoiningDate.invalid" class="invalid-feedback">
-                                <div *ngIf="f.JoiningDate.errors.required">Start Date is required</div>
+                                <div *ngIf="f.JoiningDate.errors.required">Start Date is mandatory</div>
                             </div>
                             </div>
                           </div>
@@ -513,7 +517,7 @@ Back to list
                             <mat-datepicker #RoleEffpicker></mat-datepicker>
       
                             <div *ngIf="(f.RoleEffFrom.touched || submitClicked) && f.RoleEffFrom.invalid" class="invalid-feedback">
-                              <div *ngIf="f.RoleEffFrom.errors.required">Role Effective From is required</div>
+                              <div *ngIf="f.RoleEffFrom.errors.required">Role Effective From is mandatory</div>
                           </div>
                           </div>
                         </div>

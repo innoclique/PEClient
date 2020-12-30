@@ -159,24 +159,26 @@ public currentOrganization:any={}
     });
   }
   saveCreateEmployee(){
+    
     if(this.empForm.get('FirstName').value=="" || this.empForm.get('Email').value==""){
     if(this.empForm.get('FirstName').value=="" && this.empForm.get('Email').value==""){
 
-      this.snack.error(this.translate.instant('First Name, Email is required'));
+      this.snack.error(this.translate.instant('First Name, Email is mandatory'));
       return
     }
     if(this.empForm.get('FirstName').value==""){
-      this.snack.error(this.translate.instant('First Name is required'));
+      this.snack.error(this.translate.instant('First Name is mandatory'));
       return
     }
     if(this.empForm.get('Email').value==""){
-      this.snack.error(this.translate.instant('Email is required'));
+      this.snack.error(this.translate.instant('Email is mandatory'));
       return
     }
     
   }
 
     this.empForm.patchValue({IsDraft: 'true' });
+    alert("Are you sure you want to add this employee?")
     this.saveEmployee();
   }
 
@@ -198,6 +200,7 @@ this.submitClicked=true;
   
     this.empForm.patchValue({IsSubmit: 'true' });
     this.empForm.patchValue({IsDraft: 'false' });
+    alert("Are you sure you want to add this employee?")
     this.saveEmployee();
   }
   
@@ -489,6 +492,56 @@ getAllDepartments(){
     }
   })
 }
+keyPressNumbersDecimal(event) {
+  var charCode = (event.which) ? event.which : event.keyCode;
+ if(charCode >= 48 && charCode <= 57) {
+    return true
+    
+  }else if(charCode == 45){
+return true;
+  }
+  else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
 
+keyPressNumbers(event) {
+  var charCode = (event.which) ? event.which : event.keyCode;
+ if(charCode >= 48 && charCode <= 57) {
+    return true
+    
+  }else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
+keyPressEmail(event) {
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode >= 97 && charCode <= 122){
+    return true;
 
+  } else if(charCode>=65 && charCode<=90){
+    return true;
+
+  }    if(charCode >= 48 && charCode <= 57) {
+    return true
+    
+  }else if(charCode == 46 || charCode == 64){
+return true;
+  }
+  else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
 }

@@ -478,7 +478,7 @@ draftDevGoal(){
 saveDevGoal() {
 
 if (!this.goalsBuildForm.get('DevGoal').value) {
-this.snack.error('Developmental Goal is required');
+this.snack.error('Developmental Goal is mandatory');
 return
 }
 

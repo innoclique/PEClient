@@ -11,7 +11,7 @@
           <div class="row">
             <!-- Box1 -->
             <div class="box col-lg-6">
-              <div class="box_in">
+              <div class="box_in_chart">
                 <div class="chart" *ngIf="pieChartLabels.length>0">
                   <div id="htmlData">
                     <canvas height="140" baseChart
@@ -23,8 +23,9 @@
                       [colors]="pieChartColors"
                       [legend]="pieChartLegend">
                     </canvas>
+                    <button [disabled]="enableDownload" (click)="downloadCanvas()" id="exportButton" type="button">Export as PDF</button> 
                   </div>
-                  <button [disabled]="enableDownload" (click)="downloadCanvas()" id="exportButton" type="button">Export as PDF</button>     
+               
                 </div>
                 <div class="empty-chart" *ngIf="pieChartLabels.length === 0">
                   <span>

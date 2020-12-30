@@ -262,7 +262,7 @@ export class CreateClientComponent implements OnInit {
   }
 
   public createClient = () => {
-    debugger
+    
     this.clientFormData.IsDraft = false;
     this.isFormSubmitted = true;
     console.log(this.clientForm.valid);
@@ -279,6 +279,7 @@ export class CreateClientComponent implements OnInit {
     if(this.currentRecord && this.currentRecord._id){
       this.updateClient();
     }else{
+      alert("Are you sure you want to add this client?")
       this.saveClient();
     }
     
@@ -605,22 +606,22 @@ action='Update'
     // }
     debugger
     if(this.clientForm.value.Name==="" || this.clientForm.value.Industry===""){
-      this.notification.error('Organization Name is required')
+      this.notification.error('Organization Name is mandatory')
       return;
     }
     if( this.clientForm.value.Industry===""){
-      this.notification.error('Industry is required')
+      this.notification.error('Industry is mandatory')
       return;
     }
     if(!this.clientForm.value.Email){
-      this.notification.error('Email is required')
+      this.notification.error('Email is mandatory')
       return;
     }
     if(!this.clientForm.value.AdminEmail){
-      this.notification.error('Admin Email is required')
+      this.notification.error('Admin Email is mandatory')
       return;
     }
-
+    alert("Are you sure you want to add this client?")
     this.saveClient();
   }
 
@@ -628,5 +629,57 @@ action='Update'
   
   printPage() {
     window.print();
+  }
+  keyPressNumbersDecimal(event) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+   if(charCode >= 48 && charCode <= 57) {
+      return true
+      
+    }else if(charCode == 45){
+  return true;
+    }
+    else 
+    
+    {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+  
+  keyPressNumbers(event) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+   if(charCode >= 48 && charCode <= 57) {
+      return true
+      
+    }else 
+    
+    {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+  keyPressEmail(event) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode >= 97 && charCode <= 122){
+      return true;
+  
+    } else if(charCode>=65 && charCode<=90){
+      return true;
+  
+    }    if(charCode >= 48 && charCode <= 57) {
+      return true
+      
+    }else if(charCode == 46 || charCode == 64){
+  return true;
+    }
+    else 
+    
+    {
+      event.preventDefault();
+      return false;
+    }
+    return true;
   }
 }

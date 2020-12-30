@@ -936,8 +936,6 @@ export class EvaluationslistComponent implements OnInit {
 }
   
   getEVPeriod(evRow){
-debugger
-
     let year= new Date (evRow.CreatedDate);
     if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
     return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} 
