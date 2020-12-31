@@ -840,7 +840,7 @@ export class RollevaluationComponent implements OnInit {
       return;
     }
     
-    debugger
+    
     this.selectedEmployee.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
     this.selectedEmployee.DirectReportsCompetency = this.seletedDirectReporteeCompetencyList;
 
@@ -859,7 +859,7 @@ export class RollevaluationComponent implements OnInit {
   addToGrid() {
     debugger
     if (this.selectedEmployees.length === 0) {
-      this.notification.error('Please select Employee(s)')
+      this.notification.error('At least one employee must be selected.')
       return;
     }
     if (this.initializeFormFor === 'evaluation' && (this.evaluationForm.value.Model === null || this.evaluationForm.value.Model === '')) {
@@ -875,6 +875,7 @@ export class RollevaluationComponent implements OnInit {
         this.selectedEmployeeList.push(element);
       }
     });
+    window.confirm(":  Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
     //this.selectedEmployeeList.push(...this.selectedEmployees);
     if (this.EmpGridOptions.api) {
       this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
@@ -884,9 +885,9 @@ export class RollevaluationComponent implements OnInit {
   }
 
   addToGridForKPI() {
-    debugger
+    
     if (this.selectedEmployees.length === 0) {
-      this.notification.error('Please select Employee(s)')
+      this.notification.error('At least one employee must be selected.')
       return;
     }
 

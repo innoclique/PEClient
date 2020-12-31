@@ -267,7 +267,7 @@ export class KpiAddComponent implements OnInit {
 
 if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
 
-  this.snack.error('KPI is required');
+  this.snack.error('KPI is mandatory');
   return;
 }
 
