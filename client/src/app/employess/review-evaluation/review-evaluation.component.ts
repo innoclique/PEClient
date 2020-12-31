@@ -499,7 +499,7 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
   this.snack.error('Rating is mandatory')
   return;
 }
-
+window.confirm("Are you sure you want to submit the evaluation for this employee?")
     this.saveFinalRating(false)
   }
   draftFinalRating() {
@@ -557,6 +557,7 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
   }
   
   saveTSFinalRating(isDraft) {
+    window.confirm("Are you sure you want to request a revision of the rating for this employee?")
     let reqRev=this.FinalRatingForm.value.TSReqRevision;
     this.perfApp.route = "app";
     this.perfApp.method = "SaveTSFinalRating",
