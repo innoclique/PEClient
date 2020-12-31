@@ -34,8 +34,28 @@ export class PriceListComponent implements OnInit {
         //cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="viewAdhocRequest">${data.value}</span>` }
       }, 
       //{ headerName: 'Client', field: 'clientName', sortable: true, filter: true },     
-      { headerName: 'Cost', field: 'Cost', sortable: true, filter: true },
-      { headerName: 'Discount', field: 'Discount', sortable: true, filter: true }
+      { headerName: 'Cost per year', field: 'Cost', sortable: true, filter: true },
+      { headerName: 'Discount', field: 'Discount', sortable: true, filter: true,
+      cellRenderer:(data)=>{return `${data.value}%`}
+      },
+      { headerName: 'Monthly with discount', field: 'Discount', sortable: true, filter: true,
+      cellRenderer:(data)=>{
+        let rowData = data.data;
+        let {Cost,Discount} = rowData;
+        let discountAmount = Cost*Discount/100;
+        let totalAmount = Cost-discountAmount;
+        let monthlyAmountWithDiscount = totalAmount/12;
+        return `${parseFloat(""+monthlyAmountWithDiscount).toFixed(2)}`
+      }
+      },
+      { headerName: 'Monthly no discount', field: 'Discount', sortable: true, filter: true,
+      cellRenderer:(data)=>{
+        let rowData = data.data;
+        let {Cost,Discount} = rowData;
+        let monthlyAmount = Cost/12;
+        return `${parseFloat(""+monthlyAmount).toFixed(2)}`
+      }
+      }
       
     ];
   

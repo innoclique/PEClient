@@ -167,7 +167,19 @@ export class PaymentAdhocListComponent implements OnInit {
         this.paymentDate = moment(Paymentdate).format("MM/DD/YYYY");
       }
       let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
+      
+      COST_PER_PA = COST_PER_PA.$numberDecimal;
+      COST_PER_MONTH = COST_PER_MONTH.$numberDecimal;
+      DISCOUNT_PA_PAYMENT = DISCOUNT_PA_PAYMENT.$numberDecimal;
+      TOTAL_AMOUNT = TOTAL_AMOUNT.$numberDecimal;
+      COST_PER_MONTH_ANNUAL_DISCOUNT = COST_PER_MONTH_ANNUAL_DISCOUNT.$numberDecimal;
+
       let {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT} = this.paymentReleaseData;
+      
+      DUE_AMOUNT = DUE_AMOUNT.$numberDecimal;
+      TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
+      TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
+
       this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
