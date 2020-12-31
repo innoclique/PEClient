@@ -33,6 +33,7 @@ import { ReviewAccomplishmentsComponent } from './review-accomplishments/review-
 import { PrivateNotesComponent } from './private-notes/private-notes.component';
 import { PrivateNotesListComponent } from './private-notes-list/private-notes-list.component';
 import { SnGuardService } from '../services/sn-guard.service';
+import { CurrentEvaluationReportComponent } from './reports/current-evaluation/current-evaluation-report.component';
 
 
 
@@ -142,7 +143,13 @@ const routes: Routes = [
         path:'reports',
         component:ReportsComponent,
         data:{title:'Reports'}
-      }, {
+      }, 
+       {
+        path:'reports/current-evaluation',
+        component:CurrentEvaluationReportComponent,
+        data:{title:'Evaluation Report'}
+      }, 
+      {
         path:'profile',
         component:ProfileComponent,
         data:{title:'Profile'}
