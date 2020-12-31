@@ -26,11 +26,11 @@ export class PaymentCaluculationService {
     let discount = Cost*Discount/100;
     let total_per_annum_payment = Cost-discount;
     let newPaymentBreakup:any ={};
-    newPaymentBreakup.COST_PER_PA = Cost;
-    newPaymentBreakup.COST_PER_MONTH=parseFloat(""+(Cost/totalMonths)).toFixed(2);
-    newPaymentBreakup.DISCOUNT_PA_PAYMENT=discount;
-    newPaymentBreakup.TOTAL_AMOUNT=total_per_annum_payment;
-    newPaymentBreakup.COST_PER_MONTH_ANNUAL_DISCOUNT=parseFloat(""+(total_per_annum_payment/totalMonths)).toFixed(2);
+    newPaymentBreakup.COST_PER_PA = Number(Cost).toFixed(2);
+    newPaymentBreakup.COST_PER_MONTH=Number(""+(Cost/totalMonths)).toFixed(2);
+    newPaymentBreakup.DISCOUNT_PA_PAYMENT=Number(discount).toFixed(2);
+    newPaymentBreakup.TOTAL_AMOUNT=Number(total_per_annum_payment).toFixed(2);
+    newPaymentBreakup.COST_PER_MONTH_ANNUAL_DISCOUNT=Number(""+(total_per_annum_payment/totalMonths)).toFixed(2);
     return newPaymentBreakup;
   }
 
@@ -54,10 +54,10 @@ export class PaymentCaluculationService {
     let discount = totalEmployeesCost*Discount/100;
     let total_per_annum_payment = totalEmployeesCost-discount;
     let newPaymentBreakup:any ={};
-    newPaymentBreakup.COST_PER_PA = totalEmployeesCost;
+    newPaymentBreakup.COST_PER_PA = Number(totalEmployeesCost).toFixed(2);
     newPaymentBreakup.COST_PER_MONTH=Number(parseFloat(""+(totalEmployeesCost/totalMonths)).toFixed(2));
-    newPaymentBreakup.DISCOUNT_PA_PAYMENT=discount;
-    newPaymentBreakup.TOTAL_AMOUNT=total_per_annum_payment;
+    newPaymentBreakup.DISCOUNT_PA_PAYMENT=Number(discount).toFixed(2);
+    newPaymentBreakup.TOTAL_AMOUNT=Number(total_per_annum_payment).toFixed(2);
     newPaymentBreakup.COST_PER_MONTH_ANNUAL_DISCOUNT=Number(parseFloat(""+(total_per_annum_payment/totalMonths)).toFixed(2));
     return newPaymentBreakup;
   }
@@ -69,16 +69,17 @@ export class PaymentCaluculationService {
     let {noOfMonths,isAnnualPayment} = options;
     let {Tax}  = paymentScale;
     let paymentSummary:any = {};
-    paymentSummary.DUE_AMOUNT = Math.round(COST_PER_MONTH_ANNUAL_DISCOUNT*noOfMonths);;
+    paymentSummary.DUE_AMOUNT = Number(Math.round(COST_PER_MONTH_ANNUAL_DISCOUNT*noOfMonths)).toFixed(2);
     if(!isAnnualPayment){
-      paymentSummary.DUE_AMOUNT = Math.round(COST_PER_MONTH*noOfMonths);
+      paymentSummary.DUE_AMOUNT = Number(Math.round(COST_PER_MONTH*noOfMonths)).toFixed(2);
     }
     /**
      * Tax caluculation
      */
     let taxAmount = parseFloat(""+(paymentSummary.DUE_AMOUNT*Tax/100)).toFixed(2);
-    paymentSummary.TAX_AMOUNT = Number(taxAmount);
-    paymentSummary.TOTAL_PAYABLE_AMOUNT = Number(paymentSummary.DUE_AMOUNT) + paymentSummary.TAX_AMOUNT;
+    paymentSummary.TAX_AMOUNT = Number(taxAmount).toFixed(2);
+    let _TOTAL_PAYABLE_AMOUNT = Number(paymentSummary.DUE_AMOUNT) + Number(paymentSummary.TAX_AMOUNT);
+    paymentSummary.TOTAL_PAYABLE_AMOUNT = Number(_TOTAL_PAYABLE_AMOUNT).toFixed(2);
     return paymentSummary;
   }
 }

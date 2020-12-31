@@ -12,6 +12,7 @@ import { NotificationService } from '../../../services/notification.service';
   styleUrls: ['./adhoc-payment.component.css']
 })
 export class AdhocPaymentComponent implements OnInit {
+  stateTax:any;
   otherTextValue:any;
   paymentOption:any;
   currentUser:any;
@@ -74,9 +75,22 @@ export class AdhocPaymentComponent implements OnInit {
     //console.log(this.currentOrganization._id)
     this.currentUser=this.authService.getCurrentUser();
     //this.paymentModel.Organization = this.currentOrganization.Name;
+    this.getTaxInfo(this.currentOrganization.State);
     this.findInitialPayments(this.currentOrganization._id);
   }
-  
+  getTaxInfo(State){
+    console.log("getTaxInfo")
+    let options={
+      State
+    };
+    this.perfApp.route = "payments";
+    this.perfApp.method = "tax";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(taxInfo => {
+      console.log(taxInfo);
+      this.stateTax = taxInfo.tax;
+    })
+}
   findInitialPayments(selectedOrgnization){
     let _requestBody={
       Organization:selectedOrgnization,
@@ -106,7 +120,19 @@ export class AdhocPaymentComponent implements OnInit {
       let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
       this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
       let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
+          
+      COST_PER_PA = COST_PER_PA.$numberDecimal;
+      COST_PER_MONTH = COST_PER_MONTH.$numberDecimal;
+      DISCOUNT_PA_PAYMENT = DISCOUNT_PA_PAYMENT.$numberDecimal;
+      TOTAL_AMOUNT = TOTAL_AMOUNT.$numberDecimal;
+      COST_PER_MONTH_ANNUAL_DISCOUNT = COST_PER_MONTH_ANNUAL_DISCOUNT.$numberDecimal;
+
       let {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT} = this.paymentReleaseData;
+      
+      DUE_AMOUNT = DUE_AMOUNT.$numberDecimal;
+      TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
+      TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
+      
       this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
@@ -151,13 +177,14 @@ export class AdhocPaymentComponent implements OnInit {
     let paymentReleaseOptions:any={};
     paymentReleaseOptions.Organization=this.selectedOrganizationObj._id;
     paymentReleaseOptions.noOfEmployess=Number(this.paymentModel.NoOfEmployees)
-
+    paymentReleaseOptions.State = this.selectedOrganizationObj.State;
     this.perfApp.route = "payments";
     this.perfApp.method = "employee/scale",
     this.perfApp.requestBody = paymentReleaseOptions;
     this.perfApp.CallAPI().subscribe(paymentScale => {
       if(paymentScale){
         this.paymentScale=paymentScale;
+        this.paymentScale.Tax = this.stateTax;
         this.paymentModel.Range = this.paymentScale.Range;
         this.paymentStructure = this.paymentCaluculationService.GetLicenceBreakdownPayment(this.paymentScale);
         if(this.paymentStructure){

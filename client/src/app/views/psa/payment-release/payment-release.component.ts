@@ -12,7 +12,7 @@ import { NotificationService } from '../../../services/notification.service';
   styleUrls: ['./payment-release.component.css']
 })
 export class PaymentReleaseComponent implements OnInit {
-  
+  stateTax:any;
   organizationList:any;
   currentUser:any;
   currentOrganization:any;
@@ -99,6 +99,19 @@ export class PaymentReleaseComponent implements OnInit {
         this.rangeList = _rangeList;
       });
   }
+  getTaxInfo(State){
+    console.log("getTaxInfo")
+    let options={
+      State
+    };
+    this.perfApp.route = "payments";
+    this.perfApp.method = "tax";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(taxInfo => {
+      console.log(taxInfo);
+      this.stateTax = taxInfo.tax;
+    })
+}
   orgnizationDetails(selectedOrgnization){
     console.log("On Select Organization")
     console.log(selectedOrgnization);
@@ -117,7 +130,7 @@ export class PaymentReleaseComponent implements OnInit {
     if(selectedOrgnization!=""){
       
       this.selectedOrganizationObj = this.organizationList.find(org=>org._id==selectedOrgnization);
-      
+      this.getTaxInfo(this.selectedOrganizationObj.State);
       if(this.selectedOrganizationObj.UsageType && this.selectedOrganizationObj.UsageType==="License"){
         this.isRangeSelectVisible=true;
         this.isRangeSelectBox=false;
@@ -143,7 +156,19 @@ export class PaymentReleaseComponent implements OnInit {
         }else{
           let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = paymentRelease;
           let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = paymentRelease;
+          
+          COST_PER_PA = COST_PER_PA.$numberDecimal;
+          COST_PER_MONTH = COST_PER_MONTH.$numberDecimal;
+          DISCOUNT_PA_PAYMENT = DISCOUNT_PA_PAYMENT.$numberDecimal;
+          TOTAL_AMOUNT = TOTAL_AMOUNT.$numberDecimal;
+          COST_PER_MONTH_ANNUAL_DISCOUNT = COST_PER_MONTH_ANNUAL_DISCOUNT.$numberDecimal;
+
           let {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT} = paymentRelease;
+
+          DUE_AMOUNT = DUE_AMOUNT.$numberDecimal;
+          TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
+          TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
+
           this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
           if(this.selectedOrganizationObj.UsageType=="License"){
           this.paymentModel.Range = RangeId;
@@ -154,7 +179,8 @@ export class PaymentReleaseComponent implements OnInit {
             }
           this.paymentModel.paymentreleaseId = paymentRelease._id;
           this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
-          this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT}
+          this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
+          
         }
       });
       
@@ -203,6 +229,7 @@ export class PaymentReleaseComponent implements OnInit {
     let selectedRange = this.rangeList.find(range=>range._id==selectedObj)
     console.log(selectedRange);
     this.paymentScale=selectedRange;
+    this.paymentScale.Tax = this.stateTax;
     this.paymentModel.Range = this.paymentScale._id;
     this.setPaymentBreakup();
   }

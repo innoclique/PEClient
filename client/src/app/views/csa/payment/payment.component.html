@@ -126,7 +126,7 @@
                 <div class="clear"></div>
               </li>
               <li>
-                <h6>Tax<strong>Tax({{paymentScale?paymentScale.Tax:0}}%)</strong></h6>
+                <h6>Tax<strong>Tax({{stateTax?stateTax:0}}%)</strong></h6>
                 <span>{{paymentSummary?paymentSummary.TAX_AMOUNT:0}}</span>
                 <div class="clear"></div>
               </li>
@@ -169,7 +169,7 @@
                             <label>Usage Type</label>
                             <i class="release_txt_nonedit">{{paymentModel?.UserType}}</i>
                           </div>
-                          <div class="col-lg-4">
+                          <div class="col-lg-4" *ngIf="useageTypeEmployee">
                             <label># Of Employees</label>
                             <i class="release_txt_nonedit">{{paymentModel?.NoOfEmployees}}</i>
                           </div>
@@ -183,7 +183,7 @@
                              <label>Activation Date</label>
                              <i class="release_txt_nonedit">{{checkoutActivationDate}}</i>
                           </div>
-                          <div class="col-lg-4">
+                          <div class="col-lg-4" *ngIf="isReseller">
                             <label># Need</label>
                             <i class="release_txt_nonedit">{{paymentModel.NoNeeded}}</i>
                           </div>
@@ -214,17 +214,17 @@
 
                             <li>
                               <h6>Due<strong *ngIf="paymentModel.isAnnualPayment">Amount due (annual payment)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Amount due (monthly payment)</strong></h6>
-                              <span>{{paymentStructure?paymentStructure.DUE_AMOUNT:0}}</span>
+                              <span>{{paymentSummary?paymentSummary.DUE_AMOUNT:0}}</span>
                               <div class="clear"></div>
                             </li>
                            
                             <li>
-                              <h6>Tax<strong>Tax({{paymentScale?paymentScale.Tax:0}}%)</strong></h6>
+                              <h6>Tax<strong>Tax({{stateTax?stateTax:0}}%)</strong></h6>
                                 <span>{{paymentSummary?paymentSummary.TAX_AMOUNT:0}}</span>
                                 <div class="clear"></div>
                             </li>
                             <li>
-                              <h6>Total<strong *ngIf="paymentModel.isAnnualPayment">Total Amount Payable (for annual payments)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Total Amount Payable (for monthly payments)</strong></h6>
+                              <h6>Total<strong *ngIf="paymentModel.isAnnualPayment">Total Amount Payable (annual payments)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Total Amount Payable (monthly payments)</strong></h6>
                               <span>{{paymentSummary?paymentSummary.TOTAL_PAYABLE_AMOUNT:0}}</span>
                               <div class="clear"></div>
                             </li>
@@ -251,14 +251,14 @@
   <h5 class="wow fadeIn" data-wow-delay="0.2s">Costing per Employee</h5>
   <div class="wow fadeIn" data-wow-delay="0.4s"><img src="assets/payments/costing_img.png"  alt="img"></div>
   <div class="payment_right_blue wow fadeIn" data-wow-delay="0.6s">
-    <h6>{{paymentStructure.TOTAL_AMOUNT}} <small>per year</small></h6>
-    <span *ngIf="paymentModel.UserType=='Employees'">Cost per employee per year (annual discount)</span>
-    <span *ngIf="paymentModel.UserType=='License'">Cost per year (annual discount)</span>
+    <h6>{{paymentStructure?paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT:0}} <small>per month</small></h6>
+    <span *ngIf="paymentModel.UserType=='Employees'">Cost per employee per month (annual discount)</span>
+    <span *ngIf="paymentModel.UserType=='License'">Cost per month (annual discount)</span>
   </div>
   <div class="payment_right_blue payment_right_white wow fadeIn" data-wow-delay="0.8s">
-    <h6>{{paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT}} <small>per month</small></h6>
-    <span *ngIf="paymentModel.UserType=='Employees'">Cost per employee per Month (annual discount)</span>
-    <span *ngIf="paymentModel.UserType=='License'">Cost per Month (annual discount)</span>
+    <h6>{{paymentStructure?paymentStructure.COST_PER_MONTH:0}} <small>per month</small></h6>
+    <span *ngIf="paymentModel.UserType=='Employees'">Cost per employee per Month</span>
+    <span *ngIf="paymentModel.UserType=='License'">Cost per Month</span>
   </div>
   <div class="payment_info_links">
     <h5 class="wow fadeIn" data-wow-delay="1.2s">Information Links</h5>

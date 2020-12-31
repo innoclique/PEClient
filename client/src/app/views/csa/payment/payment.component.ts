@@ -12,7 +12,7 @@ import { NotificationService } from '../../../services/notification.service';
   styleUrls: ['./payment.component.css']
 })
 export class PaymentComponent implements OnInit {
-
+  stateTax:any;
   paymentOption:any;
   currentUser:any;
   currentOrganization:any;
@@ -70,6 +70,7 @@ export class PaymentComponent implements OnInit {
   ngOnInit(): void {
     //console.log(this.currentOrganization._id)
     this.currentUser=this.authService.getCurrentUser();
+    this.getTaxInfo(this.currentOrganization.State);
     //this.paymentModel.Organization = this.currentOrganization.Name;
     this.findInitialPayments(this.currentOrganization._id);
   }
@@ -120,6 +121,19 @@ export class PaymentComponent implements OnInit {
       }
     }
   }
+  getTaxInfo(State){
+    console.log("getTaxInfo")
+    let options={
+      State
+    };
+    this.perfApp.route = "payments";
+    this.perfApp.method = "tax";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(taxInfo => {
+      console.log(taxInfo);
+      this.stateTax = taxInfo.tax;
+    })
+}
   findInitialPayments(selectedOrgnization){
     let _requestBody={
       Organization:selectedOrgnization,
@@ -170,12 +184,24 @@ export class PaymentComponent implements OnInit {
       let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
       this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
       let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
+      
+      COST_PER_PA = COST_PER_PA.$numberDecimal;
+      COST_PER_MONTH = COST_PER_MONTH.$numberDecimal;
+      DISCOUNT_PA_PAYMENT = DISCOUNT_PA_PAYMENT.$numberDecimal;
+      TOTAL_AMOUNT = TOTAL_AMOUNT.$numberDecimal;
+      COST_PER_MONTH_ANNUAL_DISCOUNT = COST_PER_MONTH_ANNUAL_DISCOUNT.$numberDecimal;
+      
       let {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT} = this.paymentReleaseData;
+      
+      DUE_AMOUNT = DUE_AMOUNT.$numberDecimal;
+      TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
+      TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
+
       this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
       this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
-      console.log(JSON.stringify(this.paymentSummary));
+      
   }
 
   loadOrganizationDefaultData(){
@@ -221,7 +247,7 @@ export class PaymentComponent implements OnInit {
     if(this.selectedOrganizationObj.Range){
       paymentReleaseOptions.Type="Range";
     };
-
+    paymentReleaseOptions.State = this.selectedOrganizationObj.State;
     this.perfApp.route = "payments";
     this.perfApp.method = "Scale",
     this.perfApp.requestBody = paymentReleaseOptions;
