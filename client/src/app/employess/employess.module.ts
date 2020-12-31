@@ -56,6 +56,7 @@ import { ReviewAccompListComponent } from './review-accomp-list/review-accomp-li
 import { ReviewAccomplishmentsComponent } from './review-accomplishments/review-accomplishments.component';
 import { PrivateNotesComponent } from './private-notes/private-notes.component';
 import { PrivateNotesListComponent } from './private-notes-list/private-notes-list.component';
+import { CurrentEvaluationReportComponent} from './reports/current-evaluation/current-evaluation-report.component';
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
@@ -74,7 +75,8 @@ import { PrivateNotesListComponent } from './private-notes-list/private-notes-li
      ReviewAccompListComponent,
      ReviewAccomplishmentsComponent,
      PrivateNotesComponent,
-     PrivateNotesListComponent
+     PrivateNotesListComponent,
+     CurrentEvaluationReportComponent
     ],
   imports: [
     CommonModule,
