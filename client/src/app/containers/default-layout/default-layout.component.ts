@@ -227,11 +227,18 @@ export class DefaultLayoutComponent implements OnInit {
       }else{
         navigationMenu.push(
           {
-            "IsActive": true,
-            "url": "/employee/reports",
-            "name": "Reports",
-            "code": "Reports",
-            "icon": "icon-list"
+                "IsActive": true,
+                "url": "/employee/reports",
+                "name": "Reports",
+                "code": "Reports",
+                "icon": "icon-list",
+                "children": [{
+                  "IsActive": true,
+                  "url": "/employee/reports/current-evaluation",
+                  "name": "Evaluation Report",
+                  "code": "Current Evaluation",
+                  "icon": "icon-list"
+                }]
           })
       }
 
