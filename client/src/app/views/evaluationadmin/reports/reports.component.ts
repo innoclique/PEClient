@@ -9,6 +9,7 @@ import ReportTemplates from '../../psa/reports/data/reports-templates';
 import { ReportsService } from '../../../services/reports.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { DateAgoPipe } from '../../../pipes/DateAgoPipe';
+import { StatusPanelComponent } from 'ag-grid-community/dist/lib/components/framework/componentTypes';
 
 @Component({
   selector: 'app-reports',
@@ -34,7 +35,7 @@ export class ReportsComponent {
     public router: Router,
     public reportService: ReportsService,
     private perfApp: PerfAppService,
-    private activatedRoute: ActivatedRoute, ) {
+    private activatedRoute: ActivatedRoute,) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     this.gridOptions = <GridOptions>{};
@@ -76,21 +77,28 @@ export class ReportsComponent {
     ];
   }
   getLengthOfService(joiningDate) {
-    console.log(joiningDate);
     return new DateAgoPipe().transform(joiningDate);
   }
-  createRowData(eaEvaluations: any) {
+
+  createRowData(eaEvaluations: any, employees: any) {
     const rowData: any[] = [];
     for (let i = 0; i < eaEvaluations.length; i++) {
       this.getLengthOfService(eaEvaluations[i].Employee.JoiningDate);
+      let mgr: string = '';
+      if (!eaEvaluations[i].Employee.Manager.FirstName) {
+        let mgrObj = employees.find(emp => emp._id == eaEvaluations[i].Employee._id);
+        mgr = mgrObj.Manager.FirstName + "-" + mgrObj.Manager.LastName;
+      } else {
+        mgr = eaEvaluations[i].Employee.Manager.FirstName + "-" + eaEvaluations[i].Employee.Manager.LastName;
+      }
       rowData.push({
         emp: eaEvaluations[i].Employee.FirstName + "-" + eaEvaluations[i].Employee.LastName,
-        mgr: eaEvaluations[i].Employee.Manager.FirstName + "-" + eaEvaluations[i].Employee.Manager.LastName,
+        mgr: mgr,
         dept: eaEvaluations[i].Employee.Department,
         title: eaEvaluations[i].Employee.Title,
         servicePeriod: this.getLengthOfService(eaEvaluations[i].Employee.JoiningDate),
         currentRoleServicePeriod: this.getLengthOfService(eaEvaluations[i].Employee.RoleEffFrom),
-        status: eaEvaluations[i].EvaluationRow.status,
+        status: eaEvaluations[i].Status?eaEvaluations[i].Status.Status:'',
 
       });
     }
@@ -126,6 +134,26 @@ export class ReportsComponent {
     this.api.setQuickFilter($event.target.value);
   }
 
+  getEmployees(selectedEmployeesList: any) {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetAllEmployees",
+      this.perfApp.requestBody = { 'companyId': this.currentOrganization._id }
+    this.perfApp.CallAPI().subscribe(c => {
+      // console.log('employeed data', c);
+      if (c && c.length > 0) {
+        this.employeesList$ = c
+        var clonedArray = this.employeesList$.map((_arrayElement) => Object.assign({}, _arrayElement));
+        this.employeesList$.map(x => {
+          var _f = Object.assign({}, x);
+          x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
+            x.row = _f;
+        });
+        // console.log('formated data', this.employeesList$);
+        this.createRowData(selectedEmployeesList, this.employeesList$);
+      }
+
+    })
+  }
 
   getEvaluationList() {
     this.selectedEmployeesList = [];
@@ -133,10 +161,9 @@ export class ReportsComponent {
     this.perfApp.method = "GetEvaluations",
       this.perfApp.requestBody = { clientId: this.authService.getOrganization()._id }
     this.perfApp.CallAPI().subscribe(c => {
-      console.log('evaluationList data', c);
       if (c) {
-        // this.selectedEmployeesList = [];
         c.map(row => {
+         
           if (row.Type === 'K') {
             this.selectedEmployeesList.push({
               Type: row.Type,
@@ -149,7 +176,7 @@ export class ReportsComponent {
               PeersCompetencyMessage: '',
               DirectReporteeComptencyMessage: '',
               PeersCompetencyList: [],
-              DirectReporteeCompetencyList: []
+              DirectReporteeCompetencyList: [],
             });
 
           } else {
@@ -166,7 +193,8 @@ export class ReportsComponent {
                 PeersCompetencyMessage: x.PeersCompetencyMessage,
                 DirectReporteeComptencyMessage: x.DirectReporteeComptencyMessage,
                 PeersCompetencyList: x.PeersCompetencyList,
-                DirectReporteeCompetencyList: x.DirectReporteeCompetencyList
+                DirectReporteeCompetencyList: x.DirectReporteeCompetencyList,
+                Status:x.Status
               });
             })
 
@@ -174,8 +202,8 @@ export class ReportsComponent {
         })
 
       }
-      this.createRowData(this.selectedEmployeesList);
-      // this.getEmployees(this.selectedEmployeesList);
+      // this.createRowData(this.selectedEmployeesList);
+      this.getEmployees(this.selectedEmployeesList);
     })
 
   }
