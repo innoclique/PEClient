@@ -85,7 +85,7 @@ export const projectRoutes: Routes = [
     CSAEvaluationsSummary,
     PaymentComponent,
     AdhocPaymentComponent,
-    PaymentGatewayComponent
+    PaymentGatewayComponent,
     
   ],
   imports: [

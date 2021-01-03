@@ -18,8 +18,14 @@
           <div class="row m-b15">
             <div class="col-lg-6">
               <label>Usage type</label>
-              <input  readonly class="form-control" [(ngModel)]="paymentModel.UserType" name="userType"  />
-              
+              <input *ngIf="!isReseller" readonly class="form-control" [(ngModel)]="paymentModel.UserType" name="userType"  />
+              <div *ngIf="isReseller">
+                <select (change)="useageOnchange($event.target.value)" [(ngModel)]="paymentModel.UserType"  class="form-control">
+                  <option selected value="License">License</option>
+                  <option value="Employees">Employees</option>
+                </select>
+                <i class="fa fa-chevron-down"></i>
+              </div>
             </div>
             <div class="col-lg-6">
                <div class="">
@@ -80,7 +86,7 @@
           <div class="row m-b15">
             <div class="col-lg-6" *ngIf="isReseller">
               <label>#s needed</label>
-              <input type="text"  class="form-control" [(ngModel)]="paymentModel.NoNeeded" />
+              <input (input)="onChangeNoNeeded($event.target.value)"  type="text"  class="form-control" [(ngModel)]="paymentModel.NoNeeded" />
             </div>
             
             
@@ -142,7 +148,7 @@
 </div>
 <!-- Right Content -->
 <div class="payment_method_right">
-  <h5 class="wow fadeIn" data-wow-delay="0.2s">Costing per Employee</h5>
+  <h5 class="wow fadeIn" data-wow-delay="0.2s">Costing Details</h5>
   <div class="wow fadeIn" data-wow-delay="0.4s"><img src="assets/payments/costing_img.png"  alt="img"></div>
   <div class="payment_right_blue wow fadeIn" data-wow-delay="0.6s">
     <h6>{{paymentStructure?paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT:0}} <small>per month</small></h6>

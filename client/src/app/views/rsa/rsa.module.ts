@@ -23,6 +23,11 @@ import { DashboardChartsModule } from "../charts/charts.module";
 import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
 import { ClientPurchaseHistory } from './reports/purchaseHistory/client/clientPurchaseHIstory';
 
+import { CSAModule } from "../csa/csa.module";
+import { PaymentComponent } from "../csa/payment/payment.component";
+import { AdhocPaymentComponent } from "../csa/adhoc-payment/adhoc-payment.component";
+import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
+import { PaymentGatewayComponent } from "../csa/payment-gateway/payment-gateway.component";
 
 export const rsaRoutes: Routes = [
 
@@ -79,7 +84,27 @@ export const rsaRoutes: Routes = [
         path: 'setup-model',
         component: SetupModelComponent,
         data: { title: 'Model' }
-      }
+      },
+      {
+        path: 'payments',
+        component: PaymentComponent,
+        data: { title: 'Payment' }
+      },
+      {
+        path: 'adhoc-payment',
+        component: AdhocPaymentComponent,
+        data: { title: 'Payment' }
+      },
+      {
+        path: 'payment-history',
+        component: PaymentHistoryComponent,
+        data: { title: 'Payment history' }
+      },
+      {
+        path: 'dopayment',
+        component: PaymentGatewayComponent,
+        data: { title: 'Payment Gateway' }
+      },
 
     ]
   },
@@ -87,10 +112,13 @@ export const rsaRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [DashboardComponent, SetupclientComponent, AppsettingsComponent, EvaluationsettingsComponent, ReportsComponent, SetupModelComponent, ClientPurchaseHistory, ClientListComponent],
+  declarations: [
+    DashboardComponent, SetupclientComponent, AppsettingsComponent, 
+    EvaluationsettingsComponent, ReportsComponent, SetupModelComponent, 
+    ClientPurchaseHistory, ClientListComponent,],
   imports: [
     CommonModule,
-
+    CSAModule,
     RouterModule.forChild(rsaRoutes),
     ChartsModule,
     MatCardModule,
@@ -105,6 +133,6 @@ export const rsaRoutes: Routes = [
     TabsModule,
     DashboardChartsModule
   ],
-  exports:[ClientSummaryComponent]
+  exports:[ClientSummaryComponent,]
 })
 export class RsaModule { }

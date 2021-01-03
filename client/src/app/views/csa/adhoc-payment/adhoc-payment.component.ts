@@ -12,6 +12,7 @@ import { NotificationService } from '../../../services/notification.service';
   styleUrls: ['./adhoc-payment.component.css']
 })
 export class AdhocPaymentComponent implements OnInit {
+  isAdhocPaymentAllowed:Boolean=true;
   stateTax:any;
   otherTextValue:any;
   paymentOption:any;
@@ -31,7 +32,7 @@ export class AdhocPaymentComponent implements OnInit {
     NoOfEmployees:0,
     NoNeeded:0,
     Status:"",
-    Duration:"",
+    DurationMonths:"1",
     Purpose:""
   };
   useageTypeEmployee:Boolean=false;
@@ -107,10 +108,12 @@ export class AdhocPaymentComponent implements OnInit {
           this.loadOrganizationDefaultData(selectedOrgnization);
         }else{
           this.notification.error(`Adhoc payment not allowed.`);
+          this.isAdhocPaymentAllowed=false;
         }
         
       }else{
         this.notification.error(`Adhoc payment not allowed.`);
+        this.isAdhocPaymentAllowed=false;
       }
     });
   }
@@ -153,9 +156,13 @@ export class AdhocPaymentComponent implements OnInit {
       this.refreshForm();
     }
   }
+  loadDuration(){
+    this.getPaymentReleaseCost();
+  }
 
   caluculateNoOfMonths(){
-    console.log(this.paymentModel.ActivationDate)
+    console.log("==caluculateNoOfMonths==");
+    console.log(this.selectedOrganizationObj)
     let activaDateMoment = moment(this.paymentModel.ActivationDate).startOf('month');
     //let activaDateMoment = moment("11/01/2020").startOf('month');
     let {EvaluationPeriod,EndMonth} = this.selectedOrganizationObj;
@@ -165,17 +172,31 @@ export class AdhocPaymentComponent implements OnInit {
       noOfMonths = momentEvlEndDate.diff(activaDateMoment,'months')+1;
     }
     else if(EvaluationPeriod === 'FiscalYear'){
-      let endMonthVal = moment().month(EndMonth).format("M");
-      let nextYear = moment(this.paymentModel.ActivationDate).add(1, 'years').month(parseInt(endMonthVal)-1).endOf('month');
-      noOfMonths = nextYear.diff(activaDateMoment,'months')+1;
+      let endMonthVal = Number(moment().month(EndMonth).format("M"));
+      let currentMonth = Number(moment().format("M"));
+      console.log(`${currentMonth} >= ${endMonthVal}`)
+      if(currentMonth>=endMonthVal){
+        let nextYear = moment(this.paymentModel.ActivationDate).add(1, 'years').month(parseInt(""+endMonthVal)-1).endOf('month');
+        noOfMonths = nextYear.diff(activaDateMoment,'months')+1;
+      }else{
+        let nextYear = moment(this.paymentModel.ActivationDate).month(parseInt(""+endMonthVal)-1).endOf('month');
+        noOfMonths = nextYear.diff(activaDateMoment,'months')+1;
+      }
+    }else if(this.selectedOrganizationObj.ClientType === "Reseller"){
+      noOfMonths = 12;
     }
+
     this.paymentModel.NoOfMonthsLable = `${noOfMonths} Months`;
     this.paymentModel.NoOfMonths = noOfMonths;
+
+    console.log("==End:caluculateNoOfMonths==");
   }
+  
 
   getPaymentReleaseCost(){
     let paymentReleaseOptions:any={};
     paymentReleaseOptions.Organization=this.selectedOrganizationObj._id;
+    paymentReleaseOptions.ClientType=this.selectedOrganizationObj.ClientType;
     paymentReleaseOptions.noOfEmployess=Number(this.paymentModel.NoOfEmployees)
     paymentReleaseOptions.State = this.selectedOrganizationObj.State;
     this.perfApp.route = "payments";
@@ -205,6 +226,9 @@ export class AdhocPaymentComponent implements OnInit {
     let noOfMonths=1;
     if(this.paymentModel.isAnnualPayment){
       noOfMonths=this.paymentModel.NoOfMonths;
+    }
+    if(this.paymentModel.DurationMonths && this.paymentModel.DurationMonths !== "0"){
+      noOfMonths = Number(this.paymentModel.DurationMonths);
     }
     let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment};
     this.paymentSummary = this.paymentCaluculationService.CaluculatePaymentSummary(this.paymentStructure,options,this.paymentScale);

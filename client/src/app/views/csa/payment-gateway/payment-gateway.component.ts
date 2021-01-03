@@ -83,7 +83,7 @@ loadPaymentPage(ticket){
   myCheckout.setCallback("page_loaded", this.initiateTransactionHistory);
   myCheckout.setCallback("payment_receipt", this.paymentReceipt);
   myCheckout.setCallback("cancel_transaction", this.initiateTransactionHistory);
-  myCheckout.setCallback("payment_complete", this.initiateTransaction);
+  //myCheckout.setCallback("payment_complete", this.initiateTransaction);
   myCheckout.setCallback("error_event", this.initiateTransactionHistory);
 }
 initiateTransactionHistory(response){

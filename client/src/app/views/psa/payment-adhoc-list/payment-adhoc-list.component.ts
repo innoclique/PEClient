@@ -73,7 +73,11 @@ export class PaymentAdhocListComponent implements OnInit {
       { headerName: 'Total Request', field: 'totalRequest', sortable: true, filter: true },
       { headerName: 'Current Request', field: 'noOfEmployees', sortable: true, filter: true },
       { headerName: 'Purpose', field: 'purpose', sortable: true, filter: true },
-      { headerName: 'Amount', field: 'amount', sortable: true, filter: true },
+      { headerName: 'Amount', field: 'amount', sortable: true, filter: true ,
+      cellRenderer: (data) => {
+        console.log(data)
+        return `${data.value.$numberDecimal}`;
+      }},
       {
         headerName: "Actions",
         suppressSizeToFit: true,
@@ -161,7 +165,7 @@ export class PaymentAdhocListComponent implements OnInit {
 
   orgnizationDetails(){
       this.paymentReleaseData;
-      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,Paymentdate} = this.paymentReleaseData;
+      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,Paymentdate,DurationMonths} = this.paymentReleaseData;
       this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
       if(Paymentdate){
         this.paymentDate = moment(Paymentdate).format("MM/DD/YYYY");
@@ -180,7 +184,7 @@ export class PaymentAdhocListComponent implements OnInit {
       TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
       TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
 
-      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
+      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,DurationMonths};
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
       this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};

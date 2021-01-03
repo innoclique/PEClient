@@ -22,13 +22,12 @@
           <div class="row m-b15">
             <div class="col-lg-6">
               <label>Duration</label>
-              <select class="form-control" [(ngModel)]="paymentModel.Duration">
-                <option value="">Select Month</option>
+              <select (change)="loadDuration()" class="form-control" [(ngModel)]="paymentModel.DurationMonths">
                 <option value="1">1 Month</option>
                 <option value="2">2 Months</option>
                 <option value="3">3 Months</option>
                 <option value="6">6 Months</option>
-                <option value="12">12 Months</option>
+                <option value="0"># of months to end of year</option>
               </select>
               <i class="fa fa-chevron-down"></i>
             </div>
@@ -155,7 +154,7 @@
               </li>
             </ul>
           </div>
-          <div  class="release_method_buttons">
+          <div *ngIf="isAdhocPaymentAllowed"  class="release_method_buttons">
             <button (click)="sendAdhocRequest()" class="release_buttons_save">Submit</button>
             <a href="javscript:void(0)" class="release_buttons_cancel">Cancel</a>
             <div class="clear"></div>
@@ -164,7 +163,7 @@
     </div>
     <!-- Right Content -->
 <div class="payment_method_right">
-  <h5 class="wow fadeIn" data-wow-delay="0.2s">Costing per Employee</h5>
+  <h5 class="wow fadeIn" data-wow-delay="0.2s">Costing Details</h5>
   <div class="wow fadeIn" data-wow-delay="0.4s"><img src="assets/payments/costing_img.png"  alt="img"></div>
   <div class="payment_right_blue wow fadeIn" data-wow-delay="0.6s">
     <h6>{{paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT}} <small>per year</small></h6>
