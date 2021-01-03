@@ -266,6 +266,30 @@ export default class RSAReportTemplates {
         currentYear = currentYear.substring(2);
         return currentYear;
     }
+  
+   static getYearStart(month: string) {
+        if (this.months.indexOf(month) > new Date().getMonth()) {
+            var currentYear: string = (new Date().getFullYear()-1).toString();
+            currentYear = currentYear.substring(2);
+            return currentYear;
+        } else {
+            var currentYear: string = new Date().getFullYear().toString();
+            currentYear = currentYear.substring(2);
+            return currentYear;
+        }
+    }
+
+    static getYearEnd(month: string) {
+        if (this.months.indexOf(month) >= new Date().getMonth()) {
+            var currentYear: string = new Date().getFullYear().toString();
+            currentYear = currentYear.substring(2);
+            return currentYear;
+        } else {
+            var currentYear: string = (new Date().getFullYear()+1).toString();
+            currentYear = currentYear.substring(2);
+            return currentYear;
+        }
+    }
     static months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July",
         "Aug", "Sep", "Oct", "Nov", "Dec"];
     static headerHeightGetter() {
