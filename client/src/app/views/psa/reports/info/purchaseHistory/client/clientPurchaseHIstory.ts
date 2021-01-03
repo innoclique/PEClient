@@ -98,7 +98,7 @@ export class ClientPurchaseHistory {
       'active': this.clientInfo.IsActive ? 'Yes' : 'No',
       'usageType': this.clientInfo.UsageType,
       'evaluationsType': this.clientInfo.EvaluationPeriod,
-      'evaluationPeriod': ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
+//       'evaluationPeriod': ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
     };
 
     for (let i = 0; i < 20; i++) {
