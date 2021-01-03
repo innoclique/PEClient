@@ -83,7 +83,7 @@ export class ClientRevenueInfoComponent {
                 clientId: clientsInfo[i]._id,
                 usageType: clientsInfo[i].UsageType,
                 evaluationsType: RefData.evaluationTypes[0],
-                evaluationPeriod: ReportTemplates.months[clientsInfo[i].StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + clientsInfo[i].EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
+//                 evaluationPeriod: ReportTemplates.months[clientsInfo[i].StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + clientsInfo[i].EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
                 paymentTypes: RefData.paymentTypes[Math.random() < 0.5 ? 1 : 0],
                 empPurchasesCount: Math.round(Math.random() * 100),
                 licPurchasesCount: Math.round(Math.random() * 10),
