@@ -6,6 +6,7 @@ import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
 import { NotificationService } from '../../../services/notification.service';
 import { Router ,ActivatedRoute} from '@angular/router';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-price-list',
@@ -16,11 +17,18 @@ export class PriceListComponent implements OnInit {
   licensePriceList:any=[];
   employeesPriceList:any=[];
   OrganizationName:any="";
+  currentOrganization:any;
   public PaymentGridOptions: GridOptions = {
     columnDefs: this.getColDef()      
   }
   @ViewChild('staticTabs', { static: false }) staticTabs: TabsetComponent;
-  constructor(private perfApp: PerfAppService,private activatedRoute: ActivatedRoute,) { }
+  constructor(
+    private perfApp: PerfAppService,
+    private activatedRoute: ActivatedRoute,
+    public authService: AuthService,
+    ) { 
+      this.currentOrganization = this.authService.getOrganization();
+    }
 
   ngOnInit(): void {
     this.getLicensePriceList();
@@ -68,6 +76,9 @@ export class PriceListComponent implements OnInit {
       "UsageType" : "License",
       "ClientType" : "Client"
      }
+     if(this.currentOrganization.ClientType === "Reseller"){
+      this.perfApp.requestBody.ClientType="Reseller"
+     }
     this.perfApp.CallAPI().subscribe(priceList => {
       this.licensePriceList = priceList;
       this.PaymentGridOptions.api.setRowData(this.licensePriceList);
@@ -80,6 +91,9 @@ export class PriceListComponent implements OnInit {
     this.perfApp.requestBody = { 
       "UsageType" : "Employees",
       "ClientType" : "Client"
+     };
+     if(this.currentOrganization.ClientType === "Reseller"){
+      this.perfApp.requestBody.ClientType="Reseller"
      }
     this.perfApp.CallAPI().subscribe(priceList => {
       this.employeesPriceList = priceList;

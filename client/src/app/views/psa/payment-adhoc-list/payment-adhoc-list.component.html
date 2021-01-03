@@ -39,8 +39,8 @@ class="ag-theme-alpine"
                              <i class="release_txt_nonedit">{{checkoutActivationDate}}</i>
                           </div>
                           <div class="col-lg-4">
-                            <label># Need</label>
-                            <i class="release_txt_nonedit">{{paymentModel.NoNeeded}}</i>
+                            <label>Duration</label>
+                            <i class="release_txt_nonedit">{{paymentModel.DurationMonths}} Months</i>
                           </div>
                           <div class="col-lg-4">
                              <label>Frequency</label>
@@ -66,11 +66,24 @@ class="ag-theme-alpine"
                               <span>{{paymentStructure?paymentStructure.TOTAL_AMOUNT:0}}</span>
                               <div class="clear"></div>
                             </li>
-                           
                             <li>
-                                <h6>Total<strong *ngIf="paymentModel.isAnnualPayment">Total Amount Payable (for annual payments)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Total Amount Payable (for monthly payments)</strong></h6>
-                                <span>{{paymentSummary?paymentSummary.TOTAL_PAYABLE_AMOUNT:0}}</span>
-                                <div class="clear"></div>
+                              <h6>Due<strong *ngIf="paymentModel.isAnnualPayment">Amount due (annual payment)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Amount due (monthly payment)</strong></h6>
+                              <span>{{paymentSummary?paymentSummary.DUE_AMOUNT:0}}</span>
+                              <div class="clear"></div>
+                            </li>
+                            <li>
+                              <h6>Tax<strong>Tax({{stateTax?stateTax:0}}%)</strong></h6>
+                              <span>{{paymentSummary?paymentSummary.TAX_AMOUNT:0}}</span>
+                              <div class="clear"></div>
+                            </li>
+                            <li>
+                              <h6>Total<strong *ngIf="paymentModel.isAnnualPayment">Total Amount Payable (annual payments)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Total Amount Payable (for monthly payments)</strong></h6>
+                              <span>{{paymentSummary?paymentSummary.TOTAL_PAYABLE_AMOUNT:0}}</span>
+                              <div class="clear"></div>
+                            </li>
+                            <li>
+                              <h6>Summary<strong>Amount payable is cost per employee per year, after discount,  number of employees  + taxes.</strong></h6>
+                              <div class="clear"></div>
                             </li>
                           </ul>
                         </div>

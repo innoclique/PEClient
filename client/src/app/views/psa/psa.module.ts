@@ -33,6 +33,7 @@ import {ClientRevenueDetails} from "./reports/revenue/details/client/clientReven
 import {ResellerRevenueDetails} from "./reports/revenue/details/reseller/resellerRevenueDetails";
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { PaymentReleaseComponent } from './payment-release/payment-release.component';
+
 import { PaymentAdhocListComponent } from './payment-adhoc-list/payment-adhoc-list.component';
 import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
 import { PriceListComponent } from "../common/price-list/price-list.component";
@@ -169,6 +170,7 @@ export const projectRoutes: Routes = [
       component:PaymentAdhocListComponent,
       data:{title:'Payment-Adhoc-List'}
     },
+    
   ]
 },
   

@@ -112,10 +112,32 @@ export class PaymentReleaseComponent implements OnInit {
       this.stateTax = taxInfo.tax;
     })
 }
+useageOnchange(){
+
+  let rangeOptions={
+    ClientType:this.selectedOrganizationObj.ClientType,
+    UsageType:this.selectedOrganizationObj.UsageType || "License",
+    "Type" : "Range"
+  } 
+  this.useageTypeEmployee=false;
+  if(this.paymentModel.UserType==="Employees"){
+    this.useageTypeEmployee=true;
+    this.isRangeSelectVisible=false;
+    this.isRangeSelectBox=true;
+    rangeOptions.UsageType="Employees";
+  }else if(this.paymentModel.UserType==="License"){
+    this.isRangeSelectVisible=true;
+    this.isRangeSelectBox=false;
+    rangeOptions.UsageType="License";
+  }
+  this.getRangeList(rangeOptions);
+}
   orgnizationDetails(selectedOrgnization){
     console.log("On Select Organization")
     console.log(selectedOrgnization);
     this.useageTypeEmployee=false;
+    this.paymentModel.RangeId="";
+    this.paymentModel.Range="";
     this.paymentModel.NoOfEmployees=0;
   
     this.isReseller = false;
@@ -130,6 +152,7 @@ export class PaymentReleaseComponent implements OnInit {
     if(selectedOrgnization!=""){
       
       this.selectedOrganizationObj = this.organizationList.find(org=>org._id==selectedOrgnization);
+      console.log(this.selectedOrganizationObj);
       this.getTaxInfo(this.selectedOrganizationObj.State);
       if(this.selectedOrganizationObj.UsageType && this.selectedOrganizationObj.UsageType==="License"){
         this.isRangeSelectVisible=true;
@@ -137,7 +160,8 @@ export class PaymentReleaseComponent implements OnInit {
       }
       //=>Range List
       let rangeOptions={
-        UsageType:this.selectedOrganizationObj.UsageType,
+        ClientType:this.selectedOrganizationObj.ClientType,
+        UsageType:this.selectedOrganizationObj.UsageType || "License",
         "Type" : "Range"
       } 
       this.getRangeList(rangeOptions);
@@ -171,12 +195,22 @@ export class PaymentReleaseComponent implements OnInit {
 
           this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
           if(this.selectedOrganizationObj.UsageType=="License"){
-          this.paymentModel.Range = RangeId;
+          this.paymentModel.RangeId = RangeId;
+          this.paymentModel.Range = Range;
           }
           if(this.selectedOrganizationObj.UsageType=="Employees"){
             this.useageTypeEmployee=true;
             this.paymentModel.Range = Range;
+          }
+          if(this.selectedOrganizationObj.ClientType === "Reseller"){
+            this.isReseller=true;
+            if(this.paymentModel.UserType==="Employees"){
+              this.useageTypeEmployee=true;
+              //this.isRangeSelectVisible=false;
+              //this.isRangeSelectBox=true;
+              //rangeOptions.UsageType="Employees";
             }
+          }
           this.paymentModel.paymentreleaseId = paymentRelease._id;
           this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
           this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
@@ -186,10 +220,13 @@ export class PaymentReleaseComponent implements OnInit {
       
     }
   }
+  
   onChangeEmployee(searchValue){
     if(searchValue && searchValue!="" && searchValue!="0"){
       let paymentReleaseOptions:any={
-        "UsageType" : this.selectedOrganizationObj.UsageType,
+        //"UsageType" : this.selectedOrganizationObj.UsageType,
+        "ClientType" : this.selectedOrganizationObj.ClientType,
+        "UsageType" : this.paymentModel.UserType,
         "Type" : "Range",
         "RangeTo" : {$gte:searchValue},
         "RangeFrom" : {$lte:searchValue},
@@ -198,10 +235,16 @@ export class PaymentReleaseComponent implements OnInit {
     }else{
       this.refreshForm();
     }
-
-
-    
   }
+
+  onChangeNoNeeded(searchValue){
+    if(searchValue && searchValue!="" && searchValue!="0"){
+      this.setPaymentBreakup();
+    }else{
+      this.refreshForm();
+    }
+  }
+
   loadOrganizationDefaultData(){
     console.log("Inside:loadOrganizationDefaultData")
     this.caluculateNoOfMonths();
@@ -211,7 +254,11 @@ export class PaymentReleaseComponent implements OnInit {
       this.paymentModel.NoOfEmployees=this.selectedOrganizationObj.UsageCount;
     }
     if(this.selectedOrganizationObj.ClientType === "Reseller"){
+      this.paymentModel.NoNeeded=1;
       this.isReseller=true;
+      this.paymentModel.UserType="License";
+      this.isRangeSelectVisible=true;
+      this.isRangeSelectBox=false;
     }
     if(this.selectedOrganizationObj.UsageType!="License"){
       let paymentReleaseOptions:any={
@@ -235,7 +282,8 @@ export class PaymentReleaseComponent implements OnInit {
   }
 
   caluculateNoOfMonths(){
-    console.log(this.paymentModel.ActivationDate)
+    console.log("==caluculateNoOfMonths==");
+    console.log(this.selectedOrganizationObj)
     let activaDateMoment = moment(this.paymentModel.ActivationDate).startOf('month');
     //let activaDateMoment = moment("11/01/2020").startOf('month');
     let {EvaluationPeriod,EndMonth} = this.selectedOrganizationObj;
@@ -245,12 +293,24 @@ export class PaymentReleaseComponent implements OnInit {
       noOfMonths = momentEvlEndDate.diff(activaDateMoment,'months')+1;
     }
     else if(EvaluationPeriod === 'FiscalYear'){
-      let endMonthVal = moment().month(EndMonth).format("M");
-      let nextYear = moment(this.paymentModel.ActivationDate).add(1, 'years').month(parseInt(endMonthVal)-1).endOf('month');
-      noOfMonths = nextYear.diff(activaDateMoment,'months')+1;
+      let endMonthVal = Number(moment().month(EndMonth).format("M"));
+      let currentMonth = Number(moment().format("M"));
+      console.log(`${currentMonth} >= ${endMonthVal}`)
+      if(currentMonth>=endMonthVal){
+        let nextYear = moment(this.paymentModel.ActivationDate).add(1, 'years').month(parseInt(""+endMonthVal)-1).endOf('month');
+        noOfMonths = nextYear.diff(activaDateMoment,'months')+1;
+      }else{
+        let nextYear = moment(this.paymentModel.ActivationDate).month(parseInt(""+endMonthVal)-1).endOf('month');
+        noOfMonths = nextYear.diff(activaDateMoment,'months')+1;
+      }
+    }else if(this.selectedOrganizationObj.ClientType === "Reseller"){
+      noOfMonths = 12;
     }
+
     this.paymentModel.NoOfMonthsLable = `${noOfMonths} Months`;
     this.paymentModel.NoOfMonths = noOfMonths;
+
+    console.log("==End:caluculateNoOfMonths==");
   }
 
   getPaymentReleaseCost(paymentReleaseOptions){
@@ -272,6 +332,7 @@ export class PaymentReleaseComponent implements OnInit {
       if(paymentScale){
         this.paymentScale=paymentScale;
         this.paymentModel.Range = this.paymentScale.Range;
+        this.paymentScale.Tax = this.stateTax;
         this.setPaymentBreakup();
       }else{
         this.paymentStructure=null;
@@ -291,10 +352,15 @@ export class PaymentReleaseComponent implements OnInit {
 
   getPaymentSummary(){
     let noOfMonths=1;
-    if(this.paymentModel.isAnnualPayment){
+    let {NoNeeded} = this.paymentModel;
+    if(this.paymentModel.isAnnualPayment && this.paymentScale.ClientType!="Reseller"){
       noOfMonths=this.paymentModel.NoOfMonths;
+    }else if(this.paymentModel.isAnnualPayment && this.paymentScale.ClientType=="Reseller"){
+      noOfMonths=12;
+    }else if(!this.paymentModel.isAnnualPayment && this.paymentScale.ClientType=="Reseller"){
+      noOfMonths=1;
     }
-    let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment};
+    let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment,NoNeeded};
     this.paymentSummary = this.paymentCaluculationService.CaluculatePaymentSummary(this.paymentStructure,options,this.paymentScale);
   }
 

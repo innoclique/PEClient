@@ -219,7 +219,8 @@ export class PaymentComponent implements OnInit {
   }
 
   caluculateNoOfMonths(){
-    console.log(this.paymentModel.ActivationDate)
+    console.log("==caluculateNoOfMonths==");
+    console.log(this.selectedOrganizationObj)
     let activaDateMoment = moment(this.paymentModel.ActivationDate).startOf('month');
     //let activaDateMoment = moment("11/01/2020").startOf('month');
     let {EvaluationPeriod,EndMonth} = this.selectedOrganizationObj;
@@ -229,12 +230,24 @@ export class PaymentComponent implements OnInit {
       noOfMonths = momentEvlEndDate.diff(activaDateMoment,'months')+1;
     }
     else if(EvaluationPeriod === 'FiscalYear'){
-      let endMonthVal = moment().month(EndMonth).format("M");
-      let nextYear = moment(this.paymentModel.ActivationDate).add(1, 'years').month(parseInt(endMonthVal)-1).endOf('month');
-      noOfMonths = nextYear.diff(activaDateMoment,'months')+1;
+      let endMonthVal = Number(moment().month(EndMonth).format("M"));
+      let currentMonth = Number(moment().format("M"));
+      console.log(`${currentMonth} >= ${endMonthVal}`)
+      if(currentMonth>=endMonthVal){
+        let nextYear = moment(this.paymentModel.ActivationDate).add(1, 'years').month(parseInt(""+endMonthVal)-1).endOf('month');
+        noOfMonths = nextYear.diff(activaDateMoment,'months')+1;
+      }else{
+        let nextYear = moment(this.paymentModel.ActivationDate).month(parseInt(""+endMonthVal)-1).endOf('month');
+        noOfMonths = nextYear.diff(activaDateMoment,'months')+1;
+      }
+    }else if(this.selectedOrganizationObj.ClientType === "Reseller"){
+      noOfMonths = 12;
     }
+
     this.paymentModel.NoOfMonthsLable = `${noOfMonths} Months`;
     this.paymentModel.NoOfMonths = noOfMonths;
+
+    console.log("==End:caluculateNoOfMonths==");
   }
 
   getPaymentReleaseCost(){
