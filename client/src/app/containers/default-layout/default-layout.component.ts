@@ -334,46 +334,159 @@ isCSA:Boolean = false;
       console.log("current menu items", navigationMenu);
       if(this.user.Role=="CSA"){
         localStorage.setItem("currentUser", "CSA")
-        for (var i =0; i < this.navItems.length; i++)
-        if (this.navItems[i].name === "CSA Dashboard") {
-           this.navItems.splice(i,1);
-           break;
-        }
-        for (var i =0; i < this.navItems.length; i++)
-        if (this.navItems[i].name === "CSA Reports") {
-           this.navItems.splice(i,1);
-           break;
-        }
-        for (var i =0; i < this.navItems.length; i++)
-        if (this.navItems[i].name === "Reports") {
-           this.navItems.splice(i,1);
-           break;
-        }
-        navigationMenu= [
+        let dashboard = {
+          "IsActive": true,
+          "url": "/dashboard",
+          "name": "Dashboard",
+          "code": "Dashboard",
+          "icon": "icon-calculator",
+          // "badge": {
+          //   "variant": "info",
+          //   "text": "Home"
+          // },
+       
+        };
+        this.navItems=[];
+        navigationMenu=[]
+          navigationMenu.push(
+            dashboard,
+            {
+              "IsActive": true,
+              "url": "/employee/kpi-setup",
+              "name": "Performance Goals",
+              "code": "KPISetting",
+              "icon": "icon-wrench"
+            },
+            {
+              "IsActive": true,
+              "url": "/employee/action-plan",
+              "name": "Action Plan",
+              "code": "ActionPlan",
+              "icon": "icon-layers"
+            },
+            {
+              "IsActive": true,
+              "url": "/employee/current-evaluation",
+              "name": "Current Evaluation",
+              "code": "CurrentEvaluation",
+              "icon": "icon-puzzle"
+            },
+            {
+              "IsActive": true,
+               "url": "/employee/accomplishments-list",
+              "name": "Accomplishments",
+              "code": "Accomplishments",
+              "icon": "cui-tags"
+             },
+             {
+              "IsActive": true,
+              "url": "/employee/peerreview",
+              "name": "Peer Review",
+              "code": "CurrentEvaluation",
+              "icon": "icon-speedometer"
+            },
+            {
+              "IsActive": true,
+              "url": "/employee/drreview",
+              "name": "Review Manager",
+              "code": "CurrentEvaluation",
+              "icon": "icon-layers"
+            },
+            {
+              "IsActive": true,
+               "url": "/employee/private-notes-list",
+              "name": "Notes",
+              "code": "Notes",
+              "icon": "icon-note"
+            },
+            {
+            "IsActive": true,
+            "url": "/ea/setup-employee",
+            "name": "Set up Employees",
+            "code": "Employees",
+            "icon": "icon-user-follow",
+            "linkProps": {
+                "routerLinkActive": "employee"
+            }
+          },
           {
-                     "IsActive": true,
-                     "url": "/ea/reports",
-                     "name": "Reports",
-                     "code": "CSA Reports",
-                     "icon": "icon-list",
-                   "children":[ {
-                       "IsActive": true,
-                       "url": "/csa/reports/evaluationsSummary",
-                       "name": "Evaluations Summary",
-                       "code": "evaluationsSummary",
-                     },
-                     {
-                       "IsActive": true,
-                       "url": "/csa/reports/paymentSummary",
-                       "name": "Payment Summary",
-                       "code": "paymentSummary",
-                     },]
-                 }
-                  
-               ]
-               this.navItems=[...this.navItems, ...navigationMenu];      
+            "IsActive": true,
+            "url": "/ea/evaluation-list",
+            "name": "Evaluations",
+            "code": "Evaluations",
+            "icon": "icon-star"
+        },
+        {
+          "IsActive": true,
+          "url": "/csa/payments",
+          "name": "Payments",
+          "code": "Payments",
+          "icon": "icon-star"
+      },
+      {
+        "IsActive": true,
+        "url": "/ea/settings",
+        "name": "Backend Setup",
+        "code": "BackendSetup",
+        "icon": "icon-settings"
+    },
+    {
+          
+      "IsActive": true,
+      "url": "/employee/review-perf-goals-list",
+      "name": "Performance Goal Review",
+      "code": "KPISetting",
+      "icon": "icon-wrench"
+      
+    },
+    {
+  
+      "IsActive": true,
+      "url": "/employee/review-action-plan-list",
+      "name": "Action Plan Review",
+      "code": "KPISetting",
+      "icon": "icon-layers"
+      
+    },
+    {
+      "IsActive": true,
+      "url": "/employee/review-accomplishments-list",
+      "name": "Review Accomplishments",
+      "code": "Review Accomplishments",
+      "icon": "cui-tags"
+    },
+    {
+      "IsActive": true,
+      "url": "/employee/review-evaluation-list",
+      "name": "Review Evaluations",
+      "code": "Review Evaluations",
+      "icon": "icon-star"
+    },
+    {
+      "IsActive": true,
+      "url": "/ea/reports",
+      "name": "Reports",
+      "code": "CSA Reports",
+      "icon": "icon-list",
+    "children":[ {
+        "IsActive": true,
+        "url": "/csa/reports/evaluationsSummary",
+        "name": "Evaluations Summary",
+        "code": "evaluationsSummary",
+      },
+      {
+        "IsActive": true,
+        "url": "/csa/reports/paymentSummary",
+        "name": "Payment Summary",
+        "code": "paymentSummary",
+      },]
+    }
 
-        console.log("------------------->", this.navItems)
+
+          )
+
+          this.navItems = navigationMenu;
+
       }
         
         return  this.navItems; 
