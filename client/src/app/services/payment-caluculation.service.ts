@@ -66,12 +66,13 @@ export class PaymentCaluculationService {
   CaluculatePaymentSummary(paymentBreakup,options,paymentScale){
     console.log("===CaluculatePaymentSummary===")
     let {COST_PER_MONTH_ANNUAL_DISCOUNT,COST_PER_MONTH,TOTAL_AMOUNT} = paymentBreakup;
-    let {noOfMonths,isAnnualPayment,NoNeeded} = options;
-    let {Tax,ClientType}  = paymentScale;
+    let {noOfMonths,isAnnualPayment,NoNeeded,NoOfEmployees} = options;
+    let {Tax,ClientType,UsageType}  = paymentScale;
     console.log(`TOTAL_AMOUNT : ${TOTAL_AMOUNT}`);
     console.log(`Tax : ${Tax}`);
     console.log(`noOfMonths : ${noOfMonths}`);
     console.log(`ClientType : ${ClientType}`);
+    console.log(`UsageType : ${UsageType}`);
     console.log(`NoNeeded : ${NoNeeded}`);
     console.log(`COST_PER_MONTH_ANNUAL_DISCOUNT : ${COST_PER_MONTH_ANNUAL_DISCOUNT}`);
     
@@ -85,7 +86,12 @@ export class PaymentCaluculationService {
       paymentSummary.DUE_AMOUNT = Number(COST_PER_MONTH*noOfMonths).toFixed(2);
     }
     if(ClientType === "Reseller"){
-      paymentSummary.DUE_AMOUNT=Number(paymentSummary.DUE_AMOUNT*NoNeeded).toFixed(2);;
+      paymentSummary.DUE_AMOUNT=Number(paymentSummary.DUE_AMOUNT*NoNeeded).toFixed(2);
+    }
+    if(UsageType === "Employees"){
+      if(NoOfEmployees>0){
+        paymentSummary.DUE_AMOUNT = Number(paymentSummary.DUE_AMOUNT*NoOfEmployees).toFixed(2);
+      }
     }
     console.log(`DUE_AMOUNT : ${paymentSummary.DUE_AMOUNT}`);
     /**

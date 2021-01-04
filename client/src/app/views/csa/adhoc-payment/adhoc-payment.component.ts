@@ -58,7 +58,6 @@ export class AdhocPaymentComponent implements OnInit {
   isCheckout:Boolean=false;
   isOtherText:Boolean=false;
 
-
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
 
   constructor(
@@ -224,13 +223,15 @@ export class AdhocPaymentComponent implements OnInit {
 
   getPaymentSummary(){
     let noOfMonths=1;
-    if(this.paymentModel.isAnnualPayment){
+    let {NoNeeded,NoOfEmployees} = this.paymentModel;
+    if(this.paymentModel.isAnnualPayment && this.paymentScale.ClientType!="Reseller"){
       noOfMonths=this.paymentModel.NoOfMonths;
+    }else if(this.paymentModel.isAnnualPayment && this.paymentScale.ClientType=="Reseller"){
+      noOfMonths=12;
+    }else if(!this.paymentModel.isAnnualPayment && this.paymentScale.ClientType=="Reseller"){
+      noOfMonths=1;
     }
-    if(this.paymentModel.DurationMonths && this.paymentModel.DurationMonths !== "0"){
-      noOfMonths = Number(this.paymentModel.DurationMonths);
-    }
-    let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment};
+    let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment,NoNeeded,NoOfEmployees};
     this.paymentSummary = this.paymentCaluculationService.CaluculatePaymentSummary(this.paymentStructure,options,this.paymentScale);
   }
 
