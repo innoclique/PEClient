@@ -3,10 +3,108 @@
         {{OrganizationName}} Payment History
     </div>
     <div class="card-body">
-        <ag-grid-angular  style="width: 100;; height: 440px;" 
+        <ag-grid-angular  style="width: 100; height: 440px;" 
         class="ag-theme-alpine" 
         [rowData]="paymentHistoryList"
         [gridOptions]="PaymentGridOptions"
+        (rowClicked)="onRowClicked($event)"
         ></ag-grid-angular>
     </div>
 </div>
+
+<div bsModal #payment_Summary="bs-modal"  [config]="{backdrop: 'static'}" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-xlg" role="document">
+      <div class="modal-content">
+        <div class="modal-header pt-1 pr-1">
+          <h5 class="modal-title"> {{currentOrganization?.Name}}</h5>
+          <button type="button" class="close" (click)="payment_Summary.hide();closeForm()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div id="myModal" role="dialog">
+                <div class="modal-dialog">
+              
+                    <div class="adhoc_model">
+                        <div class="row m-b15">
+                          <div class="col-lg-4">
+                            <label>Usage Type</label>
+                            <i class="release_txt_nonedit">{{paymentModel?.UserType}}</i>
+                          </div>
+                          <div class="col-lg-4" *ngIf="paymentModel.UserType === 'Employees'">
+                            <label># Of Employees</label>
+                            <i class="release_txt_nonedit">{{paymentModel?.NoOfEmployees}}</i>
+                          </div>
+                          <div class="col-lg-4" *ngIf="paymentModel.UserType === 'License'">
+                            <label>Range</label>
+                            <i class="release_txt_nonedit">{{paymentModel?.Range}}</i>
+                          </div>
+                          <div class="col-lg-4">
+                            <label>Payment Date</label>
+                            <i class="release_txt_nonedit">{{paymentDate}}</i>
+                          </div>
+                        </div>
+                        <div class="row m-b15">
+                          <div class="col-lg-4">
+                             <label>Activation Date</label>
+                             <i class="release_txt_nonedit">{{checkoutActivationDate}}</i>
+                          </div>
+                          <div class="col-lg-4">
+                            <label># of months</label>
+                            <i class="release_txt_nonedit">{{paymentModel.NoOfMonthsLable}}</i>
+                          </div>
+                          <div class="col-lg-4">
+                             <label>Frequency</label>
+                             <i *ngIf="paymentModel.isAnnualPayment" class="release_txt_nonedit">Annual</i>
+                             <i *ngIf="!paymentModel.isAnnualPayment" class="release_txt_nonedit">Monthly</i>
+                          </div>
+                        </div>
+                        
+                        <div class="release_cost_list">
+                          <ul>
+                            <li>
+                              <h6>Cost<strong>Cost for the year</strong></h6>
+                              <span>{{paymentStructure?paymentStructure.COST_PER_PA:0}}</span>
+                              <div class="clear"></div>
+                            </li>
+                            <li>
+                              <h6>Discount<strong>Discount for annual payment</strong></h6>
+                              <span>{{paymentStructure?paymentStructure.DISCOUNT_PA_PAYMENT:0}}</span>
+                              <div class="clear"></div>
+                            </li>
+                            <li>
+                              <h6>Total<strong>Total Amount</strong></h6>
+                              <span>{{paymentStructure?paymentStructure.TOTAL_AMOUNT:0}}</span>
+                              <div class="clear"></div>
+                            </li>
+                            <li>
+                              <h6>Due<strong *ngIf="paymentModel.isAnnualPayment">Amount due (annual payment)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Amount due (monthly payment)</strong></h6>
+                              <span>{{paymentSummary?paymentSummary.DUE_AMOUNT:0}}</span>
+                              <div class="clear"></div>
+                            </li>
+                            <li>
+                              <h6>Tax<strong></strong></h6>
+                              <span>{{paymentSummary?paymentSummary.TAX_AMOUNT:0}}</span>
+                              <div class="clear"></div>
+                            </li>
+                            <li>
+                              <h6>Total<strong *ngIf="paymentModel.isAnnualPayment">Total Amount Payable (annual payments)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Total Amount Payable (for monthly payments)</strong></h6>
+                              <span>{{paymentSummary?paymentSummary.TOTAL_PAYABLE_AMOUNT:0}}</span>
+                              <div class="clear"></div>
+                            </li>
+                            <li>
+                              <h6>Summary<strong>Amount payable is cost per employee per year, after discount,  number of employees  + taxes.</strong></h6>
+                              <div class="clear"></div>
+                            </li>
+                          </ul>
+                        </div>
+                    </div>
+              
+                </div>
+              </div>
+              <!-- Model Box Ends -->
+        </div>
+        
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->

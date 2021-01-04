@@ -296,7 +296,7 @@ useageOnchange(){
       let endMonthVal = Number(moment().month(EndMonth).format("M"));
       let currentMonth = Number(moment().format("M"));
       console.log(`${currentMonth} >= ${endMonthVal}`)
-      if(currentMonth>=endMonthVal){
+      if(currentMonth>endMonthVal){
         let nextYear = moment(this.paymentModel.ActivationDate).add(1, 'years').month(parseInt(""+endMonthVal)-1).endOf('month');
         noOfMonths = nextYear.diff(activaDateMoment,'months')+1;
       }else{
@@ -352,7 +352,7 @@ useageOnchange(){
 
   getPaymentSummary(){
     let noOfMonths=1;
-    let {NoNeeded} = this.paymentModel;
+    let {NoNeeded,NoOfEmployees} = this.paymentModel;
     if(this.paymentModel.isAnnualPayment && this.paymentScale.ClientType!="Reseller"){
       noOfMonths=this.paymentModel.NoOfMonths;
     }else if(this.paymentModel.isAnnualPayment && this.paymentScale.ClientType=="Reseller"){
@@ -360,7 +360,7 @@ useageOnchange(){
     }else if(!this.paymentModel.isAnnualPayment && this.paymentScale.ClientType=="Reseller"){
       noOfMonths=1;
     }
-    let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment,NoNeeded};
+    let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment,NoNeeded,NoOfEmployees};
     this.paymentSummary = this.paymentCaluculationService.CaluculatePaymentSummary(this.paymentStructure,options,this.paymentScale);
   }
 

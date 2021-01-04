@@ -12,8 +12,43 @@ import { Router ,ActivatedRoute} from '@angular/router';
   styleUrls: ['./payment-history.component.css']
 })
 export class PaymentHistoryComponent implements OnInit {
+  paymentReleaseId:any;
   paymentHistoryList:any=[];
   OrganizationName:any="";
+  currentOrganization:any;
+  paymentReleaseData:any;
+  checkoutActivationDate:any;
+  paymentDate:any;
+
+  paymentModel:any={
+    Organization:"",
+    isAnnualPayment:true,
+    NoOfMonthsLable:"0 Months",
+    NoOfMonths:0,
+    UserType:"",
+    ActivationDate:moment().toDate(),
+    Range:"",
+    RangeId:"",
+    NoOfEmployees:0,
+    NoNeeded:0,
+    Status:"",
+    Paymentdate:moment().toDate()
+  };
+  paymentStructure:any={
+    COST_PER_PA:0,
+    COST_PER_MONTH:0,
+    DISCOUNT_PA_PAYMENT:0,
+    TOTAL_AMOUNT:0,
+    COST_PER_MONTH_ANNUAL_DISCOUNT:0
+  };
+  paymentScale:any;
+  paymentSummary:any={
+    DUE_AMOUNT:0,
+    TAX_AMOUNT:0,
+    TOTAL_PAYABLE_AMOUNT:0
+  };
+
+  @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
   public PaymentGridOptions: GridOptions = {
     columnDefs: this.getColDef()      
   }
@@ -36,12 +71,12 @@ export class PaymentHistoryComponent implements OnInit {
   getColDef(){
     return  [
       {
-        headerName: 'Payment Date', field: 'paymentDate', tooltipField: 'clientName', sortable: true,  suppressSizeToFit: true, filter: true,  
-        //cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="viewAdhocRequest">${data.value}</span>` }
+        headerName: 'Payment Date', field: 'paymentDate', width: 300, tooltipField: 'clientName', sortable: true,  suppressSizeToFit: true, filter: true,  
+        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="viewPayment">${data.value}</span>` }
       }, 
       //{ headerName: 'Client', field: 'clientName', sortable: true, filter: true },     
-      { headerName: 'Amount', field: 'amount', sortable: true, filter: true },
-      { headerName: 'Status', field: 'status', sortable: true, filter: true }
+      { headerName: 'Amount', field: 'amount', width: 320, sortable: true, filter: true },
+      { headerName: 'Status', field: 'status', width: 350,sortable: true, filter: true }
       
     ];
   
@@ -62,11 +97,77 @@ export class PaymentHistoryComponent implements OnInit {
           paymentDate:moment(paymentObj.CreatedOn).format("MM/DD/YYYY"),
           amount:paymentObj.Amount,
           status:paymentObj.Status,
-          //paymentFrequency:paymentObj.PaymentReleaseId.isAnnualPayment?"Annual":"Monthly",
+          paymentReleaseId:paymentObj.PaymentReleaseId,
         });
       });
       this.PaymentGridOptions.api.setRowData(this.paymentHistoryList);
     })
+  }
+
+  public onRowClicked(e) {
+    if (e.event.target !== undefined) {
+      console.log("on onRowClicked")
+      let data = e.data;
+      let actionType = e.event.target.getAttribute("data-action-type");
+      switch (actionType) {
+        case "viewPayment":
+          this.paymentReleaseId=data.paymentReleaseId;
+          this.findInitialPayments(data.paymentReleaseId);
+          this.emoModal.show();
+      }
+    }
+  }
+
+  findInitialPayments(selectedOrgnization){
+    /*let _requestBody={
+      Organization:selectedOrgnization,
+      Type:"Adhoc",
+      Status:"Pending"
+    };*/
+    let _requestBody={
+      _id:selectedOrgnization,
+    }
+    
+    this.perfApp.route = "payments";
+    this.perfApp.method = "release/organization";
+    this.perfApp.requestBody = _requestBody;
+    this.perfApp.CallAPI().subscribe(paymentRelease => {
+      if(paymentRelease){
+        this.paymentReleaseData = paymentRelease;
+        this.orgnizationDetails();
+      }
+    });
+  }
+
+  orgnizationDetails(){
+      this.paymentReleaseData;
+      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,Paymentdate,DurationMonths} = this.paymentReleaseData;
+      this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
+      if(Paymentdate){
+        this.paymentDate = moment(Paymentdate).format("MM/DD/YYYY");
+      }
+      let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
+      
+      COST_PER_PA = COST_PER_PA.$numberDecimal;
+      COST_PER_MONTH = COST_PER_MONTH.$numberDecimal;
+      DISCOUNT_PA_PAYMENT = DISCOUNT_PA_PAYMENT.$numberDecimal;
+      TOTAL_AMOUNT = TOTAL_AMOUNT.$numberDecimal;
+      COST_PER_MONTH_ANNUAL_DISCOUNT = COST_PER_MONTH_ANNUAL_DISCOUNT.$numberDecimal;
+
+      let {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT} = this.paymentReleaseData;
+      
+      DUE_AMOUNT = DUE_AMOUNT.$numberDecimal;
+      TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
+      TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
+
+      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,DurationMonths};
+      this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
+      this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
+      this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
+      console.log(JSON.stringify(this.paymentSummary));
+  }
+  closeForm(){
+    this.emoModal.hide();
   }
 
 }
