@@ -196,12 +196,13 @@ export class CreateResellerComponent implements OnInit {
   
 
   public createClient = () => {
-    debugger
+    debugger;
     this.clientFormData.IsDraft = false;
     this.isFormSubmitted = true;
     if (!this.clientForm.valid) {
       return;
     }
+    debugger;
     if(this.currentRecord && this.currentRecord._id){
       this.updateClient();
     }else{
@@ -212,7 +213,7 @@ export class CreateResellerComponent implements OnInit {
 
 
   saveClient() {
-    this.clientFormData = Object.assign(this.clientFormData, this.prepareOrgData());
+    this.clientFormData = Object.assign(this.clientFormData, this.prepareOrgData()); 
     this.perfApp.route = "app";
     this.perfApp.method = "AddReseller",
       this.perfApp.requestBody = this.clientFormData; //fill body object with form 
@@ -391,6 +392,7 @@ export class CreateResellerComponent implements OnInit {
   //#endregion
 
   prepareOrgData() {
+    debugger
     var organization = this.clientForm.getRawValue();
     var action='Create';
     if(this.currentRecord && this.currentRecord._id){
@@ -447,7 +449,6 @@ action='Update'
       return;
     }
 
-debugger
     if(!this.clientForm.value.AdminEmail){
       this.notification.error('Admin Email is mandatory')
       return;

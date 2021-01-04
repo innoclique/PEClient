@@ -226,8 +226,12 @@ if (!this.kpiForm.get('Note').value) {
     }
 
     if (this.currentAction=='create' && this.kpiForm.get('IsDraft').value=='false') {
-      this.openConfirmSubmitKpisDialog();
-    }else{
+      this.openConfirmSubmitKpisDialog("create");
+    }else if (this.currentAction=='edit' && this.kpiForm.get('IsDraft').value=='false')
+    {
+      this.openConfirmSubmitKpisDialog("edit");
+    }
+    else{
     this.callKpiApi();
     }
   }
@@ -404,9 +408,9 @@ if (!this.kpiForm.get('Note').value) {
 
   
    /**To alert user for submit kpis */
-   openConfirmSubmitKpisDialog() {
+   openConfirmSubmitKpisDialog(type:string) {
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to add the note?";
+    this.alert.Content = type=="create"?"Are you sure you want to add the note?":"Are you sure you want to update the note?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";

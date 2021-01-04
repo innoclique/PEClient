@@ -9,6 +9,7 @@ export class MainDashboardComponent implements OnInit {
    selectedRoles:any=['TEST'];
   constructor(private authService: AuthService,private router: Router,) {
     this.selectedRoles = this.authService.getCurrentUser().SelectedRoles;
+    console.log("---------------------->", this.selectedRoles)
   }
   
 

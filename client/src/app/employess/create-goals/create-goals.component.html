@@ -25,7 +25,7 @@
                       <div class="form-group">
                           <div class="input-group">
                               <div class="input-group-prepend">
-                                  <span class="input-group-text input-group-text-devmentgoals redStar">Developmental Goal</span>
+                                 <span tooltip="What do I want to work on? Areas of Improvement." class="input-group-text input-group-text-devmentgoals redStar">Developmental Goal</span>
                               </div>
                               <input max="500" maxlength="500" class="form-control" type="text"
                               [readonly]="currentAction != 'create' "
@@ -83,7 +83,7 @@
                     <div class="form-group">
                         <div class="input-group">
                           <div class="input-group-prepend">
-                            <span class="input-group-text redStar">Desired Outcomes</span>
+                            <span tooltip="If I achieve my developmental goal what will be the end result?" class="input-group-text redStar">Desired Outcomes</span>
                           </div>
                           <textarea maxlength="1000" class="form-control"  cols="" rows="2" required
                           [ngClass]="{ 'is-invalid': (f.DesiredOutcomes?.touched || submitClicked) &&  f.DesiredOutcomes.invalid }"
@@ -145,21 +145,23 @@
 
                 <div  formGroupName="GoalActionItems" class="invitation_model_in_table table-responsive p-15">
                   <table *ngIf="currentAction != 'view' && accessingFrom!='currEvaluation' "  class="table table-bordered table-striped" style="margin-bottom: -2px;">
-                    <!-- <thead>
+                     <thead>
                       <tr>
-                        <th>Action Step</th>
-                        <th>Progress Indicators</th>
-                        <th>Barriers</th>
-                        <th>Target Date</th>
-                        <th>Other Participants</th>
-                        <th>Status</th>
+                        <th tooltip="What do I need to do in order to achieve my goal (s)?">Action Step</th>
+                        <th  tooltip="How will I know if I am getting closer to success? "> Progress Indicators</th>
+                        <th  tooltip="What might prevent me from executing my plan? Write down a strategy to overcome barriers if necessary.">Barriers</th>
+                        <th  tooltip="What do I need to do in order to achieve my goal (s)?"> Target Date</th>
+                        <th  tooltip="Does anyone else need to be involved in my development? If so, who can help?">Other Participants</th>
+                        <th  tooltip="What do I need to do in order to achieve my goal (s)?">Status</th>
                         <th>&nbsp;</th>
                       </tr>
-                    </thead> -->
+                    </thead>
                     <tbody>
                       <tr>
                         <td class="invitation_model_search p-0">
-                          <textarea formControlName="ActionStep" placeholder="Action Step"
+                          <textarea 
+                           
+                           formControlName="ActionStep" placeholder="Action Step"
                             [ngClass]="{ 'is-invalid': rowItemSubmitted && k.ActionStep?.errors }"
                                  class=" form-control"> </textarea>
                           <div *ngIf="rowItemSubmitted && k.ActionStep?.errors" class="invalid-feedback">
@@ -169,7 +171,7 @@
                           </div>
                         </td>
                           <td class="invitation_model_search  p-0">
-                          <textarea max="1000" maxlength="1000" formControlName="ProgressIndicators" placeholder="Progress Indicators"
+                           max="1000" maxlength="1000" formControlName="ProgressIndicators" placeholder="Progress Indicators"
                             [ngClass]="{ 'is-invalid': rowItemSubmitted && k.ProgressIndicators?.errors }"
                            
                    class=" form-control"> </textarea>

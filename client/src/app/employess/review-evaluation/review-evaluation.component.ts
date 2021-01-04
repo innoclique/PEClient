@@ -499,7 +499,7 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
   this.snack.error('Rating is mandatory')
   return;
 }
-window.confirm("Are you sure you want to submit the evaluation for this employee?")
+
     this.saveFinalRating(false)
   }
   draftFinalRating() {
@@ -528,7 +528,11 @@ window.confirm("Are you sure you want to submit the evaluation for this employee
           return;
         }
       }
+      let aResult = window.confirm("Are you sure you want to submit the evaluation for this employee?")
     console.log('final rating form', this.perfApp.requestBody)
+    if(aResult==true){
+
+    
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
    const snref=   this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
@@ -539,6 +543,8 @@ window.confirm("Are you sure you want to submit the evaluation for this employee
       console.log('error', error)
       this.snack.error('Something went wrong')
     })
+  }
+  
 
   }
 

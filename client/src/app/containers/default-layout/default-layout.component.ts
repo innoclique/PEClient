@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { navItems } from '../../_nav';
 import { AuthService } from '../../services/auth.service';
 
@@ -13,6 +13,8 @@ export class DefaultLayoutComponent implements OnInit {
   public sidebarMinimized = false;
   public navItems = navItems;
   public user: any;
+currentUser:any;
+isCSA:Boolean = false;
   constructor(public authService: AuthService,
     private router: Router,
     public translate: TranslateService) {
@@ -43,8 +45,8 @@ export class DefaultLayoutComponent implements OnInit {
     this.translate.use(lang);
   }
   ngOnInit() {
-    
     if (this.user) {
+    
       if (this.user.SelectedRoles) {
         var navigationMenu = [];
         if(this.user.Role.indexOf('EO')>-1  || this.user.SelectedRoles.indexOf("EO") !== -1){
@@ -249,7 +251,8 @@ export class DefaultLayoutComponent implements OnInit {
        // return  this.navItems;
         }
         
-        if(this.user.Role==='CSA'){
+   /*      if(this.user.Role==='CSA'){
+          
           navigationMenu= [{
             "IsActive": true,
             "__v": 0,
@@ -326,10 +329,11 @@ export class DefaultLayoutComponent implements OnInit {
         // }
       ]
         this.navItems=[...navigationMenu, ...this.navItems];
-        }
+        } */
 
-      console.log(this.navItems);
+      console.log("current menu items", navigationMenu);
       if(this.user.Role=="CSA"){
+        localStorage.setItem("currentUser", "CSA")
         for (var i =0; i < this.navItems.length; i++)
         if (this.navItems[i].name === "CSA Dashboard") {
            this.navItems.splice(i,1);

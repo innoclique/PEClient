@@ -16,7 +16,7 @@ export class EmployeeDashboardComponent implements OnInit {
 @Input()   userType:any;
  @Input() chartTypeInput:any;
 selectedYears:any=[];
-
+isCSA:Boolean = false;
   currentRowItem:any;
   loginUser: any;
   peerReview:any;
@@ -85,6 +85,9 @@ public barChartColors: Color[] = [
 
   ngOnInit(): void {
     this.loginUser = this.authService.getCurrentUser();
+    if(this.loginUser.Role==='CSA'){
+      this.isCSA=true
+    }
     this.loadDashboard();
         if(this.chartTypeInput==='CLIENT_SUMMARY'){
       this.clientSummaryBarChartData=[
