@@ -20,6 +20,7 @@ import { P404Component } from './views/error/404.component';
 import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
+import { BnNgIdleService } from 'bn-ng-idle';
 
 const APP_CONTAINERS = [
   DefaultLayoutComponent
@@ -73,9 +74,11 @@ import { CustomMaterialModule } from './custom-material/custom-material.module';
   ],
   providers: [{
     provide: LocationStrategy,
-    useClass: HashLocationStrategy
+    useClass: HashLocationStrategy,
   },
-  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },AuthService],
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  AuthService,
+  BnNgIdleService,],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
