@@ -857,7 +857,6 @@ export class RollevaluationComponent implements OnInit {
 
 
   addToGrid() {
-    debugger
     if (this.selectedEmployees.length === 0) {
       this.notification.error('At least one employee must be selected.')
       return;
@@ -875,13 +874,16 @@ export class RollevaluationComponent implements OnInit {
         this.selectedEmployeeList.push(element);
       }
     });
-    window.confirm(":  Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
-    //this.selectedEmployeeList.push(...this.selectedEmployees);
-    if (this.EmpGridOptions.api) {
-      this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
+    let r = window.confirm("Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
+    if (r==true){
+      if (this.EmpGridOptions.api) {
+        this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
+      }
+      this.selectedEmployees = [];
+      this.disabledAddButton = true;
+
     }
-    this.selectedEmployees = [];
-    this.disabledAddButton = true;
+  
   }
 
   addToGridForKPI() {

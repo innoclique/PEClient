@@ -289,7 +289,7 @@ export class CreateClientComponent implements OnInit {
   saveClient() {
     this.clientFormData = Object.assign(this.clientFormData, this.prepareOrgData());
     this.perfApp.route = "app";
-    this.perfApp.method = "AddOrganization",
+    this.perfApp.method = "AddOrganization", 
     this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
