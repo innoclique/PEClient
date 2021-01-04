@@ -85,7 +85,7 @@ export class PaymentCaluculationService {
     if(!isAnnualPayment){
       paymentSummary.DUE_AMOUNT = Number(COST_PER_MONTH*noOfMonths).toFixed(2);
     }
-    if(ClientType === "Reseller"){
+    if(ClientType === "Reseller" && NoNeeded!=0){
       paymentSummary.DUE_AMOUNT=Number(paymentSummary.DUE_AMOUNT*NoNeeded).toFixed(2);
     }
     if(UsageType === "Employees"){

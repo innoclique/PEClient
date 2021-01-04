@@ -145,7 +145,7 @@ export class AdhocPaymentComponent implements OnInit {
   loadOrganizationDefaultData(selectedOrgnization){
     this.selectedOrganizationObj = this.currentOrganization;
     this.caluculateNoOfMonths();
-    this.paymentModel.UserType = this.selectedOrganizationObj.UsageType;
+    this.paymentModel.UserType = this.selectedOrganizationObj.UsageType || "Employees";
   }
   onSearchChange(searchValue: string): void {
     if(searchValue && searchValue!="" && searchValue!="0"){
@@ -230,6 +230,9 @@ export class AdhocPaymentComponent implements OnInit {
       noOfMonths=12;
     }else if(!this.paymentModel.isAnnualPayment && this.paymentScale.ClientType=="Reseller"){
       noOfMonths=1;
+    }
+    if(this.paymentModel.DurationMonths && this.paymentModel.DurationMonths !== "0"){
+      noOfMonths = Number(this.paymentModel.DurationMonths);
     }
     let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment,NoNeeded,NoOfEmployees};
     this.paymentSummary = this.paymentCaluculationService.CaluculatePaymentSummary(this.paymentStructure,options,this.paymentScale);
