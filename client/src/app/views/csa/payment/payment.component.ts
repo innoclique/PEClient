@@ -52,7 +52,9 @@ export class PaymentComponent implements OnInit {
   paymentReleaseData:any;
   isinitialPaymentDone:Boolean=false;
   isAdhocpayment:Boolean=false;
-  
+  isRenewalPayment:Boolean=false;
+  rangeList:Array<any>;
+  selectedRangeId:any="";
 
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
 
@@ -86,6 +88,7 @@ export class PaymentComponent implements OnInit {
     this.paymentScale=null;
     this.paymentSummary=null;
     this.isAdhocpayment=false;
+    this.isRenewalPayment=false;
     
     if(paymentOption!=""){
 
@@ -103,7 +106,17 @@ export class PaymentComponent implements OnInit {
           break;
         case 'renewal_pay':
           if(this.isinitialPaymentDone){
+            this.isRenewalPayment = true;
+            let rangeOptions={
+              ClientType:this.currentOrganization.ClientType,
+              UsageType:this.currentOrganization.UsageType ,
+              "Type" : "Range"
+            };
+            this.getRangeList(rangeOptions);
+            this.loadOrganizationDefaultData();
             
+            this.findAdhocPayments(this.currentOrganization._id,"Renewal");
+            this.paymentModel.Organization = this.currentOrganization._id;
           }else{
             this.notification.error('Renewal will be available after initial payment done.')
           }
@@ -111,7 +124,7 @@ export class PaymentComponent implements OnInit {
         case 'adhoc_pay':
           if(this.isinitialPaymentDone){
             this.isAdhocpayment=true;
-            this.findAdhocPayments(this.currentOrganization._id);
+            this.findAdhocPayments(this.currentOrganization._id,"Adhoc");
           }else{
             this.notification.error('Adhoc will be available after initial payment done.');
           }
@@ -120,6 +133,36 @@ export class PaymentComponent implements OnInit {
           break;
       }
     }
+  }
+
+  setRange(selectedObj:any){
+    console.log(selectedObj)
+    let selectedRange = this.rangeList.find(range=>range._id==selectedObj)
+    console.log(selectedRange);
+    this.paymentScale=selectedRange;
+    this.paymentScale.Tax = this.stateTax;
+    this.paymentModel.Range = this.paymentScale._id;
+  }
+
+  onSelectRange(selectedObj:any){
+    this.setRange(selectedObj);
+    this.setPaymentBreakup();
+  }
+
+  setPaymentBreakup(){
+    this.paymentStructure = this.paymentCaluculationService.GetLicenceBreakdownPayment(this.paymentScale);
+    if(this.paymentStructure){
+      this.getPaymentSummary();
+    }
+  }
+
+  getRangeList(options){
+    this.perfApp.route = "payments";
+    this.perfApp.method = "range/list";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(_rangeList => {
+      this.rangeList = _rangeList;
+    });
   }
   getTaxInfo(State){
     console.log("getTaxInfo")
@@ -152,10 +195,10 @@ export class PaymentComponent implements OnInit {
     });
   }
 
-  findAdhocPayments(selectedOrgnization){
+  findAdhocPayments(selectedOrgnization,payType){
     let _requestBody={
       Organization:selectedOrgnization,
-      Type:"Adhoc",
+      Type:payType,
       Status:{"$ne":"Complete"}
     }
     this.perfApp.route = "payments";
@@ -164,24 +207,38 @@ export class PaymentComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(AdhocPay => {
       if(AdhocPay){
         let {Status} = AdhocPay;
-        if(Status === "Approved"){
-          this.paymentReleaseData = AdhocPay;
-          this.orgnizationDetails();
-        }else if(Status === "Pending"){
-          this.notification.error(`Adhoc payment Not Approved/Disapproved.`);
-        }else if(Status === "Disapproved"){
-          this.notification.error(`Adhoc payment Disapproved.`);
+        if(this.isAdhocpayment){
+          if(Status === "Approved"){
+            this.paymentReleaseData = AdhocPay;
+            this.orgnizationDetails();
+          }else if(Status === "Pending"){
+            this.notification.error(`Adhoc payment Not Approved/Disapproved.`);
+          }else if(Status === "Disapproved"){
+            this.notification.error(`Adhoc payment Disapproved.`);
+          }
+        }
+        if(this.isRenewalPayment){
+          if(Status === "Pending"){
+            this.paymentReleaseData = AdhocPay;
+            this.orgnizationDetails();
+            console.log(`this.paymentModel.RangeId: ${this.paymentModel.RangeId}`)
+            this.paymentModel.Range = this.paymentReleaseData.RangeId;
+            this.setRange(this.paymentReleaseData.RangeId);
+          }
         }
         
+        
       }else{
-        this.notification.error(`Adhoc payment was not found.`);
+        if(!this.isRenewalPayment){
+          this.notification.error(`Adhoc payment was not found.`);
+        }
       }
     });
   }
 
 
   orgnizationDetails(){
-      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
+      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
       this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
       let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
       
@@ -197,7 +254,7 @@ export class PaymentComponent implements OnInit {
       TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
       TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
 
-      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
+      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status};
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
       this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
@@ -207,6 +264,9 @@ export class PaymentComponent implements OnInit {
   loadOrganizationDefaultData(){
     this.selectedOrganizationObj = this.currentOrganization;
     this.caluculateNoOfMonths();
+    if(this.isRenewalPayment){
+      this.paymentModel.NoNeeded=12;
+    }
     this.paymentModel.UserType = this.selectedOrganizationObj.UsageType;
     if(this.selectedOrganizationObj.UsageType === "Employees"){
       this.useageTypeEmployee=true;
@@ -243,7 +303,11 @@ export class PaymentComponent implements OnInit {
     }else if(this.selectedOrganizationObj.ClientType === "Reseller"){
       noOfMonths = 12;
     }
-
+    
+    if(this.isRenewalPayment){
+      noOfMonths = 12;
+    }
+    console.log(this.isRenewalPayment +" - "+ noOfMonths)
     this.paymentModel.NoOfMonthsLable = `${noOfMonths} Months`;
     this.paymentModel.NoOfMonths = noOfMonths;
 
@@ -287,7 +351,7 @@ export class PaymentComponent implements OnInit {
       
     });
   }
-
+  
   getPaymentSummary(){
     let noOfMonths=1;
     let {NoNeeded,NoOfEmployees} = this.paymentModel;
@@ -298,6 +362,12 @@ export class PaymentComponent implements OnInit {
     }else if(!this.paymentModel.isAnnualPayment && this.paymentScale.ClientType=="Reseller"){
       noOfMonths=1;
     }
+    if(this.isRenewalPayment){
+      if(this.paymentModel.isAnnualPayment){
+        noOfMonths=12;
+      }
+    }
+    console.log(`inside:getPaymentSummary:noOfMonths = ${noOfMonths}`)
     let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment,NoNeeded,NoOfEmployees};
     this.paymentSummary = this.paymentCaluculationService.CaluculatePaymentSummary(this.paymentStructure,options,this.paymentScale);
   }
@@ -337,7 +407,12 @@ export class PaymentComponent implements OnInit {
   }
   
   proceedToPay(){
-    this.router.navigate(['csa/dopayment',{totalAmount:this.paymentSummary.TOTAL_PAYABLE_AMOUNT,paymentreleaseId:this.paymentModel.paymentreleaseId}],{ skipLocationChange: true });
+    let params = {
+      totalAmount:this.paymentSummary.TOTAL_PAYABLE_AMOUNT,
+      paymentreleaseId:this.paymentModel.paymentreleaseId
+    };
+    console.log(`sending params=> ${JSON.stringify(params)}`)
+    this.router.navigate(['csa/dopayment',params],{ skipLocationChange: true });
     /*let requestBody:any={
       Status:'Complete',
       paymentreleaseId:this.paymentModel.paymentreleaseId
@@ -361,4 +436,38 @@ export class PaymentComponent implements OnInit {
   loadPriceListPage(){
     this.router.navigate(['psa/price-list'],{ skipLocationChange: true });
   }
+
+  paymentReleaseInfo(){
+    if(this.paymentModel && !this.paymentModel.paymentreleaseId){
+      this.paymentModel.Status="Pending";
+      this.savePaymentReleaseInfo();
+    }else{
+      this.checkout();
+    }
+    
+  }
+  
+  savePaymentReleaseInfo(){
+    console.log(this.paymentModel.Status);
+    let requestBody:any={...this.paymentModel,...this.paymentStructure,...this.paymentSummary};
+    requestBody.RangeId=this.paymentScale?this.paymentScale._id:this.paymentModel.RangeId;
+    requestBody.Range=this.paymentScale?this.paymentScale.Range:this.paymentModel.Range;
+    requestBody.Type="Renewal";
+    console.log(requestBody);
+     this.perfApp.route = "payments";
+     this.perfApp.method = "/release/save";
+     this.perfApp.requestBody = requestBody;
+     this.perfApp.CallAPI().subscribe(c => {
+     if(c){
+      this.paymentModel.paymentreleaseId = c._id;
+      console.log(`paymentreleaseId = ${c._id}`)
+      this.notification.success(`Payment Released to ${this.currentOrganization.Name}`);
+      this.checkout();
+     }else{
+       this.notification.error("Record not saved.")
+     }
+     });
+  }
+
+
 }
