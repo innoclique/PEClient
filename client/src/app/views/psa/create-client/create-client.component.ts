@@ -224,6 +224,9 @@ export class CreateClientComponent implements OnInit {
   }
 
   getRangeList(options){
+    let ClientType = this.clientForm.get("ClientType").value;
+    options['ClientType'] = ClientType;
+
     this.perfApp.route = "payments";
     this.perfApp.method = "range/list";
     this.perfApp.requestBody = options;
