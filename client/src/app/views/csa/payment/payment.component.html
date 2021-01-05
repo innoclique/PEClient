@@ -44,22 +44,30 @@
           <div class="row m-b15">
             <div class="col-lg-6">
               <label>Activation Date</label>
-              <input [disabled]="isActiveDateDisabled" [min]="paymentModel.ActivationDate" (dateInput)="onActivationDate($event.value)" [(ngModel)]="paymentModel.ActivationDate" (click)="picker.open()" readonly matInput [matDatepicker]="picker" >
+              <input [disabled]="isActiveDateDisabled" [min]="paymentModel.ActivationDate" 
+              (dateInput)="onActivationDate($event.value)" 
+              [(ngModel)]="paymentModel.ActivationDate" (click)="picker.open()" 
+              readonly matInput [matDatepicker]="picker" >
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker ></mat-datepicker>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6" *ngIf="isAdhocpayment">
                <div class="">
                   <label>Range</label>
-                   <!--<select class="form-control">
-                      <option>10-100</option>
-                      <option>100-200</option>
-                    </select>-->
-                    
-                    <input [(ngModel)]="paymentModel.Range" type="text" readonly class="form-control"  />
-                    
+                  <input [(ngModel)]="paymentModel.Range" type="text" readonly class="form-control"  />
                 </div>
             </div>
+
+            <div class="col-lg-6" *ngIf="isRenewalPayment">
+              <div class="">
+                 <label>Range</label>
+                 <select  class="form-control" [(ngModel)]="paymentModel.Range" (change)="onSelectRange($event.target.value)">
+                  <option value="">Select</option>
+                   <option *ngFor="let range of rangeList" [value]="range._id">{{range.Range}}</option>
+                 </select>
+                 <i class="fa fa-chevron-down"></i>
+               </div>
+           </div>
           </div>
           <div class="row m-b15">
             <div class="col-lg-6" *ngIf="useageTypeEmployee">
@@ -131,7 +139,7 @@
                 <div class="clear"></div>
               </li>
               <li>
-                <h6>Total<strong *ngIf="paymentModel.isAnnualPayment">Total Amount Payable (annual payments)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Total Amount Payable (for monthly payments)</strong></h6>
+                <h6>Total<strong *ngIf="paymentModel.isAnnualPayment">Total Amount Payable (annual payments)</strong><strong *ngIf="!paymentModel.isAnnualPayment">Total Amount Payable (monthly payments)</strong></h6>
                 <span>{{paymentSummary?paymentSummary.TOTAL_PAYABLE_AMOUNT:0}}</span>
                 <div class="clear"></div>
               </li>
@@ -142,7 +150,8 @@
             </ul>
           </div>
           <div class="release_method_buttons">
-            <button (click)="checkout()" class="release_buttons_save">Submit</button>
+            <button *ngIf="isAdhocpayment" (click)="checkout()" class="release_buttons_save">Submit</button>
+            <button *ngIf="isRenewalPayment" (click)="paymentReleaseInfo()" class="release_buttons_save">Submit</button>
             <a href="javscript:void(0)" class="release_buttons_cancel">Cancel</a>
             <div class="clear"></div>
           </div>

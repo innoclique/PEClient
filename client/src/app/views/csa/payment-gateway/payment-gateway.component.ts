@@ -3,6 +3,7 @@ import { AuthService } from '../../../services/auth.service';
 import { MonerisService } from '../../../services/moneris.service';
 import { Router ,ActivatedRoute} from '@angular/router';
 import { PerfAppService } from '../../../services/perf-app.service';
+import { NotificationService } from '../../../services/notification.service';
 
 declare const monerisCheckout: any;
 var loginUser:any;
@@ -16,6 +17,7 @@ var payable_Amount:any
   styleUrls: ['./payment-gateway.component.css']
 })
 export class PaymentGatewayComponent implements OnInit {
+  errorMsg:any="";
   currentUser:any;
   appInputparams:any={};
   transactionId:any;
@@ -27,6 +29,7 @@ export class PaymentGatewayComponent implements OnInit {
     public monerisService: MonerisService,
     private activatedRoute: ActivatedRoute,
     private perfApp: PerfAppService,
+    private notification: NotificationService,
     ) {
       perfApp1=this.perfApp;
       this.loadScript();
@@ -66,11 +69,21 @@ export class PaymentGatewayComponent implements OnInit {
   
   
   getTicket(){
+    this.errorMsg="";
     let reqBody: any = {};
     reqBody.payableAmount=this.appInputparams.totalAmount;
-    reqBody.transactionId=this.transactionId;
+    reqBody.transactionId=this.appInputparams.paymentreleaseId;
     this.monerisService.getTicket(reqBody).subscribe(apiResponse => {
+      console.log("apiResponse")
+      console.log(apiResponse)
+      let {response} = apiResponse;
+      if(response.success && response.success!=="false"){
         this.loadPaymentPage(apiResponse.response.ticket);
+      }else{
+        this.notification.error("Payment gateway problem. Please try again later.");
+        this.errorMsg="Payment gateway problem. Please try again later.";
+      }
+      
     });
     
 }
