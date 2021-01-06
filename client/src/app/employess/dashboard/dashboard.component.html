@@ -5,7 +5,7 @@
     <div class="container clearfix">
         <div class="box_main clearfix">
           <div class="widget-parent">
-                      <div  *ngIf="isCSA">
+                      <!--<div  *ngIf="isCSA">
                
       <div class="row">
               <h2 class="widget-heading">CSA Dashboard</h2>
@@ -15,7 +15,7 @@ coming soon
             </div>
             
             
-            </div>
+            </div>-->
             <div class="row">
               <h2 class="widget-heading">Dashboard</h2>
             </div>
@@ -29,7 +29,7 @@ coming soon
                 <h2 class="bg-blue">Current Evaluation Progress</h2>
                 <div class="box_progressbar">
                   <progress-bar  title="{{currentEvaluationProgressTitle}}" [progress]="currentEvaluationProgress" 
-        [color-degraded]="{'0': 'red',  '15': '#f9c3d3', '25': '#92d892'}">
+        [color-degraded]="{'0': '#0168ad',  '15': '#0168ad', '25': '#66b460'}">
         </progress-bar>
                 </div>
                 <div class="box_goalsetting clearfix">

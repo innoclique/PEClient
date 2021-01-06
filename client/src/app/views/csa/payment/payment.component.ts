@@ -434,7 +434,7 @@ export class PaymentComponent implements OnInit {
   }
 
   loadPriceListPage(){
-    this.router.navigate(['psa/price-list'],{ skipLocationChange: true });
+    this.router.navigate(['csa/price-list'],{ skipLocationChange: true });
   }
 
   paymentReleaseInfo(){

@@ -870,7 +870,7 @@ p											{  font-size:15px; line-height:21px; font-weight:400; color:#717171;
     }
     .payment_method_right {
     float : right;
-    width : 23%;
+    width : 24%;
     background : #fff;
     /*height : 100vh;*/
     position : static;

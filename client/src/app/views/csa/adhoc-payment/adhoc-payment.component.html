@@ -35,9 +35,9 @@
               <label>Purpose</label>
               <select (change)="onchangePurpose($event.target.value)" class="form-control" [(ngModel)]="paymentModel.Purpose">
                 <option value="">Please Select</option>
-                <option value="Prohibitionary Evaluation">Prohibitionary Evaluation</option>
                 <option value="Prohibitionary Evaluation">New Employees</option>
                 <option value="Others">Others</option>
+                <option value="Prohibitionary Evaluation">Prohibitionary Evaluation</option>
               </select>
               <i class="fa fa-chevron-down"></i>
             </div>
@@ -67,16 +67,21 @@
           <h4>Pricing Information</h4>
           <div class="release_method_space">
             <div class="row m-b15">
-              <div class="col-lg-6">
+              <!--<div class="col-lg-6">
                 <label>Payment Date</label>
                 <i class="release_txt_nonedit">{{paymentDate}}</i>
-              </div>
+              </div>-->
               <div class="col-lg-6">
                 <label>Activation Date</label>
                 <input [disabled]="isActiveDateDisabled" [min]="paymentModel.ActivationDate" (dateInput)="onActivationDate($event.value)" [(ngModel)]="paymentModel.ActivationDate" (click)="picker.open()" readonly matInput [matDatepicker]="picker" >
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker ></mat-datepicker>
               </div>
+              <div class="col-lg-6">
+                <label># of months to end of year</label>
+                <input  readonly class="form-control" [(ngModel)]="paymentModel.NoOfMonthsLable"   />
+             
+            </div>
             </div>
             <div class="row m-b15">
               <div class="col-lg-6">
@@ -96,11 +101,7 @@
                   </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-              <label># of months to end of year</label>
-              <input  readonly class="form-control" [(ngModel)]="paymentModel.NoOfMonthsLable"   />
-           
-        </div>
+            
             </div>
             <div class="row m-b15">
               <div class="col-lg-12">
@@ -186,14 +187,14 @@
         <em><img src="assets/payments/purchase.png"  alt="Purchase"></em>
         <strong>Make Adhoc Purchase</strong>
       </a>-->
-      <a href="javascript:void(0)" class="payment_info_links_payment">
+      <a (click)="loadPriceListPage()" href="javascript:void(0)" class="payment_info_links_payment">
         <em><img src="assets/payments/pricing.png" alt="Pricing"></em>
         <strong>View Pricing</strong>
       </a>
-      <a href="javascript:void(0)" class="payment_info_links_payment">
+      <!--<a href="javascript:void(0)" class="payment_info_links_payment">
         <em><img src="assets/payments/purchase.png" alt="Purchase"></em>
         <strong>Current Contract</strong>
-      </a>
+      </a>-->
     </div>
   </div>
 </div>

@@ -3,4 +3,9 @@
     flex: 1 1 auto;
     padding: 0rem !important ;
 }
+.mat-datepicker-toggle {
+    position: absolute;
+    right: 10px;
+    top: 28px;
+}
 

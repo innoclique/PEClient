@@ -14,6 +14,7 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./price-list.component.css']
 })
 export class PriceListComponent implements OnInit {
+  activeTabIndex:any=0;
   licensePriceList:any=[];
   employeesPriceList:any=[];
   OrganizationName:any="";
@@ -32,7 +33,8 @@ export class PriceListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLicensePriceList();
-    this.getEmployeePriceList();
+    
+    //this.selectTab(this.activeTabIndex);
   }
 
   getColDef(){
@@ -82,6 +84,8 @@ export class PriceListComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(priceList => {
       this.licensePriceList = priceList;
       this.PaymentGridOptions.api.setRowData(this.licensePriceList);
+      this.selectTab(this.activeTabIndex);
+      this.getEmployeePriceList();
     })
   }
 
@@ -99,6 +103,10 @@ export class PriceListComponent implements OnInit {
       this.employeesPriceList = priceList;
       this.PaymentGridOptions.api.setRowData(this.employeesPriceList);
     })
+  }
+
+  selectTab(tabId: number) {
+    this.staticTabs.tabs[tabId].active = true;
   }
 
 }

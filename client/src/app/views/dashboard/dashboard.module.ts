@@ -14,6 +14,8 @@ import { EmpmanagerModule } from "../empmanager/empmanager.module";
 import { ManagerDashboardComponent } from "../empmanager/manager-dashboard/manager-dashboard.component";
 import { ThirdSignatoryModule } from "../third-signatory/third-signatory.module";
 import { ThirdSignDashboardComponent } from "../third-signatory/dashboard/dashboard.component";
+import { CSAModule } from "../csa/csa.module";
+import { DashboardCSAComponent } from "../csa/dashboard/dashboard.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -25,9 +27,10 @@ import { ThirdSignDashboardComponent } from "../third-signatory/dashboard/dashbo
     EmployessModule,
     EvaluationadminModule,
     EmpmanagerModule,
-    ThirdSignatoryModule
+    ThirdSignatoryModule,
+    CSAModule
   ],
   declarations: [ MainDashboardComponent ],
-  exports:[ThirdSignDashboardComponent,EmployeeDashboardComponent,EadashboardComponent,ManagerDashboardComponent]
+  exports:[DashboardCSAComponent,ThirdSignDashboardComponent,EmployeeDashboardComponent,EadashboardComponent,ManagerDashboardComponent]
 })
 export class DashboardModule { }
