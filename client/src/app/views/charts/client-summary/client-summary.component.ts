@@ -77,7 +77,7 @@ public barChartColors: Color[] = [
         { data: [0, 0, 0, 0], label: 'Year-end' }
         
       ];
-      this.clientSummaryChartOptions.title.text="Evaluation Summary";
+      this.clientSummaryChartOptions.title.text="";
       let scales = { xAxes: [{scaleLabel: {
         display: true,
         labelString: "Evaluation Period",
@@ -113,7 +113,7 @@ public barChartColors: Color[] = [
       orgId:orgId,
       years:this.lastYears(),
       chartType:chartType,
-      userType:this.userType
+      userType:this.userType 
     };
     this.chartService.chartSummary(reqBody).subscribe(apiResponse => {
       let {ClientSummary,Evaluation} = apiResponse;
