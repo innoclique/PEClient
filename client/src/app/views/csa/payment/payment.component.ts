@@ -53,6 +53,7 @@ export class PaymentComponent implements OnInit {
   isinitialPaymentDone:Boolean=false;
   isAdhocpayment:Boolean=false;
   isRenewalPayment:Boolean=false;
+  isInitialPayment:Boolean=false;
   rangeList:Array<any>;
   selectedRangeId:any="";
 
@@ -89,6 +90,7 @@ export class PaymentComponent implements OnInit {
     this.paymentSummary=null;
     this.isAdhocpayment=false;
     this.isRenewalPayment=false;
+    this.isInitialPayment=false;
     
     if(paymentOption!=""){
 
@@ -97,6 +99,7 @@ export class PaymentComponent implements OnInit {
       switch (paymentOption) {
         case 'initial_pay':
           if(this.paymentReleaseData){
+            this.isInitialPayment=true;
             this.orgnizationDetails();
             this.isActiveDateDisabled=true;
             this.isPaymentFrequencyDisabled=true;
