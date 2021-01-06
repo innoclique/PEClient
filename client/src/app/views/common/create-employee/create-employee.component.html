@@ -195,7 +195,7 @@ Back to list
                           <input max="8" maxlength="8" class="form-control"  type="text"
                           [ngClass]="{ 'is-invalid':( f.ZipCode.touched || submitClicked)  &&  f.ZipCode.invalid }"
                           formControlName="ZipCode"  name="ZipCode" required 
-                           (keypress)="keyPressNumbers($event)" >
+                           (keypress)="keyPressNumbersZip($event)" >
                           <div *ngIf="(f.ZipCode.touched || submitClicked) && f.ZipCode.invalid" class="invalid-feedback">
                             <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is mandatory</div>
                            <div *ngIf="f.ZipCode.errors.minlength">Pin/Zip Code must be at least 5 characters  </div>

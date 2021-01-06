@@ -7,7 +7,10 @@
         <div class="card-header">
           Clients
 
-          &nbsp;<i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print pull-right" style="font-size:21px;color:red"></i>
+          &nbsp;
+          <div *ngIf="!(isCreate|| isDraft)">
+ <i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print pull-right" style="font-size:21px;color:red"></i>
+          </div>
           <button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal" (click)="navToList()">
             <i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back To List
           </button>

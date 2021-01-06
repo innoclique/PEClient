@@ -59,19 +59,19 @@ public barChartColors: Color[] = [
         { data: [0, 0, 0, 0], label: 'Employees' }
       ];
       
-      this.clientSummaryChartOptions.title.text="Client Summary - by usage";
+      this.clientSummaryChartOptions.title.text="";
     }else if(this.chartTypeInput==='STATUS' && this.userType==='Client'){
       this.clientSummaryBarChartData=[
         { data: [0, 0, 0, 0], label: 'Active' },
         { data: [0, 0, 0, 0], label: 'Inactive' }
       ];
-      this.clientSummaryChartOptions.title.text="Client Summary - Status"
+      this.clientSummaryChartOptions.title.text=""
     }else if(this.chartTypeInput==='STATUS' && this.userType==='Reseller'){
       this.clientSummaryBarChartData=[
         { data: [0, 0, 0, 0], label: 'Active' },
         { data: [0, 0, 0, 0], label: 'Inactive' }
       ];
-      this.clientSummaryChartOptions.title.text="Reseller Summary - Status"
+      this.clientSummaryChartOptions.title.text=""
     }else if(this.chartTypeInput === 'EVALUATION_SUMMARY'){
       this.clientSummaryBarChartData=[
         { data: [0, 0, 0, 0], label: 'Year-end' }
