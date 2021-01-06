@@ -8,7 +8,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { EvalCommonModule } from '../common/common.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import {NumberDirective} from '../../directives/numbersonly';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardCSAComponent } from './dashboard/dashboard.component';
 import { ChartsModule } from "ng2-charts";
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AppDirectiveModule } from '../../directives/app-directive.module';
@@ -68,7 +68,7 @@ export const projectRoutes: Routes = [
       component: PaymentGatewayComponent,
       data: { title: 'Payment Gateway' }
     },
-    { path: 'dashboard', component: DashboardComponent,data: {
+    { path: 'dashboard', component: DashboardCSAComponent,data: {
       title: 'Dashboard'
     }},
     
@@ -80,7 +80,7 @@ export const projectRoutes: Routes = [
 @NgModule({
   declarations: [
    
-    DashboardComponent,
+    DashboardCSAComponent,
      CSAPaymentSummary,
     CSAEvaluationsSummary,
     PaymentComponent,
@@ -103,7 +103,7 @@ export const projectRoutes: Routes = [
     FlashMessagesModule.forRoot(),
     AppDirectiveModule
   ],
-  exports:[ClientSummaryComponent]
+  exports:[ClientSummaryComponent,DashboardCSAComponent]
 })
 export class CSAModule {
   /**

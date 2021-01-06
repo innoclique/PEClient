@@ -8,16 +8,17 @@ import { Label } from 'ng2-charts';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-csa-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardCSAComponent implements OnInit {
   currentUser:any;
   currentStatus:any = {
     completed:'N/A',
     inprogress:'N/A',
-    evaluations_left:'N/A'
+    evaluations_left:'N/A',
+    renewalDate:'N/A'
   }
 
   constructor(

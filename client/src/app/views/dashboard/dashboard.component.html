@@ -1,4 +1,7 @@
 <div *ngFor="let role of selectedRoles">
+  <div *ngIf="role=='CSA'">
+    <app-csa-dashboard></app-csa-dashboard>
+  </div>
   <div *ngIf="role=='EO'">
     <employee-dashboard></employee-dashboard>
   </div>
