@@ -51,7 +51,7 @@
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker ></mat-datepicker>
             </div>
-            <div class="col-lg-6" *ngIf="isAdhocpayment">
+            <div class="col-lg-6" *ngIf="isAdhocpayment || isInitialPayment">
                <div class="">
                   <label>Range</label>
                   <input [(ngModel)]="paymentModel.Range" type="text" readonly class="form-control"  />
@@ -150,7 +150,7 @@
             </ul>
           </div>
           <div class="release_method_buttons">
-            <button *ngIf="isAdhocpayment" (click)="checkout()" class="release_buttons_save">Submit</button>
+            <button *ngIf="isAdhocpayment || isInitialPayment" (click)="checkout()" class="release_buttons_save">Submit</button>
             <button *ngIf="isRenewalPayment" (click)="paymentReleaseInfo()" class="release_buttons_save">Submit</button>
             <a href="javscript:void(0)" class="release_buttons_cancel">Cancel</a>
             <div class="clear"></div>
