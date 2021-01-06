@@ -474,16 +474,24 @@ getAllDepartments(){
   this.perfApp.requestBody={industry:this.authService.getOrganization().Industry}
   this.perfApp.CallAPI().subscribe(c=>{
     
-    console.log('lients data',c);
+    console.log('CLIENTS DATA',c);
     if(c){
       this.departments=c.Industries[0].Department;
     //  this.jobRoles=c.JobRoles;
       this.appRoles=c.AppRoles;
       this.jobLevels=c.JobLevels;
-      console.log('lients data snnn',this.jobRoles);
+      console.log('CLIENT JOB ROLES',this.appRoles);
+
+      this.appRoles.filter(e=>{
+        if(e.RoleName=="ClientSuperAdmin"){
+e.RoleName="Client Super Admin"
+        }
+      }
+
+
+      )
 
       this.appRoles.filter(e=>{ 
-        debugger
         if (e.RoleName=="Employee") {
           this.empForm.patchValue({ApplicationRole: [e._id] });
         }   
@@ -500,6 +508,7 @@ keyPressNumbersDecimal(event) {
   }else if(charCode == 45){
 return true;
   }
+
   else 
   
   {
@@ -515,6 +524,27 @@ keyPressNumbers(event) {
     return true
     
   }else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
+keyPressNumbersZip(event) {
+  var charCode = (event.which) ? event.which : event.keyCode;
+  console.log(charCode)
+ if(charCode >= 48 && charCode <= 57) {
+    return true
+    
+  }
+  else if(charCode >= 97 && charCode <= 122){
+    return true
+      }
+     else if(charCode>=65 && charCode<=90){
+      return true
+    }
+  else 
   
   {
     event.preventDefault();

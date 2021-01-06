@@ -140,7 +140,7 @@ public tsColumnDefs = [
       font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
 
       <i class="cui-map" style="cursor:pointer; padding: 7px 20px 0 0;
-      font-size: 17px;"   data-action-type="reviewEval" title="Review Evaluation"></i>
+      font-size: 17px;"   data-action-type="reviewEval" title="Review final rating"></i>
       `;
       return returnString;
     }
