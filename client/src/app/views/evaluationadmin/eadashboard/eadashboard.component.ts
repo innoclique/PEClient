@@ -21,7 +21,9 @@ export class EadashboardComponent implements OnInit {
   columnDefs = [
     {headerName:'Employee',width:'180px' , field: 'name' ,sortable: true},
     { headerName:'Designation',width:'180px',field: 'designation' },
-    { headerName:'# Overdue',width:'180px',field: 'noOfDays' }
+    //{ headerName:'# Overdue',width:'180px',field: 'noOfDays' }
+    { headerName:'Title',width:'180px',field: 'title' },
+    { headerName:'Evaluation Status',width:'180px',field: 'status' }
 ];
 
 rowData = [];

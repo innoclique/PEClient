@@ -5,15 +5,16 @@
       <div class="container clearfix">
         <flash-messages></flash-messages>
           <div class="box_main clearfix">
-            <div class="row">
+            <!--<div class="row">
               <h2 class="widget-heading"> CSA Dashboard</h2>
-            </div>
+            </div>-->
             <div class="row">
               <!-- Box1 -->
               <div class="box col-lg-6">
                 <div class="box_in">
                   <div style="height: 250px; width: 100%;">
-                  <h3 style="text-align:center">Evalution Summary </h3>
+                    <h2 class="bg-blue">Evalution Summary</h2>
+                  
                   <app-client-summary [chartTypeInput]="'EVALUATION_SUMMARY'" [userType]="'Client'"></app-client-summary>
                   </div>
                   <a  href="#/csa/reports/evaluationsSummary" class="box_in_btns_view">Evaluation Summary &#8594;</a>
