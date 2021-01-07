@@ -5,12 +5,10 @@
     <div class="container clearfix">
         <div class="box_main clearfix">
           <div class="widget-parent">
-            <div class="row">
-              <h2 class="widget-heading">Evaluation Admin Dashboard</h2>
-            </div>
+            
           <div class="row">
             <!-- Box1 -->
-            <div class="box col-lg-6">
+            <!--<div class="box col-lg-6">
               <div class="box_in_chart">
                 <div class="chart" *ngIf="pieChartLabels.length>0">
                   <div id="htmlData">
@@ -23,7 +21,7 @@
                       [colors]="pieChartColors"
                       [legend]="pieChartLegend">
                     </canvas>
-                    <button [disabled]="enableDownload" (click)="downloadCanvas()" id="exportButton" type="button">Export as PDF</button> 
+                  <button [disabled]="enableDownload" (click)="downloadCanvas()" id="exportButton" type="button">Export as PDF</button>
                   </div>
                
                 </div>
@@ -37,6 +35,39 @@
                 </div>
                 <div class="clear"></div>
               </div>
+            </div>-->
+            <div class="box col-lg-6">
+              <div class="box_in">
+                <h2 class="bg-blue">Evaluation Summary</h2>
+                <div class="box_goalsetting box_rating clearfix">
+                  <div class="chart" *ngIf="pieChartLabels.length>0">
+                    <div id="htmlData">
+                      <canvas height="140" baseChart
+                        [data]="pieChartData"
+                        [labels]="pieChartLabels"
+                        [chartType]="pieChartType"
+                        [options]="pieChartOptions"
+                        [plugins]="pieChartPlugins"
+                        [colors]="pieChartColors"
+                        [legend]="pieChartLegend">
+                      </canvas>
+                      <!--<button [disabled]="enableDownload" (click)="downloadCanvas()" id="exportButton" type="button">Export as PDF</button>--> 
+                    </div>
+                 
+                  </div>
+
+                  <div class="empty-chart" *ngIf="pieChartLabels.length === 0">
+                    <span>
+                      <em></em>
+                      <small>No Evaluations</small>
+                      <div class="clear"></div>
+                    </span>
+                    <div class="empty-chart_circle"></div>
+                  </div>
+                </div> 
+                <a href="#/ea/evaluation-list" class="box_in_btns_view">View Evaluation &#8594;</a>
+                <div class="clear"></div>
+              </div>
             </div>
             <!-- Box 2 -->
             <div class="box col-lg-6">
@@ -45,7 +76,7 @@
                 <div class="box_goalsetting box_rating clearfix">
                   <h3 class="col-xs-12">Evaluation Period: {{nextEvaluationObj?.date}} ({{nextEvaluationObj?.days}} days)</h3>
                   <h3 class="col-xs-12"># of Employees: {{nextEvaluationObj?.total_employees}}</h3>
-                  <h3 class="col-xs-12">Current Pending Evaluation: {{nextEvaluationObj?.current_pending_evealuations}}</h3>
+                  <h3 class="col-xs-12">Current Pending Evaluation(s): {{nextEvaluationObj?.current_pending_evealuations}}</h3>
                 </div> 
                 <a href="#/ea/evaluation-list" class="box_in_btns_view">View Evaluation &#8594;</a>
                 <div class="clear"></div>
@@ -57,7 +88,7 @@
                 <h2 class="bg-blue">Overdue Evaluations</h2>
                 <div class="box_goalsetting box_rating clearfix">
                   <ag-grid-angular
-                    style="width: 480px; height: 200px;"
+                    style="width: 480px; height: 240px;"
                     class="ag-theme-alpine"
                     [rowData]="rowData"
                     [columnDefs]="columnDefs">

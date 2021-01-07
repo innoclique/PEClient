@@ -5,9 +5,9 @@
       <div class="container clearfix">
           <div class="box_main clearfix">
             <div class="widget-parent">
-            <div class="row">
+            <!--<div class="row">
                 <h2 class="widget-heading">Employee Manager Dashboard</h2>
-              </div>
+              </div>-->
             <div class="row">
               <!-- Box1 -->
               <div class="box col-lg-6">
@@ -15,7 +15,7 @@
                   <h2 class="bg-blue">Current Evaluation Progress</h2>
                   
                   <ag-grid-angular
-                      style="width: 495px; height: 220px;"
+                      style="width: 495px; height: 240px;"
                       class="ag-theme-alpine"
                       [rowData]="evaluationsRowData"
                       [columnDefs]="evaluationsColumnDefs"
@@ -30,7 +30,7 @@
                 <div class="box_in">
                   <h2 class="bg-blue">Direct Reports</h2>
                   <ag-grid-angular
-                      style="width: 495px; height: 220px;"
+                      style="width: 495px; height: 240px;"
                       class="ag-theme-alpine"
                       [rowData]="directReportsRowData"
                       [columnDefs]="directReportColumnDefs"
@@ -48,7 +48,7 @@
                   <h2 class="bg-blue">Peer Review</h2>
                   <div class="box_goalsetting box_rating clearfix">
                     <ag-grid-angular
-                    style="width: 980px; height: 180px;"
+                    style="width: 980px; height: 240px;"
                     class="ag-theme-alpine"
                     [rowData]="peerReviewRowData"
                     [columnDefs]="peerreviewColumnDefs"
