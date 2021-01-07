@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardRSAComponent } from './dashboard/dashboard.component';
 import { SetupclientComponent } from './setupclient/setupclient.component';
 import { AppsettingsComponent } from './appsettings/appsettings.component';
 import { EvaluationsettingsComponent } from './evaluationsettings/evaluationsettings.component';
@@ -23,11 +23,17 @@ import { DashboardChartsModule } from "../charts/charts.module";
 import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
 import { ClientPurchaseHistory } from './reports/purchaseHistory/client/clientPurchaseHIstory';
 
+/*
 import { CSAModule } from "../csa/csa.module";
 import { PaymentComponent } from "../csa/payment/payment.component";
 import { AdhocPaymentComponent } from "../csa/adhoc-payment/adhoc-payment.component";
 import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
 import { PaymentGatewayComponent } from "../csa/payment-gateway/payment-gateway.component";
+*/
+import { PaymentComponent } from '../common/payment/payment.component';
+import { AdhocPaymentComponent } from '../common/adhoc-payment/adhoc-payment.component';
+import { PaymentGatewayComponent } from '../common/payment-gateway/payment-gateway.component';
+import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
 
 export const rsaRoutes: Routes = [
 
@@ -39,7 +45,7 @@ export const rsaRoutes: Routes = [
     children: [
       {
         path: 'dashboard',
-        component: DashboardComponent
+        component: DashboardRSAComponent
       },
       {
         path:'setup-clients/:id',
@@ -113,12 +119,11 @@ export const rsaRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    DashboardComponent, SetupclientComponent, AppsettingsComponent, 
+    DashboardRSAComponent, SetupclientComponent, AppsettingsComponent, 
     EvaluationsettingsComponent, ReportsComponent, SetupModelComponent, 
     ClientPurchaseHistory, ClientListComponent,],
   imports: [
     CommonModule,
-    CSAModule,
     RouterModule.forChild(rsaRoutes),
     ChartsModule,
     MatCardModule,

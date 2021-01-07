@@ -16,9 +16,10 @@ import { DashboardChartsModule } from "../charts/charts.module";
 import {  ClientSummaryComponent } from "../charts/client-summary/client-summary.component";
 import { CSAPaymentSummary } from "./reports/summary/payment/csaPaymentSummary.component";
 import { CSAEvaluationsSummary } from "./reports/summary/evaluations/csaEvaluationSummary.component";
-import { PaymentComponent } from './payment/payment.component';
-import { AdhocPaymentComponent } from './adhoc-payment/adhoc-payment.component';
-import { PaymentGatewayComponent } from './payment-gateway/payment-gateway.component';
+//import { PaymentComponent } from './payment/payment.component';
+import { PaymentComponent } from '../common/payment/payment.component';
+import { AdhocPaymentComponent } from '../common/adhoc-payment/adhoc-payment.component';
+import { PaymentGatewayComponent } from '../common/payment-gateway/payment-gateway.component';
 import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
 import { PriceListComponent } from "../common/price-list/price-list.component";
 export const projectRoutes: Routes = [
@@ -83,9 +84,9 @@ export const projectRoutes: Routes = [
     DashboardCSAComponent,
      CSAPaymentSummary,
     CSAEvaluationsSummary,
-    PaymentComponent,
-    AdhocPaymentComponent,
-    PaymentGatewayComponent,
+    //PaymentComponent,
+    //AdhocPaymentComponent,
+    //PaymentGatewayComponent,
     
   ],
   imports: [

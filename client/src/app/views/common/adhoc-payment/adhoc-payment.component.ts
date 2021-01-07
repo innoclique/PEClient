@@ -286,7 +286,7 @@ export class AdhocPaymentComponent implements OnInit {
      this.perfApp.requestBody = requestBody
      this.perfApp.CallAPI().subscribe(c => {
      if(c){
-      this.notification.success(`Request Sent To Admin.`);
+      this.notification.success(`Ad hoc purchase request sent successfully`);
      }else{
        this.notification.error("Record not saved.")
      }

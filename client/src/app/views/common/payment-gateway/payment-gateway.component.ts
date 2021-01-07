@@ -76,13 +76,19 @@ export class PaymentGatewayComponent implements OnInit {
     this.monerisService.getTicket(reqBody).subscribe(apiResponse => {
       console.log("apiResponse")
       console.log(apiResponse)
-      let {response} = apiResponse;
-      if(response.success && response.success!=="false"){
-        this.loadPaymentPage(apiResponse.response.ticket);
+      if(apiResponse){
+        let {response} = apiResponse;
+        if(response.success && response.success!=="false"){
+          this.loadPaymentPage(apiResponse.response.ticket);
+        }else{
+          this.notification.error("Payment gateway problem. Please try again later.");
+          this.errorMsg="Payment gateway problem. Please try again later.";
+        }
       }else{
         this.notification.error("Payment gateway problem. Please try again later.");
-        this.errorMsg="Payment gateway problem. Please try again later.";
+          this.errorMsg="Payment gateway problem. Please try again later.";
       }
+      
       
     });
     

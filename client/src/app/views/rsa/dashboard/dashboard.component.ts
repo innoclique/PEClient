@@ -9,7 +9,7 @@ import * as pluginAnnotations from 'chartjs-plugin-annotation';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardRSAComponent implements OnInit {
 
   dashboardData:any;
   constructor(public rsaService:RsaService) { 

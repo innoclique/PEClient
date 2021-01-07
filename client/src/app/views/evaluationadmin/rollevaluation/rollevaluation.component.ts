@@ -451,21 +451,25 @@ export class RollevaluationComponent implements OnInit {
     })
   }
   submitEvaluation() {
-    if(this.rollEvaluationEdit){
-      debugger
-      let formdata = this.evaluationForm.value;
-      formdata.EvaluationId = this.readonlyEmployee.evaluationId;
-      this.submitValidEvaluation();
-    }else{
-      this.isFormSubmitted = true;
-      debugger
-      if (this.evaluationForm.invalid)
-        return;
-      const _evform = this.evaluationForm.value;
-  
-      this.submitValidEvaluation();
-      
-    }
+    
+      if(this.rollEvaluationEdit){
+        debugger
+        let formdata = this.evaluationForm.value;
+        formdata.EvaluationId = this.readonlyEmployee.evaluationId;
+        let isConform = window.confirm("Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
+        if(isConform)
+          this.submitValidEvaluation();
+      }else{
+        this.isFormSubmitted = true;
+        debugger
+        if (this.evaluationForm.invalid)
+          return;
+        const _evform = this.evaluationForm.value;
+        let isConform = window.confirm("Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
+        if(isConform)
+          this.submitValidEvaluation();
+        
+      }
     
   }
   submitValidEvaluation(){
@@ -874,15 +878,11 @@ export class RollevaluationComponent implements OnInit {
         this.selectedEmployeeList.push(element);
       }
     });
-    let r = window.confirm("Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
-    if (r==true){
-      if (this.EmpGridOptions.api) {
-        this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
-      }
-      this.selectedEmployees = [];
-      this.disabledAddButton = true;
-
+    if (this.EmpGridOptions.api) {
+      this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
     }
+    this.selectedEmployees = [];
+    this.disabledAddButton = true;
   
   }
 
