@@ -1,7 +1,7 @@
 <div class="card">
     
     <div style="text-align: center;" class="card-header">
-        Final Evaluation Report
+        Evaluation Report - {{getEVPeriod()}} - {{loginUser?.FirstName}} {{loginUser?.LastName}}
         <div class="form-group form-actions pull-right m-0">
             <i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
         </div>
@@ -117,7 +117,7 @@
                                 <thead class="thead-light">
                                     <th style="color: black;font-weight: 600;">Competency</th>
                                     <th style="color: black;font-weight: 600;">Rating</th>
-                                    <th style="color: black;font-weight: 600;">Comments/Evidence</th>
+                                    <th style="color: black;font-weight: 600;">Comments</th>
                                 </thead>
                                 <tr *ngFor="let question of c.Questions; let i = index">
                                     <td>
