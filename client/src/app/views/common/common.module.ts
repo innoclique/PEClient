@@ -14,11 +14,16 @@ import { CreateEmployeeComponent } from './create-employee/create-employee.compo
 import { CustomMaterialModule } from '../../custom-material/custom-material.module';
 import { PaymentHistoryComponent } from './payment-history/payment-history.component';
 import { PriceListComponent } from './price-list/price-list.component';
+import { PaymentComponent } from './payment/payment.component';
+import { AdhocPaymentComponent } from './adhoc-payment/adhoc-payment.component';
+import { PaymentGatewayComponent } from './payment-gateway/payment-gateway.component';
 
 
 
 @NgModule({
-  declarations: [ CSCComponent, SetupEmployeeComponent, CreateEmployeeComponent, PaymentHistoryComponent, PriceListComponent ],
+  declarations: [ CSCComponent, SetupEmployeeComponent, CreateEmployeeComponent, 
+    PaymentHistoryComponent, PriceListComponent,PaymentComponent, 
+    AdhocPaymentComponent, PaymentGatewayComponent ],
   imports: [
     CommonModule,
     FormsModule,

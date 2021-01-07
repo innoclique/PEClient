@@ -10,7 +10,7 @@
                             (click)="onCancle()">
                             <i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list
                         </button>
-                        &nbsp;<i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
+                        &nbsp;<i *ngIf="(currentAction == 'edit' && f?.IsDraft?.value=='false' )" (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
                     </div>
 
                 </div>
