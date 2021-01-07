@@ -27,6 +27,7 @@ export class CurrentEvaluationComponent implements OnInit {
   competencyList: any = [];
   evaluationForm: any = {};
   employeeCompetencyList: any;
+  public isSigned:boolean= false;
   questions$: Observable<CompetencyBase<any>[]>;
   currEvaluation: any;
   public oneAtATime: boolean = true;
@@ -85,6 +86,7 @@ export class CurrentEvaluationComponent implements OnInit {
     }
   ];
 
+
   /**To GET ALL  tabs data */
   getTabsData() {
     forkJoin(
@@ -98,6 +100,7 @@ export class CurrentEvaluationComponent implements OnInit {
           console.log('the evauation form', this.evaluationForm)
         }
         if (res1.FinalRating) {
+          this.isSigned= res1.FinalRating.Manager.SignOff.length>0?true:false;
           this.FinalRatingForm.controls["EmployeeComments"].setValue(res1.FinalRating.Self.YearEndComments)
           this.FinalRatingForm.controls["EmployeeOverallRating"].setValue(res1.FinalRating.Self.YearEndRating)
           this.FinalRatingForm.controls["EmployeeIsDraft"].setValue(!res1.FinalRating.Self.IsSubmitted)
@@ -363,7 +366,7 @@ export class CurrentEvaluationComponent implements OnInit {
       
    /**To alert user for submit Final Rating */
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to submit your evaluation?";
+    this.alert.Content =  this.isSigned?"This will register your sign-off for the final ratings provided by your manager. Are you sure you want to sign-off?":"Are you sure you want to submit your evaluation?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";
@@ -382,10 +385,11 @@ export class CurrentEvaluationComponent implements OnInit {
     var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(resp => {
      if (resp=='yes') {
+       let msg = this.isSigned?"Your sign-off is registered":"Evaluation has been successfully submitted."
       this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
       this.perfApp.CallAPI().subscribe(x => {
         console.log(x)
-        const snref=   this.snack.success('Evaluation has been successfully submitted.');
+        const snref=   this.snack.success(msg);
         snref.afterDismissed().subscribe(() => {
           window.location.reload();
         }); 
@@ -426,7 +430,7 @@ export class CurrentEvaluationComponent implements OnInit {
     'orgId':this.authService.getOrganization()._id
   }
       this.perfApp.CallAPI().subscribe(c => {
-
+console.log("---------------------------------->", c)
         if (c) {
 
           this.appScores = c.KpiScore;
