@@ -313,6 +313,8 @@ export class CurrentEvaluationReportComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(res => {
       if (res && !res.isError) {
         this.finalRating = res.FinalRating;
+        this.finalRating.Self.SubmittedOn = new Date(this.finalRating.Self.SubmittedOn).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' });
+        this.finalRating.Manager.SubmittedOn = new Date(this.finalRating.Manager.SubmittedOn).toLocaleDateString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' });
         console.log('inside getFinalRating :::: ');
         console.log(this.finalRating);
       }
@@ -327,12 +329,17 @@ export class CurrentEvaluationReportComponent implements OnInit {
     "August", "September", "October", "November", "December"];
 
 
-  getEVPeriod() {
+ getEVPeriod() {
     let year = this.currEvaluation ? new Date(this.currEvaluation.CreatedDate) : new Date();
     if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
-      return `${this.monthList[this.currentOrganization.StartMonth].substring(0, 3)} ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} 
+      
+      if(this.currentOrganization.StartMonth >= new Date().getMonth()){
+        return `${this.monthList[this.currentOrganization.StartMonth].substring(0, 3)}'${(year.getFullYear()-1).toString().substring(2)} To ${this.currentOrganization.EndMonth.substring(0, 3)}' 
+        ${this.currentOrganization.EndMonth < new Date().getMonth() ? (year.getFullYear()+1).toString().substring(2) : year.getFullYear().toString().substring(2)}`
+      }else{
+      return `${this.monthList[this.currentOrganization.StartMonth].substring(0, 3)}'${year.getFullYear()} To ${this.currentOrganization.EndMonth.substring(0, 3)}' 
             ${this.currentOrganization.StartMonth == '1' ? year.getFullYear() : year.getFullYear() + 1}`
-
+      }
     } else {
       return `${this.monthList[this.currentOrganization.StartMonth].substring(0, 3)} ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} ${year.getFullYear()}`
 
