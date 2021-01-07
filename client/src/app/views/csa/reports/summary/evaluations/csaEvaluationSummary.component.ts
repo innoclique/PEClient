@@ -77,7 +77,7 @@ export class CSAEvaluationsSummary {
     const rowData: any[] = [];
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
     rowData.push({
-      evaluationPeriod: ReportTemplates.months[this.currentOrganization.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.currentOrganization.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
+      evaluationPeriod: ReportTemplates.months[this.currentOrganization.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + ReportTemplates.months[ReportTemplates.months.indexOf(this.currentOrganization.EndMonth.substring(0, 3))+1] + "'" + ReportTemplates.getYear(),
       evaluationsType: RefData.evaluationTypes[0],
       evaluationsCount: evaluationSummary.data,
     });
