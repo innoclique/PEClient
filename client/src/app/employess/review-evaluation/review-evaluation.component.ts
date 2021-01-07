@@ -192,7 +192,6 @@ goto(selTab){
           this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.ThirdSignatory.SubmittedOn))
           this.showThirdSignatorySubmit = !res1.FinalRating.ThirdSignatory.IsSubmitted;
 
-
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
           this.PeerScoreCard = res1.PeerScoreCard;
@@ -563,8 +562,14 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
   }
   
   saveTSFinalRating(isDraft) {
-    window.confirm("Are you sure you want to request a revision of the rating for this employee?")
     let reqRev=this.FinalRatingForm.value.TSReqRevision;
+    let msg = reqRev?"Are you sure you want to request a revision of the rating for this employee?":"Are you sure you want to sign-off this rating?"
+   let conf =  window.confirm(msg)
+   if (conf==true)
+   {
+
+   
+    
     this.perfApp.route = "app";
     this.perfApp.method = "SaveTSFinalRating",
       this.perfApp.requestBody = {
@@ -581,7 +586,8 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
     console.log('final rating form', this.perfApp.requestBody)
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
-    const snref=  this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
+      let aMsg = reqRev?"Revision request has been sent successfully":"Rating has been signed-off"
+    const snref=  this.snack.success(aMsg);
      
       snref.afterDismissed().subscribe(() => {
         window.location.reload();
@@ -591,7 +597,10 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
       console.log('error', error)
       this.snack.error('Something went wrong')
     })
+  }
+  else{
 
+  }
   }
 
   
