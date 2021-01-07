@@ -139,8 +139,8 @@
           </div>
           <div class="release_method_buttons">
             <button (click)="savePayment()" class="release_buttons_save">Save</button>
-            <button (click)="paymentReleaseInfo()" class="release_buttons_submit">Release Info</button>
-            <a href="javscript:void(0)" class="release_buttons_cancel">Cancel</a>
+            <button (click)="paymentReleaseInfo()" class="release_buttons_submit" style="margin-left: 8px;">Release Payment Info</button>
+            <a href="javscript:void(0)" class="release_buttons_cancel" style="margin-left: 6px;margin-right: 9px;">Cancel</a>
             <div class="clear"></div>
           </div>
       </div>
@@ -162,7 +162,7 @@
   </div>
   <div class="payment_info_links">
     <!--<h5 class="wow fadeIn" data-wow-delay="1.2s">Information Links</h5>-->
-    <div class="wow fadeIn" data-wow-delay="1.4s">
+    <div class="wow fadeIn" data-wow-delay="1.4s"><br/>
       <a href="javascript:void(0)" (click)="loadPaymentHistory()" class="payment_info_links_payment">
         <em><img src="assets/payments/bill.png"  alt="Bill"></em>
         <strong>Payment History</strong>
