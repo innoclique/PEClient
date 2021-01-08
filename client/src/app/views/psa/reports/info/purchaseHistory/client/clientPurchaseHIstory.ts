@@ -98,6 +98,7 @@ export class ClientPurchaseHistory {
       'active': this.clientInfo.IsActive ? 'Yes' : 'No',
       'usageType': this.clientInfo.UsageType,
       'evaluationsType': this.clientInfo.EvaluationPeriod,
+      'evaluationPeriod':ReportTemplates.getEvaluationPeriod(this.clientInfo.StartMonth,this.clientInfo.EndMonth),
 //       'evaluationPeriod': ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
     };
 
