@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
+import ReportTemplates from '../../views/psa/reports/data/reports-templates';
 
 
 @Component({
@@ -136,17 +137,7 @@ return 34;
 
   
   getEVPeriod(){
-    let ev = this.currentOrganization.EvaluationPeriod;
-
-    if(ev="FiscalYear") ev = "Fiscal Year"
-    if (ev="CalendarYear") ev = "Calendar Year"
-    let year= new Date (this.currentOrganization.CreatedOn);
-    if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
-    return `${ev} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
-    }else{
-      return `${ev} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
-
-    }
+    return ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
   }
   
 }
