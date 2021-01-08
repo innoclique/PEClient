@@ -261,6 +261,11 @@ export default class RSAReportTemplates {
                 '</div>',
         },
     };
+  
+  static getEvaluationPeriod(StartMonth: number, EndMonth: string) {
+        return this.months[StartMonth-1] + "'" + this.getYearStart(this.months[StartMonth-1]) + " To " + EndMonth.substring(0, 3) + "'" + this.getYearEnd(EndMonth.substring(0, 3));
+    }
+  
     static getYear() {
         var currentYear: string = new Date().getFullYear().toString();
         currentYear = currentYear.substring(2);
@@ -269,7 +274,7 @@ export default class RSAReportTemplates {
   
    static getYearStart(month: string) {
         if (this.months.indexOf(month) > new Date().getMonth()) {
-            var currentYear: string = (new Date().getFullYear()-1).toString();
+            var currentYear: string = (new Date().getFullYear() - 1).toString();
             currentYear = currentYear.substring(2);
             return currentYear;
         } else {
@@ -285,7 +290,7 @@ export default class RSAReportTemplates {
             currentYear = currentYear.substring(2);
             return currentYear;
         } else {
-            var currentYear: string = (new Date().getFullYear()+1).toString();
+            var currentYear: string = (new Date().getFullYear() + 1).toString();
             currentYear = currentYear.substring(2);
             return currentYear;
         }
