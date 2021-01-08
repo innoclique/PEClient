@@ -8,6 +8,7 @@ import { AuthService } from '../../../services/auth.service';
 
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
+import ReportTemplates from'../../../views/psa/reports/data/reports-templates';
 
 
 @Component({
@@ -936,14 +937,8 @@ export class EvaluationslistComponent implements OnInit {
 }
   
   getEVPeriod(evRow){
-    let year= new Date (evRow.CreatedDate);
-    if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
-    return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} 
-    ${this.currentOrganization.StartMonth=='1' ? year.getFullYear() :year.getFullYear()+1}`
-    }else{
-      return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} ${year.getFullYear()}`
-
-    }
+    return ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
+   
   }
 
 
