@@ -92,13 +92,12 @@ export class ClientRevenueDetails {
       'active': this.clientInfo.IsActive ? 'Yes' : 'No',
       'usageType': this.clientInfo.UsageType,
       'evaluationsType': this.clientInfo.EvaluationPeriod,
-      'evaluationPeriod': ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
+      'evaluationPeriod': ReportTemplates.getEvaluationPeriod(this.clientInfo.StartMonth,this.clientInfo.EndMonth),
     };
 
     for (let i = 0; i < 20; i++) {
       rowData.push({
-//         evaluationPeriod: "Jan'20 To Dec'20",
-        evaluationPeriod: ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYearStart(ReportTemplates.months[this.clientInfo.StartMonth]) + ' To ' +  this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYearEnd( this.clientInfo.EndMonth.substring(0, 3)),
+        evaluationPeriod: ReportTemplates.getEvaluationPeriod(this.clientInfo.StartMonth,this.clientInfo.EndMonth),
         purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
         evaluationsType: 'Year - end',
         licPurchasesCount: Math.round(Math.random() * 100),
