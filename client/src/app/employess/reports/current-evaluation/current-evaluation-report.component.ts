@@ -330,20 +330,7 @@ export class CurrentEvaluationReportComponent implements OnInit {
 
 
  getEVPeriod() {
-    let year = this.currEvaluation ? new Date(this.currEvaluation.CreatedDate) : new Date();
-    if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
-      
-      if(this.currentOrganization.StartMonth >= new Date().getMonth()){
-        return `${this.monthList[this.currentOrganization.StartMonth].substring(0, 3)}'${(year.getFullYear()-1).toString().substring(2)} To ${this.currentOrganization.EndMonth.substring(0, 3)}' 
-        ${this.currentOrganization.EndMonth < new Date().getMonth() ? (year.getFullYear()+1).toString().substring(2) : year.getFullYear().toString().substring(2)}`
-      }else{
-      return `${this.monthList[this.currentOrganization.StartMonth].substring(0, 3)}'${year.getFullYear()} To ${this.currentOrganization.EndMonth.substring(0, 3)}' 
-            ${this.currentOrganization.StartMonth == '1' ? year.getFullYear() : year.getFullYear() + 1}`
-      }
-    } else {
-      return `${this.monthList[this.currentOrganization.StartMonth].substring(0, 3)} ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} ${year.getFullYear()}`
-
-    }
+   return ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
   }
   getCurrentEvaluationDetails() {
     this.perfApp.route = "evaluation";
