@@ -17,6 +17,7 @@ import { ThemeService } from '../../../services/theme.service';
 import { AlertComponent } from '../../../shared/alert/alert.component';
 import { Constants } from '../../../shared/AppConstants';
 import { CustomValidators } from '../../../shared/custom-validators';
+import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
 
 @Component({
   selector: 'app-kpi-review-manager',
@@ -715,28 +716,12 @@ editDraftKpi(){
   id:this.currentKpiId}],{ skipLocationChange: true });
 }
 
-
-
-
 public monthList = ["","January", "February", "March", "April", "May", "June", "July",
 "August", "September", "October", "November", "December"];
+  
 getEVPeriod(){
-  
-  
-      let year= this.currEvaluation? new Date (this.currEvaluation.CreatedDate) : new Date();
-      if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
-      return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} 
-            ${this.currentOrganization.StartMonth=='1' ? year.getFullYear() :year.getFullYear()+1}`
-     
-    }else{
-        return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) } ${year.getFullYear()} to ${this.currentOrganization.EndMonth.substring(0, 3)} ${year.getFullYear()}`
-  
-      }
+  return ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
     }
-
-
-
-
     
   printPage() {
     window.print();
