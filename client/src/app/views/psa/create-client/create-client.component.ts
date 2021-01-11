@@ -1,7 +1,5 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
-
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
@@ -10,6 +8,9 @@ import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { CustomValidators } from '../../../shared/custom-validators';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertComponent } from '../../../shared/alert/alert.component';
+import { AlertDialog } from '../../../Models/AlertDialog';
 
 @Component({
   selector: 'app-create-client',
@@ -21,6 +22,7 @@ export class CreateClientComponent implements OnInit {
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
+  public alert: AlertDialog;
   errorOnSave = false;
   errorMessage: string = "";
   @ViewChild('closeModal') closeModal: ElementRef
@@ -280,15 +282,44 @@ export class CreateClientComponent implements OnInit {
     }
     
     if(this.currentRecord && this.currentRecord._id){
+      this.openSaveDialog("update");
       this.updateClient();
     }else{
-      alert("Are you sure you want to add this client?")
+      this.openSaveDialog("save");
       this.saveClient();
     }
     
   }
 
+  openSaveDialog(saveType: string) {
+    this.alert.Title = "Alert";
+    this.alert.Content = saveType=="update"?"Are you sure you want to update this client?":"Are you sure you want to add this client?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Save";
 
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '100%';
+    dialogConfig.minWidth = '40%';
+
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp=='yes') {
+        saveType=="update"?this.updateClient():this.saveClient();
+
+    }else{
+
+    }
+      
+    })
+  }
   saveClient() {
     this.clientFormData = Object.assign(this.clientFormData, this.prepareOrgData());
     this.perfApp.route = "app";
@@ -296,7 +327,7 @@ export class CreateClientComponent implements OnInit {
     this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
-      this.notification.success('Organization Added Successfully.')
+      this.notification.success('The client has been successfully added.')
       this.errorOnSave = false;
       this.errorMessage = "";
       this.router.navigate(['psa/payment-release',{email:this.clientFormData.Email}],{ skipLocationChange: true });
@@ -552,7 +583,7 @@ export class CreateClientComponent implements OnInit {
       this.perfApp.requestBody = organization; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {      
       console.log('updated', c)
-      this.notification.success('Client details updated successfully')
+      this.notification.success('The client has been successfully updated.')
       this.navToList();
 
     }, error => {      
