@@ -7,8 +7,9 @@
                 Set up Performance Goal
             
             <div class="form-group form-actions pull-right m-0">
-              <button [disabled]='isKpiActivated' class="btn btn-sm btn-primary" data-toggle="modal" (click)="createKpi()">Add New Performance Goal</button>
-             &nbsp; <button [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button>
+              <button [disabled]='isKpiActivated' class="btn btn-sm btn-primary" data-toggle="modal" (click)="createKpi()">Add</button>
+             &nbsp; <button [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit</button>
+             &nbsp; <button [disabled]="isSignOffDisabled"  class="btn btn-sm btn-primary"  (click)="singoffPG()" >Sign-off</button>
             </div>
             </div>
             <div class="card-body">

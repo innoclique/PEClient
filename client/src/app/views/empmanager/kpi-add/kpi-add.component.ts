@@ -14,6 +14,7 @@ import { ThemeService } from '../../../services/theme.service';
 import { Constants } from '../../../shared/AppConstants';
 import { CustomValidators } from '../../../shared/custom-validators';
 import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-kpi-add',
@@ -55,7 +56,7 @@ export class KpiAddComponent implements OnInit {
   currEvaluation: any;
   currentOrganization: any;
   selectedUser: any;
-
+  isFinalSignoff=false;
 
 
 
@@ -79,6 +80,7 @@ export class KpiAddComponent implements OnInit {
       this.currentOwnerId = params['ownerId'];
       this.currentKpiId = params['id'];
       this.currentAction = params['action'];
+      this.findPgSignoff();
      }
      this.GetEmployeeDetailsById();
 
@@ -88,6 +90,58 @@ export class KpiAddComponent implements OnInit {
 
     
 
+  }
+
+  getOrganizationStartAndEndDates(){
+    let Organization = this.currentOrganization;
+    let {StartMonth,EndMonth,EvaluationPeriod} = Organization;
+    StartMonth = parseInt(StartMonth);
+    let currentMoment = moment();
+    let evaluationStartMoment;
+    let evaluationEndMoment
+    if(EvaluationPeriod === "FiscalYear"){
+      var currentMonth = parseInt(currentMoment.format('M'));
+      console.log(`${currentMonth} <= ${StartMonth}`)
+      if(currentMonth <= StartMonth){
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month').subtract(1, 'years');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }else{
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }
+    }else if(EvaluationPeriod === "CalenderYear"){
+      evaluationStartMoment = moment().startOf('month');
+      evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
+    }
+    return {
+      start:evaluationStartMoment,
+      end:evaluationStartMoment
+    }
+  }
+  
+  findPgSignoff(){
+    console.log(this.loginUser)
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+    let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let options = {
+      EvaluationYear,
+      Owner:this.currentOwnerId,
+      
+    };
+    console.log(options);
+    this.perfApp.route = "app";
+    this.perfApp.method = "Find/PG/Signoff";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(result => {
+      if(!result){
+        this.isFinalSignoff = false;
+      }else{
+        let {FinalSignoff}  = result;
+        this.isFinalSignoff = FinalSignoff;
+      }
+    })
   }
 
 
@@ -233,7 +287,8 @@ export class KpiAddComponent implements OnInit {
     if (this.kpiForm.get('IsDraftByManager').value=='true') {
       this.perfApp.requestBody.Action = 'Draft';
     }
-
+    this.perfApp.requestBody.isFinalSignoff = this.isFinalSignoff;
+    this.perfApp.requestBody.isManagerSubmitted = true;
     this.callKpiApi();
 
   }
