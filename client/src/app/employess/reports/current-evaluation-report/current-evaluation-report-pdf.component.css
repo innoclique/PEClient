@@ -1,0 +1,17 @@
+.ratingcard{
+    padding: .4em;    
+    font-size: 60px;
+    text-align: center;
+    background: #1779ba;
+    color: #fefefe
+}
+
+.pdfBodyqq {
+    width:100%;
+    min-width:500px;
+    float:left;
+    margin-bottom:20px;
+    max-height:1px;
+    overflow:hidden;
+
+}

@@ -57,6 +57,7 @@ import { ReviewAccomplishmentsComponent } from './review-accomplishments/review-
 import { PrivateNotesComponent } from './private-notes/private-notes.component';
 import { PrivateNotesListComponent } from './private-notes-list/private-notes-list.component';
 import { CurrentEvaluationReportComponent} from './reports/current-evaluation/current-evaluation-report.component';
+import { CurrentEvaluationReportPdfComponent} from './reports/current-evaluation-report/current-evaluation-report-pdf.component';
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
@@ -76,7 +77,8 @@ import { CurrentEvaluationReportComponent} from './reports/current-evaluation/cu
      ReviewAccomplishmentsComponent,
      PrivateNotesComponent,
      PrivateNotesListComponent,
-     CurrentEvaluationReportComponent
+     CurrentEvaluationReportComponent,
+     CurrentEvaluationReportPdfComponent
     ],
   imports: [
     CommonModule,
@@ -111,6 +113,7 @@ DRReviewModule
   exports: [
     ModalModule,
     EmployeeDashboardComponent
+    
 ],
 providers:[DatePipe]
 })

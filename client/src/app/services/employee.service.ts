@@ -18,6 +18,11 @@ export class EmployeeService {
       .pipe(retry(1), catchError(this.errorHandle));
   }
 
+  getCopiesTO(requestBody:any):Observable<any> {
+    return this.Http.post<any>(environment.ApiPath + 'app/getCopiesTo',requestBody)
+      .pipe(retry(1), catchError(this.errorHandle));
+  }
+
   errorHandle(error) {
     let errormgs = {};
     if (error.error instanceof ErrorEvent) {
