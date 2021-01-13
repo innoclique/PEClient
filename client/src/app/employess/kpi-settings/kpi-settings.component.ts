@@ -61,6 +61,7 @@ accessingFrom:any;
   currentOrganization: any;
   IsDraftDBVal: any;
   isFinalSignoff:Boolean;
+  showAllowSignoff:Boolean=false;;
 
 
 
@@ -89,6 +90,10 @@ accessingFrom:any;
      if (params['isFinalSignoff']) {
       this.isFinalSignoff = params['isFinalSignoff'];
      }
+     if (params['showAllowSignoff']) {
+      this.showAllowSignoff = params['showAllowSignoff'];
+     }
+     
      
      
     });   
@@ -114,7 +119,51 @@ accessingFrom:any;
     this.alert = new AlertDialog();
   }
 
+  DenyAllSignOffKpis() {
 
+  this.perfApp.route = "app";
+  this.perfApp.method = "DenyAllSignOffKpis",
+    this.perfApp.requestBody = { 'empId': this.loginUser._id }
+  this.perfApp.CallAPI().subscribe(c => {
+   if (c) {
+    this.snack.success(c.message);
+    this.snack.success(c.message);
+    this.router.navigate(['employee/kpi-setup']);
+   }
+
+  }
+  
+  , error => {
+
+    this.snack.error(error.error.message);
+
+  }
+  
+  )
+}
+
+  submitAllSignoffKPIs() {
+
+    this.perfApp.route = "app";
+    this.perfApp.method = "SubmitAllSignOffKpis",
+      this.perfApp.requestBody = { 'empId': this.loginUser._id }
+    this.perfApp.CallAPI().subscribe(c => {
+     if (c) {
+      this.snack.success(c.message);
+      this.snack.success(c.message);
+      this.router.navigate(['employee/kpi-setup']);
+     }
+  
+    }
+    
+    , error => {
+  
+      this.snack.error(error.error.message);
+  
+    }
+    
+    )
+  }
 
 
 

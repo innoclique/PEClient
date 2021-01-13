@@ -215,6 +215,9 @@ export class KpiSetupComponent implements OnInit {
 
           <i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="DenyPg" title="Deny"></i>
+
+          <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="ESG" title="Edit Performance Goal" ></i>
           `
          }else{
           actionlinks= `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -287,7 +290,9 @@ export class KpiSetupComponent implements OnInit {
         case "EF":
           this.editKpiForm(this.currentRowItem);
           break;
-
+        case "ESG":
+          this.editSignOffKpiForm(this.currentRowItem);
+          break;
         case "deActiveKPI":
           this.activedeActiveKPI(false);
           break;
@@ -380,6 +385,13 @@ export class KpiSetupComponent implements OnInit {
       this.router.navigate(['employee/kpi-setting',{action:'edit',id:this.currentRowItem._id,isFinalSignoff:this.isSignOffDisabled}],{ skipLocationChange: true });
       
   }
+
+  editSignOffKpiForm(currentRowItem: any) {
+   
+
+    this.router.navigate(['employee/kpi-setting',{action:'edit',id:this.currentRowItem._id,isFinalSignoff:this.isSignOffDisabled,showAllowSignoff:true}],{ skipLocationChange: true });
+    
+}
 
   
 
