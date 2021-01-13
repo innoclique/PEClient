@@ -10,6 +10,12 @@
                         (click)="router.navigate(['employee/kpi-setup'])">
                         <i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list
                       </button>
+                      <button *ngIf="showAllowSignoff" type="button" class="btn btn-sm btn-primary" 
+                       (click)="DenyAllSignOffKpis()">Deny</button>
+                      <button *ngIf="showAllowSignoff" type="button" class="btn btn-sm btn-primary" 
+                        (click)="submitAllSignoffKPIs()">
+                        Allow
+                      </button>
                       &nbsp;<i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
                     </div>
                     
@@ -393,7 +399,7 @@
 
                         </div>
 
-                        <div *ngIf="currentAction != 'view' && !isEmpFRSignOff" class="form-group form-actions pull-right">
+                        <div *ngIf="!showAllowSignoff && currentAction != 'view' && !isEmpFRSignOff" class="form-group form-actions pull-right">
                             <button *ngIf="accessingFrom!='currEvaluation' " class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>&nbsp;
                             <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftKpi()" >Save</button>&nbsp;
                             <button  *ngIf="currentAction == 'edit' && f?.IsDraft?.value=='false' " class="btn btn-sm btn-primary" (click)="submitKpi()" >Update</button>
