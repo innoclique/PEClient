@@ -60,6 +60,7 @@ accessingFrom:any;
   isEmpFRSignOff=false;
   currentOrganization: any;
   IsDraftDBVal: any;
+  isFinalSignoff:Boolean;
 
 
 
@@ -84,6 +85,11 @@ accessingFrom:any;
       this.currentKpiId = params['id'];
       this.currentAction = params['action'];
      }
+
+     if (params['isFinalSignoff']) {
+      this.isFinalSignoff = params['isFinalSignoff'];
+     }
+     
      
     });   
 
@@ -215,7 +221,7 @@ if(this.selectedItems.length==0) {
 
 
       this.perfApp.requestBody = this.kpiForm.value; //fill body object with form 
-
+      this.perfApp.requestBody.isFinalSignoff=this.isFinalSignoff;
       let Measurements = [];
    
   

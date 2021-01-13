@@ -6,11 +6,11 @@
                     <span style="color: #717171;">{{kpiDetails?.Owner?.FirstName}} {{kpiDetails?.Owner?.LastName}} -</span>
                     Performance Goal Review
 
-                    <div class="form-group form-actions pull-right m-0">
+                    <div *ngIf="!draftGoals" class="form-group form-actions pull-right m-0">
                         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
                         (click)="onCancle()" ><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list </button>&nbsp;
-
-                        <button *ngIf="accessingFrom=='kpiReview' " [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="openConfirmSubmitKpisDialog()" >Submit Performance Goals</button>&nbsp;
+                        <button [disabled]="isSignOffDisabled"  class="btn btn-sm btn-primary"  (click)="singoffPG()" >Sign-off</button>
+                        <button *ngIf="accessingFrom=='kpiReview' " [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="openConfirmSubmitKpisDialog()" >Submit</button>&nbsp;
                     <button class="btn btn-sm btn-primary"  (click)="trackKpi()"  title="Track Performance Goal" >Track</button>&nbsp;
                     <button *ngIf="kpiDetails?.IsActive" class="btn btn-sm btn-primary"  (click)="activeDeActiveKPI(false)" title="Deactivate Performance Goal">Deactivate</button>&nbsp;
 
@@ -19,6 +19,10 @@
                     <button *ngIf="kpiDetails?.IsDraftByManager" class="btn btn-sm btn-primary" (click)="editDraftKpi()" title="Edit Performance Goal">Edit</button> 
 
                     &nbsp;<i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
+                    </div>
+                    <div *ngIf="draftGoals" class="form-group form-actions pull-right m-0">
+                        <button *ngIf="kpiDetails?.IsActive" class="btn btn-sm btn-primary"  (click)="denyAllPg()" title="Deny Performance Goal">Deny</button>&nbsp;
+                        <button *ngIf="accessingFrom=='kpiReview' " [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="submitSignoffAllKpiById()" >Allow</button>&nbsp;
                     </div>
 
                 </div>
@@ -550,11 +554,16 @@
                         </div> -->
 
 
-
-                        <div *ngIf="kpiDetails?.IsActive && !kpiDetails?.IsDraftByManager && actor!='TS' &&!isManagerFRSignOff  "  class="form-group form-actions pull-right">
+                        
+                        <div *ngIf="!draftGoals && kpiDetails?.IsActive && !kpiDetails?.IsDraftByManager && actor!='TS' &&!isManagerFRSignOff  "  class="form-group form-actions pull-right">
                             <button class="btn btn-sm btn-primary" (click)="onCancle()">Cancel</button>&nbsp;
                             <button  class="btn btn-sm btn-primary"
                                 (click)="submitKpi()">{{currentAction=='edit'? 'Update' :'Update' }}</button>
+                          
+                        </div>
+                        <div *ngIf="draftGoals"  class="form-group form-actions pull-right">
+                            <button class="btn btn-sm btn-primary" (click)="denyKPI()">Deny</button>&nbsp;
+                            <button  class="btn btn-sm btn-primary" (click)="submitKpiById()">Allow</button>
                           
                         </div>
 
