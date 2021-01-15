@@ -66,6 +66,8 @@ export class RollevaluationComponent implements OnInit {
   readonlyEmployee:any={};
   editEvaluation:any;
   kpiSelectedEmployees:any=[];
+  evaluationType:any="";
+  isAdHoc:Boolean=false;
   gridRefreshParams = {
     force: true,
     suppressFlash: false
@@ -111,7 +113,15 @@ export class RollevaluationComponent implements OnInit {
     this.getCompetencyList();
       
   }
-
+  onchangeEvaluationType(optionVal){
+    if(optionVal === "Year-end"){
+this.isAdHoc= false;
+    }
+    else{
+      this.isAdHoc= true
+    }
+    
+  }
   onPeerSelect(item) {
     console.log('onPeer Select', item);
     if (!this.selectedEmployee.Peers) {
