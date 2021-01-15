@@ -902,8 +902,7 @@ export class RollevaluationComponent implements OnInit {
           console.log('column data', data)
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deletePeer" title="Delete Peer"></i> 
-          <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-          font-size: 17px;"   data-action-type="editPeerCompetencyMapping" title="Edit Peer Competency mapping"></i> 
+          
          `
           //}
         }
@@ -1070,8 +1069,7 @@ export class RollevaluationComponent implements OnInit {
           console.log('column data', data)
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deleteDirectReportee" title="Delete Reportee"></i> 
-          <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-          font-size: 17px;"   data-action-type="editPeerCompetencyMapping" title="Edit Direct Report(s) Competency mapping"></i> 
+          
          `
           //}
         }
