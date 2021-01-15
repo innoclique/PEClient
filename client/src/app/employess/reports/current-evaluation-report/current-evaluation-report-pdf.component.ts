@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,13 +14,14 @@ import { PerfAppService } from '../../../services/perf-app.service';
 import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
 
 @Component({
-  selector: 'app-current-evaluation-report',
-  templateUrl: './current-evaluation-report.component.html',
-  styleUrls: ['./current-evaluation-report.component.css']
+  selector: 'app-current-evaluation-report-pdf',
+  templateUrl: './current-evaluation-report-pdf.component.html',
+  styleUrls: ['./current-evaluation-report-pdf.component.css']
 })
-export class CurrentEvaluationReportComponent implements OnInit {
-  loginUser: any;
-  currentOrganization: any;
+export class CurrentEvaluationReportPdfComponent implements OnInit {
+  @Input() loginUser: any;
+  @Input() currentOrganization: any;
+  @Input() isReport: boolean = true;
   selfCompetencyForm: FormGroup;
   competencyList: any = [];
   performanceGoals: any = [];
@@ -28,7 +29,6 @@ export class CurrentEvaluationReportComponent implements OnInit {
   strengths: any = [];
   finalRating: any = {};
   evaluationForm: any = {};
-  empID: any;
   employeeCompetencyList: any;
   public PeerScoreCard: any;
   DirectReporteeScoreCard: any;
@@ -42,27 +42,8 @@ export class CurrentEvaluationReportComponent implements OnInit {
     public translate: TranslateService,
     private qcs: CompetencyFormService,
   ) {
-    this.activatedRoute.params.subscribe(params => {
-      if (params['_id']) {
-        this.loginUser = {};
-        this.loginUser['_id'] =params['_id'];
-       this.authService.FindUserById(params['_id']).subscribe(c => {
-        if(c){
-          console.log('user by id :::',c);
-          this.loginUser=c;
-        }
-      }
-        , error => {
-          this.snack.error(error.error.message);
-        }
-      );
-       this.loginUser = this.authService.getCurrentUser();
-      }
-    })
-    if (!this.loginUser) {
-      this.loginUser = this.authService.getCurrentUser();
-    }
-    this.currentOrganization = this.authService.getOrganization();
+    // this.loginUser = this.authService.getCurrentUser();
+    // this.currentOrganization = this.authService.getOrganization();
   }
 
   ngOnInit(): void {
@@ -74,11 +55,29 @@ export class CurrentEvaluationReportComponent implements OnInit {
   }
 
   async printPage() {
-    const pages = document.getElementsByClassName('card');
-    html2PDF(pages, {
+    const clonedDoc = document.getElementById('pdfBody');
+    await html2PDF(clonedDoc, 
+      {
+        // onclone: function (clonedDoc) {
+        //   console.log('before: ',clonedDoc);
+        //     clonedDoc.getElementById('card').style.visibility = 'visible';
+        //     clonedDoc.getElementById('card').style.overflow = 'visible';
+        //     clonedDoc.getElementById('card').style.height = 'auto';
+        //     console.log('after: ',clonedDoc);
+        // },
+      
       jsPDF: {
         format: 'a4',
       },
+      // imageType: 'image/jpeg',
+      // watermark: {
+      //   src: 'assets/img/brand/Optimal_Assessments_logo88x75.jpg',
+      //   handler({ pdf, imgNode, pageNumber, totalPageNumber }) {
+      //     const props = pdf.getImageProperties(imgNode);
+      //     // do something...
+      //     pdf.addImage(imgNode, 'JPG', 0, 0, 30, 30);
+      //   },
+      // },
       imageQuality: 1,
       margin: {
         top: 50,

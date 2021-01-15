@@ -90,7 +90,9 @@
                                         [data]="this.peersCompetencyList" [settings]="competencyDropdownSettings"
                                         [(ngModel)]="currentPeerCompetencyList"
                                         (onSelect)="onSelectPeersCompetency($event)"
-                                        (onSelectAll)="onSelectAllPeersCompetency($event)">
+                                        (onSelectAll)="onSelectAllPeersCompetency($event)"
+                                        (onDeSelect)="onPeerCompetencyDeSelect($event)"
+                                        (onDeSelectAll)="onDeSelectAllPeerCompetencies($event)">
                                     </ng-multiselect-dropdown>
                                 </div>
                             </div>
@@ -99,7 +101,7 @@
                     </div>
                     <div class="form-group row">
 
-                        <div class="col-md-12">
+                        <div class="col-md-9">
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -111,11 +113,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div   class="col-md-3">
+                            <input  type="button" style="margin-top: 9px;" class="btn btn-primary"
+                                (click)="addPeerCompetencyMapping()" value="+">
+                        </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
                             <ag-grid-angular style="width: 100; height: 200px;" class="ag-theme-alpine"
-                                [rowData]="selectedEmployee.Peers||[]" [gridOptions]="peersForEmpGridOptions"
+                                [rowData]="peerCompetencyMappingRowdata" [gridOptions]="peersForEmpGridOptions"
                                  [getRowHeight]="getRowHeight"  [enableBrowserTooltips]="true"
                                 [pagination]="true" [paginationPageSize]="10" (gridReady)="onPeersGridReady($event)"
                                 (rowClicked)="onPeersRowClicked($event)">
@@ -197,7 +203,7 @@
 
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-12">
+                        <div class="col-md-9">
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -209,11 +215,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div   class="col-md-3">
+                            <input  type="button" style="margin-top: 9px;" class="btn btn-primary"
+                                (click)="addDRCompetencyMapping()" value="+">
+                        </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
                             <ag-grid-angular style="width: auto; height: 200px;" class="ag-theme-alpine"
-                                [rowData]="selectedEmployeeDirectReportees||[]"
+                                [rowData]="drCompetencyMappingRowdata||[]"
                                 [gridOptions]="directReporteesOfEmpGridOptions" [pagination]="true"
                                 [paginationPageSize]="10" (gridReady)="onDirectReporteeGridReady($event)"
                                 (rowClicked)="onDirectReporteeGridRowClicked($event)">

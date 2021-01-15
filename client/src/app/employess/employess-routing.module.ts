@@ -34,6 +34,7 @@ import { PrivateNotesComponent } from './private-notes/private-notes.component';
 import { PrivateNotesListComponent } from './private-notes-list/private-notes-list.component';
 import { SnGuardService } from '../services/sn-guard.service';
 import { CurrentEvaluationReportComponent } from './reports/current-evaluation/current-evaluation-report.component';
+import { CurrentEvaluationReportPdfComponent } from './reports/current-evaluation-report/current-evaluation-report-pdf.component';
 
 
 
@@ -146,6 +147,11 @@ const routes: Routes = [
       }, 
        {
         path:'reports/current-evaluation',
+        component:CurrentEvaluationReportComponent,
+        data:{title:'Evaluation Report'}
+      }, 
+      {
+        path:'reports/current-evaluation-report',
         component:CurrentEvaluationReportComponent,
         data:{title:'Evaluation Report'}
       }, 

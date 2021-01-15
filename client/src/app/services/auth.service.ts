@@ -25,6 +25,11 @@ export class AuthService {
       .pipe(retry(1), catchError(this.errorHandle));
 
   }
+  FindUserById(id) {
+    return this.Http.get<UserModel>(environment.ApiPath + 'Identity/GetUserById/'+id, {})
+      .pipe(retry(1), catchError(this.errorHandle));
+  }
+
   FindUserName(UserName) {
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/GetUserByUserName', { UserName })
       .pipe(retry(1), catchError(this.errorHandle));
