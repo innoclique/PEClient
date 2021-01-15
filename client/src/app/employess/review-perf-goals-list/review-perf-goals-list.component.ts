@@ -97,6 +97,7 @@ export class ReviewPerfGoalsListComponent implements OnInit {
   },
     {headerName: 'No.of  Performance Goals',  field: 'NoOfKpis', sortable: true, filter: true },
     {headerName: 'No.of  Reviewed Goals', field: 'NoOfSignOff', sortable: true, filter: true },
+    {headerName: 'Draft', field: 'pgDraftGoals', sortable: true, filter: true },
     // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
     // {headerName: 'Final Rating Status', field: 'FRStatus',  , sortable: true, filter: true },
     {
@@ -116,6 +117,17 @@ export class ReviewPerfGoalsListComponent implements OnInit {
         font-size: 17px;"   data-action-type="reviewGoals" title="Review Goals"></i>
 
         `;
+        if(data && data.data && data.data.RowData){
+          let {RowData} = data.data;
+          let {pgDraftGoals} = RowData;
+          if(pgDraftGoals.length>0){
+            returnString += `
+            <i class="icon-pencil" style="cursor:pointer; padding: 7px 20px 0 0;
+            font-size: 17px;"   data-action-type="draftGoal" title="Draft Goals"></i>
+            `;
+          }
+        }
+
         return returnString;
       }
     }
@@ -164,16 +176,18 @@ public onEmpGridRowClick(e) {
         case "reviewKPI":
           this.reviewEvalForm('reviewKPI','Manager');
           break;
-          case "reviewGoals":
-            this.reviewEvalForm('reviewGoals','Manager');
-            break;
-            case "reviewEval":
-              this.reviewEvalForm('reviewEval','Manager');
-              break;
-
-              case "addKPI":
-                this.addKpiForm();
-                break;
+        case "reviewGoals":
+          this.reviewEvalForm('reviewGoals','Manager');
+          break;
+        case "reviewEval":
+          this.reviewEvalForm('reviewEval','Manager');
+          break;
+        case "addKPI":
+          this.addKpiForm();
+          break;
+        case "draftGoal":
+          this.reviewEvalDraftForm('reviewEval','Manager');
+          break;
       
      
       default:
@@ -214,6 +228,12 @@ public onAsTSGridRowClick(e) {
        { action: action, empId: this.currentRowItem._id,actor:actor,empManagerId:this.currentRowItem.Manager }
     ], { skipLocationChange: true });
   }
+
+  reviewEvalDraftForm(action,actor) {
+    this.router.navigate(['employee/review-perf-goals',
+     { action: action, empId: this.currentRowItem._id,actor:actor,empManagerId:this.currentRowItem.Manager,draftGoals:true }
+  ], { skipLocationChange: true });
+}
 
   viewEmpForm(action,actor) {
      this.router.navigate(['employee/review-perf-goals',
@@ -257,6 +277,7 @@ let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).len
          NoOfKpis: row.KpiList.length,
          NoOfSignOff:row.KpiList.length-unSubmitedCount,
          NoOfDevGoals: row.GoalList.length,
+         pgDraftGoals: row.pgDraftGoals.length,
         // FRStatus: evaluation ?evaluation.FinalRating.Status:'',
        
         RowData:row

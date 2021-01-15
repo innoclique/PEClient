@@ -18,6 +18,7 @@ import { AlertComponent } from '../../../shared/alert/alert.component';
 import { Constants } from '../../../shared/AppConstants';
 import { CustomValidators } from '../../../shared/custom-validators';
 import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-kpi-review-manager',
@@ -67,8 +68,10 @@ actor:any;
   msSelVal="";
   currEvaluation: any;
   unSubmitedCount=0;
+  submitedCount=0;
   scoreUnSubmitedCount:any;
-
+  isEmployeePgSignoff:boolean = false;
+  isSignOffDisabled=false;
 
   
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
@@ -80,7 +83,7 @@ actor:any;
   trackViewRef: BsModalRef;
   isManagerFRSignOff=false;
   currentOrganization: any;
-
+  draftGoals:Boolean = false;
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -104,11 +107,136 @@ actor:any;
       this.currentEmpId = params['empId'];
       this.currentEmpManagerId = params['empManagerId'];
       this.currentAction = params['action'];
+      this.findPgSignoff();
+      if(params['draftGoals']){
+        this.draftGoals = true;
+      }
+      
      }
      
     });   
 
    
+
+  }
+
+  findPgSignoff(){
+    console.log(this.loginUser)
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+    let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let {Manager,Organization} = this.loginUser;
+    let options = {
+      EvaluationYear,
+      Owner:this.currentEmpId,
+      
+    };
+    console.log(options);
+    this.perfApp.route = "app";
+    this.perfApp.method = "Find/PG/Signoff";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(result => {
+      if(!result){
+        this.isEmployeePgSignoff = false;
+      }else{
+        let {FinalSignoff, SignOff, ManagerSignOff}  = result;
+        if(ManagerSignOff.submited){
+          this.isSignOffDisabled=true;
+        }else{
+          this.getClientConfiguation();
+        }
+        
+      }
+      
+    })
+  }
+
+  getOrganizationStartAndEndDates(){
+    let Organization = this.currentOrganization;
+    let {StartMonth,EndMonth,EvaluationPeriod} = Organization;
+    StartMonth = parseInt(StartMonth);
+    let currentMoment = moment();
+    let evaluationStartMoment;
+    let evaluationEndMoment
+    if(EvaluationPeriod === "FiscalYear"){
+      var currentMonth = parseInt(currentMoment.format('M'));
+      console.log(`${currentMonth} <= ${StartMonth}`)
+      if(currentMonth <= StartMonth){
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month').subtract(1, 'years');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }else{
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }
+    }else if(EvaluationPeriod === "CalenderYear"){
+      evaluationStartMoment = moment().startOf('month');
+      evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
+    }
+    return {
+      start:evaluationStartMoment,
+      end:evaluationStartMoment
+    }
+  }
+
+  getClientConfiguation(){
+    let {Organization} = this.loginUser;
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+    let evaluationStartMoment = orgStartEnd.start;
+    let evaluationEndMoment = orgStartEnd.end;
+    let currentMoment = moment();
+    this.isSignOffDisabled=true;
+    
+    this.perfApp.route = "clientconfig";
+    this.perfApp.method = "organization";
+    this.perfApp.requestBody = {};
+    this.perfApp.requestBody.Organization = Organization._id;
+    this.perfApp.requestBody.ConfigKey = "PG-SIGNOFF";
+    this.perfApp.CallAPI().subscribe(result => {
+      if (result) {
+        let {ActivateWithin,onBeforeAfter,TimeUnit} = result;
+        if(onBeforeAfter === "After"){
+          if(TimeUnit === "DAYS"){
+            let duration = currentMoment.diff(evaluationStartMoment,'days');
+            console.log(`duration: ${duration}`);
+            if(duration>=ActivateWithin)
+            this.isSignOffDisabled=false;
+          }
+        }
+      }
+    });
+  }
+
+  singoffPG(){
+    if(this.unSubmitedCount>0 || this.submitedCount>0){
+      this.managerSignoff();
+    }else{
+      this.snack.error("Does not fount unsubmitted goals.");
+    }
+  }
+
+  managerSignoff(){
+    this.isSignOffDisabled=true;
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+    let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let {Manager,Organization,} = this.loginUser;
+    let options = {
+      Owner:this.currentEmpId,
+      EvaluationYear,
+      Manager:this.loginUser._id,
+      submittedBy:"Manager"
+    };
+    console.log(options);
+
+    this.perfApp.route = "app";
+    this.perfApp.method = "/PG/Signoff";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(result => {
+      console.log(result);
+      if(this.unSubmitedCount!=0){
+        this.submitAllKPIs()
+      }
+    });
 
   }
 
@@ -213,6 +341,102 @@ actor:any;
     this.kpiForm.patchValue({ IsDraft: 'false' });
     this.submitReview();
   }
+
+  submitSignoffAllKpiById() {
+
+    this.perfApp.route = "app";
+    this.perfApp.method = "SubmitSignoffKpisByManager",
+    this.perfApp.requestBody.empId = this.currentEmpId;
+    this.perfApp.CallAPI().subscribe(c => {
+
+     if (c) {
+      this.snack.success(c.message);
+      this.onCancle();
+
+     } else {
+       
+     }
+
+    }
+    
+    , error => {
+
+      this.snack.error(error.error.message);
+
+    }
+    
+    )
+  }
+
+  submitKpiById() {
+
+    this.perfApp.route = "app";
+    this.perfApp.method = "SubmitKpisByManager",
+    this.perfApp.requestBody.kpi = this.currentKpiId;
+    this.perfApp.requestBody.empId = this.currentEmpId;
+    this.perfApp.CallAPI().subscribe(c => {
+
+     if (c) {
+      this.snack.success(c.message);
+      this.onCancle();
+
+     } else {
+       
+     }
+
+    }
+    
+    , error => {
+
+      this.snack.error(error.error.message);
+
+    }
+    
+    )
+  }
+
+  denyAllPg(){
+    let isActive=false;
+    this.perfApp.route = "app";
+    this.perfApp.method = "DenyAllSignoffKpis";
+    this.perfApp.requestBody = {};
+    this.perfApp.requestBody.empId = this.currentEmpId;
+    this.perfApp.CallAPI().subscribe(c => {
+
+      if (c) {
+
+        this.onCancle();
+        this.snack.success(this.translate.instant(`Performance Goal Denied`));
+          
+      }
+    })
+  }
+
+
+  denyKPI() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "UpdateKpiDataById";
+    this.perfApp.requestBody = {};
+    this.perfApp.requestBody.kpiId = this.currentKpiId;
+    this.perfApp.requestBody.IsActive = false;
+    this.perfApp.requestBody.Action='DeActive' ;
+    this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+    console.log(this.perfApp.requestBody);
+    this.perfApp.CallAPI().subscribe(c => {
+
+      if (c) {
+
+      this.onCancle();
+      this.snack.success(this.translate.instant(`Performance Goal Denied Successfully`));
+        
+      }
+    })
+
+  }
+
+
+
+  
 
 
   
@@ -471,7 +695,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpisByManager",
     this.perfApp.requestBody = { 'managerId': this.currentEmpManagerId,
-        'empId': this.currentEmpId,}
+        'empId': this.currentEmpId,draftSignoff:this.draftGoals}
     // this.perfApp.method = "GetAllKpis",
       // this.perfApp.requestBody = {
       //    'empId': this.currentEmpId,
@@ -484,6 +708,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
       this.setWeighting(c.filter(item => item.IsDraft === false).length);
       if (c && c.length > 0) {
         this.unSubmitedCount=c.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
+        this.submitedCount=c.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==true).length;
         this.scoreUnSubmitedCount=c.filter(e=>e.ManagerScore=="" && e.IsDraft==false ).length;
         if(this.scoreUnSubmitedCount==0)
         this.authService.setManagerPGSubmitStatus("true");
@@ -541,6 +766,8 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
 
    
   }
+
+  
 
 
   onKpiAutoSelected(event) {

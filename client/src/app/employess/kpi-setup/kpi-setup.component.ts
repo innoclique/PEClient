@@ -13,6 +13,7 @@ import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
 import { AlertComponent } from '../../shared/alert/alert.component';
 import { Constants } from '../../shared/AppConstants';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-kpi-setup',
@@ -29,8 +30,12 @@ export class KpiSetupComponent implements OnInit {
   public alert: AlertDialog;
   public kpiListData: any
   isKpiActivated=false;
+  isSignOffDisabled=false;
   unSubmitedCount=0;
+  submitedCount=0;
   scoreUnSubmitedCount=0;
+  isEmployeePgSignoff:boolean = false;
+  finalSignoffDate:Date;
 
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
   config = {
@@ -51,8 +56,9 @@ export class KpiSetupComponent implements OnInit {
     private modalService: BsModalService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
+    
     // this.datePipe= new DatePipe('en-US');
-
+    this.findPgSignoff();
 
 
   }
@@ -62,7 +68,126 @@ export class KpiSetupComponent implements OnInit {
     this.getAllKpis();
     this.alert = new AlertDialog();
   }
+  
+  findPgSignoff(){
+    console.log(this.loginUser)
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+    let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let {Manager,Organization} = this.loginUser;
+    let options = {
+      EvaluationYear,
+      Owner:this.loginUser._id,
+      
+    };
+    console.log(options);
+    this.perfApp.route = "app";
+    this.perfApp.method = "Find/PG/Signoff";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(result => {
+      if(!result){
+        this.isEmployeePgSignoff = false;
+      }else{
+        let {FinalSignoff,SignOff}  = result;
+        if(SignOff.submited){
+          let {FinalSignoffOn} = result;
+          this.finalSignoffDate = FinalSignoffOn;
+          this.isSignOffDisabled=true;
+        }else{
+          this.getClientConfiguation();
+        }
+        
+      }
+      
+    })
+  }
+  getOrganizationStartAndEndDates(){
+    let {Organization} = this.loginUser;
+    let {StartMonth,EndMonth,EvaluationPeriod} = Organization;
+    StartMonth = parseInt(StartMonth);
+    let currentMoment = moment();
+    let evaluationStartMoment;
+    let evaluationEndMoment
+    if(EvaluationPeriod === "FiscalYear"){
+      var currentMonth = parseInt(currentMoment.format('M'));
+      console.log(`${currentMonth} <= ${StartMonth}`)
+      if(currentMonth <= StartMonth){
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month').subtract(1, 'years');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }else{
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }
+    }else if(EvaluationPeriod === "CalenderYear"){
+      evaluationStartMoment = moment().startOf('month');
+      evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
+    }
+    return {
+      start:evaluationStartMoment,
+      end:evaluationStartMoment
+    }
+  }
 
+  getClientConfiguation(){
+    let {Organization} = this.loginUser;
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+    let evaluationStartMoment = orgStartEnd.start;
+    let evaluationEndMoment = orgStartEnd.end;
+    let currentMoment = moment();
+    this.isSignOffDisabled=true;
+    
+    this.perfApp.route = "clientconfig";
+    this.perfApp.method = "organization";
+    this.perfApp.requestBody = {};
+    this.perfApp.requestBody.Organization = Organization._id;
+    this.perfApp.requestBody.ConfigKey = "PG-SIGNOFF";
+    this.perfApp.CallAPI().subscribe(result => {
+      if (result) {
+        let {ActivateWithin,onBeforeAfter,TimeUnit} = result;
+        if(onBeforeAfter === "After"){
+          if(TimeUnit === "DAYS"){
+            let duration = currentMoment.diff(evaluationStartMoment,'days');
+            console.log(`duration: ${duration}`);
+            if(duration>=ActivateWithin)
+            this.isSignOffDisabled=false;
+          }
+        }
+      }
+    });
+  }
+
+  employeeSignoff(){
+    this.isSignOffDisabled=true;
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+    let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let {Manager,Organization,} = this.loginUser;
+    let options = {
+      Owner:this.loginUser._id,
+      EvaluationYear,
+      Manager:Manager._id,
+      submittedBy:"Employee"
+    };
+    console.log(options);
+
+    this.perfApp.route = "app";
+    this.perfApp.method = "/PG/Signoff";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(result => {
+      console.log(result);
+      if(this.unSubmitedCount!=0){
+        this.submitAllKPIs()
+      }
+    });
+  }
+
+  singoffPG(){
+    if(this.unSubmitedCount>0 || this.submitedCount>0){
+      this.employeeSignoff();
+    }else{
+      this.snack.error("Does not fount unsubmitted goals.");
+    }
+  }
 
   public columnDefs = [
     {
@@ -80,24 +205,51 @@ export class KpiSetupComponent implements OnInit {
       cellRenderer: (data) => {
  let actionlinks=''
        if (data.data.RowData.IsActive) {
-        actionlinks= `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="EF" title="Edit Performance Goal" ></i>    
+         let rowData = data.data.RowData;
+         let {ManagerSignOff,IsDraft,isFinalSignoff} = rowData;
+         //finalSignoffDate,isSignOffDisabled
+         if(IsDraft && this.isSignOffDisabled && isFinalSignoff && ManagerSignOff.submited){
+          actionlinks= `
+          <i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="AllowPg" title="Allow" ></i>
+
+          <i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="DenyPg" title="Deny"></i>
+
+          <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="ESG" title="Edit Performance Goal" ></i>
+          `
+         }else{
+          actionlinks= `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="EF" title="Edit Performance Goal" ></i>    
+          
+          <i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="deActiveKPI" title="Deactivate Performance Goal"></i>
+         
+          <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>    
+          
+          `
+         }
         
-        <i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="deActiveKPI" title="Deactivate Performance Goal"></i>
-       
-        <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>    
-        
-        `
        } else {
-        actionlinks= `<i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="activeKPI" title="activate Performance Goal"></i>       
-      
-        <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>   
-       
-        `
+        let rowData = data.data.RowData;
+        let {isFinalSignoff} = rowData;
+        if(isFinalSignoff ){
+          actionlinks= `
+          <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>   
+          `
+        }else{
+          actionlinks= `<i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="activeKPI" title="activate Performance Goal"></i>       
+        
+          <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>   
+         
+          `
+        }
+        
        }
 
       //  actionlinks=  actionlinks+`
@@ -132,31 +284,71 @@ export class KpiSetupComponent implements OnInit {
 
       let actionType = e.event.target.getAttribute("data-action-type");
       switch (actionType) {
-
         case "VF":
           this.viewKpiForm(this.currentRowItem);
           break;
         case "EF":
-            this.editKpiForm(this.currentRowItem);
+          this.editKpiForm(this.currentRowItem);
           break;
-
-          case "deActiveKPI":
-            this.activedeActiveKPI(false);
+        case "ESG":
+          this.editSignOffKpiForm(this.currentRowItem);
           break;
-          case "activeKPI":
-            this.activedeActiveKPI(true);
-            break;
-
-            case "Track":
-              this.trackKpi();
+        case "deActiveKPI":
+          this.activedeActiveKPI(false);
           break;
-
-
-
+        case "activeKPI":
+          this.activedeActiveKPI(true);
+          break;
+        case "Track":
+          this.trackKpi();
+          break;
+        case "AllowPg":
+          this.allowPg();
+          break;
+        case "DenyPg":
+          this.denyPg();
+          break;
         default:
       }
     }
   }
+
+  allowPg(){
+    this.perfApp.route = "app";
+    this.perfApp.method = "SubmitKpisByEmployee";
+    this.perfApp.requestBody = {};
+    this.perfApp.requestBody.kpi = this.currentRowItem._id;
+    this.perfApp.requestBody.empId = this.loginUser._id;
+    this.perfApp.CallAPI().subscribe(c => {
+      if (c) {
+      this.getAllKpis();
+      this.snack.success(this.translate.instant(`Performance Goal Allowed Successfully`));
+      }
+    })
+  }
+  
+  
+
+  denyPg(){
+    let isActive=false;
+    this.perfApp.route = "app";
+    this.perfApp.method = "UpdateKpiDataById";
+    this.perfApp.requestBody = {};
+    this.perfApp.requestBody.kpiId = this.currentRowItem._id;
+    this.perfApp.requestBody.IsActive = isActive;
+    this.perfApp.requestBody.Action=isActive?'Active': 'DeActive' ;
+    this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+    this.perfApp.CallAPI().subscribe(c => {
+
+      if (c) {
+
+      this.getAllKpis();
+      this.snack.success(this.translate.instant(`Performance Goal Denied`));
+        
+      }
+    })
+  }
+
   trackKpi() {
 
       this.trackViewRef = this.modalService.show(this.kpiTrackView, this.config);
@@ -176,7 +368,7 @@ export class KpiSetupComponent implements OnInit {
       if (c) {
 
       this.getAllKpis();
-this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactivated'} Successfully`));
+      this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactivated'} Successfully`));
         
       }
     })
@@ -190,9 +382,16 @@ this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activate
   editKpiForm(currentRowItem: any) {
    
 
-      this.router.navigate(['employee/kpi-setting',{action:'edit',id:this.currentRowItem._id}],{ skipLocationChange: true });
+      this.router.navigate(['employee/kpi-setting',{action:'edit',id:this.currentRowItem._id,isFinalSignoff:this.isSignOffDisabled}],{ skipLocationChange: true });
       
   }
+
+  editSignOffKpiForm(currentRowItem: any) {
+   
+
+    this.router.navigate(['employee/kpi-setting',{action:'edit',id:this.currentRowItem._id,isFinalSignoff:this.isSignOffDisabled,showAllowSignoff:true}],{ skipLocationChange: true });
+    
+}
 
   
 
@@ -264,8 +463,8 @@ submitAllKPIs() {
 }
 
   createKpi(){
-
-    this.router.navigate(['employee/kpi-setting']);
+    this.router.navigate(['employee/kpi-setting',{isFinalSignoff:this.isSignOffDisabled}],{ skipLocationChange: true });
+    
   }
 
 
@@ -282,6 +481,7 @@ submitAllKPIs() {
 
       if (c && c.length > 0) {
 this.unSubmitedCount=c.filter(e=>e.IsSubmitedKPIs==false && e.IsDraft==false ).length;
+this.submitedCount=c.filter(e=>e.IsSubmitedKPIs==true && e.IsDraft==false ).length;  
 this.scoreUnSubmitedCount=c.filter(e=>e.Score=="" && e.IsDraft==false ).length;
 if(this.scoreUnSubmitedCount==0)
 this.authService.setIsPGSubmitStatus("true");
