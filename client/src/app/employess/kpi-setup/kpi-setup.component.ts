@@ -86,7 +86,7 @@ export class KpiSetupComponent implements OnInit {
       this.perfApp.CallAPI().subscribe(result => {
         if(!result){
           this.isEmployeePgSignoff = false;
-          this.isSignOffDisabled=true;
+          this.getClientConfiguation();
         }else{
           let {FinalSignoff,SignOff}  = result;
           if(SignOff.submited){
@@ -158,9 +158,13 @@ export class KpiSetupComponent implements OnInit {
             let duration = currentMoment.diff(evaluationStartMoment,'days');
             console.log(`duration: ${duration}`);
             if(duration>=ActivateWithin)
-            this.isSignOffDisabled=false;
+              this.isSignOffDisabled=false;
+            else
+              this.isSignOffDisabled=true;
           }
         }
+      }else{
+        this.isSignOffDisabled=true;
       }
     });
   }

@@ -9,7 +9,7 @@
                     <div *ngIf="!draftGoals" class="form-group form-actions pull-right m-0">
                         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
                         (click)="onCancle()" ><i class="fa fa-arrow-left" style="padding-right: 8px;"></i>Back to list </button>&nbsp;
-                        <button [disabled]="isSignOffDisabled"  class="btn btn-sm btn-primary"  (click)="singoffPG()" >Sign-off</button>
+                        <button [disabled]="isSignOffDisabled"  class="btn btn-sm btn-primary"  (click)="singoffPG()" >Sign-off</button>&nbsp;
                         <button *ngIf="accessingFrom=='kpiReview' " [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="openConfirmSubmitKpisDialog()" >Submit</button>&nbsp;
                     <button class="btn btn-sm btn-primary"  (click)="trackKpi()"  title="Track Performance Goal" >Track</button>&nbsp;
                     <button *ngIf="kpiDetails?.IsActive" class="btn btn-sm btn-primary"  (click)="activeDeActiveKPI(false)" title="Deactivate Performance Goal">Deactivate</button>&nbsp;

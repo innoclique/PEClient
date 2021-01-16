@@ -137,7 +137,7 @@ actor:any;
     this.perfApp.CallAPI().subscribe(result => {
       if(!result){
         this.isEmployeePgSignoff = false;
-        this.isSignOffDisabled=true;
+        this.getClientConfiguation();
       }else{
         let {FinalSignoff, SignOff, ManagerSignOff}  = result;
         if(ManagerSignOff.submited){
@@ -199,11 +199,15 @@ actor:any;
         if(onBeforeAfter === "After"){
           if(TimeUnit === "DAYS"){
             let duration = currentMoment.diff(evaluationStartMoment,'days');
-            console.log(`duration: ${duration}`);
+            console.log(`duration: ${duration} >= ${ActivateWithin}`);
             if(duration>=ActivateWithin)
-            this.isSignOffDisabled=false;
+              this.isSignOffDisabled=false;
+            else
+              this.isSignOffDisabled=true;
           }
         }
+      }else{
+        this.isSignOffDisabled=true;
       }
     });
   }
