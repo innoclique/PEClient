@@ -137,6 +137,7 @@ actor:any;
     this.perfApp.CallAPI().subscribe(result => {
       if(!result){
         this.isEmployeePgSignoff = false;
+        this.isSignOffDisabled=true;
       }else{
         let {FinalSignoff, SignOff, ManagerSignOff}  = result;
         if(ManagerSignOff.submited){
