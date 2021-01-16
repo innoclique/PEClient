@@ -70,35 +70,38 @@ export class KpiSetupComponent implements OnInit {
   }
   
   findPgSignoff(){
-    console.log(this.loginUser)
     let orgStartEnd = this.getOrganizationStartAndEndDates();
-    let EvaluationYear = orgStartEnd.start.format("YYYY");
-    let {Manager,Organization} = this.loginUser;
-    let options = {
-      EvaluationYear,
-      Owner:this.loginUser._id,
-      
-    };
-    console.log(options);
-    this.perfApp.route = "app";
-    this.perfApp.method = "Find/PG/Signoff";
-    this.perfApp.requestBody = options;
-    this.perfApp.CallAPI().subscribe(result => {
-      if(!result){
-        this.isEmployeePgSignoff = false;
-      }else{
-        let {FinalSignoff,SignOff}  = result;
-        if(SignOff.submited){
-          let {FinalSignoffOn} = result;
-          this.finalSignoffDate = FinalSignoffOn;
+    if(orgStartEnd){
+      let EvaluationYear = orgStartEnd.start.format("YYYY");
+      let {Manager,Organization} = this.loginUser;
+      let options = {
+        EvaluationYear,
+        Owner:this.loginUser._id,
+        
+      };
+      console.log(options);
+      this.perfApp.route = "app";
+      this.perfApp.method = "Find/PG/Signoff";
+      this.perfApp.requestBody = options;
+      this.perfApp.CallAPI().subscribe(result => {
+        if(!result){
+          this.isEmployeePgSignoff = false;
           this.isSignOffDisabled=true;
         }else{
-          this.getClientConfiguation();
+          let {FinalSignoff,SignOff}  = result;
+          if(SignOff.submited){
+            let {FinalSignoffOn} = result;
+            this.finalSignoffDate = FinalSignoffOn;
+            this.isSignOffDisabled=true;
+          }else{
+            this.getClientConfiguation();
+          }
+          
         }
         
-      }
-      
-    })
+      })
+    }
+    
   }
   getOrganizationStartAndEndDates(){
     let {Organization} = this.loginUser;
@@ -106,7 +109,7 @@ export class KpiSetupComponent implements OnInit {
     StartMonth = parseInt(StartMonth);
     let currentMoment = moment();
     let evaluationStartMoment;
-    let evaluationEndMoment
+    let evaluationEndMoment;
     if(EvaluationPeriod === "FiscalYear"){
       var currentMonth = parseInt(currentMoment.format('M'));
       console.log(`${currentMonth} <= ${StartMonth}`)
@@ -119,14 +122,19 @@ export class KpiSetupComponent implements OnInit {
         evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
         console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
       }
-    }else if(EvaluationPeriod === "CalenderYear"){
+    }else if(EvaluationPeriod === "CalendarYear"){
       evaluationStartMoment = moment().startOf('month');
       evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
     }
-    return {
-      start:evaluationStartMoment,
-      end:evaluationStartMoment
+    if(evaluationStartMoment && evaluationStartMoment){
+      return {
+        start:evaluationStartMoment,
+        end:evaluationStartMoment
+      }
+    }else{
+      return null
     }
+    
   }
 
   getClientConfiguation(){
