@@ -111,7 +111,7 @@ export class KpiAddComponent implements OnInit {
         evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
         console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
       }
-    }else if(EvaluationPeriod === "CalenderYear"){
+    }else if(EvaluationPeriod === "CalendarYear"){
       evaluationStartMoment = moment().startOf('month');
       evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
     }
