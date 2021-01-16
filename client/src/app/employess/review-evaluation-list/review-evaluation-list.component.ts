@@ -89,13 +89,21 @@ export class ReviewEvaluationListComponent implements OnInit {
   }
 
   getCopiesToList() {
-    let { _id } = this.loginUser;
-    let requestBody: any = { userId: _id }
-    this.employeeService.getCopiesTO(requestBody).subscribe(response => {
+      let { _id } = this.loginUser;
+      let requestBody: any = { userId: _id }
+      this.employeeService.getCopiesTO(requestBody).subscribe(response => {
       console.log(response);
-      this.copiesToList = response;
-    })
-  }
+      this.copiesToList = response.map(row => {
+      row.Name = row.FirstName + ' ' + row.LastName;
+      return {
+      Name: row.Name,
+      RowData: row
+      }
+      }
+      )
+      
+      })
+    }
 
   public onOptionsSelected(event) {
     const value = event.target.value;
