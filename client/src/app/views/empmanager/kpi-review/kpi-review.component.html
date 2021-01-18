@@ -21,8 +21,8 @@
                     &nbsp;<i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
                     </div>
                     <div *ngIf="draftGoals" class="form-group form-actions pull-right m-0">
-                        <button *ngIf="kpiDetails?.IsActive" class="btn btn-sm btn-primary"  (click)="denyAllPg()" title="Deny Performance Goal">Deny</button>&nbsp;
-                        <button *ngIf="accessingFrom=='kpiReview' " [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="submitSignoffAllKpiById()" >Allow</button>&nbsp;
+                        <button class="btn btn-sm btn-primary"  (click)="denyAllPg()" title="Deny Performance Goal">Deny</button>&nbsp;
+                        <button [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="submitSignoffAllKpiById()" >Allow</button>&nbsp;
                     </div>
 
                 </div>
