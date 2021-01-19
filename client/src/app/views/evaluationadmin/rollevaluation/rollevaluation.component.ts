@@ -31,9 +31,11 @@ export class RollevaluationComponent implements OnInit {
   directReportees: any[];
   evaluationPeriods: any[];
   evaluationDuration: any[];
+  competencyMappingRowdata: any;
 
   public currentOrganization: any;
   currentUser: any;
+  isViewCompetencies: boolean = false;
 
   public monthList = ["", "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"]
@@ -48,6 +50,9 @@ export class RollevaluationComponent implements OnInit {
   @ViewChild('selectePeersView') selectePeersView: TemplateRef<any>;
   @ViewChild('selecteDirectReporteeView') selecteDirectReporteeView: TemplateRef<any>;
   selecteDirectReporteeViewRef: BsModalRef;
+  selectedCompetencyViewRef: BsModalRef;
+  @ViewChild('selectedCompetencyView') selectedCompetencyView: TemplateRef<any>;
+
   public initializeFormFor = 'kpionly';
 
   //#region Refactring
@@ -191,33 +196,28 @@ export class RollevaluationComponent implements OnInit {
     }
   }
 
-  removeDuplicates(arr: any[]) {
-    arr.filter(function (elem, index, self) {
-      console.log("debugging :::: ", elem, index, self.indexOf(elem));
-      return index === self.indexOf(elem);
-    })
+  viewCompetencies(user: any, competencies: any) {
+    this.isViewCompetencies = true;
+    this.selectedCompetencyViewRef = this.modalService.show(this.selectedCompetencyView, this.config);
+    this.competencyMappingRowdata = {};
+    this.competencyMappingRowdata.peer = user;
+    this.competencyMappingRowdata.competencies = competencies;
   }
 
-  async editPeerCompetencyMapping() {
-    this.isPeerCompetencyMappingEdit = true;
-    console.log('inside editPeerCompetencyMapping:::', this.currentPeer, this.selectedEmployee.Peers, this.selectedEmployeePeers);
-    this.selectedEmployeePeers.push(this.currentPeer.peer);
-    // this.formattedPeers.push(this.currentPeer.peer);
-    this.selectedEmployee.Peers.push(this.currentPeer.peer);
-    this.currentPeerCompetencyList = this.currentPeer.competencies;
-    this.selectedPeersCompetencyList = this.currentPeer.competencies;
-    this.competencyDropdownSettings.itemsShowLimit = this.currentPeer.competencies.length;
-    console.log('this.selectedEmployeePeers:::', this.selectedEmployeePeers, this.formattedPeers);
+  viewPeerCompetencyMapping() {
+    this.viewCompetencies(this.currentPeer.peer, this.currentPeer.competencies);
   }
+
+  viewDrCompetencyMapping() {
+    this.viewCompetencies(this.currentDirectReportee.directReportee, this.currentDirectReportee.competencies);
+  }
+
   async addPeerCompetencyMapping() {
     console.log('inside addPeerCompetencyMapping ::: ');
     if (this.selectedPeersCompetencyList.length === 0) {
       this.notification.error('Please select at least one  Competency');
       return;
     }
-    // if(this.isPeerCompetencyMappingEdit){
-
-    // }
     if (!this.selectedEmployee.Peers || this.selectedEmployee.Peers.length === 0 && !this.isPeerCompetencyMappingEdit) {
       this.notification.error('At least one peer must be selected');
       return;
@@ -326,11 +326,11 @@ export class RollevaluationComponent implements OnInit {
   }
 
   onPeerDeSelect(item: any) {
-    console.log('inside onPeerDeSelect:::', item, this.selectedEmployee.Peers,this.selectedEmployeePeers);
+    console.log('inside onPeerDeSelect:::', item, this.selectedEmployee.Peers, this.selectedEmployeePeers);
     var _position = this.selectedEmployee.Peers.findIndex(x => x.EmployeeId === item.EmployeeId);
     this.selectedEmployee.Peers.splice(_position, 1);
-    this.selectedEmployeePeers.splice(_position,1);
-    console.log('after onPeerDeSelect:::', item, this.selectedEmployee.Peers,this.selectedEmployeePeers);
+    this.selectedEmployeePeers.splice(_position, 1);
+    console.log('after onPeerDeSelect:::', item, this.selectedEmployee.Peers, this.selectedEmployeePeers);
   }
 
   onDeSelectAllPeers(items: any) {
@@ -339,12 +339,26 @@ export class RollevaluationComponent implements OnInit {
     this.selectedEmployeePeers = [];
   }
 
+  closeCompetencyViewModel() {
+    console.log('closeCompetencyViewModel :::');
+    this.isViewCompetencies = false;
+    this.selectedCompetencyViewRef.hide();
+    this.competencyMappingRowdata = {};
+  }
+
   closePeersModel() {
     console.log('closePeersModel :::');
     this.selectePeersViewRef.hide();
-    this.selectedEmployee = {};
-    this.selectedPeersCompetencyList = [];
+    this.selectedEmployee.Peers = [];
     this.selectedEmployeePeers = [];
+    this.currentPeerCompetencyList = [];
+    this.selectedPeersCompetencyList = [];
+    this.PeersCompetencyMessage = "";
+    this.peerCompetencyMappingRowdata = this.selectedEmployee['peerCompetenceMapping'];
+    this.peerCompetencyUIMapping = {};
+    for (let mapping of this.peerCompetencyMappingRowdata) {
+      this.peerCompetencyUIMapping[mapping.peer.EmployeeId] = mapping;
+    }
   }
 
   savePeers() {
@@ -361,7 +375,7 @@ export class RollevaluationComponent implements OnInit {
     //   return;
     // }
     // this.peerCompetencyUIMapping[key]
-    this.selectedEmployee.Peers=[];
+    this.selectedEmployee.Peers = [];
     for (let mapping of this.peerCompetencyMappingRowdata) {
       var mappingInOldFormat = {};
       mappingInOldFormat['EmployeeId'] = mapping.peer.EmployeeId;
@@ -390,21 +404,21 @@ export class RollevaluationComponent implements OnInit {
     console.log('onSelectPeersCompetency :::', item);
     this.selectedPeersCompetencyList.push(item)
   }
-  onPeerCompetencyDeSelect(item){
+  onPeerCompetencyDeSelect(item) {
     var _position = this.selectedPeersCompetencyList.indexOf(item);
     this.selectedPeersCompetencyList.splice(_position, 1);
   }
-  onDeSelectAllPeerCompetencies(items){
+  onDeSelectAllPeerCompetencies(items) {
     this.selectedPeersCompetencyList = [];
   }
 
   onSelectAllDirectReporteeCompetency(items) {
-    console.log("selected items::::",items);
+    console.log("selected items::::", items);
     // this.seletedDirectReporteeCompetencyList.push(items);
   }
 
   onSelectDirectReporteeCompetency(item) {
-    console.log("selected item::::",item,this.seletedDirectReporteeCompetencyList);
+    console.log("selected item::::", item, this.seletedDirectReporteeCompetencyList);
     // this.seletedDirectReporteeCompetencyList.push(item);
   }
 
@@ -423,6 +437,22 @@ export class RollevaluationComponent implements OnInit {
     columnDefs: this.getDirectReporteeGridCols(),
     api: new GridApi()
   }
+
+
+  public viewCompetencyGridOptions: GridOptions = {
+    columnDefs: this.getCompetencyViewGridCols(),
+    api: new GridApi()
+  }
+
+  getCompetencyViewGridCols() {
+    return [
+      {
+        headerName: 'Competencies', width: 400, sortable: true, filter: true,
+        cellRenderer: (data) => { console.log('----', data); return `<span >${data.data.Name}</span>` }
+      }
+    ];
+  }
+
   public getDirectReportees(): void {
     this.perfApp.method = "GetDirectReporteesOfManager";
     this.perfApp.requestBody = { id: this.selectedEmployee._id };
@@ -450,7 +480,7 @@ export class RollevaluationComponent implements OnInit {
   }
   onDirectReporteeSelect(item) {
     console.log('onItemSelect', item);
-    console.log("selected item::::",this.seletedDirectReporteeCompetencyList);
+    console.log("selected item::::", this.seletedDirectReporteeCompetencyList);
     if (!this.selectedEmployee.DirectReportees) {
       this.selectedEmployee.DirectReportees = [];
     }
@@ -869,18 +899,7 @@ export class RollevaluationComponent implements OnInit {
     this.peersForEmpGridOptions.api = params.api;
   }
 
-  populateCompetencies() {
-    console.log("peer selected : ", this.currentPeer);
-    // var _p = this.selectedEmployee.Peers.indexOf(this.currentPeer);
-    // this.selectedEmployee.Peers.splice(_p, 1);
-    // if (this.peersForEmpGridOptions.api) {
-    //   this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
-    // }
-    this.selectedEmployeePeers[0] = this.currentPeer.peerCompetenceMapping.peer;
-    this.currentPeerCompetencyList = this.currentPeer.peerCompetenceMapping.competencies;
-    this.competencyDropdownSettings.itemsShowLimit = this.currentPeer.peerCompetenceMapping.competencies.length;
-    console.log('selectedEmployeePeers:::::', this.selectedEmployeePeers);
-  }
+  
   getPeersForEmpCols() {
     return [
       {
@@ -902,9 +921,9 @@ export class RollevaluationComponent implements OnInit {
           console.log('column data', data)
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deletePeer" title="Delete Peer"></i> 
-          
+          <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="viewPeerCompetencyMapping" title="Delete Peer"></i> 
          `
-          //}
         }
       }
     ];
@@ -920,7 +939,7 @@ export class RollevaluationComponent implements OnInit {
     // }
     if (this.selectedEmployee.peerCompetenceMapping) {
       this.peerCompetencyMappingRowdata = [];
-      this.selectedEmployee.Peers=[];
+      this.selectedEmployee.Peers = [];
       this.PeersCompetencyMessage = "";
       this.selectedEmployeePeers = [];
       this.currentPeerCompetencyList = [];
@@ -938,8 +957,8 @@ export class RollevaluationComponent implements OnInit {
       switch (actionType) {
         case "deletePeer":
           return this.deletePeer();
-        case "editPeerCompetencyMapping":
-          return this.editPeerCompetencyMapping();
+        case "viewPeerCompetencyMapping":
+          return this.viewPeerCompetencyMapping();
       }
     }
   }
@@ -1040,7 +1059,6 @@ export class RollevaluationComponent implements OnInit {
 
   closeDrModel() {
     this.selecteDirectReporteeViewRef.hide();
-    this.selectedEmployee = {};
     this.selectedEmployeeDirectReportees = [];
     this.selectedEmployee.DirectReportees = [];
     this.currentEmployeeSelectedDirectReportees = [];
@@ -1069,7 +1087,8 @@ export class RollevaluationComponent implements OnInit {
           console.log('column data', data)
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deleteDirectReportee" title="Delete Reportee"></i> 
-          
+          <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="viewDrCompetencyMapping" title="Delete Peer"></i>           
          `
           //}
         }
@@ -1101,12 +1120,15 @@ export class RollevaluationComponent implements OnInit {
 
   }
 
+  onViewCompetencyGridReady(params) {
+
+    this.viewCompetencyGridOptions.api = params.api;
+  }
+
   onDirectReporteeGridReady(params) {
 
     this.directReporteesOfEmpGridOptions.api = params.api;
   }
-
-
   public onDirectReporteeGridRowClicked(e) {
 
     if (e.event.target !== undefined) {
@@ -1115,6 +1137,8 @@ export class RollevaluationComponent implements OnInit {
       switch (actionType) {
         case "deleteDirectReportee":
           return this.deleteDirectReportee();
+        case "viewDrCompetencyMapping":
+          return this.viewDrCompetencyMapping();
       }
     }
   }
@@ -1125,14 +1149,13 @@ export class RollevaluationComponent implements OnInit {
     delete this.updateDRCompetencyUIMapping[this.currentDirectReportee.EmployeeId];
     this.directReporteesOfEmpGridOptions.api.setRowData(this.drCompetencyMappingRowdata);
   }
-  
+
   saveDirectReportees() {
-    if ( this.drCompetencyMappingRowdata.length < 2) {
+    if (this.drCompetencyMappingRowdata.length < 2) {
       this.notification.error('At least two direct reports must be selected');
       return;
     }
-
-    this.selectedEmployee.DirectReportees=[];
+    this.selectedEmployee.DirectReportees = [];
     for (let mapping of this.drCompetencyMappingRowdata) {
       var mappingInOldFormat = {};
       mappingInOldFormat['EmployeeId'] = mapping.directReportee.EmployeeId;
