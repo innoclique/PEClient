@@ -277,7 +277,7 @@ let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).len
          NoOfKpis: row.KpiList.length,
          NoOfSignOff:row.KpiList.length-unSubmitedCount,
          NoOfDevGoals: row.GoalList.length,
-         pgDraftGoals: row.pgDraftGoals.length,
+         pgDraftGoals: row.pgDraftGoals?row.pgDraftGoals.length:0,
         // FRStatus: evaluation ?evaluation.FinalRating.Status:'',
        
         RowData:row

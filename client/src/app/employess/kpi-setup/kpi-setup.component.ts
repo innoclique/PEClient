@@ -197,7 +197,7 @@ export class KpiSetupComponent implements OnInit {
     if(this.unSubmitedCount>0 || this.submitedCount>0){
       this.employeeSignoff();
     }else{
-      this.snack.error("Does not fount unsubmitted goals.");
+      this.snack.error("Please add and submit Performanace Goals before sign-off.");
     }
   }
 

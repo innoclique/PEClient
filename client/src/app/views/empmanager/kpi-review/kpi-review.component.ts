@@ -216,7 +216,7 @@ actor:any;
     if(this.unSubmitedCount>0 || this.submitedCount>0){
       this.managerSignoff();
     }else{
-      this.snack.error("Does not fount unsubmitted goals.");
+      this.snack.error("Please add and submit Performanace Goals before sign-off.");
     }
   }
 
