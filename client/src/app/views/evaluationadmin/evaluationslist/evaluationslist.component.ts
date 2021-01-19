@@ -318,7 +318,7 @@ export class EvaluationslistComponent implements OnInit {
   }
   gotoCreateEvaluation() {
     var selectedRows = this.EmpGridOptions.api.getSelectedRows();
-    debugger
+    ////debugger
     this.router.navigate(['ea/rollout', { allKpi: selectedRows.length>0,list:selectedRows.map(x=>x.Employee._id) }], { skipLocationChange: true });
   }
   public columnDefs = [
@@ -407,7 +407,7 @@ export class EvaluationslistComponent implements OnInit {
   }
 
   onEmpGridReady(params) {
-    debugger
+    ////debugger
     this.EmpGridOptions.api = params.api; // To access the grids API
     // params.api.sizeColumnsToFit();
   }
@@ -442,7 +442,7 @@ export class EvaluationslistComponent implements OnInit {
     this.router.navigate(['ea/rollout', {editEvaluation:JSON.stringify(selectedEvaluation), rollEvaluationEdit:true,allKpi: selectedRows.length>0,list:selectedRows.map(x=>x.Employee._id) }], { skipLocationChange: true });
     }
   openDirectReporteesView() {
-    debugger
+    //debugger
     if (this.selectedEmployee.DirectReportees && this.selectedEmployee.DirectReportees.length > 0) {
       // this.directReporteeCompetencyMessage = this.selectedEmployee.DirectReportees[0].DirectReporteeComptencyMessage;
       // this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees || [];
@@ -479,7 +479,7 @@ export class EvaluationslistComponent implements OnInit {
           _f.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
             this.formattedPeers.push(_f);
         });
-        debugger
+        //debugger
         this.peersList = c;
         console.log('formated peers data', this.formattedPeers);
       }
@@ -516,7 +516,7 @@ export class EvaluationslistComponent implements OnInit {
   }
 
   public deleteEmpFromList() {
-    debugger
+    //debugger
     var _index = this.selectedEmployees.indexOf(this.selectedEmployee);
     this.selectedEmployees.splice(_index, 1)
     _index = this.selectedEmployeesList.indexOf(this.selectedEmployee);
@@ -542,12 +542,12 @@ export class EvaluationslistComponent implements OnInit {
       var clonedArray = [];
       clonedArray = c.map((_arrayElement) => Object.assign({}, _arrayElement));
       this.directReporteeCompetencyList = clonedArray;
-      debugger
+      //debugger
       var clonedArray2 = c.map((_arrayElement) => Object.assign({}, _arrayElement));
       this.peersCompetencyList = clonedArray2;
 
     }, error => {
-      debugger
+      //debugger
       console.log('competencyList error ', error)
       this.notification.error(error.error.message)
     });
@@ -593,7 +593,7 @@ export class EvaluationslistComponent implements OnInit {
       this.notification.success('Evaluation Updated Successfully.')
       
       var rowNode = this.EmpGridOptions.api.getRowNode(this.selectedEmployee.Employee._id);
-      debugger
+      //debugger
       var newdata=rowNode.data;
       newdata.Peers=this.selectedEmployee.Peers;
       rowNode.setData(newdata);     
@@ -611,7 +611,7 @@ export class EvaluationslistComponent implements OnInit {
     window.location.reload();
 }
   updateEvaluation() {
-    debugger
+    //debugger
     const _evform = this.evaluationForm.value;
     this.evaluationForm.value.CreatedBy = this.currentUser._id;
     this.evaluationForm.value.Company = this.currentOrganization._id;
@@ -776,13 +776,13 @@ export class EvaluationslistComponent implements OnInit {
 
   }
   onDirectReporteeGridReady(params) {
-    debugger
+    //debugger
     this.directReporteesOfEmpGridOptions.api = params.api;
   }
 
 
   public onDirectReporteeGridRowClicked(e) {
-    debugger
+    //debugger
     if (e.event.target !== undefined) {
       this.currentDirectReportee = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
@@ -866,7 +866,7 @@ export class EvaluationslistComponent implements OnInit {
   }
   saveDirectReportees() {
    
-    debugger
+    //debugger
     // this.selectedEmployee.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
     // this.selectedEmployee.DirectReportsCompetency = this.seletedDirectReporteeCompetencyList;
     // this.selectedEmployee.DirectReportees.map(element => {
@@ -912,7 +912,7 @@ export class EvaluationslistComponent implements OnInit {
     // }
   }
   onSelectAllPeers(items: any) {
-    debugger
+    //debugger
     //this.selectedEmployees = items;
     if (!this.selectedEmployee.Peers) {
       this.selectedEmployee.Peers = [];
@@ -985,7 +985,7 @@ export class EvaluationslistComponent implements OnInit {
     this.selectedEmployeePeers = [];
   }
   public onPeersRowClicked(e) {
-    debugger
+    //debugger
     if (e.event.target !== undefined) {
       this.currentPeer = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
@@ -1060,7 +1060,7 @@ export class EvaluationslistComponent implements OnInit {
     }
   }
   savePeers() {
-    debugger
+    //debugger
     // if (this.currentPeerCompetencyList.length === 0) {
     //   this.notification.error('Please select at least one  Competency');
     //   return;
@@ -1146,7 +1146,7 @@ export class EvaluationslistComponent implements OnInit {
     this.selectedEmployee.DirectReportees.push(item);
     this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees
     // if (this.directReporteesOfEmpGridOptions.api) {
-    //   debugger
+    //   //debugger
     //   this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
     // }
   }
@@ -1164,13 +1164,13 @@ export class EvaluationslistComponent implements OnInit {
   }
 
   onDirectReporteeDeSelect(item: any) {
-    debugger
+    //debugger
     var _position = this.selectedEmployee.DirectReportees.findIndex(x=>x.EmployeeId===item.EmployeeId);   
     this.selectedEmployee.DirectReportees.splice(_position, 1);
     // this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
   }
   onDeSelectAllDirectReportee(items) {
-    debugger
+    //debugger
     this.selectedEmployee.DirectReportees = []
     // this.directReporteesOfEmpGridOptions.api.setRowData([])
 

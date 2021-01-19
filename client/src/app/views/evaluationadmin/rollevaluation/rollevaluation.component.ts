@@ -78,6 +78,11 @@ export class RollevaluationComponent implements OnInit {
     force: true,
     suppressFlash: false
   };
+  // for 235
+  evaluationTypes:any=[];
+  evalualtionDuration:any=[];
+
+  // end for 235
   onEmpGridReady(params) {
     this.EmpGridOptions.api = params.api; // To access the grids API
   }
@@ -519,6 +524,7 @@ export class RollevaluationComponent implements OnInit {
       }
       this.initForm();
       this.getEmployees();
+      this.getPaymentInfo()
       this.getModels();
       if (params['rollEvaluationEdit'] && params['editEvaluation']) {
         this.rollEvaluationEdit = true;
@@ -605,6 +611,32 @@ export class RollevaluationComponent implements OnInit {
     return this.evaluationForm.controls;
   }
   formattedPeers: any = []
+
+  getPaymentInfo(){
+    let unique:any=[]
+    console.log("INNN  PAYMENT INFO")
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetPaymentInfo",
+    this.perfApp.requestBody = { company: this.currentOrganization._id }
+    this.perfApp.CallAPI().subscribe(c=>{
+      console.log("PAYMENT ADHOC DATA", c)
+      c.Data.forEach(element => {
+        console.log(element)
+        
+        this.evalualtionDuration.push(element.NoOfMonthsLable)
+        this.evaluationTypes.push(element.Purpose)
+        
+      });
+      let uniqueChars =   this.evaluationTypes.filter((c, index) => {
+        return   this.evaluationTypes.indexOf(c) === index;
+    });
+    
+    this.evaluationTypes = uniqueChars;
+    }
+        )
+  }
+
+
   getEmployees() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetUnlistedEmployees",

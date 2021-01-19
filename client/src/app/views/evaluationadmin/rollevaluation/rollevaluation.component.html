@@ -47,6 +47,36 @@
                             </div>
 
                         </div>
+                        <!-- 235    BEGIN-->
+                        <div class="row">
+                        <div class="col-md-3">
+Type of Evaluation
+                        </div>
+                                                <div class="col-md-3">
+      <select class="form-control"
+                                            
+                                            >
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of evaluationTypes" [value]="e">{{e}}</option>
+
+                                        </select>
+                        </div>
+                                                <div class="col-md-3">
+Duration
+                        </div>
+                                                <div class="col-md-3">
+     <select class="form-control"
+                                            
+                                            >
+                                            <option value="" disabled>Please select</option>
+                                            <option *ngFor="let e of evalualtionDuration" [value]="e">{{e}}</option>
+
+                                        </select>
+                        </div>
+
+                        </div>
+
+                        <!-- #235 END REGION-->
                         <!--Evaluation Details Begin-->
                         <div class="row">
                             <div class="col-md-6">
