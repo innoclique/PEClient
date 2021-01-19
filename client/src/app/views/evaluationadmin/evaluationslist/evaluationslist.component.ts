@@ -279,7 +279,7 @@ export class EvaluationslistComponent implements OnInit {
         cellRenderer: (data) => {
           console.log(':::::::::::::::data',data);
           if (this.getNested(data.data.EmployeeRow, 'Peers')){
-            return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.Peers.length}</span>`
+            return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.peerCompetenceMapping.length}</span>`
           }else{
             return '';
           }
