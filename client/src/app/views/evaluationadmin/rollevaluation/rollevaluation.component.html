@@ -372,3 +372,28 @@
         </div>
     </div>
 </ng-template>
+
+<ng-template #selectedCompetencyView class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div  *ngIf="isViewCompetencies" class="modal-primary" role="document">
+        <div class="modal-content">
+            <div class="modal-header modal-primary">
+                <h4 class="modal-title">{{competencyMappingRowdata.peer.displayTemplate}}</h4>
+                <button type="button" class="close" (click)="closeCompetencyViewModel()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div  class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <ag-grid-angular style="width: auto; height: 200px;" class="ag-theme-alpine"
+                                [rowData]="competencyMappingRowdata.competencies||[]"
+                                [gridOptions]="viewCompetencyGridOptions" 
+                                (gridReady)="onViewCompetencyGridReady($event)">
+                            </ag-grid-angular>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
