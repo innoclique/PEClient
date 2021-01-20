@@ -29,8 +29,11 @@ export class ReviewEvaluationListComponent implements OnInit {
   appRoles: any;
   jobLevels: any;
   loginUser: any;
+  empSelected: any;
   viewSelected: string = 'evalutionView';
   copiesToView: boolean = false;
+  isPdfView: boolean = false;
+  
 
   filteredOptions: Observable<any[]>;
   filteredOptionsTS: Observable<any[]>;
@@ -89,19 +92,21 @@ export class ReviewEvaluationListComponent implements OnInit {
   }
 
   getCopiesToList() {
-      let { _id } = this.loginUser;
-      let requestBody: any = { userId: _id }
-      this.employeeService.getCopiesTO(requestBody).subscribe(response => {
+    let { _id } = this.loginUser;
+    let requestBody: any = { userId: _id }
+    this.employeeService.getCopiesTO(requestBody).subscribe(response => {
+      console.log(response);
       this.copiesToList = response.map(row => {
-          row.Name = row.FirstName + ' ' + row.LastName;
-          return {
+        row.Name = row.FirstName + ' ' + row.LastName;
+        return {
           Name: row.Name,
           RowData: row
-          }
         }
+      }
       )
-      })
-    }
+
+    })
+  }
 
   public onOptionsSelected(event) {
     const value = event.target.value;
@@ -228,7 +233,7 @@ export class ReviewEvaluationListComponent implements OnInit {
           break;
         case "viewReport":
           console.log('inside switch case');
-          this.viewReport('viewReport', 'TS');
+          this.pdfView();
           break;
 
 
@@ -260,7 +265,7 @@ export class ReviewEvaluationListComponent implements OnInit {
           break;
         case "viewReport":
           console.log('inside switch case');
-          this.viewReport('viewReport', 'TS');
+          this.pdfView();
           break;
 
 
@@ -289,15 +294,15 @@ export class ReviewEvaluationListComponent implements OnInit {
     ], { skipLocationChange: true });
   }
 
-  viewReport(action, actor) {
-    console.log('inside view report', this.currentRowItem._id);
-    this.router.navigate(['employee/reports/current-evaluation',
-      {
-        action: action,
-        _id: this.currentRowItem._id,
-      }
-    ], { skipLocationChange: true });
-  }
+  // viewReport(action, actor) {
+  //   console.log('inside view report', this.currentRowItem._id);
+  //   this.router.navigate(['employee/reports/current-evaluation',
+  //     {
+  //       action: action,
+  //       _id: this.currentRowItem._id,
+  //     }
+  //   ], { skipLocationChange: true });
+  // }
 
 
   addKpiForm() {
@@ -332,7 +337,26 @@ export class ReviewEvaluationListComponent implements OnInit {
     })
   }
 
+  exitReportView(){
+    this.isPdfView = false;
+  }
 
+ async pdfView(){
+    
+  this.empSelected = await this.authService.FindUserById(this.currentRowItem._id).subscribe(c => {
+      if(c){
+        console.log('user by id pdf view:::',c);
+        this.empSelected = c;
+        this.currentOrganization = this.authService.getOrganization();
+        this.isPdfView = true;
+      }
+    }
+      , error => {
+        this.snack.error(error.error.message);
+      }
+    );
+    
+  }
 
 
 
