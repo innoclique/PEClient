@@ -40,6 +40,8 @@ export class CurrentEvaluationComponent implements OnInit {
   appScores: any = [];
   kpiStatus: any = [];
   coachingRemDays: any = [];
+  isPdfView:boolean = false;
+  currentOrganization:any;
   public alert =new AlertDialog();
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -53,6 +55,7 @@ export class CurrentEvaluationComponent implements OnInit {
     private datePipe: DatePipe
   ) {
     this.loginUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
   }
 
   ngOnInit(): void {
@@ -86,6 +89,15 @@ export class CurrentEvaluationComponent implements OnInit {
     }
   ];
 
+  exitReportView(){
+    this.isPdfView = false;
+    this.evaluationForm = true;
+  }
+
+  viewReport(){
+    this.isPdfView = true;
+    this.evaluationForm = false;
+  }
 
   /**To GET ALL  tabs data */
   getTabsData() {
