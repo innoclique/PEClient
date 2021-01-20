@@ -58,6 +58,8 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   @ViewChild('evTabset') tabset: TabsetComponent;
   isReqRevDisabled=false;
   currentEmpName: any;
+  isPdfView:boolean = false;
+  currentOrganization:any;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -71,7 +73,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   ) {
    
 
-
+this.currentOrganization = this.authService.getOrganization();
     this.activatedRoute.params.subscribe(  params => {
       if (params['action']) {
        this.currentEmpId = params['empId'];
@@ -83,6 +85,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
       }
       })
       this.loginUser = this.authService.getCurrentUser();
+
   }
 
   ngAfterViewInit(){
@@ -101,6 +104,15 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
       this.getTabsData();
 }
 
+exitReportView(){
+  this.isPdfView = false;
+  this.evaluationForm = true;
+}
+
+viewReport(){
+  this.isPdfView = true;
+  this.evaluationForm = false;
+}
 
 goto(selTab){
 

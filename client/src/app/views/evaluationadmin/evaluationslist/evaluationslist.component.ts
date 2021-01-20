@@ -18,6 +18,8 @@ import ReportTemplates from'../../../views/psa/reports/data/reports-templates';
 })
 export class EvaluationslistComponent implements OnInit {
 
+  selectedCompetencyViewRef: BsModalRef;
+  @ViewChild('selectedCompetencyView') selectedCompetencyView: TemplateRef<any>;
 
   @ViewChild('closeModal') closeModal: ElementRef
   currentRowItem: any;
@@ -62,6 +64,8 @@ export class EvaluationslistComponent implements OnInit {
   peerCompetencyMappingRowdata:any = [];
   drCompetencyUIMapping:any = {};
   drCompetencyMappingRowdata:any = [];
+  competencyMappingRowdata: any;
+  isViewCompetencies: boolean = false;
 
   kpiList: any = [];
   gridRefreshParams = {
@@ -279,7 +283,7 @@ export class EvaluationslistComponent implements OnInit {
         cellRenderer: (data) => {
           console.log(':::::::::::::::data',data);
           if (this.getNested(data.data.EmployeeRow, 'Peers')){
-            return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.Peers.length}</span>`
+            return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.peerCompetenceMapping.length}</span>`
           }else{
             return '';
           }
@@ -697,7 +701,9 @@ export class EvaluationslistComponent implements OnInit {
         cellRenderer: (data) => {
           console.log('column data', data)
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-          font-size: 17px;"   data-action-type="deletePeer" title="Delete Peer"></i> 
+          font-size: 17px;"   data-action-type="deletePeer" title="Delete Peer"></i>
+          <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="viewPeerCompetencyMapping" title="Delete Peer"></i> 
           `
           //}
         }
@@ -748,8 +754,9 @@ export class EvaluationslistComponent implements OnInit {
         cellRenderer: (data) => {
           console.log('column data', data)
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-          font-size: 17px;"   data-action-type="deleteDirectReportee" title="Delete Reportee"></i> 
-           
+          font-size: 17px;"   data-action-type="deleteDirectReportee" title="Delete Reportee"></i>
+          <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="viewDrCompetencyMapping" title="Delete Peer"></i>             
          `
           //}
         }
@@ -789,6 +796,8 @@ export class EvaluationslistComponent implements OnInit {
       switch (actionType) {
         case "deleteDirectReportee":
           return this.deleteDirectReportee();
+        case "viewDrCompetencyMapping":
+          return this.viewDrCompetencyMapping();
       }
     }
   }
@@ -992,8 +1001,8 @@ export class EvaluationslistComponent implements OnInit {
       switch (actionType) {
         case "deletePeer":
           return this.deletePeer();
-        case "populateCompetencies":
-        return this.populateCompetencies();
+        case "viewPeerCompetencyMapping":
+          return this.viewPeerCompetencyMapping();
       }
     }
   }
@@ -1030,6 +1039,49 @@ export class EvaluationslistComponent implements OnInit {
     if (this.peersForEmpGridOptions.api) {
       this.peersForEmpGridOptions.api.setRowData(rowData);
     }
+  }
+
+  public viewCompetencyGridOptions: GridOptions = {
+    columnDefs: this.getCompetencyViewGridCols(),
+    api: new GridApi()
+  }
+
+  getCompetencyViewGridCols() {
+    return [
+      {
+        headerName: 'Competencies', width: 400, sortable: true, filter: true,
+        cellRenderer: (data) => { console.log('----', data); return `<span >${data.data.Name}</span>` }
+      }
+    ];
+  }
+
+
+  onViewCompetencyGridReady(params) {
+
+    this.viewCompetencyGridOptions.api = params.api;
+  }
+
+  viewCompetencies(user: any, competencies: any) {
+    this.isViewCompetencies = true;
+    this.selectedCompetencyViewRef = this.modalService.show(this.selectedCompetencyView, this.config);
+    this.competencyMappingRowdata = {};
+    this.competencyMappingRowdata.peer = user;
+    this.competencyMappingRowdata.competencies = competencies;
+  }
+
+  viewPeerCompetencyMapping() {
+    this.viewCompetencies(this.currentPeer.peer, this.currentPeer.competencies);
+  }
+
+  viewDrCompetencyMapping() {
+    this.viewCompetencies(this.currentDirectReportee.directReportee, this.currentDirectReportee.competencies);
+  }
+
+  closeCompetencyViewModel() {
+    console.log('closeCompetencyViewModel :::');
+    this.isViewCompetencies = false;
+    this.selectedCompetencyViewRef.hide();
+    this.competencyMappingRowdata = {};
   }
 
   updatePeerCompetencyUIMapping() {
