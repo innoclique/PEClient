@@ -1,3 +1,19 @@
+<div _ngcontent-fha-c25="" class="reports-buttons pull-right">
+    <button *ngIf="isPdfView" (click)="exitReportView()" ngcontent-fha-c25="" class="btn btn-primary mr-1 pull-right"
+        data-toggle="modal" type="button">
+        <i class="fa fa-arrow-left"></i>
+    </button>
+    <button *ngIf="!isPdfView" title="view Report" (click)="viewReport()" ngcontent-fha-c25=""
+        class="btn btn-primary mr-1 pull-right" type="button">
+        <i class="fa fa-file-pdf-o hide-print" aria-hidden="true"></i></button>
+</div>
+<div class="clearfix"></div>
+<div *ngIf="isPdfView">
+    <app-current-evaluation-report-pdf [loginUser]="selectedUser" [currentOrganization]="currentOrganization">
+    </app-current-evaluation-report-pdf>
+</div>                    
+                    
+                    
                     <div *ngIf="evaluationForm">
                         <em class="tab_name">{{currentEmpName}}</em>
                         <tabset #evTabset class="pro-tabs">
