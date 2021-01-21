@@ -154,7 +154,6 @@ export class EvaluationslistComponent implements OnInit {
     this.perfApp.method = "GetAllEmployees",
       this.perfApp.requestBody = { 'companyId': this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c => {
-      console.log('employeed data', c);
       if (c && c.length > 0) {
         this.employeesList$ = c
         var clonedArray = this.employeesList$.map((_arrayElement) => Object.assign({}, _arrayElement));
@@ -163,8 +162,7 @@ export class EvaluationslistComponent implements OnInit {
           x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
             x.row = _f;
         });
-        console.log('formated data', this.employeesList$);
-
+        
       }
     })
   }
@@ -205,8 +203,6 @@ export class EvaluationslistComponent implements OnInit {
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
-          console.log('column data', data)
-
           return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
             font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
             `
@@ -235,10 +231,29 @@ export class EvaluationslistComponent implements OnInit {
         }
       },
       {
-        headerName: 'RolledOn', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
+        headerName: 'Evaluation Released On', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
         cellRenderer: (data) => {
-          if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
+          if (!data.data.Type) {
+            if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
             return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
+          }else{
+            return ``;
+          }
+          
+        }
+      },
+      {
+        headerName: 'Performance Goals Released On', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
+        cellRenderer: (data) => {
+          if (data.data.Type === "K") {
+            if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
+            return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
+          }else if(data.data.EvaluationRow.kpiFormCreatedOn){
+            return new DatePipe('en-US').transform(data.data.EvaluationRow.kpiFormCreatedOn, 'MM-dd-yyyy')
+          }else{
+            return ``;
+          }
+          
         }
       },
       // {
@@ -281,7 +296,7 @@ export class EvaluationslistComponent implements OnInit {
       {
         headerName: 'Peers', field: '', sortable: false, width:100, wrapText: true, autoHeight: true,  filter: false,
         cellRenderer: (data) => {
-          console.log(':::::::::::::::data',data);
+          
           if (this.getNested(data.data.EmployeeRow, 'Peers')){
             return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.peerCompetenceMapping.length}</span>`
           }else{
@@ -309,7 +324,7 @@ export class EvaluationslistComponent implements OnInit {
          suppressMenu: true,
          Sorting: false,
          cellRenderer: (data) => {
-           console.log('column data', data)
+           
 
            return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
              font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
@@ -350,7 +365,7 @@ export class EvaluationslistComponent implements OnInit {
       suppressMenu: true,
       Sorting: false,
       cellRenderer: (data) => {
-        console.log('column data', data)
+        
         return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="edit" title="Edit Form"></i> `
         //}
@@ -364,7 +379,7 @@ export class EvaluationslistComponent implements OnInit {
     this.perfApp.method = "GetEvaluations",
       this.perfApp.requestBody = { clientId: this.authService.getOrganization()._id }
     this.perfApp.CallAPI().subscribe(c => {
-      console.log('evaluationList data', c);
+      
       if (c) {
         this.selectedEmployeesList = [];
         c.map(row => {
@@ -420,7 +435,7 @@ export class EvaluationslistComponent implements OnInit {
       let data = e.data;
       //this.currentRowItem = data.RowData;
       this.selectedEmployee = e.data;
-      console.log("inside onEmpRowClicked::::",this.selectedEmployee);
+      
       let actionType = e.event.target.getAttribute("data-action-type");
       switch (actionType) {
         // case "deleteEmp":
@@ -474,7 +489,7 @@ export class EvaluationslistComponent implements OnInit {
     this.perfApp.method = "GetPeers",
       this.perfApp.requestBody = { company: this.currentOrganization._id, id: this.currentUser._id }
     this.perfApp.CallAPI().subscribe(c => {
-      console.log('employeed data', c);
+      
       this.formattedPeers = [];
       if (c && c.length > 0) {
         c.map(x => {
@@ -485,14 +500,13 @@ export class EvaluationslistComponent implements OnInit {
         });
         debugger
         this.peersList = c;
-        console.log('formated peers data', this.formattedPeers);
+        
       }
       this.selectePeersViewRef = this.modalService.show(this.selectePeersView, this.config);
     })
   }
 
   openPeerView() {
-    console.log('inside openPeerView::::');
     if (this.selectedEmployee.EmployeeRow.peerCompetenceMapping) {
       this.peerCompetencyMappingRowdata = [];
       this.selectedEmployee.Peers=[];
@@ -570,7 +584,6 @@ export class EvaluationslistComponent implements OnInit {
     }
     this.perfApp.route = "evaluation"
     this.perfApp.CallAPI().subscribe(x => {
-      console.log('added evaluation', x)
       this.notification.success('Evaluation Updated Successfully.')
       // this.router.navigate(['ea/evaluation-list'])
       this.refresh();
@@ -593,7 +606,6 @@ export class EvaluationslistComponent implements OnInit {
     }
     this.perfApp.route = "evaluation"
     this.perfApp.CallAPI().subscribe(x => {
-      console.log('added evaluation', x)
       this.notification.success('Evaluation Updated Successfully.')
       
       var rowNode = this.EmpGridOptions.api.getRowNode(this.selectedEmployee.Employee._id);
@@ -624,12 +636,12 @@ export class EvaluationslistComponent implements OnInit {
     //this.setModelIds();
     //this.currentEvaluationForm.Employees=this.evaluationForm.value.Employees;
     this.evaluationForm.value.Employees = this.selectedEmployees;
-    console.log('evaluation form', this.evaluationForm.value);
+    
     this.perfApp.method = "UpdateEvaluationForm";
     this.perfApp.requestBody = this.currentEvaluationForm;
     this.perfApp.route = "evaluation"
     this.perfApp.CallAPI().subscribe(x => {
-      console.log('added evaluation', x)
+      
       this.notification.success('Evaluation Updated Successfully.')
       this.router.navigate(['ea/evaluation-list'])
     }, error => {
@@ -652,7 +664,7 @@ export class EvaluationslistComponent implements OnInit {
   public seletedDirectReporteeCompetencyList: any = [];
 
   onItemSelect(item: any) {
-    console.log('onItemSelect', item);
+    
     this.selectedEmployees.push(item.row);
   }
   onSelectAllEmployees(items: any) {
@@ -661,14 +673,13 @@ export class EvaluationslistComponent implements OnInit {
     items.map(x => {
       this.selectedEmployees.push(x.row);
     })
-    console.log('onSelectAll', items);
+    
   }
   onEmployeeDeSelect(item: any) {
     var _position = this.selectedEmployees.indexOf(item);
     this.selectedEmployees.splice(_position, 1);
   }
   onModelChange(event) {
-    console.log('selected model', event)
     this.selectedModel = event.target.value;
     this.getCompetencyList();
   }
@@ -685,7 +696,7 @@ export class EvaluationslistComponent implements OnInit {
     return [
       {
         headerName: 'Peer', sortable: true, filter: true,
-        cellRenderer: (data) => {console.log('getPeersForEmpCols data:::',data); return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.peer.displayTemplate}</span>` }
+        cellRenderer: (data) => {return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.peer.displayTemplate}</span>` }
       },
       {
         headerName: 'Competencies', field: '', sortable: false, filter: false,
@@ -699,7 +710,7 @@ export class EvaluationslistComponent implements OnInit {
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
-          console.log('column data', data)
+          
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deletePeer" title="Delete Peer"></i>
           <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -738,7 +749,7 @@ export class EvaluationslistComponent implements OnInit {
     return [
       {
         headerName: 'Direct Report(s)', sortable: true, filter: true,
-        cellRenderer: (data) => {console.log('dr data:::',data); return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.directReportee.displayTemplate}</span>` }
+        cellRenderer: (data) => {return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.directReportee.displayTemplate}</span>` }
       },
       {
         headerName: 'Competencies', field: '', sortable: false, filter: false,
@@ -752,7 +763,7 @@ export class EvaluationslistComponent implements OnInit {
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
-          console.log('column data', data)
+          
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deleteDirectReportee" title="Delete Reportee"></i>
           <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -802,10 +813,6 @@ export class EvaluationslistComponent implements OnInit {
     }
   }
   async addDRCompetencyMapping() {
-    console.log('inside addDRCompetencyMapping ::: ');
-    console.log('users ::: ', this.selectedEmployee.DirectReportees);
-    console.log('competencies ::: ', this.seletedDirectReporteeCompetencyList);
-    console.log('message ::: ', this.directReporteeCompetencyMessage);
     // this.currentEmployeeSelectedDirectReportees = [];
     // this.selectedEmployeeDirectReportees = []
     if (!this.selectedEmployee.DirectReportees || this.selectedEmployee.DirectReportees.length === 0) {
@@ -818,7 +825,6 @@ export class EvaluationslistComponent implements OnInit {
     }
 
     await this.updateDRCompetencyUIMapping();
-    console.log('mapping ::: ', this.drCompetencyUIMapping);
     this.selectedEmployee.DirectReportees = [];
     this.selectedEmployeeDirectReportees = [];
     this.currentEmployeeSelectedDirectReportees = [];
@@ -826,23 +832,18 @@ export class EvaluationslistComponent implements OnInit {
     this.directReporteeCompetencyMessage = "";
     var rowData: any = [];
     for (let mapping in this.drCompetencyUIMapping) {
-      console.log(mapping);
       rowData.push({
         directReportee: this.drCompetencyUIMapping[mapping].directReportee,
         competencies: this.drCompetencyUIMapping[mapping].competencies,
         message: this.drCompetencyUIMapping[mapping].message
       });
     }
-    console.log('dr rowData::::', rowData);
     this.drCompetencyMappingRowdata = rowData;
     if (this.directReporteesOfEmpGridOptions.api) {
       this.directReporteesOfEmpGridOptions.api.setRowData(rowData);
     }
   }
   updateDRCompetencyUIMapping() {
-    console.log('users ::: ', this.selectedEmployee.DirectReportees);
-    console.log('competencies ::: ', this.seletedDirectReporteeCompetencyList);
-    console.log('message ::: ', this.directReporteeCompetencyMessage);
     for (let index = 0; index < this.selectedEmployee.DirectReportees.length; index++) {
       let directReportee = this.selectedEmployee.DirectReportees[index];
       var key = directReportee.EmployeeId;
@@ -854,7 +855,6 @@ export class EvaluationslistComponent implements OnInit {
         var d = c.filter((thing, i, arr) => {
           return arr.indexOf(arr.find(t => t._id === thing._id)) === i;
         });
-        console.log("after filter ::::", d);
         value['competencies'] = d;
         this.drCompetencyUIMapping[key] = value;
       } else {
@@ -910,7 +910,6 @@ export class EvaluationslistComponent implements OnInit {
 
   currentPeer: any = {};
   onPeerSelect(item) {
-    console.log('onPeer Select', item);
     if (!this.selectedEmployee.Peers) {
       this.selectedEmployee.Peers = [];
     }
@@ -932,7 +931,6 @@ export class EvaluationslistComponent implements OnInit {
     //   this.selectedEmployee.Peers.push(x);
     // })
     // this.selectedEmployeePeers = this.selectedEmployee.Peers
-    console.log('onSelectAll peers', this.selectedEmployee.Peers);
     if (this.peersForEmpGridOptions.api) {
       this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
     }
@@ -951,17 +949,14 @@ export class EvaluationslistComponent implements OnInit {
     // this.selectedEmployeePeers = [...this.selectedEmployee.Peers]
 
     var _p = this.peerCompetencyMappingRowdata.indexOf(this.currentPeer);
-    console.log('no of mapping before :::', this.peerCompetencyMappingRowdata.length);
-    console.log('index to be deleted ::', _p);
     this.peerCompetencyMappingRowdata.splice(_p, 1);
     if (this.peersForEmpGridOptions.api) {
       this.peersForEmpGridOptions.api.setRowData(this.peerCompetencyMappingRowdata);
     }
-    console.log('no of mapping  after :::', this.peerCompetencyMappingRowdata.length);
+    
   }
 
   populateCompetencies(){
-    console.log("peer selected : ",this.currentPeer);
     // var _p = this.selectedEmployee.Peers.indexOf(this.currentPeer);
     // this.selectedEmployee.Peers.splice(_p, 1);
     // if (this.peersForEmpGridOptions.api) {
@@ -1019,7 +1014,7 @@ export class EvaluationslistComponent implements OnInit {
     }
 
     await this.updatePeerCompetencyUIMapping();
-    console.log('mapping ::: ', this.peerCompetencyUIMapping);
+    
     this.selectedEmployee.Peers = [];
     this.selectedEmployeePeers =[];
     this.currentPeerCompetencyList =[];
@@ -1027,14 +1022,14 @@ export class EvaluationslistComponent implements OnInit {
     this.PeersCompetencyMessage = "";
     var rowData: any = [];
     for (let mapping in this.peerCompetencyUIMapping) {
-      console.log(mapping);
+      
       rowData.push({
         peer: this.peerCompetencyUIMapping[mapping].peer,
         competencies: this.peerCompetencyUIMapping[mapping].competencies,
         message:this.peerCompetencyUIMapping[mapping].message
       });
     }
-    console.log('rowData::::', rowData);
+    
     this.peerCompetencyMappingRowdata = rowData;
     if (this.peersForEmpGridOptions.api) {
       this.peersForEmpGridOptions.api.setRowData(rowData);
@@ -1050,7 +1045,7 @@ export class EvaluationslistComponent implements OnInit {
     return [
       {
         headerName: 'Competencies', width: 400, sortable: true, filter: true,
-        cellRenderer: (data) => { console.log('----', data); return `<span >${data.data.Name}</span>` }
+        cellRenderer: (data) => { return `<span >${data.data.Name}</span>` }
       }
     ];
   }
@@ -1085,9 +1080,6 @@ export class EvaluationslistComponent implements OnInit {
   }
 
   updatePeerCompetencyUIMapping() {
-    console.log('users ::: ', this.selectedEmployee.Peers);
-    console.log('competencies ::: ', this.selectedPeersCompetencyList);
-    console.log('message ::: ', this.PeersCompetencyMessage,this.peerCompetencyUIMapping);
     for (let index = 0; index < this.selectedEmployee.Peers.length; index++) {
       let peer = this.selectedEmployee.Peers[index];
       var key = peer.EmployeeId;
@@ -1099,7 +1091,7 @@ export class EvaluationslistComponent implements OnInit {
         var d = c.filter((thing, i, arr) => {
           return arr.indexOf(arr.find(t => t._id === thing._id)) === i;
         });
-       console.log("after filter ::::",d);
+       
         value['competencies'] = d;
         this.peerCompetencyUIMapping[key] = value;
       } else {
@@ -1130,7 +1122,7 @@ export class EvaluationslistComponent implements OnInit {
     //   element.PeersCompetencyList = this.currentPeerCompetencyList;
     // });
     this.selectedEmployee.Peers=[];
-    console.log('inside save:::',this.peerCompetencyMappingRowdata);
+    
     for (let mapping of this.peerCompetencyMappingRowdata) {
       var mappingInOldFormat = {};
       mappingInOldFormat['EmployeeId'] = mapping.peer.EmployeeId;
@@ -1141,7 +1133,7 @@ export class EvaluationslistComponent implements OnInit {
       this.selectedEmployee.Peers.push(mappingInOldFormat);
     }
     this.selectedEmployee['peerCompetenceMapping'] = this.peerCompetencyMappingRowdata;
-    console.log('inside save selectedEmployee:::',this.selectedEmployee);
+    
     this.UpdatePeers();
   }
 
@@ -1209,7 +1201,7 @@ export class EvaluationslistComponent implements OnInit {
     }
     this.selectedEmployee.DirectReportees = items;
     this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees
-    console.log('onSelectAll', items);
+    
     // if (this.directReporteesOfEmpGridOptions.api) {
     //   this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
     // }
