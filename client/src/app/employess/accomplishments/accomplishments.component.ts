@@ -413,7 +413,7 @@ if (!this.kpiForm.get('Accomplishment').value) {
     dialogConfig.minWidth = '40%';
   
   
-    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig); 
     dialogRef.afterClosed().subscribe(resp => {
      if (resp=='yes') {
       this.callKpiApi();

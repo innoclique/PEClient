@@ -10,6 +10,9 @@ import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertComponent } from '../../../shared/alert/alert.component';
 
 
 @Component({
@@ -18,7 +21,8 @@ import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
   styleUrls: ['./rollevaluation.component.css']
 })
 export class RollevaluationComponent implements OnInit {
-
+  
+  public alert: AlertDialog;
   public evaluationForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
@@ -31,7 +35,10 @@ export class RollevaluationComponent implements OnInit {
   directReportees: any[];
   evaluationPeriods: any[];
   evaluationDuration: any[];
-
+  isDuration: boolean=false
+public currentAdhocData:any[];
+public selectedAdhocData:any[];
+public selectedMonth:string="";
   public currentOrganization: any;
   currentUser: any;
 
@@ -81,15 +88,22 @@ export class RollevaluationComponent implements OnInit {
   // for 235
   evaluationTypes:any=[];
   evalualtionDuration:any=[];
+  public maxEmployees:number=0;
+  public employeeCount:number=0;
+  public durationLabel:any=""
 
   // end for 235
   onEmpGridReady(params) {
     this.EmpGridOptions.api = params.api; // To access the grids API
   }
   onItemSelect(item: any) {
-    console.log('onItemSelect', item);
-    this.selectedEmployees.push(item.row);
-    this.disabledAddButton = false;
+   
+      console.log('onItemSelect', item);
+      this.selectedEmployees.push(item.row);
+      this.disabledAddButton = false;
+console.log("innnnnn", this.selectedEmployees)
+    
+
 
   }
   onSelectAllEmployees(items: any) {
@@ -500,6 +514,7 @@ export class RollevaluationComponent implements OnInit {
     private modalService: BsModalService,
     public authService: AuthService,
     public router: Router,
+    public dialog: MatDialog,
     public activatedRoute: ActivatedRoute) {
 
   }
@@ -586,12 +601,14 @@ export class RollevaluationComponent implements OnInit {
       itemsShowLimit: 3,
       allowSearchFilter: true
     };
+    this.alert = new AlertDialog();
   }
 
 
 
 
   initForm() {
+    
     this.evaluationForm = this.formBuilder.group({
       Employees: [[], [Validators.required]],
       EvaluationPeriod: ['', []],
@@ -602,7 +619,9 @@ export class RollevaluationComponent implements OnInit {
       ActivateActionPlan: [false, []],
       KPIFor: ["Employee", []],
       CreatedBy: ['', []],
-      Company: ['', []]
+      Company: ['', []],
+      durationLabel:['']
+
     });
     this.evaluationForm.controls["EvaluationPeriod"].setValue(this.currentOrganization.EvaluationPeriod);
     this.evaluationForm.controls["EvaluationDuration"].setValue(this.currentOrganization.EvaluationDuration);
@@ -614,17 +633,23 @@ export class RollevaluationComponent implements OnInit {
 
   getPaymentInfo(){
     let unique:any=[]
-    console.log("INNN  PAYMENT INFO")
     this.perfApp.route = "app";
     this.perfApp.method = "GetPaymentInfo",
     this.perfApp.requestBody = { company: this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c=>{
-      console.log("PAYMENT ADHOC DATA", c)
+      this.currentAdhocData=c.Data;
+      console.log("FETCHED DATA", c.Data)
       c.Data.forEach(element => {
         console.log(element)
-        
+        if(element.Type=="Initial" || element.Type=="Renewal"){
+          this.evaluationTypes.push("Year-End")
+        }
+        else{
+          this.evaluationTypes.push(element.Purpose)
+        }
+        if("Purpose" in element)
         this.evalualtionDuration.push(element.NoOfMonthsLable)
-        this.evaluationTypes.push(element.Purpose)
+        
         
       });
       let uniqueChars =   this.evaluationTypes.filter((c, index) => {
@@ -635,8 +660,33 @@ export class RollevaluationComponent implements OnInit {
     }
         )
   }
+  onchangeDuration(optionVal){
+    let arr=[];
+    arr= this.selectedAdhocData.filter((item => item.NoOfMonthsLable == optionVal))
+    console.log("CURRENT ELI", arr)
 
+    if(arr.length>0){
+      this.maxEmployees= arr[0].NoOfEmployees
+      console.log("MAX EMPLOYEES", this.maxEmployees)
+    }
+    else{
+      this.notification.error('You are not eligible for this Duration')
+    }
 
+  }
+
+  onchangePurpose(optionVal){
+    
+    if(optionVal === "Year-End"){
+      this.isDuration=false;
+    }else{
+      this.isDuration=true;
+      this.selectedAdhocData = this.currentAdhocData.filter((item => item.Purpose == optionVal))
+    this.durationLabel= this.selectedAdhocData[0].NoOfMonthsLable;
+    this.evaluationForm.controls["durationLabel"].setValue(this.durationLabel)
+    }
+    
+  }
   getEmployees() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetUnlistedEmployees",
@@ -705,23 +755,68 @@ export class RollevaluationComponent implements OnInit {
   }
 
   submitEvaluation() {
+    console.log("SELECTED EMPLOYEES", this.selectedEmployees.length)
+if(this.selectedEmployees.length > this.maxEmployees){
+  this.notification.error('Max limit exceeded')
+}
 
     if (this.rollEvaluationEdit) {
 
       let formdata = this.evaluationForm.value;
       formdata.EvaluationId = this.readonlyEmployee.evaluationId;
-      let isConform = window.confirm("Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
-      if (isConform)
-        this.submitValidEvaluation();
+      this.alert.Title = "Alert";
+      this.alert.Content = "Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?";
+      this.alert.ShowCancelButton = true;
+      this.alert.ShowConfirmButton = true;
+      this.alert.CancelButtonText = "Cancel";
+      this.alert.ConfirmButtonText = "Ok";
+      const dialogConfig = new MatDialogConfig()
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = this.alert;
+      dialogConfig.height = "300px";
+      dialogConfig.maxWidth = '100%';
+      dialogConfig.minWidth = '40%';
+
+      var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+
+      dialogRef.afterClosed().subscribe(resp => {
+        if (resp=='yes') {
+          this.submitValidEvaluation();
+        } else {
+          
+        }
+       })
     } else {
       this.isFormSubmitted = true;
 
       if (this.evaluationForm.invalid)
         return;
       const _evform = this.evaluationForm.value;
-      let isConform = window.confirm("Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
-      if (isConform)
-        this.submitValidEvaluation();
+      this.alert.Title = "Alert";
+      this.alert.Content = "Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?";
+      this.alert.ShowCancelButton = true;
+      this.alert.ShowConfirmButton = true;
+      this.alert.CancelButtonText = "Cancel";
+      this.alert.ConfirmButtonText = "Ok";
+
+      const dialogConfig = new MatDialogConfig()
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = this.alert;
+      dialogConfig.height = "300px";
+      dialogConfig.maxWidth = '100%';
+      dialogConfig.minWidth = '40%';
+
+      var dialogRef = this.dialog.open(AlertComponent, dialogConfig); 
+      dialogRef.afterClosed().subscribe(resp => {
+        
+        if (resp=='yes') {
+          this.submitValidEvaluation();
+        } else {
+          
+        }
+       })
 
     }
 
@@ -729,11 +824,11 @@ export class RollevaluationComponent implements OnInit {
   submitValidEvaluation() {
     this.evaluationForm.value.CreatedBy = this.currentUser._id;
     this.evaluationForm.value.Company = this.currentOrganization._id;
-
-    // this.setEmployeeIds();
-    //this.setModelIds();
+// durationLabel
     this.evaluationForm.value.Employees = this.selectedEmployeeList;
     console.log('evaluation form', this.evaluationForm.value);
+    delete this.evaluationForm.value["durationLabel"];
+    
     this.perfApp.method = "CreateEvaluation";
     this.perfApp.requestBody = this.evaluationForm.value;
     this.perfApp.route = "evaluation"
@@ -1245,6 +1340,7 @@ export class RollevaluationComponent implements OnInit {
     this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
   }
   saveKpiForm() {
+   
     let list = this.evaluationForm.value.Employees;
     var body: any;
     if (list && list.length > 0) {
