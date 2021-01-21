@@ -120,7 +120,7 @@ export class ReviewPerfGoalsListComponent implements OnInit {
         if(data && data.data && data.data.RowData){
           let {RowData} = data.data;
           let {pgDraftGoals} = RowData;
-          if(pgDraftGoals.length>0){
+          if(pgDraftGoals && pgDraftGoals.length>0){
             returnString += `
             <i class="icon-pencil" style="cursor:pointer; padding: 7px 20px 0 0;
             font-size: 17px;"   data-action-type="draftGoal" title="Draft Goals"></i>
@@ -277,7 +277,7 @@ let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).len
          NoOfKpis: row.KpiList.length,
          NoOfSignOff:row.KpiList.length-unSubmitedCount,
          NoOfDevGoals: row.GoalList.length,
-         pgDraftGoals: row.pgDraftGoals.length,
+         pgDraftGoals: row.pgDraftGoals?row.pgDraftGoals.length:0,
         // FRStatus: evaluation ?evaluation.FinalRating.Status:'',
        
         RowData:row
