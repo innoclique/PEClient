@@ -170,4 +170,8 @@ export class PaymentHistoryComponent implements OnInit {
     this.emoModal.hide();
   }
 
+  printPDFPage() {
+    window.print();
+  }
+  
 }
