@@ -217,14 +217,14 @@ isCSA:Boolean = false;
           "name": "Reports",
           "code": "Reports",
           "icon": "icon-list",
-          "children":[ {
-            "IsActive": true,
-            "url": "/ea/reports",
-            "name": "Evaluations",
-            "code": "EvaluationsReports",
+//           "children":[ {
+//             "IsActive": true,
+//             "url": "/ea/reports",
+//             "name": "Evaluations",
+//             "code": "EvaluationsReports",
            
             
-          }]
+//           }]
         })
       }else{
         navigationMenu.push(
@@ -234,13 +234,13 @@ isCSA:Boolean = false;
                 "name": "Reports",
                 "code": "Reports",
                 "icon": "icon-list",
-                "children": [{
-                  "IsActive": true,
-                  "url": "/employee/reports/current-evaluation",
-                  "name": "Evaluation Report",
-                  "code": "Current Evaluation",
-                  "icon": "icon-list"
-                }]
+//                 "children": [{
+//                   "IsActive": true,
+//                   "url": "/employee/reports/current-evaluation",
+//                   "name": "Evaluation Report",
+//                   "code": "Current Evaluation",
+//                   "icon": "icon-list"
+//                 }]
           })
       }
 
