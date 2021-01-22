@@ -310,7 +310,7 @@ export class EvaluationslistComponent implements OnInit {
         
         cellRenderer: (data) => {
           if (this.getNested(data.data.EmployeeRow, 'DirectReportees')){
-            return `<span style="color:blue;cursor:pointer;" data-action-type="chooseDirectReports">${data.data.EmployeeRow.DirectReportees.length}</span>`
+            return `<span style="color:blue;cursor:pointer;" data-action-type="chooseDirectReports">${data.data.EmployeeRow.drCompetenceMapping.length}</span>`
           }else{
             return '';
           }
