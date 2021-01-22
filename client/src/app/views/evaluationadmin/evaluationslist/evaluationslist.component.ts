@@ -1157,7 +1157,7 @@ export class EvaluationslistComponent implements OnInit {
 
   }
   onSelectDirectReporteeCompetency(item) {
-    this.seletedDirectReporteeCompetencyList.push(item)
+   // this.seletedDirectReporteeCompetencyList.push(item)
   }
 
   public getDirectReportees(): void {
