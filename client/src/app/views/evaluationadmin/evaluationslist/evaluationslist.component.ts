@@ -462,7 +462,7 @@ export class EvaluationslistComponent implements OnInit {
     }
   openDirectReporteesView() {
     debugger
-    if (this.selectedEmployee.DirectReportees && this.selectedEmployee.DirectReportees.length > 0) {
+    
       // this.directReporteeCompetencyMessage = this.selectedEmployee.DirectReportees[0].DirectReporteeComptencyMessage;
       // this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees || [];
       this.selectedEmployeeDirectReporteeMappings = this.selectedEmployee.DirectReportees || [];
@@ -475,10 +475,11 @@ export class EvaluationslistComponent implements OnInit {
       this.drCompetencyMappingRowdata = [];
       this.drCompetencyUIMapping = {};
       this.drCompetencyMappingRowdata = this.selectedEmployee.EmployeeRow.drCompetenceMapping;
+       if (this.selectedEmployee.EmployeeRow.drCompetenceMapping && this.selectedEmployee.EmployeeRow.drCompetenceMapping.length > 0) {
       for(let mapping of this.drCompetencyMappingRowdata){
         this.drCompetencyUIMapping[mapping.directReportee.EmployeeId] = mapping;
       }
-    }
+     }
     this.selectedModel = this.selectedEmployee.Model;
     this.getDirectReportees();
     this.getCompetencyList();
