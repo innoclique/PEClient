@@ -714,7 +714,7 @@ export class EvaluationslistComponent implements OnInit {
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deletePeer" title="Delete Peer"></i>
           <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
-          font-size: 17px;"   data-action-type="viewPeerCompetencyMapping" title="Delete Peer"></i> 
+          font-size: 17px;"   data-action-type="viewPeerCompetencyMapping" title="View Competencies"></i> 
           `
           //}
         }
@@ -767,7 +767,7 @@ export class EvaluationslistComponent implements OnInit {
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deleteDirectReportee" title="Delete Reportee"></i>
           <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
-          font-size: 17px;"   data-action-type="viewDrCompetencyMapping" title="Delete Peer"></i>             
+          font-size: 17px;"   data-action-type="viewDrCompetencyMapping" title="View Competencies"></i>             
          `
           //}
         }
