@@ -620,7 +620,7 @@ console.log("innnnnn", this.selectedEmployees)
       KPIFor: ["Employee", []],
       CreatedBy: ['', []],
       Company: ['', []],
-      durationLabel:['']
+      EvalutionType:['']
 
     });
     this.evaluationForm.controls["EvaluationPeriod"].setValue(this.currentOrganization.EvaluationPeriod);
@@ -655,8 +655,13 @@ console.log("innnnnn", this.selectedEmployees)
       let uniqueChars =   this.evaluationTypes.filter((c, index) => {
         return   this.evaluationTypes.indexOf(c) === index;
     });
+
+    let uniqueDuration =   this.evalualtionDuration.filter((c, index) => {
+      return   this.evalualtionDuration.indexOf(c) === index;
+  });
     
     this.evaluationTypes = uniqueChars;
+    this.evalualtionDuration = uniqueDuration;
     }
         )
   }
@@ -683,7 +688,7 @@ console.log("innnnnn", this.selectedEmployees)
       this.isDuration=true;
       this.selectedAdhocData = this.currentAdhocData.filter((item => item.Purpose == optionVal))
     this.durationLabel= this.selectedAdhocData[0].NoOfMonthsLable;
-    this.evaluationForm.controls["durationLabel"].setValue(this.durationLabel)
+    this.evaluationForm.controls["EvalutionType"].setValue(this.durationLabel)
     }
     
   }
@@ -822,13 +827,15 @@ if(this.selectedEmployees.length > this.maxEmployees){
 
   }
   submitValidEvaluation() {
+    let obj=[{
+"EvalutionType":this.evaluationForm.controls["durationLabel"]
+    }];
+    
     this.evaluationForm.value.CreatedBy = this.currentUser._id;
     this.evaluationForm.value.Company = this.currentOrganization._id;
 // durationLabel
     this.evaluationForm.value.Employees = this.selectedEmployeeList;
     console.log('evaluation form', this.evaluationForm.value);
-    delete this.evaluationForm.value["durationLabel"];
-    
     this.perfApp.method = "CreateEvaluation";
     this.perfApp.requestBody = this.evaluationForm.value;
     this.perfApp.route = "evaluation"
