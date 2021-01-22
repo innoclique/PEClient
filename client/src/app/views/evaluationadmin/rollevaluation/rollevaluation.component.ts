@@ -356,8 +356,10 @@ export class RollevaluationComponent implements OnInit {
     this.PeersCompetencyMessage = "";
     this.peerCompetencyMappingRowdata = this.selectedEmployee['peerCompetenceMapping'];
     this.peerCompetencyUIMapping = {};
-    for (let mapping of this.peerCompetencyMappingRowdata) {
-      this.peerCompetencyUIMapping[mapping.peer.EmployeeId] = mapping;
+    if (this.peerCompetencyMappingRowdata) {
+      for (let mapping of this.peerCompetencyMappingRowdata) {
+        this.peerCompetencyUIMapping[mapping.peer.EmployeeId] = mapping;
+      }
     }
   }
 
@@ -467,11 +469,11 @@ export class RollevaluationComponent implements OnInit {
           this.currentEmployeeDirectReportees.push(_f);
       });
       // this.currentEmployeeDirectReportees = x;
-      if (this.currentEmployeeDirectReportees.length > 0) {
-        this.selecteDirectReporteeViewRef = this.modalService.show(this.selecteDirectReporteeView, this.config)
-      } else {
-        alert("No Data Found");
-      }
+      // if (this.currentEmployeeDirectReportees.length > 0) {
+      this.selecteDirectReporteeViewRef = this.modalService.show(this.selecteDirectReporteeView, this.config)
+      // } else {
+      //   alert("No Data Found");
+      // }
     }, error => {
       console.log('error while adding eval', error)
 
@@ -713,6 +715,35 @@ export class RollevaluationComponent implements OnInit {
         this.submitValidEvaluation();
     } else {
       this.isFormSubmitted = true;
+      console.log('inside submit:::', this.selectedEmployee, this.selectedEmployeeList);
+
+      
+      for ( let emp of this.selectedEmployeeList){
+        if (emp.peerCompetenceMapping) {
+          emp.Peers = [];
+          for (let mapping of emp.peerCompetenceMapping) {
+            var mappingInOldFormat = {};
+            mappingInOldFormat['EmployeeId'] = mapping.peer.EmployeeId;
+            mappingInOldFormat['displayTemplate'] = mapping.peer.displayTemplate;
+            mappingInOldFormat['PeersCompetencyMessage'] = mapping.message;
+            mappingInOldFormat['PeersCompetencyList'] = mapping.competencies;
+            mappingInOldFormat['peerCompetenceMapping'] = mapping;
+            emp.Peers.push(mappingInOldFormat);
+          }
+        }
+        if (emp.drCompetenceMapping) {
+          emp.DirectReportees = [];
+          for (let mapping of emp.drCompetenceMapping) {
+            var mappingInOldFormat = {};
+            mappingInOldFormat['EmployeeId'] = mapping.directReportee.EmployeeId;
+            mappingInOldFormat['displayTemplate'] = mapping.directReportee.displayTemplate;
+            mappingInOldFormat['DirectReporteeComptencyMessage'] = mapping.message;
+            mappingInOldFormat['DirectReporteeCompetencyList'] = mapping.competencies;
+            mappingInOldFormat['drCompetenceMapping'] = mapping;
+            emp.DirectReportees.push(mappingInOldFormat);
+          }
+        }
+      }
 
       if (this.evaluationForm.invalid)
         return;
@@ -899,7 +930,7 @@ export class RollevaluationComponent implements OnInit {
     this.peersForEmpGridOptions.api = params.api;
   }
 
-  
+
   getPeersForEmpCols() {
     return [
       {
@@ -922,7 +953,7 @@ export class RollevaluationComponent implements OnInit {
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deletePeer" title="Delete Peer"></i> 
           <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
-          font-size: 17px;"   data-action-type="viewPeerCompetencyMapping" title="Delete Peer"></i> 
+          font-size: 17px;"   data-action-type="viewPeerCompetencyMapping" title="View Competencies"></i> 
          `
         }
       }
@@ -1006,8 +1037,13 @@ export class RollevaluationComponent implements OnInit {
           if (this.initializeFormFor === 'kpionly') {
             return '';
           } else {
-            var _count = data.data.Peers ? data.data.Peers.length : 0
-            return `<span style="color:blue;cursor:pointer" data-action-type="choosePeers">${_count}</span>`
+            var _count = data.data.peerCompetenceMapping ? data.data.peerCompetenceMapping.length : 0
+            if (this.rollEvaluationEdit) {
+              return `<span>${_count}</span>`
+            } else {
+              return `<span style="color:blue;cursor:pointer" data-action-type="choosePeers">${_count}</span>`
+            }
+
           }
 
         }
@@ -1018,8 +1054,12 @@ export class RollevaluationComponent implements OnInit {
           if (this.initializeFormFor === 'kpionly') {
             return '';
           } else {
-            var _count = data.data.DirectReportees ? data.data.DirectReportees.length : 0
-            return `<span style="color:blue;cursor:pointer" data-action-type="chooseDirectReports">${_count}</span>`
+            var _count = data.data.drCompetenceMapping ? data.data.drCompetenceMapping.length : 0
+            if (this.rollEvaluationEdit) {
+              return `<span>${_count}</span>`
+            } else {
+              return `<span style="color:blue;cursor:pointer" data-action-type="chooseDirectReports">${_count}</span>`
+            }
           }
         }
       },
@@ -1088,7 +1128,7 @@ export class RollevaluationComponent implements OnInit {
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deleteDirectReportee" title="Delete Reportee"></i> 
           <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
-          font-size: 17px;"   data-action-type="viewDrCompetencyMapping" title="Delete Peer"></i>           
+          font-size: 17px;"   data-action-type="viewDrCompetencyMapping" title="View Competencies"></i>           
          `
           //}
         }
@@ -1155,6 +1195,7 @@ export class RollevaluationComponent implements OnInit {
       this.notification.error('At least two direct reports must be selected');
       return;
     }
+
     this.selectedEmployee.DirectReportees = [];
     for (let mapping of this.drCompetencyMappingRowdata) {
       var mappingInOldFormat = {};
