@@ -65,6 +65,26 @@ export class ResellerInfoComponent {
         });
     }
 
+    getLicencePurchaseCount(paymentReleases: any[]) {
+        var licencesCount = 0;
+        var employeesCount = 0;
+        if (paymentReleases && paymentReleases.length > 0) {
+            for (let payment of paymentReleases) {
+                if (payment.UserType === 'License') {
+                    if (payment.Type != 'Adhoc') {
+                        licencesCount++;
+                    } else {
+                        employeesCount = employeesCount + payment.NoOfEmployees;
+                    }
+                } else {
+                    employeesCount = employeesCount + payment.NoOfEmployees;
+                }
+
+            }
+        }
+        return [employeesCount, licencesCount];
+    }
+
     private createResellerRowData(resellerInfo: any) {
         const rowData: any[] = [];
         //  resellerInfo = resellerInfo.ClientSummary.usage;
@@ -72,13 +92,19 @@ export class ResellerInfoComponent {
 
         console.log('inside createRowData : ');
         for (let i = 0; i < resellerInfo.length; i++) {
+            var employeesCount = 0;
+            var licencesCount = 0;
+            var counts = this.getLicencePurchaseCount(resellerInfo[i].paymentReleases);
+            employeesCount = counts[0];
+            licencesCount = counts[1];
             rowData.push({
-                reSellerName: resellerInfo[i].Name,
-                year: new Date(resellerInfo[i].CreatedOn).toLocaleDateString(undefined, options),
+                reSellerName: resellerInfo[i].Organization.Name,
+                year: new Date(resellerInfo[i].Organization.CreatedOn).toLocaleDateString(undefined, options),
                 purchasedOn: RefData.DOBs[i % RefData.DOBs.length].getFullYear(),
-                active: resellerInfo[i].IsActive ? 'Yes' : 'No',
-                resellerId: resellerInfo[i]._id,
-                purchasesCount: Math.round(Math.random() * 1000),//dummy data
+                active: resellerInfo[i].Organization.IsActive ? 'Yes' : 'No',
+                resellerId: resellerInfo[i].Organization._id,
+                licPurchasesCount: licencesCount,
+                empPurchasesCount: employeesCount,
             });
         }
         this.rowData = rowData;
@@ -89,8 +115,8 @@ export class ResellerInfoComponent {
             { headerName: 'Reseller', field: 'reSellerName', tooltipField: 'reSellerName', minWidth: 200 },
             { headerName: 'Reseller Since', field: 'year', minWidth: 50 },
             { headerName: 'Active', field: 'active', minWidth: 50 },
-            { headerName: '#s Purchased (License)', field: 'purchasesCount', minWidth: 220, type: 'rightAligned' },
-            { headerName: '#s Purchased (Employees)', field: 'purchasesCount', minWidth: 300, type: 'rightAligned' },
+            { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 220, type: 'rightAligned' },
+            { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 300, type: 'rightAligned' },
             {
                 headerName: "Actions", sorting: false, filter: false, onCellClicked: this.gotoClients.bind(this),
                 cellRenderer: (data) => {

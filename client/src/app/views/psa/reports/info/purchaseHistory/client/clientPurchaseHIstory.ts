@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import "ag-grid-community";
@@ -32,7 +33,7 @@ export class ClientPurchaseHistory {
     public authService: AuthService,
     public reportService: ReportsService,
     public router: Router,
-    private activatedRoute: ActivatedRoute, ) {
+    private activatedRoute: ActivatedRoute,) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     this.gridOptions = <GridOptions>{};
@@ -75,12 +76,13 @@ export class ClientPurchaseHistory {
     return [
       { headerName: 'Date of Purchase', field: 'purchasedOn' },
       { headerName: 'Type of Evaluation', field: 'evaluationsType' },
-      { headerName: '#s Purchased (Employees)', field: 'licPurchasesCount', type: 'rightAligned', },
+      { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', type: 'rightAligned', },
       { headerName: '#s Purchased (License)', field: 'licPurchasesCount', type: 'rightAligned', },
     ];
   }
 
   createRowData(history: any) {
+    console.log("history::::", history);
     const rowData: any[] = [];
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
@@ -91,23 +93,35 @@ export class ClientPurchaseHistory {
       'active': this.resellerInfo.IsActive ? 'Yes' : 'No',
     };
 
-    this.clientInfo = history.clientInfo;
+    this.clientInfo = history.clientInfo.Organization;
     this.clientRow = {
       'Name': this.clientInfo.Name,
       'year': new Date(this.clientInfo.CreatedOn).toLocaleDateString(undefined, options),
       'active': this.clientInfo.IsActive ? 'Yes' : 'No',
       'usageType': this.clientInfo.UsageType,
       'evaluationsType': this.clientInfo.EvaluationPeriod,
-      'evaluationPeriod':ReportTemplates.getEvaluationPeriod(this.clientInfo.StartMonth,this.clientInfo.EndMonth),
-//       'evaluationPeriod': ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
+      'evaluationPeriod': ReportTemplates.getEvaluationPeriod(this.clientInfo.StartMonth, this.clientInfo.EndMonth),
+      //       'evaluationPeriod': ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
     };
 
-    for (let i = 0; i < 20; i++) {
+    for (let payment of history.clientInfo.paymentReleases) {
+      var employeesCount = 0;
+      var licencesCount = 0;
+      if (payment.UserType === 'License') {
+        if (payment.Type != 'Adhoc') {
+          licencesCount++;
+        } else {
+          employeesCount = employeesCount + payment.NoOfEmployees;
+        }
+      } else {
+        employeesCount = employeesCount + payment.NoOfEmployees;
+      }
       rowData.push({
-        evaluationPeriod: "JAN'20-DEC'20",
-        purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
-        evaluationsType: 'Year - end',
-        licPurchasesCount: Math.round(Math.random() * 10),
+        purchasedOn: new DatePipe('en-US').transform(payment.Paymentdate, 'MM-dd-yyyy'),
+        // purchasedOn: new Date(payment.Paymentdate.toString()).toLocaleDateString(undefined, options),
+        evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Type,
+        licPurchasesCount: licencesCount,
+        empPurchasesCount: employeesCount,
       });
     }
     this.rowData = rowData;

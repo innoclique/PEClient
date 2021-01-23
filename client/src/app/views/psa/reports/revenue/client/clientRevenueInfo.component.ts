@@ -31,7 +31,7 @@ export class ClientRevenueInfoComponent {
         public authService: AuthService,
         public reportService: ReportsService,
         public router: Router,
-        private activatedRoute: ActivatedRoute, ) {
+        private activatedRoute: ActivatedRoute,) {
         this.currentUser = this.authService.getCurrentUser();
         this.currentOrganization = this.authService.getOrganization();
         this.gridOptions = <GridOptions>{};
@@ -68,6 +68,22 @@ export class ClientRevenueInfoComponent {
         });
     }
 
+    getRevenue(paymentReleases: any[]) {
+        var revenue = 0;
+        if (paymentReleases && paymentReleases.length > 0) {
+            for (let payment of paymentReleases) {
+                revenue = revenue + payment.TOTAL_PAYABLE_AMOUNT;
+            }
+        }
+        return revenue;
+    }
+
+    isAnnualPayment(paymentReleases: any[]) {
+        if (paymentReleases && paymentReleases.length > 0) {
+            return paymentReleases[0].isAnnualPayment;
+        }
+    }
+
     private createClientRowData(clientsInfo: any) {
         const rowData: any[] = [];
         const purchaseDates: any[] = [];
@@ -76,19 +92,14 @@ export class ClientRevenueInfoComponent {
         var clientsInfo = clientsInfo.clientsInfo;
         for (let i = 0; i < clientsInfo.length; i++) {
             rowData.push({
-                name: clientsInfo[i].Name,
-                year: new Date(clientsInfo[i].CreatedOn).toLocaleDateString(undefined, options),
-                purchasedOn: RefData.DOBs[i % RefData.DOBs.length].getFullYear(),
-                active: clientsInfo[i].IsActive ? 'Yes' : 'No',
-                clientId: clientsInfo[i]._id,
-                usageType: clientsInfo[i].UsageType,
+                name: clientsInfo[i].Organization.Name,
+                year: new Date(clientsInfo[i].Organization.CreatedOn).toLocaleDateString(undefined, options),
+                active: clientsInfo[i].Organization.IsActive ? 'Yes' : 'No',
+                clientId: clientsInfo[i].Organization._id,
+                usageType: clientsInfo[i].Organization.UsageType,
                 evaluationsType: RefData.evaluationTypes[0],
-//                 evaluationPeriod: ReportTemplates.months[clientsInfo[i].StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + clientsInfo[i].EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
-                paymentTypes: RefData.paymentTypes[Math.random() < 0.5 ? 1 : 0],
-                empPurchasesCount: Math.round(Math.random() * 100),
-                licPurchasesCount: Math.round(Math.random() * 10),
-                purchasesCount: Math.round(Math.random() * 1000),
-                minPurchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
+                paymentTypes: this.isAnnualPayment(clientsInfo[i].paymentReleases)?"Yearly":"Monthly",
+                purchasesCount: this.getRevenue(clientsInfo[i].paymentReleases),
             });
         }
         this.rowData = rowData;
@@ -99,11 +110,11 @@ export class ClientRevenueInfoComponent {
             { headerName: 'Client', field: 'name' },
             { headerName: 'Active', field: 'active' },
             { headerName: 'Usage Type', field: 'usageType' },
-            { headerName: 'Evaluations Type', field: 'evaluationsType',minWidth:200 },
+            { headerName: 'Evaluations Type', field: 'evaluationsType', minWidth: 200 },
             { headerName: 'Revenue (CAD)', field: 'purchasesCount', type: 'rightAligned', valueFormatter: params => params.data.purchasesCount.toFixed(2) },
             { headerName: 'Payment Type', field: 'paymentTypes' },
             {
-                headerName: "Actions",  filter: false, sorting: false, onCellClicked: this.gotoClientRevenueDetails.bind(this),
+                headerName: "Actions", filter: false, sorting: false, onCellClicked: this.gotoClientRevenueDetails.bind(this),
                 cellRenderer: () => {
                     return `  <i class="fa fa-bars"   style="cursor:pointer ;padding: 7px 10px 0 0;
             font-size: 17px; "   title="view Client Revenue Details" ></i>`

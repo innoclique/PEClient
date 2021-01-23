@@ -32,7 +32,7 @@ export class ClientInfoComponent {
         public authService: AuthService,
         public router: Router,
         public reportService: ReportsService,
-        private activatedRoute: ActivatedRoute, ) {
+        private activatedRoute: ActivatedRoute,) {
         this.currentUser = this.authService.getCurrentUser();
         this.currentOrganization = this.authService.getOrganization();
         this.gridOptions = <GridOptions>{};
@@ -69,6 +69,26 @@ export class ClientInfoComponent {
         });
     }
 
+    getLicencePurchaseCount(paymentReleases: any[]) {
+        var licencesCount = 0;
+        var employeesCount = 0;
+        if (paymentReleases && paymentReleases.length > 0) {
+            for (let payment of paymentReleases) {
+                if (payment.UserType === 'License') {
+                    if (payment.Type != 'Adhoc') {
+                        licencesCount++;
+                    } else {
+                        employeesCount = employeesCount + payment.NoOfEmployees;
+                    }
+                } else {
+                    employeesCount = employeesCount + payment.NoOfEmployees;
+                }
+
+            }
+        }
+        return [employeesCount, licencesCount];
+    }
+
     private createClientRowData(clientsInfo: any) {
         const rowData: any[] = [];
         var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -80,17 +100,22 @@ export class ClientInfoComponent {
             'active': this.currentOrganization.IsActive ? 'Yes' : 'No',
         };
         for (let i = 0; i < clientsInfo.length; i++) {
+            var employeesCount = 0;
+            var licencesCount = 0;
+            var counts = this.getLicencePurchaseCount(clientsInfo[i].paymentReleases);
+            employeesCount = counts[0];
+            licencesCount = counts[1];
             rowData.push({
-                name: clientsInfo[i].Name,
-                year: new Date(clientsInfo[i].CreatedOn).toLocaleDateString(undefined, options),
+                name: clientsInfo[i].Organization.Name,
+                year: new Date(clientsInfo[i].Organization.CreatedOn).toLocaleDateString(undefined, options),
                 purchasedOn: RefData.DOBs[i % RefData.DOBs.length].getFullYear(),
-                active: clientsInfo[i].IsActive ? 'Yes' : 'No',
-                clientId: clientsInfo[i]._id,
-                usageType: clientsInfo[i].UsageType,
+                active: clientsInfo[i].Organization.IsActive ? 'Yes' : 'No',
+                clientId: clientsInfo[i].Organization._id,
+                usageType: clientsInfo[i].Organization.UsageType,
                 evaluationsType: 'Year - end',
-               evaluationPeriod: ReportTemplates.getEvaluationPeriod(clientsInfo[i].StartMonth,clientsInfo[i].EndMonth),
-                empPurchasesCount: Math.round(Math.random() * 100),
-                licPurchasesCount: Math.round(Math.random() * 10),
+                evaluationPeriod: ReportTemplates.getEvaluationPeriod(clientsInfo[i].Organization.StartMonth, clientsInfo[i].Organization.EndMonth),
+                empPurchasesCount:employeesCount,
+                licPurchasesCount:licencesCount,
                 purchasesCount: Math.round(Math.random() * 1000),
             });
         }

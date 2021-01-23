@@ -93,7 +93,7 @@ export class ResellerClientPurchaseHistory {
       'active': this.resellerInfo.IsActive ? 'Yes' : 'No',
     };
 
-    this.clientInfo = history.clientInfo;
+    this.clientInfo = history.clientInfo.Organization;
     this.clientRow = {
       'Name': this.clientInfo.Name,
       'year': new Date(this.clientInfo.CreatedOn).toLocaleDateString(undefined, options),
@@ -103,7 +103,18 @@ export class ResellerClientPurchaseHistory {
       'evaluationPeriod': ReportTemplates.getEvaluationPeriod(this.clientInfo.StartMonth,this.clientInfo.EndMonth),
     };
 
-    for (let i = 0; i < 20; i++) {
+    for (let payment of history.clientInfo.paymentReleases) {
+      var employeesCount = 0;
+      var licencesCount = 0;
+      if (payment.UserType === 'License') {
+        if (payment.Type != 'Adhoc') {
+          licencesCount++;
+        } else {
+          employeesCount = employeesCount + payment.NoOfEmployees;
+        }
+      } else {
+        employeesCount = employeesCount + payment.NoOfEmployees;
+      }
       rowData.push({
         evaluationPeriod: "JAN'20-DEC'20",
         purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),

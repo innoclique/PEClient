@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import "ag-grid-community";
@@ -85,7 +86,7 @@ export class ClientRevenueDetails {
     const rowData: any[] = [];
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
-    this.clientInfo = history.clientInfo;
+    this.clientInfo = history.clientInfo.Organization;
     this.clientRow = {
       'Name': this.clientInfo.Name,
       'year': new Date(this.clientInfo.CreatedOn).toLocaleDateString(undefined, options),
@@ -95,13 +96,25 @@ export class ClientRevenueDetails {
       'evaluationPeriod': ReportTemplates.getEvaluationPeriod(this.clientInfo.StartMonth,this.clientInfo.EndMonth),
     };
 
-    for (let i = 0; i < 20; i++) {
+    for (let payment of history.clientInfo.paymentReleases) {
+      var employeesCount = 0;
+      var licencesCount = 0;
+      if (payment.UserType === 'License') {
+        if (payment.Type != 'Adhoc') {
+          licencesCount++;
+        } else {
+          employeesCount = employeesCount + payment.NoOfEmployees;
+        }
+      } else {
+        employeesCount = employeesCount + payment.NoOfEmployees;
+      }
       rowData.push({
+        purchasedOn: new DatePipe('en-US').transform(payment.Paymentdate, 'MM-dd-yyyy'),
+        evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Type,
+        licPurchasesCount: licencesCount,
+        empPurchasesCount: employeesCount,
         evaluationPeriod: ReportTemplates.getEvaluationPeriod(this.clientInfo.StartMonth,this.clientInfo.EndMonth),
-        purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
-        evaluationsType: 'Year - end',
-        licPurchasesCount: Math.round(Math.random() * 100),
-        amount: Math.round(Math.random() * 1000),
+        amount:payment.TOTAL_PAYABLE_AMOUNT,
       });
     }
     this.rowData = rowData;

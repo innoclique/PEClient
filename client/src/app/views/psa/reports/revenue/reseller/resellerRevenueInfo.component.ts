@@ -58,6 +58,22 @@ export class ResellerRevenueInfoComponent {
         });
     }
 
+    getRevenue(paymentReleases: any[]) {
+        var revenue = 0;
+        if (paymentReleases && paymentReleases.length > 0) {
+            for (let payment of paymentReleases) {
+                revenue = revenue + payment._TOTAL_PAYABLE_AMOUNT;
+            }
+        }
+        return revenue;
+    }
+
+    isAnnualPayment(paymentReleases: any[]) {
+        if (paymentReleases && paymentReleases.length > 0) {
+            return paymentReleases[0].isAnnualPayment;
+        }
+    }
+
     private getResellerRevenueRowData(resellerInfo: any) {
         const rowData: any[] = [];
         //  resellerInfo = resellerInfo.ClientSummary.usage;
@@ -66,13 +82,13 @@ export class ResellerRevenueInfoComponent {
         console.log('inside getResellerRevenueRowData : ');
         for (let i = 0; i < resellerInfo.length; i++) {
             rowData.push({
-                reSellerName: resellerInfo[i].Name,
-                year: new Date(resellerInfo[i].CreatedOn).toLocaleDateString(undefined, options),
+                reSellerName: resellerInfo[i].Organization.Name,
+                year: new Date(resellerInfo[i].Organization.CreatedOn).toLocaleDateString(undefined, options),
                 purchasedOn: RefData.DOBs[i % RefData.DOBs.length].getFullYear(),
-                active: resellerInfo[i].IsActive ? 'Yes' : 'No',
-                resellerId: resellerInfo[i]._id,
-                purchasesCount: Math.round(Math.random() * 1000),//dummy data
-                paymentTypes: RefData.paymentTypes[Math.random() < 0.5 ? 1 : 0],
+                active: resellerInfo[i].Organization.IsActive ? 'Yes' : 'No',
+                resellerId: resellerInfo[i].Organization._id,
+                purchasesCount: this.getRevenue(resellerInfo[i].paymentReleases),
+                paymentTypes: this.isAnnualPayment(resellerInfo[i].paymentReleases)?"Yearly":"Monthly",
             });
         }
         this.rowData = rowData;
@@ -90,7 +106,7 @@ export class ResellerRevenueInfoComponent {
         return [
             { headerName: 'Reseller', field: 'reSellerName', },
             { headerName: 'Active', field: 'active', },
-            { headerName: 'Revenue (CAD)', field: 'purchasesCount', type: 'rightAligned', valueFormatter: params => params.data.purchasesCount.toFixed(2) },
+            { headerName: 'Revenue (CAD)', field: 'purchasesCount', type: 'rightAligned'},
             { headerName: 'Payment Type', field: 'paymentTypes', },
             {
                 headerName: "Actions", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoResellerRevenueDetails.bind(this),

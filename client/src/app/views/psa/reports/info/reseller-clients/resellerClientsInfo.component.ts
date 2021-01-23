@@ -83,6 +83,26 @@ export class ResellerClientInfoComponent {
         return;
     }
 
+    getLicencePurchaseCount(paymentReleases: any[]) {
+        var licencesCount = 0;
+        var employeesCount = 0;
+        if (paymentReleases && paymentReleases.length > 0) {
+            for (let payment of paymentReleases) {
+                if (payment.UserType === 'License') {
+                    if (payment.Type != 'Adhoc') {
+                        licencesCount++;
+                    } else {
+                        employeesCount = employeesCount + payment.NoOfEmployees;
+                    }
+                } else {
+                    employeesCount = employeesCount + payment.NoOfEmployees;
+                }
+
+            }
+        }
+        return [employeesCount, licencesCount];
+    }
+
     private createResellerClientRowData(resellerClientsInfo: any) {
         const rowData: any[] = [];
         var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -95,18 +115,22 @@ export class ResellerClientInfoComponent {
         };
         // console.log('inside createRowData : ');
         for (let i = 0; i < resellerClientsInfo.length; i++) {
+            var employeesCount = 0;
+            var licencesCount = 0;
+            var counts = this.getLicencePurchaseCount(resellerClientsInfo[i].paymentReleases);
+            employeesCount = counts[0];
+            licencesCount = counts[1];
             rowData.push({
-                name: resellerClientsInfo[i].Name,
-                year: new Date(resellerClientsInfo[i].CreatedOn).toLocaleDateString(undefined, options),
+                name: resellerClientsInfo[i].Organization.Name,
+                year: new Date(resellerClientsInfo[i].Organization.CreatedOn).toLocaleDateString(undefined, options),
                 purchasedOn: RefData.DOBs[i % RefData.DOBs.length].getFullYear(),
-                active: resellerClientsInfo[i].IsActive ? 'Yes' : 'No',
-                clientId: resellerClientsInfo[i]._id,
-                usageType: resellerClientsInfo[i].UsageType,
+                active: resellerClientsInfo[i].Organization.IsActive ? 'Yes' : 'No',
+                clientId: resellerClientsInfo[i].Organization._id,
+                usageType: resellerClientsInfo[i].Organization.UsageType,
                 evaluationsType: 'Year - end',
-                evaluationPeriod: ReportTemplates.getEvaluationPeriod(resellerClientsInfo[i].StartMonth, resellerClientsInfo[i].EndMonth),
-                empPurchasesCount: Math.round(Math.random() * 100),
-                licPurchasesCount: Math.round(Math.random() * 10),
-                purchasesCount: Math.round(Math.random() * 1000),
+                evaluationPeriod: ReportTemplates.getEvaluationPeriod(resellerClientsInfo[i].Organization.StartMonth, resellerClientsInfo[i].Organization.EndMonth),
+                empPurchasesCount: employeesCount,
+                licPurchasesCount: licencesCount,
             });
         }
         this.rowData = rowData;
