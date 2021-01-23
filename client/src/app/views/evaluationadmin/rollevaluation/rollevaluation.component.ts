@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GridApi, GridOptions, _ } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AuthService } from '../../../services/auth.service';
-
+import * as moment from 'moment';
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
@@ -1235,14 +1235,44 @@ export class RollevaluationComponent implements OnInit {
     this.selectedEmployeesForEvaluation = [];
     this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
   }
+  getOrganizationStartAndEndDates(){
+    let Organization = this.currentOrganization;
+    let {StartMonth,EndMonth,EvaluationPeriod} = Organization;
+    StartMonth = parseInt(StartMonth);
+    let currentMoment = moment();
+    let evaluationStartMoment;
+    let evaluationEndMoment
+    if(EvaluationPeriod === "FiscalYear"){
+      var currentMonth = parseInt(currentMoment.format('M'));
+      console.log(`${currentMonth} <= ${StartMonth}`)
+      if(currentMonth <= StartMonth){
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month').subtract(1, 'years');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }else{
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }
+    }else if(EvaluationPeriod === "CalendarYear"){
+      evaluationStartMoment = moment().startOf('month');
+      evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
+    }
+    return {
+      start:evaluationStartMoment,
+      end:evaluationStartMoment
+    }
+  }
+
   saveKpiForm() {
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+  let EvaluationYear = orgStartEnd.start.format("YYYY");
     let list = this.evaluationForm.value.Employees;
     var body: any;
     if (list && list.length > 0) {
-      body = list.map(x => { return { EmployeeId: x.row._id, Company: this.currentOrganization._id } })
+      body = list.map(x => { return { EmployeeId: x.row._id, Company: this.currentOrganization._id, EvaluationYear:EvaluationYear } })
 
     }
-
     this.perfApp.method = "ReleaseKpiForm";
     this.perfApp.requestBody = body;
     this.perfApp.route = "evaluation"
@@ -1254,9 +1284,7 @@ export class RollevaluationComponent implements OnInit {
     }, error => {
       console.log('error while adding eval', error)
       this.notification.error(error.error.message)
-    })
-
-
+    });
   }
 
 
