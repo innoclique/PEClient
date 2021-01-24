@@ -489,6 +489,121 @@ isCSA:Boolean = false;
 
       }
         
+
+      // FOR SELECTED USER CSA
+
+      if(this.user.SelectedRoles.indexOf('CSA') > -1){
+        localStorage.setItem("currentUser", "CSA")
+        let dashboard = {
+          "IsActive": true,
+          "url": "/dashboard",
+          "name": "Dashboard",
+          "code": "Dashboard",
+          "icon": "icon-calculator",
+          // "badge": {
+          //   "variant": "info",
+          //   "text": "Home"
+          // },
+       
+        };
+        this.navItems=[];
+        navigationMenu=[]
+          navigationMenu.push(
+            dashboard,
+            {
+              "IsActive": true,
+              "url": "/employee/kpi-setup",
+              "name": "Performance Goals",
+              "code": "KPISetting",
+              "icon": "icon-wrench"
+            },
+            {
+              "IsActive": true,
+              "url": "/employee/action-plan",
+              "name": "Action Plan",
+              "code": "ActionPlan",
+              "icon": "icon-layers"
+            },
+            {
+              "IsActive": true,
+              "url": "/employee/current-evaluation",
+              "name": "Current Evaluation",
+              "code": "CurrentEvaluation",
+              "icon": "icon-puzzle"
+            },
+            {
+              "IsActive": true,
+               "url": "/employee/accomplishments-list",
+              "name": "Accomplishments",
+              "code": "Accomplishments",
+              "icon": "cui-tags"
+             },
+             {
+              "IsActive": true,
+              "url": "/employee/peerreview",
+              "name": "Peer Review",
+              "code": "CurrentEvaluation",
+              "icon": "icon-speedometer"
+            },
+            {
+              "IsActive": true,
+              "url": "/employee/drreview",
+              "name": "Review Manager",
+              "code": "CurrentEvaluation",
+              "icon": "icon-layers"
+            },
+            {
+              "IsActive": true,
+               "url": "/employee/private-notes-list",
+              "name": "Notes",
+              "code": "Notes",
+              "icon": "icon-note"
+            },
+            {
+            "IsActive": true,
+            "url": "/ea/setup-employee",
+            "name": "Set up Employees",
+            "code": "Employees",
+            "icon": "icon-user-follow",
+            "linkProps": {
+                "routerLinkActive": "employee"
+            }
+          },
+          {
+            "IsActive": true,
+            "url": "/ea/evaluation-list",
+            "name": "Evaluations",
+            "code": "Evaluations",
+            "icon": "icon-star"
+        },
+    
+ 
+    {
+      "IsActive": true,
+      "url": "/ea/reports",
+      "name": "Reports",
+      "code": "CSA Reports",
+      "icon": "icon-list",
+    "children":[ {
+        "IsActive": true,
+        "url": "/csa/reports/evaluationsSummary",
+        "name": "Evaluations Summary",
+        "code": "evaluationsSummary",
+      },
+      {
+        "IsActive": true,
+        "url": "/csa/reports/paymentSummary",
+        "name": "Payment Summary",
+        "code": "paymentSummary",
+      },]
+    }
+
+
+          )
+
+          this.navItems = navigationMenu;
+
+      }
         return  this.navItems; 
       }
     }
