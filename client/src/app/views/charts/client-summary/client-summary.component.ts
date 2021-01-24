@@ -35,6 +35,7 @@ public clientSummaryChartOptions: ChartOptions = {
   legend: { position: 'bottom' },
   title:{text:`Client Summary`,position: 'top',display: true}
 };
+//public clientSummaryBarChartLabels: Label[] = this.lastYears().toString().split(",");
 public clientSummaryBarChartLabels: Label[] = [];
 public clientSummaryBarChartType: ChartType = 'bar';
 public clientSummaryBarChartLegend = true;
@@ -55,7 +56,9 @@ public barChartColors: Color[] = [
   ngOnInit(): void {
     this.loginUser = this.authService.getCurrentUser();
     this.currentOrganization = this.loginUser.Organization;
-    this.clientSummaryBarChartLabels = this.lastYears().toString().split(",");
+    this.clientSummaryBarChartLabels= this.lastYears().toString().split(",");
+    
+
     if(this.chartTypeInput==='CLIENT_SUMMARY'){
       this.clientSummaryBarChartData=[
         { data: [0, 0, 0, 0], label: 'License' },
@@ -138,42 +141,48 @@ public barChartColors: Color[] = [
   }
 
   lastYears(){
-    let orgStartEnd = this.getOrganizationStartAndEndDates();
-    let EvaluationYear = orgStartEnd.start.format("YYYY");
-    console.log(`EvaluationYear : ${EvaluationYear}`)
     let back = 4;
-    const year = parseInt(EvaluationYear);
+    let year;
+    console.log("this.loginUser.UserType")
+    if(this.loginUser.Role === "PSA"){
+      year = new Date().getFullYear();
+    }else{
+      let orgStartEnd = this.getOrganizationStartAndEndDates();
+      let EvaluationYear = orgStartEnd.start.format("YYYY");
+      year = parseInt(EvaluationYear);
+    }
     return Array.from({length: back}, (v, i) => year - back + i + 1);
   }
-
   getOrganizationStartAndEndDates(){
-    let Organization = this.currentOrganization;
-
-    let {StartMonth,EndMonth,EvaluationPeriod} = Organization;
-    StartMonth = parseInt(StartMonth);
-    let currentMoment = moment();
-    let evaluationStartMoment;
-    let evaluationEndMoment
-    if(EvaluationPeriod === "FiscalYear"){
-      var currentMonth = parseInt(currentMoment.format('M'));
-      console.log(`${currentMonth} <= ${StartMonth}`)
-      if(currentMonth <= StartMonth){
-        evaluationStartMoment = moment().month(StartMonth-1).startOf('month').subtract(1, 'years');
-        evaluationEndMoment = moment().month(StartMonth-2).endOf('month');
-        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
-      }else{
-        evaluationStartMoment = moment().month(StartMonth-1).startOf('month');
-        evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
-        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+    if(this.currentOrganization){
+      let Organization = this.currentOrganization;
+      let {StartMonth,EndMonth,EvaluationPeriod} = Organization;
+      StartMonth = parseInt(StartMonth);
+      let currentMoment = moment();
+      let evaluationStartMoment;
+      let evaluationEndMoment
+      if(EvaluationPeriod === "FiscalYear"){
+        var currentMonth = parseInt(currentMoment.format('M'));
+        console.log(`${currentMonth} <= ${StartMonth}`)
+        if(currentMonth <= StartMonth){
+          evaluationStartMoment = moment().month(StartMonth-1).startOf('month').subtract(1, 'years');
+          evaluationEndMoment = moment().month(StartMonth-2).endOf('month');
+          console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+        }else{
+          evaluationStartMoment = moment().month(StartMonth-1).startOf('month');
+          evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
+          console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+        }
+      }else if(EvaluationPeriod === "CalendarYear"){
+        evaluationStartMoment = moment().startOf('month');
+        evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
       }
-    }else if(EvaluationPeriod === "CalendarYear"){
-      evaluationStartMoment = moment().startOf('month');
-      evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
+      return {
+        start:evaluationStartMoment,
+        end:evaluationStartMoment
+      }
     }
-    return {
-      start:evaluationStartMoment,
-      end:evaluationStartMoment
-    }
+    
   }
 
 }
