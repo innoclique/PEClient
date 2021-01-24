@@ -72,7 +72,12 @@ export class ClientRevenueInfoComponent {
         var revenue = 0;
         if (paymentReleases && paymentReleases.length > 0) {
             for (let payment of paymentReleases) {
-                revenue = revenue + payment.TOTAL_PAYABLE_AMOUNT;
+                if(Number(payment.TOTAL_PAYABLE_AMOUNT)){
+                    revenue = revenue + parseFloat(payment.TOTAL_PAYABLE_AMOUNT);
+                }else{
+                    revenue = revenue + parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal);
+                }
+                
             }
         }
         return revenue;
