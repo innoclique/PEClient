@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import "ag-grid-community";
@@ -91,7 +92,7 @@ export class ClientPurchaseHistory {
       'active': this.resellerInfo.IsActive ? 'Yes' : 'No',
     };
 
-    this.clientInfo = history.clientInfo;
+    this.clientInfo = history.clientInfo.Organization;
     this.clientRow = {
       'Name': this.clientInfo.Name,
       'year': new Date(this.clientInfo.CreatedOn).toLocaleDateString(undefined, options),
@@ -101,12 +102,26 @@ export class ClientPurchaseHistory {
 //       'evaluationPeriod': ReportTemplates.months[this.clientInfo.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + this.clientInfo.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
     };
 
-    for (let i = 0; i < 20; i++) {
+    for (let payment of history.clientInfo.paymentReleases) {
+      var employeesCount = 0;
+      var licencesCount = 0;
+      if (payment.UserType === 'License') {
+        if (payment.Type != 'Adhoc') {
+          licencesCount++;
+        } else {
+          employeesCount = employeesCount + payment.NoOfEmployees;
+        }
+      } else {
+        employeesCount = employeesCount + payment.NoOfEmployees;
+      }
       rowData.push({
-        evaluationPeriod: "JAN'20-DEC'20",
-        purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
-        evaluationsType: 'Year - end',
-        licPurchasesCount: Math.round(Math.random() * 10),
+        // evaluationPeriod: "JAN'20-DEC'20",
+        evaluationPeriod: ReportTemplates.getEvaluationPeriod(history.clientInfo.Organization.StartMonth, history.clientInfo.Organization.EndMonth),
+        purchasedOn: new DatePipe('en-US').transform(payment.Paymentdate, 'MM-dd-yyyy'),
+        // purchasedOn: new Date(payment.Paymentdate.toString()).toLocaleDateString(undefined, options),
+        evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Type,
+        licPurchasesCount: licencesCount,
+        empPurchasesCount: employeesCount,
       });
     }
     this.rowData = rowData;
