@@ -73,7 +73,7 @@ export class CSAPaymentSummary {
       { headerName: 'Evaluation Period', field: 'evaluationPeriod', },
       { headerName: 'Evaluations Type', field: 'evaluationsType', },
       { headerName: '# of Evaluations', field: 'licPurchasesCount', type: 'rightAligned', },
-      { headerName: 'Amount(CAD)', field: 'licPurchasesCount', type: 'rightAligned', valueFormatter: params => params.data.licPurchasesCount.toFixed(2) },
+      { headerName: 'Amount(CAD)', field: 'amount', type: 'rightAligned', valueFormatter: params => params.data.amount.toFixed(2) },
     ];
   }
 
@@ -86,32 +86,35 @@ export class CSAPaymentSummary {
       'usageType': apiResponse.clientInfo.Organization.UsageType,
       'evaluationsType': apiResponse.clientInfo.Organization.EvaluationPeriod,
     };
-    var totalExpenditure = 0.00;
+    var totalExpenditure = 0;
     // console.log('inside createHistoryData : ');
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
     for (let payment of apiResponse.clientInfo.paymentReleases) {
       var employeesCount = 0;
       var licencesCount = 0;
+      var isLicenseCount:boolean = false;
       if (payment.UserType === 'License') {
         if (payment.Type != 'Adhoc') {
-          licencesCount++;
+          licencesCount = payment.Range.substring(payment.Range.indexOf('-')+1,payment.Range.length);
+          isLicenseCount = true;
         } else {
           employeesCount = employeesCount + payment.NoOfEmployees;
         }
       } else {
         employeesCount = employeesCount + payment.NoOfEmployees;
       }
-      var licPurchasesCount = Math.round(Math.random() * 1000);
       rowData.push({
         evaluationPeriod: ReportTemplates.getEvaluationPeriod(apiResponse.clientInfo.Organization.StartMonth, apiResponse.clientInfo.Organization.EndMonth),
         purchasedOn: new DatePipe('en-US').transform(payment.Paymentdate, 'MM-dd-yyyy'),
         evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Type,
-        licPurchasesCount: Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal),
+        licPurchasesCount: isLicenseCount?licencesCount:employeesCount,
+        amount: Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal),
       });
-      totalExpenditure = totalExpenditure + licPurchasesCount;
+      console.log('totalExpenditure : ',totalExpenditure);
+      totalExpenditure = totalExpenditure + Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal);
     }
     this.rowData = rowData;
-    this.clientRow.totalExpenditure =totalExpenditure;
+    this.clientRow.totalExpenditure = totalExpenditure;
     console.log('totalExpenditure : ',this.clientRow.totalExpenditure);
   }
 
