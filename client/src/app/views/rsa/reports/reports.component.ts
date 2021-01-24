@@ -68,6 +68,26 @@ export class ReportsComponent {
         });
     }
 
+    getLicencePurchaseCount(paymentReleases: any[]) {
+        var licencesCount = 0;
+        var employeesCount = 0;
+        if (paymentReleases && paymentReleases.length > 0) {
+            for (let payment of paymentReleases) {
+                if (payment.UserType === 'License') {
+                    if (payment.Type != 'Adhoc') {
+                        licencesCount++;
+                    } else {
+                        employeesCount = employeesCount + payment.NoOfEmployees;
+                    }
+                } else {
+                    employeesCount = employeesCount + payment.NoOfEmployees;
+                }
+
+            }
+        }
+        return [employeesCount, licencesCount];
+    }
+
     private createClientRowData(clientsInfo: any) {
         const rowData: any[] = [];
         var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -79,19 +99,23 @@ export class ReportsComponent {
             'active': this.currentOrganization.IsActive ? 'Yes' : 'No',
         };
         for (let i = 0; i < clientsInfo.length; i++) {
+            var employeesCount = 0;
+            var licencesCount = 0;
+            var counts = this.getLicencePurchaseCount(clientsInfo[i].Organization.paymentReleases);
+            employeesCount = counts[0];
+            licencesCount = counts[1];
             rowData.push({
-                name: clientsInfo[i].Name,
-                year: new Date(clientsInfo[i].CreatedOn).toLocaleDateString(undefined, options),
+                name: clientsInfo[i].Organization.Name,
+                year: new Date(clientsInfo[i].Organization.CreatedOn).toLocaleDateString(undefined, options),
                 purchasedOn: RefData.DOBs[i % RefData.DOBs.length].getFullYear(),
-                active: clientsInfo[i].IsActive ? 'Yes' : 'No',
-                clientId: clientsInfo[i]._id,
-                usageType: clientsInfo[i].UsageType,
+                active: clientsInfo[i].Organization.IsActive ? 'Yes' : 'No',
+                clientId: clientsInfo[i].Organization._id,
+                usageType: clientsInfo[i].Organization.UsageType,
                 evaluationsType: 'Year - end',
-                evaluationPeriod: ReportTemplates.months[clientsInfo[i].StartMonth] + "'" + ReportTemplates.getYearStart(ReportTemplates.months[clientsInfo[i].StartMonth]) + ' To ' +  clientsInfo[i].EndMonth.substring(0, 3) + "'" + ReportTemplates.getYearEnd( clientsInfo[i].EndMonth.substring(0, 3)),
-//                 evaluationPeriod: ReportTemplates.months[clientsInfo[i].StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + clientsInfo[i].EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
-                empPurchasesCount: Math.round(Math.random() * 100),
-                licPurchasesCount: Math.round(Math.random() * 10),
-                purchasesCount: Math.round(Math.random() * 1000),
+                evaluationPeriod: ReportTemplates.months[clientsInfo[i].Organization.StartMonth] + "'" + ReportTemplates.getYearStart(ReportTemplates.months[clientsInfo[i].Organization.StartMonth]) + ' To ' +  clientsInfo[i].Organization.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYearEnd( clientsInfo[i].Organization.EndMonth.substring(0, 3)),
+//                 evaluationPeriod: ReportTemplates.months[clientsInfo[i].Organization.StartMonth] + "'" + ReportTemplates.getYear() + ' To ' + clientsInfo[i].Organization.EndMonth.substring(0, 3) + "'" + ReportTemplates.getYear(),
+                empPurchasesCount: employeesCount,
+                licPurchasesCount: licencesCount,
             });
         }
         this.rowData = rowData;
