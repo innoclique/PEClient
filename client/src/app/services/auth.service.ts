@@ -95,7 +95,7 @@ export class AuthService {
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/SendResetPsw', Model);
   }
   getUser() {
-    debugger
+   // debugger
     this.currentUser = this.getLSObject('User')
   }
 
@@ -110,7 +110,7 @@ export class AuthService {
 
 /**Logout API Calling */
   LogOut() {    
-    debugger
+  //  debugger
     if (!this.getCurrentUser()) {
       localStorage.clear();
       return 

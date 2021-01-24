@@ -1,74 +1,75 @@
 <!-- <div [formGroup]="countryForm" class="row" (focusout)="checkIsSelected()" > -->
-<div [formGroup]="countryForm" class="row"  >
-    <div class="col-md-4">
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Country</span>
-                </div>
-                <input   autocomplete="off" type="text" class="form-control" placeholder="Search for a Country"  #cInput
-                [formControl]="f.Country" [matAutocomplete]="auto" (blur)=" !isCSelect?cInput.value='':''; " (change)="cInputChange()"
-                formControlName="Country" name="Country"
-                [ngClass]="{ 'is-invalid': (f.Country.touched  || showValidateMsg) &&  f.Country.invalid }" required>
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCountrySelected($event)" [displayWith]="displayFn">
-                    <mat-option *ngFor="let country of filteredCountries | async" [value]="country">
-                        {{country.name}}
-                    </mat-option>
-                </mat-autocomplete>
-                <div *ngIf="(f.Country.touched  || showValidateMsg)&& f.Country.invalid" class="invalid-feedback">
-                    <div *ngIf="f.Country.errors.required">Country is mandatory</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="col-md-4">
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Province/State</span>
-                </div>
-                <input  autocomplete="off" type="text" class="form-control" [readonly]="f.Country.invalid?true:false" #sInput  placeholder="Search for a State" 
-                [formControl]="f.State" [matAutocomplete]="auto1" (focusin)="checkIsSelected()" (blur)="!isStateSelect?sInput.value=null:'' ;" (change)="sInputChange()"
-                formControlName="State" name="State"
-                [ngClass]="{ 'is-invalid': (f.State.touched  || showValidateMsg) &&  f.State.invalid }" required>
-                <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="onStateSelected($event)" [displayWith]="displayFn">
-                    <mat-option *ngFor="let state of filteredStates | async" [value]="state">
-                        {{state.name}}
-                    </mat-option>
-                </mat-autocomplete>
-                <div *ngIf=" (f.State.touched  || showValidateMsg)&& f.State.invalid" class="invalid-feedback">
-                    <div *ngIf="f.State.errors.required">Province/State is mandatory</div>
+    <div [formGroup]="countryForm" class="row"  >
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text redStar">Country</span>
+                    </div>
+                    <input   autocomplete="disabled" type="text" class="form-control" placeholder="Search for a Country"  #cInput
+                    [formControl]="f.Country" [matAutocomplete]="auto" (blur)=" !isCSelect?cInput.value='':''; " (change)="cInputChange()"
+                    formControlName="Country" name="Country"
+                    [ngClass]="{ 'is-invalid': (f.Country.touched  || showValidateMsg) &&  f.Country.invalid }" required>
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCountrySelected($event)" [displayWith]="displayFn">
+                        <mat-option *ngFor="let country of filteredCountries | async" [value]="country">
+                            {{country.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <div *ngIf="(f.Country.touched  || showValidateMsg)&& f.Country.invalid" class="invalid-feedback">
+                        <div *ngIf="f.Country.errors.required">Country is mandatory</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text redStar">City</span>
-                </div>
-                <input  autocomplete="off" type="text" class="form-control" [readonly]="f.State.invalid?true:false"  placeholder="Search for a City" 
-                [formControl]="f.City"       (focusin)="checkIsStateSelected()"
-                formControlName="City" name="City" (change)="onCitySelected($event) "
-                [ngClass]="{ 'is-invalid': (f.City.touched  || showValidateMsg) &&  f.City.invalid }" required>
-           
-            
-                <!-- <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="onCitySelected($event)" [displayWith]="displayFn">
-                    <mat-option *ngFor="let country of filteredCitys | async" [value]="country">
-                        {{country.name}}
-                    </mat-option>
-                </mat-autocomplete> -->
-
-
-                <div *ngIf="(f.City.touched  || showValidateMsg)&& f.City.invalid" class="invalid-feedback">
-                    <div *ngIf="f.City.errors.required">City is mandatory</div>
+    
+    
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text redStar">Province/State</span>
+                    </div>
+                    <input  autocomplete="disabled" type="text" class="form-control" [readonly]="f.Country.invalid?true:false" #sInput  placeholder="Search for a State" 
+                    [formControl]="f.State" [matAutocomplete]="auto1" (focusin)="checkIsSelected()" (blur)="!isStateSelect?sInput.value=null:'' ;" (change)="sInputChange()"
+                    formControlName="State" name="State"
+                    [ngClass]="{ 'is-invalid': (f.State.touched  || showValidateMsg) &&  f.State.invalid }" required>
+                    <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="onStateSelected($event)" [displayWith]="displayFn">
+                        <mat-option *ngFor="let state of filteredStates | async" [value]="state">
+                            {{state.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <div *ngIf=" (f.State.touched  || showValidateMsg)&& f.State.invalid" class="invalid-feedback">
+                        <div *ngIf="f.State.errors.required">Province/State is mandatory</div>
+                    </div>
                 </div>
             </div>
         </div>
+    
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text redStar">City</span>
+                    </div>
+                    <input  autocomplete="disabled" type="text" class="form-control" [readonly]="f.State.invalid?true:false"  placeholder="Search for a City" 
+                    [formControl]="f.City"       (focusin)="checkIsStateSelected()"
+                    formControlName="City" name="City" (change)="onCitySelected($event) "
+                    [ngClass]="{ 'is-invalid': (f.City.touched  || showValidateMsg) &&  f.City.invalid }" required>
+               
+                
+                    <!-- <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="onCitySelected($event)" [displayWith]="displayFn">
+                        <mat-option *ngFor="let country of filteredCitys | async" [value]="country">
+                            {{country.name}}
+                        </mat-option>
+                    </mat-autocomplete> -->
+    
+    
+                    <div *ngIf="(f.City.touched  || showValidateMsg)&& f.City.invalid" class="invalid-feedback">
+                        <div *ngIf="f.City.errors.required">City is mandatory</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
     </div>
-
-</div>
+    

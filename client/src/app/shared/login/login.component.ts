@@ -102,10 +102,12 @@ export class LoginComponent implements OnInit {
         } if (error.error.message === Constants.InvalidCredentials) {
 
         }
-       // this.snack.error(this.translate.instant('Login.InvalidCredentials'));
-       this.snack.error(this.translate.instant('Invalid Credentials'));
+          this.snack.error(this.translate.instant('Invalid Credentials'));
         this.showSpinner = false;
-      });
+        this.loginText = 'Login'
+      }
+      );
+     // this.showSpinner = false;
   }
   openTnCDialog() {
     this.tncRef = this.modalService.show(this.tncModalView, this.config);
