@@ -144,7 +144,7 @@ public barChartColors: Color[] = [
     let back = 4;
     let year;
     console.log("this.loginUser.UserType")
-    if(this.loginUser.Role === "PSA"){
+    if(this.loginUser.Role === "PSA" || this.loginUser.Role==="RSA"){
       year = new Date().getFullYear();
     }else{
       let orgStartEnd = this.getOrganizationStartAndEndDates();
