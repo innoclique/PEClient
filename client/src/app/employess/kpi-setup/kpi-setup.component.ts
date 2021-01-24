@@ -129,7 +129,7 @@ export class KpiSetupComponent implements OnInit {
     if(evaluationStartMoment && evaluationStartMoment){
       return {
         start:evaluationStartMoment,
-        end:evaluationStartMoment
+        end:evaluationEndMoment
       }
     }else{
       return null

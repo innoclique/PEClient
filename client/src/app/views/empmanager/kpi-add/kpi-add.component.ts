@@ -117,7 +117,7 @@ export class KpiAddComponent implements OnInit {
     }
     return {
       start:evaluationStartMoment,
-      end:evaluationStartMoment
+      end:evaluationEndMoment
     }
   }
   
