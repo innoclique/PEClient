@@ -6,6 +6,7 @@ import RefData from "../../../../psa/reports/data/refData";
 import ReportTemplates from '../../../../psa/reports/data/reports-templates';
 import { AuthService } from './../../../../../services/auth.service';
 import { ReportsService } from '../../../../../services/reports.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-reports',
@@ -79,22 +80,33 @@ export class CSAPaymentSummary {
   createRowData(apiResponse:any) {
     const rowData: any[] = [];
     this.clientRow = {
-      'Name': apiResponse.clientInfo.Name,
-      'year': new Date(apiResponse.clientInfo.CreatedOn).toLocaleDateString(undefined, options),
-      'active': apiResponse.clientInfo.IsActive ? 'Yes' : 'No',
-      'usageType': apiResponse.clientInfo.UsageType,
-      'evaluationsType': apiResponse.clientInfo.EvaluationPeriod,
+      'Name': apiResponse.clientInfo.Organization.Name,
+      'year': new Date(apiResponse.clientInfo.Organization.CreatedOn).toLocaleDateString(undefined, options),
+      'active': apiResponse.clientInfo.Organization.IsActive ? 'Yes' : 'No',
+      'usageType': apiResponse.clientInfo.Organization.UsageType,
+      'evaluationsType': apiResponse.clientInfo.Organization.EvaluationPeriod,
     };
     var totalExpenditure = 0.00;
     // console.log('inside createHistoryData : ');
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    for (let i = 0; i < 20; i++) {
+    for (let payment of apiResponse.clientInfo.paymentReleases) {
+      var employeesCount = 0;
+      var licencesCount = 0;
+      if (payment.UserType === 'License') {
+        if (payment.Type != 'Adhoc') {
+          licencesCount++;
+        } else {
+          employeesCount = employeesCount + payment.NoOfEmployees;
+        }
+      } else {
+        employeesCount = employeesCount + payment.NoOfEmployees;
+      }
       var licPurchasesCount = Math.round(Math.random() * 1000);
       rowData.push({
-        evaluationPeriod: "Jan'20 To Dec'20",
-        purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
-        evaluationsType: RefData.evaluationTypes[0],
-        licPurchasesCount: licPurchasesCount,
+        evaluationPeriod: ReportTemplates.getEvaluationPeriod(apiResponse.clientInfo.Organization.StartMonth, apiResponse.clientInfo.Organization.EndMonth),
+        purchasedOn: new DatePipe('en-US').transform(payment.Paymentdate, 'MM-dd-yyyy'),
+        evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Type,
+        licPurchasesCount: Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal),
       });
       totalExpenditure = totalExpenditure + licPurchasesCount;
     }
