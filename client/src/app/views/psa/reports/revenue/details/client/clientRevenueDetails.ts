@@ -99,9 +99,11 @@ export class ClientRevenueDetails {
     for (let payment of history.clientInfo.paymentReleases) {
       var employeesCount = 0;
       var licencesCount = 0;
+      var isLicenseCount:boolean = false;
       if (payment.UserType === 'License') {
         if (payment.Type != 'Adhoc') {
-          licencesCount++;
+          licencesCount = payment.Range.substring(payment.Range.indexOf('-')+1,payment.Range.length);
+          isLicenseCount = true;
         } else {
           employeesCount = employeesCount + payment.NoOfEmployees;
         }
@@ -111,10 +113,9 @@ export class ClientRevenueDetails {
       rowData.push({
         purchasedOn: new DatePipe('en-US').transform(payment.Paymentdate, 'MM-dd-yyyy'),
         evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Type,
-        licPurchasesCount: licencesCount,
-        empPurchasesCount: employeesCount,
+        licPurchasesCount: isLicenseCount?licencesCount:employeesCount,
         evaluationPeriod: ReportTemplates.getEvaluationPeriod(this.clientInfo.StartMonth,this.clientInfo.EndMonth),
-        amount:payment.TOTAL_PAYABLE_AMOUNT,
+        amount: Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal),
       });
     }
     this.rowData = rowData;
