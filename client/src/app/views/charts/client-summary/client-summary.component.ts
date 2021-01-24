@@ -179,7 +179,7 @@ public barChartColors: Color[] = [
       }
       return {
         start:evaluationStartMoment,
-        end:evaluationStartMoment
+        end:evaluationEndMoment
       }
     }
     

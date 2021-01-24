@@ -1260,7 +1260,7 @@ export class RollevaluationComponent implements OnInit {
     }
     return {
       start:evaluationStartMoment,
-      end:evaluationStartMoment
+      end:evaluationEndMoment
     }
   }
 

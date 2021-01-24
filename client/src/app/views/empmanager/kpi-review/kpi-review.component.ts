@@ -176,7 +176,7 @@ actor:any;
     }
     return {
       start:evaluationStartMoment,
-      end:evaluationStartMoment
+      end:evaluationEndMoment
     }
   }
 
