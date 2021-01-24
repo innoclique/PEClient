@@ -7,6 +7,7 @@ import { AuthService } from '../../../../../../services/auth.service';
 import { ReportsService } from '../../../../../../services/reports.service';
 import ReportTemplates from '../../../data/reports-templates';
 import RefData from '../../../data/refData';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-reports',
@@ -77,7 +78,7 @@ export class ResellerRevenueDetails {
       { headerName: 'Date of Purchase', field: 'purchasedOn' },
       { headerName: 'Usage Type', field: 'usageType' },
       { headerName: 'Revenue(Licenses)(CAD)', field: 'licPurchasesCount', type: 'rightAligned', valueFormatter: params => params.data.licPurchasesCount.toFixed(2) },
-      { headerName: 'Revenue(Employees)(CAD)', field: 'licPurchasesCount', type: 'rightAligned', valueFormatter: params => params.data.licPurchasesCount.toFixed(2) },
+      { headerName: 'Revenue(Employees)(CAD)', field: 'empPurchasesCount', type: 'rightAligned', valueFormatter: params => params.data.empPurchasesCount.toFixed(2) },
     ];
   }
 
@@ -85,20 +86,36 @@ export class ResellerRevenueDetails {
     const rowData: any[] = [];
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
-    this.resellerInfo = history.resellerInfo;
+    this.resellerInfo = history.resellerInfo.Organization;
     this.resellerRow = {
       'Name': this.resellerInfo.Name,
       'year': new Date(this.resellerInfo.CreatedOn).toLocaleDateString(undefined, options),
       'active': this.resellerInfo.IsActive ? 'Yes' : 'No',
     };
 
-    for (let i = 0; i < 20; i++) {
+    // for (let i = 0; i < 20; i++) {
+      for (let payment of history.resellerInfo.paymentReleases) {
+        var employeesCount = 0;
+        var licencesCount = 0;
+        var isLicenseCount:boolean = false;
+        if (payment.UserType === 'License') {
+          if (payment.Type != 'Adhoc') {
+            licencesCount = payment.Range.substring(payment.Range.indexOf('-')+1,payment.Range.length);
+            isLicenseCount = true;
+          } else {
+            employeesCount = employeesCount + payment.NoOfEmployees;
+          }
+        } else {
+          employeesCount = employeesCount + payment.NoOfEmployees;
+        }
       rowData.push({
-        evaluationPeriod: "JAN'20-DEC'20",
-        purchasedOn: new Date(2010, 0, 1).toLocaleDateString(undefined, options),
-        evaluationsType: this.resellerInfo.EvaluationPeriod,
-        usageType: RefData.usageTypes[Math.random() < 0.5 ? 1 : 0],
-        licPurchasesCount: Math.round(Math.random() * 10000),
+        usageType: payment.UserType,
+        purchasedOn: new DatePipe('en-US').transform(payment.Paymentdate, 'MM-dd-yyyy'),
+        evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Type,
+        licPurchasesCount: isLicenseCount?Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal):0,
+        empPurchasesCount: isLicenseCount?0:Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal),
+        amount: Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal),
+      
       });
     }
     this.rowData = rowData;
