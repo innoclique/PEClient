@@ -66,7 +66,7 @@ export class EvaluationslistComponent implements OnInit {
   drCompetencyMappingRowdata:any = [];
   competencyMappingRowdata: any;
   isViewCompetencies: boolean = false;
-
+  
   kpiList: any = [];
   gridRefreshParams = {
     force: true,
@@ -212,18 +212,19 @@ export class EvaluationslistComponent implements OnInit {
     ];
 
   }
+  
   getGridColumnsForEmp() {
     return [
       {
-        headerName: 'Employee', sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
+        headerName: 'Employee',checkboxSelection: true, sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
         // checkboxSelection: true,
         cellRenderer: (data) => {
           
           if (data.data.Type == "K") {
-            return `  <input  data-action-type="orgView"  type="checkbox" id="scales" name="scales">
+            return `  
            ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
           } else {
-            return `  <input   data-action-type="orgView" title="Evaluation for the employee has already been rolled-out." type="checkbox" disabled id="scales" name="scales" >
+            return `  <input   data-action-type="orgView" title="Evaluation for the employee has already been rolled-out." type="checkbox" disabled  >
             ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
           }
 
@@ -335,6 +336,7 @@ export class EvaluationslistComponent implements OnInit {
     ];
 
   }
+
   gotoCreateEvaluation() {
     var selectedRows = this.EmpGridOptions.api.getSelectedRows();
     debugger
