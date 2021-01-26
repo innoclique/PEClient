@@ -293,7 +293,7 @@ if(this.selectedItems.length==0) {
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
     this.perfApp.requestBody.Owner = this.loginUser._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
-    this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id;
+    this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id || this.loginUser.Manager;
 
     delete this.perfApp.requestBody.ManagerComments;
 
@@ -305,7 +305,6 @@ if(this.selectedItems.length==0) {
     && this.perfApp.requestBody.Weighting==0){
       this.perfApp.requestBody.Weighting =this.weight;
     }
-
     this.callKpiApi();
 
   }
