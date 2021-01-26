@@ -6,7 +6,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text redStar">Country</span>
                 </div>
-                <input   autocomplete="off" type="text" class="form-control" placeholder="Search for a Country"  #cInput
+                <input   autocomplete="disabled" type="text" class="form-control" placeholder="Search for a Country"  #cInput
                 [formControl]="f.Country" [matAutocomplete]="auto" (blur)=" !isCSelect?cInput.value='':''; " (change)="cInputChange()"
                 formControlName="Country" name="Country"
                 [ngClass]="{ 'is-invalid': (f.Country.touched  || showValidateMsg) &&  f.Country.invalid }" required>
@@ -29,7 +29,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text redStar">Province/State</span>
                 </div>
-                <input  autocomplete="off" type="text" class="form-control" [readonly]="f.Country.invalid?true:false" #sInput  placeholder="Search for a State" 
+                <input  autocomplete="disabled" type="text" class="form-control" [readonly]="f.Country.invalid?true:false" #sInput  placeholder="Search for a State" 
                 [formControl]="f.State" [matAutocomplete]="auto1" (focusin)="checkIsSelected()" (blur)="!isStateSelect?sInput.value=null:'' ;" (change)="sInputChange()"
                 formControlName="State" name="State"
                 [ngClass]="{ 'is-invalid': (f.State.touched  || showValidateMsg) &&  f.State.invalid }" required>
@@ -51,7 +51,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text redStar">City</span>
                 </div>
-                <input  autocomplete="off" type="text" class="form-control" [readonly]="f.State.invalid?true:false"  placeholder="Search for a City" 
+                <input  autocomplete="disabled" type="text" class="form-control" [readonly]="f.State.invalid?true:false"  placeholder="Search for a City" 
                 [formControl]="f.City"       (focusin)="checkIsStateSelected()"
                 formControlName="City" name="City" (change)="onCitySelected($event) "
                 [ngClass]="{ 'is-invalid': (f.City.touched  || showValidateMsg) &&  f.City.invalid }" required>

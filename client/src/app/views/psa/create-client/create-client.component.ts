@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
@@ -10,6 +9,9 @@ import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { CustomValidators } from '../../../shared/custom-validators';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertComponent } from '../../../shared/alert/alert.component';
+import { AlertDialog } from '../../../Models/AlertDialog';
 
 @Component({
   selector: 'app-create-client',
@@ -17,7 +19,7 @@ import { CustomValidators } from '../../../shared/custom-validators';
   styleUrls: ['./create-client.component.css']
 })
 export class CreateClientComponent implements OnInit {
-
+  public alert: AlertDialog;
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
@@ -42,7 +44,8 @@ export class CreateClientComponent implements OnInit {
   models:any=[];
   currentOrganization:any;
   isDraft=false;
-  constructor(private dialog: MatDialog,
+  constructor(
+    private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
     private notification: NotificationService,
@@ -105,6 +108,7 @@ export class CreateClientComponent implements OnInit {
     }
 
     this.getRangeList(rangeOptions);
+    this.alert = new AlertDialog();
   }
   getClientDataById() {
     this.perfApp.route = "app";
@@ -282,8 +286,32 @@ export class CreateClientComponent implements OnInit {
     if(this.currentRecord && this.currentRecord._id){
       this.updateClient();
     }else{
-      alert("Are you sure you want to add this client?")
-      this.saveClient();
+
+      this.alert.Title = "Alert";
+      this.alert.Content = "Are you sure you want to add this client?";
+      this.alert.ShowCancelButton = true;
+      this.alert.ShowConfirmButton = true;
+      this.alert.CancelButtonText = "Cancel";
+      this.alert.ConfirmButtonText = "Ok";
+
+      const dialogConfig = new MatDialogConfig()
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = this.alert;
+      dialogConfig.height = "300px";
+      dialogConfig.maxWidth = '100%';
+      dialogConfig.minWidth = '40%';
+
+      
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp=='yes') {
+        this.saveClient();
+      }
+      else{
+
+      }
+    })
     }
     
   }
