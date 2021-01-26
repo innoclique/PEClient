@@ -178,8 +178,31 @@ public currentOrganization:any={}
   }
 
     this.empForm.patchValue({IsDraft: 'true' });
-    alert("Are you sure you want to add this employee?")
-    this.saveEmployee();
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to add this employee?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Ok";
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '100%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp=='yes') {
+        this.saveEmployee();
+      }
+      else{
+
+      }
+    })
+
   }
 
   onCancle(){
@@ -200,8 +223,30 @@ this.submitClicked=true;
   
     this.empForm.patchValue({IsSubmit: 'true' });
     this.empForm.patchValue({IsDraft: 'false' });
-    alert("Are you sure you want to add this employee?")
-    this.saveEmployee();
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to add this employee?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Ok";
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '100%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp=='yes') {
+        this.saveEmployee();
+      }
+      else{
+
+      }
+    })
   }
   
   
