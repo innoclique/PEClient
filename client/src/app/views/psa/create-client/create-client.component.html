@@ -95,12 +95,12 @@
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text redStar">Pin/Zip Code</span>
+                      <span class="input-group-text redStar">Postal/Zip Code</span>
                     </div>
                     <input  maxlength="8" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.ZipCode.errors }"
                       formControlName="ZipCode" class="form-control">
                     <div *ngIf=" isFormSubmitted && f.ZipCode.errors" class="invalid-feedback">
-                      <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is mandatory</div>
+                      <div *ngIf="f.ZipCode.errors.required">Postal/Zip Code is mandatory</div>
                       <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                     </div>
                   </div>
@@ -241,12 +241,13 @@
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text ">Middle Name</span>
+                      <span class="input-group-text ">Initial</span>
                     </div>
-                    <input type="text" maxlength="200" class="form-control" formControlName="AdminMiddleName">
+                    <input type="text" maxlength="3" class="form-control" 
+                    (keypress)="keyPressAlphaAndPeriod($event)" formControlName="AdminMiddleName">
                     <div *ngIf="isFormSubmitted && f.AdminMiddleName.errors" class="invalid-feedback">
-                      <div *ngIf="f.AdminMiddleName.errors.maxlength"> Middle Name can be 200 characters long</div>
-                      <div *ngIf="f.AdminMiddleName.errors.pattern"> Middle Name can accept only a-z,A-Z,0-9,.,-,(,),:
+                      <div *ngIf="f.AdminMiddleName.errors.maxlength"> Initial can be 3 characters long</div>
+                      <div *ngIf="f.AdminMiddleName.errors.pattern"> Initial can accept only a-z,A-Z,0-9,.,-,(,),:
                       </div>
                     </div>
                   </div>
@@ -345,14 +346,15 @@
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text ">Middle Name</span>
+                      <span class="input-group-text ">Initial</span>
                     </div>
-                    <input type="text" class="form-control" formControlName="ContactPersonMiddleName">
+                    <input type="text" class="form-control" 
+                    (keypress)="keyPressAlphaAndPeriod($event)" formControlName="ContactPersonMiddleName">
                     <div *ngIf="isFormSubmitted && !f.SameAsAdmin.value && a.ContactPersonMiddleName.errors"
                       class="invalid-feedback">
-                      <div *ngIf="a.ContactPersonMiddleName.errors.maxlength"> Middle Name can be 200 characters long
+                      <div *ngIf="a.ContactPersonMiddleName.errors.maxlength"> Initial can be 200 characters long
                       </div>
-                      <div *ngIf="a.ContactPersonMiddleName.errors.pattern"> Middle Name can accept only
+                      <div *ngIf="a.ContactPersonMiddleName.errors.pattern"> Initial can accept only
                         a-z,A-Z,0-9,.,-,(,),:
                       </div>
                     </div>

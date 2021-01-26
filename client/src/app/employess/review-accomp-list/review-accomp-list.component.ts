@@ -96,7 +96,7 @@ export class ReviewAccompListComponent implements OnInit {
   },
     {headerName: 'No.of  Accomplishments',  field: 'NoOfAccomps', sortable: true, filter: true },
      {
-      headerName: 'Action', field: '', autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '', autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -126,7 +126,7 @@ public tsColumnDefs = [
   // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
   // {headerName: 'Final Rating Status', field: 'FRStatus',  , sortable: true, filter: true },
   {
-    headerName: 'Action', field: '',  autoHeight: true, suppressSizeToFit: true,
+    headerName: 'Review/Modify', field: '',  autoHeight: true, suppressSizeToFit: true,
     cellRenderer: (data) => {
 
       var returnString = '';

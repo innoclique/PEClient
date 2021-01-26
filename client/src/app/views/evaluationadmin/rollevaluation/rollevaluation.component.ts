@@ -945,7 +945,7 @@ export class RollevaluationComponent implements OnInit {
         }
       },
       {
-        headerName: "Actions",
+        headerName: "Review/Modify",
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
@@ -1064,8 +1064,8 @@ export class RollevaluationComponent implements OnInit {
         }
       },
       {
-        headerName: "Actions",
-        width: 120,
+        headerName: "Review/Modify",
+        width: 130,
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
@@ -1120,7 +1120,7 @@ export class RollevaluationComponent implements OnInit {
         }
       },
       {
-        headerName: "Actions",
+        headerName: "Review/Modify",
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
@@ -1144,7 +1144,7 @@ export class RollevaluationComponent implements OnInit {
     //   },
 
     //   {
-    //     headerName: "Actions",
+    //     headerName: "Review/Modify",
     //     suppressMenu: true,
     //     Sorting: false,
     //     cellRenderer: (data) => {

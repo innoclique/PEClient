@@ -95,7 +95,7 @@ export class ActionPlanComponent implements OnInit {
         }
       },
        {
-         headerName: "Action",
+         headerName: "Review/Modify",
          suppressMenu: true,
          Sorting: false,
          
@@ -136,7 +136,7 @@ export class ActionPlanComponent implements OnInit {
      },
        
        {
-         headerName: "Action",
+         headerName: "Review/Modify",
          suppressMenu: true,
          Sorting: false,
          

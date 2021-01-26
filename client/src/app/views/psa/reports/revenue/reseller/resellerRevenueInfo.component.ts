@@ -113,7 +113,7 @@ export class ResellerRevenueInfoComponent {
             { headerName: 'Revenue (CAD)', field: 'purchasesCount', type: 'rightAligned'},
             { headerName: 'Payment Type', field: 'paymentTypes', },
             {
-                headerName: "Actions", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoResellerRevenueDetails.bind(this),
+                headerName: "Review/Modify", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoResellerRevenueDetails.bind(this),
                 cellRenderer: () => {
                     return `  <i class="fa fa-bars"   style="cursor:pointer ;padding: 7px 20px 0 0;
                 font-size: 17px;"   title="view Reseller Revenue Details" ></i>`

@@ -147,7 +147,7 @@ export class ResellerClientInfoComponent {
             { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 150, type: 'rightAligned' },
             { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 150, type: 'rightAligned' },
             {
-                headerName: "Actions", filter: false, Sorting: false, onCellClicked: this.gotoPurchaseHistory.bind(this),
+                headerName: "Review/Modify", filter: false, Sorting: false, onCellClicked: this.gotoPurchaseHistory.bind(this),
                 cellRenderer: () => {
                     return `  <i class="fa fa-history"   style="cursor:pointer ;padding: 7px 20px 0 0;
                         font-size: 17px;"   data-action-type="edit" title="view purchase history" ></i>`

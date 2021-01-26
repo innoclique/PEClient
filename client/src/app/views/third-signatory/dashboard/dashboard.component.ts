@@ -15,7 +15,7 @@ export class ThirdSignDashboardComponent implements OnInit {
   tsEvaluationsColumnDefs = [
     { headerName:'Name',width:'130px',field: 'name',sortable: true},
     { headerName:'Status',width:'150px',field: 'status',sortable: true},
-    { headerName:'Action',width:'280px',
+    { headerName: 'Review/Modify',width:'280px',
     cellRenderer: (data) => {
       let actionlinks=''
              actionlinks= `
@@ -42,7 +42,7 @@ export class ThirdSignDashboardComponent implements OnInit {
     { headerName:'Title',width:'200px',field: 'title',sortable: true},
     { headerName:'Department',width:'250px', field: 'deparment' ,sortable: true,filter: true },
     { headerName:'Days Remaining',width:'200px', field: 'daysRemaining' ,sortable: true,filter: true },
-    { headerName:'Action',width:'100px',
+    { headerName: 'Review/Modify',width:'100px',
     cellRenderer: (data) => {
       let actionlinks=''
              actionlinks= `

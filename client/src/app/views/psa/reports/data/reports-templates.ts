@@ -130,7 +130,7 @@ export default class RSAReportTemplates {
             { headerName: '#s Purchased (License)', field: 'licPurchasesCount', sortable: true, minWidth: 50, width: 128, resizable: true, filter: true },
             { headerName: '#s Purchased (# of Employees)', field: 'empPurchasesCount', sortable: true, minWidth: 50, width: 128, resizable: true, filter: true },
             {
-                headerName: "Actions", suppressSizeToFit: true, Sorting: false,
+                headerName: "Review/Modify", suppressSizeToFit: true, Sorting: false,
                 cellRenderer: (data) => {
                     return `  <i class="fa fa-history" onCellClicked: this.gotoDashboard.bind(this)  style="cursor:pointer ;padding: 7px 20px 0 0;
                     font-size: 17px;"   data-action-type="edit" title="view purchase history" ></i>`
@@ -148,7 +148,7 @@ export default class RSAReportTemplates {
                     { headerName: '#s Purchased (# of Employees)', field: 'purchaseCount' },
                     { headerName: '#s Purchased (License)', field: 'purchaseCount' },
                     {
-                        headerName: 'Action',
+                        headerName: 'Review/Modify',
                         cellRenderer: (data) => {
                             return `<button onCellClicked: this.gotoDashboard.bind(this) ngcontent-fha-c25="" 
                     class="btn btn-primary mr-1 pull-right" data-toggle="modal" type="button">
