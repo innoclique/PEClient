@@ -419,6 +419,12 @@
             </div>
 
         </div>
+<div *ngIf="hasRecords">
+INN
+</div>
+<div *ngIf="!hasRecords">
+  OUT
+    </div>
 
         <ng-template class="col-md-12"  #noRecordsFound>
             <h3 class="heading-with-margin">No Performance Goals Found</h3>

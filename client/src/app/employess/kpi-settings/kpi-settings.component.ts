@@ -61,7 +61,8 @@ accessingFrom:any;
   currentOrganization: any;
   IsDraftDBVal: any;
   isFinalSignoff:Boolean;
-  showAllowSignoff:Boolean=false;;
+  showAllowSignoff:Boolean=false;
+  hasRecords:Boolean=false;;
 
 
 
@@ -113,7 +114,8 @@ accessingFrom:any;
   ngOnInit(): void {
 
 
-    if(this.accessingFrom == "currEvaluation") this.showKpiForm=false;
+    if(this.accessingFrom == "currEvaluation") 
+    this.showKpiForm=false;
     this.initKPIForm()
 
     this.alert = new AlertDialog();
@@ -528,7 +530,6 @@ conformSubmitKpis(){
     this.perfApp.CallAPI().subscribe(c => {
 
       // this.setWeighting(c.filter(item => item.IsDraft === false).length);
-      debugger
      // if (this.currentAction =='create')
         this.setWeighting(c.filter(item => item.IsDraft === false).length, this.currentAction);
       if (c && c.length > 0) {
@@ -566,6 +567,7 @@ this.authService.setIsPGSubmitStatus("true");
 
            this.getMeasurementCriterias("");
            this.showKpiForm=true;
+           this.hasRecords = true;
 
       }else{
         
