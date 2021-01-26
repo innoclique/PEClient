@@ -293,8 +293,11 @@ if(this.selectedItems.length==0) {
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
     this.perfApp.requestBody.Owner = this.loginUser._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
-    this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id || this.loginUser.Manager;
-
+    if(this.loginUser.Manager && this.loginUser.Manager._id){
+      this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id
+    }else if(this.loginUser.Manager){
+      this.perfApp.requestBody.ManagerId = this.loginUser.Manager;
+    }
     delete this.perfApp.requestBody.ManagerComments;
 
     if (this.kpiForm.get('IsDraft').value=='true') {
@@ -305,6 +308,8 @@ if(this.selectedItems.length==0) {
     && this.perfApp.requestBody.Weighting==0){
       this.perfApp.requestBody.Weighting =this.weight;
     }
+    console.log(this.loginUser.Manager);
+    console.log(this.perfApp.requestBody.ManagerId)
     this.callKpiApi();
 
   }

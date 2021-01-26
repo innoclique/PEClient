@@ -103,6 +103,9 @@ export class PaymentComponent implements OnInit {
             this.orgnizationDetails();
             this.isActiveDateDisabled=true;
             this.isPaymentFrequencyDisabled=true;
+            if(this.currentUser.Organization.ClientType === "Reseller"){
+              this.isReseller = true;
+            }
           }else{
             this.notification.error("Initial payment was not found.")
           }
