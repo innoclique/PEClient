@@ -482,7 +482,9 @@ goto(selTab){
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
       this.snack.success(isDraft ? 'Competencies Rating Saved Successfully' : 'Competency Rating Submitted Successfully');
-      this.openCompetencyReport();
+      if (!isDraft) {
+        this.openCompetencyReport();
+      }
      this.getTabsData();
       // this.refresh()
     }, error => {
