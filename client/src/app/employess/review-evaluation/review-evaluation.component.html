@@ -1,395 +1,498 @@
 <div _ngcontent-fha-c25="" class="reports-buttons pull-right">
-    <button *ngIf="isPdfView" (click)="exitReportView()" ngcontent-fha-c25="" class="btn btn-primary mr-1 pull-right"
-        data-toggle="modal" type="button">
-        <i class="fa fa-arrow-left"></i>
+  <div *ngIf="showReviewRating && isCompetencyTabActive" style="margin-right:10px;display:inline-flex">
+    <button title="view Rating Report" (click)="openCompetencyReport()" ngcontent-fha-c25=""
+          class="btn btn-primary mr-1 pull-right" type="button">
+      <i class="fa fa-file-text-o" aria-hidden="true"></i>
     </button>
-    <button *ngIf="!isPdfView" title="view Report" (click)="viewReport()" ngcontent-fha-c25=""
-        class="btn btn-primary mr-1 pull-right" type="button">
-        <i class="fa fa-file-pdf-o hide-print" aria-hidden="true"></i></button>
+  </div>
+  <button *ngIf="isPdfView" (click)="exitReportView()" ngcontent-fha-c25="" class="btn btn-primary mr-1 pull-right"
+          data-toggle="modal" type="button">
+    <i class="fa fa-arrow-left"></i>
+  </button>
+  <button *ngIf="!isPdfView" title="view Report" (click)="viewReport()" ngcontent-fha-c25=""
+          class="btn btn-primary mr-1 pull-right" type="button">
+    <i class="fa fa-file-pdf-o hide-print" aria-hidden="true"></i>
+  </button>
 </div>
 <div class="clearfix"></div>
 <div *ngIf="isPdfView">
-    <app-current-evaluation-report-pdf [loginUser]="selectedUser" [currentOrganization]="currentOrganization">
-    </app-current-evaluation-report-pdf>
-</div>                    
-                    
-                    
-                    <div *ngIf="evaluationForm">
-                        <em class="tab_name">{{currentEmpName}}</em>
-                        <tabset #evTabset class="pro-tabs">
-                            <tab>
-                                <ng-template tabHeading><i></i>Performance Goals</ng-template>
-  
-                                <app-kpi-review-manager  [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole> </app-kpi-review-manager>
-                            </tab>
-                           
-                            <tab>
-                                <ng-template tabHeading><i ></i> Competencies</ng-template>
-                                <div [formGroup]="managerCompetencyForm"  class="card col-lg-12 pt-3">
-                                    <accordion [closeOthers]="oneAtATime">
-                                        <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of managerCompetencyQuestionsList">
-                                            <button  class="btn btn-link btn-block clearfix" accordion-heading type="button">                                                
-                                                <div class="pull-left">
-                                                    <i  [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
-                                                </div>
-                                                <div>
-                                                    <span tooltip="Overall Rating is calculated and displayed after all the required ratings (from Manager, Peer, Direct Report) have been submitted." class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span>
-                                                </div>
-                                              </button>  
-                                            <app-competency-wrapper [questions]="c.Questions" [form]="c.form" [comments]="c.comments" [empComments]="c.empComments">
-                                            </app-competency-wrapper>
-                                        </accordion-group>
-  
-                                    </accordion>
-                                    <div  class="row">
-                                        <div  class="col-md-6">
-                                            <ul class="list-group">                                            
-                                                <li class="list-group-item active" >
-                                                Peer Review List
-                                                </li>
-                                              </ul>
-                                            <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length>0" class="list-group">                                            
-                                                <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let peer of PeerScoreCard?.PeerList">
-                                                    {{peer.FirstName}} {{peer.LastName}}
-                                                </li>
-                                              </ul>
-                                              <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length===0" class="list-group">                                            
-                                                <li class="list-group-item list-group-item-action list-group-item-info" >
-                                                  <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span> 
-                                                </li>
-                                              </ul>
-                                            
-                                        </div>
-                                        <div  class="col-md-6">
-                                            <ul class="list-group">                                            
-                                                <li class="list-group-item active" >
-                                                Direct Report Review List
-                                                </li>
-                                              </ul>
-                                            <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0" class="list-group">                                            
-                                                <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">
-                                                    {{dr.FirstName}} {{dr.LastName}}
-                                                </li>
-                                              </ul>
-                                              <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length===0" class="list-group">                                            
-                                                <li class="list-group-item list-group-item-action list-group-item-info" >
-                                                  <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span> 
-                                                </li>
-                                              </ul>
-                                        </div>
-                                     </div>
-                                     <br>
-                                    <div *ngIf="showCompetencySubmitForManager" class="form-group row">
-                                        <div class=" col-md-12">
-                                            <div class="form-group">
-                                                <div class="pull-right">
-                                                    <button (click)="cancelCompetencyRating()"
-                                                        class="btn btn-secondary">Cancel</button>&nbsp;
-                                                    <button (click)="saveManagerCompetencyFormAsDraft()"
-                                                        class="btn btn-primary">Save</button>&nbsp;
-                                                    <button (click)="submitManagerCompetencyForm()"
-                                                        class="btn btn-primary">Submit</button>
-                                                </div>
-                                            </div>  
-                                        </div>
-                                    </div>
-                                </div>
-                            </tab>
-                            
-                            <tab>
-                                <ng-template tabHeading><i class="icon-hand-rock"></i>Developmental Goals
-                                </ng-template>
-                                <app-devgoal-review [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole ></app-devgoal-review>
-  
-                            </tab>
-
-                            <tab>
-                                <ng-template tabHeading><i class="icon-hand-rock"></i>Strengths
-                                </ng-template>
-                                <app-strength-review [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole ></app-strength-review>
-  
-                            </tab>
-                            
-
-                            <tab>
-                                <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
-                                <div [formGroup]="FinalRatingForm"  class="card col-lg-12">
-                                    <section  class="view-only pt-3">
-                                        <h3>Employee Self Review</h3>
-                                        <div *ngIf="!showEmployeeSubmit || !showManagerSubmit " class="wrapper">
-                                            <div class="form-group row">                                            
-                                                <div class="col-md-8 ">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text">Comments</span>
-                                                            </div>
-                                                            <textarea name="EmployeeComments" maxlength="2000" formControlName="EmployeeComments"
-                                                                class="form-control"></textarea>
-      
-                                                        </div>
-                                                    </div>
-      
-                                                </div>
-      
-                                            </div>
-                                            <div class="form-group row">                                              
-                                                <div class="col-md-8" *ngIf='FinalRatingForm?.value?.EmployeeRevComments'>
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text ">Revision Comments</span>
-                                                            </div>
-                                                            <textarea maxlength="2000" formControlName="EmployeeRevComments"
-                                                                class="form-control"></textarea>
-      
-                                                        </div>
-                                                    </div>
-                                                </div>
-      
-                                               
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-4">
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"> Employee Sign-Off:</span>
-                                                        </div>
-                                                        <input type="text" class="form-control" readonly formControlName="EmployeeSignOff"
-                                                        [value]="FinalRatingForm?.value?.EmployeeSignOff"
-                                                            name="EmployeeSignOff">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"> Signed-off On:</span>
-                                                        </div>
-                                                        <input type="text" readonly 
-                                                        formControlName="EmployeeSubmittedOn"
-                                                        class="form-control"    
-                                                        name="EmployeeSubmittedOn">
-                                                    </div>
-                                                </div>
-      
-                                                
-                                            </div>
-                                        </div>
-                                        <div style="height: 50%;padding-left: 5%;padding-top: 2%;" *ngIf="showEmployeeSubmit && showManagerSubmit ">
-                                            <div class="row">
-                                                <div class="col-md-12">                                                    
-                                                    <div class="form-group">                                                    
-                                                        <span class="font-weight-bold period-value">
-                                                           Not Submitted
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-
-
-                                    <section *ngIf="!showEmployeeSubmit || !showManagerSubmit " style="padding-top: 3%;" [ngClass]="{ 'view-only': seletedTabRole=='TS' }">
-                                        <h3>Manager Review</h3>
-                                        <div class="form-group row">
-                                            <div class="col-md-4 ">
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text redStar">Rating</span>
-                                                        </div>
-                                                        <select formControlName="ManagerOverallRating"
-                                                            class="form-control" name="Score">
-                                                            <option value="" disabled>Please select</option>
-                                                            <option *ngFor="let e of appScores" [value]="e.value">{{e.value}}-{{e.Text}}</option>
-                                                            <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
-                                                            <!-- <option value="1">1</option>
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option> -->
-  
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8 ">
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text">Comments</span>
-                                                        </div>
-                                                        <textarea maxlength="2000" formControlName="ManagerComments"
-                                                            class="form-control"></textarea>
-  
-                                                    </div>
-                                                </div>
-  
-                                            </div>
-  
-                                        </div>
-
-
-                                        <div class="form-group row">                                            
-                                            <div class="col-md-8" *ngIf=' ( ( FinalRatingForm?.value?.TSReqRevision && seletedTabRole=="Manager" )
-                                            || FinalRatingForm?.value?.ManagerRevComments  )'>
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend w-25">
-                                                            <span class="input-group-text redStar w-100">Revision Comments</span>
-                                                        </div>
-                                                        <textarea maxlength="2000" formControlName="ManagerRevComments"
-                                                            class="form-control"></textarea>
-  
-                                                    </div>
-                                                </div>
-                                            </div>
-  
-                                           
-                                        </div>
-  
-                                        <div class="form-group row">
-                                            <div  class="col-md-4">
-                                                <div class="input-group">
-                                                 
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"> Manager Sign-Off:</span>
-                                                    </div>
-                                                    <input type="text" readonly formControlName="ManagerSignOff"
-                                                    class="form-control" name="ManagerSignOff">
-                                                </div>
-                                            </div>
-                                            <div *ngIf="!showManagerSubmit" class="col-md-4">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"> Signed-off On:</span>
-                                                    </div>
-                                                   
-                                                    <input type="text" readonly formControlName="ManagerSubmittedOn"
-                                                    class="form-control"   name="ManagerSubmittedOn">
-                                                </div>
-                                            </div>
-  
-                                            <div *ngIf="showManagerSubmit 
-                                            && !showEmployeeSubmit 
-                                            && seletedTabRole=='Manager'" 
-                                            class="col-md-12">
-                                                <div class="pull-right form-group">
-                                                    <div class="">
-                                                        <button (click)="cancelFinalRating()"
-                                                            class="btn btn-secondary">Cancel</button>&nbsp;
-                                                        <button (click)="saveFinalRating()"
-                                                            class="btn btn-primary">Save</button>&nbsp;
-                                                        <button (click)="submitFinalRating()"
-                                                            class="btn btn-primary">Submit
-                                                            Final Rating</button>
-                                                    </div>
-                                                </div>
-  
-                                            </div>
-                                        </div>
-                                    </section>
+  <app-current-evaluation-report-pdf [loginUser]="selectedUser" [currentOrganization]="currentOrganization">
+  </app-current-evaluation-report-pdf>
+</div>
 
 
 
-                                    
-                                    <section *ngIf="!showEmployeeSubmit || !showManagerSubmit" 
-                                    [hidden]="seletedTabRole !='TS' && showThirdSignatorySubmit" [ngClass]="{ 'view-only': seletedTabRole !='TS' }" >
-                                        <h3>Third Signatory Review</h3>
-                                        <div class="form-group row">
-                                           
-                                            <div class="col-md-8 ">
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text">Comments</span>
-                                                        </div>
-                                                        <textarea maxlength="2000" formControlName="ThirdSignatoryComments"
-                                                            class="form-control"></textarea>
-  
-                                                    </div>
-                                                </div>
-  
-                                            </div>
-  
-                                        </div>
-  
-                                        <div class="form-group row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                    
-                                                        <input   *ngIf="!isReqRevDisabled"
-                                                            formControlName="TSReqRevision" class="form-check-input" type="checkbox" 
-                                                            >
+<div *ngIf="evaluationForm">
+  <em class="tab_name">{{currentEmpName}}</em>
+  <tabset #evTabset class="pro-tabs">
+    <tab (selectTab)="changeTab($event, false)">
+      <ng-template tabHeading><i></i>Performance Goals</ng-template>
 
-                                                            <input   disabled *ngIf="isReqRevDisabled"
-                                                            formControlName="TSReqRevision" class="form-check-input" type="checkbox" 
-                                                             >
+      <app-kpi-review-manager [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole> </app-kpi-review-manager>
+    </tab>
 
-                                                        <label class="form-check-label" for="TSReqRevision">
-                                                            Request Revision
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- <div class="col-md-4" *ngIf='FinalRatingForm?.value?.TSReqRevision'>
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text redStar">Revision Comments</span>
-                                                        </div>
-                                                        <textarea maxlength="2000" formControlName="ThirdSignatoryRevComments"
-                                                            class="form-control"></textarea>
-  
-                                                    </div>
-                                                </div>
-                                            </div> -->
-  
-                                           
-                                        </div>
+    <tab (selectTab)="changeTab($event, true)" >
+      <ng-template tabHeading><i></i> Competencies</ng-template>
+      <div [formGroup]="managerCompetencyForm" class="card col-lg-12 pt-3">
+        <accordion [closeOthers]="oneAtATime">
+          <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of managerCompetencyQuestionsList">
+            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+              <div class="pull-left">
+                <i [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
+              </div>
+              <div>
+                <span tooltip="Overall Rating is calculated and displayed after all the required ratings (from Manager, Peer, Direct Report) have been submitted." class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span>
+              </div>
+            </button>
+            <app-competency-wrapper [showEmployeeRatingColumn]="false" [questions]="c.Questions" [form]="c.form" [comments]="c.comments" [empComments]="c.empComments">
+            </app-competency-wrapper>
+          </accordion-group>
+
+        </accordion>
+        <div class="row">
+          <div class="col-md-6">
+            <ul class="list-group">
+              <li class="list-group-item active">
+                Peer Review List
+              </li>
+            </ul>
+            <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length>0" class="list-group">
+              <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let peer of PeerScoreCard?.PeerList">
+                {{peer.FirstName}} {{peer.LastName}}
+              </li>
+            </ul>
+            <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length===0" class="list-group">
+              <li class="list-group-item list-group-item-action list-group-item-info">
+                <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span>
+              </li>
+            </ul>
+
+          </div>
+          <div class="col-md-6">
+            <ul class="list-group">
+              <li class="list-group-item active">
+                Direct Report Review List
+              </li>
+            </ul>
+            <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0" class="list-group">
+              <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">
+                {{dr.FirstName}} {{dr.LastName}}
+              </li>
+            </ul>
+            <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length===0" class="list-group">
+              <li class="list-group-item list-group-item-action list-group-item-info">
+                <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <br>
+        <div *ngIf="showCompetencySubmitForManager" class="form-group row">
+          <div class=" col-md-12">
+            <div class="form-group">
+              <div class="pull-right">
+                <button (click)="cancelCompetencyRating()"
+                        class="btn btn-secondary">
+                  Cancel
+                </button>&nbsp;
+                <button (click)="saveManagerCompetencyFormAsDraft()"
+                        class="btn btn-primary">
+                  Save
+                </button>&nbsp;
+                <button (click)="submitManagerCompetencyForm()" type="button" class="btn btn-primary" [disabled]="disableManagerSubmit">
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </tab>
+
+    <tab (selectTab)="changeTab($event, false)">
+      <ng-template tabHeading>
+        <i class="icon-hand-rock"></i>Developmental Goals
+      </ng-template>
+      <app-devgoal-review [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole></app-devgoal-review>
+
+    </tab>
+
+    <tab (selectTab)="changeTab($event, false)">
+      <ng-template tabHeading>
+        <i class="icon-hand-rock"></i>Strengths
+      </ng-template>
+      <app-strength-review [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole></app-strength-review>
+
+    </tab>
 
 
-                                        <div  class="form-group row">
-                                            <div class="col-md-4">
-                                                <div class="input-group">
-                                                   
-                                                    <div class="input-group-prepend w-52">
-                                                        <span class="input-group-text w-100">Third Signatory Sign-Off:</span>
-                                                    </div>
-                                                    <input class="form-control" type="text" readonly formControlName="ThirdSignatorySignOff"
-                                                     name="ThirdSignatorySignOff">
-                                                </div>
-                                            </div>
-                                            <div *ngIf="!showThirdSignatorySubmit" class="col-md-4">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"> Signed-off On:</span>
-                                                    </div>
-                                                    <input type="text" readonly formControlName="ThirdSignatorySubmittedOn"
-                                                    class="form-control"   name="ThirdSignatorySubmittedOn">
-                                                </div>
-                                            </div>
-  
-                                            <div *ngIf="showThirdSignatorySubmit && !showManagerSubmit && !showEmployeeSubmit  && seletedTabRole==='TS' " class="col-md-12">
-                                                <div class="pull-right form-group">
-                                                    <div class="">
-                                                        <button (click)="cancelFinalRating()"
-                                                            class="btn btn-secondary">Cancel</button>&nbsp;
-                                                        <button (click)="saveTSFinalRating()"
-                                                            class="btn btn-primary">Save</button>&nbsp;
-                                                        <button (click)="submitTSFinalRating()" 
-                                                            class="btn btn-primary">Submit
-                                                            Final Rating</button>
-                                                    </div>
-                                                </div>
-  
-                                            </div>
-                                        </div>
-                                    </section>
-  
-                                </div>
-                            </tab>
-                        </tabset>
-  
+    <tab (selectTab)="changeTab($event, false)">
+      <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
+      <div [formGroup]="FinalRatingForm" class="card col-lg-12">
+        <section class="view-only pt-3">
+          <h3>Employee Self Review</h3>
+          <div *ngIf="!showEmployeeSubmit || !showManagerSubmit " class="wrapper">
+            <div class="form-group row">
+              <div class="col-md-8 ">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Comments</span>
                     </div>
-               
-               
+                    <textarea name="EmployeeComments" maxlength="2000" formControlName="EmployeeComments"
+                              class="form-control"></textarea>
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <div class="form-group row">
+              <div class="col-md-8" *ngIf='FinalRatingForm?.value?.EmployeeRevComments'>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text ">Revision Comments</span>
+                    </div>
+                    <textarea maxlength="2000" formControlName="EmployeeRevComments"
+                              class="form-control"></textarea>
+
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+            <div class="form-group row">
+              <div class="col-md-4">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"> Employee Sign-Off:</span>
+                  </div>
+                  <input type="text" class="form-control" readonly formControlName="EmployeeSignOff"
+                         [value]="FinalRatingForm?.value?.EmployeeSignOff"
+                         name="EmployeeSignOff">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"> Signed-off On:</span>
+                  </div>
+                  <input type="text" readonly
+                         formControlName="EmployeeSubmittedOn"
+                         class="form-control"
+                         name="EmployeeSubmittedOn">
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+          <div style="height: 50%;padding-left: 5%;padding-top: 2%;" *ngIf="showEmployeeSubmit && showManagerSubmit ">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <span class="font-weight-bold period-value">
+                    Not Submitted
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <section *ngIf="!showEmployeeSubmit || !showManagerSubmit " style="padding-top: 3%;" [ngClass]="{ 'view-only': seletedTabRole=='TS' }">
+          <h3>Manager Review</h3>
+          <div class="form-group row">
+            <div class="col-md-4 ">
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text redStar">Rating</span>
+                  </div>
+                  <select formControlName="ManagerOverallRating"
+                          class="form-control" name="Score">
+                    <option value="" disabled>Please select</option>
+                    <option *ngFor="let e of appScores" [value]="e.value">{{e.value}}-{{e.Text}}</option>
+                    <!-- <option *ngFor="let e of appScores" [value]="e">{{e}}</option> -->
+                    <!-- <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option> -->
+
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8 ">
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Comments</span>
+                  </div>
+                  <textarea maxlength="2000" formControlName="ManagerComments"
+                            class="form-control"></textarea>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group row">
+            <div class="col-md-8" *ngIf=' ( ( FinalRatingForm?.value?.TSReqRevision && seletedTabRole=="Manager" )
+                                            || FinalRatingForm?.value?.ManagerRevComments  )'>
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend w-25">
+                    <span class="input-group-text redStar w-100">Revision Comments</span>
+                  </div>
+                  <textarea maxlength="2000" formControlName="ManagerRevComments"
+                            class="form-control"></textarea>
+
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-4">
+              <div class="input-group">
+
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> Manager Sign-Off:</span>
+                </div>
+                <input type="text" readonly formControlName="ManagerSignOff"
+                       class="form-control" name="ManagerSignOff">
+              </div>
+            </div>
+            <div *ngIf="!showManagerSubmit" class="col-md-4">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> Signed-off On:</span>
+                </div>
+
+                <input type="text" readonly formControlName="ManagerSubmittedOn"
+                       class="form-control" name="ManagerSubmittedOn">
+              </div>
+            </div>
+
+            <div *ngIf="showManagerSubmit
+                                            && !showEmployeeSubmit
+                                            && seletedTabRole=='Manager'"
+                 class="col-md-12">
+              <div class="pull-right form-group">
+                <div class="">
+                  <button (click)="cancelFinalRating()"
+                          class="btn btn-secondary">
+                    Cancel
+                  </button>&nbsp;
+                  <button (click)="saveFinalRating()"
+                          class="btn btn-primary">
+                    Save
+                  </button>&nbsp;
+                  <button (click)="submitFinalRating()"
+                          class="btn btn-primary">
+                    Submit
+                    Final Rating
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+
+
+
+        <section *ngIf="!showEmployeeSubmit || !showManagerSubmit"
+                 [hidden]="seletedTabRole !='TS' && showThirdSignatorySubmit" [ngClass]="{ 'view-only': seletedTabRole !='TS' }">
+          <h3>Third Signatory Review</h3>
+          <div class="form-group row">
+
+            <div class="col-md-8 ">
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Comments</span>
+                  </div>
+                  <textarea maxlength="2000" formControlName="ThirdSignatoryComments"
+                            class="form-control"></textarea>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="form-check">
+
+                  <input *ngIf="!isReqRevDisabled"
+                         formControlName="TSReqRevision" class="form-check-input" type="checkbox">
+
+                  <input disabled *ngIf="isReqRevDisabled"
+                         formControlName="TSReqRevision" class="form-check-input" type="checkbox">
+
+                  <label class="form-check-label" for="TSReqRevision">
+                    Request Revision
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-md-4" *ngIf='FinalRatingForm?.value?.TSReqRevision'>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text redStar">Revision Comments</span>
+                        </div>
+                        <textarea maxlength="2000" formControlName="ThirdSignatoryRevComments"
+                            class="form-control"></textarea>
+
+                    </div>
+                </div>
+            </div> -->
+
+
+          </div>
+
+
+          <div class="form-group row">
+            <div class="col-md-4">
+              <div class="input-group">
+
+                <div class="input-group-prepend w-52">
+                  <span class="input-group-text w-100">Third Signatory Sign-Off:</span>
+                </div>
+                <input class="form-control" type="text" readonly formControlName="ThirdSignatorySignOff"
+                       name="ThirdSignatorySignOff">
+              </div>
+            </div>
+            <div *ngIf="!showThirdSignatorySubmit" class="col-md-4">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"> Signed-off On:</span>
+                </div>
+                <input type="text" readonly formControlName="ThirdSignatorySubmittedOn"
+                       class="form-control" name="ThirdSignatorySubmittedOn">
+              </div>
+            </div>
+
+            <div *ngIf="showThirdSignatorySubmit && !showManagerSubmit && !showEmployeeSubmit  && seletedTabRole==='TS' " class="col-md-12">
+              <div class="pull-right form-group">
+                <div class="">
+                  <button (click)="cancelFinalRating()"
+                          class="btn btn-secondary">
+                    Cancel
+                  </button>&nbsp;
+                  <button (click)="saveTSFinalRating()"
+                          class="btn btn-primary">
+                    Save
+                  </button>&nbsp;
+                  <button (click)="submitTSFinalRating()"
+                          class="btn btn-primary">
+                    Submit
+                    Final Rating
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </tab>
+  </tabset>
+
+</div>
+
+
+
+<ng-template #competencyView class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+  <div class="modal-primary modal-xlg" role="document">
+    <div class="modal-content">
+      <div class="modal-header modal-primary">
+        <h4 class="modal-title">{{currentEmpName}} - Competencies</h4>
+        <button type="button" class="close" (click)="closeDrModel()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" novalidate="" class="ng-untouched ng-pristine ng-valid">
+          <div [formGroup]="managerCompetencyForm" class="card col-lg-12 pt-3">
+            <accordion [closeOthers]="oneAtATime">
+              <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of managerCompetencyQuestionsList">
+                <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                  <div class="pull-left">
+                    <i [ngClass]="{'icon-minus': groupval?.isOpen, 'icon-plus': !groupval?.isOpen}"> </i> {{c.CompetenyName}}
+                  </div>
+                  <div>
+                    <span tooltip="Overall Rating is calculated and displayed after all the required ratings (from Manager, Peer, Direct Report) have been submitted." class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span>
+                  </div>
+                </button>
+                <app-competency-wrapper [disableManagerRatingField]="disableManagerRating" [questions]="c.Questions" [form]="c.form" [comments]="c.comments" [empComments]="c.empComments">
+                </app-competency-wrapper>
+              </accordion-group>
+
+            </accordion>
+            <div class="row">
+              <div class="col-md-6">
+                <ul class="list-group">
+                  <li class="list-group-item active">
+                    Peer Review List
+                  </li>
+                </ul>
+                <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length>0" class="list-group">
+                  <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let peer of PeerScoreCard?.PeerList">
+                    {{peer.FirstName}} {{peer.LastName}}
+                  </li>
+                </ul>
+                <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length===0" class="list-group">
+                  <li class="list-group-item list-group-item-action list-group-item-info">
+                    <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span>
+                  </li>
+                </ul>
+
+              </div>
+              <div class="col-md-6">
+                <ul class="list-group">
+                  <li class="list-group-item active">
+                    Direct Report Review List
+                  </li>
+                </ul>
+                <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0" class="list-group">
+                  <li class="list-group-item list-group-item-action list-group-item-info" *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">
+                    {{dr.FirstName}} {{dr.LastName}}
+                  </li>
+                </ul>
+                <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length===0" class="list-group">
+                  <li class="list-group-item list-group-item-action list-group-item-info">
+                    <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <br>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" #closeModal (click)="closeDrModel()">Ok</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+

@@ -15,5 +15,8 @@ export class CompetencyQuestionsComponent implements OnInit {
   }
   @Input() question: CompetencyBase<string>;
   @Input() form: FormGroup;
+  @Input() showEmployeeRatingField: boolean = true;
+  @Input() disableManagerRatingFieldQuestion: boolean = false;
+
   get isValid() { return this.form.controls[this.question.key].valid; }
 }
