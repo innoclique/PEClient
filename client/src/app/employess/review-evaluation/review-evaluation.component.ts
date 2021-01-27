@@ -48,6 +48,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   public showEmployeeSubmit: Boolean = true;
   public showManagerSubmit: Boolean = true;
   public showThirdSignatorySubmit: Boolean = true;
+  public FRReqRevision:Boolean= false;
   public PeerScoreCard: any;
   DirectReporteeScoreCard: any;
   currentEmpId: any;
@@ -169,7 +170,6 @@ goto(selTab){
           this.prepareCompetencyQuestionsByManager();
           console.log('the evauation form', this.evaluationForm)
         }
-        debugger
         if (res1.FinalRating) {
           this.FinalRatingForm.controls["EmployeeComments"].setValue(res1.FinalRating.Self.YearEndComments)
           this.FinalRatingForm.controls["EmployeeRevComments"].setValue(res1.FinalRating.Self.RevComments)
@@ -203,6 +203,13 @@ goto(selTab){
             :this.selectedUser.ThirdSignatory?this.selectedUser.ThirdSignatory.FirstName+" "+this.selectedUser.ThirdSignatory.LastName:"")
           this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.ThirdSignatory.SubmittedOn))
           this.showThirdSignatorySubmit = !res1.FinalRating.ThirdSignatory.IsSubmitted;
+          let reqrev:boolean= false;
+          if(res1.FinalRating.Status!="Employee Submitted" && res1.FinalRating.FRReqRevision){
+            reqrev=true
+          }
+          this.FRReqRevision = reqrev;
+ 
+
 
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {

@@ -368,6 +368,23 @@
                                                     class="form-control"   name="ThirdSignatorySubmittedOn">
                                                 </div>
                                             </div>
+                                            <div class="col-md-12" *ngIf="FRReqRevision" >
+                                                <div class="pull-right form-group">
+                                                    <div class="">
+                                                        <button
+                                                            class="btn btn-secondary" disabled="true">
+                                                            <span tooltip="Employee yet to submit rating">Cancel</span></button>&nbsp;
+                                                        <button
+                                                            class="btn btn-primary" disabled="true">
+                                                            <span tooltip="Employee yet to submit rating">Save</span></button>&nbsp;
+                                                        <button
+                                                            class="btn btn-primary" disabled="true">
+                                                            <span tooltip="Employee yet to submit rating">Submit
+                                                                Final Rating</span></button>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
   
                                             <div *ngIf="showThirdSignatorySubmit && !showManagerSubmit && !showEmployeeSubmit  && seletedTabRole==='TS' " class="col-md-12">
                                                 <div class="pull-right form-group">

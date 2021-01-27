@@ -99,11 +99,13 @@ export class LoginComponent implements OnInit {
       }, error => {
         if (error.error.message === Constants.DuplicateSession) {
           this.openDuplicateSessionDialog()
+       
         } if (error.error.message === Constants.InvalidCredentials) {
 
         }
        // this.snack.error(this.translate.instant('Login.InvalidCredentials'));
        this.snack.error(this.translate.instant('Invalid Credentials'));
+       this.loginText = 'Login'
         this.showSpinner = false;
       });
   }
