@@ -516,7 +516,10 @@ action='Update'
     organization.ParentOrganization=this.currentOrganization._id;
     delete organization.contactPersonForm;
     if(organization.UsageType==="License"){
-      organization.UsageType.UsageCount = Number(organization.UsageType.UsageCount);
+      if(!isNaN(organization.UsageType.UsageCount)){
+        organization.UsageType.UsageCount = Number(organization.UsageType.UsageCount);
+      }
+      
     }
     return organization;
   }
