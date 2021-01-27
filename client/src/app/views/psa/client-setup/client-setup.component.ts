@@ -87,7 +87,7 @@ export class ClientSetupComponent implements OnInit {
       { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
       { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
       {
-        headerName: "Actions",
+        headerName: "Review/Modify",
         // suppressMenu: true,
         suppressSizeToFit: true,
     
@@ -127,7 +127,7 @@ export class ClientSetupComponent implements OnInit {
       { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
       { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
       {
-        headerName: "Actions",
+        headerName: "Review/Modify",
         // suppressMenu: true,
         suppressSizeToFit: true,
     
@@ -722,6 +722,28 @@ onCSCSelect(data){
     });
   }
   //#endregion
+
+  
+keyPressAlphaAndPeriod(event) {
+  debugger
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode >= 97 && charCode <= 122){
+    return true;
+
+  } else if(charCode>=65 && charCode<=90){
+    return true;
+
+  }  else if(charCode == 46){
+return true;
+  }
+  else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
 
   prepareOrgData(action) {
     var organization = this.clientForm.value;

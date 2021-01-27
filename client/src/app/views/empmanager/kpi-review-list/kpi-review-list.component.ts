@@ -61,7 +61,7 @@ export class KpiReviewListComponent implements OnInit {
     // { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
     // { headerName: 'Performance Goal Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
      {
-      headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
       

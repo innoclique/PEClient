@@ -118,7 +118,7 @@ export class ResellerInfoComponent {
             { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 220, type: 'rightAligned' },
             { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 300, type: 'rightAligned' },
             {
-                headerName: "Actions", sorting: false, filter: false, onCellClicked: this.gotoClients.bind(this),
+                headerName: "Review/Modify", sorting: false, filter: false, onCellClicked: this.gotoClients.bind(this),
                 cellRenderer: (data) => {
                     return `  <i class="fa fa-sitemap"   style="cursor:pointer ;padding: 7px 20px 0 0;
                     font-size: 17px;"   data-action-type="edit" title="view clients" ></i>`

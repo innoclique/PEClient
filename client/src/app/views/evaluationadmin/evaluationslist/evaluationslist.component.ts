@@ -199,7 +199,7 @@ export class EvaluationslistComponent implements OnInit {
       },
 
       {
-        headerName: "Actions",
+        headerName: "Review/Modify",
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
@@ -320,8 +320,8 @@ export class EvaluationslistComponent implements OnInit {
       },
 
        {
-         headerName: "Actions",
-         width:100,
+         headerName: "Review/Modify",
+         width:130,
          suppressMenu: true,
          Sorting: false,
          cellRenderer: (data) => {
@@ -363,8 +363,9 @@ export class EvaluationslistComponent implements OnInit {
     },
 
     {
-      headerName: "Actions",
+      headerName: "Review/Modify",
       suppressMenu: true,
+      suppressSizeToFit: true,
       Sorting: false,
       cellRenderer: (data) => {
         
@@ -709,7 +710,7 @@ export class EvaluationslistComponent implements OnInit {
         }
       },
       {
-        headerName: "Actions",
+        headerName: "Review/Modify",
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
@@ -728,7 +729,7 @@ export class EvaluationslistComponent implements OnInit {
       // },
 
       // {
-      //   headerName: "Actions",
+      //   headerName: "Review/Modify",
       //   // suppressMenu: true,
       //   // suppressSizeToFit: true, 
       //   Sorting: false,
@@ -762,7 +763,7 @@ export class EvaluationslistComponent implements OnInit {
         }
       },
       {
-        headerName: "Actions",
+        headerName: "Review/Modify",
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
@@ -783,7 +784,7 @@ export class EvaluationslistComponent implements OnInit {
     //   },
 
     //   {
-    //     headerName: "Actions",
+    //     headerName: "Review/Modify",
     //     suppressMenu: true,
     //     Sorting: false,
     //     cellRenderer: (data) => {

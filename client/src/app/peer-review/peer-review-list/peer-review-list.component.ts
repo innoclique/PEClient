@@ -62,7 +62,7 @@ export class PeerReviewListComponent implements OnInit {
       
     } },
     {
-      headerName: 'Action', field: '', width: 150, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '', width: 150, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
         debugger
         if(!data.data.IsRatingSubmitted){

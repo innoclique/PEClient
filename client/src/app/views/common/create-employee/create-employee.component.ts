@@ -44,6 +44,7 @@ export class CreateEmployeeComponent implements OnInit {
   filteredOptionsDR: Observable<any[]>;
 public currentOrganization:any={}
   submitClicked=false;
+  show=false;
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -97,6 +98,11 @@ public currentOrganization:any={}
         CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
       ])
       ],
+      EmployeeId: [this.empDetails.EmployeeId?this.empDetails.EmployeeId:'', Validators.compose([
+        CustomValidators.patternValidator(/(?=.*[()#-])/, { hasEmpIdSplChars: true }, 'hasEmpIdSplChars')
+      
+      ])
+      ],
       FirstName: [this.empDetails.FirstName?this.empDetails.FirstName:'', Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
@@ -111,27 +117,27 @@ public currentOrganization:any={}
       ],
 
 
-      Address: [this.empDetails.Address?this.empDetails.Address:'', Validators.compose([
+      Address: [this.empDetails.Address?this.empDetails.Address:'Not Applicable', Validators.compose([
         Validators.required, Validators.minLength(4),
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/])/, { hasAddressSplChars: true }, 'hasAddressSplChars'),
       ])
       ],
 
-      PhoneNumber: [this.empDetails.PhoneNumber?this.empDetails.PhoneNumber:'', Validators.compose([
+      PhoneNumber: [this.empDetails.PhoneNumber?this.empDetails.PhoneNumber:'Not Applicable', Validators.compose([
          Validators.minLength(10),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+        // CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
-      ExtNumber: [this.empDetails.ExtNumber?this.empDetails.ExtNumber:'', Validators.compose([
+      ExtNumber: [this.empDetails.ExtNumber?this.empDetails.ExtNumber:'Not Applicable', Validators.compose([
         Validators.minLength(2),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      // CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
-      AltPhoneNumber: [this.empDetails.AltPhoneNumber?this.empDetails.AltPhoneNumber:'', Validators.compose([
+      AltPhoneNumber: [this.empDetails.AltPhoneNumber?this.empDetails.AltPhoneNumber:'Not Applicable', Validators.compose([
         Validators.minLength(10),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      //  CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
-      MobileNumber: [this.empDetails.MobileNumber?this.empDetails.MobileNumber:'', Validators.compose([
+      MobileNumber: [this.empDetails.MobileNumber?this.empDetails.MobileNumber:'Not Applicable', Validators.compose([
         Validators.minLength(10),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+       // CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       IsActive: [this.empDetails.IsActive+'',[Validators.required] ],
       IsSubmit: ['false'],
@@ -143,12 +149,12 @@ public currentOrganization:any={}
       ThirdSignatory: [this.empDetails.ThirdSignatory?this.empDetails.ThirdSignatory:'',],
       CopiesTo: [this.empDetails.CopiesTo?this.empDetails.CopiesTo:'', ],
       Manager: [this.empDetails.Manager?this.empDetails.Manager:'',[Validators.required]],
-      Country: [this.empDetails.Country?this.empDetails.Country:'',],
-      State: [this.empDetails.State?this.empDetails.State:'',],
-      City: [this.empDetails.City?this.empDetails.City:'',],
+      Country: [this.empDetails.Country?this.empDetails.Country:'Not Applicable',],
+      State: [this.empDetails.State?this.empDetails.State:'Not Applicable',],
+      City: [this.empDetails.City?this.empDetails.City:'Not Applicable',],
       JoiningDate: [this.empDetails.JoiningDate?new Date (this.empDetails.JoiningDate):'',[Validators.required]],
       RoleEffFrom: [''],
-      ZipCode: [this.empDetails.ZipCode?this.empDetails.ZipCode:'', Validators.compose([
+      ZipCode: [this.empDetails.ZipCode?this.empDetails.ZipCode:'Not Applicable', Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/[^A-Za-z0-9\s]+/g, { isInValidZip: true }, 'isInValidZip'),
         Validators.minLength(5)
@@ -619,4 +625,28 @@ return true;
   }
   return true;
 }
+
+
+
+keyPressAlphaAndPeriod(event) {
+  debugger
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode >= 97 && charCode <= 122){
+    return true;
+
+  } else if(charCode>=65 && charCode<=90){
+    return true;
+
+  }  else if(charCode == 46){
+return true;
+  }
+  else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
+
 }

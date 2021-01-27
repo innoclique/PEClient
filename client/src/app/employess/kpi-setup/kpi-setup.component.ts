@@ -213,7 +213,7 @@ export class KpiSetupComponent implements OnInit {
     { headerName: 'Status', field: 'Status',  sortable: true, filter: true },
     { headerName: 'Submitted', field: 'IsSubmitedKPIs',   sortable: true, filter: true },
     {
-      headerName: 'Action', field: '',  autoHeight: true,  suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '',  autoHeight: true,  suppressSizeToFit: true,
       cellRenderer: (data) => {
  let actionlinks=''
        if (data.data.RowData.IsActive) {

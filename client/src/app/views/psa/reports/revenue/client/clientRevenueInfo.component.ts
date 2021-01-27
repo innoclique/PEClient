@@ -119,7 +119,7 @@ export class ClientRevenueInfoComponent {
             { headerName: 'Revenue (CAD)', field: 'purchasesCount', type: 'rightAligned', valueFormatter: params => params.data.purchasesCount.toFixed(2) },
             { headerName: 'Payment Type', field: 'paymentTypes' },
             {
-                headerName: "Actions", filter: false, sorting: false, onCellClicked: this.gotoClientRevenueDetails.bind(this),
+                headerName: "Review/Modify", filter: false, sorting: false, onCellClicked: this.gotoClientRevenueDetails.bind(this),
                 cellRenderer: () => {
                     return `  <i class="fa fa-bars"   style="cursor:pointer ;padding: 7px 10px 0 0;
             font-size: 17px; "   title="view Client Revenue Details" ></i>`

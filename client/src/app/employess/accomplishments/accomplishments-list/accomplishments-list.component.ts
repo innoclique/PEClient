@@ -79,7 +79,7 @@ export class AccomplishmentsListComponent implements OnInit {
     { headerName: 'Draft', field: 'IsDraft',  sortable: true, filter: true },
    
     {
-      headerName: 'Action', field: '',  autoHeight: true,  suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '',  autoHeight: true,  suppressSizeToFit: true,
       cellRenderer: (data) => {
  let actionlinks=''
        if (data.data.RowData.IsActive) {

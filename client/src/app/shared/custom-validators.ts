@@ -25,6 +25,15 @@ export class CustomValidators {
         return valid ? null : error;
       }
 
+      if (name === 'hasEmpIdSplChars') {
+        if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`]+/.test(control.value)) {
+          valid = true;
+          return valid ? null : error;
+        }
+        valid = !/[!@$%^&*_+\=\[\]{};'"\\|<>\/?`]+/.test(control.value)
+        return valid ? null : error;
+      }
+
       if (name === 'hasAddressSplChars') {
         if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`]+/.test(control.value)) {
           valid = true;
