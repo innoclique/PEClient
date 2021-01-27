@@ -13,7 +13,9 @@ export class CompetencyWrapperComponent implements OnInit {
   @Input() questions: CompetencyBase<string>[] = [];
   @Input() form: FormGroup;
   @Input() comments:String;
-  @Input() empComments:String
+  @Input() empComments: String;
+  @Input() showEmployeeRatingColumn: boolean = true;
+  @Input() disableManagerRatingField: boolean = false;
   //form: FormGroup;
   payLoad = '';
 
@@ -28,7 +30,7 @@ export class CompetencyWrapperComponent implements OnInit {
       this.form.controls['Comments'].setValue(this.comments);
       this.form.addControl('EmpComments', new FormControl())
       this.form.controls['EmpComments'].setValue(this.empComments);
-      
+
     }
    
   }

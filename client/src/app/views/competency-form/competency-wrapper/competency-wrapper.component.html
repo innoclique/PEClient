@@ -2,9 +2,10 @@
   <form  autocomplete="off"  [formGroup]="form" style="width: 100%;">
     <table class="table">
       <thead>
-        <th>Question</th>
-        <th></th>
-        <th style="margin-left: -27px; display: block;margin-bottom: -1px;padding-left: 0px;">Employee Rating</th>
+      <th>Question</th>
+      <th></th>
+      <th *ngIf="showEmployeeRatingColumn" style="margin-left: -27px; display: block;margin-bottom: -1px;padding-left: 0px;">Employee Rating</th>
+      <th *ngIf="!showEmployeeRatingColumn"></th>
       </thead>
       <tbody>
         <tr>
@@ -15,7 +16,7 @@
       </tbody>
     </table>
     <div *ngFor="let question of questions">
-      <app-competency-questions [question]="question" [form]="form"></app-competency-questions>
+      <app-competency-questions [disableManagerRatingFieldQuestion]="disableManagerRatingField" [showEmployeeRatingField]="showEmployeeRatingColumn" [question]="question" [form]="form"></app-competency-questions>
     </div>
 
     <div *ngIf="form" class="form-row">
@@ -24,7 +25,7 @@
         <div style="margin-left: 10px;" class="form-group">
           <label  for="EmpComments" class="strong-key"> Comments: </label>
           <textarea maxlength="500" class="form-control" cols="" rows="4" formControlName="EmpComments"
-            name="EmpComments">  </textarea>
+            name="EmpComments" [attr.disabled]= "disableManagerRatingField ? 'disabled' : null">  </textarea>
         </div>
       </div>
 
@@ -32,14 +33,14 @@
         <div style="margin-left: 10px;" class="form-group">
           <label for="Comments" class="strong-key"> Manager Comments: </label>
           <textarea maxlength="500" class="form-control" cols="" rows="4" formControlName="Comments"
-            name="Comments">  </textarea>
+            name="Comments" [attr.disabled]= "disableManagerRatingField ? 'disabled' : null">  </textarea>
         </div>
       </div>
       <div *ngIf="!questions[0].showEmpRating" class="col-md-6">
         <div style="margin-left: 10px;" class="form-group">
           <label for="Comments" style="font-weight: 600;">  Comments: </label>
           <textarea maxlength="500" class="form-control" cols="" rows="4" formControlName="Comments"
-            name="Comments">  </textarea>
+            name="Comments" [attr.disabled]= "disableManagerRatingField ? 'disabled' : null">  </textarea>
         </div>
       </div>
     </div>
