@@ -64,6 +64,7 @@ export class PaymentGatewayComponent implements OnInit {
         this.appInputparams.totalAmount=params['totalAmount'];
         payable_Amount=params['totalAmount'];
       }
+      this.appInputparams.isRemoveReleaseId=params['isRemoveReleaseId'] || false;
      });  
   };
   
@@ -83,15 +84,30 @@ export class PaymentGatewayComponent implements OnInit {
         }else{
           this.notification.error("Payment gateway problem. Please try again later.");
           this.errorMsg="Payment gateway problem. Please try again later.";
+          if(this.appInputparams.isRemoveReleaseId)
+            this.removePaymentRelease();
         }
       }else{
         this.notification.error("Payment gateway problem. Please try again later.");
-          this.errorMsg="Payment gateway problem. Please try again later.";
+        this.errorMsg="Payment gateway problem. Please try again later.";
+        if(this.appInputparams.isRemoveReleaseId)
+            this.removePaymentRelease();
       }
       
       
     });
     
+}
+removePaymentRelease(){
+  let requestBody = {
+    paymentReleaseId:this.appInputparams.paymentreleaseId
+  }
+  perfApp1.route = "payments";
+  perfApp1.method = "delete/payament/release",
+  perfApp1.requestBody = requestBody
+  perfApp1.CallAPI().subscribe(c => {
+   console.log(c);
+  });
 }
 loadPaymentPage(ticket){
   console.log(' ticket : ',ticket);

@@ -97,6 +97,14 @@ export class PaymentReleaseComponent implements OnInit {
       this.perfApp.requestBody = options;
       this.perfApp.CallAPI().subscribe(_rangeList => {
         this.rangeList = _rangeList;
+        let isRangeAvailable = _rangeList.find(r=>{
+          console.log(`${r._id.toString()} == ${this.selectedOrganizationObj.Range.toString()}`)
+          return r._id.toString() === this.selectedOrganizationObj.Range.toString()
+        })
+        if(isRangeAvailable){
+          this.paymentModel.Range = isRangeAvailable._id.toString();
+          this.onSelectRange(isRangeAvailable._id.toString())
+        }
       });
   }
   getTaxInfo(State){
@@ -165,6 +173,7 @@ useageOnchange(){
         "Type" : "Range"
       } 
       this.getRangeList(rangeOptions);
+      
       //=> End
       let _requestBody={
         Organization:selectedOrgnization,
