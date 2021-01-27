@@ -183,31 +183,33 @@ public currentOrganization:any={}
     
   }
 
-    this.empForm.patchValue({IsDraft: 'true' });
-    this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to add this employee?"
-    this.alert.ShowCancelButton = true;
-    this.alert.ShowConfirmButton = true;
-    this.alert.CancelButtonText = "Cancel";
-    this.alert.ConfirmButtonText = "Ok";
+    this.empForm.patchValue({ IsDraft: 'true' });
+    this.saveEmployee();
 
-    const dialogConfig = new MatDialogConfig()
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = this.alert;
-    dialogConfig.height = "300px";
-    dialogConfig.maxWidth = '100%';
-    dialogConfig.minWidth = '40%';
+    //this.alert.Title = "Alert";
+    //this.alert.Content = "Are you sure you want to add this employee?"
+    //this.alert.ShowCancelButton = true;
+    //this.alert.ShowConfirmButton = true;
+    //this.alert.CancelButtonText = "Cancel";
+    //this.alert.ConfirmButtonText = "Ok";
 
-    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(resp => {
-      if (resp=='yes') {
-        this.saveEmployee();
-      }
-      else{
+    //const dialogConfig = new MatDialogConfig()
+    //dialogConfig.disableClose = true;
+    //dialogConfig.autoFocus = true;
+    //dialogConfig.data = this.alert;
+    //dialogConfig.height = "300px";
+    //dialogConfig.maxWidth = '100%';
+    //dialogConfig.minWidth = '40%';
 
-      }
-    })
+    //var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    //dialogRef.afterClosed().subscribe(resp => {
+    //  if (resp=='yes') {
+    //    this.saveEmployee();
+    //  }
+    //  else{
+
+    //  }
+    //})
 
   }
 

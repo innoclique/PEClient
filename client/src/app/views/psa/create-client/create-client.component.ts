@@ -196,8 +196,8 @@ export class CreateClientComponent implements OnInit {
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
         ContactPersonFirstName: ['', Validators.compose([
-          Validators.required,                
-          Validators.pattern("^[a-zA-Z0-9.,-:() ]+$"),        
+          Validators.required,
+          Validators.pattern("^[a-zA-Z0-9.,-:() ]+$"),
           Validators.maxLength(200)])
         ],
         ContactPersonLastName: ['', Validators.compose([
@@ -327,7 +327,11 @@ export class CreateClientComponent implements OnInit {
       this.notification.success('Organization Added Successfully.')
       this.errorOnSave = false;
       this.errorMessage = "";
-      this.router.navigate(['psa/payment-release',{email:this.clientFormData.Email}],{ skipLocationChange: true });
+      if (!this.clientFormData.IsDraft) {
+        this.router.navigate(['psa/payment-release', { email: this.clientFormData.Email }], { skipLocationChange: true });
+      } else {
+        this.router.navigate(['psa/list']);
+      }
       
     }, error => {
       this.errorOnSave = true;
@@ -350,11 +354,25 @@ export class CreateClientComponent implements OnInit {
           this.setContactPersonFields(contactForm)
         }
         else {
-          this.enableFields(contactForm);
-          this.addValidators(contactForm);
+         // this.enableFields(contactForm);
+         // this.addValidators(contactForm);
         }
       });
   }
+
+  public onSameAsAdminChange(value): void {
+    var contactForm = (this.clientForm.controls['contactPersonForm'] as FormGroup)
+    if (value.target.checked) {
+      this.removeValidators(contactForm);
+      this.disableFields(contactForm);
+      this.setContactPersonFields(contactForm)
+    }
+    else {
+      this.enableFields(contactForm);
+      this.addValidators(contactForm);
+    }
+  }
+
   mandateStartMonth() {
     this.clientForm.get('EvaluationPeriod').valueChanges
       .subscribe(value => {
@@ -621,11 +639,11 @@ action='Update'
       organization.ContactPersonPhone = organization.AdminPhone;
       organization.ContactPersonEmail = organization.AdminEmail;
     } else {
-      organization.ContactPersonFirstName = organization.ContactPersonFirstName;
-      organization.ContactPersonMiddleName = organization.ContactPersonMiddleName;
-      organization.ContactPersonLastName = organization.ContactPersonLastName;
-      organization.ContactPersonPhone = organization.ContactPersonPhone;
-      organization.ContactPersonEmail = organization.ContactPersonEmail;
+      organization.ContactPersonFirstName = organization.contactPersonForm.ContactPersonFirstName;
+      organization.ContactPersonMiddleName = organization.contactPersonForm.ContactPersonMiddleName;
+      organization.ContactPersonLastName = organization.contactPersonForm.ContactPersonLastName;
+      organization.ContactPersonPhone = organization.contactPersonForm.ContactPersonPhone;
+      organization.ContactPersonEmail = organization.contactPersonForm.ContactPersonEmail;
     }
     return organization;
   }
@@ -635,14 +653,14 @@ action='Update'
     // if (!this.clientForm.valid) {
     //   return;
     // }
-    debugger
-    if(this.clientForm.value.Name==="" || this.clientForm.value.Industry===""){
-      this.notification.error('Organization Name is mandatory')
+   debugger
+    if(this.clientForm.value.Name===""){
+     this.notification.error('Organization Name is mandatory')
       return;
     }
-    if( this.clientForm.value.Industry===""){
+    if(!this.clientForm.value.Industry){
       this.notification.error('Industry is mandatory')
-      return;
+     return;
     }
     if(!this.clientForm.value.Email){
       this.notification.error('Email is mandatory')
@@ -652,7 +670,6 @@ action='Update'
       this.notification.error('Admin Email is mandatory')
       return;
     }
-    alert("Are you sure you want to add this client?")
     this.saveClient();
   }
 

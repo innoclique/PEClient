@@ -87,7 +87,8 @@ export class PaymentReleaseComponent implements OnInit {
     this.perfApp.method = "GetAllOrganizations",
     this.perfApp.requestBody = { 'companyId': this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c => {
-      this.organizationList = c;
+      this.organizationList = c.filter((org) => !org.IsDraft);
+     // this.organizationList = c;
       this.onloadOrgEMail();
     })
   }
