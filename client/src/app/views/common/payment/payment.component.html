@@ -13,7 +13,8 @@
                     <option value="">Select Payment</option>
                     <option *ngIf="!isinitialPaymentDone" value="initial_pay">Initial Payment</option>
                     <option *ngIf="isinitialPaymentDone" value="adhoc_pay">Adhoc Payment</option>
-                    <option *ngIf="isinitialPaymentDone" value="renewal_pay">Renewal</option>
+                    <option *ngIf="isinitialPaymentDone && !isReseller" value="renewal_pay">Renewal</option>
+                    <option *ngIf="isinitialPaymentDone && isReseller" value="client_renewal_pay">Renewal</option>
                   </select>
                   <i class="fa fa-chevron-down"></i>
                 </div>
@@ -28,7 +29,14 @@
             </div>
           </div>-->
           <div class="row m-b15">
-            <div class="col-lg-6">
+            <div class="col-lg-6" *ngIf="isReseller">
+              <label>Clients</label>
+              <select [(ngModel)]="paymentModel.ClientId"  class="form-control" (change)="clientOrgnizationDetails($event.target.value)">
+                <option value="">Select Organisation</option>
+                <option *ngFor="let item of clientData" [value]="item._id">{{item.Name}}</option>
+              </select>
+            </div>
+            <div class="col-lg-6" *ngIf="!isReseller">
               <label>Usage type</label>
               <input readonly class="form-control" [(ngModel)]="paymentModel.UserType" name="userType"  />
               
@@ -94,11 +102,11 @@
             </div>
             
           </div>
-
+          
           <div class="row m-b15">
-            <div class="col-lg-6" *ngIf="isReseller">
+            <div class="col-lg-6" *ngIf="isNoNeededVisible">
               <label>#s needed</label>
-              <input type="text"  class="form-control" [(ngModel)]="paymentModel.NoNeeded" />
+              <input (input)="onChangeNoNeeded($event.target.value)"  type="text"  class="form-control" [(ngModel)]="paymentModel.NoNeeded" />
             </div>
             
             
