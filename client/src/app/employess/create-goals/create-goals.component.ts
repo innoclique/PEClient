@@ -220,7 +220,7 @@ get k (){
           '</div>'
   }, field: 'Status', width: 120, autoHeight: true },
     {
-      headerName: "Action",
+      headerName: "Review/Modify",
       suppressMenu: true,
       Sorting: false,
       width: 80,

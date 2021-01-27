@@ -133,7 +133,7 @@ export class ClientInfoComponent {
             { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 150, type: 'rightAligned' },
             { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 150, type: 'rightAligned' },
             {
-                headerName: "Actions", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoPurchaseHistory.bind(this),
+                headerName: "Review/Modify", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoPurchaseHistory.bind(this),
                 cellRenderer: (data) => {
                     return `  <i class="fa fa-history"   style="cursor:pointer ;padding: 7px 20px 0 0;
                     font-size: 17px;"   data-action-type="edit" title="view purchase history" ></i>`

@@ -100,7 +100,7 @@ export class ReviewActionPlanListComponent implements OnInit {
     // {headerName: 'No.of DevGoals', field: 'NoOfDevGoals', sortable: true, filter: true },
     // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '', autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -134,7 +134,7 @@ public tsColumnDefs = [
    
   // {headerName: 'Final Rating Status', field: 'FRStatus',  width: 200, sortable: true, filter: true },
   {
-    headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+    headerName: 'Review/Modify', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
     cellRenderer: (data) => {
 
       var returnString = '';

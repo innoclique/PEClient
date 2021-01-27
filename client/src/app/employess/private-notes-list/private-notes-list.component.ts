@@ -80,7 +80,7 @@ export class PrivateNotesListComponent implements OnInit {
     { headerName: 'Draft', field: 'IsDraft',  sortable: true, filter: true },
    
     {
-      headerName: 'Action', field: '',  
+      headerName: 'Review/Modify', field: '',  
       cellRenderer: (data) => {
  let actionlinks=''
        if (data.data.RowData.IsActive) {

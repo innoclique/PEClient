@@ -79,7 +79,7 @@ export class PaymentAdhocListComponent implements OnInit {
         return `${data.value.$numberDecimal}`;
       }},
       {
-        headerName: "Actions",
+        headerName: "Review/Modify",
         suppressSizeToFit: true,
     
         Sorting: false,        

@@ -148,14 +148,14 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text redStar">Pin/Zip Code</span>
+                    <span class="input-group-text redStar">Postal/Zip Code</span>
                   </div>
                   <input maxlength="8" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.ZipCode.errors }"
                     formControlName="ZipCode" class="form-control">
 
 
                   <div *ngIf=" isFormSubmitted && f.ZipCode.errors" class="invalid-feedback">
-                    <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is mandatory</div>
+                    <div *ngIf="f.ZipCode.errors.required">Postal/Zip Code is mandatory</div>
                     <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                   </div>
                 </div>
@@ -289,9 +289,10 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text ">Middle Name</span>
+                    <span class="input-group-text ">Initial</span>
                   </div>
-                  <input type="text" class="form-control" formControlName="AdminMiddleName">
+                  <input type="text"   (keypress)="keyPressAlphaAndPeriod($event)"
+                   class="form-control" formControlName="AdminMiddleName">
                 </div>
               </div>
             </div>
@@ -375,9 +376,9 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text ">Middle Name</span>
+                    <span class="input-group-text ">Initial</span>
                   </div>
-                  <input type="text" class="form-control" formControlName="ContactPersonMiddleName">
+                  <input type="text" (keypress)="keyPressAlphaAndPeriod($event)" class="form-control" formControlName="ContactPersonMiddleName">
                 </div>
               </div>
             </div>

@@ -46,9 +46,10 @@ Back to list
                         <div class="form-group">
                             <div class="input-group">
                               <div class="input-group-prepend">
-                                <span class="input-group-text">Middle Name</span>
+                                <span class="input-group-text">Initial</span>
                               </div>
-                              <input max="200" maxlength="200" class="form-control"  type="text"
+                              <input max="3" maxlength="3" class="form-control"  type="text"
+                              (keypress)="keyPressAlphaAndPeriod($event)"
                               [ngClass]="{ 'is-invalid': ( f.MiddleName.touched|| submitClicked)  &&  f.MiddleName.invalid }"
                               formControlName="MiddleName"  name="MiddleName"  >
       
@@ -82,11 +83,11 @@ Back to list
                     
                 </div>
               
-                <app-csc [reset]="countyFormReset" [showValidateMsg]="submitClicked" [CSCData]='cscData' (onSelect)="onCSCSelect($event)" >
+                <!-- <app-csc [reset]="countyFormReset" [showValidateMsg]="submitClicked" [CSCData]='cscData' (onSelect)="onCSCSelect($event)" >
                   
-                </app-csc>
+                </app-csc> -->
       
-                <div class="row">
+                <div *ngIf="show" class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <div class="input-group">
@@ -184,27 +185,45 @@ Back to list
                     
                 </div>
       
-                <div class="row">
+                <div  class="row">
                  
-                  <div class="col-md-4">
+                  <div *ngIf="show" class="col-md-4">
                     <div class="form-group">
                         <div class="input-group">
                           <div class="input-group-prepend">
-                            <span class="input-group-text redStar">Pin/Zip Code</span>
+                            <span class="input-group-text redStar">Postal/Zip Code</span>
                           </div>
                           <input max="8" maxlength="8" class="form-control"  type="text"
                           [ngClass]="{ 'is-invalid':( f.ZipCode.touched || submitClicked)  &&  f.ZipCode.invalid }"
                           formControlName="ZipCode"  name="ZipCode" required 
                            (keypress)="keyPressNumbersZip($event)" >
                           <div *ngIf="(f.ZipCode.touched || submitClicked) && f.ZipCode.invalid" class="invalid-feedback">
-                            <div *ngIf="f.ZipCode.errors.required">Pin/Zip Code is mandatory</div>
-                           <div *ngIf="f.ZipCode.errors.minlength">Pin/Zip Code must be at least 5 characters  </div>
+                            <div *ngIf="f.ZipCode.errors.required">Postal/Zip Code is mandatory</div>
+                           <div *ngIf="f.ZipCode.errors.minlength">Postal/Zip Code must be at least 5 characters  </div>
                             <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div> 
                         </div>
                        
                         </div>
                       </div>
                 </div>
+
+                <div  class="col-md-4">
+                  <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span style="width: 152px;" class="input-group-text">Employee Id/Number</span>
+                        </div>
+                        <input max="10" maxlength="10" class="form-control"  type="text"
+                        [ngClass]="{ 'is-invalid':( f.EmployeeId.touched || submitClicked)  &&  f.EmployeeId.invalid }"
+                        formControlName="EmployeeId"  name="EmployeeId"  >
+                        <div *ngIf="(f.EmployeeId.touched || submitClicked) && f.EmployeeId.invalid" class="invalid-feedback">
+                          <div *ngIf="f.EmployeeId.errors.hasEmpIdSplChars">Allowed special characters are (-,(,),#)</div>
+
+                      </div>
+                     
+                      </div>
+                    </div>
+              </div>
       
                     <div class="col-md-4">
       

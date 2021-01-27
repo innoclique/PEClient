@@ -33,7 +33,7 @@ isCSA:Boolean = false;
     { headerName:'Title',width:'200px',field: 'title',sortable: true},
     { headerName:'Department',width:'250px', field: 'deparment' ,sortable: true,filter: true },
     { headerName:'Days Remaining',width:'200px', field: 'daysRemaining' ,sortable: true,filter: true },
-    { headerName:'Action',width:'100px',
+    { headerName: 'Review/Modify',width:'100px',
     cellRenderer: (data) => {
       let actionlinks=''
              actionlinks= `

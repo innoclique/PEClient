@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 
 
@@ -60,7 +61,18 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   isReqRevDisabled=false;
   currentEmpName: any;
   isPdfView:boolean = false;
-  currentOrganization:any;
+  currentOrganization: any;
+
+  config = {
+    backdrop: true,
+    ignoreBackdropClick: true,
+  };
+  competencyViewRef: BsModalRef;
+  @ViewChild('competencyView') competencyView: TemplateRef<any>;
+  public showReviewRating: boolean = false;
+  public disableManagerSubmit: boolean = false;
+  public disableManagerRating: boolean = true;
+  public isCompetencyTabActive: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -70,7 +82,8 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
     public translate: TranslateService,
     private fb: FormBuilder,
     private qcs: CompetencyFormService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private modalService: BsModalService,
   ) {
    
 
@@ -142,7 +155,7 @@ goto(selTab){
     // { headerName: 'Status', field: 'Status', width: 150, sortable: true, filter: true },
     // { headerName: 'Performance Goal Submited', field: 'IsSubmitedKPIs', width: 150, sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '', width: 200, autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
         return `<i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i>       
@@ -363,7 +376,9 @@ goto(selTab){
     var questions: CompetencyBase<string>[] = [];
     
     this.managerCompetencyList = this.evaluationForm.ManagerCompetencies.Manager.Competencies;
-    this.showCompetencySubmitForManager=!this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted;
+    this.showCompetencySubmitForManager = !this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted;
+    this.showReviewRating = this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted;
+    this.disableManagerSubmit = !this.evaluationForm.Competencies.Employee.CompetencySubmitted;
    // console.log('this.managerCompetencyForm.value', this.managerCompetencyForm.value)
    this.managerCompetencyQuestionsList=[];
    this.managerCompetencyList.forEach(element => {
@@ -474,6 +489,9 @@ goto(selTab){
     this.perfApp.CallAPI().subscribe(x => {
       console.log(x)
       this.snack.success(isDraft ? 'Competencies Rating Saved Successfully' : 'Competency Rating Submitted Successfully');
+      if (!isDraft) {
+        this.openCompetencyReport();
+      }
      this.getTabsData();
       // this.refresh()
     }, error => {
@@ -671,6 +689,18 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
     // const average= arr.reduce((p, c) => p + c, 0) / arr.length;
     console.log('average score :', avg);
     return avg;
+  }
+
+  public openCompetencyReport() {
+    this.competencyViewRef = this.modalService.show(this.competencyView, this.config);
+  }
+
+  public closeDrModel() {
+    this.competencyViewRef.hide();
+  }
+
+  public changeTab(event, isCompetencyTab) {
+    this.isCompetencyTabActive = isCompetencyTab;
   }
 }
 

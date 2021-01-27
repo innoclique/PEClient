@@ -46,6 +46,7 @@ export class SetupEmployeeComponent implements OnInit {
   viewEmpFormRef: BsModalRef;
   countyFormReset: boolean;
   isRoleChanged=false;
+  show=false;
   empDetails: any={}
   currentAction='create';
   cscData:any=undefined;
@@ -102,6 +103,10 @@ export class SetupEmployeeComponent implements OnInit {
         CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
       ])
       ],
+      EmployeeId: [this.empDetails.EmployeeId?this.empDetails.EmployeeId:'', Validators.compose([
+        CustomValidators.patternValidator(/(?=.*[#()-])/, { hasEmpIdSplChars: true }, 'hasEmpIdSplChars')
+      
+      ])      ],
       FirstName: [this.empDetails.FirstName?this.empDetails.FirstName:'', Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
@@ -124,19 +129,19 @@ export class SetupEmployeeComponent implements OnInit {
 
       PhoneNumber: [this.empDetails.PhoneNumber?this.empDetails.PhoneNumber:'', Validators.compose([
          Validators.minLength(10),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      //  CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       ExtNumber: [this.empDetails.ExtNumber?this.empDetails.ExtNumber:'', Validators.compose([
         Validators.minLength(2),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+       // CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       AltPhoneNumber: [this.empDetails.AltPhoneNumber?this.empDetails.AltPhoneNumber:'', Validators.compose([
         Validators.minLength(10),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+       // CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       MobileNumber: [this.empDetails.MobileNumber?this.empDetails.MobileNumber:'', Validators.compose([
         Validators.minLength(10),
-        CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+       // CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
       ])],
       IsActive: [this.empDetails.IsActive+'',[Validators.required] ],
       IsSubmit: ['false'],
@@ -154,7 +159,7 @@ export class SetupEmployeeComponent implements OnInit {
       JoiningDate: [this.empDetails.JoiningDate?new Date (this.empDetails.JoiningDate):'',[Validators.required]],
       RoleEffFrom: [this.empDetails.RoleEffFrom?new Date (this.empDetails.RoleEffFrom):''],
       ZipCode: [this.empDetails.ZipCode?this.empDetails.ZipCode:'', Validators.compose([
-        Validators.required,
+       // Validators.required,
         CustomValidators.patternValidator(/[^A-Za-z0-9\s]+/g, { isInValidZip: true }, 'isInValidZip'),
         Validators.minLength(5)
       ])
@@ -192,11 +197,11 @@ export class SetupEmployeeComponent implements OnInit {
     }},
     {headerName: 'Title', field: 'Title',suppressSizeToFit: true, sortable: true, tooltipField: 'Title', filter: true },
     // {headerName: 'Department', field: 'Department', sortable: true, filter: true },
-    {headerName: 'Phone', field: 'PhoneNumber',  sortable: true, filter: true },
+    {headerName: 'Phone', field: 'PhoneNumber',  sortable: true, filter: true,hide: true },
     {headerName: 'Draft', field: 'IsDraft',   sortable: true, filter: true },
     {headerName: 'Active', field: 'IsActive',   sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', suppressSizeToFit: true, 
+      headerName: 'Review/Modify', field: '', suppressSizeToFit: true, 
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -439,6 +444,7 @@ saveCreateEmployee(){
 
 
 submitCreateEmployee(){
+  debugger
 
   if (!this.empForm.valid) {
     this.empForm.markAllAsTouched();
@@ -598,6 +604,27 @@ getAllDepartments(){
   })
 }
 
+
+keyPressAlphaAndPeriod(event) {
+  debugger
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode >= 97 && charCode <= 122){
+    return true;
+
+  } else if(charCode>=65 && charCode<=90){
+    return true;
+
+  }  else if(charCode == 46){
+return true;
+  }
+  else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
 
 
 printPage() {

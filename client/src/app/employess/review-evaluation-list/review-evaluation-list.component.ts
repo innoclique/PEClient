@@ -127,7 +127,7 @@ export class ReviewEvaluationListComponent implements OnInit {
     { headerName: 'No.of Dev Goals', field: 'NoOfDevGoals', sortable: true, filter: true },
     { headerName: 'Evaluation Status', field: 'FRStatus', tooltipField: "FRStatus", sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '', autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -164,7 +164,7 @@ export class ReviewEvaluationListComponent implements OnInit {
     { headerName: 'No.of Dev Goals', field: 'NoOfDevGoals', sortable: true, filter: true },
     { headerName: 'Evaluation Status', field: 'FRStatus', tooltipField: "FRStatus", sortable: true, filter: true },
     {
-      headerName: 'Action', field: '', autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '', autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
 
         var returnString = '';
@@ -188,7 +188,7 @@ export class ReviewEvaluationListComponent implements OnInit {
   public copiesToColumnDefs = [
     { headerName: 'Employee', field: 'Name', sortable: true, filter: true, },
     {
-      headerName: 'Action', field: '', autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '', autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
         var returnString = '';
         returnString += `<i class="cui-map" style="cursor:pointer; padding: 7px 20px 0 0;
