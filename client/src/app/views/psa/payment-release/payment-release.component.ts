@@ -398,6 +398,21 @@ useageOnchange(){
   }
   paymentReleaseInfo(){
     console.log(":")
+
+    if (!this.paymentModel.Organization) {
+      this.notification.error('Organization Name is mandatory');
+      return;
+    }
+    if (this.paymentModel.UserType === "License" && !this.paymentModel.Range) {
+      this.notification.error('Range is mandatory');
+      return;
+    }
+    if (this.paymentModel.UserType === "Employees" && (this.paymentModel.NoOfEmployees < 1 || !this.paymentModel.NoOfEmployees)) {
+      this.notification.error('# Of Employees is mandatory');
+      return;
+    }
+   
+
     this.paymentModel.Status="Pending";
     this.savePaymentReleaseInfo();
   }
@@ -420,6 +435,8 @@ useageOnchange(){
       if(this.paymentModel.Status === "Draft"){
           this.notification.success(`${this.selectedOrganizationObj.Name} payment release saved.`);
       }
+
+       this.router.navigate(['psa/list']);
        
      }else{
        this.notification.error("Record not saved.")
@@ -427,10 +444,11 @@ useageOnchange(){
      });
   }
   loadPaymentHistory(){
-    if(this.selectedOrganizationObj && this.selectedOrganizationObj._id!=""){
-      this.router.navigate(['psa/payment-history',{Organization:this.currentOrganization._id}],{ skipLocationChange: true });
-    }else{
-      this.notification.error("Please select Organization");
+    if (this.selectedOrganizationObj && this.selectedOrganizationObj._id != "") {
+      //this.router.navigate(['psa/payment-history', { Organization: this.currentOrganization._id }], { skipLocationChange: true });
+      this.router.navigate(['psa/reports/revenue/client/details/' + this.selectedOrganizationObj._id]);
+    } else {
+      this.router.navigate(['psa/reports/revenue/client']);
     }
     
   }
