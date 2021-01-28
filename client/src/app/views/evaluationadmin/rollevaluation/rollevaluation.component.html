@@ -57,17 +57,69 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <span class="period-label"> Evaluation Duration: </span>
-                                    <span class="font-weight-bold period-value">{{currentOrganization?.EvaluationDuration}}</span>
+                                    <span class="period-label">RolledOut: </span>
+                                    <i style="padding-left: 2px;" class="fa fa-user-minus fa-2x"></i>
+                                    <span class="font-weight-bold period-value">{{ getEvaluationsRolledOutForUI() }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <span class="period-label">Available: </span>
+                                    <i style="padding-left: 2px;" class="fa fa-user-plus fa-2x"></i>
+                                    <span class="font-weight-bold period-value">{{getEvaluationsAvailable()}}
+                                    </span>
                                 </div>
                             </div>
 
                         </div>
                         <div class="row">
-                            
+                            <div *ngIf="isSingleEvaluationType" class="col-md-6" >
+                                <div class="form-group">
+                                    <span class="period-label"> Type of Evaluation: </span>
+                                    <span class="font-weight-bold period-value">{{evaluationType}}</span>
+                                </div>
+                            </div>
+                            <div *ngIf="!isSingleEvaluationType" class="col-md-6" style="width: 85%;">
+                                <div class="form-group">
+                                    <div class="input-group" style="width: 85%;">
+                                        <div class="input-group-prepend">
+                                            <span  class="input-group-text redStar">Evaluation Type</span>
+                                        </div>
+                                        <select class="form-control" [value]="evaluationType" (change)="onEvaluationTypeChange($event)"
+                                             >
+                                            <option *ngFor="let type of evaluationTypes">{{type}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div *ngIf="isSingleDurationType" class="col-md-5">
+                                <div class="form-group">
+                                    <span class="period-label">Duration: </span>
+                                    <span  class="font-weight-bold period-value">{{durationOptionSelected}}</span>
+                                </div>
+                            </div>
+                            <div *ngIf="!isSingleDurationType" class="col-md-5">
+                                <div class="form-group" >
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text redStar">Duration</span>
+                                        </div>
+                                        <select class="form-control" (change)="onDurationChange($event)"  >
+                                            <option *ngFor="let durationOption of evaluationDurationOptions"
+                                                >{{durationOption}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
                                 <div  class="form-group">
                                     <div class="input-group">
