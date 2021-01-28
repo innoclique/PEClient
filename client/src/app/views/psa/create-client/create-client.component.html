@@ -312,7 +312,7 @@
             <div class="form-group row">
               <div class="col-md-9 col-form-label pull-left" style="padding:0 0 0 20px;">
                 <div class="form-check form-check-inline mr-1">
-                  <input class="form-check-input" id="inline-checkbox1" formControlName="SameAsAdmin" type="checkbox"
+                  <input class="form-check-input" id="inline-checkbox1" formControlName="SameAsAdmin" type="checkbox" (change)="onSameAsAdminChange($event)"
                     value="option1">
                   <label class="form-check-label" for="inline-checkbox1">Same as Admin</label>
                 </div>
