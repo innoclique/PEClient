@@ -97,11 +97,11 @@ isStateSelect=false;
   
 
   ngOnInit():void {
-     this.countryForm = this.fb.group({ 
-      Country: ['', [Validators.required]],
-      State: ['', [Validators.required]],
-      City: ['', [Validators.required]]
-    });
+    // this.countryForm = this.fb.group({ 
+    //  Country: ['', [Validators.required]],
+    //  State: ['', [Validators.required]],
+    //  City: ['', [Validators.required]]
+    //});
 
 
        this.filteredCountries = this.countryForm.controls['Country'].valueChanges.pipe(

@@ -467,11 +467,12 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                     <span class="input-group-text redStar">Select Model</span>
                   </div>
                   <select [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }"
-                    class="form-control" formControlName="EvaluationModels">
-                    <option value="0">Please select</option>
+                          class="form-control" formControlName="EvaluationModels">
+                    <!--<option value="0">Please select</option>
                     <option value="1">Option #1</option>
                     <option value="2">Option #2</option>
-                    <option value="3">Option #3</option>
+                    <option value="3">Option #3</option>-->
+                    <option *ngFor="let topping of models" [value]="topping">{{topping}}</option>
                   </select>
                   <div *ngIf="isFormSubmitted && f.EvaluationModels.errors" class="invalid-feedback">
                     <div *ngIf="f.EvaluationModels.errors.required">Evaluation Model is mandatory</div>
