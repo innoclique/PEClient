@@ -21,10 +21,10 @@
              Review Evalution  
                      </div> -->
         <div class="card-body">
-          <select class='select-option' style="width: 15%;float: right;" class="form-control" [(ngModel)]="viewSelected" (change)='onOptionsSelected($event)'>
+          <!-- <select class='select-option' style="width: 15%;float: right;" class="form-control" [(ngModel)]="viewSelected" (change)='onOptionsSelected($event)'>
             <option class='option' value="evalutionView">Evaluations</option>
             <option class='option' value="copiesToView">Copies To</option>
-          </select>
+          </select> -->
           <tabset #staticTabs class="pro-tabs">
             <tab *ngIf="loginUser?.SelectedRoles?.includes('EM')">
 
