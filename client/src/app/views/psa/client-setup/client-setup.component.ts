@@ -38,8 +38,8 @@ export class ClientSetupComponent implements OnInit {
   appScores: any = [];
   kpiStatus: any = [];
   coachingRemDays: any = [];
-  public resellerList: any=[];
-  public clientData: any=[]
+  public resellerList: any[];
+  public clientData: any[];
   public monthList = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"]
     public resellerGridApi:any;
@@ -52,7 +52,8 @@ export class ClientSetupComponent implements OnInit {
     public resellerGridOptions: GridOptions = {
       columnDefs: this.getReColDef()      
     }
-    currentUser:any;
+  currentUser: any;
+  models: any = [];
   cscData:any=undefined;
   countyFormReset: boolean;
   currentOrganization:any;
@@ -324,6 +325,8 @@ export class ClientSetupComponent implements OnInit {
     this.perfApp.requestBody = { 'companyId': this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c => {
       
+      this.clientData=[];
+      this.resellerList=[];
       console.log('lients data', c);
       if (c && c.length > 0) {
         
@@ -355,7 +358,7 @@ export class ClientSetupComponent implements OnInit {
         this.clientGridOptions.api.setRowData(this.clientData);
        
         this.resellerGridOptions.api.setRowData(this.resellerList);
-      
+        
       }
       this.selectTab(this.activeTabIndex);
     })
@@ -393,8 +396,8 @@ export class ClientSetupComponent implements OnInit {
           this.setContactPersonFields(contactForm)
         }
         else {
-          this.enableFields(contactForm);
-          this.addValidators(contactForm);
+         this.enableFields(contactForm);
+         this.addValidators(contactForm);
         }
       });
   }
@@ -631,6 +634,7 @@ export class ClientSetupComponent implements OnInit {
       this.orgViewRef.setClass('modal-xlg');  
       this.countyFormReset=true; 
       this.cscData={Country:cr.Country,State:cr.State,City:cr.City};    
+      this.models = cr.EvaluationModels;
       this.setValues(this.clientForm, cr);
       this.disableForm(this.clientForm);
     }
@@ -648,6 +652,7 @@ export class ClientSetupComponent implements OnInit {
       this.countyFormReset=true; 
       this.cscData={Country:cr.Country,State:cr.State,City:cr.City};
       this.setValues(this.clientForm, cr);
+      this.models = cr.EvaluationModels;
       this.disableForm(this.clientForm);
     }
     

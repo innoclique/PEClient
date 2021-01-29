@@ -118,13 +118,17 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text redStar">Phone</span>
                       </div>
+                      <!-- <input maxlength="13"  class="form-control"
+                      [ngClass]="{ 'is-invalid':(isFormSubmitted || ( f.Phone.touched&& f.Phone.invalid  )) &&  f.Phone.errors }"
+                       formControlName="Phone" numbersOnly required> -->
                       <input maxlength="13"  class="form-control"
                         [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Phone.errors }"
                          formControlName="Phone" numbersOnly required>
                       <div *ngIf="isFormSubmitted  && f.Phone.errors" class="invalid-feedback">
                         <div *ngIf="f.Phone.errors.required">Phone Number is mandatory</div>  
-                        <div *ngIf="f.Phone.errors.pattern">Phone can accept only 0-9 and - format should be
-                          (01-1234567890).</div>
+                        <div *ngIf="f.Phone.errors.minlength">Phone Number must be at least 10 characters  </div>
+                        <!-- <div *ngIf="f.Phone.errors.pattern">Phone can accept only 0-9 and - format should be
+                          (01-1234567890).</div> -->
   
                       </div>
                     </div>
@@ -226,8 +230,9 @@
                         formControlName="AdminPhone" numbersOnly>
                         <div *ngIf="isFormSubmitted && f.AdminPhone.errors" class="invalid-feedback">
                           <div *ngIf="f.AdminPhone.errors.required">Admin Phone is mandatory</div>
-                          <div *ngIf="f.AdminPhone.errors.pattern">Phone can accept only 0-9 and - format should be
-                            (01-1234567890).</div>
+                          <div *ngIf="f.AdminPhone.errors.minlength">Phone Number must be at least 10 characters  </div>
+                          <!-- <div *ngIf="f.AdminPhone.errors.pattern">Phone can accept only 0-9 and - format should be
+                            (01-1234567890).</div> -->
                         </div>
                     </div>
                   </div>
@@ -256,7 +261,7 @@
                 <div class="col-md-9 col-form-label pull-left">
                   <div class="form-check form-check-inline mr-1">
                     <input class="form-check-input" id="inline-checkbox1" formControlName="SameAsAdmin" type="checkbox"
-                      value="option1">
+                    (change)="sameAsContactOnChange($event)"  value="option1">
                     <label class="form-check-label" for="inline-checkbox1">Same as Admin</label>
                   </div>
                 </div>
@@ -311,14 +316,15 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text ">Phone</span>
                       </div>
-                      <input class="form-control" type="text"
+                      <input class="form-control" type="text" maxlength="13"
                         [ngClass]="{ 'is-invalid': !f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors}"
                         formControlName="ContactPersonPhone" numbersOnly>
                         <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors"
                         class="invalid-feedback">
                         <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is mandatory</div>
-                        <div *ngIf="a.ContactPersonPhone.errors.pattern">Phone can accept only 0-9 and - format should be
-                          (01-1234567890).</div>
+                        <div *ngIf="a.ContactPersonPhone.errors.minlength">Phone Number must be at least 10 characters  </div>
+                        <!-- <div *ngIf="a.ContactPersonPhone.errors.pattern">Phone can accept only 0-9 and - format should be
+                          (01-1234567890).</div> -->
                       </div>
                     </div>
                   </div>

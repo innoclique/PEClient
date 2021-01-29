@@ -35,6 +35,7 @@ export class ClientListComponent implements OnInit {
   appScores: any = [];
   kpiStatus: any = [];
   coachingRemDays: any = [];
+  models: any = [];
   
   public clientData: any=[]
   public monthList = ["January", "February", "March", "April", "May", "June", "July",
@@ -497,6 +498,7 @@ export class ClientListComponent implements OnInit {
       this.countyFormReset=true; 
       this.cscData={Country:cr.Country,State:cr.State,City:cr.City};
       this.setValues(this.clientForm, cr);
+      this.models = cr.EvaluationModels;
       this.disableForm(this.clientForm);
     }
     

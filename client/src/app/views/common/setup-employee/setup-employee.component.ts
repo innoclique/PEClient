@@ -190,6 +190,7 @@ export class SetupEmployeeComponent implements OnInit {
   }
   closeForm(){
   this.countyFormReset=false;
+  this.isRoleChanged=false;
   this.emoModal.hide();
   }
 
@@ -446,6 +447,11 @@ getEmployees(){
 
 saveCreateEmployee(){
   this.empForm.patchValue({IsDraft: 'true' });
+if(this.isRoleChanged){
+this.snack.error("Role Effective From is mandatory")
+return
+}
+
   this.saveEmployee();
 }
 
@@ -490,6 +496,8 @@ saveEmployee(){
   if (this.currentAction=='edit') {
     this.perfApp.requestBody._id=this.currentRowItem._id; 
     this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
+    if( this.perfApp.requestBody.RoleEffFrom =="" && this.perfApp.requestBody.JoiningDate !="")
+    this.perfApp.requestBody.RoleEffFrom= this.perfApp.requestBody.JoiningDate;
   }else{
     this.perfApp.requestBody.CreatedBy=this.loginUser._id;
     this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
@@ -580,7 +588,7 @@ onJobRole(event){
 
   if (this.currentAction=='create') return;
   let val = event.target.value;
-  if (this.currentRowItem.JobRole !=val) {
+  if (this.currentRowItem.JobRole !="" && this.currentRowItem.JobRole !=val) {
     this.isRoleChanged=true;
     this.empForm.controls['RoleEffFrom'].setValidators([Validators.required])
   }else{
