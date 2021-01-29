@@ -1,0 +1,27 @@
+<div class="animated fadeIn">
+  <div _ngcontent-fha-c25="" class="reports-buttons pull-right">
+    <button *ngIf="isPdfView" (click)="exitReportView()" ngcontent-fha-c25="" class="btn btn-primary mr-1 pull-right"
+        data-toggle="modal" type="button">
+        <i class="fa fa-arrow-left"></i>
+    </button>
+</div>
+  <div class="clearfix"></div>
+  <div *ngIf="isPdfView">
+    <app-current-evaluation-report-pdf [loginUser]="empSelected" [currentOrganization]="currentOrganization">
+    </app-current-evaluation-report-pdf>
+  </div>
+  <div *ngIf="!isPdfView" class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <ag-grid-angular *ngIf="copiesToView" style="width: auto; height: 440px;" class="ag-theme-alpine"
+            [rowData]="copiesToList" [columnDefs]="copiesToColumnDefs" [pagination]="true"
+            (gridReady)="onCopiesToGridReady($event)" [getRowHeight]="getRowHeight" [enableBrowserTooltips]="true"
+            (gridSizeChanged)="onGridSizeChanged($event)" [paginationPageSize]="10"
+            (rowClicked)="pdfView($event)">
+          </ag-grid-angular>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

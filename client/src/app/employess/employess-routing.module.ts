@@ -35,6 +35,7 @@ import { PrivateNotesListComponent } from './private-notes-list/private-notes-li
 import { SnGuardService } from '../services/sn-guard.service';
 import { CurrentEvaluationReportComponent } from './reports/current-evaluation/current-evaluation-report.component';
 import { CurrentEvaluationReportPdfComponent } from './reports/current-evaluation-report/current-evaluation-report-pdf.component';
+import {CopiesToComponent} from './copiesTo/copies-to.component';
 
 
 
@@ -139,6 +140,13 @@ const routes: Routes = [
         component:DoDrReviewComponent,
         data:{title:'Accomplishments'}
       },
+
+      {
+        path:'copiesTo',
+        component:CopiesToComponent,
+        data:{title:'CopiesTo'}
+      },
+      
       
       {
         path:'reports',

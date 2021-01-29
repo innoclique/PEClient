@@ -84,7 +84,7 @@ actor:any;
   isManagerFRSignOff=false;
   currentOrganization: any;
   draftGoals:Boolean = false;
-
+  currentEvaluationYear:any;
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     public router: Router,
@@ -101,7 +101,9 @@ actor:any;
     
 
     this.activatedRoute.params.subscribe(params => {
-     
+     if(params['currentEvaluationYear']){
+      this.currentEvaluationYear = params['currentEvaluationYear'];
+     }
      if (params['action']) {
       this.currentKpiId = params['id'];
       this.currentEmpId = params['empId'];
@@ -674,7 +676,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
 
     this.perfApp.route = "app";
     this.perfApp.method = "SubmitAllKpisByManager",
-      this.perfApp.requestBody = { 'empId': this.currentEmpId }
+      this.perfApp.requestBody = { 'empId': this.currentEmpId,currentEvaluation:this.currentEvaluationYear }
     this.perfApp.CallAPI().subscribe(c => {
 
      if (c) {
@@ -700,7 +702,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpisByManager",
     this.perfApp.requestBody = { 'managerId': this.currentEmpManagerId,
-        'empId': this.currentEmpId,draftSignoff:this.draftGoals}
+        'empId': this.currentEmpId,draftSignoff:this.draftGoals,currentEvaluation:this.currentEvaluationYear}
     // this.perfApp.method = "GetAllKpis",
       // this.perfApp.requestBody = {
       //    'empId': this.currentEmpId,

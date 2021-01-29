@@ -36,6 +36,7 @@ export class KpiSetupComponent implements OnInit {
   scoreUnSubmitedCount=0;
   isEmployeePgSignoff:boolean = false;
   finalSignoffDate:Date;
+  selectedEvaluationYr:any="";
 
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
   config = {
@@ -44,6 +45,8 @@ export class KpiSetupComponent implements OnInit {
 
   };
   trackViewRef: BsModalRef;
+  empEvaluationsYears:any=[];
+  employeeEvaluationYear:any="";
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -56,7 +59,7 @@ export class KpiSetupComponent implements OnInit {
     private modalService: BsModalService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
-    
+    this.getEmployeeEvaluationYears();
     // this.datePipe= new DatePipe('en-US');
     this.findPgSignoff();
 
@@ -64,11 +67,27 @@ export class KpiSetupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.getAllKpis();
+    this.getEmployeeCurrentEvaluation();
+    //this.getAllKpis();
     this.alert = new AlertDialog();
   }
-  
+
+  getEmployeeEvaluationYears() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetEmployeeEvaluationYears",
+      this.perfApp.requestBody = { 'empId': this.loginUser._id}
+    this.perfApp.CallAPI().subscribe(evaluationYears => {
+      this.empEvaluationsYears = evaluationYears;
+    }, error => {
+      this.snack.error(error.error.message);
+    });
+  }
+
+  loadKpisByYear(evaluationYear){
+    this.isKpiActivated=false;
+    this.selectedEvaluationYr=evaluationYear;
+    this.getAllKpis();
+  }
   findPgSignoff(){
     let orgStartEnd = this.getOrganizationStartAndEndDates();
     if(orgStartEnd){
@@ -453,7 +472,7 @@ submitAllKPIs() {
 
   this.perfApp.route = "app";
   this.perfApp.method = "SubmitKpisForEvaluation",
-    this.perfApp.requestBody = { 'empId': this.loginUser._id }
+    this.perfApp.requestBody = { 'empId': this.loginUser._id,currentEvaluation:this.employeeEvaluationYear }
   this.perfApp.CallAPI().subscribe(c => {
 
    if (c) {
@@ -475,7 +494,7 @@ submitAllKPIs() {
 }
 
   createKpi(){
-    this.router.navigate(['employee/kpi-setting',{isFinalSignoff:this.isSignOffDisabled}],{ skipLocationChange: true });
+    this.router.navigate(['employee/kpi-setting',{isFinalSignoff:this.isSignOffDisabled,currentEvaluation:this.selectedEvaluationYr}],{ skipLocationChange: true });
     
   }
 
@@ -487,6 +506,9 @@ submitAllKPIs() {
        'empId': this.loginUser._id,
        'currentOnly': true,
     'orgId':this.authService.getOrganization()._id}
+    if(this.selectedEvaluationYr!=""){
+      this.perfApp.requestBody.evaluationYear=this.selectedEvaluationYr;
+    }
 
 
     this.perfApp.CallAPI().subscribe(c => {
@@ -523,12 +545,26 @@ this.authService.setIsPGSubmitStatus("true");
         this.kpiListData=[];
         this.snack.error(error.error.message);
       } else {
-
         this.isKpiActivated=true;
         this.kpiListData=[];
       this.snack.error(error.error.message);
 
        }
+    })
+  }
+
+  getEmployeeCurrentEvaluation() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetEmployeeCurrentEvaluation",
+    this.perfApp.requestBody = {
+      'empId': this.loginUser._id,
+      'orgId':this.authService.getOrganization()._id
+    }
+    this.perfApp.CallAPI().subscribe(evaluationYear => {
+      console.log("=====GetEmployeeCurrentEvaluation====");
+      console.log(evaluationYear);
+      this.employeeEvaluationYear=evaluationYear;
+      this.loadKpisByYear(evaluationYear);
     })
   }
 

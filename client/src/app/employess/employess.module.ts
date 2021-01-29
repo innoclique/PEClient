@@ -58,6 +58,7 @@ import { PrivateNotesComponent } from './private-notes/private-notes.component';
 import { PrivateNotesListComponent } from './private-notes-list/private-notes-list.component';
 import { CurrentEvaluationReportComponent} from './reports/current-evaluation/current-evaluation-report.component';
 import { CurrentEvaluationReportPdfComponent} from './reports/current-evaluation-report/current-evaluation-report-pdf.component';
+import {CopiesToComponent} from './copiesTo/copies-to.component';
 
 @NgModule({
   declarations: [KpiSettingsComponent, KpiSetupComponent,ReportsComponent,ProfileComponent,
@@ -78,7 +79,8 @@ import { CurrentEvaluationReportPdfComponent} from './reports/current-evaluation
      PrivateNotesComponent,
      PrivateNotesListComponent,
      CurrentEvaluationReportComponent,
-     CurrentEvaluationReportPdfComponent
+     CurrentEvaluationReportPdfComponent,
+     CopiesToComponent
     ],
   imports: [
     CommonModule,

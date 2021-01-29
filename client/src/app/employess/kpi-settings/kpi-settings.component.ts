@@ -62,7 +62,7 @@ accessingFrom:any;
   IsDraftDBVal: any;
   isFinalSignoff:Boolean;
   showAllowSignoff:Boolean=false;;
-
+  currentEvaluation:any;
 
 
 
@@ -77,11 +77,7 @@ accessingFrom:any;
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
-
-    this.initApicallsForKpi();
-
     this.activatedRoute.params.subscribe(params => {
-     
      if (params['action']) {
       this.currentKpiId = params['id'];
       this.currentAction = params['action'];
@@ -93,21 +89,19 @@ accessingFrom:any;
      if (params['showAllowSignoff']) {
       this.showAllowSignoff = params['showAllowSignoff'];
      }
-     
-     
-     
-    });   
+     if (params['currentEvaluation']) {
+      this.currentEvaluation = params['currentEvaluation'];
+      
+     }
+    });
+    this.initApicallsForKpi();
 
   }
 
 
   async initApicallsForKpi() {
-
-    
     await this.getAllKpiBasicData();
     await this.getAllKPIs();
-    
-
   }
 
   ngOnInit(): void {
@@ -291,6 +285,7 @@ if(this.selectedItems.length==0) {
     this.perfApp.requestBody.EvaluationId = this.currEvaluation._id;
 
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
+    this.perfApp.requestBody.EvaluationYear = this.currentEvaluation;
     this.perfApp.requestBody.Owner = this.loginUser._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
     if(this.loginUser.Manager && this.loginUser.Manager._id){
@@ -389,7 +384,8 @@ this.toggleSelection(c,null);
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpiSetupBasicData";
     this.perfApp.requestBody = { 'empId': this.loginUser._id ,
-    'orgId':this.authService.getOrganization()._id
+    'orgId':this.authService.getOrganization()._id,
+    currentEvaluation:this.currentEvaluation
   }
       this.perfApp.CallAPI().subscribe(c => {
 
@@ -504,7 +500,7 @@ conformSubmitKpis(){
 
     this.perfApp.route = "app";
     this.perfApp.method = "SubmitKpisForEvaluation",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id }
+      this.perfApp.requestBody = { 'empId': this.loginUser._id,currentEvaluation:this.currentEvaluation }
     this.perfApp.CallAPI().subscribe(c => {
 
      if (c) {
@@ -528,9 +524,9 @@ conformSubmitKpis(){
   getAllKPIs() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllKpis",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id,'orgId':this.authService.getOrganization()._id}
+      this.perfApp.requestBody = { 'empId': this.loginUser._id,'orgId':this.authService.getOrganization()._id,evaluationYear:this.currentEvaluation}
     this.perfApp.CallAPI().subscribe(c => {
-
+      console.log(c);
       // this.setWeighting(c.filter(item => item.IsDraft === false).length);
       debugger
      // if (this.currentAction =='create')
@@ -621,13 +617,11 @@ this.authService.setIsPGSubmitStatus("true");
 
 
   setWeighting(length: any,currentAction) {
+    console.log(length +" = "+currentAction);
     debugger
-    
     this.weight = length==0? 100 :  Math.round( 100/(length+1));
     if(currentAction =='create')
     this.kpiForm.patchValue({ Weighting: this.weight });
-
-   
   }
 
 
