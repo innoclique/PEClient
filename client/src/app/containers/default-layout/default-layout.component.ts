@@ -124,6 +124,13 @@ isCSA:Boolean = false;
         },
         {
           "IsActive": true,
+          "url": "/employee/copiesTo",
+          "name": "Copies To",
+          "code": "CopiesTo",
+          "icon": "icon-layers"
+        },
+        {
+          "IsActive": true,
            "url": "/employee/private-notes-list",
           "name": "Notes",
           "code": "Notes",
@@ -394,6 +401,13 @@ isCSA:Boolean = false;
             },
             {
               "IsActive": true,
+              "url": "/employee/copiesTo",
+              "name": "Copies To",
+              "code": "CopiesTo",
+              "icon": "icon-layers"
+            },
+            {
+              "IsActive": true,
                "url": "/employee/private-notes-list",
               "name": "Notes",
               "code": "Notes",
@@ -550,6 +564,13 @@ isCSA:Boolean = false;
               "url": "/employee/drreview",
               "name": "Review Manager",
               "code": "CurrentEvaluation",
+              "icon": "icon-layers"
+            },
+            {
+              "IsActive": true,
+              "url": "/employee/copiesTo",
+              "name": "Copies To",
+              "code": "CopiesTo",
               "icon": "icon-layers"
             },
             {
