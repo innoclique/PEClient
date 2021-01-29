@@ -31,6 +31,8 @@ export class SetupEmployeeComponent implements OnInit {
   appRoles: any;
   jobLevels: any;
   loginUser: any;
+  today = new Date();
+  jd=new Date()
 
   filteredOptions: Observable<any[]>;
   filteredOptionsTS: Observable<any[]>;
@@ -43,6 +45,7 @@ export class SetupEmployeeComponent implements OnInit {
   currentRowItem: any;
   // @ViewChild('addEmployee', { static: true }) addEmployeeView: TemplateRef<any>;
   @ViewChild("addEmployee", { static: true }) emoModal: ModalDirective;
+  
   viewEmpFormRef: BsModalRef;
   countyFormReset: boolean;
   isRoleChanged=false;
@@ -167,9 +170,13 @@ export class SetupEmployeeComponent implements OnInit {
 
 
     });
+    this.jd=this.empDetails.JoiningDate?new Date (this.empDetails.JoiningDate):new Date();
   }
 
-
+  dateChanged(event){
+    this.jd=new Date(event.value);
+    this.empDetails.RoleEffFrom= new Date(event.value)
+  }
   
   public hasError = (controlName: string, errorName: string) =>{
     return this.empForm.controls[controlName].hasError(errorName);
@@ -248,7 +255,7 @@ openEmpForm() {
 }
 
   editEmpForm(data) {
-debugger
+//debugger
     this.empForm.reset();
     this.countyFormReset=true;
     this.currentAction='edit'
@@ -268,7 +275,7 @@ debugger
 
 
   onGridReady(params) {
-    debugger
+   // debugger
     params.api.sizeColumnsToFit();
 	     this.gridOptions.api = params.api; // To access the grids API
         this.gridOptions.rowHeight = 34;
@@ -444,12 +451,14 @@ saveCreateEmployee(){
 
 
 submitCreateEmployee(){
-  debugger
+  
 
   if (!this.empForm.valid) {
     this.empForm.markAllAsTouched();
       return;    
-    }else{
+    }
+    else{
+      
       if (!this.empForm.get('PhoneNumber').value &&  !this.empForm.get('AltPhoneNumber').value
        && !this.empForm.get('MobileNumber').value) {
         this.snack.error(this.translate.instant('Please provide at least one contact (PhoneNumber, AltPhoneNumber, MobileNumber )'));
@@ -459,7 +468,7 @@ submitCreateEmployee(){
 
   this.empForm.patchValue({IsSubmit: 'true' });
   this.empForm.patchValue({IsDraft: 'false' });
-  this.saveEmployee();
+ this.saveEmployee();
 }
 
 
@@ -567,7 +576,7 @@ if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
 
 
 onJobRole(event){
-  debugger
+  //debugger
 
   if (this.currentAction=='create') return;
   let val = event.target.value;
@@ -606,7 +615,7 @@ getAllDepartments(){
 
 
 keyPressAlphaAndPeriod(event) {
-  debugger
+ //  debugger
   var charCode = (event.which) ? event.which : event.keyCode;
   if (charCode >= 97 && charCode <= 122){
     return true;
