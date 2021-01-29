@@ -133,7 +133,20 @@ export class LoginComponent implements OnInit {
     dialogConfig.minWidth = '40%';
 
 
+
     var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.keydownEvents().subscribe(event => {
+
+      if(event.key=='Enter'){
+        this.authService.LogOut();
+      //  console.log('alert dialog', resp);
+        this.loginText = 'loading...'
+        setTimeout(()=>{ 
+          this.loginSubmit();
+        }, 700);
+
+      }
+    });
     dialogRef.afterClosed().subscribe(resp => {
       if (resp=='yes') {
       this.authService.LogOut();
