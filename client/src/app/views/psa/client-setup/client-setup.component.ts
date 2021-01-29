@@ -38,8 +38,8 @@ export class ClientSetupComponent implements OnInit {
   appScores: any = [];
   kpiStatus: any = [];
   coachingRemDays: any = [];
-  public resellerList: any=[];
-  public clientData: any=[]
+  public resellerList: any[];
+  public clientData: any[];
   public monthList = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"]
     public resellerGridApi:any;
@@ -325,6 +325,8 @@ export class ClientSetupComponent implements OnInit {
     this.perfApp.requestBody = { 'companyId': this.currentOrganization._id }
     this.perfApp.CallAPI().subscribe(c => {
       
+      this.clientData=[];
+      this.resellerList=[];
       console.log('lients data', c);
       if (c && c.length > 0) {
         

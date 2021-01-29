@@ -246,9 +246,9 @@
                   <span style="width: 152px;" class="input-group-text">Employee Id/Number</span>
                 </div>
                 <input max="10" maxlength="10" class="form-control"  type="text" 
-                [ngClass]="{ 'is-invalid':( f.EmployeeId.touched || submitClicked)  &&  f.EmployeeId.invalid }"
+                [ngClass]="{ 'is-invalid': f.EmployeeId.touched   &&  f.EmployeeId.invalid }"
                 formControlName="EmployeeId"  name="EmployeeId"  >
-                <div *ngIf="(f.EmployeeId.touched || submitClicked) && f.EmployeeId.invalid" class="invalid-feedback">
+                <div *ngIf="f.EmployeeId.touched  && f.EmployeeId.invalid" class="invalid-feedback">
                   <div *ngIf="f.EmployeeId.errors.hasEmpIdSplChars">Allowed special characters are (-,(,),#)</div>
 
               </div>
