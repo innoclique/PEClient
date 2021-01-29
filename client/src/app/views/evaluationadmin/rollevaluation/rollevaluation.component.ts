@@ -79,6 +79,19 @@ export class RollevaluationComponent implements OnInit {
   readonlyEmployee: any = {};
   editEvaluation: any;
   kpiSelectedEmployees: any = [];
+  availableEvaluations: any = [];
+
+  purposeDurationMap: Map<string, Map<string, number>>;
+  pgsMap: Map<string, Map<string, number>>;
+  evaluationsMap: Map<string, Map<string, number>>;
+  isSingleEvaluationType: boolean = true;
+  isSingleDurationType: boolean = true;
+  evaluationType: string;
+  durationOptionSelected: string;
+  evaluationsRolledOut: number = 0;
+  evaluationsAvailable: number = 0;
+  evaluationTypes: Array<string> = [];
+  evaluationDurationOptions: Array<string> = [];
   gridRefreshParams = {
     force: true,
     suppressFlash: false
@@ -94,6 +107,10 @@ export class RollevaluationComponent implements OnInit {
   }
   onSelectAllEmployees(items: any) {
     //this.selectedEmployees = items;
+    if (items.length   > this.getEvaluationsAvailable()) {
+      this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
+      return;
+    }
     this.selectedEmployees = [];
     this.selectedEmployeesForEvaluation = []
     items.map(x => {
@@ -540,6 +557,7 @@ export class RollevaluationComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
+    this.GetAvailableOrgEvaluations();
     this.activatedRoute.params.subscribe(params => {
 
       if (params['allKpi']) {
@@ -628,7 +646,8 @@ export class RollevaluationComponent implements OnInit {
       ActivateActionPlan: [false, []],
       KPIFor: ["Employee", []],
       CreatedBy: ['', []],
-      Company: ['', []]
+      Company: ['', []],
+      EvaluationType: ['Year-end', []],
     });
     this.evaluationForm.controls["EvaluationPeriod"].setValue(this.currentOrganization.EvaluationPeriod);
     this.evaluationForm.controls["EvaluationDuration"].setValue(this.currentOrganization.EvaluationDuration);
@@ -705,9 +724,14 @@ export class RollevaluationComponent implements OnInit {
   }
 
   submitEvaluation() {
+     if (this.selectedEmployeeList.length > this.getEvaluationsAvailable()) {
+        this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
+        return;
+      }
 
     if (this.rollEvaluationEdit) {
-
+      this.evaluationForm.value.EvaluationDuration = this.durationOptionSelected;
+      this.evaluationForm.value.EvaluationType = this.evaluationType;
       let formdata = this.evaluationForm.value;
       formdata.EvaluationId = this.readonlyEmployee.evaluationId;
       let isConform = window.confirm("Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
@@ -758,6 +782,8 @@ export class RollevaluationComponent implements OnInit {
   submitValidEvaluation() {
     this.evaluationForm.value.CreatedBy = this.currentUser._id;
     this.evaluationForm.value.Company = this.currentOrganization._id;
+    this.evaluationForm.value.EvaluationType = this.evaluationType;
+    this.evaluationForm.value.EvaluationDuration = this.durationOptionSelected;
 
     // this.setEmployeeIds();
     //this.setModelIds();
@@ -928,6 +954,218 @@ export class RollevaluationComponent implements OnInit {
   }
   public onPeersGridReady(params) {
     this.peersForEmpGridOptions.api = params.api;
+  }
+
+  getEmpCount(item: any) {
+    console.log('inside getEmpCount : ', item);
+    if (item.Type == 'Adhoc' || item.UserType != 'License') {
+      console.log('emp count : ', item.NoOfEmployees);
+      return item.NoOfEmployees;
+    } else {
+      console.log('else emp count : ', parseInt(item.Range.substring(item.Range.indexOf('-') + 1, item.Range.length)));
+      return parseInt(item.Range.substring(item.Range.indexOf('-') + 1, item.Range.length));
+    }
+  }
+
+  GetAvailableOrgEvaluations() {
+    this.perfApp.route = "evaluation";
+    this.perfApp.method = "GetAvailableOrgEvaluations",
+      this.perfApp.requestBody = { clientId: this.currentOrganization._id };
+    this.perfApp.CallAPI().subscribe(c => {
+      console.log('GetAvailableOrgEvaluations : ', c);
+      if (c) {
+        this.pgsMap = new Map<string, Map<string, number>>();
+        this.evaluationsMap = new Map<string, Map<string, number>>();
+        this.availableEvaluations = c.payments;
+        if (c.pgs) {
+          c.pgs.forEach(item => {
+            if (!item.EvaluationType) {
+              item.EvaluationType = 'Year-end';
+            }
+            if (this.pgsMap.get(item.EvaluationType)) {
+              //update purpose
+              var durationMap: Map<string, number> = this.pgsMap.get(item.EvaluationType);
+              if (durationMap.get(item.EvaluationDuration)) {
+                // update duration
+                var existingDurationEmpCount = durationMap.get(item.EvaluationDuration);
+                durationMap.set(item.EvaluationDuration, existingDurationEmpCount + 1);
+                this.pgsMap.set(item.EvaluationType, durationMap);
+              } else {
+                // add duration
+                durationMap.set(item.EvaluationDuration, 1);
+                this.pgsMap.set(item.EvaluationType, durationMap);
+              }
+            } else {
+              // add EvaluationType
+              var durationMap = new Map<string, number>();
+              durationMap.set(item.EvaluationDuration, 1);
+              this.pgsMap.set(item.EvaluationType, durationMap);
+            }
+          });
+        }
+
+        if (c.evaluations) {
+          c.evaluations.forEach(item => {
+            if (!item.EvaluationType) {
+              item.EvaluationType = 'Year-end';
+            }
+            if (this.evaluationsMap.get(item.EvaluationType)) {
+              //update purpose
+              var durationMap: Map<string, number> = this.evaluationsMap.get(item.EvaluationType);
+              if (durationMap.get(item.EvaluationDuration)) {
+                // update duration
+                var existingDurationEmpCount = durationMap.get(item.EvaluationDuration);
+                durationMap.set(item.EvaluationDuration, existingDurationEmpCount + item.Employees.length);
+                this.evaluationsMap.set(item.EvaluationType, durationMap);
+              } else {
+                // add duration
+                durationMap.set(item.EvaluationDuration, item.Employees.length);
+                this.evaluationsMap.set(item.EvaluationType, durationMap);
+              }
+            } else {
+              // add EvaluationType
+              var durationMap = new Map<string, number>();
+              durationMap.set(item.EvaluationDuration, item.Employees.length);
+              this.evaluationsMap.set(item.EvaluationType, durationMap);
+            }
+          });
+        }
+
+        this.purposeDurationMap = new Map<string, Map<string, number>>();
+
+        this.availableEvaluations.forEach(item => {
+          if (!item.Purpose) {
+            item.Purpose = 'Year-end';
+          }
+          if (this.purposeDurationMap.get(item.Purpose)) {
+            //update purpose
+            var durationMap: Map<string, number> = this.purposeDurationMap.get(item.Purpose);
+            if (durationMap.get(item.NoOfMonthsLable)) {
+              // update duration
+              var existingDurationEmpCount = durationMap.get(item.NoOfMonthsLable);
+              durationMap.set(item.NoOfMonthsLable, existingDurationEmpCount + this.getEmpCount(item));
+              this.purposeDurationMap.set(item.Purpose, durationMap);
+            } else {
+              // add duration
+              durationMap.set(item.NoOfMonthsLable, this.getEmpCount(item));
+              this.purposeDurationMap.set(item.Purpose, durationMap);
+            }
+          } else {
+            // add purpose
+            var durationMap = new Map<string, number>();
+            durationMap.set(item.NoOfMonthsLable, this.getEmpCount(item));
+            this.purposeDurationMap.set(item.Purpose, durationMap);
+          }
+        });
+        console.log('this.pgsMap : ', this.pgsMap);
+        console.log('this.evaluationsMap : ', this.evaluationsMap);
+        console.log('map : ', this.purposeDurationMap);
+        console.log('purposes : ', this.evaluationTypes);
+        console.log('durations : ', Array.from(this.purposeDurationMap.get('Year-end').keys()));
+
+        this.evaluationTypes = Array.from(this.purposeDurationMap.keys());
+        if (this.evaluationTypes) {
+          if (this.evaluationTypes.length === 1) {
+            this.isSingleEvaluationType = true;
+            this.evaluationType = this.evaluationTypes[0];
+          } else {
+            this.evaluationType = this.evaluationTypes[0];
+            this.isSingleEvaluationType = false;
+          }
+        }
+
+        if (this.evaluationType) {
+          this.evaluationDurationOptions = Array.from(this.purposeDurationMap.get(this.evaluationType).keys());
+          if (this.evaluationDurationOptions) {
+            if (this.evaluationDurationOptions.length == 1) {
+              this.durationOptionSelected = this.evaluationDurationOptions[0];
+              this.isSingleDurationType = true;
+            } else {
+              this.isSingleDurationType = false;
+              this.durationOptionSelected = this.evaluationDurationOptions[0];
+            }
+          }
+        }
+
+      }
+    })
+  }
+
+  getEvaluationsRolledOut() {
+    var noOfPgs = 0;
+    var noOfEvs = 0;
+    if (this.pgsMap && this.pgsMap.get(this.evaluationType) && this.pgsMap.get(this.evaluationType).get(this.durationOptionSelected)) {
+      noOfPgs = Number(this.pgsMap.get(this.evaluationType).get(this.durationOptionSelected)) ? (this.pgsMap.get(this.evaluationType).get(this.durationOptionSelected)) : 0;
+    }
+    if (this.evaluationsMap && this.evaluationsMap.get(this.evaluationType) && this.evaluationsMap.get(this.evaluationType).get(this.durationOptionSelected)) {
+      var noOfEvs = Number(this.evaluationsMap.get(this.evaluationType).get(this.durationOptionSelected)) ? this.evaluationsMap.get(this.evaluationType).get(this.durationOptionSelected) : 0;
+    }
+    return noOfEvs + noOfPgs;
+  }
+
+  getEvaluationsRolledOutForUI() {
+    var available = 0;
+    if (this.purposeDurationMap && this.purposeDurationMap.get(this.evaluationType) && this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected)) {
+      available = this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected);
+    }
+    return this.getEvaluationsRolledOut().toString() + " out of " + available.toString();
+  }
+
+  getEvaluationsAvailable() {
+    var available = 0;
+    if (this.purposeDurationMap && this.purposeDurationMap.get(this.evaluationType) && this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected)) {
+      available = this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected);
+    }
+    return (available - this.getEvaluationsRolledOut());
+  }
+
+  onEvaluationTypeChange(event) {
+    if (this.selectedEmployeeList.length > 0) {
+      let isConform = window.confirm("Once the evaluation type changed, you will loose all the employees added for current evaluation type . Are you sure you want to change the evaluations type?")
+      if (isConform) {
+        this.initializeFormFor = this.initializeFormFor?'kpionly':'evaluation';
+        this.selectedEmployeeList = [];
+        this.selectedEmployeesForEvaluation = [];
+        this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
+      }
+      else {
+         event.target.value = this.evaluationType;
+        return;
+      }
+    }
+    console.log('onEvaluationTypeChange : ', event.target.value)
+    this.evaluationType = event.target.value;
+    if (this.evaluationType) {
+      this.evaluationDurationOptions = Array.from(this.purposeDurationMap.get(this.evaluationType).keys());
+      if (this.evaluationDurationOptions) {
+        if (this.evaluationDurationOptions.length == 1) {
+          this.isSingleDurationType = true;
+        } else {
+          this.isSingleDurationType = false;
+        }
+        this.durationOptionSelected = this.evaluationDurationOptions[0];
+        // this.evaluationsAvailable = this.getEvaluationsAvailable();
+        // this.evaluationsRolledOut = this.getEvaluationsRolledOut();
+      }
+    }
+  }
+
+  onDurationChange(event) {
+    console.log('inside onDurationChange : ', event.target.value, this.evaluationType);
+    if (this.selectedEmployeeList.length > 0) {
+      let isConform = window.confirm("Once the Duration type changed, you will loose all the employees added for current duration type . Are you sure you want to change the duration type?")
+      if (isConform) {
+        this.initializeFormFor = this.initializeFormFor?'kpionly':'evaluation';
+        this.selectedEmployeeList = [];
+        this.selectedEmployeesForEvaluation = [];
+        this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
+      }
+      else {
+         event.target.value = this.durationOptionSelected;
+        return;
+      }
+    }
+    this.durationOptionSelected = event.target.value;
   }
 
 
@@ -1224,6 +1462,12 @@ export class RollevaluationComponent implements OnInit {
       this.notification.error('At least one employee must be selected.')
       return;
     }
+
+    if ( this.selectedEmployees.length + this.selectedEmployeeList.length > this.getEvaluationsAvailable()) {
+      this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
+      return;
+    }
+
     if (this.initializeFormFor === 'evaluation' && (this.evaluationForm.value.Model === null || this.evaluationForm.value.Model === '')) {
       this.notification.error('Please select Model')
       return;
@@ -1246,6 +1490,11 @@ export class RollevaluationComponent implements OnInit {
   }
 
   addToGridForKPI() {
+
+    if (this.selectedEmployees.length +this.selectedEmployeeList.length> this.getEvaluationsAvailable()) {
+      this.notification.error(`only ${this.getEvaluationsAvailable()} employees evaluations left to rollout, to  add more please contact `);
+      return;
+    }
 
     if (this.selectedEmployees.length === 0) {
       this.notification.error('At least one employee must be selected.')
@@ -1311,7 +1560,7 @@ export class RollevaluationComponent implements OnInit {
     let list = this.evaluationForm.value.Employees;
     var body: any;
     if (list && list.length > 0) {
-      body = list.map(x => { return { EmployeeId: x.row._id, Company: this.currentOrganization._id, EvaluationYear:EvaluationYear } })
+      body = list.map(x => { return { EmployeeId: x.row._id, Company: this.currentOrganization._id, EvaluationDuration: this.durationOptionSelected, EvaluationType: this.evaluationType } })
 
     }
     this.perfApp.method = "ReleaseKpiForm";
