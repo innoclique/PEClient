@@ -57,7 +57,7 @@ export class KpiAddComponent implements OnInit {
   currentOrganization: any;
   selectedUser: any;
   isFinalSignoff=false;
-
+  currentEvaluationYear:any;
 
 
   constructor(private fb: FormBuilder,
@@ -75,7 +75,9 @@ export class KpiAddComponent implements OnInit {
     
 
     this.activatedRoute.params.subscribe(params => {
-     
+      if (params['currentEvaluationYear']) {
+        this.currentEvaluationYear = params['currentEvaluationYear'];
+      }
      if (params['action']) {
       this.currentOwnerId = params['ownerId'];
       this.currentKpiId = params['id'];
@@ -280,6 +282,7 @@ export class KpiAddComponent implements OnInit {
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
     this.perfApp.requestBody.Owner = this.ownerInfo._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+    this.perfApp.requestBody.EvaluationYear = this.currentEvaluationYear;
     this.perfApp.requestBody.ManagerId = this.loginUser._id;//this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id;
 
 
@@ -352,7 +355,8 @@ this.toggleSelection(c);
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpiSetupBasicData";
     this.perfApp.requestBody = { 'empId': this.currentOwnerId,
-    'orgId':this.authService.getOrganization()._id
+    'orgId':this.authService.getOrganization()._id,
+    currentEvaluation:this.currentEvaluationYear
    }
       this.perfApp.CallAPI().subscribe(c => {
 
@@ -456,7 +460,7 @@ this.toggleSelection(c);
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllKpis",
       this.perfApp.requestBody = { 'empId': this.currentOwnerId ,
-      'orgId':this.authService.getOrganization()._id }
+      'orgId':this.authService.getOrganization()._id,evaluationYear:this.currentEvaluationYear }
     this.perfApp.CallAPI().subscribe(c => {
 
       this.setWeighting(c.length);
