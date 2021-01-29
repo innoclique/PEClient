@@ -40,6 +40,7 @@ export class CreateResellerComponent implements OnInit {
   clientFormData: any = {};
   currentOrganization:any;
   isDraft=false;
+  isSaveAsDraftClicked=false;
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -77,6 +78,7 @@ export class CreateResellerComponent implements OnInit {
 
     }));
 
+    this.isSaveAsDraftClicked=false;
     this.initForm();
     this.getIndustries();
     this.sameAsContactChange();
@@ -120,8 +122,8 @@ export class CreateResellerComponent implements OnInit {
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/])/, { hasAddressSplChars: true }, 'hasAddressSplChars'),
       ])],
       Phone: [null, Validators.compose([
-        Validators.required, Validators.maxLength(13),
-        Validators.pattern("^[0-9]{2}-[0-9]{10}$")
+        Validators.required, Validators.maxLength(13), Validators.minLength(10),
+       // Validators.pattern("^[0-9]{2}-[0-9]{10}$")
       ])],
       PhoneExt: ['', Validators.compose([
          Validators.maxLength(5),
@@ -157,8 +159,8 @@ export class CreateResellerComponent implements OnInit {
         ])],
       AdminEmail: ['', [Validators.required, Validators.email]],
       AdminPhone: [null, Validators.compose([
-        Validators.required, Validators.maxLength(13),
-        Validators.pattern("^[0-9]{2}-[0-9]{10}$")
+        Validators.required, Validators.maxLength(13), Validators.minLength(10),
+       // Validators.pattern("^[0-9]{2}-[0-9]{10}$")
       ])],
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
@@ -178,7 +180,7 @@ export class CreateResellerComponent implements OnInit {
         ContactPersonEmail: ['', [Validators.required, Validators.email]],
         ContactPersonPhone: [null, Validators.compose([
           Validators.required, Validators.minLength(10),
-          Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+         // Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
         ])]
       }),
       IsActive: ['', []]
@@ -242,11 +244,28 @@ export class CreateResellerComponent implements OnInit {
           this.setContactPersonFields(contactForm)
         }
         else {
-          this.enableFields(contactForm);
-          this.addValidators(contactForm);
+          // this.enableFields(contactForm);
+          // this.addValidators(contactForm);
         }
       });
   }
+
+
+  sameAsContactOnChange(value) {
+    var contactForm = (this.clientForm.controls['contactPersonForm'] as FormGroup)
+    if (value.target.checked) {
+      this.removeValidators(contactForm);
+      this.disableFields(contactForm);
+      this.setContactPersonFields(contactForm)
+    }
+    else {
+      this.enableFields(contactForm);
+      this.addValidators(contactForm);
+    }
+
+  }
+
+
   public removeValidators(form: FormGroup) {
     for (const key in form.controls) {
       form.get(key).clearValidators();
@@ -369,7 +388,7 @@ export class CreateResellerComponent implements OnInit {
 
   //#region  update client related
   public updateClient() {
-    if (this.clientForm.invalid) {
+    if (this.clientForm.invalid && this.isSaveAsDraftClicked==false) {
       return;
     }
     const organization = this.prepareOrgData();
@@ -407,6 +426,8 @@ action='Update'
       organization.UpdatedBy = this.authService.getCurrentUser()._id;
       organization.UpdatedOn = new Date();
       organization.IsDraft=false;
+      if(this.isSaveAsDraftClicked)
+      organization.IsDraft=true;
     }
     organization = this.setContactPersonData(organization);
     organization.ParentOrganization=this.currentOrganization._id;
@@ -431,6 +452,7 @@ action='Update'
     return organization;
   }
   saveAsDraft() {
+    this.isSaveAsDraftClicked=true;
     this.clientFormData.IsDraft = true;
     //this.isFormSubmitted = true;
     // if (!this.clientForm.valid) {
@@ -454,7 +476,13 @@ action='Update'
       return;
     }
 
-    this.saveClient();
+    // this.saveClient();
+    debugger
+    if(this.currentRecord && this.currentRecord._id){
+      this.updateClient();
+    }else{
+      this.saveClient();
+    }
   }
 
 

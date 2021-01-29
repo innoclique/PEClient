@@ -23,6 +23,7 @@ export class CreateClientComponent implements OnInit {
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
+  isSaveAsDraftClicked=false;
   errorOnSave = false;
   errorMessage: string = "";
   @ViewChild('closeModal') closeModal: ElementRef
@@ -121,8 +122,14 @@ export class CreateClientComponent implements OnInit {
       this.countyFormReset=true; 
       this.cscData={Country:c.Country,State:c.State,City:c.City};
       console.info('client record', c);
-      this.setValues(this.clientForm, c);
+      try{
+        this.setValues(this.clientForm, c);
+      }catch(e){
+        console.info('error', e);
+      } 
       this.models=c.EvaluationModels
+      if(c.EvaluationModels[0] =="")
+      this.getModels();
     }, error => {
       this.notification.error('something went wrong')
       console.error(error);
@@ -149,8 +156,8 @@ export class CreateClientComponent implements OnInit {
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/])/, { hasAddressSplChars: true }, 'hasAddressSplChars'),
       ])],
       Phone: [null, Validators.compose([
-        Validators.required, Validators.maxLength(13),
-        Validators.pattern("^[0-9]{2}-[0-9]{10}$")
+        Validators.required, Validators.maxLength(13),Validators.minLength(10),
+      //  Validators.pattern("^[0-9]{2}-[0-9]{10}$")
       ])],
       PhoneExt: [null, Validators.compose([
          Validators.maxLength(5),
@@ -190,8 +197,8 @@ export class CreateClientComponent implements OnInit {
         ])],
       AdminEmail: ['', [Validators.required, Validators.email]],
       AdminPhone: [null, Validators.compose([
-        Validators.required, Validators.maxLength(13),
-        Validators.pattern("^[0-9]{2}-[0-9]{10}$")
+        Validators.required, Validators.maxLength(13),Validators.minLength(10),
+        //Validators.pattern("^[0-9]{2}-[0-9]{10}$")
       ])],
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
@@ -211,7 +218,7 @@ export class CreateClientComponent implements OnInit {
         ContactPersonEmail: ['', [Validators.required, Validators.email]],
         ContactPersonPhone: [null, Validators.compose([
           Validators.required, Validators.minLength(10),
-          Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
+         // Validators.pattern("^((\\+91-?)|0)?[0-9]{12}$")
         ])]
       }),
       CoachingReminder: ['', []],
@@ -588,7 +595,7 @@ export class CreateClientComponent implements OnInit {
 
   //#region  update client related
   public updateClient() {
-    if (this.clientForm.invalid) {
+    if (this.clientForm.invalid  && this.isSaveAsDraftClicked==false ) {
       return;
     }
     const organization = this.prepareOrgData();
@@ -624,6 +631,9 @@ action='Update'
       organization.UpdatedBy = this.authService.getCurrentUser()._id;
       organization.UpdatedOn = new Date();
       organization.IsDraft=false;
+
+      if(this.isSaveAsDraftClicked)
+      organization.IsDraft=true;
     }
     organization = this.setContactPersonData(organization);
     organization.ParentOrganization=this.currentOrganization._id;
@@ -648,6 +658,7 @@ action='Update'
     return organization;
   }
   saveAsDraft() {
+    this.isSaveAsDraftClicked=true;
     this.clientFormData.IsDraft = true;
     //this.isFormSubmitted = true;
     // if (!this.clientForm.valid) {
@@ -670,7 +681,13 @@ action='Update'
       this.notification.error('Admin Email is mandatory')
       return;
     }
-    this.saveClient();
+   
+
+    if(this.currentRecord && this.currentRecord._id){
+      this.updateClient();
+    }else{
+      this.saveClient();
+    }
   }
 
 
