@@ -6,8 +6,8 @@ import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-copies-to',
-  templateUrl: './copies-to.component.html',
-  styleUrls: ['./copies-to.component.css']
+  templateUrl: './copies-to.component.html'
+  
 })
 export class CopiesToComponent implements OnInit {
   copiesToList = [];
