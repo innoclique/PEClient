@@ -104,7 +104,6 @@ export class PaymentReleaseComponent implements OnInit {
         })
         if(isRangeAvailable){
           this.paymentModel.Range = isRangeAvailable._id.toString();
-          this.onSelectRange(isRangeAvailable._id.toString())
         }
       });
   }
@@ -187,6 +186,9 @@ useageOnchange(){
       this.perfApp.CallAPI().subscribe(paymentRelease => {
         if(!paymentRelease){
           this.loadOrganizationDefaultData();
+          if(this.paymentModel.Range)
+          this.onSelectRange(this.paymentModel.Range)
+          
         }else{
           let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = paymentRelease;
           let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = paymentRelease;
@@ -282,9 +284,7 @@ useageOnchange(){
       
   }
   onSelectRange(selectedObj:any){
-    console.log(selectedObj)
     let selectedRange = this.rangeList.find(range=>range._id==selectedObj)
-    console.log(selectedRange);
     this.paymentScale=selectedRange;
     this.paymentScale.Tax = this.stateTax;
     this.paymentModel.Range = this.paymentScale._id;

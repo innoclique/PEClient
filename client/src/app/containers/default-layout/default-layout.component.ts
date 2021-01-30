@@ -46,7 +46,6 @@ isCSA:Boolean = false;
   }
   ngOnInit() {
     if (this.user) {
-    
       if (this.user.SelectedRoles) {
         var navigationMenu = [];
         if(this.user.Role.indexOf('EO')>-1  || this.user.SelectedRoles.indexOf("EO") !== -1){
@@ -340,7 +339,9 @@ isCSA:Boolean = false;
 
       console.log("current menu items", navigationMenu);
       if(this.user.Role=="CSA"){
-        localStorage.setItem("currentUser", "CSA")
+        let piInfo = JSON.parse(localStorage.getItem('pi'));
+        localStorage.setItem("currentUser", "CSA");
+        //{initialPaymentRequired: true, renewalRequired: false}
         let dashboard = {
           "IsActive": true,
           "url": "/dashboard",
@@ -354,8 +355,19 @@ isCSA:Boolean = false;
        
         };
         this.navItems=[];
-        navigationMenu=[]
+        navigationMenu=[];
+        if(piInfo.initialPaymentRequired || piInfo.renewalRequired){
           navigationMenu.push(
+            {
+              "IsActive": true,
+              "url": "/csa/payments",
+              "name": "Payments",
+              "code": "Payments",
+              "icon": "icon-star"
+          }
+          )
+        }else{
+           navigationMenu.push(
             dashboard,
             {
               "IsActive": true,
@@ -494,10 +506,8 @@ isCSA:Boolean = false;
         "name": "Payment Summary",
         "code": "paymentSummary",
       },]
-    }
-
-
-          )
+    })
+  }
 
           this.navItems = navigationMenu;
 

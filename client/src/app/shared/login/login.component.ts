@@ -84,6 +84,7 @@ export class LoginComponent implements OnInit {
       const LoginModel = { Email: email, Password: password };
 
       await this.authService.login(LoginModel).subscribe(x => {
+
         if (x.Error === Constants.DuplicateSession) {
           this.openDuplicateSessionDialog()
           return
@@ -103,8 +104,10 @@ export class LoginComponent implements OnInit {
         } if (error.error.message === Constants.InvalidCredentials) {
 
         }
+        //alert(error.error.message)
        // this.snack.error(this.translate.instant('Login.InvalidCredentials'));
-       this.snack.error(this.translate.instant('Invalid Credentials'));
+       //this.snack.error(this.translate.instant('Invalid Credentials'));
+       this.snack.error(this.translate.instant(`${error.error.message || 'Invalid Credentials'}`));
        this.loginText = 'Login'
         this.showSpinner = false;
       });
@@ -187,7 +190,13 @@ export class LoginComponent implements OnInit {
     } else {
       if (x.Role === 'CSA') {
         //this.router.navigate(['csa']);
-        this.router.navigate(['dashboard']);
+        let piInfo = this.authService.getPi();
+        if(piInfo.initialPaymentRequired || piInfo.renewalRequired){
+          this.router.navigate(['csa/payments']);
+        }else{
+          this.router.navigate(['dashboard']);
+        }
+        
       }
       if (x.Role === 'EA') {
         this.router.navigate(['ea']);

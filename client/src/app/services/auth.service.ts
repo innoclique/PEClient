@@ -61,6 +61,7 @@ export class AuthService {
           localStorage.setItem("NavigationMenu", JSON.stringify(UserModel.NavigationMenu));
           localStorage.setItem("Permissions", JSON.stringify(UserModel.Permissions));
           localStorage.setItem("OrganizationData", JSON.stringify(UserModel.OrganizationData));
+          localStorage.setItem("pi", JSON.stringify(UserModel.pi));
           this.setToken(UserModel.AccessToken);
           this.currentUser = UserModel;
         }
@@ -159,6 +160,9 @@ export class AuthService {
   }
 getCurrentUser(){
   return this.getLSObject('User')
+}
+getPi(){
+  return this.getLSObject('pi')
 }
 getOrganization(){
   return this.getLSObject('OrganizationData');
