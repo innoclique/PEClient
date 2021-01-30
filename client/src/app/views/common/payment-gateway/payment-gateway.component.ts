@@ -64,7 +64,12 @@ export class PaymentGatewayComponent implements OnInit {
         this.appInputparams.totalAmount=params['totalAmount'];
         payable_Amount=params['totalAmount'];
       }
-      this.appInputparams.isRemoveReleaseId=params['isRemoveReleaseId'] || false;
+      if(params['isRemoveReleaseId'] && params['isRemoveReleaseId']!=false){
+        this.appInputparams.isRemoveReleaseId=params['isRemoveReleaseId'];
+      }else{
+        this.appInputparams.isRemoveReleaseId=false;
+      }
+      
      });  
   };
   
@@ -84,13 +89,13 @@ export class PaymentGatewayComponent implements OnInit {
         }else{
           this.notification.error("Payment gateway problem. Please try again later.");
           this.errorMsg="Payment gateway problem. Please try again later.";
-          if(this.appInputparams.isRemoveReleaseId)
+          if(this.appInputparams.isRemoveReleaseId==true)
             this.removePaymentRelease();
         }
       }else{
         this.notification.error("Payment gateway problem. Please try again later.");
         this.errorMsg="Payment gateway problem. Please try again later.";
-        if(this.appInputparams.isRemoveReleaseId)
+        if(this.appInputparams.isRemoveReleaseId==true)
             this.removePaymentRelease();
       }
       
