@@ -443,11 +443,11 @@ action='Update'
       organization.ContactPersonPhone = organization.AdminPhone;
       organization.ContactPersonEmail = organization.AdminEmail;
     } else {
-      organization.ContactPersonFirstName = organization.ContactPersonLastName;
-      organization.ContactPersonMiddleName = organization.ContactPersonMiddleName;
-      organization.ContactPersonLastName = organization.ContactPersonLastName;
-      organization.ContactPersonPhone = organization.ContactPersonPhone;
-      organization.ContactPersonEmail = organization.ContactPersonEmail;
+      organization.ContactPersonFirstName = organization.contactPersonForm.ContactPersonLastName;
+      organization.ContactPersonMiddleName = organization.contactPersonForm.ContactPersonMiddleName;
+      organization.ContactPersonLastName = organization.contactPersonForm.ContactPersonLastName;
+      organization.ContactPersonPhone = organization.contactPersonForm.ContactPersonPhone;
+      organization.ContactPersonEmail = organization.contactPersonForm.ContactPersonEmail;
     }
     return organization;
   }

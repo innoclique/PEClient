@@ -91,7 +91,8 @@ export class CSAEvaluationsSummary {
   onBtExport() {
     var params = {
       columnWidth: parseFloat('200'),
-      sheetName: 'Client-Info',
+      sheetName: 'Evaluations Summary',
+      fileName: 'Evaluations Summary',
       exportMode: undefined,
       suppressTextAsCDATA: false,
       rowHeight: undefined,

@@ -127,8 +127,8 @@ export class CreateClientComponent implements OnInit {
       }catch(e){
         console.info('error', e);
       } 
-      this.models=c.EvaluationModels
-      if(c.EvaluationModels[0] =="")
+      // this.models=c.EvaluationModels
+      // if(c.EvaluationModels[0] =="")  // Commenting this line for generating complete models list instead of only selected models //
       this.getModels();
     }, error => {
       this.notification.error('something went wrong')

@@ -4,7 +4,7 @@
       
       <div class="release_method_cont_in paymentinfo">
         
-        <h3 class="wow fadeIn" data-wow-delay="0.2s">Payment info - Client Organization</h3>
+        <h3 class="wow fadeIn" data-wow-delay="0.2s">Payment info</h3>
         <div class="release_method_space">
             <div class="row m-b15">
                 <div class="col-lg-12">
@@ -160,7 +160,7 @@
           <div class="release_method_buttons">
             <button *ngIf="isAdhocpayment || isInitialPayment" (click)="checkout()" class="release_buttons_save">Submit</button>
             <button *ngIf="isRenewalPayment" (click)="paymentReleaseInfo()" class="release_buttons_save">Submit</button>
-            <a href="javscript:void(0)" class="release_buttons_cancel">Cancel</a>
+            <a href="javascript:void(0)" class="release_buttons_cancel">Cancel</a>
             <div class="clear"></div>
           </div>
       </div>
@@ -171,7 +171,7 @@
     <div class="modal-dialog modal-primary modal-xlg" role="document">
       <div class="modal-content">
         <div class="modal-header pt-1 pr-1">
-          <h5 class="modal-title"> {{currentOrganization?.Name}}</h5>
+          <h5 class="modal-title"> {{currentOrganization?.Name}} - Payment Confirmation</h5>
           <button type="button" class="close" (click)="payment_Summary.hide();closeForm()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

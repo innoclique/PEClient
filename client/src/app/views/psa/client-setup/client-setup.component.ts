@@ -396,11 +396,26 @@ export class ClientSetupComponent implements OnInit {
           this.setContactPersonFields(contactForm)
         }
         else {
-         this.enableFields(contactForm);
-         this.addValidators(contactForm);
+        // this.enableFields(contactForm);
+        // this.addValidators(contactForm);
         }
       });
   }
+
+  sameAsContactOnChange(value) {
+    var contactForm = (this.clientForm.controls['contactPersonForm'] as FormGroup)
+    if (value.target.checked) {
+      this.removeValidators(contactForm);
+      this.disableFields(contactForm);
+      this.setContactPersonFields(contactForm)
+    }
+    else {
+      this.enableFields(contactForm);
+      this.addValidators(contactForm);
+    }
+
+  }
+
   mandateStartMonth() {
     this.clientForm.get('EvaluationPeriod').valueChanges
       .subscribe(value => {
@@ -754,7 +769,7 @@ return true;
     var organization = this.clientForm.value;
     if (action === 'Create') {
       organization.IsActive = true;
-      organization.UsageCount= organization.UsageType=='License'?0:organization.UsageCount;
+      organization.UsageCount= organization.UsageType =='License' ? 0 : organization.UsageCount;
       organization.CreatedBy = this.authService.getCurrentUser()._id;
       organization.CreatedOn = new Date();
     } else {

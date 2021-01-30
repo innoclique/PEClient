@@ -125,7 +125,8 @@ export class CSAPaymentSummary {
   onBtExport() {
     var params = {
       columnWidth: parseFloat('200'),
-      sheetName: 'Client-Info',
+      fileName: 'Payment Summary',
+      sheetName: 'Payment Summary',
       exportMode: undefined,
       suppressTextAsCDATA: false,
       rowHeight: undefined,

@@ -442,13 +442,27 @@ isCSA:Boolean = false;
             "code": "Evaluations",
             "icon": "icon-star"
         },
-        {
-          "IsActive": true,
-          "url": "/csa/payments",
-          "name": "Payments",
-          "code": "Payments",
-          "icon": "icon-star"
-      },
+             {
+               "IsActive": true,
+               "url": "/csa/payments",
+               "name": "Payments",
+               "code": "Payments",
+               "icon": "icon-star",
+               "children": [{
+                 "IsActive": true,
+                 "url": "/csa/payments",
+                 "name": "Payment Info",
+                 "code": "paymentInfo",
+                 "icon": "icon-settings"
+               },
+               {
+                 "IsActive": true,
+                 "url": "/csa/adhoc-payment",
+                 "name": "Adhoc Payment",
+                 "code": "adhocPayment",
+                 "icon": "icon-settings"
+               }]
+             },
       {
         "IsActive": true,
         "url": "/ea/settings",
