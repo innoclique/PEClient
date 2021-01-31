@@ -101,7 +101,7 @@
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="form-group">
-                                    <div class="input-group">
+                                    <div class="input-group" tooltip="A goal is an outcome you want to achieve and will be measured against.">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text redStar">
                                                 Performance Goal</span>
@@ -141,7 +141,7 @@
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="form-group">
-                                    <div class="input-group">
+                                    <div class="input-group" tooltip="KPI is a metric (aka something you measure) that lets you know well you are progressing towards the goal">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text redStar">KPI</span>
                                         </div>
@@ -182,7 +182,6 @@
                                                </mat-autocomplete>
 
                                         <div *ngIf="f.MeasurementCriteria.touched && selectedItems.length==0" class="invalid-feedback">
-                                            <div *ngIf="f.MeasurementCriteria.errors?.required">KPI is mandatory.</div>
                                             <div *ngIf="selectedItems.length==0">KPI is mandatory</div>
                                         </div>
 
@@ -229,7 +228,7 @@
 
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
+                                        <div class="input-group-prepend" tooltip ="Generally, goals will be equally weighted">
                                             <span class="input-group-text ">Weighting</span>
                                         </div>
                                         <div class="autoc-border  form-control">
@@ -262,7 +261,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group" *ngIf="accessingFrom =='currEvaluation' " >
-                                    <div class="input-group">
+                                    <div class="input-group" tooltip ="Rating for performance goals">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text redStar">Score (self)</span>
                                         </div>

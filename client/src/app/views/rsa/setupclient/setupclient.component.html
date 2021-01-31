@@ -286,7 +286,7 @@
               <div class="col-md-9 col-form-label pull-left" style="padding:0 0 0 20px;">
                 <div class="form-check form-check-inline mr-1">
                   <input class="form-check-input" id="inline-checkbox1" formControlName="SameAsAdmin" type="checkbox"
-                    value="option1">
+                    (change)="onSameAsContactChange($event)"  value="option1">
                   <label class="form-check-label" for="inline-checkbox1">Same as Admin</label>
                 </div>
               </div>
@@ -506,7 +506,7 @@
                         <span class="input-group-text">Employee Buffer</span>
                       </div>
                       <select formControlName="EmployeeBufferCount" class="form-control" class="form-control">
-                        <option value="0">Please select</option>
+                        <option value=""  selected >Please select</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -533,13 +533,13 @@
                         <span class="input-group-text">Download Buffer</span>
                       </div>
                       <select formControlName="DownloadBufferDays" class="form-control" class="form-control">
-                        <option value="0">Please select</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25">25</option>
-                        <option value="30">30</option>
+                        <option value=""  selected >Please select</option>
+                        <option value="5">5 Days</option>
+                        <option value="10">10 Days</option>
+                        <option value="15">15 Days</option>
+                        <option value="20">20 Days</option>
+                        <option value="25">25 Days</option>
+                        <option value="30">30 Days</option>
                       </select>
                     </div>
                   </div>

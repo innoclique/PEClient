@@ -489,10 +489,10 @@ export class ClientListComponent implements OnInit {
   openOrgView() {
     debugger
     const cr = this.currentRowItem;
-    if(cr.IsDraft){
-      this.router.navigate(['/rsa/setup-clients/'+cr._id])
-      return;
-    }else{
+    // if(cr.IsDraft){
+    //   this.router.navigate(['/rsa/setup-clients/'+cr._id])
+    //   return;
+    // }else{
       this.orgViewRef = this.modalService.show(this.orgView, this.config);
       this.orgViewRef.setClass('modal-xlg');     
       this.countyFormReset=true; 
@@ -500,7 +500,7 @@ export class ClientListComponent implements OnInit {
       this.setValues(this.clientForm, cr);
       this.models = cr.EvaluationModels;
       this.disableForm(this.clientForm);
-    }
+   // }
     
 
   }

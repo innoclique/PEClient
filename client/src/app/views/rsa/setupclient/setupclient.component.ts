@@ -43,6 +43,7 @@ export class SetupclientComponent implements OnInit {
   models:any=[];
   currentOrganization:any;
   isDraft=false;
+  isSaveAsDraftClicked=false;
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -89,6 +90,7 @@ export class SetupclientComponent implements OnInit {
 
     }));
 
+    this.isSaveAsDraftClicked=false;
     this.initForm();
     this.getAllBasicData();
     // this.getIndustries();
@@ -274,11 +276,27 @@ export class SetupclientComponent implements OnInit {
           this.setContactPersonFields(contactForm)
         }
         else {
-          this.enableFields(contactForm);
-          this.addValidators(contactForm);
+          // this.enableFields(contactForm);
+          // this.addValidators(contactForm);
         }
       });
   }
+
+
+  
+  public onSameAsContactChange(value): void {
+    var contactForm = (this.clientForm.controls['contactPersonForm'] as FormGroup)
+    if (value.target.checked) {
+      this.removeValidators(contactForm);
+      this.disableFields(contactForm);
+      this.setContactPersonFields(contactForm)
+    }
+    else {
+      this.enableFields(contactForm);
+      this.addValidators(contactForm);
+    }
+  }
+
   mandateStartMonth() {
     this.clientForm.get('EvaluationPeriod').valueChanges
       .subscribe(value => {
@@ -330,9 +348,15 @@ export class SetupclientComponent implements OnInit {
           this.clientForm.controls['UsageCount'].reset();
           this.clientForm.controls['UsageCount'].clearValidators();
           this.clientForm.controls['UsageCount'].setValue(0);
+
+          this.clientForm.controls['Range'].setValidators(Validators.required);
+          this.clientForm.controls['Range'].setValue(0);
         } else {         
           this.clientForm.controls['UsageCount'].setValidators(Validators.required);
-          this.clientForm.controls['UsageCount'].setValue(1);
+          this.clientForm.controls['UsageCount'].setValue("");
+
+          this.clientForm.controls['Range'].reset();
+          this.clientForm.controls['Range'].clearValidators();
         }
 
 
@@ -475,7 +499,7 @@ export class SetupclientComponent implements OnInit {
 
   //#region  update client related
   public updateClient() {
-    if (this.clientForm.invalid) {
+    if (this.clientForm.invalid && this.isSaveAsDraftClicked==false ) {
       return;
     }
     const organization = this.prepareOrgData();
@@ -511,6 +535,8 @@ action='Update'
       organization.UpdatedBy = this.authService.getCurrentUser()._id;
       organization.UpdatedOn = new Date();
       organization.IsDraft=false;
+      if(this.isSaveAsDraftClicked)
+      organization.IsDraft=true;
     }
     organization = this.setContactPersonData(organization);
     organization.ParentOrganization=this.currentOrganization._id;
@@ -542,12 +568,13 @@ action='Update'
   }
   saveAsDraft() {
     this.clientFormData.IsDraft = true;
+    this.isSaveAsDraftClicked=true;
     //this.isFormSubmitted = true;
     // if (!this.clientForm.valid) {
     //   return;
     // }
     debugger
-    if(this.clientForm.value.Name==="" || this.clientForm.value.Industry===""){
+    if(this.clientForm.value.Name===""){
       this.notification.error('Organization Name is mandatory')
       return;
     }
@@ -564,7 +591,11 @@ action='Update'
       return;
     }
 
-    this.saveClient();
+    if(this.currentRecord && this.currentRecord._id){
+      this.updateClient();
+    }else{
+      this.saveClient();
+    }
   }
 
 

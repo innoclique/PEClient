@@ -222,7 +222,12 @@ export class CreateResellerComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Reseller Added Successfully.')
-      this.navToList();
+      if (!this.clientFormData.IsDraft) {
+        this.router.navigate(['psa/payment-release', { email: this.clientFormData.Email }], { skipLocationChange: true });
+      } else {
+        this.navToList();
+      }
+     
     }, error => {
       this.errorOnSave = true;
       this.errorMessage = error.error ? error.error.message : error.message;
@@ -443,11 +448,11 @@ action='Update'
       organization.ContactPersonPhone = organization.AdminPhone;
       organization.ContactPersonEmail = organization.AdminEmail;
     } else {
-      organization.ContactPersonFirstName = organization.ContactPersonLastName;
-      organization.ContactPersonMiddleName = organization.ContactPersonMiddleName;
-      organization.ContactPersonLastName = organization.ContactPersonLastName;
-      organization.ContactPersonPhone = organization.ContactPersonPhone;
-      organization.ContactPersonEmail = organization.ContactPersonEmail;
+      organization.ContactPersonFirstName = organization.contactPersonForm.ContactPersonLastName;
+      organization.ContactPersonMiddleName = organization.contactPersonForm.ContactPersonMiddleName;
+      organization.ContactPersonLastName = organization.contactPersonForm.ContactPersonLastName;
+      organization.ContactPersonPhone = organization.contactPersonForm.ContactPersonPhone;
+      organization.ContactPersonEmail = organization.contactPersonForm.ContactPersonEmail;
     }
     return organization;
   }

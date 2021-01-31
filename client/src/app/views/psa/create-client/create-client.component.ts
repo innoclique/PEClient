@@ -127,8 +127,8 @@ export class CreateClientComponent implements OnInit {
       }catch(e){
         console.info('error', e);
       } 
-      this.models=c.EvaluationModels
-      if(c.EvaluationModels[0] =="")
+      // this.models=c.EvaluationModels
+      // if(c.EvaluationModels[0] =="")  // Commenting this line for generating complete models list instead of only selected models //
       this.getModels();
     }, error => {
       this.notification.error('something went wrong')
@@ -431,9 +431,15 @@ export class CreateClientComponent implements OnInit {
           this.clientForm.controls['UsageCount'].reset();
           this.clientForm.controls['UsageCount'].clearValidators();
           this.clientForm.controls['UsageCount'].setValue(0);
+
+          this.clientForm.controls['Range'].setValidators(Validators.required);
+          this.clientForm.controls['Range'].setValue(0);
         } else {         
           this.clientForm.controls['UsageCount'].setValidators(Validators.required);
-          this.clientForm.controls['UsageCount'].setValue(1);
+          this.clientForm.controls['UsageCount'].setValue("");
+
+          this.clientForm.controls['Range'].reset();
+          this.clientForm.controls['Range'].clearValidators();
         }
 
 

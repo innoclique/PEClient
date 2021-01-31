@@ -216,7 +216,7 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
       if (res1 && !res1.isError) {
         this.evaluationForm = res1;
         if (res1.Competencies) {
-          this.employeeCompetencyList = res1.Competencies.Employee.Competencies
+          this.employeeCompetencyList = res1.Competencies.Employee.Manager.Competencies // Gets Manager ratings instead of emloyee
           this.prepareCompetencyQuestions();
           console.log('the evauation form', this.evaluationForm)
         }

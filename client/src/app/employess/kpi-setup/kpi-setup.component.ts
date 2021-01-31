@@ -440,7 +440,7 @@ export class KpiSetupComponent implements OnInit {
    /**To alert user for submit kpis */
    conformSubmitKpis() {
     this.alert.Title = "Alert";
-    this.alert.Content = "This will confirm your sign-off. Are you sure you want to continue?";
+    this.alert.Content = "Are you sure you want to submit the performanace goals?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";
@@ -476,7 +476,7 @@ submitAllKPIs() {
   this.perfApp.CallAPI().subscribe(c => {
 
    if (c) {
-    this.snack.success(c.message);
+    this.snack.success("Your performanace goals have been submitted.");
     this.getAllKpis();
    } else {
      

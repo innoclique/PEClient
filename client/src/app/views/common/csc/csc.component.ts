@@ -16,7 +16,10 @@ import { stateData } from '../../../shared/AppConstants/states';
 export class CSCComponent implements OnInit,OnChanges {
  
 @Input()
-showValidateMsg:boolean=false;
+showValidateMsg: boolean = false;
+
+  @Input()
+  isDraftItem: boolean = true;
 
 isCSelect=false;
 isStateSelect=false;
@@ -104,13 +107,17 @@ isStateSelect=false;
     //});
 
 
-       this.filteredCountries = this.countryForm.controls['Country'].valueChanges.pipe(
+    this.filteredCountries = this.countryForm.controls['Country'].valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
     );
 
-    
-  
+    if (!this.isDraftItem) {
+      this.countryForm.get('Country').disable();
+      this.countryForm.get('State').disable();
+      this.countryForm.get('City').disable();
+    }
+
 
   }
 
