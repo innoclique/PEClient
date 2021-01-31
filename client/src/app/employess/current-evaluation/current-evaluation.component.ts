@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +15,7 @@ import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { AlertComponent } from '../../shared/alert/alert.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-current-evaluation',
@@ -42,7 +43,22 @@ export class CurrentEvaluationComponent implements OnInit {
   coachingRemDays: any = [];
   isPdfView:boolean = false;
   currentOrganization:any;
-  public alert =new AlertDialog();
+  public alert = new AlertDialog();
+  config = {
+    backdrop: true,
+    ignoreBackdropClick: true,
+  };
+  competencyViewRef: BsModalRef;
+  @ViewChild('competencyView') competencyView: TemplateRef<any>;
+  public managerCompetencyQuestionsList: any = [];
+  public managerCompetencyList: any = [];
+  public showManagerRating: boolean = false;
+  public isCompetencyTabActive: boolean = false;
+  public disableManagerRating: boolean = true;
+  public thirdSignatoryRevRequest: boolean = true;
+  isReqRevDisabled = false;
+  isThirdSignatorySubmitted = false;
+
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -52,7 +68,8 @@ export class CurrentEvaluationComponent implements OnInit {
     private fb: FormBuilder,
     public dialog: MatDialog,
     private qcs: CompetencyFormService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private modalService: BsModalService
   ) {
     this.loginUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
@@ -109,9 +126,11 @@ export class CurrentEvaluationComponent implements OnInit {
         if (res1.Competencies) {
           this.employeeCompetencyList = res1.Competencies.Employee.Competencies          
           this.prepareCompetencyQuestions();
+          this.prepareCompetencyQuestionsByManager();
           console.log('the evauation form', this.evaluationForm)
         }
         if (res1.FinalRating) {
+          this.showManagerRating = res1.FinalRating.Manager.IsSubmitted;
           this.isSigned= res1.FinalRating.Manager.SignOff.length>0?true:false;
           this.FinalRatingForm.controls["EmployeeComments"].setValue(res1.FinalRating.Self.YearEndComments)
           this.FinalRatingForm.controls["EmployeeOverallRating"].setValue(res1.FinalRating.Self.YearEndRating)
@@ -130,7 +149,15 @@ export class CurrentEvaluationComponent implements OnInit {
           this.FinalRatingForm.controls["ManagerSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Manager.SubmittedOn))
           this.FinalRatingForm.controls["ManagerRevComments"].setValue(res1.FinalRating.Manager.RevComments)
 
+          this.thirdSignatoryRevRequest = res1.FinalRating.FRReqRevision;
 
+          this.FinalRatingForm.controls["ThirdSignatoryComments"].setValue(res1.FinalRating.ThirdSignatory.YearEndComments)
+          this.FinalRatingForm.controls["ThirdSignatoryRevComments"].setValue(res1.FinalRating.ThirdSignatory.RevComments)
+          this.FinalRatingForm.controls["TSReqRevision"].setValue(res1.FinalRating.ThirdSignatory.ReqRevision)
+          this.FinalRatingForm.controls["ThirdSignatorySignOff"].setValue(res1.FinalRating.ThirdSignatory.SignOff)
+          this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.ThirdSignatory.SubmittedOn))
+          this.isReqRevDisabled = res1.FinalRating.FRReqRevision;
+          this.isThirdSignatorySubmitted = res1.FinalRating.ThirdSignatory.IsSubmitted;
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
           debugger
@@ -189,7 +216,12 @@ export class CurrentEvaluationComponent implements OnInit {
       // ManagerReqRevision: [false],
       // ManagerIsDraft: [true],
       ManagerSignOff: [],
-      ManagerSubmittedOn: ['']
+      ManagerSubmittedOn: [''],
+      ThirdSignatoryComments: ['', [Validators.required]],
+      ThirdSignatoryRevComments: ['',],
+      TSReqRevision: [false],
+      ThirdSignatorySignOff: [],
+      ThirdSignatorySubmittedOn: ['']
     })
 
   }
@@ -255,6 +287,70 @@ export class CurrentEvaluationComponent implements OnInit {
       return _rate.overallScore||"Pending";
     }
   }
+
+ 
+  prepareCompetencyQuestionsByManager() {
+    var questions: CompetencyBase<string>[] = [];
+
+    this.managerCompetencyList = this.evaluationForm.ManagerCompetencies.Manager.Competencies;
+    // console.log('this.managerCompetencyForm.value', this.managerCompetencyForm.value)
+    this.managerCompetencyQuestionsList = [];
+    this.managerCompetencyList.forEach(element => {
+      questions = [];
+      element.Questions.forEach(q => {
+        questions.push(new QuestionBase({
+          key: q._id,
+          label: q.Question,
+          options: q.Rating,
+          order: 1,
+          required: true,
+          value: q.SelectedRating,
+          showEmpRating: true,
+          empRating: this.getQuestionRating(q._id),
+          empKey: q._id
+        }))
+
+      });
+
+      this.managerCompetencyQuestionsList.push({
+        CompetenyName: element.Competency.Name,
+        CompetencyId: element.Competency._id,
+        CompetencyRowId: element._id,
+        Questions: questions,
+        form: this.qcs.toFormGroup(questions),
+        comments: element.Comments,
+        empComments: this.getEmpCommentsForCompetency(element.Competency._id),
+        CompetencyAvgRating: this.getCompetencyOverallRating(element.Competency._id)//element.CompetencyAvgRating
+      })
+
+    });
+
+  }
+ 
+  getQuestionRating(questionId) {
+    var ff = this.employeeCompetencyList.map(element => { return element.Questions.find(q => q._id === questionId) })
+    if (ff) {
+      var _questionvalue = ff.find(x => x)
+      if (_questionvalue) {
+        return _questionvalue.SelectedRating
+      }
+
+    }
+    return "Pending"
+  }
+  getEmpCommentsForCompetency(competencyId) {
+    var ff = this.employeeCompetencyList.map(element => { return element.Competency._id === competencyId ? element.Comments : "" });
+    if (ff) {
+      var _competencyValue = ff.find(x => x)
+      if (_competencyValue) {
+        return _competencyValue;
+      }
+    } else {
+      return "";
+    }
+  }
+
+
   cancelCompetencyRating() {
 
   }
@@ -469,5 +565,17 @@ console.log("---------------------------------->", c)
     // const average= arr.reduce((p, c) => p + c, 0) / arr.length;
     console.log('average score :', avg);
     return parseFloat(avg.toFixed(2));
+  }
+
+  public openCompetencyReport() {
+    this.competencyViewRef = this.modalService.show(this.competencyView, this.config);
+  }
+
+  public closeDrModel() {
+    this.competencyViewRef.hide();
+  }
+
+  public changeTab(event, isCompetencyTab) {
+    this.isCompetencyTabActive = isCompetencyTab;
   }
 }

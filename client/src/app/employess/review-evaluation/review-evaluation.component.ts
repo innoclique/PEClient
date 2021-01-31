@@ -74,6 +74,9 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   public disableManagerRating: boolean = true;
   public isCompetencyTabActive: boolean = false;
 
+  public showRevisionCommentSection: boolean = false;
+  public empRevRequest: boolean = false;
+
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -191,7 +194,8 @@ goto(selTab){
           this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1.FinalRating.Self.SignOff)
           this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.Self.SubmittedOn))
           this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
-
+          this.showRevisionCommentSection = res1.FinalRating.Self.IsSubmitted;
+          this.empRevRequest = res1.FinalRating.FRReqRevision;
 
           this.FinalRatingForm.controls["ManagerComments"].setValue(res1.FinalRating.Manager.YearEndComments)
           this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1.FinalRating.Manager.YearEndRating)

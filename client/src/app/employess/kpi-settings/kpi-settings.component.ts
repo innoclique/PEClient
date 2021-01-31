@@ -36,7 +36,8 @@ export class KpiSettingsComponent implements OnInit {
   isAllSelected = false;
   addMCSwitch = true;
   scoreUnSubmitedCount=0;
-  unSubmitedCount=0;
+  unSubmitedCount = 0;
+  showManagerScore = false;
 
   filteredOptionsKPI: Observable<any[]>;
   public empKPIData: any[] = []
@@ -399,7 +400,8 @@ this.toggleSelection(c,null);
             let {Employees} = c.evaluation;
             let empFinalRatingSelfSignoff = Employees.find(employee=>employee._id==this.loginUser._id);
             if(empFinalRatingSelfSignoff)
-              this.isEmpFRSignOff=empFinalRatingSelfSignoff.FinalRating.Self.SignOff.length>0;
+              this.isEmpFRSignOff = empFinalRatingSelfSignoff.FinalRating.Self.SignOff.length > 0;
+            this.showManagerScore = empFinalRatingSelfSignoff.FinalRating.Manager.IsSubmitted;
           }
           debugger
           
