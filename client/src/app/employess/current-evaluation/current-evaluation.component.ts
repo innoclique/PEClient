@@ -336,11 +336,11 @@ export class CurrentEvaluationComponent implements OnInit {
   }
   saveFinalRating(isDraft) {
 
-    if (this.FinalRatingForm.value.IsManagerReqRev &&
-      this.FinalRatingForm.value.EmployeeRevComments.length == 0) {
-      this.snack.error('Revision Comments is mandatory')
-      return;
-    }
+    // if (this.FinalRatingForm.value.IsManagerReqRev &&
+    //   this.FinalRatingForm.value.EmployeeRevComments.length == 0) {
+    //   this.snack.error('Revision Comments is mandatory')
+    //   return;
+    // }
     if (!this.evaluationForm.Competencies.Employee.CompetencySubmitted) {
       this.snack.error('Competencies Rating should be Submitted')
       return;

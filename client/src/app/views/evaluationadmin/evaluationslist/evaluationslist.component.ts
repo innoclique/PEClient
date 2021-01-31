@@ -238,7 +238,7 @@ export class EvaluationslistComponent implements OnInit {
             if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
             return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
           }else{
-            return ``;
+            return `N/A`;
           }
           
         }
@@ -252,7 +252,7 @@ export class EvaluationslistComponent implements OnInit {
           }else if(data.data.EvaluationRow.kpiFormCreatedOn){
             return new DatePipe('en-US').transform(data.data.EvaluationRow.kpiFormCreatedOn, 'MM-dd-yyyy')
           }else{
-            return ``;
+            return `N/A`;
           }
           
         }
@@ -266,6 +266,9 @@ export class EvaluationslistComponent implements OnInit {
         cellRenderer: (data) => {
           if (this.getNested(data.data.EvaluationRow, 'EvaluationPeriod')) // true
             return this.getEVPeriod(data.data.EvaluationRow);
+            else{
+              return `N/A`;
+            }
         }
       },
       {
@@ -273,6 +276,8 @@ export class EvaluationslistComponent implements OnInit {
         cellRenderer: (data) => {
           if (this.getNested(data.data.EvaluationRow, 'EvaluationDuration')) {
             return data.data.EvaluationRow.EvaluationDuration
+          }else{
+            return `N/A`;
           }
         }
       },
@@ -281,6 +286,8 @@ export class EvaluationslistComponent implements OnInit {
         cellRenderer: (data) => {
           if (this.getNested(data.data.EmployeeRow, 'Model', 'Name')) {
             return data.data.EmployeeRow.Model.Name
+          }else{
+            return `N/A`;
           }
         }
       },
@@ -289,6 +296,8 @@ export class EvaluationslistComponent implements OnInit {
         cellRenderer: (data) => {
           if (this.getNested(data.data.Employee, 'Manager', 'FirstName')) {
             return `${data.data.Employee.Manager.FirstName} ${data.data.Employee.Manager.LastName}`
+          }else{
+            return `N/A`;
           }
         }
 
@@ -301,7 +310,7 @@ export class EvaluationslistComponent implements OnInit {
           if (this.getNested(data.data.EmployeeRow, 'Peers')){
             return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.peerCompetenceMapping.length}</span>`
           }else{
-            return '';
+            return 'N/A';
           }
           
         }
@@ -313,7 +322,7 @@ export class EvaluationslistComponent implements OnInit {
           if (this.getNested(data.data.EmployeeRow, 'DirectReportees')){
             return `<span style="color:blue;cursor:pointer;" data-action-type="chooseDirectReports">${data.data.EmployeeRow.drCompetenceMapping.length}</span>`
           }else{
-            return '';
+            return 'N/A';
           }
           
         }
@@ -393,10 +402,10 @@ export class EvaluationslistComponent implements OnInit {
               EvaluationRow: row,
               Peers: [],
               DirectReportees: [],
-              Model: '',
+              Model: 'N/A',
               Employee: row.Employee[0],
-              PeersCompetencyMessage: '',
-              DirectReporteeComptencyMessage: '',
+              PeersCompetencyMessage: 'N/A',
+              DirectReporteeComptencyMessage: 'N/A',
               PeersCompetencyList: [],
               DirectReporteeCompetencyList: []
             });

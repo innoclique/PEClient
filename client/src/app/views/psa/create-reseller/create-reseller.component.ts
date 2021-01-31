@@ -222,7 +222,12 @@ export class CreateResellerComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
       this.notification.success('Reseller Added Successfully.')
-      this.navToList();
+      if (!this.clientFormData.IsDraft) {
+        this.router.navigate(['psa/payment-release', { email: this.clientFormData.Email }], { skipLocationChange: true });
+      } else {
+        this.navToList();
+      }
+     
     }, error => {
       this.errorOnSave = true;
       this.errorMessage = error.error ? error.error.message : error.message;

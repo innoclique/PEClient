@@ -54,6 +54,7 @@ export class ClientSetupComponent implements OnInit {
     }
   currentUser: any;
   models: any = [];
+  rangeList:any=[];
   cscData:any=undefined;
   countyFormReset: boolean;
   currentOrganization:any;
@@ -173,6 +174,12 @@ export class ClientSetupComponent implements OnInit {
     // this.getIndustries();
     this.sameAsContactChange()
     this.currentUser=this.authService.getCurrentUser();
+    let rangeOptions={
+      UsageType:"License",
+      "Type" : "Range",
+      'ClientType': "Client"
+    }
+      this.getRangeList(rangeOptions);
     
     
   }
@@ -209,6 +216,7 @@ export class ClientSetupComponent implements OnInit {
       ],
       ClientType: ['', [Validators.required]],
       UsageType: ['', [Validators.required]],
+      Range:[null,[]],
       UsageCount: ['', [Validators.required]],
       AdminFirstName: ['', Validators.compose([
         Validators.required,
@@ -244,6 +252,7 @@ export class ClientSetupComponent implements OnInit {
           Validators.minLength(2)])
         ],
         ContactPersonMiddleName: ['', []],
+        IsActive: ['', []],
         ContactPersonEmail: ['', [Validators.required, Validators.email]],
         ContactPersonPhone: [null, Validators.compose([
           Validators.required, Validators.minLength(10),
@@ -598,6 +607,21 @@ export class ClientSetupComponent implements OnInit {
       }
     }
   }
+
+
+  getRangeList(options){
+    //let ClientType = this.clientForm.get("ClientType").value;
+   // options['ClientType'] = ClientType;
+
+    this.perfApp.route = "payments";
+    this.perfApp.method = "range/list";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(_rangeList => {
+      this.rangeList = _rangeList;
+    });
+}
+
+
   suspendOrg() {
     debugger
     
@@ -638,13 +662,20 @@ export class ClientSetupComponent implements OnInit {
       this.router.navigate(['/psa/setup-reseller/'+cr._id])
       return;    
   }
-  openResellerview(){
+  async openResellerview(){
     debugger
     const cr = this.currentRowItem;
-    if(cr.IsDraft){
-      this.router.navigate(['/psa/setup-reseller/'+cr._id])
-      return;
-    }else{
+    // if(cr.IsDraft){
+    //   this.router.navigate(['/psa/setup-reseller/'+cr._id])
+    //   return;
+    // }else{
+
+      let rangeOptions={
+        UsageType:"License",
+        "Type" : "Range",
+        'ClientType': "Reseller"
+      }
+    await  this.getRangeList(rangeOptions);
       this.orgViewRef = this.modalService.show(this.orgView, this.config);
       this.orgViewRef.setClass('modal-xlg');  
       this.countyFormReset=true; 
@@ -652,24 +683,34 @@ export class ClientSetupComponent implements OnInit {
       this.models = cr.EvaluationModels;
       this.setValues(this.clientForm, cr);
       this.disableForm(this.clientForm);
-    }
+    // }
     
   }
-  openOrgView() {
+  async openOrgView() {
     debugger
     const cr = this.currentRowItem;
-    if(cr.IsDraft){
-      this.router.navigate(['/psa/setup-clients/'+cr._id])
-      return;
-    }else{
-      this.orgViewRef = this.modalService.show(this.orgView, this.config);
+    // if(cr.IsDraft){
+    //   this.router.navigate(['/psa/setup-clients/'+cr._id])
+    //   return;
+    // }else{
+    
+    
+      let rangeOptions={
+        UsageType:"License",
+        "Type" : "Range",
+        'ClientType': "Client"
+      }
+     await   this.getRangeList(rangeOptions);
+
+    this.orgViewRef = this.modalService.show(this.orgView, this.config);
       this.orgViewRef.setClass('modal-xlg');     
       this.countyFormReset=true; 
       this.cscData={Country:cr.Country,State:cr.State,City:cr.City};
+     
       this.setValues(this.clientForm, cr);
       this.models = cr.EvaluationModels;
       this.disableForm(this.clientForm);
-    }
+    // }
     
 
   }

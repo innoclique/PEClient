@@ -16,7 +16,8 @@
         </div>
         <div class="card-body">
           <tabset #staticTabs class="pro-tabs">
-            <tab [hidden]="(f.ClientType.value === 'Reseller' || currentUser.Role === 'RSA')">
+            <!-- <tab [hidden]="(f.ClientType.value === 'Reseller' || currentUser.Role === 'RSA')"> -->
+            <tab >
   
               <ng-template tabHeading><i ></i> Client</ng-template>
               <ag-grid-angular  style="width: 100;; height: 440px;" class="ag-theme-alpine" 
@@ -232,7 +233,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               </div>
 
             </div>
-            <div class="form-group col-md-4 ">
+            <div *ngIf="f.ClientType.value === 'Client'" class="form-group col-md-4 ">
               <div class="field-group">
                 <label class="col-form-label redStar" for="inline-radios">Usage Type:</label>
                 <label class="radio-inline ml-2">
@@ -252,7 +253,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
               </div>
               </div>
 
-              <div class="col-md-4">
+              <div *ngIf="f.ClientType.value === 'Client' && f.UsageType.value==='Employees' " class="col-md-4">
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-prepend">
@@ -268,6 +269,25 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                   </div>
                 </div>
               </div>
+
+              <div *ngIf=" f.ClientType.value === 'Client' && f.UsageType.value==='License'" class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Range</span>
+                    </div>
+                      <select formControlName="Range" [required]="f.UsageType.value==='License' ? true : null "   class="form-control"  >
+                        <option>Select</option>
+                         <option *ngFor="let range of rangeList" [value]="range._id">{{range.Range}}</option>
+                       </select>
+                       
+                    <div *ngIf=" isFormSubmitted  && f.Range.errors" class="invalid-feedback">
+                      <div *ngIf="f.Range.errors.required">Range Mandatory</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           <!--Admin Form fields-->
           <h3 class="form-group-label">Admin Details </h3>
@@ -561,71 +581,74 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                 </div>
               </div>
 
-            </div>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Employee Buffer</span>
-                    </div>
-                    <select formControlName="EmployeeBufferCount" class="form-control" class="form-control">
-                      <option value="0">Please select</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="15">15</option>
-                      <option value="20">20</option>
-                      <option value="25">25</option>
-                      <option value="30">30</option>
-                      <option value="35">35</option>
-                      <option value="40">40</option>
-                      <option value="45">45</option>
-                      <option value="50">50</option>
-                    </select>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Employee Buffer</span>
+                  </div>
+                  <select formControlName="EmployeeBufferCount" class="form-control" class="form-control">
+                    <option value=""  selected >Please select</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                    <option value="45">45</option>
+                    <option value="50">50</option>
+                  </select>
 
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Download Buffer</span>
-                    </div>
-                    <select formControlName="DownloadBufferDays" class="form-control" class="form-control">
-                      <option value="0">Please select</option>
-                      <option value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="15">15</option>
-                      <option value="20">20</option>
-                      <option value="25">25</option>
-                      <option value="30">30</option>
-                    </select>
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Download Buffer</span>
                   </div>
+                  <select formControlName="DownloadBufferDays" class="form-control" class="form-control">
+                    <option value=""  selected >Please select</option>
+                    <option value="5">5 Days</option>
+                    <option value="10">10 Days</option>
+                    <option value="15">15 Days</option>
+                    <option value="20">20 Days</option>
+                    <option value="25">25 Days</option>
+                    <option value="30">30 Days</option>
+                  </select>
                 </div>
               </div>
-              <div class="form-group col-md-4 ">
-                <label class="col-form-label redStar" for="inline-radios">Active:</label>
-
-                <label class="radio-inline ml-2">
-                  <input [checked]="true" [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
-                         formControlName="IsActive" type="radio" name="IsActive" [value]="true"> Yes
-                </label>
-                <label class="form-control" class="radio-inline ml-2">
-                  <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
-                         formControlName="IsActive" type="radio" name="IsActive" [value]="false"> No
-                </label>
-
-                <!-- <div *ngIf="isFormSubmitted && f.IsActive.errors" class="invalid-feedback">
-          <div *ngIf="f.IsActive.errors.required">Client Type is mandatory</div>
-        </div> -->
-
-              </div>
+             
             </div>
+
+
+            <div class="form-group col-md-4 ">
+              <label class="col-form-label redStar" for="inline-radios">Active:</label>
+
+              <label class="radio-inline ml-2">
+                <input [checked]="true" [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
+                       formControlName="IsActive" type="radio" name="IsActive" [value]="true"> Yes
+              </label>
+              <label class="form-control" class="radio-inline ml-2">
+                <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
+                       formControlName="IsActive" type="radio" name="IsActive" [value]="false"> No
+              </label>
+
+              <!-- <div *ngIf="isFormSubmitted && f.IsActive.errors" class="invalid-feedback">
+        <div *ngIf="f.IsActive.errors.required">Client Type is mandatory</div>
+      </div> -->
+
+            </div>
+          </div>
 
 
             <div>

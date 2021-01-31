@@ -431,9 +431,15 @@ export class CreateClientComponent implements OnInit {
           this.clientForm.controls['UsageCount'].reset();
           this.clientForm.controls['UsageCount'].clearValidators();
           this.clientForm.controls['UsageCount'].setValue(0);
+
+          this.clientForm.controls['Range'].setValidators(Validators.required);
+          this.clientForm.controls['Range'].setValue(0);
         } else {         
           this.clientForm.controls['UsageCount'].setValidators(Validators.required);
-          this.clientForm.controls['UsageCount'].setValue(1);
+          this.clientForm.controls['UsageCount'].setValue("");
+
+          this.clientForm.controls['Range'].reset();
+          this.clientForm.controls['Range'].clearValidators();
         }
 
 

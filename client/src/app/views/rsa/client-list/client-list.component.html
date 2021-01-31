@@ -217,13 +217,13 @@
   
                 <label class="radio-inline ml-2">
                   <input formControlName="UsageType" name="UsageType"
-                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="license">
+                    [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio" value="License">
                   License
                 </label>
                 <label class="form-control" class="radio-inline ml-2">
                   <input formControlName="UsageType" name="UsageType"
                     [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
-                    value="countofEmployees"> # of Employees
+                    value="Employees"> # of Employees
                 </label>
   
                 <div *ngIf="isFormSubmitted && f.UsageType.errors" class="invalid-feedback">
@@ -530,7 +530,7 @@
                       <span class="input-group-text">Employee Buffer</span>
                     </div>
                     <select formControlName="EmployeeBufferCount" class="form-control" class="form-control">
-                      <option value="0">Please select</option>
+                      <option value=""  selected >Please select</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
@@ -557,13 +557,13 @@
                       <span class="input-group-text">Download Buffer</span>
                     </div>
                     <select formControlName="DownloadBufferDays" class="form-control" class="form-control">
-                      <option value="0">Please select</option>
-                      <option value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="15">15</option>
-                      <option value="20">20</option>
-                      <option value="25">25</option>
-                      <option value="30">30</option>
+                      <option value=""  selected >Please select</option>
+                      <option value="5">5 Days</option>
+                      <option value="10">10 Days</option>
+                      <option value="15">15 Days</option>
+                      <option value="20">20 Days</option>
+                      <option value="25">25 Days</option>
+                      <option value="30">30 Days</option>
                     </select>
                   </div>
                 </div>
