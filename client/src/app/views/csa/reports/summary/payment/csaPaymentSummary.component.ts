@@ -111,7 +111,7 @@ export class CSAPaymentSummary {
         amount: Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal),
       });
       console.log('totalExpenditure : ',totalExpenditure);
-      totalExpenditure = totalExpenditure + Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal);
+      totalExpenditure += totalExpenditure + Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal);
     }
     this.rowData = rowData;
     this.clientRow.totalExpenditure = totalExpenditure;

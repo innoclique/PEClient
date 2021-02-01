@@ -551,8 +551,8 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
     this.saveFinalRating(true)
   }
   saveFinalRating(isDraft) {
-    
-    let reqRev=this.FinalRatingForm.value.ManagerRevComments;
+
+    let reqRev = this.FinalRatingForm.value.ManagerRevComments;
     this.perfApp.route = "app";
     this.perfApp.method = "SaveManagerFinalRating",
       this.perfApp.requestBody = {
@@ -562,58 +562,67 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
         OverallRating: this.FinalRatingForm.value.ManagerOverallRating,
 
         RevComments: this.FinalRatingForm.value.ManagerRevComments,
-      //  ReqRevision: this.FinalRatingForm.value.ManagerReqRevision,
+        //  ReqRevision: this.FinalRatingForm.value.ManagerReqRevision,
 
         IsDraft: isDraft,
         SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
       };
-      if(!isDraft){
-        if (!this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted) {
-          this.snack.error('Competencies Rating should be Submitted')
-          return;
-        }
+    if (!isDraft) {
+      if (!this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted) {
+        this.snack.error('Competencies Rating should be Submitted')
+        return;
       }
-     
 
-  this.alert.Title = "Alert";
-  this.alert.Content = "Are you sure you want to submit the evaluation for this employee?";
-  this.alert.ShowCancelButton = true;
-  this.alert.ShowConfirmButton = true;
-  this.alert.CancelButtonText = "Cancel";
-  this.alert.ConfirmButtonText = "Continue";
-
-
-  const dialogConfig = new MatDialogConfig()
-  dialogConfig.disableClose = true;
-  dialogConfig.autoFocus = true;
-  dialogConfig.data = this.alert;
-  dialogConfig.height = "300px";
-  dialogConfig.maxWidth = '40%';
-  dialogConfig.minWidth = '40%';
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit the evaluation for this employee?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
 
 
-  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
-  dialogRef.afterClosed().subscribe(resp => {
-   if (resp=='yes') {
-   
-      console.log('final rating form', this.perfApp.requestBody)
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
 
-    
-    this.perfApp.CallAPI().subscribe(x => {
-      console.log(x)
-   const snref=   this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
-      snref.afterDismissed().subscribe(() => {
-        window.location.reload();
-      }); 
-    }, error => {
-      console.log('error', error)
-      this.snack.error('Something went wrong')
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+
+        console.log('final rating form', this.perfApp.requestBody)
+
+
+        this.perfApp.CallAPI().subscribe(x => {
+          console.log(x)
+          const snref = this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
+          snref.afterDismissed().subscribe(() => {
+            window.location.reload();
+          });
+        }, error => {
+          console.log('error', error)
+          this.snack.error('Something went wrong')
+        })
+      } else {
+
+      }
     })
-  }else {
-     
-  }
- })
-  
+    } else {
+      this.perfApp.CallAPI().subscribe(x => {
+        let aMsg = "Evaluation has been successfully saved.";
+        const snref = this.snack.success(aMsg);
+        snref.afterDismissed().subscribe(() => {
+          window.location.reload();
+        });
+
+      }, error => {
+        this.snack.error('Evaluation not saved, please try again.')
+      })
+    }
 
   }
 
@@ -632,31 +641,29 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
   }
   
   saveTSFinalRating(isDraft) {
-    let reqRev=this.FinalRatingForm.value.TSReqRevision && !this.isReqRevDisabled;
-  
-
-  this.alert.Title = "Alert";
-  this.alert.Content = reqRev?"Are you sure you want to request a revision of the rating for this employee?":"Are you sure you want to sign-off this rating?"
-  this.alert.ShowCancelButton = true;
-  this.alert.ShowConfirmButton = true;
-  this.alert.CancelButtonText = "Cancel";
-  this.alert.ConfirmButtonText = "Continue";
+    let reqRev = this.FinalRatingForm.value.TSReqRevision && !this.isReqRevDisabled;
 
 
-  const dialogConfig = new MatDialogConfig()
-  dialogConfig.disableClose = true;
-  dialogConfig.autoFocus = true;
-  dialogConfig.data = this.alert;
-  dialogConfig.height = "300px";
-  dialogConfig.maxWidth = '40%';
-  dialogConfig.minWidth = '40%';
+    this.alert.Title = "Alert";
+    this.alert.Content = reqRev ? "Are you sure you want to request a revision of the rating for this employee?" : "Are you sure you want to sign-off this rating?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
 
 
-  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
-  dialogRef.afterClosed().subscribe(resp => {
-   if (resp=='yes') {
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
 
-    
+
+
+
+
     this.perfApp.route = "app";
     this.perfApp.method = "SaveTSFinalRating",
       this.perfApp.requestBody = {
@@ -666,29 +673,48 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
         RevComments: this.FinalRatingForm.value.ThirdSignatoryRevComments,
         ReqRevision: this.FinalRatingForm.value.TSReqRevision,
         FRReqRevision: this.FinalRatingForm.value.FRReqRevision,
-        
+
         IsDraft: isDraft,
         SignOff: `${this.loginUser.FirstName} ${this.loginUser.LastName}`
       };
     console.log('final rating form', this.perfApp.requestBody)
-    this.perfApp.CallAPI().subscribe(x => {
-      console.log(x)
-      let aMsg = reqRev?"Revision request has been sent successfully":"Rating has been signed-off"
-    const snref=  this.snack.success(aMsg);
-     
-      snref.afterDismissed().subscribe(() => {
-        window.location.reload();
-      }); 
 
-    }, error => {
-      console.log('error', error)
-      this.snack.error('Something went wrong')
+
+    if (isDraft) {
+      this.perfApp.CallAPI().subscribe(x => {
+        let aMsg = "Evaluation has been successfully saved.";
+        const snref = this.snack.success(aMsg);
+        snref.afterDismissed().subscribe(() => {
+          window.location.reload();
+        });
+
+      }, error => {
+        this.snack.error('Evaluation not saved, please try again.')
+      })
+
+    } else {
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.perfApp.CallAPI().subscribe(x => {
+          console.log(x)
+          let aMsg = reqRev ? "Revision request has been sent successfully" : "Rating has been signed-off"
+          const snref = this.snack.success(aMsg);
+
+          snref.afterDismissed().subscribe(() => {
+            window.location.reload();
+          });
+
+        }, error => {
+          console.log('error', error)
+          this.snack.error('Something went wrong')
+        })
+
+      } else {
+
+      }
     })
-    
-   } else {
-     
-   }
-  })
+  }
 
 
   }
