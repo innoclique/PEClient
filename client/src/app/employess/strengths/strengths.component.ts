@@ -171,6 +171,11 @@ getAllStrengthDetails() {
     if (c && c.length > 0) {
       this.empDevGoalsData = c;
 
+      if (this.accessingFrom=='currEvaluation' && this.empDevGoalsData.filter(e=>e.IsStrengthSubmited).length==0) {
+        this.showDevGoalsForm  =false;
+        return
+      }
+
 
 
       this.filteredOptionsDevGoals = this.strengthBuildForm.controls['Strength'].valueChanges
