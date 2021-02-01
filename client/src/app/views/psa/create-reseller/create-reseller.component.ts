@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,8 @@ import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { CustomValidators } from '../../../shared/custom-validators';
-
+import { AlertComponent } from '../../../shared/alert/alert.component';
+import { AlertDialog } from '../../../Models/AlertDialog';
 
 @Component({
   selector: 'app-create-reseller',
@@ -19,7 +20,7 @@ import { CustomValidators } from '../../../shared/custom-validators';
 })
 export class CreateResellerComponent implements OnInit {
 
- 
+  public alert = new AlertDialog();
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
@@ -207,8 +208,33 @@ export class CreateResellerComponent implements OnInit {
     debugger;
     if(this.currentRecord && this.currentRecord._id){
       this.updateClient();
-    }else{
-      this.saveClient();
+    } else {
+      this.alert.Title = "Alert";
+      this.alert.Content = "Are you sure you want to submit the evaluation for this employee?";
+      this.alert.ShowCancelButton = true;
+      this.alert.ShowConfirmButton = true;
+      this.alert.CancelButtonText = "Cancel";
+      this.alert.ConfirmButtonText = "Continue";
+
+
+      const dialogConfig = new MatDialogConfig()
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = this.alert;
+      dialogConfig.height = "300px";
+      dialogConfig.maxWidth = '40%';
+      dialogConfig.minWidth = '40%';
+
+
+      var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(resp => {
+        if (resp == 'yes') {
+          this.saveClient();
+        } else {
+
+        }
+      })
+      
     }
     
   }

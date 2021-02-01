@@ -74,18 +74,22 @@
   width: 100%;
 }
 
+.cdk-global-scrollblock {
+    position: inherit;
+ }
 
-@import "../node_modules/ag-grid-community/src/styles/ag-grid.scss";
-@import "../node_modules/ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin.scss";
 
-.ag-theme-alpine {
+  @import "../node_modules/ag-grid-community/src/styles/ag-grid.scss";
+  @import "../node_modules/ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin.scss";
+
+  .ag-theme-alpine {
     @include ag-theme-alpine();
-}
+  }
 
-.avgScore{
-  font-size: small;
-}
+  .avgScore{
+    font-size: small;
+  }
 
-::ng-deep .ag-center-cols-container{
-  width:inherit !important;
-}
+  ::ng-deep .ag-center-cols-container{
+    width:inherit !important;
+  }
