@@ -421,6 +421,11 @@ getAllDevGoalsDetails() {
     if (c && c.length > 0) {
       this.empDevGoalsData = c;
 
+      if (this.accessingFrom=='currEvaluation' && this.empDevGoalsData.filter(e=>e.IsGoalSubmited).length==0) {
+        this.showDevGoalsForm  =false;
+        return
+      }
+
 
 
       this.filteredOptionsDevGoals = this.goalsBuildForm.controls['DevGoal'].valueChanges

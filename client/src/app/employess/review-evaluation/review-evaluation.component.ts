@@ -14,6 +14,9 @@ import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertDialog } from '../../Models/AlertDialog';
+import { AlertComponent } from '../../shared/alert/alert.component';
 
 
 
@@ -27,6 +30,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   loginUser: any;
   selectedUser: any;
   seletedTabRole:any;
+  public alert= new AlertDialog();
   public empKPIData: any[] = []
   kpiDetails: any = {};
   currentKpiId: any;
@@ -83,6 +87,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
     private snack: NotificationService,
     private perfApp: PerfAppService,
     public translate: TranslateService,
+    public dialog: MatDialog,
     private fb: FormBuilder,
     private qcs: CompetencyFormService,
     private datePipe: DatePipe,
@@ -568,9 +573,30 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
           return;
         }
       }
-      let aResult = window.confirm("Are you sure you want to submit the evaluation for this employee?")
-    console.log('final rating form', this.perfApp.requestBody)
-    if(aResult==true){
+     
+
+  this.alert.Title = "Alert";
+  this.alert.Content = "Are you sure you want to submit the evaluation for this employee?";
+  this.alert.ShowCancelButton = true;
+  this.alert.ShowConfirmButton = true;
+  this.alert.CancelButtonText = "Cancel";
+  this.alert.ConfirmButtonText = "Continue";
+
+
+  const dialogConfig = new MatDialogConfig()
+  dialogConfig.disableClose = true;
+  dialogConfig.autoFocus = true;
+  dialogConfig.data = this.alert;
+  dialogConfig.height = "300px";
+  dialogConfig.maxWidth = '40%';
+  dialogConfig.minWidth = '40%';
+
+
+  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+  dialogRef.afterClosed().subscribe(resp => {
+   if (resp=='yes') {
+   
+      console.log('final rating form', this.perfApp.requestBody)
 
     
     this.perfApp.CallAPI().subscribe(x => {
@@ -583,7 +609,10 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
       console.log('error', error)
       this.snack.error('Something went wrong')
     })
+  }else {
+     
   }
+ })
   
 
   }
@@ -603,13 +632,30 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
   }
   
   saveTSFinalRating(isDraft) {
-    let reqRev=this.FinalRatingForm.value.TSReqRevision;
-    let msg = reqRev?"Are you sure you want to request a revision of the rating for this employee?":"Are you sure you want to sign-off this rating?"
-   let conf =  window.confirm(msg)
-   if (conf==true)
-   {
+    let reqRev=this.FinalRatingForm.value.TSReqRevision && !this.isReqRevDisabled;
+  
 
-   
+  this.alert.Title = "Alert";
+  this.alert.Content = reqRev?"Are you sure you want to request a revision of the rating for this employee?":"Are you sure you want to sign-off this rating?"
+  this.alert.ShowCancelButton = true;
+  this.alert.ShowConfirmButton = true;
+  this.alert.CancelButtonText = "Cancel";
+  this.alert.ConfirmButtonText = "Continue";
+
+
+  const dialogConfig = new MatDialogConfig()
+  dialogConfig.disableClose = true;
+  dialogConfig.autoFocus = true;
+  dialogConfig.data = this.alert;
+  dialogConfig.height = "300px";
+  dialogConfig.maxWidth = '40%';
+  dialogConfig.minWidth = '40%';
+
+
+  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+  dialogRef.afterClosed().subscribe(resp => {
+   if (resp=='yes') {
+
     
     this.perfApp.route = "app";
     this.perfApp.method = "SaveTSFinalRating",
@@ -638,10 +684,13 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
       console.log('error', error)
       this.snack.error('Something went wrong')
     })
-  }
-  else{
+    
+   } else {
+     
+   }
+  })
 
-  }
+
   }
 
   

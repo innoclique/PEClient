@@ -9,7 +9,7 @@ export class NotificationService {
   constructor(public snackBar: MatSnackBar ) {}
 
   config: MatSnackBarConfig = {
-    duration: 1000,
+    duration: 10000,
     horizontalPosition: 'center',
     verticalPosition: 'bottom'    
   }
