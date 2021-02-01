@@ -1040,20 +1040,20 @@ export class RollevaluationComponent implements OnInit {
           if (this.purposeDurationMap.get(item.Purpose)) {
             //update purpose
             var durationMap: Map<string, number> = this.purposeDurationMap.get(item.Purpose);
-            if (durationMap.get(item.NoOfMonthsLable)) {
+            if (durationMap.get(item.Purpose=='Year-end'?item.NoOfMonthsLable:`${item.DurationMonths} Months`)) {
               // update duration
-              var existingDurationEmpCount = durationMap.get(item.NoOfMonthsLable);
-              durationMap.set(item.NoOfMonthsLable, existingDurationEmpCount + this.getEmpCount(item));
+              var existingDurationEmpCount = durationMap.get(item.Purpose=='Year-end'?item.NoOfMonthsLable:`${item.DurationMonths} Months`);
+              durationMap.set(item.Purpose=='Year-end'?item.NoOfMonthsLable:`${item.DurationMonths} Months`, existingDurationEmpCount + this.getEmpCount(item));
               this.purposeDurationMap.set(item.Purpose, durationMap);
             } else {
               // add duration
-              durationMap.set(item.NoOfMonthsLable, this.getEmpCount(item));
+              durationMap.set(item.Purpose=='Year-end'?item.NoOfMonthsLable:`${item.DurationMonths} Months`, this.getEmpCount(item));
               this.purposeDurationMap.set(item.Purpose, durationMap);
             }
           } else {
             // add purpose
             var durationMap = new Map<string, number>();
-            durationMap.set(item.NoOfMonthsLable, this.getEmpCount(item));
+            durationMap.set(item.Purpose=='Year-end'?item.NoOfMonthsLable:`${item.DurationMonths} Months`, this.getEmpCount(item));
             this.purposeDurationMap.set(item.Purpose, durationMap);
           }
         });
@@ -1107,6 +1107,13 @@ export class RollevaluationComponent implements OnInit {
     var available = 0;
     if (this.purposeDurationMap && this.purposeDurationMap.get(this.evaluationType) && this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected)) {
       available = this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected);
+      //console.log('available : ',available);
+      if(this.evaluationType==='Year-end'){
+       // console.log('EmployeeBufferCount ::: ',Number(parseInt(this.currentOrganization.EmployeeBufferCount))? parseInt(this.currentOrganization.EmployeeBufferCount): 0);
+        var empBufferCount = parseInt(this.currentOrganization.EmployeeBufferCount)? parseInt(this.currentOrganization.EmployeeBufferCount): 0;
+      available = available + empBufferCount;
+     // console.log('final available : ',available);
+      }
     }
     return this.getEvaluationsRolledOut().toString() + " out of " + available.toString();
   }
@@ -1116,6 +1123,14 @@ export class RollevaluationComponent implements OnInit {
     if (this.purposeDurationMap && this.purposeDurationMap.get(this.evaluationType) && this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected)) {
       available = this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected);
     }
+    
+    if(this.evaluationType==='Year-end'){
+      console.log('EmployeeBufferCount ::: ',Number(parseInt(this.currentOrganization.EmployeeBufferCount))? parseInt(this.currentOrganization.EmployeeBufferCount): 0);
+      var empBufferCount = parseInt(this.currentOrganization.EmployeeBufferCount)? parseInt(this.currentOrganization.EmployeeBufferCount): 0;
+    available = available + empBufferCount;
+    console.log('final available : ',available);
+    }
+    
     return (available - this.getEvaluationsRolledOut());
   }
 

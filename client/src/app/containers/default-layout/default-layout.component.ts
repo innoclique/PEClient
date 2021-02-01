@@ -124,7 +124,7 @@ isCSA:Boolean = false;
         {
           "IsActive": true,
           "url": "/employee/copiesTo",
-          "name": "Copies To",
+          "name": "Peer Evaluations",
           "code": "CopiesTo",
           "icon": "icon-layers"
         },
@@ -414,7 +414,7 @@ isCSA:Boolean = false;
             {
               "IsActive": true,
               "url": "/employee/copiesTo",
-              "name": "Copies To",
+              "name": "Peer Evaluations",
               "code": "CopiesTo",
               "icon": "icon-layers"
             },
@@ -593,7 +593,7 @@ isCSA:Boolean = false;
             {
               "IsActive": true,
               "url": "/employee/copiesTo",
-              "name": "Copies To",
+              "name": "Peer Evaluations",
               "code": "CopiesTo",
               "icon": "icon-layers"
             },
