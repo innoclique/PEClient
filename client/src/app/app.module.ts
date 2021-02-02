@@ -46,6 +46,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { AuthService } from './services/auth.service';
 import { SharedModule } from './shared/shared.module';
 import { CustomMaterialModule } from './custom-material/custom-material.module';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { CustomMaterialModule } from './custom-material/custom-material.module';
     PerfectScrollbarModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),    
+    AccordionModule.forRoot(),
     SharedModule,
     CustomMaterialModule,
     FlashMessagesModule.forRoot()

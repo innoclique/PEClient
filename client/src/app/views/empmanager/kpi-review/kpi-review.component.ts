@@ -721,6 +721,15 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
         this.authService.setManagerPGSubmitStatus("true");
         this.empKPIData = c;
 
+        if (this.accessingFrom=='reviewEvaluation') {
+          if (c.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==true).length==0) {
+            this.showKpiForm  =false;
+            return
+          }
+          this.empKPIData = c.filter(e=> e.IsActive==true && e.ManagerSignOff && e.ManagerSignOff.submited ==true );
+        }
+        
+
 
 
         this.filteredOptionsKPI = this.kpiForm.controls['Kpi'].valueChanges
