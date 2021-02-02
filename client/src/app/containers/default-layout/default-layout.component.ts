@@ -15,6 +15,7 @@ export class DefaultLayoutComponent implements OnInit {
   public user: any;
 currentUser:any;
 isCSA:Boolean = false;
+public oneAtATime: boolean = true;
   constructor(public authService: AuthService,
     private router: Router,
     public translate: TranslateService) {
