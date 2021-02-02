@@ -547,7 +547,8 @@ export class RollevaluationComponent implements OnInit {
     public activatedRoute: ActivatedRoute) {
 
   }
-
+  employeesList$Memory: any[] = [];
+  pgSubmittedEmployeesList: any[] = [];
   currentEvaluationForm: any = {};
   selectedEmployeeList: any = [];
   dropdownSettings: any = {};
@@ -568,6 +569,7 @@ export class RollevaluationComponent implements OnInit {
         this.kpiSelectedEmployees = params["list"].split(',')
       }
       this.initForm();
+      this.getEvaluationList();
       this.getEmployees();
       this.getModels();
       if (params['rollEvaluationEdit'] && params['editEvaluation']) {
@@ -692,6 +694,7 @@ export class RollevaluationComponent implements OnInit {
 
         }
 
+        this.employeesList$Memory = this.employeesList$
 
 
       } else {
@@ -1539,6 +1542,16 @@ export class RollevaluationComponent implements OnInit {
     this.selectedEmployeeList = [];
     this.selectedEmployeesForEvaluation = [];
     this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
+
+    // returns pg employees which are not submitted yet
+    let pgEmpDropdown = [];
+    if (this.initializeFormFor === 'kpionly') {
+      pgEmpDropdown = this.employeesList$Memory.filter(emp => (this.pgSubmittedEmployeesList.findIndex(pg => pg.Employee._id == emp._id) == -1));
+    } else {
+      pgEmpDropdown = this.employeesList$Memory;
+    }
+
+    this.employeesList$ = pgEmpDropdown;
   }
   getOrganizationStartAndEndDates(){
     let Organization = this.currentOrganization;
@@ -1606,5 +1619,26 @@ export class RollevaluationComponent implements OnInit {
     //   return `${ev} - ${this.monthList[ this.currentOrganization.StartMonth] } to ${this.currentOrganization.EndMonth}`
 
     // }
+  }
+
+ 
+  getEvaluationList() {
+    this.perfApp.route = "evaluation";
+    this.perfApp.method = "GetEvaluations",
+      this.perfApp.requestBody = { clientId: this.authService.getOrganization()._id }
+    this.perfApp.CallAPI().subscribe(c => {
+      if (c) {
+        this.pgSubmittedEmployeesList = [];
+        c.map(row => {
+          if (row.Type === 'K') {
+            this.pgSubmittedEmployeesList.push({
+              Type: row.Type,
+              EvaluationRow: row,
+              Employee: row.Employee[0],
+            });
+          }
+        })
+      }
+    })
   }
 }
