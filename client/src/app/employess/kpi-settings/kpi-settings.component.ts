@@ -535,7 +535,11 @@ conformSubmitKpis(){
         this.setWeighting(c.filter(item => item.IsDraft === false).length, this.currentAction);
       if (c && c.length > 0) {
         if (this.accessingFrom=='currEvaluation') {
-          this.empKPIData = c.filter(e=> e.IsDraft==false);
+          if (c.filter(e=>e.IsSubmitedKPIs).length==0) {
+            this.showKpiForm  =false;
+            return
+          }
+          this.empKPIData = c.filter(e=> e.IsDraft==false && e.IsActive==true && e.IsSubmitedKPIs==true );
         }else{
           this.empKPIData = c;
         }

@@ -394,9 +394,9 @@ export class SetupclientComponent implements OnInit {
         this.setValues(f, rowdata);
       } else {
         form.get(key).setValue(rowdata[key]);
-        if((key === "EmployeeBufferCount" || key === "DownloadBufferDays") && !rowdata[key]){
-          form.get(key).setValue("0");
-        }
+        // if((key === "EmployeeBufferCount" || key === "DownloadBufferDays") && !rowdata[key]){
+        //   form.get(key).setValue("");
+        // }
 
       }
 
