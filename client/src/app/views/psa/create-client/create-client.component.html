@@ -453,7 +453,7 @@
                       <mat-select formControlName="EvaluationModels"
                         [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }" class="form-control"
                         multiple>
-                        <mat-option *ngFor="let topping of models" [value]="topping">{{topping}}</mat-option>
+                        <mat-option *ngFor="let topping of models" [value]="topping._id">{{topping.Name}}</mat-option>
                       </mat-select>
 
                       <div *ngIf="isFormSubmitted && f.EvaluationModels.errors" class="invalid-feedback">

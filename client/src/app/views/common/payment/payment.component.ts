@@ -632,7 +632,7 @@ export class PaymentComponent implements OnInit {
     requestBody.Type="Renewal";
     console.log(requestBody);
      this.perfApp.route = "payments";
-     this.perfApp.method = "/release/save";
+     this.perfApp.method = "release/save";
      this.perfApp.requestBody = requestBody;
      this.perfApp.CallAPI().subscribe(c => {
      if(c){

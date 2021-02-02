@@ -535,7 +535,8 @@ export class CreateClientComponent implements OnInit {
     this.perfApp.method = "GetModelsByIndustry",
       this.perfApp.requestBody ={id: this.clientForm.controls["Industry"].value}; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
-      this.models=c.map(x=>x.Name)
+      this.models = c;
+      //this.models=c.map(x=>x.Name)
     }, error => {
       debugger
       console.log('models error ',error)
