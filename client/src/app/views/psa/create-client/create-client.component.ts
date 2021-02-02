@@ -331,13 +331,17 @@ export class CreateClientComponent implements OnInit {
     this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
-      this.notification.success('Organization Added Successfully.')
+      if (this.clientFormData.IsDraft) {
+        this.notification.success('The client has been successfully saved.')
+      } else {
+        this.notification.success('The client has been successfully added.')
+      }
       this.errorOnSave = false;
       this.errorMessage = "";
       if (!this.clientFormData.IsDraft) {
         this.router.navigate(['psa/payment-release', { email: this.clientFormData.Email }], { skipLocationChange: true });
       } else {
-        this.router.navigate(['psa/list']);
+        this.navToList();
       }
       
     }, error => {
@@ -478,9 +482,9 @@ export class CreateClientComponent implements OnInit {
         this.setValues(f, rowdata);
       } else {
         form.get(key).setValue(rowdata[key]);
-        if((key === "EmployeeBufferCount" || key === "DownloadBufferDays") && !rowdata[key]){
-          form.get(key).setValue("0");
-        }
+        //if((key === "EmployeeBufferCount" || key === "DownloadBufferDays") && !rowdata[key]){
+        //  form.get(key).setValue("0");
+        //}
 
       }
 
@@ -611,8 +615,18 @@ export class CreateClientComponent implements OnInit {
       this.perfApp.requestBody = organization; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {      
       console.log('updated', c)
-      this.notification.success('Client details updated successfully')
-      this.navToList();
+      if (!this.clientFormData.IsDraft) {
+        this.notification.success('The client has been successfully added.')
+      } else {
+        this.notification.success('The client has been successfully updated.')
+      }
+
+
+      if (!this.clientFormData.IsDraft) {
+        this.router.navigate(['psa/payment-release', { email: this.clientFormData.Email }], { skipLocationChange: true });
+      } else {
+        this.navToList();
+      }
 
     }, error => {      
       console.log('eror while updating orgnaizartion :', error)

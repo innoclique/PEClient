@@ -38,6 +38,7 @@ export class CreateEmployeeComponent implements OnInit {
   countyFormReset: boolean;
   isRoleChanged: boolean;
   public alert: AlertDialog;
+  isDraftEmployee: boolean;
   
   filteredOptions: Observable<any[]>;
   filteredOptionsTS: Observable<any[]>;
@@ -184,6 +185,7 @@ public currentOrganization:any={}
   }
 
     this.empForm.patchValue({ IsDraft: 'true' });
+    this.isDraftEmployee = true;
     this.saveEmployee();
 
     //this.alert.Title = "Alert";
@@ -230,7 +232,8 @@ this.submitClicked=true;
       }
   
     this.empForm.patchValue({IsSubmit: 'true' });
-    this.empForm.patchValue({IsDraft: 'false' });
+    this.empForm.patchValue({ IsDraft: 'false' });
+    this.isDraftEmployee = false;
     this.alert.Title = "Alert";
     this.alert.Content = "Are you sure you want to add this employee?"
     this.alert.ShowCancelButton = true;
@@ -314,10 +317,14 @@ this.submitClicked=true;
   
     this.perfApp.CallAPI().subscribe(c=>{
   
-      if (c.message==Constants.SuccessText) {
-        this.submitClicked=false;
-        
-        this.snack.success(this.translate.instant(`Employee ${this.currentAction=='create'?'Added':'Updated'}  Successfully`));
+      if (c.message == Constants.SuccessText) {
+        this.submitClicked = false;
+
+        if (this.isDraftEmployee) {
+          this.snack.success(this.translate.instant(`Employee has been Saved Successfully`));
+      } else {
+          this.snack.success(this.translate.instant(`Employee has been ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Successfully`));
+      }
         // this.getEmployees();
         // this.closeForm();
         // this.showSpinner = false;

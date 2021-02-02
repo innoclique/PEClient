@@ -52,7 +52,8 @@ export class SetupEmployeeComponent implements OnInit {
   show=false;
   empDetails: any={}
   currentAction='create';
-  cscData:any=undefined;
+  cscData: any = undefined;
+  isDraftEmployee: boolean;
 
   public alert: AlertDialog;
   public currentOrganization:any={};
@@ -446,7 +447,8 @@ getEmployees(){
 
 
 saveCreateEmployee(){
-  this.empForm.patchValue({IsDraft: 'true' });
+  this.empForm.patchValue({ IsDraft: 'true' });
+  this.isDraftEmployee = true;
 if(this.isRoleChanged){
 this.snack.error("Role Effective From is mandatory")
 return
@@ -473,7 +475,8 @@ submitCreateEmployee(){
     }
 
   this.empForm.patchValue({IsSubmit: 'true' });
-  this.empForm.patchValue({IsDraft: 'false' });
+  this.empForm.patchValue({ IsDraft: 'false' });
+  this.isDraftEmployee = false;
  this.saveEmployee();
 }
 
@@ -531,8 +534,12 @@ if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
   this.perfApp.CallAPI().subscribe(c=>{
 
     if (c.message==Constants.SuccessText) {
-      
-      this.snack.success(this.translate.instant(`Employee ${this.currentAction=='create'?'Added':'Updated'}  Successfully`));
+
+      if (this.isDraftEmployee) {
+        this.snack.success(this.translate.instant(`Employee has been Saved Successfully`));
+      } else {
+        this.snack.success(this.translate.instant(`Employee has been ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Successfully`));
+      }
       this.getEmployees();
       this.closeForm();
       // this.showSpinner = false;

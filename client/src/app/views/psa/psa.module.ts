@@ -37,6 +37,7 @@ import { PaymentReleaseComponent } from './payment-release/payment-release.compo
 import { PaymentAdhocListComponent } from './payment-adhoc-list/payment-adhoc-list.component';
 import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
 import { PriceListComponent } from "../common/price-list/price-list.component";
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 export const projectRoutes: Routes = [
   
   {path: '',
@@ -204,6 +205,7 @@ export const projectRoutes: Routes = [
     RouterModule.forChild(projectRoutes),
     AgGridModule.withComponents([]),
     ModalModule.forRoot(),
+    TooltipModule.forRoot(),
     EvalCommonModule,
     TabsModule,
     ChartsModule,

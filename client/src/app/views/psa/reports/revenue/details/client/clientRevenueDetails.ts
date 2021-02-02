@@ -128,7 +128,8 @@ export class ClientRevenueDetails {
   onBtExport() {
     var params = {
       columnWidth: parseFloat('200'),
-      sheetName: 'Client-Info',
+      sheetName: 'Client Revenue Details',
+      fileName: 'Client Revenue Details',
       exportMode: undefined,
       suppressTextAsCDATA: false,
       rowHeight: undefined,

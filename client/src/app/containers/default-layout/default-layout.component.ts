@@ -117,7 +117,7 @@ isCSA:Boolean = false;
         {
           "IsActive": true,
           "url": "/employee/drreview",
-          "name": "Review Manager",
+          "name": "Review your Manager",
           "code": "CurrentEvaluation",
           "icon": "icon-layers"
         },
@@ -407,7 +407,7 @@ isCSA:Boolean = false;
             {
               "IsActive": true,
               "url": "/employee/drreview",
-              "name": "Review Manager",
+              "name": "Review your Manager",
               "code": "CurrentEvaluation",
               "icon": "icon-layers"
             },
@@ -586,7 +586,7 @@ isCSA:Boolean = false;
             {
               "IsActive": true,
               "url": "/employee/drreview",
-              "name": "Review Manager",
+              "name": "Review your Manager",
               "code": "CurrentEvaluation",
               "icon": "icon-layers"
             },

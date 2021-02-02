@@ -62,6 +62,8 @@ export class PaymentComponent implements OnInit {
   public clientData: any=[]
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
 
+  public taxToolTip;
+
   constructor(
     public router: Router,
     public authService: AuthService,
@@ -73,6 +75,12 @@ export class PaymentComponent implements OnInit {
     this.currentOrganization = this.authService.getOrganization();
     console.log("====this.currentOrganization==");
     console.log(this.currentOrganization)
+
+    if (this.currentOrganization && this.currentOrganization.Country == "Canada") {
+      this.taxToolTip = "For Canadian clients, tax is applied based on the province and will include applicable GST/HST/PST.";
+    } else {
+      this.taxToolTip = null;
+    }
    }
 
   ngOnInit(): void {

@@ -49,6 +49,7 @@ export class PaymentReleaseComponent implements OnInit {
   isRangeSelectVisible:Boolean=false;
   isRangeSelectBox:Boolean=true;
   
+  public taxToolTip;
 
   constructor(
     public router: Router,
@@ -60,7 +61,12 @@ export class PaymentReleaseComponent implements OnInit {
     ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
-    
+
+    if (this.currentOrganization && this.currentOrganization.Country == "Canada") {
+      this.taxToolTip = "For Canadian clients, tax is applied based on the province and will include applicable GST/HST/PST.";
+    } else {
+      this.taxToolTip = null;
+    }
    }
 
   ngOnInit(): void {
@@ -173,6 +179,12 @@ useageOnchange(){
         "Type" : "Range"
       } 
       this.getRangeList(rangeOptions);
+
+      if (this.selectedOrganizationObj && this.selectedOrganizationObj.Country == "Canada") {
+        this.taxToolTip = "For Canadian clients, tax is applied based on the province and will include applicable GST/HST/PST.";
+      } else {
+        this.taxToolTip = null;
+      }
       
       //=> End
       let _requestBody={
