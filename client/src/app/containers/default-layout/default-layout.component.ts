@@ -1,10 +1,11 @@
-import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, DoCheck, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { navItems } from '../../_nav';
 import { AuthService } from '../../services/auth.service';
 
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { PerfAppService } from '../../services/perf-app.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './default-layout.component.html'
@@ -16,8 +17,10 @@ export class DefaultLayoutComponent implements OnInit {
 currentUser:any;
 isCSA:Boolean = false;
 public oneAtATime: boolean = true;
+  notificationList=[];
   constructor(public authService: AuthService,
     private router: Router,
+    private perfApp: PerfAppService,
     public translate: TranslateService) {
     this.navItems = JSON.parse(localStorage.getItem('NavigationMenu'));
 
@@ -25,6 +28,12 @@ public oneAtATime: boolean = true;
     translate.addLangs(['en', 'fr']);
     translate.setDefaultLang('en');
   }
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   this.getAllEmpNotifications();
+  // }
+  // ngDoCheck(): void {
+  //   this.getAllEmpNotifications();
+  // }
   toggleMinimize(e) {
     this.sidebarMinimized = e;
   }
@@ -40,6 +49,24 @@ public oneAtATime: boolean = true;
 
   gotoMessages(){
     
+  }
+
+  
+
+  getAllEmpNotifications() {
+    this.perfApp.route = "notifications";
+    this.perfApp.method = "";
+    this.perfApp.requestBody = { 'email':"empone@in.com" // this.user.Email
+  }
+      this.perfApp.CallAPI().subscribe(c => {
+
+        if (c) {
+
+          this.notificationList=c;
+
+          
+        }
+      })
   }
 
   switchLang(lang: string) {
@@ -650,6 +677,8 @@ public oneAtATime: boolean = true;
           this.navItems = navigationMenu;
 
       }
+
+      this.getAllEmpNotifications();
         return  this.navItems; 
       }
     }
