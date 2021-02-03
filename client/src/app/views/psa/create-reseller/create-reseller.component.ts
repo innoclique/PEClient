@@ -247,8 +247,13 @@ export class CreateResellerComponent implements OnInit {
       this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
-      this.notification.success('Reseller Added Successfully.')
       if (!this.clientFormData.IsDraft) {
+        this.notification.success('The Reseller has been successfully added.')
+      } else {
+        this.notification.success('The Reseller has been successfully saved.')
+      }
+
+        if (!this.clientFormData.IsDraft) {
         this.router.navigate(['psa/payment-release', { email: this.clientFormData.Email }], { skipLocationChange: true });
       } else {
         this.navToList();
@@ -430,8 +435,16 @@ export class CreateResellerComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
       debugger
       console.log('updated', c)
-      this.notification.success('Reseller details updated successfully');
-      this.navToList();
+      if (!this.clientFormData.IsDraft) {
+        this.notification.success('The Reseller has been successfully added.')
+      } else {
+        this.notification.success('The Reseller has been successfully updated.')
+      }
+      if (!this.clientFormData.IsDraft) {
+        this.router.navigate(['psa/payment-release', { email: this.clientFormData.Email }], { skipLocationChange: true });
+      } else {
+        this.navToList();
+      }
       
 
     }, error => {      

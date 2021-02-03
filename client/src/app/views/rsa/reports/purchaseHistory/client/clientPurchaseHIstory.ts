@@ -134,7 +134,8 @@ export class ClientPurchaseHistory {
   onBtExport() {
     var params = {
       columnWidth: parseFloat('200'),
-      sheetName: 'Client-Info',
+      sheetName: 'Purchase History',
+      fileName: 'Purchase History',
       exportMode: undefined,
       suppressTextAsCDATA: false,
       rowHeight: undefined,

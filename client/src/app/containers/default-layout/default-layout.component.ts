@@ -15,6 +15,7 @@ export class DefaultLayoutComponent implements OnInit {
   public user: any;
 currentUser:any;
 isCSA:Boolean = false;
+public oneAtATime: boolean = true;
   constructor(public authService: AuthService,
     private router: Router,
     public translate: TranslateService) {
@@ -117,7 +118,7 @@ isCSA:Boolean = false;
         {
           "IsActive": true,
           "url": "/employee/drreview",
-          "name": "Review Manager",
+          "name": "Review your Manager",
           "code": "CurrentEvaluation",
           "icon": "icon-layers"
         },
@@ -407,7 +408,7 @@ isCSA:Boolean = false;
             {
               "IsActive": true,
               "url": "/employee/drreview",
-              "name": "Review Manager",
+              "name": "Review your Manager",
               "code": "CurrentEvaluation",
               "icon": "icon-layers"
             },
@@ -586,7 +587,7 @@ isCSA:Boolean = false;
             {
               "IsActive": true,
               "url": "/employee/drreview",
-              "name": "Review Manager",
+              "name": "Review your Manager",
               "code": "CurrentEvaluation",
               "icon": "icon-layers"
             },

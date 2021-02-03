@@ -137,7 +137,8 @@ export class ResellerRevenueInfoComponent {
     onBtExport() {
         var params = {
             columnWidth: parseFloat('200'),
-            sheetName: 'Client-Info',
+            sheetName: 'Reseller Revenue',
+            fileName: 'Reseller Revenue',
             exportMode: undefined,
             suppressTextAsCDATA: false,
             rowHeight: undefined,
