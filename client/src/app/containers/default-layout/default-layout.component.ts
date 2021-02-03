@@ -6,6 +6,9 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PerfAppService } from '../../services/perf-app.service';
+import { DateAgoPipe } from '../../pipes/DateAgoPipe';
+import { RemoveHtml } from '../../pipes/RemoveHtml';
+import { TimeAgoPipe } from '../../pipes/TimeAgoPipe';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './default-layout.component.html'
@@ -18,6 +21,7 @@ currentUser:any;
 isCSA:Boolean = false;
 public oneAtATime: boolean = true;
   notificationList=[];
+  Intervel: NodeJS.Timeout;
   constructor(public authService: AuthService,
     private router: Router,
     private perfApp: PerfAppService,
@@ -56,7 +60,7 @@ public oneAtATime: boolean = true;
   getAllEmpNotifications() {
     this.perfApp.route = "notifications";
     this.perfApp.method = "";
-    this.perfApp.requestBody = { 'email':"empone@in.com" // this.user.Email
+    this.perfApp.requestBody = { 'email': this.user.Email //"empone@in.com"
   }
       this.perfApp.CallAPI().subscribe(c => {
 
@@ -69,11 +73,29 @@ public oneAtATime: boolean = true;
       })
   }
 
+  getTime(joiningDate) {
+    return new TimeAgoPipe().transform(joiningDate);
+  }
+  removeHtmlTags(joiningDate) {
+    return new RemoveHtml().transform(joiningDate);
+  }
+  removeLogin(s){
+    return s.replace('To login, <a href="http://15.223.26.103/#/login">click here</a>.',"")
+  }
+
   switchLang(lang: string) {
     this.translate.use(lang);
   }
   ngOnInit() {
     if (this.user) {
+
+
+      this.getAllEmpNotifications(); 
+      this.Intervel = setInterval(() => {
+        this.getAllEmpNotifications(); 
+      }, 180000);
+
+
       if (this.user.SelectedRoles) {
         var navigationMenu = [];
         if(this.user.Role.indexOf('EO')>-1  || this.user.SelectedRoles.indexOf("EO") !== -1){
@@ -678,9 +700,15 @@ public oneAtATime: boolean = true;
 
       }
 
-      this.getAllEmpNotifications();
         return  this.navItems; 
       }
+    }
+  }
+
+
+  ngOnDestroy() {
+    if (this.Intervel) {
+      clearInterval(this.Intervel);
     }
   }
 }

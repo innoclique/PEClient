@@ -59,7 +59,8 @@ export class PaymentComponent implements OnInit {
   selectedRangeId:any="";
   isNoNeededReadOnly:Boolean = false;
   isNoNeededVisible:Boolean = false;
-  public clientData: any=[]
+  public clientData: any = []
+  selectedRangeValue: any;
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
 
   public taxToolTip;
@@ -209,6 +210,7 @@ export class PaymentComponent implements OnInit {
     this.paymentScale=selectedRange;
     this.paymentScale.Tax = this.stateTax;
     this.paymentModel.Range = this.paymentScale._id;
+    this.selectedRangeValue = this.paymentScale.Range;
   }
 
   onSelectRange(selectedObj:any){

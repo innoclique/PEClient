@@ -147,7 +147,7 @@ export class ResetPasswordComponent implements OnInit {
       await this.authService.updatePassword(resetModel).subscribe(x => {
         
         this.snack.success("Password updated successfully.")
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['csa/payments']);
       }, error => {
         if (error.error.message === Constants.InvalidOldPassword) {
          this.snack.error(error.error.message)
