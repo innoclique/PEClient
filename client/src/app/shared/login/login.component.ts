@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   public loginInvalid: boolean;
   private formSubmitAttempt: boolean;
   private returnUrl: string;
+  private redirectLink: string;
   showSpinner: boolean;
   public alert: AlertDialog;
   tncRef: BsModalRef;
@@ -43,7 +44,18 @@ export class LoginComponent implements OnInit {
     private perfApp: PerfAppService,
     public translate: TranslateService,
     private modalService: BsModalService,
-    ) { }
+    private activatedRoute: ActivatedRoute,
+    ) { 
+  
+   this.activatedRoute.queryParams.subscribe(params => {
+      if (params) {
+        console.log('params from login ', params);
+        if (params['redirectTo']) {
+          this.redirectLink = params['redirectTo'];
+        }
+      }
+    });
+  }
 
 
   get f() {
@@ -188,6 +200,10 @@ export class LoginComponent implements OnInit {
     if (!x.User.IsPswChangedOnFirstLogin) {
       this.router.navigate(['resetPassword']);
     } else {
+       if (this.redirectLink) {
+        console.log(' redirect Link found : ', this.redirectLink);
+        this.router.navigate([this.redirectLink]);
+      } else {
       if (x.Role === 'CSA') {
         //this.router.navigate(['csa']);
         let piInfo = this.authService.getPi();
@@ -216,7 +232,7 @@ export class LoginComponent implements OnInit {
         //this.router.navigate(['em/dashboard']);
         
       }
-
+    }
     }
   }
   
