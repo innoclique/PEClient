@@ -53,7 +53,8 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   public showEmployeeSubmit: Boolean = true;
   public showManagerSubmit: Boolean = true;
   public showThirdSignatorySubmit: Boolean = true;
-  public FRReqRevision:Boolean= false;
+  public FRReqRevision: Boolean = false;
+  public showTSRevComments: boolean = false;
   public PeerScoreCard: any;
   DirectReporteeScoreCard: any;
   currentEmpId: any;
@@ -231,6 +232,11 @@ goto(selTab){
           }
           this.FRReqRevision = reqrev;
  
+          if ((res1.FinalRating.FRReqRevision && res1.FinalRating.Self.IsSubmitted && res1.FinalRating.Manager.IsSubmitted) && (this.seletedTabRole == 'TS' || this.seletedTabRole == 'Manager')) {
+            this.showTSRevComments = true;
+          } else {
+            this.showTSRevComments = false;
+          }
 
 
         }
