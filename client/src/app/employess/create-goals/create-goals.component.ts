@@ -59,7 +59,7 @@ accessingFrom:any;
   currentRowItem: any;
   currentOrganization: any={};
   showDevGoalsForm=true;
-  
+  currentEvaluation:any="";
  
   constructor(private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -70,7 +70,7 @@ accessingFrom:any;
     private snack: NotificationService,
     private perfApp: PerfAppService,
     public translate: TranslateService) {
-
+      
     this.loginUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     
@@ -85,7 +85,9 @@ accessingFrom:any;
        this.currentDevGoalId = params['id'];
        this.currentAction = params['action'];
       }
-      
+      if (params['currentEvaluation']) {
+        this.currentEvaluation = params['currentEvaluation'];
+       }
      });   
    }
 
@@ -516,6 +518,7 @@ return
   this.perfApp.requestBody.Kpi = this.perfApp.requestBody.Kpi?  this.perfApp.requestBody.Kpi._id :null;
   this.perfApp.requestBody.GoalActionItems = this.goalsItemRows.length>0? this.goalsItemRows :null;
   this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+  this.perfApp.requestBody.CreatedYear = this.currentEvaluation
   // this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id; sg todo
 
   if (this.goalsBuildForm.get('IsDraft').value=='true') {

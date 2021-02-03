@@ -54,7 +54,7 @@ accessingFrom:any;
   currentOrganization: any={};
   showDevGoalsForm=true;
   strengthId:any;
-  
+  currentEvaluation:any;
  
   constructor(private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -65,7 +65,7 @@ accessingFrom:any;
     private snack: NotificationService,
     private perfApp: PerfAppService,
     public translate: TranslateService) {
-
+      
     this.loginUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     
@@ -76,7 +76,9 @@ accessingFrom:any;
        this.currentDevGoalId = params['id'];
        this.currentAction = params['action'];
       }
-      
+      if (params['currentEvaluation']) {
+        this.currentEvaluation = params['currentEvaluation'];
+       }
      });   
    }
 
@@ -284,6 +286,7 @@ return
   this.perfApp.requestBody.Employee = this.loginUser._id;
    this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id; 
    this.perfApp.requestBody.Owner = this.loginUser._id;
+   this.perfApp.requestBody.CreatedYear = this.currentEvaluation;
 
    if (this.strengthBuildForm.get('IsDraft').value=='true' && this.currentAction=='create') {
     this.perfApp.requestBody.Action = 'Draft';
