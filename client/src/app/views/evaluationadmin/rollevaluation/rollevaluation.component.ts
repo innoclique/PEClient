@@ -817,8 +817,8 @@ export class RollevaluationComponent implements OnInit {
   }
   getModels() {
     this.perfApp.route = "shared";
-    this.perfApp.method = "GetModelsByIndustry",
-      this.perfApp.requestBody = { id: this.currentOrganization.Industry }; //fill body object with form 
+    this.perfApp.method = "GetModelsByIndustryByOrganization",
+      this.perfApp.requestBody = { id: this.currentOrganization.Industry,Organization:this.currentOrganization._id }; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.modelsList = c;
     }, error => {
