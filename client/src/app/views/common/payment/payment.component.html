@@ -122,7 +122,10 @@
           <div class="release_cost_list release_method_list">
             <ul>
               <li>
-                <h6>Cost<strong>Cost for the year</strong></h6>
+                <h6>
+                  Cost<strong *ngIf="paymentModel && paymentModel.UserType === 'Employees' ">Cost per employee per year</strong>
+                  <strong *ngIf="paymentModel && paymentModel.UserType !== 'Employees' ">Cost for the year</strong>
+                </h6>
                 <span>{{paymentStructure?paymentStructure.COST_PER_PA:0}}</span>
                 <div class="clear"></div>
               </li>
@@ -132,7 +135,9 @@
                 <div class="clear"></div>
               </li>
               <li>
-                <h6>Total<strong>Total Amount</strong></h6>
+                <h6>Total<strong *ngIf="paymentModel && paymentModel.UserType === 'Employees' ">Total amount per employee</strong>
+                  <strong *ngIf="paymentModel && paymentModel.UserType !== 'Employees' ">Total Amount</strong>
+                </h6>
                 <span>{{paymentStructure?paymentStructure.TOTAL_AMOUNT:0}}</span>
                 <div class="clear"></div>
               </li>
@@ -152,8 +157,17 @@
                 <div class="clear"></div>
               </li>
               <li>
-                <h6>Summary<strong>Amount payable is cost per employee per year, after discount,  number of employees  + taxes.</strong></h6>
+                <h6>
+                  Summary
+                  <strong *ngIf="paymentModel && paymentModel.UserType === 'Employees' ">
+                    Amount due is cost per employee per year <{{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}}> * number of employees <{{paymentModel ? paymentModel.NoOfEmployees : 0}}> + taxes. In case of monthly payments - <{{ paymentStructure ? paymentStructure.COST_PER_MONTH : 0}}> per month is payable on 1st of each month
+                  </strong>
+                  <strong *ngIf="paymentModel && paymentModel.UserType === 'License' ">
+                    Amount payable is cost per year, after discount, <{{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}}> + taxes
+                  </strong>
+                </h6>
                 <div class="clear"></div>
+                
               </li>
             </ul>
           </div>
@@ -188,7 +202,7 @@
                           </div>
                           <div class="col-lg-4" >
                             <label>Range</label>
-                            <i class="release_txt_nonedit">{{paymentModel?.Range}}</i>
+                            <i class="release_txt_nonedit">{{selectedRangeValue}}</i>
                           </div>
                           <div class="col-lg-4">
                             <label>Payment Date</label>
@@ -222,7 +236,10 @@
                         <div class="release_cost_list">
                           <ul>
                             <li>
-                              <h6>Cost<strong>Cost for the year</strong></h6>
+                              <h6>
+                                Cost<strong *ngIf="paymentModel && paymentModel.UserType === 'Employees' ">Cost per employee per year</strong>
+                                <strong *ngIf="paymentModel && paymentModel.UserType !== 'Employees' ">Cost for the year</strong>
+                              </h6>
                               <span>{{paymentStructure?paymentStructure.COST_PER_PA:0}}</span>
                               <div class="clear"></div>
                             </li>
@@ -232,7 +249,9 @@
                               <div class="clear"></div>
                             </li>
                             <li>
-                              <h6>Total<strong>Total Amount</strong></h6>
+                              <h6>Total<strong *ngIf="paymentModel && paymentModel.UserType === 'Employees' ">Total amount per employee</strong>
+                                <strong *ngIf="paymentModel && paymentModel.UserType !== 'Employees' ">Total Amount</strong>
+                              </h6>
                               <span>{{paymentStructure?paymentStructure.TOTAL_AMOUNT:0}}</span>
                               <div class="clear"></div>
                             </li>
