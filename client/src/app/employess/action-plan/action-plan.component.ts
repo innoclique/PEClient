@@ -11,6 +11,7 @@ import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
 import { AlertComponent } from '../../shared/alert/alert.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-action-plan',
@@ -39,6 +40,12 @@ export class ActionPlanComponent implements OnInit {
   addedGoalCount=0;
   unSubmitedStrenthCount=0;
   addedStrenthCount=0;
+  empEvaluationsYears:any=[];
+  evaluationStartMonth;
+  evaluationEndMonth;
+  employeeEvaluationYear:any="";
+  currentEvaluationYear:any="";
+  
 
 
   constructor(private formBuilder: FormBuilder,
@@ -56,14 +63,79 @@ export class ActionPlanComponent implements OnInit {
         }
        });
     this.loginUser = this.authService.getCurrentUser();
-
-    this.getAllDevGoalsDetails();
-    this.getAllStrengthDetails();
+    this.getEmployeeCurrentEvaluation();
+    let evaluationStartEndMoment = this.getOrganizationStartAndEndDates();
+    this.evaluationStartMonth = evaluationStartEndMoment.start.format("MMM");
+    this.evaluationEndMonth = evaluationStartEndMoment.end.format("MM DD,YYYY");
+    this.getEmployeeEvaluationYears();
+    
      
     }
 
   ngOnInit(): void {
     
+  }
+
+  getEmployeeCurrentEvaluation() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetEmployeeCurrentEvaluation",
+    this.perfApp.requestBody = {
+      'empId': this.loginUser._id,
+      'orgId':this.authService.getOrganization()._id
+    }
+    this.perfApp.CallAPI().subscribe(evaluationYear => {
+      console.log("=====GetEmployeeCurrentEvaluation====");
+      console.log(evaluationYear);
+      this.employeeEvaluationYear=evaluationYear;
+      this.currentEvaluationYear = evaluationYear;
+      this.getAllDevGoalsDetails();
+      this.getAllStrengthDetails();
+    })
+  }
+
+  loadKpisByYear(evaluationYear){
+    this.getAllDevGoalsDetails();
+    this.getAllStrengthDetails();
+  }
+
+  getOrganizationStartAndEndDates(){
+    let Organization = this.authService.getOrganization();
+    let {StartMonth,EndMonth,EvaluationPeriod} = Organization;
+    StartMonth = parseInt(StartMonth);
+    let currentMoment = moment();
+    let evaluationStartMoment;
+    let evaluationEndMoment;
+    if(EvaluationPeriod === "FiscalYear"){
+      var currentMonth = parseInt(currentMoment.format('M'));
+      console.log(`${currentMonth} <= ${StartMonth}`)
+      if(currentMonth <= StartMonth){
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month').subtract(1, 'years');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }else{
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }
+    }else if(EvaluationPeriod === "CalendarYear"){
+      evaluationStartMoment = moment().month(0).startOf('month');
+      evaluationEndMoment = moment().month(11).endOf('month');
+    }
+    return {
+      start:evaluationStartMoment,
+      end:evaluationEndMoment
+    }
+  }
+
+  getEmployeeEvaluationYears() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetEmployeeEvaluationYears",
+      this.perfApp.requestBody = { 'empId': this.loginUser._id}
+    this.perfApp.CallAPI().subscribe(evaluationYears => {
+      this.empEvaluationsYears = evaluationYears;
+    }, error => {
+      this.snack.error(error.error.message);
+    });
   }
   
   selectTab(tabId: number) {
@@ -155,12 +227,12 @@ export class ActionPlanComponent implements OnInit {
    }
 
    openStrengthsForm(){
-    this.router.navigate(['employee/strengths']);
+    this.router.navigate(['employee/strengths',{currentEvaluation:this.currentEvaluationYear}]);
 
    }
 
    openDevGoalForm(){
-    this.router.navigate(['employee/dev-goal']);
+    this.router.navigate(['employee/dev-goal',{currentEvaluation:this.currentEvaluationYear}]);
    }
 
    
@@ -191,7 +263,9 @@ getAllDevGoalsDetails() {
   this.perfApp.method = "GetAllDevGoals",
     this.perfApp.requestBody = { 'empId': this.loginUser._id,
     'currentOnly':true,'fetchAll':true,
-    'orgId':this.authService.getOrganization()._id}
+    'orgId':this.authService.getOrganization()._id,
+    'CreatedYear':this.employeeEvaluationYear
+  }
   this.perfApp.CallAPI().subscribe(c => {
 
     this.unSubmitedCount=c.filter(e=>e.IsGoalSubmited==false && e.IsDraft==false ).length;
@@ -218,7 +292,9 @@ getAllStrengthDetails() {
   this.perfApp.method = "GetAllStrengths",
     this.perfApp.requestBody = { 'empId': this.loginUser._id,
     'currentOnly':true,'fetchAll':true,
-    'orgId':this.authService.getOrganization()._id}
+    'orgId':this.authService.getOrganization()._id,
+    'CreatedYear':this.employeeEvaluationYear
+  }
   this.perfApp.CallAPI().subscribe(c => {
 
     this.unSubmitedStrenthCount=c.filter(e=>e.IsStrengthSubmited==false && e.IsDraft==false ).length;
