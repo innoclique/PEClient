@@ -19,6 +19,8 @@ import { LogoutComponent } from './logout/logout.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SelectCheckAllComponent } from './select-check-all/select-check-all.component';
 import { DateAgoPipe } from '../pipes/DateAgoPipe';
+import { RemoveHtml } from '../pipes/RemoveHtml';
+import { TimeAgoPipe } from '../pipes/TimeAgoPipe';
 
 
 
@@ -31,7 +33,9 @@ import { DateAgoPipe } from '../pipes/DateAgoPipe';
     MatSpinnerOverlayComponent,
     LogoutComponent,
     SelectCheckAllComponent,
-    DateAgoPipe
+    RemoveHtml,
+    DateAgoPipe,
+    TimeAgoPipe
     ],
   imports: [    
     CommonModule,
@@ -51,7 +55,7 @@ import { DateAgoPipe } from '../pipes/DateAgoPipe';
   ],
   entryComponents:[AlertComponent],
   providers: [  ],
-  exports:[AlertComponent,SelectCheckAllComponent,DateAgoPipe]
+  exports:[AlertComponent,SelectCheckAllComponent,DateAgoPipe,RemoveHtml,TimeAgoPipe]
 })
 export class SharedModule { }
 export function httpTranslateLoader(http: HttpClient) {

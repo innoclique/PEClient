@@ -716,7 +716,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
       if (c && c.length > 0) {
         this.unSubmitedCount=c.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
         this.submitedCount=c.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==true).length;
-        this.scoreUnSubmitedCount=c.filter(e=>e.ManagerScore=="" && e.IsDraft==false ).length;
+        this.scoreUnSubmitedCount=c.filter(e=>e.ManagerScore=="" && e.IsDraft==false && e.IsActive==true ).length;
         if(this.scoreUnSubmitedCount==0)
         this.authService.setManagerPGSubmitStatus("true");
         this.empKPIData = c;

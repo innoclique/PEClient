@@ -39,7 +39,7 @@
       
       
       <a class="nav-link"  data-toggle="langdropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
-        <i class="icon-envelope-letter"></i><span class="badge badge-pill badge-info">7</span>
+        <i class="icon-envelope-letter"></i><span class="badge badge-pill badge-info">{{notificationList.length==0?'':notificationList.length}}</span>
       </a>
 
       <div aria-labelledby="simple-dropdown"  (click)="$event.stopPropagation()"  *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-xlg"
@@ -47,7 +47,7 @@
 
       
 
-      <div class="dropdown-header text-center"><strong>You have 4 messages</strong></div>
+      <div class="dropdown-header text-center"><strong>You have {{notificationList.length}} messages</strong></div>
     
 
       <accordion [closeOthers]="oneAtATime" >
@@ -64,9 +64,11 @@
                          <!-- <div class="avatar"><img src="assets/img/avatars/emp.png" alt="admin@bootstrapmaster.com"
                              class="img-avatar"><span class="avatar-status badge-success"></span></div> -->
                        </div>
-                       <div><small class="text-muted"></small><small class="text-muted float-right mt-1">Just now</small></div>
-                       <div class="text-truncate font-weight-bold"><span class="fa fa-exclamation text-danger"></span>{{c.Subject}}</div>
-                       <div class="small text-muted text-truncate">{{c.Template}}</div>
+                       <div><small class="text-muted"></small><small class="text-muted float-right mt-1">{{getTime(c.CreatedOn)}}</small></div>
+                       <div class="text-truncate font-weight-bold">
+                         <!-- <span class="fa fa-exclamation text-danger"></span>  -->
+                         {{c.Subject}}</div>
+                       <div class="small text-muted text-truncate">{{removeHtmlTags(c.Template)}}</div>
                      </div>
 
                    </a>
@@ -76,7 +78,7 @@
                      <!-- <span tooltip="Overall Rating is calculated and displayed after all the required ratings (from Manager, Peer, Direct Report) have been submitted." class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span> -->
                  </div>
                </button>
-               {{c.Template}}
+              <div [innerHtml]="removeLogin(c.Template)" ></div>
          </accordion-group>
   
      </accordion>

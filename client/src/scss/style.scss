@@ -90,6 +90,16 @@
     font-size: small;
   }
 
+  .card-header {background-color: #fff !important;border-bottom: 0px solid #c8ced3 !important;}
+.card { border:none !important;}
+accordion .panel-default {margin-bottom: 0;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0px;}
+.app-header .navbar-nav .dropdown-menu-right{height: 300px; width: 480px;
+    overflow-y: auto;}
+
+    .app-header .dropdown-item {width: 369px;}
+
   ::ng-deep .ag-center-cols-container{
     width:inherit !important;
   }
