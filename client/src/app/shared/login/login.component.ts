@@ -220,7 +220,14 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['psa/dashboard']);
       }
       else if (x.Role === 'RSA') {
-        this.router.navigate(['rsa/dashboard']);
+        let piInfo = this.authService.getPi();
+        if(piInfo.initialPaymentRequired || piInfo.renewalRequired){
+          this.router.navigate(['rsa/payments']);
+        }else{
+          this.router.navigate(['rsa/dashboard']);
+        }
+
+        
       }
       else if (x.Role === 'EO') {
         /*if(x.SelectedRoles.indexOf("EA")!==-1){
