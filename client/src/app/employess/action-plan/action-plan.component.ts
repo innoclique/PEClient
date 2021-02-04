@@ -446,7 +446,9 @@ submitActionPlan() {
 
   this.perfApp.route = "app";
   this.perfApp.method = "SubmitActionPlanByEmp",
-    this.perfApp.requestBody = { 'empId': this.loginUser._id }
+    this.perfApp.requestBody = { 'empId': this.loginUser._id,
+    currentEvaluationYear:this.currentEvaluationYear
+   }
   this.perfApp.CallAPI().subscribe(c => {
 
    if (c) {

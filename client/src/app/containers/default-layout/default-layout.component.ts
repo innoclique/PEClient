@@ -79,6 +79,8 @@ public oneAtATime: boolean = true;
   removeHtmlTags(joiningDate) {
     let s= new RemoveHtml().transform(joiningDate);
    s=  s.replace('Please   click here to login and review.',"")
+   s=  s.replace('To view details   click here to login',"")
+   s=  s.replace('To view details, click here.',"")
      return s;
   }
   removeLogin(s){
