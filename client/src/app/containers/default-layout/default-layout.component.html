@@ -78,7 +78,7 @@
                      <!-- <span tooltip="Overall Rating is calculated and displayed after all the required ratings (from Manager, Peer, Direct Report) have been submitted." class="badge badge-secondary float-right pull-right avgScore"> Overall Rating: {{c.CompetencyAvgRating||0}}</span> -->
                  </div>
                </button>
-              <div [innerHtml]="removeLogin(c.Template)" ></div>
+              <div  > {{removeHtmlTags(c.Template)}} </div>
          </accordion-group>
   
      </accordion>
