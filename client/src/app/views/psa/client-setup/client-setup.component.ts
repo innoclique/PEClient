@@ -58,7 +58,8 @@ export class ClientSetupComponent implements OnInit {
   cscData:any=undefined;
   countyFormReset: boolean;
   currentOrganization:any;
-  activeTabIndex:any=0;
+  activeTabIndex: any = 0;
+  modelsList: any[];
   @ViewChild('staticTabs', { static: false }) staticTabs: TabsetComponent;
   constructor(
     private formBuilder: FormBuilder,
@@ -76,7 +77,7 @@ export class ClientSetupComponent implements OnInit {
       if (params['activeTab']) {
         this.activeTabIndex = params['activeTab'];
       }
-     });
+    });
   }
 
   getReColDef(){
@@ -680,7 +681,7 @@ export class ClientSetupComponent implements OnInit {
       this.orgViewRef = this.modalService.show(this.orgView, this.config);
       this.orgViewRef.setClass('modal-xlg');  
       this.countyFormReset=true; 
-      this.cscData={Country:cr.Country,State:cr.State,City:cr.City};    
+      this.cscData={Country:cr.Country,State:cr.State,City:cr.City};
       this.models = cr.EvaluationModels;
       this.setValues(this.clientForm, cr);
       this.disableForm(this.clientForm);
@@ -709,7 +710,8 @@ export class ClientSetupComponent implements OnInit {
       this.cscData={Country:cr.Country,State:cr.State,City:cr.City};
      
       this.setValues(this.clientForm, cr);
-      this.models = cr.EvaluationModels;
+      this.getModels();
+    
       this.disableForm(this.clientForm);
     // }
     
@@ -841,5 +843,19 @@ return true;
     return organization;
   }
 
-
+  
+  getModels() {
+    this.perfApp.route = "shared";
+    this.perfApp.method = "GetModelsByIndustry",
+      this.perfApp.requestBody = { id: this.clientForm.controls["Industry"].value }; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+      this.modelsList = c;
+      if (this.modelsList)
+      this.models = this.modelsList.filter(m => this.currentRowItem.EvaluationModels.findIndex(em => em == m._id) > -1);
+    }, error => {
+      debugger
+      console.log('models error ', error)
+      this.notification.error(error.error.message)
+    });
+  }
 }
