@@ -503,14 +503,19 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Select Model</span>
                     </div>
-                    <select [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }"
-                            class="form-control" formControlName="EvaluationModels">
+                    <!--<select [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }"
+                            class="form-control" formControlName="EvaluationModels">-->
                       <!--<option value="0">Please select</option>
-              <option value="1">Option #1</option>
-              <option value="2">Option #2</option>
-              <option value="3">Option #3</option>-->
-                      <option *ngFor="let topping of models" [value]="topping">{{topping}}</option>
-                    </select>
+    <option value="1">Option #1</option>
+    <option value="2">Option #2</option>
+    <option value="3">Option #3</option>-->
+                      <!--<option *ngFor="let topping of models" [value]="topping._id">{{topping.Name}}</option>
+                    </select>-->
+                    <mat-select formControlName="EvaluationModels"
+                                [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }" class="form-control"
+                                multiple>
+                      <mat-option *ngFor="let topping of models" [value]="topping._id">{{topping.Name}}</mat-option>
+                    </mat-select>
                     <div *ngIf="isFormSubmitted && f.EvaluationModels.errors" class="invalid-feedback">
                       <div *ngIf="f.EvaluationModels.errors.required">Evaluation Model is mandatory</div>
                     </div>
