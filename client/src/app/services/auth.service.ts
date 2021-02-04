@@ -6,6 +6,7 @@ import { Observable, throwError, of, BehaviorSubject } from 'rxjs';
 import { map, retry, catchError, tap, mapTo } from 'rxjs/operators';
 import { UserModel } from '../Models/User';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 
 
@@ -17,9 +18,11 @@ export class AuthService {
   navigationMenu:any;
   isPGSubmitedSubject = new BehaviorSubject<string>("false");
   isMPGSubmitedSubject = new BehaviorSubject<string>("false");
+  public redirectUrl: string;
+  isLogged: boolean = false;
   
   isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
-  constructor(private Http: HttpClient) { }
+  constructor(private Http: HttpClient,   private router: Router) { }
   FindEmail(Email): Observable<UserModel> {
     return this.Http.post<UserModel>(environment.ApiPath + 'Identity/GetUserByEmail', { Email })
       .pipe(retry(1), catchError(this.errorHandle));
@@ -64,9 +67,22 @@ export class AuthService {
           localStorage.setItem("pi", JSON.stringify(UserModel.pi));
           this.setToken(UserModel.AccessToken);
           this.currentUser = UserModel;
+          
+        }
+        this.isLogged = true;
+        localStorage.setItem("isLogged", "1")
+        localStorage.setItem("redirectUrl", this.redirectUrl)
+        if (this.redirectUrl) {
+          this.router.navigate([this.redirectUrl]);
+          this.redirectUrl = null;
         }
         return UserModel;
-      }));
+  
+      }
+      
+      )
+      );
+      
   }
 
   loginAdmin(Model: { Email: any; Password: any; }) {
@@ -111,7 +127,9 @@ export class AuthService {
 
 /**Logout API Calling */
   LogOut() {    
-    debugger
+    this.isLogged = false;
+    localStorage.setItem("isLogged", "0")
+        localStorage.setItem("redirectUrl", "")
     if (!this.getCurrentUser()) {
       localStorage.clear();
       return 

@@ -95,8 +95,24 @@ export class LoginComponent implements OnInit {
       const password = this.loginForm.get('password').value;
       const LoginModel = { Email: email, Password: password };
 
-      await this.authService.login(LoginModel).subscribe(x => {
 
+      
+      await this.authService.login(LoginModel).subscribe(x => {
+        var isLogin = localStorage.getItem("isLogged")
+        var rdURL = localStorage.getItem("redirectUrl")
+        console.log("LOGIN", isLogin)
+        console.log("CURRENT URL", rdURL)
+  
+      //  debugger;
+        if(isLogin=="1" && (rdURL.length>0 && !rdURL.includes("login")))
+  {
+    console.log("REDIRECTING TO ", rdURL)
+    debugger;
+    this.router.navigate([rdURL]);
+    return
+  }
+    
+//debugger;
         if (x.Error === Constants.DuplicateSession) {
           this.openDuplicateSessionDialog()
           return
@@ -192,6 +208,7 @@ export class LoginComponent implements OnInit {
   }
 
   logincallback(x) {
+
     console.log('user ....', x)
     if (!x.User.TnCAccepted) {
       this.openTnCDialog();
@@ -206,6 +223,8 @@ export class LoginComponent implements OnInit {
       } else {
       if (x.Role === 'CSA') {
         //this.router.navigate(['csa']);
+        
+        
         let piInfo = this.authService.getPi();
         if(piInfo.initialPaymentRequired || piInfo.renewalRequired){
           this.router.navigate(['csa/payments']);
