@@ -39,7 +39,8 @@ export class RollevaluationComponent implements OnInit {
 
   public monthList = ["", "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"]
-  kpiForList: string[] = ['Employee', 'Manager', 'EA'];
+  kpiForList: string[] = ['Employee', 'Manager'];
+  // kpiForList: string[] = ['Employee', 'Manager', 'EA'];
   modelsList: any[];
   config = {
     backdrop: true,

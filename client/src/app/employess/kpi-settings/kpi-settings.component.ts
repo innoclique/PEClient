@@ -544,7 +544,7 @@ conformSubmitKpis(){
           this.empKPIData = c;
         }
         this.unSubmitedCount=c.filter(e=>e.IsSubmitedKPIs==false && e.IsDraft==false ).length;
-        this.scoreUnSubmitedCount=c.filter(e=>e.Score=="" && e.IsDraft==false ).length;
+        this.scoreUnSubmitedCount=c.filter(e=>e.Score=="" && e.IsDraft==false && e.IsActive==true ).length;
 if(this.scoreUnSubmitedCount==0)
 this.authService.setIsPGSubmitStatus("true");
 
