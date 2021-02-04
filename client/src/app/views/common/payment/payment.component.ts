@@ -155,6 +155,7 @@ export class PaymentComponent implements OnInit {
               this.isNoNeededReadOnly = true;
               this.isNoNeededVisible = true;
             }
+            this.selectedRangeValue = this.paymentReleaseData.Range;
           }else{
             this.notification.error("Initial payment was not found.")
           }
