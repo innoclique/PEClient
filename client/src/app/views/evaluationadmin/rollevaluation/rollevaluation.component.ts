@@ -84,6 +84,8 @@ export class RollevaluationComponent implements OnInit {
 
   purposeDurationMap: Map<string, Map<string, number>>;
   pgsMap: Map<string, Map<string, number>>;
+  existingPgs: any;
+  existingEvals: any;
   evaluationsMap: Map<string, Map<string, number>>;
   isSingleEvaluationType: boolean = true;
   isSingleDurationType: boolean = true;
@@ -108,7 +110,7 @@ export class RollevaluationComponent implements OnInit {
   }
   onSelectAllEmployees(items: any) {
     //this.selectedEmployees = items;
-    if (items.length   > this.getEvaluationsAvailable()) {
+    if (items.length > this.getEvaluationsAvailable()) {
       this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
       return;
     }
@@ -144,7 +146,7 @@ export class RollevaluationComponent implements OnInit {
   }
 
   onPeerSelect(item) {
-    debugger
+    //debugger
     console.log('onPeer Select', item);
     if (!this.selectedEmployee.Peers) {
       this.selectedEmployee.Peers = [];
@@ -699,7 +701,7 @@ export class RollevaluationComponent implements OnInit {
 
 
       } else {
-        this.notification.error('You have reached maximum employees limit for evaluation. Please contact Admin')
+        this.notification.error('You have reached maximum employees limit for evaluation or for all existing employees evaluation is rolled out. Please contact Admin')
       }
     })
   }
@@ -728,10 +730,10 @@ export class RollevaluationComponent implements OnInit {
   }
 
   submitEvaluation() {
-     if (this.selectedEmployeeList.length > this.getEvaluationsAvailable()) {
-        this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
-        return;
-      }
+    if (this.selectedEmployeeList.length > this.getEvaluationsAvailable()) {
+      this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
+      return;
+    }
 
     if (this.rollEvaluationEdit) {
       this.evaluationForm.value.EvaluationDuration = this.durationOptionSelected;
@@ -745,8 +747,8 @@ export class RollevaluationComponent implements OnInit {
       this.isFormSubmitted = true;
       console.log('inside submit:::', this.selectedEmployee, this.selectedEmployeeList);
 
-      
-      for ( let emp of this.selectedEmployeeList){
+
+      for (let emp of this.selectedEmployeeList) {
         if (emp.peerCompetenceMapping) {
           emp.Peers = [];
           for (let mapping of emp.peerCompetenceMapping) {
@@ -819,7 +821,7 @@ export class RollevaluationComponent implements OnInit {
   getModels() {
     this.perfApp.route = "shared";
     this.perfApp.method = "GetModelsByIndustryByOrganization",
-      this.perfApp.requestBody = { id: this.currentOrganization.Industry,Organization:this.currentOrganization._id }; //fill body object with form 
+      this.perfApp.requestBody = { id: this.currentOrganization.Industry, Organization: this.currentOrganization._id }; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.modelsList = c;
     }, error => {
@@ -982,6 +984,7 @@ export class RollevaluationComponent implements OnInit {
         this.evaluationsMap = new Map<string, Map<string, number>>();
         this.availableEvaluations = c.payments;
         if (c.pgs) {
+          this.existingPgs = c.pgs;
           c.pgs.forEach(item => {
             if (!item.EvaluationType) {
               item.EvaluationType = 'Year-end';
@@ -1009,6 +1012,7 @@ export class RollevaluationComponent implements OnInit {
         }
 
         if (c.evaluations) {
+          this.existingEvals = c.evaluations;
           c.evaluations.forEach(item => {
             if (!item.EvaluationType) {
               item.EvaluationType = 'Year-end';
@@ -1044,20 +1048,20 @@ export class RollevaluationComponent implements OnInit {
           if (this.purposeDurationMap.get(item.Purpose)) {
             //update purpose
             var durationMap: Map<string, number> = this.purposeDurationMap.get(item.Purpose);
-            if (durationMap.get(item.Purpose=='Year-end'?item.NoOfMonthsLable:`${item.DurationMonths} Months`)) {
+            if (durationMap.get(item.Purpose == 'Year-end' ? item.NoOfMonthsLable : `${item.DurationMonths} Months`)) {
               // update duration
-              var existingDurationEmpCount = durationMap.get(item.Purpose=='Year-end'?item.NoOfMonthsLable:`${item.DurationMonths} Months`);
-              durationMap.set(item.Purpose=='Year-end'?item.NoOfMonthsLable:`${item.DurationMonths} Months`, existingDurationEmpCount + this.getEmpCount(item));
+              var existingDurationEmpCount = durationMap.get(item.Purpose == 'Year-end' ? item.NoOfMonthsLable : `${item.DurationMonths} Months`);
+              durationMap.set(item.Purpose == 'Year-end' ? item.NoOfMonthsLable : `${item.DurationMonths} Months`, existingDurationEmpCount + this.getEmpCount(item));
               this.purposeDurationMap.set(item.Purpose, durationMap);
             } else {
               // add duration
-              durationMap.set(item.Purpose=='Year-end'?item.NoOfMonthsLable:`${item.DurationMonths} Months`, this.getEmpCount(item));
+              durationMap.set(item.Purpose == 'Year-end' ? item.NoOfMonthsLable : `${item.DurationMonths} Months`, this.getEmpCount(item));
               this.purposeDurationMap.set(item.Purpose, durationMap);
             }
           } else {
             // add purpose
             var durationMap = new Map<string, number>();
-            durationMap.set(item.Purpose=='Year-end'?item.NoOfMonthsLable:`${item.DurationMonths} Months`, this.getEmpCount(item));
+            durationMap.set(item.Purpose == 'Year-end' ? item.NoOfMonthsLable : `${item.DurationMonths} Months`, this.getEmpCount(item));
             this.purposeDurationMap.set(item.Purpose, durationMap);
           }
         });
@@ -1104,7 +1108,25 @@ export class RollevaluationComponent implements OnInit {
     if (this.evaluationsMap && this.evaluationsMap.get(this.evaluationType) && this.evaluationsMap.get(this.evaluationType).get(this.durationOptionSelected)) {
       var noOfEvs = Number(this.evaluationsMap.get(this.evaluationType).get(this.durationOptionSelected)) ? this.evaluationsMap.get(this.evaluationType).get(this.durationOptionSelected) : 0;
     }
-    return noOfEvs + noOfPgs;
+
+    var noOfExistingEvalsWithPGRolledOut = 0;
+    if (this.existingPgs) {
+      for (let pg of this.existingPgs) {
+        console.log(`pg emp id : ${pg.EmployeeId.toString()}`)
+        if (pg.EvaluationType == this.evaluationType && pg.EvaluationDuration) {
+          if (this.existingEvals) {
+            for(let existingEval of this.existingEvals){
+              existingEval.Employees.forEach(empl => {
+                if (empl._id.toString() == pg.EmployeeId.toString()) {
+                  noOfExistingEvalsWithPGRolledOut++;
+                }
+              });
+            }
+          }
+        }
+      }
+    }
+    return noOfEvs + noOfPgs - noOfExistingEvalsWithPGRolledOut;
   }
 
   getEvaluationsRolledOutForUI() {
@@ -1112,11 +1134,11 @@ export class RollevaluationComponent implements OnInit {
     if (this.purposeDurationMap && this.purposeDurationMap.get(this.evaluationType) && this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected)) {
       available = this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected);
       //console.log('available : ',available);
-      if(this.evaluationType==='Year-end'){
-       // console.log('EmployeeBufferCount ::: ',Number(parseInt(this.currentOrganization.EmployeeBufferCount))? parseInt(this.currentOrganization.EmployeeBufferCount): 0);
-        var empBufferCount = parseInt(this.currentOrganization.EmployeeBufferCount)? parseInt(this.currentOrganization.EmployeeBufferCount): 0;
-      available = available + empBufferCount;
-     // console.log('final available : ',available);
+      if (this.evaluationType === 'Year-end') {
+        // console.log('EmployeeBufferCount ::: ',Number(parseInt(this.currentOrganization.EmployeeBufferCount))? parseInt(this.currentOrganization.EmployeeBufferCount): 0);
+        var empBufferCount = parseInt(this.currentOrganization.EmployeeBufferCount) ? parseInt(this.currentOrganization.EmployeeBufferCount) : 0;
+        available = available + empBufferCount;
+        // console.log('final available : ',available);
       }
     }
     return this.getEvaluationsRolledOut().toString() + " out of " + available.toString();
@@ -1127,28 +1149,45 @@ export class RollevaluationComponent implements OnInit {
     if (this.purposeDurationMap && this.purposeDurationMap.get(this.evaluationType) && this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected)) {
       available = this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected);
     }
-    
-    if(this.evaluationType==='Year-end'){
-      console.log('EmployeeBufferCount ::: ',Number(parseInt(this.currentOrganization.EmployeeBufferCount))? parseInt(this.currentOrganization.EmployeeBufferCount): 0);
-      var empBufferCount = parseInt(this.currentOrganization.EmployeeBufferCount)? parseInt(this.currentOrganization.EmployeeBufferCount): 0;
-    available = available + empBufferCount;
-    console.log('final available : ',available);
+
+    if (this.evaluationType === 'Year-end') {
+      // console.log('EmployeeBufferCount ::: ',Number(parseInt(this.currentOrganization.EmployeeBufferCount))? parseInt(this.currentOrganization.EmployeeBufferCount): 0);
+      var empBufferCount = parseInt(this.currentOrganization.EmployeeBufferCount) ? parseInt(this.currentOrganization.EmployeeBufferCount) : 0;
+      available = available + empBufferCount;
+      // console.log('final available : ',available);
     }
-    
-    return (available - this.getEvaluationsRolledOut());
+    var existingPGsSelectedForEvaluation = 0;
+    if (this.existingPgs) {
+      for (let pg of this.existingPgs) {
+        if (pg.EvaluationType == this.evaluationType && pg.EvaluationDuration) {
+          if (this.selectedEmployees) {
+            console.log('this.selectedEmployees : ', this.selectedEmployees);
+            this.selectedEmployees.forEach(function (x) {
+              if (x._id.toString() == pg.EmployeeId.toString()) {
+                existingPGsSelectedForEvaluation++;
+              }
+            });
+
+          }
+
+        }
+      }
+    }
+    console.log('existingPGsSelectedForEvaluation : ', existingPGsSelectedForEvaluation);
+    return (available - this.getEvaluationsRolledOut() + existingPGsSelectedForEvaluation);
   }
 
   onEvaluationTypeChange(event) {
     if (this.selectedEmployeeList.length > 0) {
       let isConform = window.confirm("Once the evaluation type changed, you will loose all the employees added for current evaluation type . Are you sure you want to change the evaluations type?")
       if (isConform) {
-        this.initializeFormFor = this.initializeFormFor?'kpionly':'evaluation';
+        this.initializeFormFor = this.initializeFormFor ? 'kpionly' : 'evaluation';
         this.selectedEmployeeList = [];
         this.selectedEmployeesForEvaluation = [];
         this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
       }
       else {
-         event.target.value = this.evaluationType;
+        event.target.value = this.evaluationType;
         return;
       }
     }
@@ -1174,13 +1213,13 @@ export class RollevaluationComponent implements OnInit {
     if (this.selectedEmployeeList.length > 0) {
       let isConform = window.confirm("Once the Duration type changed, you will loose all the employees added for current duration type . Are you sure you want to change the duration type?")
       if (isConform) {
-        this.initializeFormFor = this.initializeFormFor?'kpionly':'evaluation';
+        this.initializeFormFor = this.initializeFormFor ? 'kpionly' : 'evaluation';
         this.selectedEmployeeList = [];
         this.selectedEmployeesForEvaluation = [];
         this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
       }
       else {
-         event.target.value = this.durationOptionSelected;
+        event.target.value = this.durationOptionSelected;
         return;
       }
     }
@@ -1482,7 +1521,7 @@ export class RollevaluationComponent implements OnInit {
       return;
     }
 
-    if ( this.selectedEmployees.length + this.selectedEmployeeList.length > this.getEvaluationsAvailable()) {
+    if (this.selectedEmployees.length + this.selectedEmployeeList.length > this.getEvaluationsAvailable()) {
       this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
       return;
     }
@@ -1510,7 +1549,7 @@ export class RollevaluationComponent implements OnInit {
 
   addToGridForKPI() {
 
-    if (this.selectedEmployees.length +this.selectedEmployeeList.length> this.getEvaluationsAvailable()) {
+    if (this.selectedEmployees.length + this.selectedEmployeeList.length > this.getEvaluationsAvailable()) {
       this.notification.error(`only ${this.getEvaluationsAvailable()} employees evaluations left to rollout, to  add more please contact `);
       return;
     }
@@ -1554,38 +1593,38 @@ export class RollevaluationComponent implements OnInit {
 
     this.employeesList$ = pgEmpDropdown;
   }
-  getOrganizationStartAndEndDates(){
+  getOrganizationStartAndEndDates() {
     let Organization = this.currentOrganization;
-    let {StartMonth,EndMonth,EvaluationPeriod} = Organization;
+    let { StartMonth, EndMonth, EvaluationPeriod } = Organization;
     StartMonth = parseInt(StartMonth);
     let currentMoment = moment();
     let evaluationStartMoment;
     let evaluationEndMoment
-    if(EvaluationPeriod === "FiscalYear"){
+    if (EvaluationPeriod === "FiscalYear") {
       var currentMonth = parseInt(currentMoment.format('M'));
       console.log(`${currentMonth} <= ${StartMonth}`)
-      if(currentMonth <= StartMonth){
-        evaluationStartMoment = moment().month(StartMonth-1).startOf('month').subtract(1, 'years');
-        evaluationEndMoment = moment().month(StartMonth-2).endOf('month');
+      if (currentMonth <= StartMonth) {
+        evaluationStartMoment = moment().month(StartMonth - 1).startOf('month').subtract(1, 'years');
+        evaluationEndMoment = moment().month(StartMonth - 2).endOf('month');
         console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
-      }else{
-        evaluationStartMoment = moment().month(StartMonth-1).startOf('month');
-        evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
+      } else {
+        evaluationStartMoment = moment().month(StartMonth - 1).startOf('month');
+        evaluationEndMoment = moment().month(StartMonth - 2).endOf('month').add(1, 'years');
         console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
       }
-    }else if(EvaluationPeriod === "CalendarYear"){
+    } else if (EvaluationPeriod === "CalendarYear") {
       evaluationStartMoment = moment().startOf('month');
       evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
     }
     return {
-      start:evaluationStartMoment,
-      end:evaluationEndMoment
+      start: evaluationStartMoment,
+      end: evaluationEndMoment
     }
   }
 
   saveKpiForm() {
     let orgStartEnd = this.getOrganizationStartAndEndDates();
-  let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let EvaluationYear = orgStartEnd.start.format("YYYY");
     let list = this.evaluationForm.value.Employees;
     var body: any;
     if (list && list.length > 0) {
@@ -1622,7 +1661,7 @@ export class RollevaluationComponent implements OnInit {
     // }
   }
 
- 
+
   getEvaluationList() {
     this.perfApp.route = "evaluation";
     this.perfApp.method = "GetEvaluations",
