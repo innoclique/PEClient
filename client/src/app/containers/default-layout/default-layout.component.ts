@@ -311,85 +311,22 @@ public oneAtATime: boolean = true;
        // return  this.navItems;
         }
         
-   /*      if(this.user.Role==='CSA'){
-          
-          navigationMenu= [{
-            "IsActive": true,
-            "__v": 0,
-            "url": "/csa/dashboard",
-            "name": "CSA Dashboard",
-            "code": "CSA Dashboard",
-            "icon": "icon-calculator",
-            // "badge": {
-            //     "variant": "info",
-            //     "text": "Home"
-            // },
-            "linkProps": {
-                "routerLinkActive": "dashboard"
+        if(this.user.Role==='RSA'){
+          let piInfo = JSON.parse(localStorage.getItem('pi'));
+          localStorage.setItem("currentUser", "RSA");
+          if(piInfo.initialPaymentRequired || piInfo.renewalRequired){
+            navigationMenu.push(
+              {
+                "IsActive": true,
+                "url": "/rsa/payments",
+                "name": "Payments",
+                "code": "Payments",
+                "icon": "icon-star"
             }
-        }, 
-        // {
-        //     "IsActive": true,
-        //     "url": "/ea/setup-employee",
-        //     "name": "Set up Employees",
-        //     "code": "Employees",
-        //     "icon": "icon-user-follow",
-        //     "linkProps": {
-        //         "routerLinkActive": "employee"
-        //     }
-        // }, {
-        //     "IsActive": true,
-        //     "url": "/ea/evaluation-list",
-        //     "name": "Evaluations",
-        //     "code": "Evaluations",
-        //     "icon": "icon-star"
-        // },
-        
-        {
-            "IsActive": true,
-            "url": "/ea/settings",
-            "name": "Backend Setup",
-            "code": "BackendSetup",
-            "icon": "icon-settings"
-        },
-        {
-          "IsActive": true,
-          "url": "/csa/payments",
-          "name": "Payments",
-          "code": "Payments",
-          "icon": "icon-star"
-      },
-         {
-            "IsActive": true,
-            "url": "/ea/reports",
-            "name": "CSA Reports",
-            "code": "CSA Reports",
-            "icon": "icon-list",
-          "children":[ {
-              "IsActive": true,
-              "url": "/csa/reports/evaluationsSummary",
-              "name": "Evaluations Summary",
-              "code": "evaluationsSummary",
-            },
-            {
-              "IsActive": true,
-              "url": "/csa/reports/paymentSummary",
-              "name": "Payment Summary",
-              "code": "paymentSummary",
-            },]
-        }, 
-         
-      
-        // {
-        //     "IsActive": true,
-        //     "url": "/logout",
-        //     "name": "Logout",
-        //     "code": "Logout",
-        //     "icon": "icon-star"
-        // }
-      ]
-        this.navItems=[...navigationMenu, ...this.navItems];
-        } */
+            );
+            this.navItems = navigationMenu;
+          }
+        }
 
       console.log("current menu items", navigationMenu);
       if(this.user.Role=="CSA"){

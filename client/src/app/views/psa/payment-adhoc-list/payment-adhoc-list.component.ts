@@ -5,6 +5,9 @@ import * as moment from 'moment/moment';
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../../services/notification.service';
 import { Router ,ActivatedRoute} from '@angular/router';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { AlertComponent } from '../../../shared/alert/alert.component';
 
 @Component({
   selector: 'app-payment-adhoc-list',
@@ -12,6 +15,7 @@ import { Router ,ActivatedRoute} from '@angular/router';
   styleUrls: ['./payment-adhoc-list.component.css']
 })
 export class PaymentAdhocListComponent implements OnInit {
+  public alert= new AlertDialog();
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
   paymentReleaseId:any;
   paymentReleaseData:any;
@@ -54,6 +58,7 @@ export class PaymentAdhocListComponent implements OnInit {
     private perfApp: PerfAppService,
     private notification: NotificationService,
     public router: Router,
+    public dialog: MatDialog,
     ) {
     
    }
@@ -197,31 +202,63 @@ export class PaymentAdhocListComponent implements OnInit {
     console.log(flag);
     let status="";
     if(flag ===1){
+      this.alert.Content = "Are you sure you want to approve this purchase and release the payment information to the client?";
       status="Approved";
     }
     if( flag === 0){
+      this.alert.Content = "Are you sure you want to disapprove this purchase?";
       status="Disapproved";
     }
-    
     if(status!=""){
-      this.paymentModel.Organization=this.currentOrganization._id;
-      let requestBody:any={
-        Status:status,
-        paymentreleaseId:this.paymentReleaseId
-      };
-      console.log(requestBody);
-       this.perfApp.route = "payments";
-       this.perfApp.method = "/release/save",
-       this.perfApp.requestBody = requestBody
-       this.perfApp.CallAPI().subscribe(c => {
-       if(c){
-        this.notification.success(`${status} ${this.currentOrganization.Name}`);
-       }else{
-         this.notification.error("Record not updated.")
-       }
-       this.emoModal.hide();
-      window.location.reload();
-       });
+      this.alert.Title = "Alert";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.paymentModel.Organization=this.currentOrganization._id;
+        let requestBody:any={
+          Status:status,
+          paymentreleaseId:this.paymentReleaseId
+        };
+        console.log(requestBody);
+         this.perfApp.route = "payments";
+         this.perfApp.method = "/release/save",
+         this.perfApp.requestBody = requestBody
+         this.perfApp.CallAPI().subscribe(c => {
+         if(c){
+          if(flag ===1){
+            this.notification.success(`The purchase has been approved and payment info sent to ${this.currentOrganization.Name}.`);
+          }
+          if( flag === 0){
+            this.notification.success(`The purchase has been disapproved and information sent to ${this.currentOrganization.Name}.`);
+          }
+          
+         }else{
+           this.notification.error("Record not updated.")
+         }
+         this.emoModal.hide();
+        window.location.reload();
+         });
+      }
+    });
+
+
+
+      
+
+
     }
     
 
