@@ -216,7 +216,7 @@ export class KpiSetupComponent implements OnInit {
     if(this.unSubmitedCount>0 || this.submitedCount>0){
       this.employeeSignoff();
     }else{
-      this.snack.error("Please add and submit Performanace Goals before sign-off.");
+      this.snack.error("Please add and submit performance Goals before sign-off.");
     }
   }
 
@@ -440,7 +440,7 @@ export class KpiSetupComponent implements OnInit {
    /**To alert user for submit kpis */
    conformSubmitKpis() {
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to submit the performanace goals?";
+    this.alert.Content = "Are you sure you want to submit the performance goals?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";
@@ -476,7 +476,7 @@ submitAllKPIs() {
   this.perfApp.CallAPI().subscribe(c => {
 
    if (c) {
-    this.snack.success("Your performanace goals have been submitted.");
+    this.snack.success("Your performance goals have been submitted.");
     this.getAllKpis();
    } else {
      

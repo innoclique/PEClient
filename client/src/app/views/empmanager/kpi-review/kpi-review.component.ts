@@ -218,7 +218,7 @@ actor:any;
     if(this.unSubmitedCount>0 || this.submitedCount>0){
       this.managerSignoff();
     }else{
-      this.snack.error("Please add and submit Performanace Goals before sign-off.");
+      this.snack.error("Please add and submit performance Goals before sign-off.");
     }
   }
 
@@ -449,7 +449,7 @@ actor:any;
   
   submitReview() {
 if(this.accessingFrom=="reviewEvaluation" && this.unSubmitedCount>0){
-this.snack.error("Please sign-off performance goals")
+this.snack.error("Please submit performance goals")
 return
 }
 
@@ -896,7 +896,7 @@ this.msSelText="";
    /**To alert user for submit kpis */
    openConfirmSubmitKpisDialog() {
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to sign-off?";
+    this.alert.Content = "Are you sure you want to submit?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";

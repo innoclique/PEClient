@@ -77,7 +77,11 @@ public oneAtATime: boolean = true;
     return new TimeAgoPipe().transform(joiningDate);
   }
   removeHtmlTags(joiningDate) {
-    return new RemoveHtml().transform(joiningDate);
+    let s= new RemoveHtml().transform(joiningDate);
+   s=  s.replace('Please   click here to login and review.',"")
+   s=  s.replace('To view details   click here to login',"")
+   s=  s.replace('To view details, click here.',"")
+     return s;
   }
   removeLogin(s){
     return s.replace('To login, <a href="http://15.223.26.103/#/login">click here</a>.',"")
