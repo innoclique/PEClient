@@ -6,12 +6,17 @@ import { PaymentCaluculationService } from '../../../services/payment-caluculati
 import * as moment from 'moment/moment';
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../../services/notification.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { AlertComponent } from '../../../shared/alert/alert.component';
+
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css']
 })
 export class PaymentComponent implements OnInit {
+  public alert= new AlertDialog();
   stateTax:any;
   paymentOption:any;
   currentUser:any;
@@ -71,6 +76,7 @@ export class PaymentComponent implements OnInit {
     private perfApp: PerfAppService,
     private paymentCaluculationService:PaymentCaluculationService,
     private notification: NotificationService,
+    public dialog: MatDialog,
     ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
@@ -578,7 +584,26 @@ export class PaymentComponent implements OnInit {
   }
   checkout(){
     if(this.paymentOption && this.paymentOption!="" && this.paymentReleaseData){
-      this.emoModal.show();
+      
+      this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to make this payment";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.emoModal.show();
+      }
+    });
     }else{
       this.notification.error("No Payment Available.");
     }
@@ -601,18 +626,7 @@ export class PaymentComponent implements OnInit {
     };
     console.log(`sending params=> ${JSON.stringify(params)}`)
     this.router.navigate(['csa/dopayment',params],{ skipLocationChange: true });
-    /*let requestBody:any={
-      Status:'Complete',
-      paymentreleaseId:this.paymentModel.paymentreleaseId
-    }
-    this.perfApp.route = "payments";
-     this.perfApp.method = "/release/save",
-     this.perfApp.requestBody = requestBody
-     this.perfApp.CallAPI().subscribe(c => {
-      this.notification.success(`Payment Success.`);
-      this.emoModal.hide();
-      window.location.reload();
-     })*/
+    
   }
   closeForm(){
     this.emoModal.hide();

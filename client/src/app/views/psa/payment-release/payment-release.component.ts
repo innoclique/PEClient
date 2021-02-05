@@ -5,6 +5,9 @@ import { PerfAppService } from '../../../services/perf-app.service';
 import { PaymentCaluculationService } from '../../../services/payment-caluculation.service';
 import * as moment from 'moment/moment';
 import { NotificationService } from '../../../services/notification.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { AlertComponent } from '../../../shared/alert/alert.component';
 
 @Component({
   selector: 'app-payment-release',
@@ -12,6 +15,7 @@ import { NotificationService } from '../../../services/notification.service';
   styleUrls: ['./payment-release.component.css']
 })
 export class PaymentReleaseComponent implements OnInit {
+  public alert= new AlertDialog();
   stateTax:any;
   organizationList:any;
   currentUser:any;
@@ -58,6 +62,7 @@ export class PaymentReleaseComponent implements OnInit {
     private paymentCaluculationService:PaymentCaluculationService,
     private notification: NotificationService,
     private activatedRoute: ActivatedRoute,
+    public dialog: MatDialog,
     ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
@@ -418,8 +423,7 @@ useageOnchange(){
     this.savePaymentReleaseInfo();
   }
   paymentReleaseInfo(){
-    console.log(":")
-
+    
     if (!this.paymentModel.Organization) {
       this.notification.error('Organization Name is mandatory');
       return;
@@ -432,10 +436,31 @@ useageOnchange(){
       this.notification.error('# Of Employees is mandatory');
       return;
     }
-   
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to release the payment info?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
 
-    this.paymentModel.Status="Pending";
-    this.savePaymentReleaseInfo();
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+            this.paymentModel.Status="Pending";
+            this.savePaymentReleaseInfo();
+      }
+    });
+
+
   }
   
   savePaymentReleaseInfo(){
@@ -454,7 +479,7 @@ useageOnchange(){
           this.notification.success(`Payment Released to ${this.selectedOrganizationObj.Name}`)
       }
       if(this.paymentModel.Status === "Draft"){
-          this.notification.success(`${this.selectedOrganizationObj.Name} payment release saved.`);
+          this.notification.success(`Payment info has been sent to the ${this.selectedOrganizationObj.Name}.`);
       }
 
        this.router.navigate(['psa/list']);

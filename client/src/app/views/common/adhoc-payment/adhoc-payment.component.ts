@@ -6,12 +6,17 @@ import { PaymentCaluculationService } from '../../../services/payment-caluculati
 import * as moment from 'moment/moment';
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../../services/notification.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { AlertComponent } from '../../../shared/alert/alert.component';
+
 @Component({
   selector: 'app-adhoc-payment',
   templateUrl: './adhoc-payment.component.html',
   styleUrls: ['./adhoc-payment.component.css']
 })
 export class AdhocPaymentComponent implements OnInit {
+  public alert= new AlertDialog();
   isAdhocPaymentAllowed:Boolean=true;
   stateTax:any;
   otherTextValue:any;
@@ -66,6 +71,7 @@ export class AdhocPaymentComponent implements OnInit {
     private perfApp: PerfAppService,
     private paymentCaluculationService:PaymentCaluculationService,
     private notification: NotificationService,
+    public dialog: MatDialog,
     ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
@@ -270,6 +276,30 @@ export class AdhocPaymentComponent implements OnInit {
     window.print();
   }
   
+  submitAdhocRequest(){
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to send the ad hoc purchase request?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.sendAdhocRequest()
+      }
+    });
+  }
+
   sendAdhocRequest(){
     if(this.isOtherText){
       this.paymentModel.Purpose = this.otherTextValue
@@ -286,7 +316,7 @@ export class AdhocPaymentComponent implements OnInit {
      this.perfApp.requestBody = requestBody
      this.perfApp.CallAPI().subscribe(c => {
      if(c){
-      this.notification.success(`Ad hoc purchase request sent successfully`);
+      this.notification.success(`Ad hoc purchase request sent successfully.`);
      }else{
        this.notification.error("Record not saved.")
      }
