@@ -23,6 +23,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
   styleUrls: ['./current-evaluation.component.css']
 })
 export class CurrentEvaluationComponent implements OnInit {
+  years: any;
+  yearToPass: any;
+  yearSelected: any;
   loginUser: any;
   selfCompetencyForm: FormGroup;
   competencyList: any = [];
@@ -76,12 +79,12 @@ export class CurrentEvaluationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.yearSelected=(new Date()).getFullYear();
     this.getAllKpiBasicData();
     this.initCompetencyForm();
     this.initFinalRatingForm();
-    this.getTabsData();
-
+    
+    this.getTabsData(this.yearSelected);
     this.authService.getIsPGSubmitStatus().subscribe(status=>this.pgSubmitStatus=status);
 
   }
@@ -117,9 +120,9 @@ export class CurrentEvaluationComponent implements OnInit {
   }
 
   /**To GET ALL  tabs data */
-  getTabsData() {
+  getTabsData(val:any) {
     forkJoin(
-      this.getCurrentEvaluationDetails().pipe(catchError(error => of({ error: error, isError: true })))      
+      this.getCurrentEvaluationDetails(val).pipe(catchError(error => of({ error: error, isError: true })))      
     ).subscribe(([res1]) => {
       if (res1 && !res1.isError) {
         this.evaluationForm = res1;        
@@ -168,16 +171,19 @@ export class CurrentEvaluationComponent implements OnInit {
         if (res1 && Object.keys(res1.DirectReporteeScoreCard).length > 0) {
           this.DirectReporteeScoreCard = res1.DirectReporteeScoreCard;
         }
+        this.years=res1.PreviousEvaluationYear
+        console.log("yrs",this.years)
       } else {
         this.evaluationForm = null;
       }
     });
 
   }
-  getCurrentEvaluationDetails() {
+  getCurrentEvaluationDetails(val:any) {
+    this.yearToPass=val;
     this.perfApp.route = "evaluation";
     this.perfApp.method = "GetEmpCurrentEvaluation",
-      this.perfApp.requestBody = { EmployeeId: this.loginUser._id }
+      this.perfApp.requestBody = { EmployeeId: this.loginUser._id ,EvaluationYear: this.yearToPass}
     return this.perfApp.CallAPI()
   }
 
