@@ -15,6 +15,7 @@ import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
 import * as moment from 'moment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-review-perf-goals-list',
@@ -23,7 +24,7 @@ import * as moment from 'moment';
 })
 export class ReviewPerfGoalsListComponent implements OnInit {
 
-
+  kpiGuidance:any = environment.KPI_GUIDANCE_URL;
   public empForm: FormGroup;
   departments=[];
   jobRoles=[];
@@ -76,6 +77,9 @@ export class ReviewPerfGoalsListComponent implements OnInit {
       this.currentOrganization = this.loginUser.Organization;
       let orgStartEnd = this.getOrganizationStartAndEndDates();
       this.currentEvaluationYear = orgStartEnd.start.format("YYYY");
+    }
+    showGuidance(){
+      window.location.href=this.kpiGuidance;
     }
     getEmployeeEvaluationYears() {
       this.perfApp.route = "app";

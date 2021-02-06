@@ -14,6 +14,7 @@ import { ThemeService } from '../../services/theme.service';
 import { AlertComponent } from '../../shared/alert/alert.component';
 import { Constants } from '../../shared/AppConstants';
 import * as moment from 'moment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-kpi-setup',
@@ -24,7 +25,7 @@ export class KpiSetupComponent implements OnInit {
 
 
 
-
+  kpiGuidance:any = environment.KPI_GUIDANCE_URL;
   loginUser: any;
   currentRowItem: any;
   public alert: AlertDialog;
@@ -65,7 +66,9 @@ export class KpiSetupComponent implements OnInit {
 
 
   }
-
+  showGuidance(){
+    window.location.href=this.kpiGuidance;
+  }
   ngOnInit(): void {
     this.getEmployeeCurrentEvaluation();
     //this.getAllKpis();

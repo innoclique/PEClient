@@ -319,8 +319,8 @@ public oneAtATime: boolean = true;
               {
                 "IsActive": true,
                 "url": "/rsa/payments",
-                "name": "Payments",
-                "code": "Payments",
+                "name": "Make Payment",
+                "code": "MakePayment",
                 "icon": "icon-star"
             }
             );
@@ -352,8 +352,8 @@ public oneAtATime: boolean = true;
             {
               "IsActive": true,
               "url": "/csa/payments",
-              "name": "Payments",
-              "code": "Payments",
+              "name": "Make Payment",
+              "code": "Make Payment",
               "icon": "icon-star"
           }
           )
@@ -442,8 +442,8 @@ public oneAtATime: boolean = true;
                "children": [{
                  "IsActive": true,
                  "url": "/csa/payments",
-                 "name": "Payment Info",
-                 "code": "paymentInfo",
+                 "name": "Make Payment",
+                 "code": "Make Payment",
                  "icon": "icon-settings"
                },
                {
