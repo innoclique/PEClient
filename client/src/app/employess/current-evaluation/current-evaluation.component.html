@@ -14,8 +14,8 @@
                       <div class="row">
                           <div class="col-md-7"></div>
                           <div class="input-group-prepend col-md-4" style="margin-left:1px;margin-bottom: 10px;">
-                              <span class="input-group-text" style="border-right:none;border-radius: 0px;">SelectEvaluationYear</span>
-                              <select  class="form-control" style="border-radius: 0px;" [(ngModel)]="yearSelected" name="Year" required (ngModelChange)="getTabsData($event)" >
+                              <span class="input-group-text" style="border-right:none;border-radius: 0px;width:auto">Select Evaluation Year</span>
+                              <select  class="form-control" style="border-radius: 0px; width:auto" [(ngModel)]="yearSelected" name="Year" required (ngModelChange)="getTabsData($event)" >
                                 <option value="" disabled >Please select</option>
                                 <option *ngFor="let x of years" [value]="x.id" >{{x.name}}</option>
                               </select>

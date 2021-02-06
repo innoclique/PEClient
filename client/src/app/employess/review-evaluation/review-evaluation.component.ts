@@ -333,7 +333,7 @@ goto(selTab){
     this.yearToPass=val;
     this.perfApp.route = "app";
     this.perfApp.method = "GetEmpFinalRatingByYear",
-      this.perfApp.requestBody = { EmployeeId: this.loginUser._id,EvaluationYear: this.yearToPass,orgId:this.authService.getOrganization()._id}
+      this.perfApp.requestBody = { EmployeeId: this.currentEmpId,EvaluationYear: this.yearToPass,orgId:this.authService.getOrganization()._id}
       console.log("obj", this.perfApp.requestBody)
     return this.perfApp.CallAPI()
   }
