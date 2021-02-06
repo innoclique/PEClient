@@ -60,18 +60,51 @@ public barChartColors: Color[] = [
     
 
     if(this.chartTypeInput==='CLIENT_SUMMARY'){
+      let scales = { xAxes: [], yAxes: [
+         {
+           
+              ticks: {
+                beginAtZero: true,
+                userCallback: function(label, index, labels) {
+                  // when the floored value is the same as the value we have a whole number
+                  if (Math.floor(label) === label) {
+                      return label;
+                  }
+
+              },
+              }
+            }
+      ] };
+
       this.clientSummaryBarChartData=[
         { data: [0, 0, 0, 0], label: 'License' },
         { data: [0, 0, 0, 0], label: 'Employees' }
       ];
       
       this.clientSummaryChartOptions.title.text="";
+      this.clientSummaryChartOptions.scales=scales;
     }else if(this.chartTypeInput==='STATUS' && this.userType==='Client'){
+      let scales = { xAxes: [], yAxes: [
+        {
+          
+             ticks: {
+               beginAtZero: true,
+               userCallback: function(label, index, labels) {
+                 // when the floored value is the same as the value we have a whole number
+                 if (Math.floor(label) === label) {
+                     return label;
+                 }
+
+             },
+             }
+           }
+     ] };
       this.clientSummaryBarChartData=[
         { data: [0, 0, 0, 0], label: 'Active' },
         { data: [0, 0, 0, 0], label: 'Inactive' }
       ];
-      this.clientSummaryChartOptions.title.text=""
+      this.clientSummaryChartOptions.title.text="";
+      this.clientSummaryChartOptions.scales=scales;
     }else if(this.chartTypeInput==='STATUS' && this.userType==='Reseller'){
       this.clientSummaryBarChartData=[
         { data: [0, 0, 0, 0], label: 'Active' },
