@@ -14,7 +14,7 @@ import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
-
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-review-action-plan-list',
   templateUrl: './review-action-plan-list.component.html',
@@ -22,7 +22,7 @@ import { ThemeService } from '../../services/theme.service';
 })
 export class ReviewActionPlanListComponent implements OnInit {
 
-
+  actionPlanGuidance:any = environment.ACTION_PLANNING_GUIDANCE_URL
   public empForm: FormGroup;
   departments=[];
   jobRoles=[];
@@ -71,7 +71,9 @@ export class ReviewActionPlanListComponent implements OnInit {
       this.loginUser=this.authService.getCurrentUser();
     }
 
-
+    showGuidance(){
+      window.location.href=this.actionPlanGuidance;
+    }
 
   ngOnInit(): void {
 

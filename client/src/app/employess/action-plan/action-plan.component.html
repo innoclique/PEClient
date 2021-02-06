@@ -15,7 +15,13 @@
               </div>
                 <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="openDevGoalForm()">&#x271A; Developmental Goals</button>&nbsp;
                 <button class="btn btn-sm btn-primary" data-toggle="modal" (click)="openStrengthsForm()">&#x271A; Strengths</button>&nbsp;
-                <button [disabled]="unSubmitedCount==0 && unSubmitedStrenthCount==0" class="btn btn-sm btn-primary" data-toggle="modal" (click)="openConfirmSubmitDialog()">Submit Action Plan</button>
+                <button [disabled]="unSubmitedCount==0 && unSubmitedStrenthCount==0" class="btn btn-sm btn-primary" data-toggle="modal" (click)="openConfirmSubmitDialog()">Submit Action Plan</button>&nbsp;
+                <div  style="margin-right:10px;display:inline-flex">
+                <button title="Goals & KPI Guidance" (click)="showGuidance()" ngcontent-fha-c25=""
+            class="btn btn-primary mr-1 pull-right" type="button">
+              <i class="fa fa-file-text-o" aria-hidden="true"></i>
+            </button></div>
+
               </div>
 
                      </div>

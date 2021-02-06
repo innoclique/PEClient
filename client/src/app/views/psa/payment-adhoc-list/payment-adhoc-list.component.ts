@@ -89,11 +89,19 @@ export class PaymentAdhocListComponent implements OnInit {
     
         Sorting: false,        
         cellRenderer: (data) => {
-          return `<i class="icon-minus" style="cursor:check ;padding: 7px 20px 0 0;
-                      font-size: 17px;"   data-action-type="suspendorg" title="Approved"></i>
-                      <i class="icon-close" style="cursor:check ;padding: 7px 20px 0 0;
-                      font-size: 17px;"   data-action-type="suspendorg" title="Disapproved"></i>
+          let _rowData = data.data;
+          if(_rowData.status === "Pending"){
+            return `<i class="icon-check" style="cursor:check ;padding: 7px 20px 0 0;
+            font-size: 17px;"   data-action-type="Approve" title="Approve" ></i>
+            <i class="icon-close" style="cursor:check ;padding: 7px 20px 0 0;
+            font-size: 17px;"   data-action-type="Disapprove" title="Disapprove"></i>
+            `
+          }else{
+            return `<i class="icon-eye" style="cursor:check ;padding: 7px 20px 0 0;
+                      font-size: 17px;"   data-action-type="viewAdhocRequest" title="${_rowData.status}" >
                       `
+          }
+          
         }
   
   
@@ -131,7 +139,7 @@ export class PaymentAdhocListComponent implements OnInit {
       let data = e.data;
       this.isActionButtonEnabled=false;
       let actionType = e.event.target.getAttribute("data-action-type");
-      //console.log(actionType);
+      console.log(actionType);
       switch (actionType) {
         case "viewAdhocRequest":
           console.log(data.clientName);
@@ -143,6 +151,15 @@ export class PaymentAdhocListComponent implements OnInit {
             this.isActionButtonEnabled=true;
           }
           this.emoModal.show();
+          break;
+          case "Approve":
+            this.paymentReleaseId=data.paymentReleaseId;
+            this.releaseStatusChange(1);
+            break;
+            case "Disapprove":
+            this.paymentReleaseId=data.paymentReleaseId;
+            this.releaseStatusChange(0);
+            break;
       }
     }
   }

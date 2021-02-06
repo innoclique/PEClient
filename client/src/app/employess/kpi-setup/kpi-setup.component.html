@@ -5,7 +5,6 @@
           <div class="card">
             <div class="card-header">
                 Set up Performance Goal
-            
             <div class="form-group form-actions pull-right m-0">
               <div class="evaluationYear">
                 <select [(ngModel)]="employeeEvaluationYear"   class="form-control" (change)="loadKpisByYear($event.target.value)">
@@ -16,6 +15,11 @@
               <button [disabled]='isKpiActivated' class="btn btn-sm btn-primary" data-toggle="modal" (click)="createKpi()">Add</button>
              &nbsp; <button [disabled]="unSubmitedCount==0" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit</button>
              &nbsp; <button [disabled]="isSignOffDisabled"  class="btn btn-sm btn-primary"  (click)="singoffPG()" >Sign-off</button>
+             &nbsp; <button title="Goals & KPI Guidance" (click)="showGuidance()" ngcontent-fha-c25=""
+                                class="btn btn-primary mr-1 pull-right" type="button">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                </button>
+             
             </div>
             </div>
             <div class="form-group form-actions pull-right m-0">

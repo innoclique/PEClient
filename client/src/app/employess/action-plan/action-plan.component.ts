@@ -12,6 +12,7 @@ import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
 import { AlertComponent } from '../../shared/alert/alert.component';
 import * as moment from 'moment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-action-plan',
@@ -19,6 +20,7 @@ import * as moment from 'moment';
   styleUrls: ['./action-plan.component.css']
 })
 export class ActionPlanComponent implements OnInit {
+  actionPlanGuidance:any = environment.ACTION_PLANNING_GUIDANCE_URL
   loginUser: any;
   devGoalRecords: any;
   strengthRecords: any;
@@ -75,7 +77,9 @@ export class ActionPlanComponent implements OnInit {
   ngOnInit(): void {
     
   }
-
+  showGuidance(){
+    window.location.href=this.actionPlanGuidance;
+  }
   getEmployeeCurrentEvaluation() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetEmployeeCurrentEvaluation",

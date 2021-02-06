@@ -8,6 +8,10 @@
              Review Action Plan  
                      </div> -->
           <div class="card-body">
+            <button *ngIf="loginUser?.SelectedRoles?.includes('EM')" title="Goals & KPI Guidance" (click)="showGuidance()" ngcontent-fha-c25=""
+            class="btn btn-primary mr-1 pull-right" type="button">
+              <i class="fa fa-file-text-o" aria-hidden="true"></i>
+            </button>
              <tabset #staticTabs class="pro-tabs">
               <tab *ngIf="loginUser?.SelectedRoles?.includes('EM')">
     

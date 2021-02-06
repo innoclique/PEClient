@@ -13,7 +13,13 @@
                 <option *ngFor="let ev of evaluationsYears" [value]="ev">{{ev}}</option>
               </select>
               <i class="fa fa-chevron-down"></i>
+              
+              
             </div>
+            <button *ngIf="loginUser?.SelectedRoles?.includes('EM')" title="Goals & KPI Guidance" (click)="showGuidance()" ngcontent-fha-c25=""
+                                class="btn btn-primary mr-1 pull-right" type="button">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                </button>
             <tabset #staticTabs class="pro-tabs">
               <tab *ngIf="loginUser?.SelectedRoles?.includes('EM')">
     
