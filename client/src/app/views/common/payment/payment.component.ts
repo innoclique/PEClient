@@ -309,11 +309,47 @@ export class PaymentComponent implements OnInit {
       }else{
         if(!this.isRenewalPayment){
           this.notification.error(`Adhoc payment was not found.`);
+        }else{
+          
+          if(this.selectedOrganizationObj.UsageType && this.selectedOrganizationObj.UsageType=="License"){
+            this.paymentModel.Range  = this.selectedOrganizationObj.Range;
+            this.onSelectRange(this.paymentModel.Range);
+          }else if(this.selectedOrganizationObj.UsageType && this.selectedOrganizationObj.UsageType=="Employees"){
+            this.getPaymentScaleDetails();
+          }
+          //
         }
       }
     });
   }
-
+  getPaymentScaleDetails(){
+    let paymentReleaseOptions:any={};
+    paymentReleaseOptions.Organization=this.selectedOrganizationObj._id;
+    paymentReleaseOptions.ClientType=this.selectedOrganizationObj.ClientType;
+    paymentReleaseOptions.noOfEmployess=Number(this.paymentModel.NoOfEmployees)
+    paymentReleaseOptions.State = this.selectedOrganizationObj.State;
+    this.perfApp.route = "payments";
+    this.perfApp.method = "employee/scale",
+    this.perfApp.requestBody = paymentReleaseOptions;
+    this.perfApp.CallAPI().subscribe(paymentScale => {
+      if(paymentScale){
+        this.paymentScale=paymentScale;
+        this.paymentScale.Tax = this.stateTax;
+        this.paymentModel.Range = this.paymentScale._id;
+        this.paymentStructure = this.paymentCaluculationService.GetLicenceBreakdownPayment(this.paymentScale);
+        if(this.paymentStructure){
+          this.getPaymentSummary();
+        }
+        
+      }else{
+        this.notification.error("Range not found")
+        this.paymentStructure=null;
+        this.paymentScale=null;
+        this.refreshForm();
+      }
+      
+    });
+  }
   clientOrgnizationDetails(selectedOrgnization){
     console.log("On Select Organization")
     console.log(selectedOrgnization);
