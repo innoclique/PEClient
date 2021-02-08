@@ -128,7 +128,7 @@ export class ClientSetupComponent implements OnInit {
       },      
       { headerName: 'Industry', field: 'Industry', sortable: true, filter: true },
       { headerName: 'Usage Type', field: 'UsageType', sortable: true, filter: true },
-      { headerName: 'Contact Person', field: 'ContactName', sortable: true, filter: true },
+      { headerName: 'Active', field: 'IsActive', sortable: true, filter: true },
       {
         headerName: "Review/Modify",
         // suppressMenu: true,
@@ -351,6 +351,7 @@ export class ClientSetupComponent implements OnInit {
               , UsageType: row.UsageType
               , ContactName: row.ContactName
               , RowData: row
+              ,IsActive: row.IsActive?"Yes":"No"
             })
           }
           if(row.ClientType==='Reseller'){
