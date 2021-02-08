@@ -1,5 +1,5 @@
 import { isDataSource } from '@angular/cdk/collections';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +15,7 @@ import { AlertComponent } from '../../shared/alert/alert.component';
 import { Constants } from '../../shared/AppConstants';
 import { CustomValidators } from '../../shared/custom-validators';
 import ReportTemplates from '../../views/psa/reports/data/reports-templates';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-kpi-settings',
@@ -22,8 +23,14 @@ import ReportTemplates from '../../views/psa/reports/data/reports-templates';
   styleUrls: ['./kpi-settings.component.css']
 })
 export class KpiSettingsComponent implements OnInit {
+  @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
+  config = {
+    backdrop: true,
+    ignoreBackdropClick: true,
 
-
+  };
+  trackViewRef: BsModalRef;
+  currentRowItem: any;
   public kpiForm: FormGroup;
   kpiDetails: any = { IsActive: 'true',MeasurementCriteria:[] }
   loginUser: any;
@@ -75,6 +82,7 @@ accessingFrom:any;
     public themeService: ThemeService,
     private snack: NotificationService,
     private perfApp: PerfAppService,
+    private modalService: BsModalService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
@@ -112,6 +120,11 @@ accessingFrom:any;
     this.initKPIForm()
 
     this.alert = new AlertDialog();
+  }
+
+  trackKpi() {
+
+    this.trackViewRef = this.modalService.show(this.kpiTrackView, this.config);
   }
 
   DenyAllSignOffKpis() {
@@ -876,5 +889,26 @@ getEVPeriod(){
     window.print();
   }
 
+  activeDeActiveKPI(isActive) {
+    this.perfApp.route = "app";
+    this.perfApp.method = "UpdateKpiDataById";
+    this.perfApp.requestBody = {};
+    this.perfApp.requestBody.kpiId = this.currentKpiId;
+    this.perfApp.requestBody.IsActive = isActive;
+    this.perfApp.requestBody.Action=isActive?'Active': 'DeActive' ;
+    this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+    this.perfApp.CallAPI().subscribe(c => {
+
+      if (c) {
+
+      
+  this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactivated'} Successfully`));
+this.onCancle();
+      }
+    })
+
+  }
 
 }
+
+

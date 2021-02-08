@@ -15,7 +15,11 @@
                       <button *ngIf="showAllowSignoff" type="button" class="btn btn-sm btn-primary" 
                         (click)="submitAllSignoffKPIs()">
                         Allow
-                      </button>
+                      </button>&nbsp;
+                      <button *ngIf="kpiDetails?.IsActive" class="btn btn-sm btn-primary"  (click)="activeDeActiveKPI(false)" title="Deactivate Performance Goal">Deactivate</button>&nbsp;
+
+                    <button *ngIf="!kpiDetails?.IsActive" class="btn btn-sm btn-primary"  (click)="activeDeActiveKPI(true)" title="Active Performance Goal">Active</button>&nbsp;
+                      <button class="btn btn-sm btn-primary"  (click)="trackKpi()"  title="Track Performance Goal" >Track</button>&nbsp;
                       &nbsp;<i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
                     </div>
                     
@@ -437,7 +441,7 @@
     <div class="modal-content no_bdr">
         <div class="container clearfix" style="height: 200px;   overflow-y: auto;">
           <ul class="timeline clearfix">
-            <li   [ngClass]="{ 'active' : last }"  *ngFor="let t of currentRowItem.tracks;let i=index;let last = last">
+            <li   [ngClass]="{ 'active' : last }"  *ngFor="let t of kpiDetails?.tracks;let i=index;let last = last">
               <span>{{t.comment}}</span>
               <div class="clear"></div>
               <i *ngIf="!last"></i>
