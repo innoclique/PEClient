@@ -321,9 +321,10 @@ this.submitClicked=true;
         this.submitClicked = false;
 
         if (this.isDraftEmployee) {
-          this.snack.success(this.translate.instant(`Employee has been Saved Successfully`));
+          this.snack.success(this.translate.instant(`The employee has been successfully saved.`));
       } else {
-          this.snack.success(this.translate.instant(`Employee has been ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Successfully`));
+          this.snack.success(this.translate.instant(`
+          The employee has been successfully ${this.currentAction == 'create' ? 'added' : 'updated'}.`));
       }
         // this.getEmployees();
         // this.closeForm();
@@ -336,7 +337,7 @@ this.submitClicked=true;
           if (error.error.message === Constants.EvaluationAdminNotFound) {
             this.openEvaluationAdminNotFoundDialog()
           }else{
-            this.snack.error(this.translate.instant(error.error.message));
+            this.snack.error(this.translate.instant(`Employee not ${this.currentAction == 'create' ? 'added' : 'updated'}, please try again`));
       
           } 
       

@@ -1,15 +1,17 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GridOptions } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
+import { AlertDialog } from '../../../Models/AlertDialog';
 import { AuthService } from '../../../services/auth.service';
 
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
+import { AlertComponent } from '../../../shared/alert/alert.component';
 import { CustomValidators } from '../../../shared/custom-validators';
 
 
@@ -22,6 +24,7 @@ export class SetupclientComponent implements OnInit {
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
+  public alert: AlertDialog;
   errorOnSave = false;
   errorMessage: string = "";
   @ViewChild('closeModal') closeModal: ElementRef
@@ -91,6 +94,7 @@ export class SetupclientComponent implements OnInit {
     }));
 
     this.isSaveAsDraftClicked=false;
+    this.alert = new AlertDialog();
     this.initForm();
     this.getAllBasicData();
     // this.getIndustries();
@@ -236,9 +240,57 @@ export class SetupclientComponent implements OnInit {
       return;
     }
     if(this.currentRecord && this.currentRecord._id){
-      this.updateClient();
+      this.alert.Title = "Alert";
+      this.alert.Content = "Are you sure you want to update this client?";
+      this.alert.ShowCancelButton = true;
+      this.alert.ShowConfirmButton = true;
+      this.alert.CancelButtonText = "Cancel";
+      this.alert.ConfirmButtonText = "Ok";
+
+      const dialogConfig = new MatDialogConfig()
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = this.alert;
+      dialogConfig.height = "300px";
+      dialogConfig.maxWidth = '100%';
+      dialogConfig.minWidth = '40%';
+
+      
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp=='yes') {
+        this.updateClient();
+      }
+      else{
+
+      }
+    })
     }else{
-      this.saveClient();
+      this.alert.Title = "Alert";
+      this.alert.Content = "Are you sure you want to add this client?";
+      this.alert.ShowCancelButton = true;
+      this.alert.ShowConfirmButton = true;
+      this.alert.CancelButtonText = "Cancel";
+      this.alert.ConfirmButtonText = "Ok";
+
+      const dialogConfig = new MatDialogConfig()
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = this.alert;
+      dialogConfig.height = "300px";
+      dialogConfig.maxWidth = '100%';
+      dialogConfig.minWidth = '40%';
+
+      
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp=='yes') {
+        this.saveClient();
+      }
+      else{
+
+      }
+    })
     }
     
   }
@@ -251,7 +303,12 @@ export class SetupclientComponent implements OnInit {
       this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
       this.resetForm();
-      this.notification.success('Organization Added Successfully.')
+      // this.notification.success('Organization Added Successfully.')
+      if (this.clientFormData.IsDraft) {
+        this.notification.success('The client has been successfully saved.')
+      } else {
+        this.notification.success('The client has been successfully added.')
+      }
       this.navToList();
       this.errorOnSave = false;
       this.errorMessage = "";
@@ -509,7 +566,12 @@ export class SetupclientComponent implements OnInit {
       this.perfApp.requestBody = organization; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {      
       console.log('updated', c)
-      this.notification.success('Client details updated successfully')
+      // this.notification.success('Client details updated successfully') 
+      if (this.currentRecord.IsDraft &&!this.clientFormData.IsDraft) {
+        this.notification.success('The client has been successfully added.')
+      } else {
+        this.notification.success('The client has been successfully updated.')
+      }
       this.navToList();
 
     }, error => {      
