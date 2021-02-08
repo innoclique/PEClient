@@ -467,6 +467,12 @@ export class PaymentComponent implements OnInit {
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
       this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
+      this.paymentSummary.CD_PER_MONTH=COST_PER_MONTH;
+      this.paymentSummary.CD_PER_MONTH_DISCOUNT=COST_PER_MONTH_ANNUAL_DISCOUNT;
+      if(this.currentUser.Organization.ClientType === "Reseller" && NoNeeded!=0){
+        this.paymentStructure.CD_PER_MONTH=(COST_PER_MONTH*NoNeeded).toFixed(2);
+        this.paymentStructure.CD_PER_MONTH_DISCOUNT=(COST_PER_MONTH_ANNUAL_DISCOUNT*NoNeeded).toFixed(2);
+      }
       
   }
 
@@ -579,6 +585,13 @@ export class PaymentComponent implements OnInit {
     console.log(`inside:getPaymentSummary:noOfMonths = ${noOfMonths}`)
     let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment,NoNeeded,NoOfEmployees};
     this.paymentSummary = this.paymentCaluculationService.CaluculatePaymentSummary(this.paymentStructure,options,this.paymentScale);
+    
+    this.paymentStructure.CD_PER_MONTH=this.paymentStructure.COST_PER_MONTH;
+    this.paymentStructure.CD_PER_MONTH_DISCOUNT=this.paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT;
+    if(this.currentUser.Organization.ClientType === "Reseller" && NoNeeded!=0){
+      this.paymentStructure.CD_PER_MONTH=(this.paymentStructure.COST_PER_MONTH*NoNeeded).toFixed(2);
+      this.paymentStructure.CD_PER_MONTH_DISCOUNT=(this.paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT*NoNeeded).toFixed(2);
+    }
   }
 
   onChangeFrequency(){
