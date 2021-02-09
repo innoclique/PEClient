@@ -572,6 +572,10 @@ export class ProfileComponent implements OnInit {
         });
 
         this.empDetails.ApplicationRole = this.selectedApplicationRoles;
+        let managerName = this.employeeDirReportData.find(man => c.Manager == man._id);
+        if (managerName) {
+          this.empDetails.Manager = managerName.FirstName;
+        }
         this.initEmpForm();
       }
     })
