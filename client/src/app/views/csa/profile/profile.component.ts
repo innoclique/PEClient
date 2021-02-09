@@ -157,7 +157,7 @@ export class ProfileComponent implements OnInit {
     });
   }
   navToList() {
-   // this.router.navigate(['dashboard']);
+   this.router.navigate(['dashboard']);
   }
   initForm() {
     this.clientForm = this.formBuilder.group({
