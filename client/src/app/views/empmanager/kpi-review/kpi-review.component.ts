@@ -72,6 +72,7 @@ actor:any;
   scoreUnSubmitedCount:any;
   isEmployeePgSignoff:boolean = false;
   isSignOffDisabled=false;
+  isFinalSignoffDone=false;
 
   
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
@@ -142,6 +143,7 @@ actor:any;
         this.getClientConfiguation();
       }else{
         let {FinalSignoff, SignOff, ManagerSignOff}  = result;
+        this.isFinalSignoffDone=FinalSignoff;
         if(ManagerSignOff.submited){
           this.isSignOffDisabled=true;
         }else{
@@ -214,9 +216,40 @@ actor:any;
     });
   }
 
+  
+  openConfirmSignoffKpisDialog() {
+    this.alert.Title = "Alert";
+    this.alert.Content = "This will confirm your sign-off. Are you sure you want to continue?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      
+      this.managerSignoff();
+     } else {
+       
+     }
+    })
+  }
+
   singoffPG(){
     if(this.unSubmitedCount>0 || this.submitedCount>0){
-      this.managerSignoff();
+      this.openConfirmSignoffKpisDialog();
+      
     }else{
       this.snack.error("Please add and submit performance Goals before sign-off.");
     }
@@ -240,6 +273,9 @@ actor:any;
     this.perfApp.requestBody = options;
     this.perfApp.CallAPI().subscribe(result => {
       console.log(result);
+      if (result) {
+        this.snack.success(this.translate.instant(`The performance goals have been submitted successfully and your sign-off registered.`));
+      }
       if(this.unSubmitedCount!=0){
         this.submitAllKPIs()
       }
@@ -726,7 +762,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
             this.showKpiForm  =false;
             return
           }
-          this.empKPIData = c.filter(e=> e.IsActive==true && e.ManagerSignOff && e.ManagerSignOff.submited ==true  && ( e.SignOff && e.SignOff.submited)  );
+          this.empKPIData = c.filter(e=> this.isFinalSignoffDone && e.IsActive==true && e.ManagerSignOff && e.ManagerSignOff.submited ==true   );
         }
         
 

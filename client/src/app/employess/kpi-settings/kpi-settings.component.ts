@@ -16,6 +16,7 @@ import { Constants } from '../../shared/AppConstants';
 import { CustomValidators } from '../../shared/custom-validators';
 import ReportTemplates from '../../views/psa/reports/data/reports-templates';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-kpi-settings',
@@ -70,6 +71,8 @@ accessingFrom:any;
   IsDraftDBVal: any;
   isFinalSignoff:Boolean;
   showAllowSignoff:Boolean=false;;
+  isFinalSignoffDone=false;
+
   currentEvaluation:any;
 
 
@@ -103,7 +106,8 @@ accessingFrom:any;
       
      }
     });
-    this.initApicallsForKpi();
+    this.findPgSignoff();
+    //this.initApicallsForKpi();
 
   }
 
@@ -393,6 +397,65 @@ this.toggleSelection(c,null);
   }
 
 
+  
+  getOrganizationStartAndEndDates(){
+    let Organization = this.currentOrganization;
+    let {StartMonth,EndMonth,EvaluationPeriod} = Organization;
+    StartMonth = parseInt(StartMonth);
+    let currentMoment = moment();
+    let evaluationStartMoment;
+    let evaluationEndMoment
+    if(EvaluationPeriod === "FiscalYear"){
+      var currentMonth = parseInt(currentMoment.format('M'));
+      console.log(`${currentMonth} <= ${StartMonth}`)
+      if(currentMonth <= StartMonth){
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month').subtract(1, 'years');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }else{
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }
+    }else if(EvaluationPeriod === "CalendarYear"){
+      evaluationStartMoment = moment().startOf('month');
+      evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
+    }
+    return {
+      start:evaluationStartMoment,
+      end:evaluationEndMoment
+    }
+  }
+
+  findPgSignoff(){
+    console.log(this.loginUser)
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+    let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let {Manager,Organization} = this.loginUser;
+    let options = {
+      EvaluationYear,
+      Owner: this.loginUser._id,
+      
+    };
+    console.log(options);
+    this.perfApp.route = "app";
+    this.perfApp.method = "Find/PG/Signoff";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(result => {
+     debugger
+      if(!result){
+
+      }else{
+        let {FinalSignoff, SignOff, ManagerSignOff}  = result;
+        this.isFinalSignoffDone=FinalSignoff;
+        
+      }
+
+      this.initApicallsForKpi();
+      
+    })
+  }
+
 
   getAllKpiBasicData() {
     this.perfApp.route = "app";
@@ -552,7 +615,7 @@ conformSubmitKpis(){
             this.showKpiForm  =false;
             return
           }
-          this.empKPIData = c.filter(e=> e.IsDraft==false && e.IsActive==true && e.IsSubmitedKPIs==true && ( e.ManagerSignOff && e.ManagerSignOff.submited) && ( e.SignOff && e.SignOff.submited)  );
+          this.empKPIData = c.filter(e=> this.isFinalSignoffDone && e.IsDraft==false && e.IsActive==true && e.IsSubmitedKPIs==true && ( e.ManagerSignOff&& e.ManagerSignOff.submited)   );
         }else{
           this.empKPIData = c;
         }
