@@ -26,7 +26,10 @@ import { AlertComponent } from '../../shared/alert/alert.component';
   styleUrls: ['./review-evaluation.component.css']
 })
 export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
-
+  years: any;
+  public yearSelected: number;
+  yearToPass: any;
+  public currentYear;
   loginUser: any;
   selectedUser: any;
   seletedTabRole:any;
@@ -66,7 +69,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   currentEmpName: any;
   isPdfView:boolean = false;
   currentOrganization: any;
-
+  
   config = {
     backdrop: true,
     ignoreBackdropClick: true,
@@ -116,6 +119,8 @@ this.currentOrganization = this.authService.getOrganization();
 
   ngOnInit(): void {   
     this.authService.getManagerPGSubmitStatus().subscribe(status=>this.mpgSubmitStatus=status);
+    this.currentYear=(new Date()).getFullYear();
+    this.yearSelected=(new Date()).getFullYear();
   }
 
 
@@ -240,7 +245,73 @@ goto(selTab){
         if (res1 && Object.keys(res1.DirectReporteeScoreCard).length > 0) {
           this.DirectReporteeScoreCard = res1.DirectReporteeScoreCard;
         }
+        this.years=res1.PreviousEvaluationYear
+        console.log("yrs",this.years)
+      } else {
+        this.evaluationForm = null;
+      }
+      
+    },error=>{
+      console.log('error while getting evaluation data',error)
+      this.evaluationForm=null;
+      this.snack.error('something went wrong')
+    });
 
+  }
+  getFinalratingData(val:any) {
+    forkJoin(
+      this.getempfinalrating(val).pipe(catchError(error => of({ error: error, isError: true })))      
+    ).subscribe(([res1]) => {
+      
+      if (res1 && !res1.isError) {
+
+        this.evaluationForm = res1;
+        console.log('the evauation form1', this.evaluationForm)
+     console.log("fr",res1["Employees"][0]["FinalRating"])
+        
+        if (res1["Employees"][0]["FinalRating"]) {
+          this.FinalRatingForm.controls["EmployeeComments"].setValue(res1["Employees"][0]["FinalRating"].Self.YearEndComments)
+          console.log("hii", this.FinalRatingForm.controls["EmployeeComments"])
+          this.FinalRatingForm.controls["EmployeeRevComments"].setValue(res1["Employees"][0]["FinalRating"].Self.RevComments)
+          this.FinalRatingForm.controls["EmployeeOverallRating"].setValue(res1["Employees"][0]["FinalRating"].Self.YearEndRating)
+          this.FinalRatingForm.controls["EmployeeIsDraft"].setValue(!res1["Employees"][0]["FinalRating"].Self.IsSubmitted);
+          this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1["Employees"][0]["FinalRating"].Self.SignOff)
+          this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1["Employees"][0]["FinalRating"].Self.SubmittedOn))
+          this.showEmployeeSubmit = !res1["Employees"][0]["FinalRating"].Self.IsSubmitted;
+
+
+          this.FinalRatingForm.controls["ManagerComments"].setValue(res1["Employees"][0]["FinalRating"].Manager.YearEndComments)
+          this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1["Employees"][0]["FinalRating"].Manager.YearEndRating)
+          this.FinalRatingForm.controls["ManagerIsDraft"].setValue(!res1["Employees"][0]["FinalRating"].Manager.IsSubmitted)
+          this.FinalRatingForm.controls["ManagerSignOff"].setValue(res1["Employees"][0]["FinalRating"].Manager.SignOff?res1["Employees"][0]["FinalRating"].Manager.SignOff
+            :this.selectedUser.Manager.FirstName+" "+this.selectedUser.Manager.LastName)
+          this.FinalRatingForm.controls["ManagerSubmittedOn"].setValue(this.datePipe.transform(res1["Employees"][0]["FinalRating"].Manager.SubmittedOn))
+          this.showManagerSubmit = !res1["Employees"][0]["FinalRating"].Manager.IsSubmitted;
+          this.FinalRatingForm.controls["ManagerRevComments"].setValue(res1["Employees"][0]["FinalRating"].Manager.RevComments)
+          this.FinalRatingForm.controls["ManagerReqRevision"].setValue(res1["Employees"][0]["FinalRating"].Manager.ReqRevision)
+
+
+          
+          this.FinalRatingForm.controls["ThirdSignatoryComments"].setValue(res1["Employees"][0]["FinalRating"].ThirdSignatory.YearEndComments)
+          this.FinalRatingForm.controls["ThirdSignatoryRevComments"].setValue(res1["Employees"][0]["FinalRating"].ThirdSignatory.RevComments)
+          this.FinalRatingForm.controls["TSReqRevision"].setValue(res1["Employees"][0]["FinalRating"].ThirdSignatory.ReqRevision)
+     
+          this.isReqRevDisabled =res1["Employees"][0]["FinalRating"].FRReqRevision;
+          this.FinalRatingForm.controls["FRReqRevision"].setValue(res1["Employees"][0]["FinalRating"].FRReqRevision)
+          this.FinalRatingForm.controls["ThirdSignatoryIsDraft"].setValue(!res1["Employees"][0]["FinalRating"].ThirdSignatory.IsSubmitted)
+          this.FinalRatingForm.controls["ThirdSignatorySignOff"].setValue(res1["Employees"][0]["FinalRating"].ThirdSignatory.SignOff?res1["Employees"][0]["FinalRating"].ThirdSignatory.SignOff
+            :this.selectedUser.ThirdSignatory?this.selectedUser.ThirdSignatory.FirstName+" "+this.selectedUser.ThirdSignatory.LastName:"")
+          this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1["Employees"][0]["FinalRating"].ThirdSignatory.SubmittedOn))
+          this.showThirdSignatorySubmit = !res1["Employees"][0]["FinalRating"].ThirdSignatory.IsSubmitted;
+
+        }
+        if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
+          this.PeerScoreCard = res1.PeerScoreCard;
+        }
+        if (res1 && Object.keys(res1.DirectReporteeScoreCard).length > 0) {
+          this.DirectReporteeScoreCard = res1.DirectReporteeScoreCard;
+        }
+       
       } else {
         this.evaluationForm = null;
       }
@@ -255,7 +326,15 @@ goto(selTab){
   getCurrentEvaluationDetails() {
     this.perfApp.route = "evaluation";
     this.perfApp.method = "GetEmpCurrentEvaluation",
-      this.perfApp.requestBody = { EmployeeId: this.currentEmpId }
+      this.perfApp.requestBody = { EmployeeId: this.currentEmpId,EvaluationYear:(new Date()).getFullYear()}
+    return this.perfApp.CallAPI()
+  }
+  getempfinalrating(val:any) {
+    this.yearToPass=val;
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetEmpFinalRatingByYear",
+      this.perfApp.requestBody = { EmployeeId: this.currentEmpId,EvaluationYear: this.yearToPass,orgId:this.authService.getOrganization()._id}
+      console.log("obj", this.perfApp.requestBody)
     return this.perfApp.CallAPI()
   }
 

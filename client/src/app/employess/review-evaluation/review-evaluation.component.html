@@ -25,13 +25,13 @@
 <div *ngIf="evaluationForm">
   <em class="tab_name">{{currentEmpName}}</em>
   <tabset #evTabset class="pro-tabs">
-    <tab (selectTab)="changeTab($event, false)">
+    <tab  [disabled]="yearSelected!=currentYear" (selectTab)="changeTab($event, false)">
       <ng-template tabHeading><i></i>Performance Goals</ng-template>
 
       <app-kpi-review-manager [accessingFrom]="'reviewEvaluation'" [actor]=seletedTabRole> </app-kpi-review-manager>
     </tab>
 
-    <tab (selectTab)="changeTab($event, true)" >
+    <tab  [disabled]="yearSelected!=currentYear"(selectTab)="changeTab($event, true)" >
       <ng-template tabHeading><i></i> Competencies</ng-template>
       <div [formGroup]="managerCompetencyForm" class="card col-lg-12 pt-3">
         <accordion [closeOthers]="oneAtATime">
@@ -109,7 +109,7 @@
       </div>
     </tab>
 
-    <tab (selectTab)="changeTab($event, false)">
+    <tab  [disabled]="yearSelected!=currentYear"(selectTab)="changeTab($event, false)">
       <ng-template tabHeading>
         <i class="icon-hand-rock"></i>Developmental Goals
       </ng-template>
@@ -117,7 +117,7 @@
 
     </tab>
 
-    <tab (selectTab)="changeTab($event, false)">
+    <tab  [disabled]="yearSelected!=currentYear" (selectTab)="changeTab($event, false)">
       <ng-template tabHeading>
         <i class="icon-hand-rock"></i>Strengths
       </ng-template>
@@ -126,11 +126,29 @@
     </tab>
 
 
-    <tab (selectTab)="changeTab($event, false)">
+    <tab  [disabled]="yearSelected!=currentYear" (selectTab)="changeTab($event, false)">
       <ng-template tabHeading><i class="icon-hand-rock"></i>Final Rating</ng-template>
+      <div class="card col-lg-12">
+      <div class="row" >
+        <div class="col-md-4">
+            <h3 style="margin-top:25px">Employee Self Review</h3>
+        </div>
+        <div class="col-md-4">
+        </div>
+        <!-- <div class="col-md-1" ></div> -->
+        <div class="col-md-4" style="margin-top:10px;margin-bottom:10px" >
+            <div class="input-group-prepend">
+                <span class="input-group-text" style="border-right:none;border-radius: 0px; width:auto">Select Evaluation Year</span>
+                <select  class="form-control" style="border-radius: 0px; width:auto;" [(ngModel)]="yearSelected" name="Year" required (ngModelChange)="getFinalratingData($event)" >
+                  <option value="" disabled >Please select</option>
+                  <option *ngFor="let x of years" [value]="x.id" >{{x.name}}</option>
+                </select>
+        
+            </div>
+        </div>
+    </div>
       <div [formGroup]="FinalRatingForm" class="card col-lg-12">
         <section class="view-only pt-3">
-          <h3>Employee Self Review</h3>
           <div *ngIf="!showEmployeeSubmit || !showManagerSubmit " class="wrapper">
             <div class="form-group row">
               <div class="col-md-8 ">
@@ -445,6 +463,7 @@
           </div>
         </section>
 
+      </div>
       </div>
     </tab>
   </tabset>
