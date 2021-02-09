@@ -129,10 +129,10 @@
                                         {{question.label}}
                                     </td>
                                     <td>
-                                        {{question.value}}
+                                      {{finalRating.Manager.IsSubmitted ? question.value : ''}}
                                     </td>
                                     <td *ngIf="i==0" [attr.rowspan]="i">
-                                        {{c.comments}}
+                                      {{finalRating.Manager.IsSubmitted ? c.comments : ''}}
                                     </td>
                                 </tr>
                             </table>
@@ -300,7 +300,7 @@
                 <div class="col-lg-6 pull-left"><span>
                         SubmittedOn :
                     </span>
-                    <label>{{finalRating.Self.SubmittedOn}}</label>
+                    <label>{{finalRating.Self.IsSubmitted ? finalRating.Self.SubmittedOn : ''}}</label>
                 </div>
 
                 <div class="col-lg-12 pull-left"><span>
@@ -322,7 +322,7 @@
                 <div class="col-lg-6 pull-left"><span>
                         SubmittedOn :
                     </span>
-                    <label>{{finalRating.Manager.SubmittedOn}}</label>
+                 <label>{{finalRating.Manager.IsSubmitted ? finalRating.Manager.SubmittedOn : ''}}</label>
                 </div>
             </div>
         </div>

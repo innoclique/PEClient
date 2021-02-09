@@ -16,6 +16,7 @@ export class CompetencyWrapperComponent implements OnInit {
   @Input() empComments: String;
   @Input() showEmployeeRatingColumn: boolean = true;
   @Input() disableManagerRatingField: boolean = false;
+  @Input() currentUserRole: any;
   //form: FormGroup;
   payLoad = '';
 
