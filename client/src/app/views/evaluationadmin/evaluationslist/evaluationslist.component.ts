@@ -251,6 +251,9 @@ export class EvaluationslistComponent implements OnInit {
             return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
           }else if(data.data.EvaluationRow.kpiFormCreatedOn){
             return new DatePipe('en-US').transform(data.data.EvaluationRow.kpiFormCreatedOn, 'MM-dd-yyyy')
+          }else if (!data.data.Type) {
+            if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
+            return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
           }else{
             return `N/A`;
           }

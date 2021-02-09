@@ -178,6 +178,8 @@ export class PaymentComponent implements OnInit {
             this.loadOrganizationDefaultData();
             this.findAdhocPayments(this.currentOrganization._id,"Renewal");
             this.paymentModel.Organization = this.currentOrganization._id;
+            if(this.paymentReleaseData.Range)
+              this.selectedRangeValue = this.paymentReleaseData.Range;
           }else{
             this.notification.error('Renewal will be available after initial payment done.')
           }
@@ -186,6 +188,8 @@ export class PaymentComponent implements OnInit {
           if(this.isinitialPaymentDone){
             this.isAdhocpayment=true;
             this.findAdhocPayments(this.currentOrganization._id,"Adhoc");
+            if(this.paymentReleaseData.Range)
+              this.selectedRangeValue = this.paymentReleaseData.Range;
           }else{
             this.notification.error('Adhoc will be available after initial payment done.');
           }
@@ -585,7 +589,6 @@ export class PaymentComponent implements OnInit {
     console.log(`inside:getPaymentSummary:noOfMonths = ${noOfMonths}`)
     let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment,NoNeeded,NoOfEmployees};
     this.paymentSummary = this.paymentCaluculationService.CaluculatePaymentSummary(this.paymentStructure,options,this.paymentScale);
-    
     this.paymentStructure.CD_PER_MONTH=this.paymentStructure.COST_PER_MONTH;
     this.paymentStructure.CD_PER_MONTH_DISCOUNT=this.paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT;
     if(this.currentUser.Organization.ClientType === "Reseller" && NoNeeded!=0){
@@ -712,7 +715,7 @@ export class PaymentComponent implements OnInit {
      if(c){
       this.paymentModel.paymentreleaseId = c._id;
       console.log(`paymentreleaseId = ${c._id}`)
-      this.notification.success(`Payment Released to ${this.currentOrganization.Name}`);
+      //this.notification.success(`Payment Released to ${this.currentOrganization.Name}`);
       this.checkout();
      }else{
        this.notification.error("Record not saved.")
