@@ -68,10 +68,11 @@ export class ProfileComponent implements OnInit {
     this.getEmployees();
     this.getManagersEmps();
     this.getThirdSignatoryEmps();
+    this.initEmpForm();
     this.getAllDepartments();
 
-    this.initEmpForm();
-    this.getUserProfile();
+    
+  //  this.getUserProfile();
     this.getAllBasicData();
     this.alert = new AlertDialog();
 
@@ -425,7 +426,7 @@ export class ProfileComponent implements OnInit {
       console.log('CLIENTS DATA', c);
       if (c) {
         this.departments = c.Industries[0].Department;
-        //  this.jobRoles=c.JobRoles;
+        this.jobRoles = this.departments[0].JobRoles;
         this.appRoles = c.AppRoles;
         this.jobLevels = c.JobLevels;
         console.log('CLIENT JOB ROLES', this.appRoles);
@@ -443,6 +444,8 @@ export class ProfileComponent implements OnInit {
 
         })
       }
+
+      this.getUserProfile();
     })
   }
 
@@ -545,6 +548,7 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  selectedApplicationRoles = [];
   getUserProfile() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetEmployeeProfile",
@@ -562,6 +566,12 @@ export class ProfileComponent implements OnInit {
           this.empDetails.AltPhoneNumber = c.profile.AltPhoneNumber;
           this.empDetails.CoachingReminder = c.profile.CoachingReminder;
         }
+
+        c.ApplicationRole.forEach(element => {
+           this.selectedApplicationRoles.push(element._id)
+        });
+
+        this.empDetails.ApplicationRole = this.selectedApplicationRoles;
         this.initEmpForm();
       }
     })
