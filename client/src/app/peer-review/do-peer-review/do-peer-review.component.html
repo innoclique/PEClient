@@ -1,7 +1,12 @@
 <div [formGroup]="peerCompetencyForm">
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-bordered">
+            <div class=" card">
+                <div class="card-header">
+                    Peer Review
+                  </div>
+        <div class="card-body">
+            <table class="table table-bordered peer">
                 <thead class="thead-light">
                     <th>Employee</th>
                     <th>Email</th>
@@ -17,8 +22,7 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
+   
     <accordion [closeOthers]="oneAtATime">
         <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of competencyQuestionsList">
             <button  class="btn btn-link btn-block clearfix" accordion-heading type="button">
@@ -51,4 +55,9 @@
 
         </div>
     </div>
+    </div>
+    </div>
+    
+</div>
+</div>
 </div>
