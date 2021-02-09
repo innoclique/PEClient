@@ -212,21 +212,28 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Manager</span>
                     </div>
+                    <!--<input type="text" class=" form-control"
+         placeholder="Search for a Manager" required
+         [ngClass]="{ 'is-invalid': (f.Manager.touched || submitClicked)  &&  f.Manager.invalid }"
+         [matAutocomplete]="auto3"
+         formControlName="Manager" name="Manager"
+         [formControl]="f.Manager">
+  <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn">
+    <mat-option *ngFor="let option of filteredOptionsDR | async" [value]="option">
+      {{option.FirstName}}
+    </mat-option>
+  </mat-autocomplete>
+
+  <div *ngIf="(f.Manager.touched || submitClicked) && f.Manager.invalid" class="invalid-feedback">
+    <div *ngIf="f.Manager.errors.required">Manager is mandatory</div>
+  </div>-->
+
                     <input type="text" class=" form-control"
                            placeholder="Search for a Manager" required
                            [ngClass]="{ 'is-invalid': (f.Manager.touched || submitClicked)  &&  f.Manager.invalid }"
                            [matAutocomplete]="auto3"
                            formControlName="Manager" name="Manager"
                            [formControl]="f.Manager">
-                    <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn">
-                      <mat-option *ngFor="let option of filteredOptionsDR | async" [value]="option">
-                        {{option.FirstName}}
-                      </mat-option>
-                    </mat-autocomplete>
-
-                    <div *ngIf="(f.Manager.touched || submitClicked) && f.Manager.invalid" class="invalid-feedback">
-                      <div *ngIf="f.Manager.errors.required">Manager is mandatory</div>
-                    </div>
 
                   </div>
                 </div>
