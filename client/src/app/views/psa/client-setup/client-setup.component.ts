@@ -86,8 +86,8 @@ export class ClientSetupComponent implements OnInit {
         headerName: 'Reseller', field: 'Name', tooltipField: 'Name', sortable: true,  suppressSizeToFit: true, filter: true,  
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.value}</span>` }
       },      
-      { headerName: '# of Clients(Employee)', field: 'EmpTypeCount',  sortable: true, filter: true },
-      { headerName: '# of Clients(License)', field: 'LicenceTypeCount',  sortable: true, filter: true },
+      { headerName: '# of Clients (Employee)', field: 'EmpTypeCount',  sortable: true, filter: true },
+      { headerName: '# of Clients (License)', field: 'LicenceTypeCount',  sortable: true, filter: true },
       { headerName: 'Active', field: 'IsActive', sortable: true, filter: true },
       {
         headerName: "Review/Modify",
