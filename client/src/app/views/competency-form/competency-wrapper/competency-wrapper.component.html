@@ -25,7 +25,7 @@
         <div style="margin-left: 10px;" class="form-group">
           <label  for="EmpComments" class="strong-key"> Comments: </label>
           <textarea maxlength="500" class="form-control" cols="" rows="4" formControlName="EmpComments"
-            name="EmpComments" [attr.disabled]= "disableManagerRatingField ? 'disabled' : null">  </textarea>
+            name="EmpComments" [attr.disabled]= "disableManagerRatingField || currentUserRole == 'Manager' || currentUserRole == 'TS' ? 'disabled' : null">  </textarea>
         </div>
       </div>
 
@@ -33,7 +33,7 @@
         <div style="margin-left: 10px;" class="form-group">
           <label for="Comments" class="strong-key"> Manager Comments: </label>
           <textarea maxlength="500" class="form-control" cols="" rows="4" formControlName="Comments"
-            name="Comments" [attr.disabled]= "disableManagerRatingField ? 'disabled' : null">  </textarea>
+            name="Comments" [attr.disabled]= "disableManagerRatingField || currentUserRole == 'TS' ? 'disabled' : null">  </textarea>
         </div>
       </div>
       <div *ngIf="!questions[0].showEmpRating" class="col-md-6">

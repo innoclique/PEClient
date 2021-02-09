@@ -1,0 +1,622 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+         Organization Profile
+        </div>
+        <div class="card-body">
+
+          <form autocomplete="off" [formGroup]="clientForm" novalidate="" class="ng-untouched ng-pristine ng-valid">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Organization Name</span>
+                    </div>
+                    <input [readonly]="!isCreate" class="form-control" type="text" formControlName="Name" name="Name"
+                           [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Name.errors }" required>
+                    <div *ngIf=" isFormSubmitted  && f.Name.errors" class="invalid-feedback">
+                      <div *ngIf="f.Name.errors.required">Organization name is mandatory.</div>
+                      <div *ngIf="f.Name.errors.maxlength">Organization name can be 500 characters long.</div>
+                      <div *ngIf="f.Name.errors.minlength">Organization name must be at least 2 characters </div>
+                      <div *ngIf="f.Name.errors.hasFirstCharNum">First character should be character </div>
+                      <div *ngIf="f.Name.errors.pattern">Allowed special characters are (.,-,(,),&,#,:,/) </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Select Industry</span>
+                    </div>
+                    <select (change)="onIndustryChange($event)"
+                            [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Industry.errors }" formControlName="Industry"
+                            class="form-control">
+                      <option value="" disabled selected>Select Industry</option>
+                      <option *ngFor="let i of industries" [value]="i.Code">{{i.Name}}</option>
+                    </select>
+                    <div *ngIf=" isFormSubmitted &&   f.Industry.errors" class="invalid-feedback">
+                      <div *ngIf="f.Industry.errors.required">Industry is mandatory</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h3 class="form-group-label">Organization Profile </h3>
+
+            <div class="row" style="margin-bottom:0px;">
+              <div class="col-md-12">
+                <app-csc [reset]="countyFormReset" [CSCData]='cscData' (onSelect)="onCSCSelect($event)" [showValidateMsg]="isFormSubmitted">
+                </app-csc>
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Address</span>
+                    </div>
+                    <textarea maxlength="500" class="form-control" cols="" rows="4"
+                              [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Address.errors }" formControlName="Address"
+                              name="Address" required>  </textarea>
+                    <div *ngIf="isFormSubmitted && f.Address.errors" class="invalid-feedback">
+                      <div *ngIf="f.Address.errors.required">Address is mandatory</div>
+                      <div *ngIf="f.Address.errors.minlength">Address must be at least 4 characters </div>
+                      <div *ngIf="f.Address.errors.hasAddressSplChars">
+                        Allowed special characters are
+                        (.,-,(,),&,#,:,/)
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Postal/Zip Code</span>
+                    </div>
+                    <input maxlength="8" [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.ZipCode.errors }"
+                           formControlName="ZipCode" class="form-control">
+                    <div *ngIf=" isFormSubmitted && f.ZipCode.errors" class="invalid-feedback">
+                      <div *ngIf="f.ZipCode.errors.required">Postal/Zip Code is mandatory</div>
+                      <div *ngIf="f.ZipCode.errors.isInValidZip">Allowed alphanumeric, space</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 ">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Phone</span>
+                    </div>
+                    <input numbersOnly maxlength="13" numbersOnly type="text" class="form-control"
+                           [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Phone.errors }" formControlName="Phone" required>
+                    <div *ngIf="isFormSubmitted  && f.Phone.errors" class="invalid-feedback">
+                      <div *ngIf="f.Phone.errors.required">Phone or Mobile number is mandatory.</div>
+                      <div *ngIf="f.Phone.errors.minlength">Phone Number must be at least 10 characters  </div>
+                      <!-- <div *ngIf="f.Phone.errors.pattern">Phone can accept only 0-9 and - format should be
+                        (01-1234567890).</div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 ">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Ext Number</span>
+                    </div>
+                    <input maxlength="5" numbersOnly type="text" class="form-control" formControlName="PhoneExt"
+                           numbersOnly>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Email</span>
+                    </div>
+                    <input class="form-control" type="text"
+                           [ngClass]="{ 'is-invalid':isFormSubmitted && f.Email.errors}" formControlName="Email" name="Email"
+                           required>
+                    <div *ngIf="isFormSubmitted   && f.Email.errors" class="invalid-feedback">
+                      <div *ngIf="f.Email.errors.required">Email is mandatory</div>
+                      <div *ngIf="f.Email.errors.maxlength">Email can be 500 characters long.</div>
+                      <div *ngIf="f.Email.errors.email">Email accepts a-z,A-Z,0-9,.,-,@ characters only. </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div class="form-group col-md-4 ">
+                <div class="field-group">
+                  <label class="col-form-label redStar" for="inline-radios">Usage Type</label>
+                  <label class="radio-inline ml-2">
+                    <input [checked] formControlName="UsageType" name="UsageType"
+                           [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
+                           value="License">
+                    License
+                  </label>
+                  <label class="form-control" class="radio-inline ml-2">
+                    <input formControlName="UsageType" name="UsageType"
+                           [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
+                           value="Employees" (click)="onCheckEmployee()"> # of Employees
+                  </label>
+
+                  <div *ngIf="isFormSubmitted && f.UsageType.errors" class="invalid-feedback">
+                    <div *ngIf="f.UsageType.errors.required">Usage Type is mandatory</div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="f.UsageType.value==='Employees'" class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Count</span>
+                    </div>
+                    <input type="test" class="form-control" maxlength="5" numbersOnly type="text"
+                           [ngClass]="{ 'is-invalid': isFormSubmitted  && f.UsageCount.errors}" formControlName="UsageCount"
+                           name="UsageCount" (keypress)="keyPressNumbers($event)">
+
+                    <div *ngIf=" isFormSubmitted  && f.UsageCount.errors" class="invalid-feedback">
+                      <div *ngIf="f.UsageCount.errors.required">Count of Employees is mandatory</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="f.UsageType.value==='License'" class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Range</span>
+                    </div>
+                    <select formControlName="Range" [required]="f.UsageType.value==='License' ? true : null " class="form-control" [(ngModel)]="Range">
+                      <option>Select</option>
+                      <option *ngFor="let range of rangeList" [value]="range._id">{{range.Range}}</option>
+                    </select>
+
+                    <div *ngIf=" isFormSubmitted  && f.Range.errors" class="invalid-feedback">
+                      <div *ngIf="f.Range.errors.required">Range Mandatory</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--Admin Form fields-->
+            <h3 class="form-group-label">Admin Details </h3>
+            <div class="row">
+              <div class="col-md-4 ">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">First Name</span>
+                    </div>
+                    <input type="text" class="form-control"
+                           [ngClass]="{ 'is-invalid': isFormSubmitted && f.AdminFirstName.invalid }"
+                           formControlName="AdminFirstName" required>
+                    <div *ngIf="isFormSubmitted && f.AdminFirstName.errors" class="invalid-feedback">
+                      <div *ngIf="f.AdminFirstName.errors.required"> First Name is mandatory</div>
+                      <div *ngIf="f.AdminFirstName.errors.minlength"> First Name can be atleast 2 characters long</div>
+                      <div *ngIf="f.AdminFirstName.errors.maxlength"> First Name can be 200 characters long</div>
+                      <div *ngIf="f.AdminFirstName.errors.pattern">
+                        First Name can accept only a-z,A-Z,0-9,.,-,(,),:
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 ">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text ">Initial</span>
+                    </div>
+                    <input type="text" maxlength="3" class="form-control"
+                           (keypress)="keyPressAlphaAndPeriod($event)" formControlName="AdminMiddleName">
+                    <div *ngIf="isFormSubmitted && f.AdminMiddleName.errors" class="invalid-feedback">
+                      <div *ngIf="f.AdminMiddleName.errors.maxlength"> Initial can be 3 characters long</div>
+                      <div *ngIf="f.AdminMiddleName.errors.pattern">
+                        Initial can accept only a-z,A-Z,0-9,.,-,(,),:
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Last Name</span>
+                    </div>
+                    <input maxlength="200" class="form-control" type="text"
+                           [ngClass]="{ 'is-invalid': isFormSubmitted   &&  f.AdminLastName.errors}"
+                           formControlName="AdminLastName">
+                    <div *ngIf="isFormSubmitted && f.AdminLastName.errors" class="invalid-feedback">
+                      <div *ngIf="f.AdminLastName.errors.required"> Last Name is mandatory</div>
+                      <div *ngIf="f.AdminLastName.errors.maxlength"> Last Name can be 200 characters long</div>
+                      <div *ngIf="f.AdminLastName.errors.pattern"> Last Name can accept only a-z,A-Z,0-9,.,-,(,),:</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Phone</span>
+                    </div>
+                    <input numbersOnly maxlength="13" class="form-control" type="text"
+                           [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.AdminPhone.errors }"
+                           formControlName="AdminPhone">
+                    <div *ngIf="isFormSubmitted && f.AdminPhone.errors" class="invalid-feedback">
+                      <div *ngIf="f.AdminPhone.errors.required">Admin Phone is mandatory</div>
+                      <div *ngIf="f.AdminPhone.errors.minlength">Phone Number must be at least 10 characters  </div>
+                      <!-- <div *ngIf="f.AdminPhone.errors.pattern">Phone can accept only 0-9 and - format should be
+                        (01-1234567890).</div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Email</span>
+                    </div>
+                    <input class="form-control" type="text"
+                           [ngClass]="{ 'is-invalid': isFormSubmitted &&  f.AdminEmail.errors }"
+                           formControlName="AdminEmail"
+                           (keypress)="keyPressEmail($event)" required>
+                    <div *ngIf="isFormSubmitted && f.AdminEmail.errors" class="invalid-feedback">
+                      <div *ngIf="f.AdminEmail.errors.maxlength">Email can be 500 characters long.</div>
+                      <div *ngIf="f.AdminEmail.errors.email">Email accepts a-z,A-Z,0-9,.,-,@ characters only. </div>
+                      <div *ngIf="f.AdminEmail.errors.required">Admin Email is mandatory</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="form-group-label pull-left">Contact Person </h3>
+            <div class="form-group row">
+              <div class="col-md-9 col-form-label pull-left" style="padding:0 0 0 20px;">
+                <div class="form-check form-check-inline mr-1">
+                  <input class="form-check-input" id="inline-checkbox1" formControlName="SameAsAdmin" type="checkbox" (change)="onSameAsAdminChange($event)"
+                         value="option1">
+                  <label class="form-check-label" for="inline-checkbox1">Same as Admin</label>
+                </div>
+              </div>
+            </div>
+            <div formGroupName="contactPersonForm" class="row">
+              <div class="col-md-4 ">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">First Name</span>
+                    </div>
+                    <input maxlength="200" type="text" class="form-control"
+                           [ngClass]="{ 'is-invalid': !f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonFirstName.errors }"
+                           formControlName="ContactPersonFirstName" required>
+                    <div *ngIf="isFormSubmitted && !f.SameAsAdmin.value && a.ContactPersonFirstName.errors"
+                         class="invalid-feedback">
+                      <div *ngIf="a.ContactPersonFirstName.errors.required">Contact Person First Name is mandatory</div>
+                      <div *ngIf="a.ContactPersonFirstName.errors.minlength">
+                        First Name can be atleast 2 characters
+                        long
+                      </div>
+                      <div *ngIf="a.ContactPersonFirstName.errors.maxlength">
+                        First Name can be 200 characters long
+                      </div>
+                      <div *ngIf="a.ContactPersonFirstName.errors.pattern">
+                        First Name can accept only
+                        a-z,A-Z,0-9,.,-,(,),:
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 ">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text ">Initial</span>
+                    </div>
+                    <input type="text" class="form-control"
+                           (keypress)="keyPressAlphaAndPeriod($event)" formControlName="ContactPersonMiddleName">
+                    <div *ngIf="isFormSubmitted && !f.SameAsAdmin.value && a.ContactPersonMiddleName.errors"
+                         class="invalid-feedback">
+                      <div *ngIf="a.ContactPersonMiddleName.errors.maxlength">
+                        Initial can be 200 characters long
+                      </div>
+                      <div *ngIf="a.ContactPersonMiddleName.errors.pattern">
+                        Initial can accept only
+                        a-z,A-Z,0-9,.,-,(,),:
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Last Name</span>
+                    </div>
+                    <input class="form-control" type="text"
+                           [ngClass]="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonLastName.errors "
+                           formControlName="ContactPersonLastName">
+                    <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted && a.ContactPersonLastName.errors"
+                         class="invalid-feedback">
+                      <div *ngIf="a.ContactPersonLastName.errors.required">Contact Person Last Name is mandatory</div>
+
+                      <div *ngIf="a.ContactPersonLastName.errors.maxlength">
+                        Last Name can be 200 characters long
+                      </div>
+                      <div *ngIf="a.ContactPersonLastName.errors.pattern">
+                        Last Name can accept only
+                        a-z,A-Z,0-9,.,-,(,),:
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Phone</span>
+                    </div>
+                    <input numbersOnly class="form-control" type="text" maxlength="13"
+                           [ngClass]="{ 'is-invalid': !f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors}"
+                           formControlName="ContactPersonPhone">
+                    <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors"
+                         class="invalid-feedback">
+                      <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is mandatory</div>
+                      <div *ngIf="a.ContactPersonPhone.errors.minlength">Phone Number must be at least 10 characters  </div>
+                      <!-- <div *ngIf="a.ContactPersonPhone.errors.pattern">Phone can accept only 0-9 and - format should be
+                        (01-1234567890).</div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Email</span>
+                    </div>
+                    <input class="form-control" type="text"
+                           [ngClass]="{ 'is-invalid': (!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonEmail.errors )}"
+                           formControlName="ContactPersonEmail"
+                           (keypress)="keyPressEmail($event)">
+                    <div *ngIf="isFormSubmitted && !f.SameAsAdmin.value && a.ContactPersonEmail.errors"
+                         class="invalid-feedback">
+                      <div *ngIf="a.ContactPersonEmail.errors.required">Contact Person Email is mandatory</div>
+                      <div *ngIf="a.ContactPersonEmail.errors.email">Email accepts a-z,A-Z,0-9,.,-,@ characters only. </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h3 class="form-group-label">Evaluation Details</h3>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Coaching Reminder</span>
+                    </div>
+                    <select formControlName="CoachingReminder" class="form-control">
+                      <option value="" disabled selected>Coaching Remainder</option>
+
+                      <option *ngFor="let e of coachingRemDays" [value]="e.value">{{e.Text}}</option>
+                    </select>
+
+                    <!--<div class="input-group-append">
+                      <span class="input-group-text">days</span>
+                    </div>-->
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Select Model</span>
+                    </div>
+
+                    <mat-select formControlName="EvaluationModels"
+                                [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }" class="form-control"
+                                multiple>
+                      <mat-option *ngFor="let topping of models" [value]="topping._id">{{topping.Name}}</mat-option>
+                    </mat-select>
+
+                    <div *ngIf="isFormSubmitted && f.EvaluationModels.errors" class="invalid-feedback">
+                      <div *ngIf="f.EvaluationModels.errors.required">Evaluation Model is mandatory</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Evaluation Period</span>
+                    </div>
+                    <select [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.EvaluationPeriod.errors }"
+                            formControlName="EvaluationPeriod" class="form-control" class="form-control">
+                      <option value="" disabled selected>Select Period</option>
+                      <option *ngFor="let i of evaluationPeriods" [value]="i.Code">{{i.Name}}</option>
+
+                      <!-- <option value="FiscalYear">Fiscal Year</option>
+                      <option value="CalendarYear">Calendar Year</option> -->
+
+                    </select>
+                    <div *ngIf="isFormSubmitted && f.EvaluationPeriod.errors" class="invalid-feedback">
+                      <div *ngIf="f.EvaluationPeriod.errors.required">Evalution Period is mandatory</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Start Month</span>
+                    </div>
+                    <select [disabled]="f.EvaluationPeriod.value==='CalendarYear'"
+                            [ngClass]="{ 'is-invalid':isFormSubmitted  &&  f.StartMonth.invalid }"
+                            formControlName="StartMonth" class="form-control" id="StartMonth" name="StartMonth">
+                      <option value="" disabled selected>Select Start Month</option>
+                      <option value='1'>January</option>
+                      <option value='2'>February</option>
+                      <option value='3'>March</option>
+                      <option value='4'>April</option>
+                      <option value='5'>May</option>
+                      <option value='6'>June</option>
+                      <option value='7'>July</option>
+                      <option value='8'>August</option>
+                      <option value='9'>September</option>
+                      <option value='10'>October</option>
+                      <option value='11'>November</option>
+                      <option value='12'>December</option>
+                    </select>
+                    <div *ngIf="isFormSubmitted && f.StartMonth.errors" class="invalid-feedback">
+                      <div *ngIf="f.StartMonth.errors.required">Start Month is mandatory</div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">End Month</span>
+                    </div>
+                    <input class="form-control" type="text" readonly formControlName="EndMonth">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!--<div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Employee Buffer</span>
+                    </div>
+                    <select formControlName="EmployeeBufferCount" class="form-control" class="form-control">
+                      <option value="" selected>Please select</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                      <option value="30">30</option>
+                      <option value="35">35</option>
+                      <option value="40">40</option>
+                      <option value="45">45</option>
+                      <option value="50">50</option>
+                    </select>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Download Buffer</span>
+                    </div>
+                    <select formControlName="DownloadBufferDays" class="form-control" class="form-control">
+                      <option value="" selected>Please select</option>
+                      <option value="5">5 Days</option>
+                      <option value="10">10 Days</option>
+                      <option value="15">15 Days</option>
+                      <option value="20">20 Days</option>
+                      <option value="25">25 Days</option>
+                      <option value="30">30 Days</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Active</span>
+                    </div>
+                    <div style="margin-top: 10px;">
+                      <label class="radio-inline ml-2">
+                        <input [checked]="true" [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
+                               formControlName="IsActive" type="radio" name="IsActive" [value]="true"> Yes
+                      </label>
+                      <label class="form-control" class="radio-inline ml-2">
+                        <input [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.IsActive.invalid }"
+                               formControlName="IsActive" type="radio" name="IsActive" [value]="false"> No
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>-->
+
+          </form>
+          <div *ngIf="errorOnSave" class="row">
+            <div class="alert alert-danger">
+              <strong>Error:</strong> {{errorMessage}}
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <div class="form-group form-actions pull-right">
+              <button class="btn btn-sm btn-primary" (click)="navToList()">Cancel</button>&nbsp;
+              <button class="btn btn-sm btn-primary" (click)="saveAsDraft()">Save</button>&nbsp;
+              <button class="btn btn-sm btn-primary" (click)="createClient()">Submit</button>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+  <!--/.row-->
+</div>

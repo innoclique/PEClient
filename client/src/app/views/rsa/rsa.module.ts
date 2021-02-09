@@ -34,6 +34,7 @@ import { PaymentComponent } from '../common/payment/payment.component';
 import { AdhocPaymentComponent } from '../common/adhoc-payment/adhoc-payment.component';
 import { PaymentGatewayComponent } from '../common/payment-gateway/payment-gateway.component';
 import { PaymentHistoryComponent } from "../common/payment-history/payment-history.component";
+import { ProfileComponent } from './profile/profile.component';
 
 export const rsaRoutes: Routes = [
 
@@ -111,6 +112,11 @@ export const rsaRoutes: Routes = [
         component: PaymentGatewayComponent,
         data: { title: 'Payment Gateway' }
       },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        data: { title: 'Profile' }
+      }
 
     ]
   },
@@ -121,7 +127,7 @@ export const rsaRoutes: Routes = [
   declarations: [
     DashboardRSAComponent, SetupclientComponent, AppsettingsComponent, 
     EvaluationsettingsComponent, ReportsComponent, SetupModelComponent, 
-    ClientPurchaseHistory, ClientListComponent,],
+    ClientPurchaseHistory, ClientListComponent, ProfileComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(rsaRoutes),

@@ -47,8 +47,17 @@ public oneAtATime: boolean = true;
     this.router.navigate(['login'])
   }
   public gotoProfile() {
-    const _role = this.authService.getCurrentUser().Role || ""
-    this.router.navigate([_role.toLowerCase() + '/profile'])
+    //const _role = this.authService.getCurrentUser().Role || ""
+    //this.router.navigate([_role.toLowerCase() + '/profile'])
+    this.router.navigate(['ea/profile'])
+  }
+
+  gotoOrgProfile() {
+    if (this.user.Role === 'RSA') {
+      this.router.navigate(['rsa/profile']);
+    }else {
+      this.router.navigate(['csa/profile']);
+    }
   }
 
   gotoMessages(){
@@ -646,6 +655,7 @@ public oneAtATime: boolean = true;
     }
   }
 
+  
 
   ngOnDestroy() {
     if (this.Intervel) {
