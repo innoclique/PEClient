@@ -15,6 +15,7 @@ import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { AlertComponent } from '../../shared/alert/alert.component';
+import ReportTemplates from '../../views/psa/reports/data/reports-templates';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -455,6 +456,8 @@ export class CurrentEvaluationComponent implements OnInit {
         EmployeeId: this.loginUser._id,
         YearEndComments: this.FinalRatingForm.value.EmployeeComments,
         IsManagerSubmited: this.FinalRatingForm.value.IsManagerSubmited,
+        IsSigned:this.isSigned,
+       EvaluationPeriodText:ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth),
         RevComments: this.FinalRatingForm.value.EmployeeRevComments,
         OverallRating: this.FinalRatingForm.value.EmployeeOverallRating,
         IsDraft: isDraft,

@@ -601,14 +601,15 @@ goto(selTab){
     if(this.PeerScoreCard){
       const peers=this.PeerScoreCard.Employees.Peers;
       if(peers.length>0 && ( peers[0].CompetencySubmitted==false || peers[1].CompetencySubmitted==false ) ){
-      this.snack.error("Peer competency not submitted");
+      this.snack.error("Final rating can be submitted only after all the ratings are available for the employee (from manager, peer and direct reports). Currently one or more rating is pending.");
       return;
       }
     }
     if(this.DirectReporteeScoreCard){
       const direReportee=this.DirectReporteeScoreCard.Employees.DirectReportees;
       if(direReportee.length>0 && ( direReportee[0].CompetencySubmitted==false || direReportee[1].CompetencySubmitted==false  ) ){
-      this.snack.error("Direct Reportee competency not submitted");
+      // this.snack.error("Direct Reportee competency not submitted");
+      this.snack.error("Final rating can be submitted only after all the ratings are available for the employee (from manager, peer and direct reports). Currently one or more rating is pending.");
       return;
       }
     }
@@ -641,6 +642,7 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
         OverallRating: this.FinalRatingForm.value.ManagerOverallRating,
 
         RevComments: this.FinalRatingForm.value.ManagerRevComments,
+        IsReqRevision: this.FinalRatingForm.value.FRReqRevision,
         //  ReqRevision: this.FinalRatingForm.value.ManagerReqRevision,
 
         IsDraft: isDraft,
@@ -678,7 +680,8 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
 
         this.perfApp.CallAPI().subscribe(x => {
           console.log(x)
-          const snref = this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
+          // const snref = this.snack.success(`Successfully ${reqRev ? 'Request Revision' : 'Submitted'} Final Rating`);
+          const snref = this.snack.success(`Evaluation has been successfully submitted.`);
           snref.afterDismissed().subscribe(() => {
             window.location.reload();
           });

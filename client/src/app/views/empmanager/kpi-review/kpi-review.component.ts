@@ -726,7 +726,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
             this.showKpiForm  =false;
             return
           }
-          this.empKPIData = c.filter(e=> e.IsActive==true && e.ManagerSignOff && e.ManagerSignOff.submited ==true );
+          this.empKPIData = c.filter(e=> e.IsActive==true && e.ManagerSignOff && e.ManagerSignOff.submited ==true  && ( e.SignOff && e.SignOff.submited)  );
         }
         
 
@@ -924,6 +924,40 @@ this.msSelText="";
   }
 
 
+  
+  confirmActiveDeActiveKPI(isActive){
+
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = isActive? "Are you sure you want to activate the performance goal?"
+    :"Are you sure you want to deactivate the performance goal?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.activeDeActiveKPI(isActive);
+     } else {
+       
+     }
+    })
+
+
+  }
 
   activeDeActiveKPI(isActive) {
     this.perfApp.route = "app";
