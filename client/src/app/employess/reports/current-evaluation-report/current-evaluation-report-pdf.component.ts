@@ -30,6 +30,7 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
   finalRating: any = {};
   evaluationForm: any = {};
   employeeCompetencyList: any;
+  RatingList: any;
   public PeerScoreCard: any;
   DirectReporteeScoreCard: any;
   public performanceGoalsRowData: any[];
@@ -217,6 +218,7 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
         this.evaluationForm = res1;
         if (res1.Competencies) {
           this.employeeCompetencyList = res1.Competencies.Employee.Manager.Competencies // Gets Manager ratings instead of emloyee
+          this.RatingList = res1.Competencies.Employee.Competencies[0].Questions[0].Rating; // Gets Manager ratings instead of emloyee
           this.prepareCompetencyQuestions();
           console.log('the evauation form', this.evaluationForm)
         }
@@ -300,6 +302,14 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
       console.log(this.competencyQuestionsList);
     });
 
+  }
+
+
+  getRatingText(value){
+    debugger
+    if(this.RatingList.length>0)
+    return " -" +this.RatingList.find(e=> e.value== value).Text;
+    else return "";
   }
 
   getCompetencyOverallRating(competencyId) {

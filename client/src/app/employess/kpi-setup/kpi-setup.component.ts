@@ -213,7 +213,7 @@ export class KpiSetupComponent implements OnInit {
         this.snack.success(this.translate.instant(`The performance goals have been submitted successfully and your sign-off registered.`));
       }
       if(this.unSubmitedCount!=0){
-        this.submitAllKPIs()
+        this.submitAllKPIs(false)
       }
     });
   }
@@ -535,7 +535,7 @@ export class KpiSetupComponent implements OnInit {
     dialogRef.afterClosed().subscribe(resp => {
      if (resp=='yes') {
       this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
-      this.submitAllKPIs();
+      this.submitAllKPIs(true);
      } else {
        
      }
@@ -543,7 +543,7 @@ export class KpiSetupComponent implements OnInit {
   }
 
 
-submitAllKPIs() {
+submitAllKPIs(showMsg) {
 
   this.perfApp.route = "app";
   this.perfApp.method = "SubmitKpisForEvaluation",
@@ -551,7 +551,8 @@ submitAllKPIs() {
   this.perfApp.CallAPI().subscribe(c => {
 
    if (c) {
-    this.snack.success("Your performance goals have been submitted.");
+    if(showMsg)
+    this.snack.success("The performance goals have been submitted successfully");
     this.getAllKpis();
    } else {
      

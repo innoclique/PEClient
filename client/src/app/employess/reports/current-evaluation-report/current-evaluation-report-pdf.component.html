@@ -96,7 +96,7 @@
                         {{performanceGoal.yearEndManagerComments}}
                     </td>
                     <td>
-                        {{performanceGoal.score}}
+                        {{performanceGoal.score}} {{ performanceGoal.score ? getRatingText(performanceGoal.score) :'' }} 
                     </td>
                 </tr>
             </table>
@@ -129,7 +129,7 @@
                                         {{question.label}}
                                     </td>
                                     <td>
-                                      {{finalRating.Manager.IsSubmitted ? question.value : ''}}
+                                      {{finalRating.Manager.IsSubmitted ? question.value : ''}} {{ finalRating.Manager.IsSubmitted ? getRatingText(question.value) :'' }} 
                                     </td>
                                     <td *ngIf="i==0" [attr.rowspan]="i">
                                       {{finalRating.Manager.IsSubmitted ? c.comments : ''}}
@@ -306,7 +306,7 @@
                 <div class="col-lg-12 pull-left"><span>
                         Manager Rating :
                     </span>
-                    <label>{{finalRating.Manager.YearEndRating}}</label>
+                    <label>{{finalRating.Manager.YearEndRating}} {{ finalRating.Manager.YearEndRating ? getRatingText(finalRating.Manager.YearEndRating) :'' }}</label>
                 </div>
 
                 <div class="col-lg-12 pull-left" *ngIf="finalRating.Manager"><span>

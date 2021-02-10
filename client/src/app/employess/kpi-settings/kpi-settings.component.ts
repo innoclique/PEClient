@@ -42,6 +42,8 @@ export class KpiSettingsComponent implements OnInit {
   @Input()
   currentAction = 'create';
   isAllSelected = false;
+  disabledAddKpiBtn = false;
+  disabledCreateBtn = false;
   addMCSwitch = true;
   scoreUnSubmitedCount=0;
   unSubmitedCount = 0;
@@ -353,6 +355,7 @@ if(this.selectedItems.length==0) {
   }
 
   callKpiApi() {
+    this.disabledCreateBtn=true;
 
     this.perfApp.CallAPI().subscribe(c => {
 
@@ -370,6 +373,8 @@ if(this.selectedItems.length==0) {
         }
       }
 
+      this.disabledCreateBtn=false;
+
     }, error => {
       if (error.error.message === Constants.EvaluationAdminNotFound) {
         //  this.openConfirmSubmitKpisDialog()
@@ -377,7 +382,7 @@ if(this.selectedItems.length==0) {
         this.snack.error(this.translate.instant(error.error.message));
 
       }
-
+      this.disabledCreateBtn=false;
 
     });
 
@@ -386,6 +391,7 @@ if(this.selectedItems.length==0) {
 
 
   addMesurment() {
+    
     debugger
 
 if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
@@ -400,6 +406,8 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
     this.perfApp.requestBody.Name = this.kpiForm.get('MeasurementCriteria').value;
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+
+    this.disabledAddKpiBtn=true;
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c) {
@@ -416,6 +424,8 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
   c.selected=true;
  // }
 this.toggleSelection(c,null);
+
+this.disabledAddKpiBtn=false;
         
       }
     })
