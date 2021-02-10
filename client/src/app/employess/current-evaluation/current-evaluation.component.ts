@@ -483,7 +483,7 @@ export class CurrentEvaluationComponent implements OnInit {
     return
     }
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to submit Performance Goal?";
+    this.alert.Content = "Are you sure you want to submit your evaluation?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";
@@ -511,7 +511,7 @@ export class CurrentEvaluationComponent implements OnInit {
   }
   draftFinalRating() {
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to submit Performance Goal?";
+    this.alert.Content = "Are you sure you want to save your evaluation?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";
