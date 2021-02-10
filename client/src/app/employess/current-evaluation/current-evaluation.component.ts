@@ -362,10 +362,60 @@ export class CurrentEvaluationComponent implements OnInit {
 
   }
   saveSelfCompetencyFormAsDraft() {
-    this.saveSelfCompetencyForm(true)
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit Competency Rating?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.saveSelfCompetencyForm(true)
+     } else {
+       
+     }
+    })
   }
+
   submitSelfCompetencyForm() {
-    this.saveSelfCompetencyForm(false)
+   
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit Competency Rating?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.saveSelfCompetencyForm(false)
+     } else {
+       
+     }
+    })
+    
   }
   saveSelfCompetencyForm(isDraft) {
     //selfCompetencyForm
@@ -432,10 +482,59 @@ export class CurrentEvaluationComponent implements OnInit {
       this.snack.error("Please score performance goals")
     return
     }
-    this.saveFinalRating(false)
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit Performance Goal?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.saveFinalRating(false)
+
+     } else {
+       
+     }
+    })
+    
   }
   draftFinalRating() {
-    this.saveFinalRating(true)
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit Performance Goal?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.saveFinalRating(true)
+
+     } else {
+       
+     }
+    })
   }
   saveFinalRating(isDraft) {
 

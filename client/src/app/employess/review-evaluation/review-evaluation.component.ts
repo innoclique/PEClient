@@ -535,7 +535,32 @@ goto(selTab){
     this.saveManagerCompetencyForm(true)
   }
   submitManagerCompetencyForm() {
-    this.saveManagerCompetencyForm(false)
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit Competency Rating ?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+	
+	  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.saveManagerCompetencyForm(false)
+
+     } else {
+       
+     }
+    })
+    
   }
   saveManagerCompetencyForm(isDraft) {
     //selfCompetencyForm
@@ -624,8 +649,33 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
   this.snack.error('Rating is mandatory')
   return;
 }
+this.alert.Title = "Alert";
+this.alert.Content = "Are you sure you want to submit Final Rating?";
+this.alert.ShowCancelButton = true;
+this.alert.ShowConfirmButton = true;
+this.alert.CancelButtonText = "Cancel";
+this.alert.ConfirmButtonText = "Ok";
 
-    this.saveFinalRating(false)
+
+const dialogConfig = new MatDialogConfig()
+dialogConfig.disableClose = true;
+dialogConfig.autoFocus = true;
+dialogConfig.data = this.alert;
+dialogConfig.height = "300px";
+dialogConfig.maxWidth = '40%';
+dialogConfig.minWidth = '40%';
+
+var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+dialogRef.afterClosed().subscribe(resp => {
+ if (resp=='yes') {
+  this.saveFinalRating(false)
+
+ } else {
+   
+ }
+})
+
+    
   }
   draftFinalRating() {
     this.saveFinalRating(true)
@@ -710,13 +760,33 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
 
   submitTSFinalRating() {
 
-// if (this.FinalRatingForm.value.TSReqRevision &&
-//   this.FinalRatingForm.value.ThirdSignatoryRevComments.length==0) {
-//     this.snack.error('Revision Comments is mandatory')
-//     return;
-// }
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit Final Rating?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+	
+	  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.saveTSFinalRating(false)
 
-    this.saveTSFinalRating(false)
+     } else {
+       
+     }
+    })
+
+    
   }
   draftTSFinalRating() {
     this.saveTSFinalRating(true)

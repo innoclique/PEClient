@@ -230,7 +230,7 @@ accessingFrom:any;
   }
 
   submitKpi() {
-    
+    debugger;
     if (!this.kpiForm.valid) {
       this.kpiForm.markAllAsTouched();
       return;
@@ -253,7 +253,32 @@ accessingFrom:any;
       this.snack.error("Score is mandatory.")
       return;
     }
-    this.saveKpi();
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit the performance goals?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.saveKpi();
+     } else {
+       
+     }
+    })
+    
   }
 
 
