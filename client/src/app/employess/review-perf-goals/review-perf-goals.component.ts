@@ -15,6 +15,9 @@ import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertDialog } from '../../Models/AlertDialog';
+import { AlertComponent } from '../../shared/alert/alert.component';
 
 
 
@@ -24,7 +27,7 @@ import { ThemeService } from '../../services/theme.service';
   styleUrls: ['./review-perf-goals.component.css']
 })
 export class ReviewPerfGoalsComponent implements OnInit {
-
+  public alert= new AlertDialog();
   loginUser: any;
   selectedUser: any;
   seletedTabRole:any;
@@ -55,6 +58,7 @@ export class ReviewPerfGoalsComponent implements OnInit {
   @ViewChild('evTabset') tabset: TabsetComponent;
 
   constructor(private activatedRoute: ActivatedRoute,
+    public dialog: MatDialog,
     private router: Router,
     private authService: AuthService,
     private snack: NotificationService,
@@ -428,7 +432,32 @@ if (this.FinalRatingForm.value.TSReqRevision &&
     this.snack.error('Revision Comments is mandatory')
     return;
 }
-    this.saveFinalRating(false)
+this.alert.Title = "Alert";
+this.alert.Content = "Are you sure you want to submit Final Rating?";
+this.alert.ShowCancelButton = true;
+this.alert.ShowConfirmButton = true;
+this.alert.CancelButtonText = "Cancel";
+this.alert.ConfirmButtonText = "Continue";
+
+
+const dialogConfig = new MatDialogConfig()
+dialogConfig.disableClose = true;
+dialogConfig.autoFocus = true;
+dialogConfig.data = this.alert;
+dialogConfig.height = "300px";
+dialogConfig.maxWidth = '40%';
+dialogConfig.minWidth = '40%';
+
+var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+dialogRef.afterClosed().subscribe(resp => {
+ if (resp=='yes') {
+  this.saveFinalRating(false)
+
+ } else {
+   
+ }
+})
+    
   }
   draftFinalRating() {
     this.saveFinalRating(true)

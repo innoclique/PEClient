@@ -245,7 +245,7 @@ export class SetupclientComponent implements OnInit {
       this.alert.ShowCancelButton = true;
       this.alert.ShowConfirmButton = true;
       this.alert.CancelButtonText = "Cancel";
-      this.alert.ConfirmButtonText = "Ok";
+      this.alert.ConfirmButtonText = "Continue";
 
       const dialogConfig = new MatDialogConfig()
       dialogConfig.disableClose = true;
@@ -271,7 +271,7 @@ export class SetupclientComponent implements OnInit {
       this.alert.ShowCancelButton = true;
       this.alert.ShowConfirmButton = true;
       this.alert.CancelButtonText = "Cancel";
-      this.alert.ConfirmButtonText = "Ok";
+      this.alert.ConfirmButtonText = "Continue";
 
       const dialogConfig = new MatDialogConfig()
       dialogConfig.disableClose = true;

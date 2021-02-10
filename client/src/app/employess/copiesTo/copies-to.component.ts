@@ -60,7 +60,7 @@ export class CopiesToComponent implements OnInit {
   public copiesToColumnDefs = [
     { headerName: 'Employee', field: 'Name', sortable: true, filter: true, },
     {
-      headerName: 'Action', field: '', autoHeight: true, suppressSizeToFit: true,
+      headerName: 'Review/Modify', field: '', autoHeight: true, suppressSizeToFit: true,
       cellRenderer: (data) => {
         var returnString = '';
         returnString += `<i class="cui-map" style="cursor:pointer; padding: 7px 20px 0 0;

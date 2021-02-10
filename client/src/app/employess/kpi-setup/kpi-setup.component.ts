@@ -515,7 +515,7 @@ export class KpiSetupComponent implements OnInit {
    /**To alert user for submit kpis */
    conformSubmitKpis() {
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to submit the performance goals?";
+    this.alert.Content = "Are you sure you want to submit the KPI?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";
