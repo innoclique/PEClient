@@ -423,9 +423,10 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
 // }else if (this.currentAction=='edit') {
   c.selected=true;
  // }
+
+ this.disabledAddKpiBtn=false;
 this.toggleSelection(c,null);
 
-this.disabledAddKpiBtn=false;
         
       }
     })
