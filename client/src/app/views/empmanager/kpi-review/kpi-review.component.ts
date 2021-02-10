@@ -277,7 +277,7 @@ actor:any;
         this.snack.success(this.translate.instant(`The performance goals have been submitted successfully and your sign-off registered.`));
       }
       if(this.unSubmitedCount!=0){
-        this.submitAllKPIs()
+        this.submitAllKPIs(false)
       }
     });
 
@@ -708,7 +708,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
 
 
   
-  submitAllKPIs() {
+  submitAllKPIs(showMsg) {
 
     this.perfApp.route = "app";
     this.perfApp.method = "SubmitAllKpisByManager",
@@ -716,7 +716,8 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
     this.perfApp.CallAPI().subscribe(c => {
 
      if (c) {
-      this.snack.success(c.message);
+       if(showMsg)
+      this.snack.success("The performance goals have been submitted successfully");
       this.onCancle();
 
      } else {
@@ -952,7 +953,7 @@ this.msSelText="";
     dialogRef.afterClosed().subscribe(resp => {
      if (resp=='yes') {
       this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
-      this.submitAllKPIs();
+      this.submitAllKPIs(true);
      } else {
        
      }

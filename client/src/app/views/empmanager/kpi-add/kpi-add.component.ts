@@ -34,6 +34,7 @@ export class KpiAddComponent implements OnInit {
   currentAction = 'create';
   currentKpiId: any;
   isAllSelected = false;
+  disabledAddKpiBtn = false;
   addMCSwitch = true;
 
   filteredOptionsKPI: Observable<any[]>;
@@ -324,6 +325,7 @@ export class KpiAddComponent implements OnInit {
 
   addMesurment() {
 
+
 if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
 
   this.snack.error('KPI is mandatory');
@@ -336,6 +338,7 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
     this.perfApp.requestBody.Name = this.kpiForm.get('MeasurementCriteria').value;
     this.perfApp.requestBody.CreatedBy = this.ownerInfo._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+    this.disabledAddKpiBtn=true;
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c) {
@@ -344,6 +347,8 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
 this.snack.success(this.translate.instant(`KPI added Successfully`));
 c.selected=false;
 this.toggleSelection(c);
+
+this.disabledAddKpiBtn=false;
         
       }
     })

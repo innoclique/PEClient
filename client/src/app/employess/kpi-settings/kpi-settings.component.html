@@ -200,7 +200,7 @@
                             </div> -->
                             <div *ngIf="currentAction != 'view' && accessingFrom!='currEvaluation' " class="col-md-1"  >
                                 <button style="width: 88px !important;padding: 3px 0px;" class="btn btn-block btn-primary pull-left" 
-                                 (click)="addMesurment()"  >+ Add KPI  </button>
+                                 (click)="addMesurment()" [disabled]="disabledAddKpiBtn"  >+ Add KPI  </button>
                                 </div>
 
                         </div>
@@ -396,7 +396,7 @@
                                 <div class="col-md-6">
                                     <strong class="strong-key">Year-end Comments (manager): </strong>
                                 </div>
-                                <div class="col-md-6"><span class="span-value">{{kpiDetails.YECommManager}}</span></div>
+                                <div class="col-md-6"><span class="span-value">{{kpiDetails.YECommManager? kpiDetails.YECommManager :'N/A'}}</span></div>
 
                             </div>
 
@@ -406,7 +406,7 @@
                             <button *ngIf="accessingFrom!='currEvaluation' " class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>&nbsp;
                             <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftKpi()" >Save</button>&nbsp;
                             <button  *ngIf="currentAction == 'edit' && f?.IsDraft?.value=='false' " class="btn btn-sm btn-primary" (click)="submitKpi()" >Update</button>
-                                 <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create'  " class="btn btn-sm btn-primary" (click)="submitKpi()" >Create</button>
+                                 <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create'  " class="btn btn-sm btn-primary" [disabled]="disabledCreateBtn" (click)="submitKpi()" >Create</button>
                             <!-- [disabled]="!kpiForm.valid" <button *ngIf="!kpiDetails?.IsSubmitedKPIs" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
                           </div>
             
