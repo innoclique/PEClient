@@ -346,9 +346,10 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
         this.getMeasurementCriterias();
 this.snack.success(this.translate.instant(`KPI added Successfully`));
 c.selected=false;
+this.disabledAddKpiBtn=false;
 this.toggleSelection(c);
 
-this.disabledAddKpiBtn=false;
+
         
       }
     })
