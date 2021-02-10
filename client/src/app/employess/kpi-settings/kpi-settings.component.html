@@ -405,8 +405,8 @@
                         <div *ngIf="!showAllowSignoff && currentAction != 'view' && !isEmpFRSignOff" class="form-group form-actions pull-right">
                             <button *ngIf="accessingFrom!='currEvaluation' " class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>&nbsp;
                             <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftKpi()" >Save</button>&nbsp;
-                            <button  *ngIf="currentAction == 'edit' && f?.IsDraft?.value=='false' " class="btn btn-sm btn-primary" (click)="submitKpi()" >Update</button>
-                                 <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create'  " class="btn btn-sm btn-primary" [disabled]="disabledCreateBtn" (click)="submitKpi()" >Create</button>
+                            <button  *ngIf="currentAction == 'edit' && f?.IsDraft?.value=='false' " class="btn btn-sm btn-primary" (click)="submitKpi('u')" >Update</button>
+                                 <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create'  " class="btn btn-sm btn-primary" [disabled]="disabledCreateBtn" (click)="submitKpi('c')" >Create</button>
                             <!-- [disabled]="!kpiForm.valid" <button *ngIf="!kpiDetails?.IsSubmitedKPIs" class="btn btn-sm btn-primary"  (click)="conformSubmitKpis()" >Submit Performance Goals</button> -->
                           </div>
             

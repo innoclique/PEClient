@@ -231,7 +231,7 @@ accessingFrom:any;
     this.router.navigate(['employee/kpi-setup']);
   }
 
-  submitKpi() {
+  submitKpi(action) {
     debugger;
     if (!this.kpiForm.valid) {
       this.kpiForm.markAllAsTouched();
@@ -256,7 +256,7 @@ accessingFrom:any;
       return;
     }
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to submit the performance goals?";
+    this.alert.Content = action=="c"?"Are you sure you want to create the performance goal?":"Are you sure you want to update the performance goal?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";

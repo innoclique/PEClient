@@ -10,12 +10,17 @@ import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertDialog } from '../../Models/AlertDialog';
+import { AlertComponent } from '../../shared/alert/alert.component';
+
 @Component({
   selector: 'app-do-peer-review',
   templateUrl: './do-peer-review.component.html',
   styleUrls: ['./do-peer-review.component.css']
 })
 export class DoPeerReviewComponent implements OnInit {
+  public alert: AlertDialog;
   currentReview: any = {};
   loginUser: any;
   competencyList: any
@@ -27,6 +32,7 @@ export class DoPeerReviewComponent implements OnInit {
   isContentOpen:Boolean=false;
   public forEmployee:any;
   constructor(private authService: AuthService,
+    public dialog: MatDialog,
     private router: Router,
     private snack: NotificationService,
     private perfApp: PerfAppService,
@@ -45,6 +51,7 @@ export class DoPeerReviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.initCompetencyForm()
+    this.alert = new AlertDialog();
   }
   initCompetencyForm() {
     this.peerCompetencyForm = this.fb.group({
@@ -129,7 +136,32 @@ export class DoPeerReviewComponent implements OnInit {
     this.savePeerCompetencyForm(true)
   }
   submitPeerCompetencyForm() {
-    this.savePeerCompetencyForm(false)
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit peer rating?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+	
+	  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.savePeerCompetencyForm(false)
+
+     } else {
+       
+     }
+    })
+    
   }
   savePeerCompetencyForm(isDraft) {
     //selfCompetencyForm
