@@ -72,6 +72,7 @@ actor:any;
   scoreUnSubmitedCount:any;
   isEmployeePgSignoff:boolean = false;
   isSignOffDisabled=false;
+  isFinalSignoffDone=false;
 
   
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
@@ -142,6 +143,7 @@ actor:any;
         this.getClientConfiguation();
       }else{
         let {FinalSignoff, SignOff, ManagerSignOff}  = result;
+        this.isFinalSignoffDone=FinalSignoff;
         if(ManagerSignOff.submited){
           this.isSignOffDisabled=true;
         }else{
@@ -214,9 +216,40 @@ actor:any;
     });
   }
 
+  
+  openConfirmSignoffKpisDialog() {
+    this.alert.Title = "Alert";
+    this.alert.Content = "This will confirm your sign-off. Are you sure you want to continue?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      
+      this.managerSignoff();
+     } else {
+       
+     }
+    })
+  }
+
   singoffPG(){
     if(this.unSubmitedCount>0 || this.submitedCount>0){
-      this.managerSignoff();
+      this.openConfirmSignoffKpisDialog();
+      
     }else{
       this.snack.error("Please add and submit performance Goals before sign-off.");
     }
@@ -240,8 +273,11 @@ actor:any;
     this.perfApp.requestBody = options;
     this.perfApp.CallAPI().subscribe(result => {
       console.log(result);
+      if (result) {
+        this.snack.success(this.translate.instant(`The performance goals have been submitted successfully and your sign-off registered.`));
+      }
       if(this.unSubmitedCount!=0){
-        this.submitAllKPIs()
+        this.submitAllKPIs(false)
       }
     });
 
@@ -346,7 +382,32 @@ actor:any;
 
     this.kpiForm.patchValue({ IsSubmit: 'true' });
     this.kpiForm.patchValue({ IsDraft: 'false' });
-    this.submitReview();
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to update performance goal?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+	
+	  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.submitReview();
+
+     } else {
+       
+     }
+    })
+    
   }
 
   submitSignoffAllKpiById() {
@@ -672,7 +733,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
 
 
   
-  submitAllKPIs() {
+  submitAllKPIs(showMsg) {
 
     this.perfApp.route = "app";
     this.perfApp.method = "SubmitAllKpisByManager",
@@ -680,7 +741,8 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
     this.perfApp.CallAPI().subscribe(c => {
 
      if (c) {
-      this.snack.success(c.message);
+       if(showMsg)
+      this.snack.success("The performance goals have been submitted successfully");
       this.onCancle();
 
      } else {
@@ -726,7 +788,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
             this.showKpiForm  =false;
             return
           }
-          this.empKPIData = c.filter(e=> e.IsActive==true && e.ManagerSignOff && e.ManagerSignOff.submited ==true );
+          this.empKPIData = c.filter(e=> this.isFinalSignoffDone && e.IsActive==true && e.ManagerSignOff && e.ManagerSignOff.submited ==true   );
         }
         
 
@@ -916,7 +978,7 @@ this.msSelText="";
     dialogRef.afterClosed().subscribe(resp => {
      if (resp=='yes') {
       this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
-      this.submitAllKPIs();
+      this.submitAllKPIs(true);
      } else {
        
      }
@@ -924,6 +986,40 @@ this.msSelText="";
   }
 
 
+  
+  confirmActiveDeActiveKPI(isActive){
+
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = isActive? "Are you sure you want to activate the performance goal?"
+    :"Are you sure you want to deactivate the performance goal?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.activeDeActiveKPI(isActive);
+     } else {
+       
+     }
+    })
+
+
+  }
 
   activeDeActiveKPI(isActive) {
     this.perfApp.route = "app";

@@ -47,6 +47,7 @@ export class ActionPlanComponent implements OnInit {
   evaluationEndMonth;
   employeeEvaluationYear:any="";
   currentEvaluationYear:any="";
+  allowActionPlan:any=false;
   
 
 
@@ -59,6 +60,7 @@ export class ActionPlanComponent implements OnInit {
     private snack: NotificationService,
     private perfApp: PerfAppService,
     public translate: TranslateService) {
+      
       this.activatedRoute.params.subscribe(params => {
         if (params['activeTab']) {
          this.activeTabIndex = params['activeTab'];
@@ -70,6 +72,7 @@ export class ActionPlanComponent implements OnInit {
     this.evaluationStartMonth = evaluationStartEndMoment.start.format("MMM");
     this.evaluationEndMonth = evaluationStartEndMoment.end.format("MM DD,YYYY");
     this.getEmployeeEvaluationYears();
+    
     
      
     }
@@ -94,12 +97,14 @@ export class ActionPlanComponent implements OnInit {
       this.currentEvaluationYear = evaluationYear;
       this.getAllDevGoalsDetails();
       this.getAllStrengthDetails();
+      this.findEvaluationPgRollout();
     })
   }
 
   loadKpisByYear(evaluationYear){
     this.getAllDevGoalsDetails();
     this.getAllStrengthDetails();
+    this.findEvaluationPgRollout();
   }
 
   getOrganizationStartAndEndDates(){
@@ -134,7 +139,7 @@ export class ActionPlanComponent implements OnInit {
   getEmployeeEvaluationYears() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetEmployeeEvaluationYears",
-      this.perfApp.requestBody = { 'empId': this.loginUser._id}
+    this.perfApp.requestBody = { 'empId': this.loginUser._id}
     this.perfApp.CallAPI().subscribe(evaluationYears => {
       this.empEvaluationsYears = evaluationYears;
     }, error => {
@@ -356,28 +361,19 @@ trackKpi() {
 
 
 editKpiForm(currentRowItem: any) {
-   
-
   this.router.navigate(['employee/dev-goal',{action:'edit',id:this.currentRowItem._id}],{ skipLocationChange: true });
-  
-}
+ }
 
 
 
 viewKpiForm(currentRowItem: any) {
-
-
-this.router.navigate(['employee/dev-goal',{action:'view',id:this.currentRowItem._id}],{ skipLocationChange: true });
-
+  this.router.navigate(['employee/dev-goal',{action:'view',id:this.currentRowItem._id}],{ skipLocationChange: true });
 }
 
 
 viewStrengthForm(currentRowItem: any) {
-
-
   this.router.navigate(['employee/strengths',{action:'view',id:this.currentRowItem._id}],{ skipLocationChange: true });
-  
-  }
+}
 
 public onStrengthGridRowClick(e) {
   if (e.event.target !== undefined) {
@@ -475,10 +471,22 @@ submitActionPlan() {
 }
 
 editStrengthForm(currentRowItem: any) {
-   
-
   this.router.navigate(['employee/strengths',{action:'edit',id:this.currentRowItem._id}],{ skipLocationChange: true });
-  
+}
+
+findEvaluationPgRollout() {
+  this.perfApp.route = "app";
+  this.perfApp.method = "FindEvaluationPgRollout",
+  this.perfApp.requestBody = { 'empId': this.loginUser._id,'orgId':this.authService.getOrganization()._id,evaluationYear:this.employeeEvaluationYear}
+  this.perfApp.CallAPI().subscribe(c => {
+    if(c){
+      this.allowActionPlan = true;
+    }
+  },error => {
+    this.allowActionPlan = false;
+    this.snack.error(error.error.message);
+  });
+
 }
 
 }

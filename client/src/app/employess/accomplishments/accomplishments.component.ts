@@ -64,6 +64,7 @@ accessingFrom:any;
   currEvaluation: any;
   showKpiForm=true;
   isEmpFRSignOff=false;
+  isSaveClicked=false;
   isFirstTimeCreateing=false;
 
   @ViewChild('sgsgggjsr', {static: false}) content: ElementRef;
@@ -176,6 +177,7 @@ accessingFrom:any;
 
 
   draftKpi(){
+    this.isSaveClicked=true;
     this.kpiForm.patchValue({ IsDraft: 'true' });
     this.saveKpi();
   }
@@ -221,8 +223,13 @@ if (!this.kpiForm.get('Accomplishment').value) {
       this.perfApp.requestBody.Action = 'Draft';
     }
 
+    debugger
     if (this.currentAction=='create' && this.kpiForm.get('IsDraft').value=='false') {
       this.openConfirmSubmitKpisDialog();
+    }else if (this.currentAction=='edit' && this.isFirstTimeCreateing) {
+      this.openConfirmSubmitKpisDialog();
+    }else if (this.currentAction=='edit' && this.kpiForm.get('IsDraft').value=='false' && !this.isFirstTimeCreateing) {
+      this.openConfirmUpdateKpisDialog();
     }else{
     this.callKpiApi();
     }
@@ -234,7 +241,7 @@ if (!this.kpiForm.get('Accomplishment').value) {
 
       if (c.message == Constants.SuccessText) {
 
-        this.snack.success(this.translate.instant(` The accomplishment has been  ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)}  successfully.`));
+        this.snack.success(this.translate.instant(` The accomplishment has been  ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action,this.isFirstTimeCreateing)}  successfully.`));
        this.selectedItems=[];
        // this.GetAllAccomplishmentsDetails();
         if (this.accessingFrom=='currEvaluation') {
@@ -246,7 +253,7 @@ if (!this.kpiForm.get('Accomplishment').value) {
       }
 
     }, error => {
-      this.snack.error(this.translate.instant(`Accomplishment not  ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action)}, please try again.`));
+      this.snack.error(this.translate.instant(`Accomplishment not  ${ this.getActionString(this.currentAction,this.perfApp.requestBody.Action,this.isFirstTimeCreateing)}, please try again.`));
 
 
     });
@@ -256,12 +263,31 @@ if (!this.kpiForm.get('Accomplishment').value) {
 
 
 
-  getActionString(currentAction,subAction) {
+  // getActionString(currentAction,subAction,isfirst) {
+  //   if (currentAction=='create' && subAction=='Draft') {
+  //     return 'saved'
+  //   } else  if (currentAction=='create') {
+  //     return 'added '
+  //   }else  if (currentAction=='edit') { //to do eding draft
+  //     return 'updated'
+  //   }
+    
+   
+  // }
+
+
+  
+  getActionString(currentAction,subAction,isfirst) {
+    debugger
     if (currentAction=='create' && subAction=='Draft') {
       return 'saved'
     } else  if (currentAction=='create') {
       return 'added '
-    }else  if (currentAction=='edit') { //to do eding draft
+    }else  if (currentAction=='edit' && isfirst==false && this.isSaveClicked)  {
+      return 'saved'
+    }else  if (currentAction=='edit' && isfirst==true && !this.isSaveClicked)  {
+      return 'created'
+    }else  if (currentAction=='edit') {
       return 'updated'
     }
     
@@ -398,6 +424,38 @@ if (!this.kpiForm.get('Accomplishment').value) {
    openConfirmSubmitKpisDialog() {
     this.alert.Title = "Alert";
     this.alert.Content = "Are you sure you want to add the accomplishment?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.callKpiApi();
+     } else {
+       
+     }
+    })
+  }
+
+
+
+  
+   /**To alert user for submit kpis */
+   openConfirmUpdateKpisDialog() {
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to update the accomplishment?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";

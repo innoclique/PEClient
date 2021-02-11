@@ -209,15 +209,51 @@ export class KpiSetupComponent implements OnInit {
     this.perfApp.requestBody = options;
     this.perfApp.CallAPI().subscribe(result => {
       console.log(result);
+      if (result) {
+        this.snack.success(this.translate.instant(`The performance goals have been submitted successfully and your sign-off registered.`));
+      }
       if(this.unSubmitedCount!=0){
-        this.submitAllKPIs()
+        this.submitAllKPIs(false)
       }
     });
   }
 
+
+   
+   openConfirmSignoffKpisDialog() {
+    this.alert.Title = "Alert";
+    this.alert.Content = "This will confirm your sign-off. Are you sure you want to continue?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      
+      this.employeeSignoff();
+     } else {
+       
+     }
+    })
+  }
+
+
   singoffPG(){
     if(this.unSubmitedCount>0 || this.submitedCount>0){
-      this.employeeSignoff();
+      this.openConfirmSignoffKpisDialog()
+      // this.employeeSignoff();
     }else{
       this.snack.error("Please add and submit performance Goals before sign-off.");
     }
@@ -328,10 +364,10 @@ export class KpiSetupComponent implements OnInit {
           this.editSignOffKpiForm(this.currentRowItem);
           break;
         case "deActiveKPI":
-          this.activedeActiveKPI(false);
+          this.confirmActiveDeActiveKPI(false);
           break;
         case "activeKPI":
-          this.activedeActiveKPI(true);
+          this.confirmActiveDeActiveKPI(true);
           break;
         case "Track":
           this.trackKpi();
@@ -388,6 +424,42 @@ export class KpiSetupComponent implements OnInit {
       this.trackViewRef = this.modalService.show(this.kpiTrackView, this.config);
   }
 
+
+
+  
+  confirmActiveDeActiveKPI(isActive){
+
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = isActive? "Are you sure you want to activate the performance goal?"
+    :"Are you sure you want to deactivate the performance goal?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.activedeActiveKPI(isActive);
+     } else {
+       
+     }
+    })
+
+
+  }
 
   activedeActiveKPI(isActive) {
     this.perfApp.route = "app";
@@ -463,7 +535,7 @@ export class KpiSetupComponent implements OnInit {
     dialogRef.afterClosed().subscribe(resp => {
      if (resp=='yes') {
       this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
-      this.submitAllKPIs();
+      this.submitAllKPIs(true);
      } else {
        
      }
@@ -471,7 +543,7 @@ export class KpiSetupComponent implements OnInit {
   }
 
 
-submitAllKPIs() {
+submitAllKPIs(showMsg) {
 
   this.perfApp.route = "app";
   this.perfApp.method = "SubmitKpisForEvaluation",
@@ -479,7 +551,8 @@ submitAllKPIs() {
   this.perfApp.CallAPI().subscribe(c => {
 
    if (c) {
-    this.snack.success("Your performance goals have been submitted.");
+    if(showMsg)
+    this.snack.success("The performance goals have been submitted successfully");
     this.getAllKpis();
    } else {
      

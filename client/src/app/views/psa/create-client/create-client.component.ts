@@ -291,7 +291,34 @@ export class CreateClientComponent implements OnInit {
     }
     
     if(this.currentRecord && this.currentRecord._id){
-      this.updateClient();
+
+
+      this.alert.Title = "Alert";
+      this.alert.Content = "Are you sure you want to update this client?";
+      this.alert.ShowCancelButton = true;
+      this.alert.ShowConfirmButton = true;
+      this.alert.CancelButtonText = "Cancel";
+      this.alert.ConfirmButtonText = "Continue";
+
+      const dialogConfig = new MatDialogConfig()
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = this.alert;
+      dialogConfig.height = "300px";
+      dialogConfig.maxWidth = '100%';
+      dialogConfig.minWidth = '40%';
+
+      
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp=='yes') {
+        this.updateClient();
+      }
+      else{
+
+      }
+    })
+      
     }else{
 
       this.alert.Title = "Alert";
@@ -299,7 +326,7 @@ export class CreateClientComponent implements OnInit {
       this.alert.ShowCancelButton = true;
       this.alert.ShowConfirmButton = true;
       this.alert.CancelButtonText = "Cancel";
-      this.alert.ConfirmButtonText = "Ok";
+      this.alert.ConfirmButtonText = "Continue";
 
       const dialogConfig = new MatDialogConfig()
       dialogConfig.disableClose = true;
@@ -616,7 +643,8 @@ export class CreateClientComponent implements OnInit {
       this.perfApp.requestBody = organization; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {      
       console.log('updated', c)
-      if (!this.clientFormData.IsDraft) {
+      debugger
+      if (this.currentRecord.IsDraft &&!this.clientFormData.IsDraft) {
         this.notification.success('The client has been successfully added.')
       } else {
         this.notification.success('The client has been successfully updated.')

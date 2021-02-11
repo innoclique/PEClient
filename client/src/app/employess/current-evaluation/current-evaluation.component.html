@@ -9,9 +9,40 @@
                     <div *ngIf="!evaluationForm && !isPdfView">
                         <h5>No Active Evaluation</h5>
                     </div>
+                    <div class="container-fluid">
+                        
+                      <div class="row">
+                          <div class="col-md-7"></div>
+                          <div class="input-group-prepend col-md-4" style="margin-left:1px;margin-bottom: 10px;">
+                              <span class="input-group-text" style="border-right:none;border-radius: 0px;width:auto">Select Evaluation Year</span>
+                              <select  class="form-control" style="border-radius: 0px; width:auto" [(ngModel)]="yearSelected" name="Year" required (ngModelChange)="getTabsData($event)" >
+                                <option value="" disabled >Please select</option>
+                                <option *ngFor="let x of years" [value]="x.id" >{{x.name}}</option>
+                              </select>
+                      
+                          </div>
+                          <div class="col-md-1">
+                              <div _ngcontent-fha-c25="" class="reports-buttons pull-right">
+                                <div  style="margin-right:10px;display:inline-flex">
+                                  <button *ngIf="showManagerRating && isCompetencyTabActive" title="view Rating Report" (click)="openCompetencyReport()" ngcontent-fha-c25=""
+                                          class="btn btn-primary mr-1 pull-right" type="button">
+                                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                  </button>
+                                </div>
+                                  <button *ngIf="isPdfView" (click)="exitReportView()" ngcontent-fha-c25="" class="btn btn-primary mr-1 pull-right"
+                                      data-toggle="modal" type="button">
+                                      <i class="fa fa-arrow-left"></i>
+                                  </button>
+                                  <button *ngIf="!isPdfView && evaluationForm" title="view Report" (click)="viewReport()" ngcontent-fha-c25=""
+                                      class="btn btn-primary mr-1 pull-right" type="button">
+                                      <i class="fa fa-file-pdf-o hide-print" aria-hidden="true"></i></button>
+                              </div>
+                          </div>
+                      </div>
+                
+                  </div>
                     
-                    
-                    <div _ngcontent-fha-c25="" class="reports-buttons pull-right">
+                    <!-- <div _ngcontent-fha-c25="" class="reports-buttons pull-right">
                       <div  style="margin-right:10px;display:inline-flex">
                         <button *ngIf="showManagerRating && isCompetencyTabActive" title="view Rating Report" (click)="openCompetencyReport()" ngcontent-fha-c25=""
                                 class="btn btn-primary mr-1 pull-right" type="button">
@@ -27,7 +58,7 @@
                               class="btn btn-primary mr-1 pull-right" type="button">
                         <i class="fa fa-file-pdf-o hide-print" aria-hidden="true"></i>
                       </button>
-                    </div>
+                    </div> -->
                     <div class="clearfix"></div>
                     <div *ngIf="isPdfView">
                         <app-current-evaluation-report-pdf [loginUser]="loginUser" [currentOrganization]="currentOrganization">

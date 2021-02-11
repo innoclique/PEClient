@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { EmployessModule } from '../../employess/employess.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomMaterialModule } from '../../custom-material/custom-material.module';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { EadashboardComponent } from './eadashboard/eadashboard.component';
 import { EvalCommonModule } from '../common/common.module';
@@ -129,7 +130,8 @@ const routes: Routes = [
     ChartsModule,
     MatGridListModule,
     MatDividerModule,
-    TabsModule
+    TabsModule,
+    TooltipModule
   ],
   exports:[EadashboardComponent]
 })

@@ -10,6 +10,9 @@ import * as moment from 'moment';
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
+import { AlertComponent } from '../../../shared/alert/alert.component';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertDialog } from '../../../Models/AlertDialog';
 
 
 @Component({
@@ -22,6 +25,7 @@ export class RollevaluationComponent implements OnInit {
   public evaluationForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
+  public alert: AlertDialog;
   isPeerCompetencyMappingEdit: boolean = false;
   errorOnSave = false;
   errorMessage: string = "";
@@ -544,6 +548,7 @@ export class RollevaluationComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
     private notification: NotificationService,
+    public dialog: MatDialog,
     private modalService: BsModalService,
     public authService: AuthService,
     public router: Router,
@@ -559,6 +564,7 @@ export class RollevaluationComponent implements OnInit {
   directReporteeDropdownSettings: any = {}
   public peerDropdownSettings: any = {};
   ngOnInit(): void {
+    this.alert=new AlertDialog()
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     this.GetAvailableOrgEvaluations();
@@ -740,9 +746,7 @@ export class RollevaluationComponent implements OnInit {
       this.evaluationForm.value.EvaluationType = this.evaluationType;
       let formdata = this.evaluationForm.value;
       formdata.EvaluationId = this.readonlyEmployee.evaluationId;
-      let isConform = window.confirm("Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
-      if (isConform)
-        this.submitValidEvaluation();
+      this.openConfirmSubmitEVDialog()
     } else {
       this.isFormSubmitted = true;
       console.log('inside submit:::', this.selectedEmployee, this.selectedEmployeeList);
@@ -778,13 +782,52 @@ export class RollevaluationComponent implements OnInit {
       if (this.evaluationForm.invalid)
         return;
       const _evform = this.evaluationForm.value;
-      let isConform = window.confirm("Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?")
-      if (isConform)
-        this.submitValidEvaluation();
+      this.openConfirmSubmitEVDialog();
 
     }
 
   }
+
+
+
+  openConfirmSubmitEVDialog() {
+    this.alert.Title = "Alert";
+    this.alert.Content = "Once the evaluation is rolled-out, you will not be able to make changes to the Models until all the evaluations are completed. Are you sure you want to roll-out the evaluations?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.submitValidEvaluation();
+     } else {
+       
+     }
+    })
+  }
+
+
+
+
+
+
+
+
+
+
   submitValidEvaluation() {
     this.evaluationForm.value.CreatedBy = this.currentUser._id;
     this.evaluationForm.value.Company = this.currentOrganization._id;
@@ -797,13 +840,14 @@ export class RollevaluationComponent implements OnInit {
     console.log('evaluation form', this.evaluationForm.value);
     this.perfApp.method = "CreateEvaluation";
     this.perfApp.requestBody = this.evaluationForm.value;
+    this.perfApp.requestBody.EvaluationPeriodText= ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
     this.perfApp.route = "evaluation"
     this.perfApp.CallAPI().subscribe(x => {
       console.log('added evaluation', x);
       if (this.rollEvaluationEdit) {
         this.notification.success('Evaluation Updated Successfully.')
       } else {
-        this.notification.success(`The Evaluations Setting have been
+        this.notification.success(`The Evaluations have been
           successfully setup to be rolled out on ${new DatePipe('en-US').transform(new Date(), 'MM-dd-yyyy, h:mm a')}.`)
       }
 
@@ -1622,6 +1666,41 @@ export class RollevaluationComponent implements OnInit {
     }
   }
 
+
+
+  confirmSaveKpiForm(){
+
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to roll-out the performance goals?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.saveKpiForm();
+     } else {
+       
+     }
+    })
+
+
+  }
+
   saveKpiForm() {
     let orgStartEnd = this.getOrganizationStartAndEndDates();
     let EvaluationYear = orgStartEnd.start.format("YYYY");
@@ -1633,6 +1712,8 @@ export class RollevaluationComponent implements OnInit {
     }
     this.perfApp.method = "ReleaseKpiForm";
     this.perfApp.requestBody = body;
+    this.perfApp.requestBody.CreatedBy=this.currentUser._id;
+    this.perfApp.requestBody.EvaluationPeriodText= ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
     this.perfApp.route = "evaluation"
     this.perfApp.CallAPI().subscribe(x => {
       console.log('added evaluation', x)

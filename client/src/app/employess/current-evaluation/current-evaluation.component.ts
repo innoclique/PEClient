@@ -15,6 +15,7 @@ import { CompetencyFormService } from '../../services/CompetencyFormService';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { AlertComponent } from '../../shared/alert/alert.component';
+import ReportTemplates from '../../views/psa/reports/data/reports-templates';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -23,6 +24,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
   styleUrls: ['./current-evaluation.component.css']
 })
 export class CurrentEvaluationComponent implements OnInit {
+  years: any;
+  yearToPass: any;
+  yearSelected: any;
   loginUser: any;
   selfCompetencyForm: FormGroup;
   competencyList: any = [];
@@ -76,12 +80,12 @@ export class CurrentEvaluationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.yearSelected=(new Date()).getFullYear();
     this.getAllKpiBasicData();
     this.initCompetencyForm();
     this.initFinalRatingForm();
-    this.getTabsData();
-
+    
+    this.getTabsData(this.yearSelected);
     this.authService.getIsPGSubmitStatus().subscribe(status=>this.pgSubmitStatus=status);
 
   }
@@ -117,9 +121,9 @@ export class CurrentEvaluationComponent implements OnInit {
   }
 
   /**To GET ALL  tabs data */
-  getTabsData() {
+  getTabsData(val:any) {
     forkJoin(
-      this.getCurrentEvaluationDetails().pipe(catchError(error => of({ error: error, isError: true })))      
+      this.getCurrentEvaluationDetails(val).pipe(catchError(error => of({ error: error, isError: true })))      
     ).subscribe(([res1]) => {
       if (res1 && !res1.isError) {
         this.evaluationForm = res1;        
@@ -168,16 +172,19 @@ export class CurrentEvaluationComponent implements OnInit {
         if (res1 && Object.keys(res1.DirectReporteeScoreCard).length > 0) {
           this.DirectReporteeScoreCard = res1.DirectReporteeScoreCard;
         }
+        this.years=res1.PreviousEvaluationYear
+        console.log("yrs",this.years)
       } else {
         this.evaluationForm = null;
       }
     });
 
   }
-  getCurrentEvaluationDetails() {
+  getCurrentEvaluationDetails(val:any) {
+    this.yearToPass=val;
     this.perfApp.route = "evaluation";
     this.perfApp.method = "GetEmpCurrentEvaluation",
-      this.perfApp.requestBody = { EmployeeId: this.loginUser._id }
+      this.perfApp.requestBody = { EmployeeId: this.loginUser._id ,EvaluationYear: this.yearToPass}
     return this.perfApp.CallAPI()
   }
 
@@ -355,10 +362,60 @@ export class CurrentEvaluationComponent implements OnInit {
 
   }
   saveSelfCompetencyFormAsDraft() {
-    this.saveSelfCompetencyForm(true)
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit Competency Rating?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.saveSelfCompetencyForm(true)
+     } else {
+       
+     }
+    })
   }
+
   submitSelfCompetencyForm() {
-    this.saveSelfCompetencyForm(false)
+   
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit Competency Rating?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.saveSelfCompetencyForm(false)
+     } else {
+       
+     }
+    })
+    
   }
   saveSelfCompetencyForm(isDraft) {
     //selfCompetencyForm
@@ -425,10 +482,60 @@ export class CurrentEvaluationComponent implements OnInit {
       this.snack.error("Please score performance goals")
     return
     }
+   /*  this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to submit your evaluation?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      
+
+     } else {
+       
+     }
+    }) */
+    
     this.saveFinalRating(false)
   }
   draftFinalRating() {
-    this.saveFinalRating(true)
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to save your evaluation?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.saveFinalRating(true)
+
+     } else {
+       
+     }
+    })
   }
   saveFinalRating(isDraft) {
 
@@ -449,6 +556,8 @@ export class CurrentEvaluationComponent implements OnInit {
         EmployeeId: this.loginUser._id,
         YearEndComments: this.FinalRatingForm.value.EmployeeComments,
         IsManagerSubmited: this.FinalRatingForm.value.IsManagerSubmited,
+        IsSigned:this.isSigned,
+       EvaluationPeriodText:ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth),
         RevComments: this.FinalRatingForm.value.EmployeeRevComments,
         OverallRating: this.FinalRatingForm.value.EmployeeOverallRating,
         IsDraft: isDraft,
@@ -474,7 +583,7 @@ export class CurrentEvaluationComponent implements OnInit {
       
    /**To alert user for submit Final Rating */
     this.alert.Title = "Alert";
-    this.alert.Content =  this.isSigned?"This will register your sign-off for the final ratings provided by your manager. Are you sure you want to sign-off?":"Are you sure you want to submit your evaluation?";
+    this.alert.Content = this.isSigned? "This will register your sign-off for the final ratings provided by your manager. Are you sure you want to sign-off?":"Are you sure you want to submit your evaluation?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";

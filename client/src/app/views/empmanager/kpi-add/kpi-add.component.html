@@ -192,7 +192,7 @@
 
                             <div *ngIf="currentAction != 'view'" class="col-md-2">
                                 <button class="btn btn-primary" 
-                                 (click)="addMesurment()"  >+ Add KPI  </button>
+                                 (click)="addMesurment()" [disabled]="disabledAddKpiBtn" >+ Add KPI  </button>
                                 </div>
 
                         </div>

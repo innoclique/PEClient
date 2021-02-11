@@ -1,7 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
@@ -15,6 +14,8 @@ import { Constants } from '../../../shared/AppConstants';
 import { CustomValidators } from '../../../shared/custom-validators';
 import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
 import * as moment from 'moment';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertComponent } from '../../../shared/alert/alert.component';
 
 @Component({
   selector: 'app-kpi-add',
@@ -34,6 +35,7 @@ export class KpiAddComponent implements OnInit {
   currentAction = 'create';
   currentKpiId: any;
   isAllSelected = false;
+  disabledAddKpiBtn = false;
   addMCSwitch = true;
 
   filteredOptionsKPI: Observable<any[]>;
@@ -230,7 +232,32 @@ export class KpiAddComponent implements OnInit {
     }
 
     this.kpiForm.patchValue({ IsDraftByManager: 'false' });
-    this.saveKpi();
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to create performance goal?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+	
+	  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.saveKpi();
+
+     } else {
+       
+     }
+    })
+    
   }
 
 
@@ -324,6 +351,7 @@ export class KpiAddComponent implements OnInit {
 
   addMesurment() {
 
+
 if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
 
   this.snack.error('KPI is mandatory');
@@ -336,6 +364,7 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
     this.perfApp.requestBody.Name = this.kpiForm.get('MeasurementCriteria').value;
     this.perfApp.requestBody.CreatedBy = this.ownerInfo._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+    this.disabledAddKpiBtn=true;
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c) {
@@ -343,7 +372,10 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
         this.getMeasurementCriterias();
 this.snack.success(this.translate.instant(`KPI added Successfully`));
 c.selected=false;
+this.disabledAddKpiBtn=false;
 this.toggleSelection(c);
+
+
         
       }
     })

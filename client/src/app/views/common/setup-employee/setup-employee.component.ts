@@ -477,7 +477,34 @@ submitCreateEmployee(){
   this.empForm.patchValue({IsSubmit: 'true' });
   this.empForm.patchValue({ IsDraft: 'false' });
   this.isDraftEmployee = false;
- this.saveEmployee();
+
+
+
+  this.alert.Title = "Alert";
+  this.alert.Content = "Are you sure you want to update this employee?"
+  this.alert.ShowCancelButton = true;
+  this.alert.ShowConfirmButton = true;
+  this.alert.CancelButtonText = "Cancel";
+  this.alert.ConfirmButtonText = "Ok";
+
+  const dialogConfig = new MatDialogConfig()
+  dialogConfig.disableClose = true;
+  dialogConfig.autoFocus = true;
+  dialogConfig.data = this.alert;
+  dialogConfig.height = "300px";
+  dialogConfig.maxWidth = '100%';
+  dialogConfig.minWidth = '40%';
+
+  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+  dialogRef.afterClosed().subscribe(resp => {
+    if (resp=='yes') {
+      this.saveEmployee();
+    }
+    else{
+
+    }
+  })
+//  this.saveEmployee();
 }
 
 
@@ -536,9 +563,9 @@ if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
     if (c.message==Constants.SuccessText) {
 
       if (this.isDraftEmployee) {
-        this.snack.success(this.translate.instant(`Employee has been Saved Successfully`));
+        this.snack.success(this.translate.instant(`The employee has been successfully saved.`));
       } else {
-        this.snack.success(this.translate.instant(`Employee has been ${this.currentAction == 'create' ? 'Added' : 'Updated'}  Successfully`));
+        this.snack.success(this.translate.instant(`The employee has been successfully ${this.currentAction == 'create' ? 'added' : 'updated'}.`));
       }
       this.getEmployees();
       this.closeForm();

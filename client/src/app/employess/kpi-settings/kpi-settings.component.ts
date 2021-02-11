@@ -1,5 +1,5 @@
 import { isDataSource } from '@angular/cdk/collections';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +15,8 @@ import { AlertComponent } from '../../shared/alert/alert.component';
 import { Constants } from '../../shared/AppConstants';
 import { CustomValidators } from '../../shared/custom-validators';
 import ReportTemplates from '../../views/psa/reports/data/reports-templates';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-kpi-settings',
@@ -22,8 +24,14 @@ import ReportTemplates from '../../views/psa/reports/data/reports-templates';
   styleUrls: ['./kpi-settings.component.css']
 })
 export class KpiSettingsComponent implements OnInit {
+  @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
+  config = {
+    backdrop: true,
+    ignoreBackdropClick: true,
 
-
+  };
+  trackViewRef: BsModalRef;
+  currentRowItem: any;
   public kpiForm: FormGroup;
   kpiDetails: any = { IsActive: 'true',MeasurementCriteria:[] }
   loginUser: any;
@@ -34,6 +42,8 @@ export class KpiSettingsComponent implements OnInit {
   @Input()
   currentAction = 'create';
   isAllSelected = false;
+  disabledAddKpiBtn = false;
+  disabledCreateBtn = false;
   addMCSwitch = true;
   scoreUnSubmitedCount=0;
   unSubmitedCount = 0;
@@ -63,6 +73,8 @@ accessingFrom:any;
   IsDraftDBVal: any;
   isFinalSignoff:Boolean;
   showAllowSignoff:Boolean=false;;
+  isFinalSignoffDone=false;
+
   currentEvaluation:any;
 
 
@@ -75,6 +87,7 @@ accessingFrom:any;
     public themeService: ThemeService,
     private snack: NotificationService,
     private perfApp: PerfAppService,
+    private modalService: BsModalService,
     public translate: TranslateService) {
     this.loginUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
@@ -95,7 +108,8 @@ accessingFrom:any;
       
      }
     });
-    this.initApicallsForKpi();
+    this.findPgSignoff();
+    //this.initApicallsForKpi();
 
   }
 
@@ -112,6 +126,11 @@ accessingFrom:any;
     this.initKPIForm()
 
     this.alert = new AlertDialog();
+  }
+
+  trackKpi() {
+
+    this.trackViewRef = this.modalService.show(this.kpiTrackView, this.config);
   }
 
   DenyAllSignOffKpis() {
@@ -212,8 +231,8 @@ accessingFrom:any;
     this.router.navigate(['employee/kpi-setup']);
   }
 
-  submitKpi() {
-    
+  submitKpi(action) {
+    debugger;
     if (!this.kpiForm.valid) {
       this.kpiForm.markAllAsTouched();
       return;
@@ -236,7 +255,32 @@ accessingFrom:any;
       this.snack.error("Score is mandatory.")
       return;
     }
-    this.saveKpi();
+    this.alert.Title = "Alert";
+    this.alert.Content = action=="c"?"Are you sure you want to create the performance goal?":"Are you sure you want to update the performance goal?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.saveKpi();
+     } else {
+       
+     }
+    })
+    
   }
 
 
@@ -311,6 +355,7 @@ if(this.selectedItems.length==0) {
   }
 
   callKpiApi() {
+    this.disabledCreateBtn=true;
 
     this.perfApp.CallAPI().subscribe(c => {
 
@@ -328,6 +373,8 @@ if(this.selectedItems.length==0) {
         }
       }
 
+      this.disabledCreateBtn=false;
+
     }, error => {
       if (error.error.message === Constants.EvaluationAdminNotFound) {
         //  this.openConfirmSubmitKpisDialog()
@@ -335,7 +382,7 @@ if(this.selectedItems.length==0) {
         this.snack.error(this.translate.instant(error.error.message));
 
       }
-
+      this.disabledCreateBtn=false;
 
     });
 
@@ -344,6 +391,7 @@ if(this.selectedItems.length==0) {
 
 
   addMesurment() {
+    
     debugger
 
 if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
@@ -358,6 +406,8 @@ if(this.kpiForm.get('MeasurementCriteria').value.length==0) {
     this.perfApp.requestBody.Name = this.kpiForm.get('MeasurementCriteria').value;
     this.perfApp.requestBody.CreatedBy = this.loginUser._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+
+    this.disabledAddKpiBtn=true;
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c) {
@@ -373,12 +423,74 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
 // }else if (this.currentAction=='edit') {
   c.selected=true;
  // }
+
+ this.disabledAddKpiBtn=false;
 this.toggleSelection(c,null);
+
         
       }
     })
   }
 
+
+  
+  getOrganizationStartAndEndDates(){
+    let Organization = this.currentOrganization;
+    let {StartMonth,EndMonth,EvaluationPeriod} = Organization;
+    StartMonth = parseInt(StartMonth);
+    let currentMoment = moment();
+    let evaluationStartMoment;
+    let evaluationEndMoment
+    if(EvaluationPeriod === "FiscalYear"){
+      var currentMonth = parseInt(currentMoment.format('M'));
+      console.log(`${currentMonth} <= ${StartMonth}`)
+      if(currentMonth <= StartMonth){
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month').subtract(1, 'years');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }else{
+        evaluationStartMoment = moment().month(StartMonth-1).startOf('month');
+        evaluationEndMoment = moment().month(StartMonth-2).endOf('month').add(1, 'years');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }
+    }else if(EvaluationPeriod === "CalendarYear"){
+      evaluationStartMoment = moment().startOf('month');
+      evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
+    }
+    return {
+      start:evaluationStartMoment,
+      end:evaluationEndMoment
+    }
+  }
+
+  findPgSignoff(){
+    console.log(this.loginUser)
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+    let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let {Manager,Organization} = this.loginUser;
+    let options = {
+      EvaluationYear,
+      Owner: this.loginUser._id,
+      
+    };
+    console.log(options);
+    this.perfApp.route = "app";
+    this.perfApp.method = "Find/PG/Signoff";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(result => {
+     debugger
+      if(!result){
+
+      }else{
+        let {FinalSignoff, SignOff, ManagerSignOff}  = result;
+        this.isFinalSignoffDone=FinalSignoff;
+        
+      }
+
+      this.initApicallsForKpi();
+      
+    })
+  }
 
 
   getAllKpiBasicData() {
@@ -539,7 +651,7 @@ conformSubmitKpis(){
             this.showKpiForm  =false;
             return
           }
-          this.empKPIData = c.filter(e=> e.IsDraft==false && e.IsActive==true && e.IsSubmitedKPIs==true );
+          this.empKPIData = c.filter(e=> this.isFinalSignoffDone && e.IsDraft==false && e.IsActive==true && e.IsSubmitedKPIs==true && ( e.ManagerSignOff&& e.ManagerSignOff.submited)   );
         }else{
           this.empKPIData = c;
         }
@@ -877,4 +989,62 @@ getEVPeriod(){
   }
 
 
+  
+  confirmActiveDeActiveKPI(isActive){
+
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = isActive? "Are you sure you want to activate the performance goal?"
+    :"Are you sure you want to deactivate the performance goal?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.activeDeActiveKPI(isActive);
+     } else {
+       
+     }
+    })
+
+
+  }
+  
+
+  activeDeActiveKPI(isActive) {
+    this.perfApp.route = "app";
+    this.perfApp.method = "UpdateKpiDataById";
+    this.perfApp.requestBody = {};
+    this.perfApp.requestBody.kpiId = this.currentKpiId;
+    this.perfApp.requestBody.IsActive = isActive;
+    this.perfApp.requestBody.Action=isActive?'Active': 'DeActive' ;
+    this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+    this.perfApp.CallAPI().subscribe(c => {
+
+      if (c) {
+
+      
+  this.snack.success(this.translate.instant(`Performance Goal ${isActive?'Activated':'Deactivated'} Successfully`));
+this.onCancle();
+      }
+    })
+
+  }
+
 }
+
+
