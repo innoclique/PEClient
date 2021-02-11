@@ -649,7 +649,7 @@ if(this.FinalRatingForm.value.ManagerOverallRating==''){
   this.snack.error('Rating is mandatory')
   return;
 }
-this.alert.Title = "Alert";
+/* this.alert.Title = "Alert";
 this.alert.Content = "Are you sure you want to submit Final Rating?";
 this.alert.ShowCancelButton = true;
 this.alert.ShowConfirmButton = true;
@@ -658,7 +658,6 @@ this.alert.ConfirmButtonText = "Ok";
 
 
 const dialogConfig = new MatDialogConfig()
-dialogConfig.disableClose = true;
 dialogConfig.autoFocus = true;
 dialogConfig.data = this.alert;
 dialogConfig.height = "300px";
@@ -673,8 +672,10 @@ dialogRef.afterClosed().subscribe(resp => {
  } else {
    
  }
-})
+}) */
 
+//dialogConfig.disableClose = true;
+this.saveFinalRating(false)
     
   }
   draftFinalRating() {
@@ -760,7 +761,7 @@ dialogRef.afterClosed().subscribe(resp => {
 
   submitTSFinalRating() {
 
-    this.alert.Title = "Alert";
+   /*  this.alert.Title = "Alert";
     this.alert.Content = "Are you sure you want to submit Final Rating?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
@@ -779,13 +780,13 @@ dialogRef.afterClosed().subscribe(resp => {
 	  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(resp => {
      if (resp=='yes') {
-      this.saveTSFinalRating(false)
+      
 
      } else {
        
      }
-    })
-
+    }) */
+    this.saveTSFinalRating(false)
     
   }
   draftTSFinalRating() {

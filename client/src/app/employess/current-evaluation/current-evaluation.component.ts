@@ -482,7 +482,7 @@ export class CurrentEvaluationComponent implements OnInit {
       this.snack.error("Please score performance goals")
     return
     }
-    this.alert.Title = "Alert";
+   /*  this.alert.Title = "Alert";
     this.alert.Content = "Are you sure you want to submit your evaluation?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
@@ -501,13 +501,14 @@ export class CurrentEvaluationComponent implements OnInit {
     var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(resp => {
      if (resp=='yes') {
-      this.saveFinalRating(false)
+      
 
      } else {
        
      }
-    })
+    }) */
     
+    this.saveFinalRating(false)
   }
   draftFinalRating() {
     this.alert.Title = "Alert";
@@ -582,7 +583,7 @@ export class CurrentEvaluationComponent implements OnInit {
       
    /**To alert user for submit Final Rating */
     this.alert.Title = "Alert";
-    this.alert.Content =  this.isSigned?"This will register your sign-off for the final ratings provided by your manager. Are you sure you want to sign-off?":"Are you sure you want to submit your evaluation?";
+    this.alert.Content = this.isSigned? "This will register your sign-off for the final ratings provided by your manager. Are you sure you want to sign-off?":"Are you sure you want to submit your evaluation?";
     this.alert.ShowCancelButton = true;
     this.alert.ShowConfirmButton = true;
     this.alert.CancelButtonText = "Cancel";
