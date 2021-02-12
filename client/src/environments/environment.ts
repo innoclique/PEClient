@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false, ApiPath : 'http://localhost:3000/api/',
-  ACTION_PLANNING_GUIDANCE_URL:"https://opassess.s3.ca-central-1.amazonaws.com/Reference+Documents/Action+Planning+Guidance.doc",
-  KPI_GUIDANCE_URL:"https://opassess.s3.ca-central-1.amazonaws.com/Reference+Documents/Goals+and+KPI's.docx",
+  ACTION_PLANNING_GUIDANCE_URL:"https://opassess-docs.s3.ca-central-1.amazonaws.com/Reference+Documents/Action%2BPlanning%2BGuidance.doc",
+  KPI_GUIDANCE_URL:"https://opassess-docs.s3.ca-central-1.amazonaws.com/Reference+Documents/Goals%2Band%2BKPI's.docx",
 };
