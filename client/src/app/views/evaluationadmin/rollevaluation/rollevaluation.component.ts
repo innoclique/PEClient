@@ -151,7 +151,7 @@ export class RollevaluationComponent implements OnInit {
 
   onPeerSelect(item) {
     //debugger
-    console.log('onPeer Select', item);
+    // console.log('onPeer Select', item);
     if (!this.selectedEmployee.Peers) {
       this.selectedEmployee.Peers = [];
     }
@@ -178,7 +178,7 @@ export class RollevaluationComponent implements OnInit {
         var d = c.filter((thing, i, arr) => {
           return arr.indexOf(arr.find(t => t._id === thing._id)) === i;
         });
-        console.log("after filter ::::", d);
+        // console.log("after filter ::::", d);
         value['competencies'] = d;
         this.drCompetencyUIMapping[key] = value;
       } else {
@@ -1156,7 +1156,7 @@ export class RollevaluationComponent implements OnInit {
     var noOfExistingEvalsWithPGRolledOut = 0;
     if (this.existingPgs) {
       for (let pg of this.existingPgs) {
-        console.log(`pg emp id : ${pg.EmployeeId.toString()}`)
+        // console.log(`pg emp id : ${pg.EmployeeId.toString()}`)
         if (pg.EvaluationType == this.evaluationType && pg.EvaluationDuration) {
           if (this.existingEvals) {
             for(let existingEval of this.existingEvals){
@@ -1205,7 +1205,7 @@ export class RollevaluationComponent implements OnInit {
       for (let pg of this.existingPgs) {
         if (pg.EvaluationType == this.evaluationType && pg.EvaluationDuration) {
           if (this.selectedEmployees) {
-            console.log('this.selectedEmployees : ', this.selectedEmployees);
+            // console.log('this.selectedEmployees : ', this.selectedEmployees);
             this.selectedEmployees.forEach(function (x) {
               if (x._id.toString() == pg.EmployeeId.toString()) {
                 existingPGsSelectedForEvaluation++;
@@ -1217,7 +1217,7 @@ export class RollevaluationComponent implements OnInit {
         }
       }
     }
-    console.log('existingPGsSelectedForEvaluation : ', existingPGsSelectedForEvaluation);
+    // console.log('existingPGsSelectedForEvaluation : ', existingPGsSelectedForEvaluation);
     return (available - this.getEvaluationsRolledOut() + existingPGsSelectedForEvaluation);
   }
 
@@ -1359,7 +1359,7 @@ export class RollevaluationComponent implements OnInit {
           if (this.initializeFormFor === 'kpionly') {
             return '';
           } else {
-            return `${data.data.Model.Name}`
+            return `${data.data.Model}`
           }
         },
       },
@@ -1623,8 +1623,8 @@ export class RollevaluationComponent implements OnInit {
 
   changeFormFor(value) {
     this.initializeFormFor = value;
-    this.selectedEmployeeList = [];
-    this.selectedEmployeesForEvaluation = [];
+    // this.selectedEmployeeList = [];
+    // this.selectedEmployeesForEvaluation = [];
     this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
 
     // returns pg employees which are not submitted yet
@@ -1636,6 +1636,7 @@ export class RollevaluationComponent implements OnInit {
     }
 
     this.employeesList$ = pgEmpDropdown;
+    console.log("try",this.selectedEmployeeList)
   }
   getOrganizationStartAndEndDates() {
     let Organization = this.currentOrganization;
