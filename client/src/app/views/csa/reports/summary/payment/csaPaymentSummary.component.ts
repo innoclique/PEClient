@@ -244,6 +244,10 @@ closeForm(){
   onQuickFilterChanged($event: any) {
     this.api.setQuickFilter($event.target.value);
   }
+  
+   printPDFPage() {
+    window.print();
+  }
 
 
 }
