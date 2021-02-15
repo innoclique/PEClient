@@ -210,7 +210,7 @@ export class CreateResellerComponent implements OnInit {
       this.updateClient();
     } else {
       this.alert.Title = "Alert";
-      this.alert.Content = "Are you sure you want to submit the evaluation for this employee?";
+      this.alert.Content = "Are you sure you want to add this reseller?";
       this.alert.ShowCancelButton = true;
       this.alert.ShowConfirmButton = true;
       this.alert.CancelButtonText = "Cancel";

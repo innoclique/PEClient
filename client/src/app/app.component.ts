@@ -6,7 +6,7 @@ import { AuthService } from './services/auth.service';
 @Component({
   // tslint:disable-next-line
   selector: 'body',
-  template: '<router-outlet></router-outlet>'
+  template: `<lib-loader></lib-loader><router-outlet></router-outlet>`
 })
 export class AppComponent implements OnInit {
   constructor(public authService: AuthService,private router: Router,private bnIdle: BnNgIdleService) {

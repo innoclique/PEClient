@@ -62,6 +62,7 @@ export class CurrentEvaluationComponent implements OnInit {
   public thirdSignatoryRevRequest: boolean = true;
   isReqRevDisabled = false;
   isThirdSignatorySubmitted = false;
+  public isValidForm = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -126,7 +127,8 @@ export class CurrentEvaluationComponent implements OnInit {
       this.getCurrentEvaluationDetails(val).pipe(catchError(error => of({ error: error, isError: true })))      
     ).subscribe(([res1]) => {
       if (res1 && !res1.isError) {
-        this.evaluationForm = res1;        
+        this.evaluationForm = res1;
+        this.isValidForm = true;
         if (res1.Competencies) {
           this.employeeCompetencyList = res1.Competencies.Employee.Competencies          
           this.prepareCompetencyQuestions();
