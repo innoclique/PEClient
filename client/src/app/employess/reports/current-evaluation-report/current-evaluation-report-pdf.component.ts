@@ -253,7 +253,9 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
       }
     }
       , error => {
-        this.snack.error(error.error.message);
+        // this.snack.error(error.error.message);
+        this.snack.error('something went wrong.')
+        console.log('error', error)
       }
     )
   }
