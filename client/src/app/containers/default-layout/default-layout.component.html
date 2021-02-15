@@ -45,7 +45,7 @@
       
       
       <a class="nav-link"  data-toggle="langdropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
-        <i class="icon-envelope-letter"></i><span class="badge badge-pill badge-info">{{notificationList.length==0?'':notificationList.length}}</span>
+        <i class="icon-envelope-letter"></i><span class="badge badge-pill badge-info">{{unReadCount==0?'':unReadCount}}</span>
       </a>
 
       <div aria-labelledby="simple-dropdown"  (click)="$event.stopPropagation()"  *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-xlg"
@@ -58,7 +58,7 @@
 
       <accordion [closeOthers]="oneAtATime" >
         <accordion-group class="accordian_panel acc-noty"  #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of notificationList" >
-             <button  class="btn btn-link btn-block clearfix" accordion-heading type="button">
+             <button  class="btn btn-link btn-block clearfix" (click)="markAsRead(c)" accordion-heading type="button">
                  <div class="pull-left ">
                   
                      <a  (click)="false"
