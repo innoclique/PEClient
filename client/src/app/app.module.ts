@@ -47,6 +47,7 @@ import { AuthService } from './services/auth.service';
 import { SharedModule } from './shared/shared.module';
 import { CustomMaterialModule } from './custom-material/custom-material.module';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { LoaderInterceptor } from './services/loader-interceptor';
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
     provide: LocationStrategy,
     useClass: HashLocationStrategy,
   },
-  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
   AuthService,
   BnNgIdleService,],
   bootstrap: [ AppComponent ]

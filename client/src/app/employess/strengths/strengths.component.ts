@@ -255,9 +255,32 @@ submitGoal() {
   //   this.openConfirmSubmitDialog();
   
   //   }else  {
-    this.saveStrength();
+  //  this.saveStrength();
   // }
+  this.alert.Title = "Alert";
+  this.alert.Content = "Are you sure you want to submit the action plan?";
+  this.alert.ShowCancelButton = true;
+  this.alert.ShowConfirmButton = true;
+  this.alert.CancelButtonText = "Cancel";
+  this.alert.ConfirmButtonText = "Continue";
 
+
+  const dialogConfig = new MatDialogConfig()
+  dialogConfig.disableClose = true;
+  dialogConfig.autoFocus = true;
+  dialogConfig.data = this.alert;
+  dialogConfig.height = "300px";
+  dialogConfig.maxWidth = '40%';
+  dialogConfig.minWidth = '40%';
+
+
+  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+  dialogRef.afterClosed().subscribe(resp => {
+    if (resp == 'yes') {
+      this.saveStrength();
+    } else {
+    }
+  })
 
   
 }

@@ -401,25 +401,51 @@ export class RollevaluationComponent implements OnInit {
     //   return;
     // }
     // this.peerCompetencyUIMapping[key]
-    this.selectedEmployee.Peers = [];
-    for (let mapping of this.peerCompetencyMappingRowdata) {
-      var mappingInOldFormat = {};
-      mappingInOldFormat['EmployeeId'] = mapping.peer.EmployeeId;
-      mappingInOldFormat['displayTemplate'] = mapping.peer.displayTemplate;
-      mappingInOldFormat['PeersCompetencyMessage'] = mapping.message;
-      mappingInOldFormat['PeersCompetencyList'] = mapping.competencies;
-      mappingInOldFormat['peerCompetenceMapping'] = mapping;
-      this.selectedEmployee.Peers.push(mappingInOldFormat);
-    }
-    this.selectedEmployee['peerCompetenceMapping'] = this.peerCompetencyMappingRowdata;
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to add peers for review?"
+    this.alert.ShowConfirmButton = true;
+    this.alert.ShowCancelButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
 
-    // this.selectedEmployee.Peers.map(element => {
-    //   element.PeersCompetencyMessage = this.PeersCompetencyMessage;
-    //   element.PeersCompetencyList = this.selectedPeersCompetencyList;
-    // });
-    this.EmpGridOptions.api.setRowData(this.selectedEmployeeList)
-    this.EmpGridOptions.api.refreshCells(this.gridRefreshParams)
-    this.closePeersModel();
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.selectedEmployee.Peers = [];
+        for (let mapping of this.peerCompetencyMappingRowdata) {
+          var mappingInOldFormat = {};
+          mappingInOldFormat['EmployeeId'] = mapping.peer.EmployeeId;
+          mappingInOldFormat['displayTemplate'] = mapping.peer.displayTemplate;
+          mappingInOldFormat['PeersCompetencyMessage'] = mapping.message;
+          mappingInOldFormat['PeersCompetencyList'] = mapping.competencies;
+          mappingInOldFormat['peerCompetenceMapping'] = mapping;
+          this.selectedEmployee.Peers.push(mappingInOldFormat);
+        }
+        this.selectedEmployee['peerCompetenceMapping'] = this.peerCompetencyMappingRowdata;
+
+        // this.selectedEmployee.Peers.map(element => {
+        //   element.PeersCompetencyMessage = this.PeersCompetencyMessage;
+        //   element.PeersCompetencyList = this.selectedPeersCompetencyList;
+        // });
+        this.EmpGridOptions.api.setRowData(this.selectedEmployeeList)
+        this.EmpGridOptions.api.refreshCells(this.gridRefreshParams)
+        this.closePeersModel();
+      } else {
+
+      }
+    })
+
+    
   }
 
   onSelectAllPeersCompetency(items) {
@@ -716,7 +742,7 @@ export class RollevaluationComponent implements OnInit {
     this.perfApp.route = "app";
     this.perfApp.method = "GetPeers",
       //this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id,'id':this.selectedEmployee._id }    
-      this.perfApp.requestBody = { company: this.currentOrganization._id, id: this.currentUser._id }
+      this.perfApp.requestBody = { company: this.currentOrganization._id, id: this.selectedEmployee.Employee._id }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
       this.formattedPeers = [];
@@ -964,7 +990,7 @@ export class RollevaluationComponent implements OnInit {
         case "choosePeers":
           return this.openPeersView();
         case "deleteEmp":
-          return this.deleteEmpFromList();
+          this.onDeleteEmployee();
       }
     }
   }
@@ -978,7 +1004,7 @@ export class RollevaluationComponent implements OnInit {
     this.selectedEmployeesForEvaluation = [...this.selectedEmployeesForEvaluation]
     this.selectedEmployeeList.splice(_index, 1);
     this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
-
+    this.notification.success('Selected name has been removed successfully');
   }
   public EmpGridOptions: GridOptions = {
     columnDefs: this.getGridColumnsForEmp(),
@@ -1759,6 +1785,38 @@ export class RollevaluationComponent implements OnInit {
             });
           }
         })
+      }
+    })
+  }
+
+  onDeleteEmployee() {
+    this.alert.Title = "Alert";
+    if (this.initializeFormFor === 'kpionly') {
+      this.alert.Content = "Are you sure you want to remove the selected name from performance goal roll-out?"
+    } else {
+      this.alert.Content = "Are you sure you want to remove the selected name from evaluation roll-out?"
+    }
+    this.alert.ShowConfirmButton = true;
+    this.alert.ShowCancelButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        return this.deleteEmpFromList();
+      } else {
+
       }
     })
   }
