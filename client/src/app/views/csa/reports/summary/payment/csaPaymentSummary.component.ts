@@ -37,7 +37,7 @@ export class CSAPaymentSummary {
     isAnnualPayment:true,
     NoOfMonthsLable:"0 Months",
     NoOfMonths:0,
-    UserType:"",
+    UsageType:"",
     ActivationDate:moment().toDate(),
     Range:"",
     RangeId:"",
@@ -120,7 +120,7 @@ export class CSAPaymentSummary {
   }
   orgnizationDetails(){
     this.paymentReleaseData;
-    let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,Paymentdate,DurationMonths} = this.paymentReleaseData;
+    let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,Paymentdate,DurationMonths} = this.paymentReleaseData;
     this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
     if(Paymentdate){
       this.paymentDate = moment(Paymentdate).format("MM/DD/YYYY");
@@ -139,7 +139,7 @@ export class CSAPaymentSummary {
     TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
     TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
 
-    this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,DurationMonths};
+    this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,DurationMonths};
     this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
     this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
     this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
@@ -192,7 +192,7 @@ closeForm(){
       var employeesCount = 0;
       var licencesCount = 0;
       var isLicenseCount:boolean = false;
-      if (payment.UserType === 'License') {
+      if (payment.UsageType === 'License') {
         if (payment.Type != 'Adhoc') {
           licencesCount = payment.Range.substring(payment.Range.indexOf('-')+1,payment.Range.length);
           isLicenseCount = true;
@@ -244,8 +244,7 @@ closeForm(){
   onQuickFilterChanged($event: any) {
     this.api.setQuickFilter($event.target.value);
   }
-  
-   printPDFPage() {
+  printPDFPage() {
     window.print();
   }
 
