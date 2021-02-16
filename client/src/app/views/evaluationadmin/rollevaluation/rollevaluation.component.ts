@@ -1034,7 +1034,7 @@ export class RollevaluationComponent implements OnInit {
 
   getEmpCount(item: any) {
     console.log('inside getEmpCount : ', item);
-    if (item.Type == 'Adhoc' || item.UserType != 'License') {
+    if (item.Type == 'Adhoc' || item.UsageType != 'License') {
       console.log('emp count : ', item.NoOfEmployees);
       return item.NoOfEmployees;
     } else {
