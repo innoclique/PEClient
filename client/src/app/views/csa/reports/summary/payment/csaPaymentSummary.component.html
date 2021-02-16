@@ -66,13 +66,13 @@
                       <div class="row m-b15">
                         <div class="col-lg-4">
                           <label>Usage Type</label>
-                          <i class="release_txt_nonedit">{{paymentModel?.UserType}}</i>
+                          <i class="release_txt_nonedit">{{paymentModel?.UsageType}}</i>
                         </div>
-                        <div class="col-lg-4" *ngIf="paymentModel.UserType === 'Employees'">
+                        <div class="col-lg-4" *ngIf="paymentModel.UsageType === 'Employees'">
                           <label># Of Employees</label>
                           <i class="release_txt_nonedit">{{paymentModel?.NoOfEmployees}}</i>
                         </div>
-                        <div class="col-lg-4" *ngIf="paymentModel.UserType === 'License'">
+                        <div class="col-lg-4" *ngIf="paymentModel.UsageType === 'License'">
                           <label>Range</label>
                           <i class="release_txt_nonedit">{{paymentModel?.Range}}</i>
                         </div>
