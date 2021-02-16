@@ -584,7 +584,7 @@ conformSubmitDevGoals(){
 // }
 
   this.alert.Title = "Alert";
-  this.alert.Content = "Are you sure you want to submit the action plan?";
+  this.alert.Content = "Are you sure you want to create the developmental goal?";
   this.alert.ShowCancelButton = true;
   this.alert.ShowConfirmButton = true;
   this.alert.CancelButtonText = "Cancel";
