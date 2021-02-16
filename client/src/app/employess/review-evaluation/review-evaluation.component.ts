@@ -83,6 +83,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
 
   public showRevisionCommentSection: boolean = false;
   public empRevRequest: boolean = false;
+  empEvStatus="";
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -188,6 +189,9 @@ goto(selTab){
       if (res1 && !res1.isError) {
 
         this.evaluationForm = res1;
+        if(res1.Employee_Evaluation && res1.Employee_Evaluation.Status)
+this.empEvStatus=res1.Employee_Evaluation.Status.Status;
+
         if (res1.Competencies.Employee) {
           this.employeeCompetencyList = res1.Competencies.Employee.Competencies;
           

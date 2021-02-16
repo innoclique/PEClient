@@ -88,19 +88,26 @@ public oneAtATime: boolean = true;
     return new TimeAgoPipe().transform(joiningDate);
   }
   removeHtmlTags(joiningDate) {
-    let s= new RemoveHtml().transform(joiningDate);
-   s=  s.replace('Please   click here to login and review.',"")
-   s=  s.replace('To view details   click here to login',"")
+    let s= new RemoveHtml().transform(joiningDate).replace(/\s+/g, " ");
+   s=  s.replace('Please click here to login and review.',"")
+   s=  s.replace('To view details click here to login',"")
    s=  s.replace('To view details, click here',"")
-   s=  s.replace('To login   click here',"")
-   s=  s.replace('please   click here to login',"")
-   s=  s.replace('Please   click here to login',"")
-   s=  s.replace('To view details   click here',"")
+   s=  s.replace('To login click here',"")
+   s=  s.replace('click here to login.',"")
+   s=  s.replace('Please click here to login',"")
+   
+   s=  s.replace('please click here to login',"")
+   s=  s.replace('to login',"")
+   //Please click here
+   s=  s.replace('To view details click here',"")
    s=  s.replace(`Dear ${this.user.FirstName},`,"")
    s=  s.replace(`Dear ${this.user.FirstName}`,"")
-   s=  s.replace('Thank you   OPAssess Admin',"")
+   //s=  s.replace('Thank you   OPAssess Admin',"")
    s=  s.replace('Thank you, OPAssess Administrator',"")
-   s=  s.replace('Confidentiality Statement:  “This communication contains confidential information intended only for the persons to whom it is addressed. Any other distribution, copying or disclosure is strictly prohibited. If you have received this message in error, please notify us immediately and delete this message from your mailbox and trash without reading or copying it.”',"")
+   s=  s.replace('Thank you OPAssess Administrator',"")
+   s=  s.replace('Thank you,OPAssess Administrator',"")
+   //Thank you, OPAssess Administrator
+   s=  s.replace('Confidentiality Statement: “This communication contains confidential information intended only for the persons to whom it is addressed. Any other distribution, copying or disclosure is strictly prohibited. If you have received this message in error, please notify us immediately and delete this message from your mailbox and trash without reading or copying it.”',"")
      return s;
   }
   removeLogin(s){
