@@ -1557,30 +1557,55 @@ export class RollevaluationComponent implements OnInit {
   }
 
   saveDirectReportees() {
-    if (this.drCompetencyMappingRowdata.length < 2) {
+    if (!this.drCompetencyMappingRowdata || this.drCompetencyMappingRowdata.length < 2) {
       this.notification.error('At least two direct reports must be selected');
       return;
     }
 
-    this.selectedEmployee.DirectReportees = [];
-    for (let mapping of this.drCompetencyMappingRowdata) {
-      var mappingInOldFormat = {};
-      mappingInOldFormat['EmployeeId'] = mapping.directReportee.EmployeeId;
-      mappingInOldFormat['displayTemplate'] = mapping.directReportee.displayTemplate;
-      mappingInOldFormat['DirectReporteeComptencyMessage'] = mapping.message;
-      mappingInOldFormat['DirectReporteeCompetencyList'] = mapping.competencies;
-      mappingInOldFormat['drCompetenceMapping'] = mapping;
-      this.selectedEmployee.DirectReportees.push(mappingInOldFormat);
-    }
-    this.selectedEmployee['drCompetenceMapping'] = this.drCompetencyMappingRowdata;
-    // this.selectedEmployee.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
-    // this.selectedEmployee.DirectReportsCompetency = this.seletedDirectReporteeCompetencyList;
-    // this.selectedEmployee.DirectReportees.map(element => {
-    //   element.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
-    //   element.DirectReporteeCompetencyList = this.directReporteeCompetencyList;
-    // });
-    this.EmpGridOptions.api.refreshCells(this.gridRefreshParams)
-    this.closeDrModel();
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to add the direct reports?"
+    this.alert.ShowConfirmButton = true;
+    this.alert.ShowCancelButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.selectedEmployee.DirectReportees = [];
+        for (let mapping of this.drCompetencyMappingRowdata) {
+          var mappingInOldFormat = {};
+          mappingInOldFormat['EmployeeId'] = mapping.directReportee.EmployeeId;
+          mappingInOldFormat['displayTemplate'] = mapping.directReportee.displayTemplate;
+          mappingInOldFormat['DirectReporteeComptencyMessage'] = mapping.message;
+          mappingInOldFormat['DirectReporteeCompetencyList'] = mapping.competencies;
+          mappingInOldFormat['drCompetenceMapping'] = mapping;
+          this.selectedEmployee.DirectReportees.push(mappingInOldFormat);
+        }
+        this.selectedEmployee['drCompetenceMapping'] = this.drCompetencyMappingRowdata;
+        // this.selectedEmployee.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
+        // this.selectedEmployee.DirectReportsCompetency = this.seletedDirectReporteeCompetencyList;
+        // this.selectedEmployee.DirectReportees.map(element => {
+        //   element.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
+        //   element.DirectReporteeCompetencyList = this.directReporteeCompetencyList;
+        // });
+        this.EmpGridOptions.api.refreshCells(this.gridRefreshParams)
+        this.closeDrModel();
+        this.notification.success('Evaluation Updated Successfully.');
+      } else {
+
+      }
+    })
   }
 
 
