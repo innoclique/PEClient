@@ -264,7 +264,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text redStar">Email</span>
                   </div>
-                  <input class="form-control"  [readonly]="currentAction == 'edit'" type="text"
+                  <input class="form-control"  [readonly]="currentAction == 'edit' && currentRowItem?.IsSubmit" type="text"
                   [ngClass]="{ 'is-invalid': f.Email.touched  &&  f.Email.invalid }"
                   formControlName="Email"  name="Email" required >
                 

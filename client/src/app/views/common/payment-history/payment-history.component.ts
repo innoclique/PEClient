@@ -25,7 +25,7 @@ export class PaymentHistoryComponent implements OnInit {
     isAnnualPayment:true,
     NoOfMonthsLable:"0 Months",
     NoOfMonths:0,
-    UserType:"",
+    UsageType:"",
     ActivationDate:moment().toDate(),
     Range:"",
     RangeId:"",
@@ -47,12 +47,16 @@ export class PaymentHistoryComponent implements OnInit {
     TAX_AMOUNT:0,
     TOTAL_PAYABLE_AMOUNT:0
   };
+  popupHeading:any="";
 
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
   public PaymentGridOptions: GridOptions = {
     columnDefs: this.getColDef()      
   }
-  constructor(private perfApp: PerfAppService,private activatedRoute: ActivatedRoute,) { }
+  constructor(
+    private perfApp: PerfAppService,
+    private activatedRoute: ActivatedRoute,
+    private notification: NotificationService,) { }
 
   ngOnInit(): void {
     this.onloadParams();
@@ -118,14 +122,14 @@ export class PaymentHistoryComponent implements OnInit {
     }
   }
 
-  findInitialPayments(selectedOrgnization){
+  findInitialPayments(paymentReleaseId){
     /*let _requestBody={
       Organization:selectedOrgnization,
       Type:"Adhoc",
       Status:"Pending"
     };*/
     let _requestBody={
-      _id:selectedOrgnization,
+      _id:paymentReleaseId,
     }
     
     this.perfApp.route = "payments";
@@ -135,16 +139,25 @@ export class PaymentHistoryComponent implements OnInit {
       if(paymentRelease){
         this.paymentReleaseData = paymentRelease;
         this.orgnizationDetails();
+      }else{
+        this.notification.error("No Payment Info Available.");
+        this.emoModal.hide();
       }
     });
   }
 
   orgnizationDetails(){
-      this.paymentReleaseData;
-      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,Paymentdate,DurationMonths} = this.paymentReleaseData;
+      this.popupHeading="Payment Details";
+      let {ClientType,EvaluationPeriod,Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,Paymentdate,DurationMonths} = this.paymentReleaseData;
       this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
+      if(ClientType && ClientType!="Reseller"){
+        if(EvaluationPeriod){
+          this.popupHeading+=" - "+EvaluationPeriod;
+        }
+      }
       if(Paymentdate){
         this.paymentDate = moment(Paymentdate).format("MM/DD/YYYY");
+        this.popupHeading+=" - "+this.paymentDate
       }
       let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
       
@@ -160,7 +173,7 @@ export class PaymentHistoryComponent implements OnInit {
       TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
       TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
 
-      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,DurationMonths};
+      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,DurationMonths};
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
       this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};

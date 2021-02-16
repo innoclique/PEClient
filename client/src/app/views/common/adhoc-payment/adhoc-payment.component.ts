@@ -30,7 +30,7 @@ export class AdhocPaymentComponent implements OnInit {
     isAnnualPayment:true,
     NoOfMonthsLable:"0 Months",
     NoOfMonths:0,
-    UserType:"",
+    UsageType:"",
     ActivationDate:moment().toDate(),
     Range:"",
     RangeId:"",
@@ -125,7 +125,7 @@ export class AdhocPaymentComponent implements OnInit {
   
   orgnizationDetails(){
     this.paymentReleaseData;
-      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
+      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
       this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
       let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
           
@@ -141,7 +141,7 @@ export class AdhocPaymentComponent implements OnInit {
       TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
       TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
       
-      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
+      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
       this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
@@ -151,7 +151,7 @@ export class AdhocPaymentComponent implements OnInit {
   loadOrganizationDefaultData(selectedOrgnization){
     this.selectedOrganizationObj = this.currentOrganization;
     this.caluculateNoOfMonths();
-    this.paymentModel.UserType = this.selectedOrganizationObj.UsageType || "Employees";
+    this.paymentModel.UsageType = this.selectedOrganizationObj.UsageType || "Employees";
   }
   onSearchChange(searchValue: string): void {
     if(searchValue && searchValue!="" && searchValue!="0"){

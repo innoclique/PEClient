@@ -21,6 +21,7 @@ import { SelectCheckAllComponent } from './select-check-all/select-check-all.com
 import { DateAgoPipe } from '../pipes/DateAgoPipe';
 import { RemoveHtml } from '../pipes/RemoveHtml';
 import { TimeAgoPipe } from '../pipes/TimeAgoPipe';
+import { LoaderComponent } from './loader/loader.component';
 
 
 
@@ -35,7 +36,8 @@ import { TimeAgoPipe } from '../pipes/TimeAgoPipe';
     SelectCheckAllComponent,
     RemoveHtml,
     DateAgoPipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    LoaderComponent
     ],
   imports: [    
     CommonModule,
@@ -55,7 +57,7 @@ import { TimeAgoPipe } from '../pipes/TimeAgoPipe';
   ],
   entryComponents:[AlertComponent],
   providers: [  ],
-  exports:[AlertComponent,SelectCheckAllComponent,DateAgoPipe,RemoveHtml,TimeAgoPipe]
+  exports: [AlertComponent, SelectCheckAllComponent, DateAgoPipe, RemoveHtml, TimeAgoPipe, LoaderComponent]
 })
 export class SharedModule { }
 export function httpTranslateLoader(http: HttpClient) {

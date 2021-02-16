@@ -32,7 +32,7 @@ export class ThirdSignDashboardComponent implements OnInit {
     { headerName:'Name',width:'100px',field: 'name',sortable: true},
     { headerName:'Start date',width:'120px',field: 'joiningDate',sortable: true},
     { headerName:'Last Rating',width:'100px',field: 'lastRating',sortable: true},
-    { headerName:'# of Evaluations',width:'13 0px',field: 'noOfEvaluations',sortable: true},
+    { headerName:'# of Evaluations',width:'130px',field: 'noOfEvaluations',sortable: true},
   ];
   directReportsRowData = [];
   tsEvaluationsRowData = [];

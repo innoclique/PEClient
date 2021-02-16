@@ -9,7 +9,9 @@ import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
 import ReportTemplates from'../../../views/psa/reports/data/reports-templates';
-
+import { AlertDialog } from '../../../Models/AlertDialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AlertComponent } from '../../../shared/alert/alert.component';
 
 @Component({
   selector: 'app-evaluationslist',
@@ -17,7 +19,7 @@ import ReportTemplates from'../../../views/psa/reports/data/reports-templates';
   styleUrls: ['./evaluationslist.component.css']
 })
 export class EvaluationslistComponent implements OnInit {
-
+  public alert: AlertDialog;
   selectedCompetencyViewRef: BsModalRef;
   @ViewChild('selectedCompetencyView') selectedCompetencyView: TemplateRef<any>;
 
@@ -82,13 +84,15 @@ export class EvaluationslistComponent implements OnInit {
     private notification: NotificationService,
     private modalService: BsModalService,
     public authService: AuthService,
-    public router: Router
+    public router: Router,
+    public dialog: MatDialog,
   ) {
 
 
   }
 
   ngOnInit(): void {
+    this.alert = new AlertDialog();
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     this.getEvaluationList();
@@ -505,7 +509,7 @@ export class EvaluationslistComponent implements OnInit {
   getPeersForEmployees() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetPeers",
-      this.perfApp.requestBody = { company: this.currentOrganization._id, id: this.currentUser._id }
+      this.perfApp.requestBody = { company: this.currentOrganization._id, id: this.selectedEmployee.Employee._id }
     this.perfApp.CallAPI().subscribe(c => {
       
       this.formattedPeers = [];
@@ -900,22 +904,46 @@ export class EvaluationslistComponent implements OnInit {
     //   element.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
     //   element.DirectReporteeCompetencyList = this.seletedDirectReporteeCompetencyList;
     // });
-    this.selectedEmployee.DirectReportees=[];
-    for (let mapping of this.drCompetencyMappingRowdata) {
-      var mappingInOldFormat = {};
-      mappingInOldFormat['EmployeeId'] = mapping.directReportee.EmployeeId;
-      mappingInOldFormat['displayTemplate'] = mapping.directReportee.displayTemplate;
-      mappingInOldFormat['DirectReporteeComptencyMessage'] = mapping.message;
-      mappingInOldFormat['DirectReporteeCompetencyList'] = mapping.competencies;
-      mappingInOldFormat['drCompetenceMapping'] = mapping;
-      this.selectedEmployee.DirectReportees.push(mappingInOldFormat);
-    }
-    this.selectedEmployee['drCompetenceMapping'] = this.drCompetencyMappingRowdata;
-    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
-    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
-    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
-    this.updateDirectReporteesOfEmployee();
-    this.closeDrModel();
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to add the direct reports?";
+    this.alert.ShowConfirmButton = true;
+    this.alert.ShowCancelButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.selectedEmployee.DirectReportees = [];
+        for (let mapping of this.drCompetencyMappingRowdata) {
+          var mappingInOldFormat = {};
+          mappingInOldFormat['EmployeeId'] = mapping.directReportee.EmployeeId;
+          mappingInOldFormat['displayTemplate'] = mapping.directReportee.displayTemplate;
+          mappingInOldFormat['DirectReporteeComptencyMessage'] = mapping.message;
+          mappingInOldFormat['DirectReporteeCompetencyList'] = mapping.competencies;
+          mappingInOldFormat['drCompetenceMapping'] = mapping;
+          this.selectedEmployee.DirectReportees.push(mappingInOldFormat);
+        }
+        this.selectedEmployee['drCompetenceMapping'] = this.drCompetencyMappingRowdata;
+        // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
+        // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
+        // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
+        this.updateDirectReporteesOfEmployee();
+        this.closeDrModel();
+      } else {
+
+      }
+    })
   }
 
 
@@ -1139,20 +1167,46 @@ export class EvaluationslistComponent implements OnInit {
     //   element.PeersCompetencyMessage = this.PeersCompetencyMessage;
     //   element.PeersCompetencyList = this.currentPeerCompetencyList;
     // });
-    this.selectedEmployee.Peers=[];
-    
-    for (let mapping of this.peerCompetencyMappingRowdata) {
-      var mappingInOldFormat = {};
-      mappingInOldFormat['EmployeeId'] = mapping.peer.EmployeeId;
-      mappingInOldFormat['displayTemplate'] = mapping.peer.displayTemplate;
-      mappingInOldFormat['PeersCompetencyMessage'] = mapping.message;
-      mappingInOldFormat['PeersCompetencyList'] = mapping.competencies;
-      mappingInOldFormat['peerCompetenceMapping'] = mapping;
-      this.selectedEmployee.Peers.push(mappingInOldFormat);
-    }
-    this.selectedEmployee['peerCompetenceMapping'] = this.peerCompetencyMappingRowdata;
-    
-    this.UpdatePeers();
+
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to add peers for review?";
+    this.alert.ShowConfirmButton = true;
+    this.alert.ShowCancelButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.selectedEmployee.Peers = [];
+
+        for (let mapping of this.peerCompetencyMappingRowdata) {
+          var mappingInOldFormat = {};
+          mappingInOldFormat['EmployeeId'] = mapping.peer.EmployeeId;
+          mappingInOldFormat['displayTemplate'] = mapping.peer.displayTemplate;
+          mappingInOldFormat['PeersCompetencyMessage'] = mapping.message;
+          mappingInOldFormat['PeersCompetencyList'] = mapping.competencies;
+          mappingInOldFormat['peerCompetenceMapping'] = mapping;
+          this.selectedEmployee.Peers.push(mappingInOldFormat);
+        }
+        this.selectedEmployee['peerCompetenceMapping'] = this.peerCompetencyMappingRowdata;
+
+        this.UpdatePeers();
+      } else {
+
+      }
+    })
+   
   }
 
   onDeSelectDirectReporteeCompetency(item) {

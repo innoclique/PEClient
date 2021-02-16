@@ -151,20 +151,41 @@
 
               </div>
             </div>
-
+            <div class="row">
+              <div class="form-group col-md-4 ">
+                <div class="form-group">
+                  <span class="period-label">Available: </span>
+                  <i style="padding-left: 2px;" class="fa fa-user-plus fa-2x"></i>
+                  <span class="font-weight-bold period-value">{{usageCount}}
+                  </span>
+              </div>
+              </div>
+              
+            </div>
             <div class="row">
 
               <div class="form-group col-md-4 ">
                 <div class="field-group">
                   <label class="col-form-label redStar" for="inline-radios">Usage Type</label>
-                  <label class="radio-inline ml-2">
-                    <input [checked] formControlName="UsageType" name="UsageType"
+                  <label *ngIf="accountsInfo.LicenceCount>0" class="radio-inline ml-2">
+                    <input (change)="handleChangeLicense($event)"  formControlName="UsageType" name="UsageType"
                       [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
                       value="License">
                     License
                   </label>
-                  <label class="form-control" class="radio-inline ml-2">
-                    <input formControlName="UsageType" name="UsageType"
+                  <label *ngIf="accountsInfo.LicenceCount==0" class="radio-inline ml-2">
+                    <input disabled (change)="handleChangeLicense($event)"  formControlName="UsageType" name="UsageType"
+                      [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
+                      value="License">
+                    License
+                  </label>
+                  <label *ngIf="accountsInfo.EmployeesCount>0" class="form-control" class="radio-inline ml-2">
+                    <input (change)="handleChangeEmployee($event)" formControlName="UsageType" name="UsageType"
+                      [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
+                      value="Employees"> # of Employees
+                  </label>
+                  <label *ngIf="accountsInfo.EmployeesCount==0" class="form-control" class="radio-inline ml-2">
+                    <input disabled (change)="handleChangeEmployee($event)" formControlName="UsageType" name="UsageType"
                       [ngClass]="{ 'is-invalid': isFormSubmitted  &&  f.UsageType.invalid }" type="radio"
                       value="Employees"> # of Employees
                   </label>
@@ -181,16 +202,36 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Count</span>
                     </div>
-                    <input type="number" class="form-control" min="1"
-                      [ngClass]="{ 'is-invalid': isFormSubmitted  && f.UsageCount.errors}" formControlName="UsageCount"
+                    <input (input)="onChangeEmployee($event.target.value)" type="number" class="form-control" min="1"
+                      [ngClass]="{ 'is-invalid': isFormSubmitted  && f.UsageCount.errors }" formControlName="UsageCount"
                       name="UsageCount">
 
-                    <div *ngIf=" isFormSubmitted  && f.UsageCount.errors" class="invalid-feedback">
+                    <div *ngIf="isFormSubmitted  && f.UsageCount.errors " class="invalid-feedback">
                       <div *ngIf="f.UsageCount.errors.required">Count of Employees is mandatory</div>
+                      
                     </div>
+                    
                   </div>
                 </div>
               </div>
+
+              <div *ngIf=" f.ClientType.value === 'Client' && f.UsageType.value==='License'" class="col-md-4">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text redStar">Range</span>
+                    </div>
+                      <select formControlName="Range" 
+                       (change)="onSelectRange($event.target.value)"   class="form-control"  >
+                        <option>Select</option>
+                         <option *ngFor="let range of PurchasedLicenseList" [value]="range._id">{{range.Range}}</option>
+                       </select>
+                       
+                    
+                  </div>
+                </div>
+              </div>
+
             </div>
             <!--Admin Form fields-->
             <h3 class="form-group-label">Admin Details </h3>
@@ -421,7 +462,7 @@
                       <mat-select formControlName="EvaluationModels"
                         [ngClass]="{ 'is-invalid':isFormSubmitted && f.EvaluationModels.errors }" class="form-control"
                         multiple>
-                        <mat-option *ngFor="let topping of models" [value]="topping">{{topping}}</mat-option>
+                        <mat-option *ngFor="let topping of models" [value]="topping._id">{{topping.Name}}</mat-option>
                       </mat-select>
 
                       <div *ngIf="isFormSubmitted && f.EvaluationModels.errors" class="invalid-feedback">

@@ -74,7 +74,7 @@ export class ClientInfoComponent {
         var employeesCount = 0;
         if (paymentReleases && paymentReleases.length > 0) {
             for (let payment of paymentReleases) {
-                if (payment.UserType === 'License') {
+                if (payment.UsageType === 'License') {
                     if (payment.Type != 'Adhoc') {
                         licencesCount++;
                     } else {

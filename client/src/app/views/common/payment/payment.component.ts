@@ -28,7 +28,7 @@ export class PaymentComponent implements OnInit {
     isAnnualPayment:true,
     NoOfMonthsLable:"0 Months",
     NoOfMonths:0,
-    UserType:"",
+    UsageType:"",
     ActivationDate:moment().toDate(),
     Range:"",
     RangeId:"",
@@ -39,6 +39,7 @@ export class PaymentComponent implements OnInit {
   };
   useageTypeEmployee:Boolean=false;
   isReseller:Boolean=false;
+  newPurchase:Boolean=false;
   paymentStructure:any={
     COST_PER_PA:0,
     COST_PER_MONTH:0,
@@ -102,7 +103,7 @@ export class PaymentComponent implements OnInit {
       //this.getClients();
       let rangeOptions={
             ClientType:this.currentOrganization.ClientType,
-            UsageType:this.currentOrganization.UsageType ,
+            UsageType:this.currentOrganization.UsageType || "License" ,
             "Type" : "Range"
           };
       this.getRangeList(rangeOptions);
@@ -144,6 +145,7 @@ export class PaymentComponent implements OnInit {
     this.isRenewalPayment=false;
     this.isInitialPayment=false;
     this.isNoNeededVisible=false;
+    this.newPurchase = false;
     
     if(paymentOption!=""){
 
@@ -202,6 +204,19 @@ export class PaymentComponent implements OnInit {
             this.notification.error('Renewal will be available after initial payment done.')
           }
           break;
+        case 'new_purchase':
+          if(this.isinitialPaymentDone){
+            this.paymentModel.Range="";
+            this.isReseller = true;
+            this.newPurchase = true;
+            this.isNoNeededReadOnly = true;
+            this.isNoNeededVisible = true;
+            this.paymentModel.UsageType="License";
+          }else{
+            this.notification.error('Adhoc will be available after initial payment done.');
+          }
+          break;
+          break;
         default:
           this.isNoNeededVisible=true;
           break;
@@ -212,6 +227,59 @@ export class PaymentComponent implements OnInit {
         this.isNoNeededVisible = true;
       }
     }
+  }
+
+  usageOnchange(){
+    let rangeOptions={
+      ClientType:this.currentOrganization.ClientType,
+      UsageType:this.currentOrganization.UsageType || "License",
+      "Type" : "Range"
+    } 
+    console.log(rangeOptions)
+    this.useageTypeEmployee=false;
+    if(this.paymentModel.UsageType==="Employees"){
+      this.useageTypeEmployee=true;
+      rangeOptions.UsageType="Employees";
+      this.paymentModel.Range="";
+    }else if(this.paymentModel.UsageType==="License"){
+      rangeOptions.UsageType="License";
+    }
+    this.getRangeList(rangeOptions);
+  }
+
+  onChangeEmployee(searchValue){
+    if(searchValue && searchValue!="" && searchValue!="0"){
+      let paymentReleaseOptions:any={
+        //"UsageType" : this.selectedOrganizationObj.UsageType,
+        "ClientType" : this.currentOrganization.ClientType,
+        "UsageType" : this.paymentModel.UsageType,
+        "Type" : "Range",
+        "RangeTo" : {$gte:searchValue},
+        "RangeFrom" : {$lte:searchValue},
+      };
+      this.getResellerPaymentReleaseCost(paymentReleaseOptions);
+    }else{
+      //this.refreshForm();
+    }
+  }
+
+  getResellerPaymentReleaseCost(paymentReleaseOptions){
+    this.perfApp.route = "payments";
+    this.perfApp.method = "Scale",
+    this.perfApp.requestBody = paymentReleaseOptions;
+    this.perfApp.CallAPI().subscribe(paymentScale => {
+      if(paymentScale){
+        this.paymentScale=paymentScale;
+        this.paymentModel.Range = this.paymentScale.Range;
+        this.paymentScale.Tax = this.stateTax;
+        this.setRange(paymentScale._id);
+        this.setPaymentBreakup();
+      }else{
+        this.paymentStructure=null;
+        this.paymentScale=null;
+      }
+      
+    });
   }
 
   setRange(selectedObj:any){
@@ -401,7 +469,7 @@ export class PaymentComponent implements OnInit {
         if(!paymentRelease){
           this.loadOrganizationDefaultData();
         }else{
-          let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = paymentRelease;
+          let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = paymentRelease;
           let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = paymentRelease;
           
           COST_PER_PA = COST_PER_PA.$numberDecimal;
@@ -416,7 +484,7 @@ export class PaymentComponent implements OnInit {
           TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
           TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
 
-          this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
+          this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
           if(this.selectedOrganizationObj.UsageType=="License"){
           this.paymentModel.RangeId = RangeId;
           this.paymentModel.Range = Range;
@@ -427,7 +495,7 @@ export class PaymentComponent implements OnInit {
           }
           if(this.selectedOrganizationObj.ClientType === "Reseller"){
             this.isReseller=true;
-            if(this.paymentModel.UserType==="Employees"){
+            if(this.paymentModel.UsageType==="Employees"){
               this.useageTypeEmployee=true;
               //this.isRangeSelectVisible=false;
               //this.isRangeSelectBox=true;
@@ -451,7 +519,7 @@ export class PaymentComponent implements OnInit {
 }
 
   orgnizationDetails(){
-      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
+      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
       this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
       let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
       
@@ -467,7 +535,7 @@ export class PaymentComponent implements OnInit {
       TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
       TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
 
-      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status};
+      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status};
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
       this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
@@ -486,7 +554,7 @@ export class PaymentComponent implements OnInit {
     if(this.isRenewalPayment){
       this.paymentModel.NoNeeded=12;
     }
-    this.paymentModel.UserType = this.selectedOrganizationObj.UsageType;
+    this.paymentModel.UsageType = this.selectedOrganizationObj.UsageType;
     if(this.selectedOrganizationObj.UsageType === "Employees"){
       this.useageTypeEmployee=true;
       this.paymentModel.NoOfEmployees=this.selectedOrganizationObj.UsageCount;
@@ -608,7 +676,7 @@ export class PaymentComponent implements OnInit {
       Organization:"",
       isAnnualPayment:true,
       NoOfMonths:"0",
-      UserType:"",
+      UsageType:"",
       ActivationDate:new Date(),
       Range:"",
       NoOfEmployees:0,
@@ -635,6 +703,7 @@ export class PaymentComponent implements OnInit {
     }
   }
   checkout(){
+    
     if(this.paymentOption && this.paymentOption!="" && this.paymentReleaseData){
       
       this.alert.Title = "Alert";
@@ -698,9 +767,40 @@ export class PaymentComponent implements OnInit {
     }else{
       this.checkout();
     }
-    
+  }
+
+  newPurchaseReleaseInfo(){
+    if(this.paymentModel && !this.paymentModel.paymentreleaseId){
+      this.paymentModel.Status="Pending";
+      this.savePurchasePayment();
+    }else{
+      //this.checkout();
+    }
   }
   
+  savePurchasePayment(){
+    console.log(this.paymentModel.Status);
+    let requestBody:any={...this.paymentModel,...this.paymentStructure,...this.paymentSummary};
+    requestBody.RangeId=this.paymentScale?this.paymentScale._id:this.paymentModel.RangeId;
+    requestBody.Range=this.paymentScale?this.paymentScale.Range:this.paymentModel.Range;
+    requestBody.Type="NewPurchase";
+    requestBody.ClientType="Reseller";
+    console.log(requestBody);
+     this.perfApp.route = "payments";
+     this.perfApp.method = "release/save";
+     this.perfApp.requestBody = requestBody;
+     this.perfApp.CallAPI().subscribe(c => {
+     if(c){
+      this.paymentModel.paymentreleaseId = c._id;
+      console.log(`paymentreleaseId = ${c._id}`)
+      //this.notification.success(`Payment Released to ${this.currentOrganization.Name}`);
+      this.checkout();
+     }else{
+       this.notification.error("Record not saved.")
+     }
+     });
+  }
+
   savePaymentReleaseInfo(){
     console.log(this.paymentModel.Status);
     let requestBody:any={...this.paymentModel,...this.paymentStructure,...this.paymentSummary};
@@ -728,12 +828,12 @@ export class PaymentComponent implements OnInit {
       this.paymentOption="new";
       this.paymentModel.ClientId=null;
       this.paymentModel.Organization = this.currentUser.Organization._id;
-      this.setRange(this.paymentReleaseData.RangeId);
+      this.setRange(this.paymentModel.Range);
       this.setPaymentBreakup();
       this.isRenewalPayment=true;
     }else{
-      this.refreshForm();
-      this.isRenewalPayment=false;
+      //this.refreshForm();
+      //this.isRenewalPayment=false;
     }
   }
 

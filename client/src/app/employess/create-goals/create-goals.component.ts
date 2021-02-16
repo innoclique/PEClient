@@ -262,7 +262,7 @@ public onRowActionItemsClicked(e) {
     switch (actionType) {
 
       case "remove":
-        this.deleteActionRow(this.currentRowItem);
+        this.openDeletConfirmationDialog();
         break;
 
 
@@ -276,7 +276,7 @@ public onRowActionItemsClicked(e) {
 
     this.goalsItemRows.splice(this.goalsItemRows.indexOf(data), 1);
     this.redrawAllRows();
-
+    this.snack.success('Selected action row has been successfully removed');
   }
 
 addItemRow() {
@@ -580,8 +580,33 @@ conformSubmitDevGoals(){
 //   this.openConfirmSubmitDialog();
 
 // }else  {
-  this.submitGoal();
+//  this.submitGoal();
 // }
+
+  this.alert.Title = "Alert";
+  this.alert.Content = "Are you sure you want to create the developmental goal?";
+  this.alert.ShowCancelButton = true;
+  this.alert.ShowConfirmButton = true;
+  this.alert.CancelButtonText = "Cancel";
+  this.alert.ConfirmButtonText = "Continue";
+
+
+  const dialogConfig = new MatDialogConfig()
+  dialogConfig.disableClose = true;
+  dialogConfig.autoFocus = true;
+  dialogConfig.data = this.alert;
+  dialogConfig.height = "300px";
+  dialogConfig.maxWidth = '40%';
+  dialogConfig.minWidth = '40%';
+
+
+  var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+  dialogRef.afterClosed().subscribe(resp => {
+    if (resp == 'yes') {
+      this.submitGoal();
+    } else {
+    }
+  })
  
 }
 
@@ -636,7 +661,6 @@ conformSubmitDevGoals(){
     }else  if (currentAction=='edit') {
       return 'updated'
     }
-    
    
   }
 
@@ -739,5 +763,32 @@ nextKpi(){
   window.print();
 }
 
+
+  openDeletConfirmationDialog() {
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to remove the action row?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.deleteActionRow(this.currentRowItem);
+      } else {
+      }
+    })
+  }
 
 }

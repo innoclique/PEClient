@@ -62,6 +62,8 @@ export class CurrentEvaluationComponent implements OnInit {
   public thirdSignatoryRevRequest: boolean = true;
   isReqRevDisabled = false;
   isThirdSignatorySubmitted = false;
+  public isValidForm = false;
+  public empEvStatus = "";
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -113,11 +115,13 @@ export class CurrentEvaluationComponent implements OnInit {
   exitReportView(){
     this.isPdfView = false;
     this.evaluationForm = true;
+    this.isValidForm = true;
   }
 
   viewReport(){
     this.isPdfView = true;
     this.evaluationForm = false;
+    this.isValidForm = false;
   }
 
   /**To GET ALL  tabs data */
@@ -126,7 +130,11 @@ export class CurrentEvaluationComponent implements OnInit {
       this.getCurrentEvaluationDetails(val).pipe(catchError(error => of({ error: error, isError: true })))      
     ).subscribe(([res1]) => {
       if (res1 && !res1.isError) {
-        this.evaluationForm = res1;        
+        this.evaluationForm = res1;
+        this.isValidForm = true;
+if(res1.Employee_Evaluation && res1.Employee_Evaluation.Status)
+this.empEvStatus=res1.Employee_Evaluation.Status.Status;
+
         if (res1.Competencies) {
           this.employeeCompetencyList = res1.Competencies.Employee.Competencies          
           this.prepareCompetencyQuestions();
@@ -176,6 +184,7 @@ export class CurrentEvaluationComponent implements OnInit {
         console.log("yrs",this.years)
       } else {
         this.evaluationForm = null;
+        this.isValidForm = false;
       }
     });
 

@@ -226,7 +226,8 @@ export class CreateClientComponent implements OnInit {
       EvaluationPeriod: ['', [Validators.required]],
 
       EmployeeBufferCount: ['', []],
-      DownloadBufferDays: ['', []],
+     // DownloadBufferDays: [this.clientForm['DownloadBufferDays'] == '' || this.clientForm['DownloadBufferDays'] == null ? '10' : this.clientForm['DownloadBufferDays'], []],
+      DownloadBufferDays: ['10' , []],
       IsActive: ['', []],
       StartMonth: ['', []],
       EndMonth: ['', []]

@@ -16,7 +16,7 @@
     <div class="modal-dialog modal-primary modal-xlg" role="document">
       <div class="modal-content">
         <div class="modal-header pt-1 pr-1">
-          <h5 class="modal-title"> {{currentOrganization?.Name}}</h5>
+          <h5 class="modal-title"> {{popupHeading}}</h5>
           <button type="button" class="close" (click)="payment_Summary.hide();closeForm()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -29,13 +29,13 @@
                         <div class="row m-b15">
                           <div class="col-lg-4">
                             <label>Usage Type</label>
-                            <i class="release_txt_nonedit">{{paymentModel?.UserType}}</i>
+                            <i class="release_txt_nonedit">{{paymentModel?.UsageType}}</i>
                           </div>
-                          <div class="col-lg-4" *ngIf="paymentModel.UserType === 'Employees'">
+                          <div class="col-lg-4" *ngIf="paymentModel.UsageType === 'Employees'">
                             <label># Of Employees</label>
                             <i class="release_txt_nonedit">{{paymentModel?.NoOfEmployees}}</i>
                           </div>
-                          <div class="col-lg-4" *ngIf="paymentModel.UserType === 'License'">
+                          <div class="col-lg-4" *ngIf="paymentModel.UsageType === 'License'">
                             <label>Range</label>
                             <i class="release_txt_nonedit">{{paymentModel?.Range}}</i>
                           </div>
@@ -93,7 +93,15 @@
                               <div class="clear"></div>
                             </li>
                             <li>
-                              <h6>Summary<strong>Amount payable is cost per employee per year, after discount,  number of employees  + taxes.</strong></h6>
+                              <h6>
+                                Summary
+                                <strong *ngIf="paymentModel && paymentModel.UsageType === 'Employees' ">
+                                  Amount due is cost per employee per year <{{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}}> * number of employees <{{paymentModel ? paymentModel.NoOfEmployees : 0}}> + taxes. In case of monthly payments - <{{ paymentStructure ? paymentStructure.COST_PER_MONTH : 0}}> per month is payable on 1st of each month
+                                </strong>
+                                <strong *ngIf="paymentModel && paymentModel.UsageType === 'License' ">
+                                  Amount payable is cost per year, after discount, <{{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}}> + taxes
+                                </strong>
+                              </h6>
                               <div class="clear"></div>
                             </li>
                           </ul>

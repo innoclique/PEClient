@@ -25,7 +25,7 @@ export class PaymentReleaseComponent implements OnInit {
     isAnnualPayment:true,
     NoOfMonthsLable:"0 Months",
     NoOfMonths:0,
-    UserType:"",
+    UsageType:"",
     ActivationDate:moment().toDate(),
     Range:"",
     RangeId:"",
@@ -110,11 +110,14 @@ export class PaymentReleaseComponent implements OnInit {
       this.perfApp.CallAPI().subscribe(_rangeList => {
         this.rangeList = _rangeList;
         let isRangeAvailable = _rangeList.find(r=>{
-          console.log(`${r._id.toString()} == ${this.selectedOrganizationObj.Range.toString()}`)
-          return r._id.toString() === this.selectedOrganizationObj.Range.toString()
+          if(this.selectedOrganizationObj.Range){
+            console.log(`${r._id.toString()} == ${this.selectedOrganizationObj.Range.toString()}`)
+            return r._id.toString() === this.selectedOrganizationObj.Range.toString()
+          }
         })
         if(isRangeAvailable){
           this.paymentModel.Range = isRangeAvailable._id.toString();
+          this.onSelectRange(this.paymentModel.Range)
         }
       });
   }
@@ -131,7 +134,7 @@ export class PaymentReleaseComponent implements OnInit {
       this.stateTax = taxInfo.tax;
     })
 }
-useageOnchange(){
+usageOnchange(){
 
   let rangeOptions={
     ClientType:this.selectedOrganizationObj.ClientType,
@@ -139,13 +142,13 @@ useageOnchange(){
     "Type" : "Range"
   } 
   this.useageTypeEmployee=false;
-  if(this.paymentModel.UserType==="Employees"){
+  if(this.paymentModel.UsageType==="Employees"){
     this.useageTypeEmployee=true;
     this.isRangeSelectVisible=false;
     this.isRangeSelectBox=true;
     rangeOptions.UsageType="Employees";
     this.paymentModel.Range="";
-  }else if(this.paymentModel.UserType==="License"){
+  }else if(this.paymentModel.UsageType==="License"){
     this.isRangeSelectVisible=true;
     this.isRangeSelectBox=false;
     rangeOptions.UsageType="License";
@@ -204,11 +207,12 @@ useageOnchange(){
       this.perfApp.CallAPI().subscribe(paymentRelease => {
         if(!paymentRelease){
           this.loadOrganizationDefaultData();
+          console.log(`this.paymentModel.Range => ${this.paymentModel.Range}`);
           if(this.paymentModel.Range)
           this.onSelectRange(this.paymentModel.Range)
           
         }else{
-          let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = paymentRelease;
+          let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = paymentRelease;
           let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = paymentRelease;
           
           COST_PER_PA = COST_PER_PA.$numberDecimal;
@@ -223,7 +227,7 @@ useageOnchange(){
           TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
           TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
 
-          this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
+          this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
           if(this.selectedOrganizationObj.UsageType=="License"){
           this.paymentModel.RangeId = RangeId;
           this.paymentModel.Range = Range;
@@ -234,7 +238,7 @@ useageOnchange(){
           }
           if(this.selectedOrganizationObj.ClientType === "Reseller"){
             this.isReseller=true;
-            if(this.paymentModel.UserType==="Employees"){
+            if(this.paymentModel.UsageType==="Employees"){
               this.useageTypeEmployee=true;
               //this.isRangeSelectVisible=false;
               //this.isRangeSelectBox=true;
@@ -263,7 +267,7 @@ useageOnchange(){
       let paymentReleaseOptions:any={
         //"UsageType" : this.selectedOrganizationObj.UsageType,
         "ClientType" : this.selectedOrganizationObj.ClientType,
-        "UsageType" : this.paymentModel.UserType,
+        "UsageType" : this.paymentModel.UsageType,
         "Type" : "Range",
         "RangeTo" : {$gte:searchValue},
         "RangeFrom" : {$lte:searchValue},
@@ -285,7 +289,7 @@ useageOnchange(){
   loadOrganizationDefaultData(){
     console.log("Inside:loadOrganizationDefaultData")
     this.caluculateNoOfMonths();
-    this.paymentModel.UserType = this.selectedOrganizationObj.UsageType;
+    this.paymentModel.UsageType = this.selectedOrganizationObj.UsageType;
     if(this.selectedOrganizationObj.UsageType === "Employees"){
       this.useageTypeEmployee=true;
       this.paymentModel.NoOfEmployees=this.selectedOrganizationObj.UsageCount;
@@ -293,7 +297,7 @@ useageOnchange(){
     if(this.selectedOrganizationObj.ClientType === "Reseller"){
       this.paymentModel.NoNeeded=1;
       this.isReseller=true;
-      this.paymentModel.UserType="License";
+      this.paymentModel.UsageType="License";
       this.isRangeSelectVisible=true;
       this.isRangeSelectBox=false;
     }
@@ -309,11 +313,17 @@ useageOnchange(){
       
   }
   onSelectRange(selectedObj:any){
-    let selectedRange = this.rangeList.find(range=>range._id==selectedObj)
-    this.paymentScale=selectedRange;
-    this.paymentScale.Tax = this.stateTax;
-    this.paymentModel.Range = this.paymentScale._id;
-    this.setPaymentBreakup();
+    if(selectedObj && selectedObj!=""){
+      let selectedRange = this.rangeList.find(range=>range._id==selectedObj)
+      this.paymentScale=selectedRange;
+      this.paymentScale.Tax = this.stateTax;
+      this.paymentModel.Range = this.paymentScale._id;
+      this.setPaymentBreakup();
+    }else{
+      this.refreshForm();
+    }
+    
+    
   }
 
   caluculateNoOfMonths(){
@@ -435,6 +445,35 @@ useageOnchange(){
     }
   }
   savePayment(){
+    if (!this.paymentModel.Organization) {
+      this.notification.error('Organization Name is mandatory');
+      return;
+    }
+    if (this.paymentModel.UsageType === "License" && !this.paymentModel.Range) {
+      this.notification.error('Range is mandatory');
+      return;
+    }
+    if (this.paymentModel.UsageType === "Employees" && (this.paymentModel.NoOfEmployees < 1 || !this.paymentModel.NoOfEmployees)) {
+      this.notification.error('# Of Employees is mandatory');
+      return;
+    }
+    if (!this.paymentSummary || !this.paymentSummary.TOTAL_PAYABLE_AMOUNT) {
+      this.notification.error('Invalid Payment Release Amount');
+      return;
+    }
+    if (this.paymentSummary && this.paymentSummary.TOTAL_PAYABLE_AMOUNT) {
+      if(!isNaN(this.paymentSummary.TOTAL_PAYABLE_AMOUNT)){
+        if(Number(this.paymentSummary.TOTAL_PAYABLE_AMOUNT)<=0){
+          this.notification.error('Invalid Payment Release Amount');
+        return;
+        }
+      }else{
+        this.notification.error('Invalid Payment Release Amount');
+        return;
+      }
+      
+    }
+
     this.paymentModel.Status="Draft";
     this.savePaymentReleaseInfo();
   }
@@ -444,13 +483,29 @@ useageOnchange(){
       this.notification.error('Organization Name is mandatory');
       return;
     }
-    if (this.paymentModel.UserType === "License" && !this.paymentModel.Range) {
+    if (this.paymentModel.UsageType === "License" && !this.paymentModel.Range) {
       this.notification.error('Range is mandatory');
       return;
     }
-    if (this.paymentModel.UserType === "Employees" && (this.paymentModel.NoOfEmployees < 1 || !this.paymentModel.NoOfEmployees)) {
+    if (this.paymentModel.UsageType === "Employees" && (this.paymentModel.NoOfEmployees < 1 || !this.paymentModel.NoOfEmployees)) {
       this.notification.error('# Of Employees is mandatory');
       return;
+    }
+    if (!this.paymentSummary || !this.paymentSummary.TOTAL_PAYABLE_AMOUNT) {
+      this.notification.error('Invalid Payment Release Amount');
+      return;
+    }
+    if (this.paymentSummary && this.paymentSummary.TOTAL_PAYABLE_AMOUNT) {
+      if(!isNaN(this.paymentSummary.TOTAL_PAYABLE_AMOUNT)){
+        if(Number(this.paymentSummary.TOTAL_PAYABLE_AMOUNT)<=0){
+          this.notification.error('Invalid Payment Release Amount');
+        return;
+        }
+      }else{
+        this.notification.error('Invalid Payment Release Amount');
+        return;
+      }
+      
     }
     
     this.alert.Title = "Alert";
@@ -484,7 +539,8 @@ useageOnchange(){
     let requestBody:any={...this.paymentModel,...this.paymentStructure,...this.paymentSummary};
     requestBody.RangeId=this.paymentScale?this.paymentScale._id:this.paymentModel.RangeId;
     requestBody.Range=this.paymentScale?this.paymentScale.Range:this.paymentModel.Range;
-    requestBody.Type="Initial"
+    requestBody.Type="Initial";
+    requestBody.ClientType=this.selectedOrganizationObj.ClientType;
     console.log(requestBody);
      this.perfApp.route = "payments";
      this.perfApp.method = "/release/save",
@@ -492,10 +548,10 @@ useageOnchange(){
      this.perfApp.CallAPI().subscribe(c => {
      if(c){
        if(this.paymentModel.Status === "Pending"){
-          this.notification.success(`Payment Released to ${this.selectedOrganizationObj.Name}`)
+          this.notification.success(`Payment info has been sent to the ${this.selectedOrganizationObj.Name}`)
       }
       if(this.paymentModel.Status === "Draft"){
-          this.notification.success(`Payment info has been sent to the ${this.selectedOrganizationObj.Name}.`);
+          this.notification.success(`Payment info of ${this.selectedOrganizationObj.Name} saved.`);
       }
 
        this.router.navigate(['psa/list']);
@@ -517,4 +573,5 @@ useageOnchange(){
   loadPriceListPage(){
     this.router.navigate(['psa/price-list'],{ skipLocationChange: true });
   }
+  
 }
