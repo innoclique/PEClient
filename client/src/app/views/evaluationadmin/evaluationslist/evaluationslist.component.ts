@@ -904,22 +904,46 @@ export class EvaluationslistComponent implements OnInit {
     //   element.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
     //   element.DirectReporteeCompetencyList = this.seletedDirectReporteeCompetencyList;
     // });
-    this.selectedEmployee.DirectReportees=[];
-    for (let mapping of this.drCompetencyMappingRowdata) {
-      var mappingInOldFormat = {};
-      mappingInOldFormat['EmployeeId'] = mapping.directReportee.EmployeeId;
-      mappingInOldFormat['displayTemplate'] = mapping.directReportee.displayTemplate;
-      mappingInOldFormat['DirectReporteeComptencyMessage'] = mapping.message;
-      mappingInOldFormat['DirectReporteeCompetencyList'] = mapping.competencies;
-      mappingInOldFormat['drCompetenceMapping'] = mapping;
-      this.selectedEmployee.DirectReportees.push(mappingInOldFormat);
-    }
-    this.selectedEmployee['drCompetenceMapping'] = this.drCompetencyMappingRowdata;
-    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
-    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
-    // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
-    this.updateDirectReporteesOfEmployee();
-    this.closeDrModel();
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to add the direct reports?";
+    this.alert.ShowConfirmButton = true;
+    this.alert.ShowCancelButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.selectedEmployee.DirectReportees = [];
+        for (let mapping of this.drCompetencyMappingRowdata) {
+          var mappingInOldFormat = {};
+          mappingInOldFormat['EmployeeId'] = mapping.directReportee.EmployeeId;
+          mappingInOldFormat['displayTemplate'] = mapping.directReportee.displayTemplate;
+          mappingInOldFormat['DirectReporteeComptencyMessage'] = mapping.message;
+          mappingInOldFormat['DirectReporteeCompetencyList'] = mapping.competencies;
+          mappingInOldFormat['drCompetenceMapping'] = mapping;
+          this.selectedEmployee.DirectReportees.push(mappingInOldFormat);
+        }
+        this.selectedEmployee['drCompetenceMapping'] = this.drCompetencyMappingRowdata;
+        // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
+        // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
+        // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
+        this.updateDirectReporteesOfEmployee();
+        this.closeDrModel();
+      } else {
+
+      }
+    })
   }
 
 
