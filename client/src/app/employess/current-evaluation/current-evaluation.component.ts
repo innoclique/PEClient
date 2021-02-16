@@ -115,11 +115,13 @@ export class CurrentEvaluationComponent implements OnInit {
   exitReportView(){
     this.isPdfView = false;
     this.evaluationForm = true;
+    this.isValidForm = true;
   }
 
   viewReport(){
     this.isPdfView = true;
     this.evaluationForm = false;
+    this.isValidForm = false;
   }
 
   /**To GET ALL  tabs data */
@@ -182,6 +184,7 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
         console.log("yrs",this.years)
       } else {
         this.evaluationForm = null;
+        this.isValidForm = false;
       }
     });
 
