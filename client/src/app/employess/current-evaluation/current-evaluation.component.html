@@ -21,7 +21,7 @@
                               </select>
                       
                           </div>
-                          <div class="col-md-1">
+                          <div [ngClass]="isValidForm ? 'col-md-1' : 'col-md-5'">
                               <div _ngcontent-fha-c25="" class="reports-buttons pull-right">
                                 <div  style="margin-right:10px;display:inline-flex">
                                   <button *ngIf="showManagerRating && isCompetencyTabActive" title="view Rating Report" (click)="openCompetencyReport()" ngcontent-fha-c25=""
