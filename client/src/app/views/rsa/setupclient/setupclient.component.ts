@@ -47,6 +47,15 @@ export class SetupclientComponent implements OnInit {
   currentOrganization:any;
   isDraft=false;
   isSaveAsDraftClicked=false;
+  accountsList:any = [];
+  accountsInfo:any={
+    LicenceCount:0,
+    EmployeesCount:0
+  };
+  usageCount:any=0;
+  rangeLicenseList:any=[];
+  rangeEmployeeList:any=[];
+  PurchasedLicenseList:any=[];
   constructor(private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -58,8 +67,142 @@ export class SetupclientComponent implements OnInit {
   ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
-
+    this.fetchAccountDetails();
   }
+  getRangeLicenseList(options){
+    //let ClientType = this.clientForm.get("ClientType").value;
+   // options['ClientType'] = ClientType;
+
+    this.perfApp.route = "payments";
+    this.perfApp.method = "range/list";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(_rangeList => {
+      this.rangeLicenseList = _rangeList;
+    });
+}
+  getRangeEmployeeList(options){
+    //let ClientType = this.clientForm.get("ClientType").value;
+   // options['ClientType'] = ClientType;
+
+    this.perfApp.route = "payments";
+    this.perfApp.method = "range/list";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(_rangeList => {
+      this.rangeEmployeeList = _rangeList;
+    });
+}
+
+
+  fetchAccountDetails(){
+    console.log("Inside:fetchAccountDetails")
+    this.perfApp.route = "rsa";
+    this.perfApp.method = "account/details",
+      this.perfApp.requestBody = { orgId: this.currentOrganization._id}; //fill body object with form 
+    this.perfApp.CallAPI().subscribe(c => {
+      this.accountsList = c;
+      this.fetchAccountsInfo();
+      //this.usageCount = this.accountsInfo.LicenceCount;
+    }, error => {
+      this.notification.error('something went wrong')
+      console.error(error);
+
+      //this.notification.error(error.error.message)
+    });
+  }
+  fetchAccountsInfo(){
+    let _accountsList = this.accountsList;
+    let LicenceList = _accountsList.filter((account:any)=>account.UsageType=="License");
+    let EmployeesList = _accountsList.filter((account:any)=>account.UsageType=="Employees");
+    this.accountsInfo.LicenceList = [];
+    this.accountsInfo.EmployeesList = [];
+    if(LicenceList){
+      this.accountsInfo.LicenceCount = LicenceList.map((account)=>account.Balance).reduce(function(acc, val) { return acc + val; }, 0);
+      this.accountsInfo.LicenceList = LicenceList;
+    }
+    if(EmployeesList){
+      this.accountsInfo.EmployeesCount = EmployeesList.map((account)=>account.Balance).reduce(function(acc, val) { return acc + val; }, 0);
+      this.accountsInfo.EmployeesList = EmployeesList;
+    }
+    
+    console.log(this.accountsInfo)
+  }
+  onSelectRange(selectedRange){
+    if(selectedRange){
+      let selectedRangeObj = this.accountsInfo.LicenceList.find((licenseRange)=>licenseRange.RangeId._id==selectedRange);
+      if(selectedRangeObj){
+        this.usageCount = selectedRangeObj.Balance;
+      }else{
+        this.usageCount=0;
+      }
+    }else{
+      this.usageCount=0;
+    }
+    
+  }
+  
+  handleChangeLicense(evt) {
+    let target = evt.target;
+    console.log(target.checked);
+    if(target.checked){
+      this.usageCount = this.accountsInfo.LicenceCount;
+      this.PurchasedLicenseList = this.getPurchasedRangeList(this.accountsInfo.LicenceList,this.rangeLicenseList);
+    }
+  }
+  handleChangeEmployee(evt) {
+    let target = evt.target;
+    if(target.checked){
+      this.usageCount = this.accountsInfo.EmployeesCount;
+    }
+  }
+
+  getPurchasedRangeList(_list,purchasedList){
+    let filterList = [];
+    for(var index in _list){
+      let {RangeId} = _list[index];
+      let _licenseObj = purchasedList.find((rang)=>rang._id == RangeId._id);
+      if(_licenseObj){
+        console.log(_licenseObj)
+        filterList.push(_licenseObj)
+      }
+      
+    }
+    return filterList;
+  }
+
+  onChangeEmployee(count){
+    console.log(count);
+    let matchedRange = null;
+    if(count && !isNaN(count)){
+      count = Number(count);
+      let {EmployeesList} = this.accountsInfo;
+      
+      for(let i in EmployeesList){
+        let {RangeId} = EmployeesList[i];
+        let {RangeFrom,RangeTo} = RangeId;
+        if(count>RangeFrom && count<=RangeTo){
+          matchedRange = RangeId;
+          this.clientForm.patchValue({
+            Range: RangeId._id, 
+            // formControlName2: myValue2 (can be omitted)
+          });
+          break;
+        }
+      }
+    }
+    console.log(matchedRange);
+    if(!matchedRange){
+      console.log("inside error")
+      this.clientForm.controls['UsageCount'].setErrors({'required': true});
+      this.clientForm.patchValue({
+        Range: null, 
+        // formControlName2: myValue2 (can be omitted)
+      });
+    }else{
+      this.clientForm.controls['UsageCount'].setErrors(null);
+    }
+    
+  }
+  
   public monthList = ["January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"]
   countyFormReset: boolean;
@@ -92,6 +235,20 @@ export class SetupclientComponent implements OnInit {
       }
 
     }));
+
+    let rangeLicenseOptions={
+      UsageType:"License",
+      "Type" : "Range",
+      'ClientType': "Reseller"
+    }
+    this.getRangeLicenseList(rangeLicenseOptions);
+
+    let rangeEmployeeOptions={
+      UsageType:"Employees",
+      "Type" : "Range",
+      'ClientType': "Reseller"
+    }
+    this.getRangeEmployeeList(rangeEmployeeOptions);
 
     this.isSaveAsDraftClicked=false;
     this.alert = new AlertDialog();
@@ -165,8 +322,8 @@ export class SetupclientComponent implements OnInit {
       ])
       ],
       ClientType: ['Client',[]],
-      UsageType: ['License', [Validators.required]],
-      UsageCount: [1, []],
+      UsageType: ['', [Validators.required]],
+      UsageCount: [1, [Validators.required]],
       AdminFirstName: ['', Validators.compose([
         Validators.required,                
         Validators.pattern("^[a-zA-Z0-9.,-:() ]+$"),        
@@ -214,7 +371,8 @@ export class SetupclientComponent implements OnInit {
       DownloadBufferDays: ['', []],
       IsActive: ['', []],
       StartMonth: ['', []],
-      EndMonth: ['', []]
+      EndMonth: ['', []],
+      Range:[null,],
 
     });
   }
@@ -412,7 +570,7 @@ export class SetupclientComponent implements OnInit {
           this.clientForm.controls['UsageCount'].setValidators(Validators.required);
           this.clientForm.controls['UsageCount'].setValue("");
 
-          this.clientForm.controls['Range'].reset();
+          //this.clientForm.controls['Range'].reset();
           this.clientForm.controls['Range'].clearValidators();
         }
 
@@ -514,7 +672,7 @@ export class SetupclientComponent implements OnInit {
     this.perfApp.method = "GetModelsByIndustry",
       this.perfApp.requestBody ={id: this.clientForm.controls["Industry"].value}; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
-      this.models=c.map(x=>x.Name)
+      this.models=c;
     }, error => {
       debugger
       console.log('models error ',error)

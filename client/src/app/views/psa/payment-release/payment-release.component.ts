@@ -25,7 +25,7 @@ export class PaymentReleaseComponent implements OnInit {
     isAnnualPayment:true,
     NoOfMonthsLable:"0 Months",
     NoOfMonths:0,
-    UserType:"",
+    UsageType:"",
     ActivationDate:moment().toDate(),
     Range:"",
     RangeId:"",
@@ -142,13 +142,13 @@ usageOnchange(){
     "Type" : "Range"
   } 
   this.useageTypeEmployee=false;
-  if(this.paymentModel.UserType==="Employees"){
+  if(this.paymentModel.UsageType==="Employees"){
     this.useageTypeEmployee=true;
     this.isRangeSelectVisible=false;
     this.isRangeSelectBox=true;
     rangeOptions.UsageType="Employees";
     this.paymentModel.Range="";
-  }else if(this.paymentModel.UserType==="License"){
+  }else if(this.paymentModel.UsageType==="License"){
     this.isRangeSelectVisible=true;
     this.isRangeSelectBox=false;
     rangeOptions.UsageType="License";
@@ -212,7 +212,7 @@ usageOnchange(){
           this.onSelectRange(this.paymentModel.Range)
           
         }else{
-          let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = paymentRelease;
+          let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = paymentRelease;
           let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = paymentRelease;
           
           COST_PER_PA = COST_PER_PA.$numberDecimal;
@@ -227,7 +227,7 @@ usageOnchange(){
           TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
           TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
 
-          this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
+          this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
           if(this.selectedOrganizationObj.UsageType=="License"){
           this.paymentModel.RangeId = RangeId;
           this.paymentModel.Range = Range;
@@ -238,7 +238,7 @@ usageOnchange(){
           }
           if(this.selectedOrganizationObj.ClientType === "Reseller"){
             this.isReseller=true;
-            if(this.paymentModel.UserType==="Employees"){
+            if(this.paymentModel.UsageType==="Employees"){
               this.useageTypeEmployee=true;
               //this.isRangeSelectVisible=false;
               //this.isRangeSelectBox=true;
@@ -267,7 +267,7 @@ usageOnchange(){
       let paymentReleaseOptions:any={
         //"UsageType" : this.selectedOrganizationObj.UsageType,
         "ClientType" : this.selectedOrganizationObj.ClientType,
-        "UsageType" : this.paymentModel.UserType,
+        "UsageType" : this.paymentModel.UsageType,
         "Type" : "Range",
         "RangeTo" : {$gte:searchValue},
         "RangeFrom" : {$lte:searchValue},
@@ -289,7 +289,7 @@ usageOnchange(){
   loadOrganizationDefaultData(){
     console.log("Inside:loadOrganizationDefaultData")
     this.caluculateNoOfMonths();
-    this.paymentModel.UserType = this.selectedOrganizationObj.UsageType;
+    this.paymentModel.UsageType = this.selectedOrganizationObj.UsageType;
     if(this.selectedOrganizationObj.UsageType === "Employees"){
       this.useageTypeEmployee=true;
       this.paymentModel.NoOfEmployees=this.selectedOrganizationObj.UsageCount;
@@ -297,7 +297,7 @@ usageOnchange(){
     if(this.selectedOrganizationObj.ClientType === "Reseller"){
       this.paymentModel.NoNeeded=1;
       this.isReseller=true;
-      this.paymentModel.UserType="License";
+      this.paymentModel.UsageType="License";
       this.isRangeSelectVisible=true;
       this.isRangeSelectBox=false;
     }
@@ -449,11 +449,11 @@ usageOnchange(){
       this.notification.error('Organization Name is mandatory');
       return;
     }
-    if (this.paymentModel.UserType === "License" && !this.paymentModel.Range) {
+    if (this.paymentModel.UsageType === "License" && !this.paymentModel.Range) {
       this.notification.error('Range is mandatory');
       return;
     }
-    if (this.paymentModel.UserType === "Employees" && (this.paymentModel.NoOfEmployees < 1 || !this.paymentModel.NoOfEmployees)) {
+    if (this.paymentModel.UsageType === "Employees" && (this.paymentModel.NoOfEmployees < 1 || !this.paymentModel.NoOfEmployees)) {
       this.notification.error('# Of Employees is mandatory');
       return;
     }
@@ -483,11 +483,11 @@ usageOnchange(){
       this.notification.error('Organization Name is mandatory');
       return;
     }
-    if (this.paymentModel.UserType === "License" && !this.paymentModel.Range) {
+    if (this.paymentModel.UsageType === "License" && !this.paymentModel.Range) {
       this.notification.error('Range is mandatory');
       return;
     }
-    if (this.paymentModel.UserType === "Employees" && (this.paymentModel.NoOfEmployees < 1 || !this.paymentModel.NoOfEmployees)) {
+    if (this.paymentModel.UsageType === "Employees" && (this.paymentModel.NoOfEmployees < 1 || !this.paymentModel.NoOfEmployees)) {
       this.notification.error('# Of Employees is mandatory');
       return;
     }
