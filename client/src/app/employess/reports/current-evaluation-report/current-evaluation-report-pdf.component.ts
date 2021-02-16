@@ -309,7 +309,7 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
 
   getRatingText(value){
     debugger
-    if(this.RatingList.length>0)
+    if (this.RatingList && this.RatingList.length>0)
     return " -" +this.RatingList.find(e=> e.value== value).Text;
     else return "";
   }
