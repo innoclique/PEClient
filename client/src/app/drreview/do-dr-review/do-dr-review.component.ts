@@ -32,6 +32,8 @@ export class DoDrReviewComponent implements OnInit {
   isContentOpen:Boolean=false;
   public forEmployee:any;
   currentOrganization: any;
+  selectedUser:any;
+  EmployeeId: any;
   constructor(private authService: AuthService,
     public dialog: MatDialog,
     private router: Router,
@@ -46,14 +48,34 @@ export class DoDrReviewComponent implements OnInit {
 
     this.activatedRoute.params.subscribe(params => {
       this.currentReview = params;
-      console.log('current peer', this.currentReview)
+      console.log('current peer', this.currentReview.EmployeeId)
+      this.EmployeeId = this.currentReview.EmployeeId
+      this.GetEmployeeDetailsById()
       this.getCompetencyQuestions()
     });
   }
 
   ngOnInit(): void {
     this.initCompetencyForm()
+    debugger;
   }
+
+  async GetEmployeeDetailsById() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetEmployeeDataById",
+      this.perfApp.requestBody = { id:  this.EmployeeId }
+      this.perfApp.CallAPI().subscribe(x => {
+      this.selectedUser =x;
+      console.log("CURRENT USER", x)
+
+     // this.callInitApis();
+      }, error => {
+        console.log('error', error)
+        this.selectedUser=null;
+      this.snack.error('something went wrong')
+      })
+  }
+
   initCompetencyForm() {
     this.competencyForm = this.fb.group({
       OverallComments: ['', [Validators.required]],
