@@ -6,15 +6,23 @@
             <!-- Box1 -->
             <div class="box col-lg-6">
               <div class="box_in">
-                <h2 class="bg-blue">Client Summary - By usage</h2>
+                <h2 class="bg-blue">Client Summary - By usages</h2>
                 <app-client-summary [chartTypeInput]="'CLIENT_SUMMARY'" [userType]="'Client'"></app-client-summary>
+                <a  href="#/psa/reports/info/client" class="box_in_btns_view" >Clients &#8594; </a>
               </div>
+              
+              <div class="clear"></div>
+              
+           
+              
             </div>
+    
             <!-- Box 2 -->
             <div class="box col-lg-6">
               <div class="box_in">
                 <h2 class="bg-blue">Client Summary - Status</h2>
                 <app-client-summary [chartTypeInput]="'STATUS'" [userType]="'Client'"></app-client-summary>
+                <a  href="#/psa/reports/info/client" class="box_in_btns_view" >Clients &#8594; </a>
               </div>
             </div>
             
@@ -26,7 +34,9 @@
               <div class="box_in">
                 <h2 class="bg-blue">Reseller Summary - Status</h2>
                 <app-client-summary [chartTypeInput]="'STATUS'" [userType]="'Reseller'"></app-client-summary>
+                <a  href="#/psa/reports/info/reseller" class="box_in_btns_view">Resellers &#8594;</a>
               </div>
+              
             </div>
             <!-- Box 2 -->
             <!-- Box1 -->

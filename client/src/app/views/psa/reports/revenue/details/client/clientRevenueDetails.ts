@@ -74,6 +74,7 @@ export class ClientRevenueDetails {
     this.gridOptions = <GridOptions>{};
     this.gridOptions = {
       columnDefs: this.getClientRevenueDetailsColumnDefs(),
+      
     }
     this.defaultColDef = ReportTemplates.defaultColDef;
   }
@@ -167,6 +168,7 @@ closeForm(){
   }
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
   getClientRevenueDetailsColumnDefs() {
+    
     return [
       { headerName: 'Evaluation Period', field: 'evaluationPeriod' },
       // { headerName: 'Date of Purchase', field: 'purchasedOn' },
@@ -175,8 +177,8 @@ closeForm(){
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="viewPayment">${data.value}</span>` }
       }, 
       { headerName: 'Evaluations Type', field: 'evaluationsType' },
-      { headerName: '#s Purchased', field: 'licPurchasesCount', type: 'rightAligned' },
-      { headerName: 'Amount (CAD)', field: 'amount', type: 'rightAligned', valueFormatter: params => params.data.amount.toFixed(2) },
+      { headerName: '#s Purchased', field: 'licPurchasesCount', type: 'leftAligned' } ,
+      { headerName: 'Amount (CAD)', field: 'amount', type: 'leftAligned', valueFormatter: params => params.data.amount.toFixed(2) },
     ];
   }
 

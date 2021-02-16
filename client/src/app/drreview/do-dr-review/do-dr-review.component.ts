@@ -12,6 +12,7 @@ import { PerfAppService } from '../../services/perf-app.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AlertDialog } from '../../Models/AlertDialog';
 import { AlertComponent } from '../../shared/alert/alert.component';
+import ReportTemplates from '../../views/psa/reports/data/reports-templates';
 
 @Component({
   selector: 'app-do-dr-review',
@@ -30,6 +31,7 @@ export class DoDrReviewComponent implements OnInit {
   isSubmitted: Boolean = false;
   isContentOpen:Boolean=false;
   public forEmployee:any;
+  currentOrganization: any;
   constructor(private authService: AuthService,
     public dialog: MatDialog,
     private router: Router,
@@ -40,6 +42,7 @@ export class DoDrReviewComponent implements OnInit {
     private qcs: CompetencyFormService,
     private fb: FormBuilder,) {
     this.loginUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
 
     this.activatedRoute.params.subscribe(params => {
       this.currentReview = params;
@@ -243,4 +246,7 @@ export class DoDrReviewComponent implements OnInit {
     console.log('average score :', avg);
     return avg;
   }
+  getEVPeriod(){
+    return ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
+      }
 }
