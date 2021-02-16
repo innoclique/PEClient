@@ -6,23 +6,84 @@
                     Peer Review
                   </div>
         <div class="card-body">
-            <table class="table table-bordered peer">
-                <thead class="thead-light">
-                    <th>Employee</th>
-                    <th>Email</th>
-                    <th>Evaluation Period</th>
-                    <th>Evaluation Duration</th>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{forEmployee?.FirstName}}-{{forEmployee?.LastName}}</td>
-                        <td>{{forEmployee?.Email}}</td>
-                        <td>{{forEmployee?.EvaluationPeriod}}</td>
-                        <td>{{forEmployee?.EvaluationDuration}}</td>
-                    </tr>
-                </tbody>
-            </table>
-   
+
+            <div class="row">
+                <div class="col-md-6 kpi-fl ">
+                    <div class="col-md-4">
+                        <strong class="strong-key">Evaluation Period: </strong>
+                    </div>
+                    <div class="col-md-5"><span span
+                        class="span-value">{{getEVPeriod()}}</span></div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <strong class="strong-key">Title: </strong>
+                    </div>
+                    <div class="col-md-5"><span class="span-value">{{loginUser?.Title}}</span></div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <strong class="strong-key">Department: </strong>
+                    </div>
+                    <div class="col-md-5"><span class="span-value">{{loginUser?.Department}}</span></div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <strong class="strong-key">Length of Service: </strong>
+                    </div>
+                    <div class="col-md-5"><span
+                            class="span-value">{{ loginUser?.JoiningDate| dateAgo}}</span></div>
+
+                </div>
+
+                <!-- </div>
+
+            <div class="row"> -->
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <strong class="strong-key">Manager: </strong>
+                    </div>
+                    <div class="col-md-5"><span
+                            class="span-value">{{loginUser?.Manager? loginUser?.Manager?.FirstName :'NA'}}</span>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <strong class="strong-key">Length of Time in Current Role: </strong>
+                    </div>
+                    <div class="col-md-5"><span
+                            class="span-value">{{ loginUser?.RoleEffFrom | dateAgo}}</span></div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <strong class="strong-key">Leadership Role: </strong>
+                    </div>
+                    <div class="col-md-5"><span
+                            class="span-value">{{loginUser?.DirectReports?'Yes':'No'}}</span></div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <strong class="strong-key">Job Level: </strong>
+                    </div>
+                    <div class="col-md-5"><span
+                            class="span-value">{{loginUser?.JobLevel?.JobLevelName}}</span></div>
+
+                </div>
+
+            </div>
+   <hr>
     <accordion [closeOthers]="oneAtATime">
         <accordion-group #groupval [isOpen]="groupval.isContentOpen" *ngFor="let c of competencyQuestionsList">
             <button  class="btn btn-link btn-block clearfix" accordion-heading type="button">

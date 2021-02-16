@@ -39,6 +39,7 @@ export class ClientRevenueDetails {
     this.gridOptions = <GridOptions>{};
     this.gridOptions = {
       columnDefs: this.getClientRevenueDetailsColumnDefs(),
+      
     }
     this.defaultColDef = ReportTemplates.defaultColDef;
   }
@@ -73,12 +74,13 @@ export class ClientRevenueDetails {
   }
 
   getClientRevenueDetailsColumnDefs() {
+    
     return [
       { headerName: 'Evaluation Period', field: 'evaluationPeriod' },
       { headerName: 'Date of Purchase', field: 'purchasedOn' },
       { headerName: 'Evaluations Type', field: 'evaluationsType' },
-      { headerName: '#s Purchased', field: 'licPurchasesCount', type: 'rightAligned' },
-      { headerName: 'Amount (CAD)', field: 'amount', type: 'rightAligned', valueFormatter: params => params.data.amount.toFixed(2) },
+      { headerName: '#s Purchased', field: 'licPurchasesCount', type: 'leftAligned' } ,
+      { headerName: 'Amount (CAD)', field: 'amount', type: 'leftAligned', valueFormatter: params => params.data.amount.toFixed(2) },
     ];
   }
 
