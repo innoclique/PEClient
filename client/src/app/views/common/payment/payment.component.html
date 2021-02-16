@@ -15,6 +15,7 @@
                     <option *ngIf="isinitialPaymentDone" value="adhoc_pay">Adhoc Payment</option>
                     <option *ngIf="isinitialPaymentDone && !isReseller" value="renewal_pay">Renewal</option>
                     <option *ngIf="isinitialPaymentDone && isReseller" value="client_renewal_pay">Renewal</option>
+                    <option *ngIf="isinitialPaymentDone && isReseller" value="new_purchase">New Purchase</option>
                   </select>
                   <i class="fa fa-chevron-down"></i>
                 </div>
@@ -29,17 +30,23 @@
             </div>
           </div>-->
           <div class="row m-b15">
-            <div class="col-lg-6" *ngIf="isReseller">
+            <div class="col-lg-6" *ngIf="false">
               <label>Clients</label>
               <select [(ngModel)]="paymentModel.ClientId"  class="form-control" (change)="clientOrgnizationDetails($event.target.value)">
                 <option value="">Select Organisation</option>
                 <option *ngFor="let item of clientData" [value]="item._id">{{item.Name}}</option>
               </select>
             </div>
-            <div class="col-lg-6" *ngIf="!isReseller">
+            <div  class="col-lg-6">
               <label>Usage type</label>
-              <input readonly class="form-control" [(ngModel)]="paymentModel.UserType" name="userType"  />
-              
+              <input *ngIf="!newPurchase" readonly class="form-control" [(ngModel)]="paymentModel.UsageType" name="UsageType"  />
+              <div *ngIf="isReseller && newPurchase">
+                <select (change)="usageOnchange($event.target.value)" [(ngModel)]="paymentModel.UsageType"  class="form-control">
+                  <option selected value="License">License</option>
+                  <option value="Employees">Employees</option>
+                </select>
+                <i class="fa fa-chevron-down"></i>
+              </div>
             </div>
             <div class="col-lg-6">
                <div class="">
@@ -66,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-6" *ngIf="isRenewalPayment">
+            <div class="col-lg-6" *ngIf="isRenewalPayment || newPurchase">
               <div class="">
                  <label>Range</label>
                  <select  class="form-control" [(ngModel)]="paymentModel.Range" (change)="onSelectRange($event.target.value)">
@@ -80,7 +87,8 @@
           <div class="row m-b15">
             <div class="col-lg-6" *ngIf="useageTypeEmployee">
               <label># Of Employees</label>
-              <input class="form-control" [(ngModel)]="paymentModel.NoOfEmployees"  />
+              <!--<input class="form-control" [(ngModel)]="paymentModel.NoOfEmployees"  />-->
+              <input class="form-control" (input)="onChangeEmployee($event.target.value)" [(ngModel)]="paymentModel.NoOfEmployees"  />
             </div>
             
             <div class="col-lg-6">
@@ -123,8 +131,8 @@
             <ul>
               <li>
                 <h6>
-                  Cost<strong *ngIf="paymentModel && paymentModel.UserType === 'Employees' ">Cost per employee per year</strong>
-                  <strong *ngIf="paymentModel && paymentModel.UserType !== 'Employees' ">Cost for the year</strong>
+                  Cost<strong *ngIf="paymentModel && paymentModel.UsageType === 'Employees' ">Cost per employee per year</strong>
+                  <strong *ngIf="paymentModel && paymentModel.UsageType !== 'Employees' ">Cost for the year</strong>
                 </h6>
                 <span>{{paymentStructure?paymentStructure.COST_PER_PA:0}}</span>
                 <div class="clear"></div>
@@ -135,8 +143,8 @@
                 <div class="clear"></div>
               </li>
               <li>
-                <h6>Total<strong *ngIf="paymentModel && paymentModel.UserType === 'Employees' ">Total amount per employee</strong>
-                  <strong *ngIf="paymentModel && paymentModel.UserType !== 'Employees' ">Total Amount</strong>
+                <h6>Total<strong *ngIf="paymentModel && paymentModel.UsageType === 'Employees' ">Total amount per employee</strong>
+                  <strong *ngIf="paymentModel && paymentModel.UsageType !== 'Employees' ">Total Amount</strong>
                 </h6>
                 <span>{{paymentStructure?paymentStructure.TOTAL_AMOUNT:0}}</span>
                 <div class="clear"></div>
@@ -159,10 +167,10 @@
               <li>
                 <h6>
                   Summary
-                  <strong *ngIf="paymentModel && paymentModel.UserType === 'Employees' ">
+                  <strong *ngIf="paymentModel && paymentModel.UsageType === 'Employees' ">
                     Amount due is cost per employee per year <{{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}}> * number of employees <{{paymentModel ? paymentModel.NoOfEmployees : 0}}> + taxes. In case of monthly payments - <{{ paymentStructure ? paymentStructure.COST_PER_MONTH : 0}}> per month is payable on 1st of each month
                   </strong>
-                  <strong *ngIf="paymentModel && paymentModel.UserType === 'License' ">
+                  <strong *ngIf="paymentModel && paymentModel.UsageType === 'License' ">
                     Amount payable is cost per year, after discount, <{{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}}> + taxes
                   </strong>
                 </h6>
@@ -173,7 +181,8 @@
           </div>
           <div class="release_method_buttons">
             <button *ngIf="isAdhocpayment || isInitialPayment" (click)="checkout()" class="release_buttons_save">Submit</button>
-            <button *ngIf="isRenewalPayment" (click)="paymentReleaseInfo()" class="release_buttons_save">Submit</button>
+            <button *ngIf="isRenewalPayment && !newPurchase" (click)="paymentReleaseInfo()" class="release_buttons_save">Submit</button>
+            <button *ngIf="newPurchase" (click)="newPurchaseReleaseInfo()" class="release_buttons_save">Submit</button>
             <a href="javascript:void(0)" class="release_buttons_cancel">Cancel</a>
             <div class="clear"></div>
           </div>
@@ -198,7 +207,7 @@
                         <div class="row m-b15">
                           <div class="col-lg-4">
                             <label>Usage Type</label>
-                            <i class="release_txt_nonedit">{{paymentModel?.UserType}}</i>
+                            <i class="release_txt_nonedit">{{paymentModel?.UsageType}}</i>
                           </div>
                           <div class="col-lg-4" >
                             <label>Range</label>
@@ -237,8 +246,8 @@
                           <ul>
                             <li>
                               <h6>
-                                Cost<strong *ngIf="paymentModel && paymentModel.UserType === 'Employees' ">Cost per employee per year</strong>
-                                <strong *ngIf="paymentModel && paymentModel.UserType !== 'Employees' ">Cost for the year</strong>
+                                Cost<strong *ngIf="paymentModel && paymentModel.UsageType === 'Employees' ">Cost per employee per year</strong>
+                                <strong *ngIf="paymentModel && paymentModel.UsageType !== 'Employees' ">Cost for the year</strong>
                               </h6>
                               <span>{{paymentStructure?paymentStructure.COST_PER_PA:0}}</span>
                               <div class="clear"></div>
@@ -249,8 +258,8 @@
                               <div class="clear"></div>
                             </li>
                             <li>
-                              <h6>Total<strong *ngIf="paymentModel && paymentModel.UserType === 'Employees' ">Total amount per employee</strong>
-                                <strong *ngIf="paymentModel && paymentModel.UserType !== 'Employees' ">Total Amount</strong>
+                              <h6>Total<strong *ngIf="paymentModel && paymentModel.UsageType === 'Employees' ">Total amount per employee</strong>
+                                <strong *ngIf="paymentModel && paymentModel.UsageType !== 'Employees' ">Total Amount</strong>
                               </h6>
                               <span>{{paymentStructure?paymentStructure.TOTAL_AMOUNT:0}}</span>
                               <div class="clear"></div>
@@ -294,13 +303,13 @@
   <div class="wow fadeIn" data-wow-delay="0.4s"><img src="assets/payments/costing_img.png"  alt="img"></div>
   <div class="payment_right_blue wow fadeIn" data-wow-delay="0.6s">
     <h6>{{paymentStructure?paymentStructure.CD_PER_MONTH_DISCOUNT:0}} <small>per month</small></h6>
-    <span *ngIf="paymentModel.UserType=='Employees'">Cost per employee per month (annual discount)</span>
-    <span *ngIf="paymentModel.UserType=='License'">Cost per month (annual discount)</span>
+    <span *ngIf="paymentModel.UsageType=='Employees'">Cost per employee per month (annual discount)</span>
+    <span *ngIf="paymentModel.UsageType=='License'">Cost per month (annual discount)</span>
   </div>
   <div class="payment_right_blue payment_right_white wow fadeIn" data-wow-delay="0.8s">
     <h6>{{paymentStructure?paymentStructure.CD_PER_MONTH:0}} <small>per month</small></h6>
-    <span *ngIf="paymentModel.UserType=='Employees'">Cost per employee per Month</span>
-    <span *ngIf="paymentModel.UserType=='License'">Cost per Month</span>
+    <span *ngIf="paymentModel.UsageType=='Employees'">Cost per employee per Month</span>
+    <span *ngIf="paymentModel.UsageType=='License'">Cost per Month</span>
   </div>
   <div class="payment_info_links">
     <!--<h5 class="wow fadeIn" data-wow-delay="1.2s">Information Links</h5>-->
