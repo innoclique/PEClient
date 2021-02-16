@@ -742,7 +742,7 @@ export class RollevaluationComponent implements OnInit {
     this.perfApp.route = "app";
     this.perfApp.method = "GetPeers",
       //this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id,'id':this.selectedEmployee._id }    
-      this.perfApp.requestBody = { company: this.currentOrganization._id, id: this.selectedEmployee.Employee._id }
+      this.perfApp.requestBody = { company: this.currentOrganization._id, id: this.selectedEmployee._id }
     this.perfApp.CallAPI().subscribe(c => {
       console.log('employeed data', c);
       this.formattedPeers = [];
