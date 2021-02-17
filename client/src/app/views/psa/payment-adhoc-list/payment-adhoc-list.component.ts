@@ -25,7 +25,7 @@ export class PaymentAdhocListComponent implements OnInit {
     isAnnualPayment:true,
     NoOfMonthsLable:"0 Months",
     NoOfMonths:0,
-    UserType:"",
+    UsageType:"",
     ActivationDate:moment().toDate(),
     Range:"",
     RangeId:"",
@@ -187,7 +187,7 @@ export class PaymentAdhocListComponent implements OnInit {
 
   orgnizationDetails(){
       this.paymentReleaseData;
-      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,Paymentdate,DurationMonths} = this.paymentReleaseData;
+      let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,Paymentdate,DurationMonths} = this.paymentReleaseData;
       this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
       if(Paymentdate){
         this.paymentDate = moment(Paymentdate).format("MM/DD/YYYY");
@@ -206,7 +206,7 @@ export class PaymentAdhocListComponent implements OnInit {
       TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
       TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
 
-      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UserType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,DurationMonths};
+      this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,DurationMonths};
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
       this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
