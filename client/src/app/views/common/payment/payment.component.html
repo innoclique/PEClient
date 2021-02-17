@@ -20,6 +20,16 @@
                   <i class="fa fa-chevron-down"></i>
                 </div>
               </div>
+              <div class="row m-b15" *ngIf="isClientDropdownEnable">
+                <div class="col-lg-12">
+                  <label>Clients</label>
+                  <select [(ngModel)]="paymentModel.Organization"  class="form-control" (change)="clientOrgnizationDetails($event.target.value)">
+                    <option value="">Select Organisation</option>
+                    <option *ngFor="let item of clientData" [value]="item._id">{{item.Name}}</option>
+                  </select>
+                  <i class="fa fa-chevron-down"></i>
+                </div>
+              </div>
           <!--<div class="row m-b15">
             <div class="col-lg-12">
               <label>Organisation</label>
@@ -30,13 +40,6 @@
             </div>
           </div>-->
           <div class="row m-b15">
-            <div class="col-lg-6" *ngIf="false">
-              <label>Clients</label>
-              <select [(ngModel)]="paymentModel.ClientId"  class="form-control" (change)="clientOrgnizationDetails($event.target.value)">
-                <option value="">Select Organisation</option>
-                <option *ngFor="let item of clientData" [value]="item._id">{{item.Name}}</option>
-              </select>
-            </div>
             <div  class="col-lg-6">
               <label>Usage type</label>
               <input *ngIf="!newPurchase" readonly class="form-control" [(ngModel)]="paymentModel.UsageType" name="UsageType"  />
@@ -318,7 +321,7 @@
         <em><img src="assets/payments/bill.png"  alt="Bill"></em>
         <strong>Payment History</strong>
       </a>
-      <a href="#/csa/adhoc-payment" class="payment_info_links_payment">
+      <a href="{{adhokPaymentLink}}" class="payment_info_links_payment">
         <em><img src="assets/payments/purchase.png"  alt="Purchase"></em>
         <strong>Make Adhoc Purchase</strong>
       </a>
