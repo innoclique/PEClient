@@ -222,12 +222,14 @@
                       <span class="input-group-text redStar">Range</span>
                     </div>
                       <select formControlName="Range" 
-                       (change)="onSelectRange($event.target.value)"   class="form-control"  >
+                       (change)="onSelectRange($event.target.value)"   [required]="f.UsageType.value==='License' ? true : null " class="form-control" [(ngModel)]="Range"   >
                         <option>Select</option>
                          <option *ngFor="let range of PurchasedLicenseList" [value]="range._id">{{range.Range}}</option>
                        </select>
                        
-                    
+                    <div *ngIf=" isFormSubmitted  && f.Range.errors" class="invalid-feedback">
+                      <div *ngIf="f.Range.errors.required">Range is Mandatory</div>
+                    </div>
                   </div>
                 </div>
               </div>

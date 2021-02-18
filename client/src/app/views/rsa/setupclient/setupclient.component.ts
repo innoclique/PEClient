@@ -372,7 +372,7 @@ export class SetupclientComponent implements OnInit {
       IsActive: ['', []],
       StartMonth: ['', []],
       EndMonth: ['', []],
-      Range:[null,],
+      Range:[null,[]]
 
     });
   }

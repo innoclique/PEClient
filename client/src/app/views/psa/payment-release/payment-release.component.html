@@ -20,8 +20,9 @@
               <label>Usage type</label>
               <input *ngIf="!isReseller" readonly class="form-control" [(ngModel)]="paymentModel.UsageType" name="UsageType"  />
               <div *ngIf="isReseller">
-                <select (change)="usageOnchange($event.target.value)" [(ngModel)]="paymentModel.UsageType"  class="form-control">
-                  <option selected value="License">License</option>
+                <select (change)="usageOnchange($event.target.value)" [(ngModel)]="paymentModel.UsageType" class="form-control">
+                  <option selected value="">Select</option>
+                  <option value="License">License</option>
                   <option value="Employees">Employees</option>
                 </select>
                 <i class="fa fa-chevron-down"></i>
