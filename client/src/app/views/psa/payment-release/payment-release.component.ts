@@ -165,7 +165,7 @@ usageOnchange(){
   
     this.isReseller = false;
     this.paymentModel.NoNeeded=0;
-  
+
     this.paymentStructure=null;
     this.paymentScale=null;
     this.paymentSummary=null;
@@ -297,7 +297,7 @@ usageOnchange(){
     if(this.selectedOrganizationObj.ClientType === "Reseller"){
       this.paymentModel.NoNeeded=1;
       this.isReseller=true;
-      this.paymentModel.UsageType="License";
+      this.paymentModel.UsageType="";
       this.isRangeSelectVisible=true;
       this.isRangeSelectBox=false;
     }
@@ -481,6 +481,10 @@ usageOnchange(){
     
     if (!this.paymentModel.Organization) {
       this.notification.error('Organization Name is mandatory');
+      return;
+    }
+    if (this.paymentModel.UsageType === "") {
+      this.notification.error('UsageType is mandatory');
       return;
     }
     if (this.paymentModel.UsageType === "License" && !this.paymentModel.Range) {
