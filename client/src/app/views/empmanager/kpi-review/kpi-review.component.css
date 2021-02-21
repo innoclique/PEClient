@@ -73,3 +73,20 @@ h3:after {
     font-weight: 600;
     margin: 0px;
 }
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  thead > tr {
+    background-color:#427cac;
+  }
+.backgroundred{
+    background-color: lightblue;
+}
