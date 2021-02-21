@@ -86,6 +86,10 @@ actor:any;
   currentOrganization: any;
   draftGoals:Boolean = false;
   currentEvaluationYear:any;
+  public index:any;
+  indexcolor:any;
+  index1:any;
+
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     public router: Router,
@@ -292,7 +296,7 @@ actor:any;
   }
 
   ngOnInit(): void {
-    
+    this.index1=0;
     this.initApicallsForKpi();
 
     this.initKPIForm()
@@ -938,6 +942,14 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
 this.msSelText="";
   }
 
+  currentKpi(index){
+
+    this.index1=index
+     this.kpiDetails=  this.empKPIData[this.index1];
+     this.initKPIForm();
+     this.currentKpiId=this.kpiDetails._id;
+     
+   }
   nextKpi(){
 
    this.selIndex=this.selIndex+1;

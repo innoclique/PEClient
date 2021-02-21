@@ -137,7 +137,40 @@
                         </div>
                         <hr>
                         <br>
-                       
+                        <div>
+                            <table id="tabId" >
+                                <thead>
+                                <tr  >
+                                    <th style="font-weight: bold;color:white;">
+                                        Performance Goal
+                                    </th>
+                                    <th style="font-weight: bold;color:white;">
+                                        Target Completion
+                                    </th>
+                                    <th style="font-weight: bold;color:white;">
+                                        Status
+                                    </th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 <tr *ngFor="let x of empKPIData;let indexOfelement=index;" (click)="currentKpi(indexOfelement)" [ngClass]="{ 'backgroundred':index1==indexOfelement}" style="cursor: pointer;"
+                                 >
+                                     <td>
+                                        {{x.Kpi}} 
+                                     </td>
+                                     <td>
+                                         {{x.TargetCompletionDate | date: 'MM/dd/yyyy'}}
+                                     </td>
+                                     <td>
+                                         {{x.Status}}
+                                     </td>
+                                 </tr>
+                             </tbody>
+                            </table>
+                        </div>
+                        <br>
+ <hr>
+ <br>
 
                     <div class="view-only">
 
