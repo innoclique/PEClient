@@ -293,13 +293,18 @@ export class ProfileComponent implements OnInit {
 
     this.perfApp.requestBody = this.clientFormData; //fill body object with form 
     this.perfApp.CallAPI().subscribe(c => {
-      this.resetForm();
+     
       if (this.clientFormData.IsDraft) {
         this.notification.success('Profile has been successfully saved.')
       } else {
+        //update firstName and lastname in localstorage after submit
+        var userFromLocalStorage = JSON.parse(localStorage.getItem("User"));
+        userFromLocalStorage.FirstName = this.clientForm.value.AdminFirstName;
+        userFromLocalStorage.LastName = this.clientForm.value.AdminLastName;
+        this.authService.setLSObject('User', userFromLocalStorage);
         this.notification.success('Profile has been successfully updated.')
       }
-
+      this.resetForm();
      // if (!this.clientFormData.IsDraft) {
       this.router.navigate(['rsa/dashboard']);
      // }

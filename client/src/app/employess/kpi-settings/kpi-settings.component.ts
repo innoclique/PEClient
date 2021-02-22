@@ -644,7 +644,7 @@ conformSubmitKpis(){
       // this.setWeighting(c.filter(item => item.IsDraft === false).length);
       debugger
      // if (this.currentAction =='create')
-        this.setWeighting(c.filter(item => item.IsDraft === false).length, this.currentAction);
+      this.setWeighting(c.filter(item => item.IsDraft === false && item.EvaluationYear == this.currentEvaluation ).length, this.currentAction);
       if (c && c.length > 0) {
         if (this.accessingFrom=='currEvaluation') {
           if (c.filter(e=>e.IsSubmitedKPIs).length==0) {
