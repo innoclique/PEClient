@@ -33,6 +33,11 @@ public oneAtATime: boolean = true;
     translate.addLangs(['en', 'fr']);
     translate.setDefaultLang('en');
   }
+
+  get userObj() {
+    this.user = JSON.parse(localStorage.getItem('User'));
+    return this.user;
+  }
   // ngOnChanges(changes: SimpleChanges): void {
   //   this.getAllEmpNotifications();
   // }
