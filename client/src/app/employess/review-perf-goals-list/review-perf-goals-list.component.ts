@@ -157,7 +157,9 @@ export class ReviewPerfGoalsListComponent implements OnInit {
         var returnString = '';
 debugger
         if(data && data.data && 
-         ( (data.data.ReleasedKpis && data.data.ReleasedKpis.KPIFor=="Manager") || (data.data.RowData.Evaluation) )){
+         ( (data.data.ReleasedKpis && data.data.ReleasedKpis.KPIFor=="Manager")
+         || (data.data.ReleasedKpis && data.data.ReleasedKpis.KPIFor=="Employee")
+         || (data.data.RowData.Evaluation) )){
           returnString += ` <i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i> `
         } else {
@@ -242,7 +244,7 @@ public onEmpGridRowClick(e) {
           break;
         case "addKPI":
           this.addKpiForm( (this.currentRowItem.ReleasedKpis && this.currentRowItem.ReleasedKpis.KPIFor=="Manager") 
-          ||  ( this.currentRowItem.Evaluation) );
+          || (this.currentRowItem.ReleasedKpis && this.currentRowItem.ReleasedKpis.KPIFor=="Employee")  ||  ( this.currentRowItem.Evaluation) );
           break;
         case "draftGoal":
           this.reviewEvalDraftForm('reviewEval','Manager');

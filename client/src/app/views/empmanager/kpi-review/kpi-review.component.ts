@@ -581,8 +581,8 @@ if (this.accessingFrom == "reviewEvaluation"  && this.kpiForm.get('ManagerScore'
   return;
 }
 
-this.convertPage();
-this.getBase64();
+// this.convertPage();
+// this.getBase64();
 
     this.perfApp.route = "app";
     this.perfApp.method = "UpdateKpiDataById";
