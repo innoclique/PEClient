@@ -1062,20 +1062,20 @@ export class RollevaluationComponent implements OnInit {
             if (this.pgsMap.get(item.EvaluationType)) {
               //update purpose
               var durationMap: Map<string, number> = this.pgsMap.get(item.EvaluationType);
-              if (durationMap.get(item.EvaluationDuration)) {
+              if (durationMap.get(item.EvaluationType == 'Year-end' ? '12 Months' :item.EvaluationDuration)) {
                 // update duration
-                var existingDurationEmpCount = durationMap.get(item.EvaluationDuration);
-                durationMap.set(item.EvaluationDuration, existingDurationEmpCount + 1);
+                var existingDurationEmpCount = durationMap.get(item.EvaluationType == 'Year-end' ? '12 Months' :item.EvaluationDuration);
+                durationMap.set(item.EvaluationType == 'Year-end' ? '12 Months' :item.EvaluationDuration, existingDurationEmpCount + 1);
                 this.pgsMap.set(item.EvaluationType, durationMap);
               } else {
                 // add duration
-                durationMap.set(item.EvaluationDuration, 1);
+                durationMap.set(item.EvaluationType == 'Year-end' ? '12 Months' :item.EvaluationDuration, 1);
                 this.pgsMap.set(item.EvaluationType, durationMap);
               }
             } else {
               // add EvaluationType
               var durationMap = new Map<string, number>();
-              durationMap.set(item.EvaluationDuration, 1);
+              durationMap.set(item.EvaluationType == 'Year-end' ? '12 Months' :item.EvaluationDuration, 1);
               this.pgsMap.set(item.EvaluationType, durationMap);
             }
           });
@@ -1090,20 +1090,20 @@ export class RollevaluationComponent implements OnInit {
             if (this.evaluationsMap.get(item.EvaluationType)) {
               //update purpose
               var durationMap: Map<string, number> = this.evaluationsMap.get(item.EvaluationType);
-              if (durationMap.get(item.EvaluationDuration)) {
+              if (durationMap.get(item.EvaluationType == 'Year-end' ? '12 Months' :item.EvaluationDuration)) {
                 // update duration
-                var existingDurationEmpCount = durationMap.get(item.EvaluationDuration);
-                durationMap.set(item.EvaluationDuration, existingDurationEmpCount + item.Employees.length);
+                var existingDurationEmpCount = durationMap.get(item.EvaluationType == 'Year-end' ? '12 Months' :item.EvaluationDuration);
+                durationMap.set(item.EvaluationType == 'Year-end' ? '12 Months' :item.EvaluationDuration, existingDurationEmpCount + item.Employees.length);
                 this.evaluationsMap.set(item.EvaluationType, durationMap);
               } else {
                 // add duration
-                durationMap.set(item.EvaluationDuration, item.Employees.length);
+                durationMap.set(item.EvaluationType == 'Year-end' ? '12 Months' :item.EvaluationDuration, item.Employees.length);
                 this.evaluationsMap.set(item.EvaluationType, durationMap);
               }
             } else {
               // add EvaluationType
               var durationMap = new Map<string, number>();
-              durationMap.set(item.EvaluationDuration, item.Employees.length);
+              durationMap.set(item.EvaluationType == 'Year-end' ? '12 Months' :item.EvaluationDuration, item.Employees.length);
               this.evaluationsMap.set(item.EvaluationType, durationMap);
             }
           });
@@ -1118,20 +1118,20 @@ export class RollevaluationComponent implements OnInit {
           if (this.purposeDurationMap.get(item.Purpose)) {
             //update purpose
             var durationMap: Map<string, number> = this.purposeDurationMap.get(item.Purpose);
-            if (durationMap.get(item.Purpose == 'Year-end' ? item.NoOfMonthsLable : `${item.DurationMonths} Months`)) {
+            if (durationMap.get(item.Purpose == 'Year-end' ? '12 Months' : `${item.DurationMonths} Months`)) {
               // update duration
-              var existingDurationEmpCount = durationMap.get(item.Purpose == 'Year-end' ? item.NoOfMonthsLable : `${item.DurationMonths} Months`);
-              durationMap.set(item.Purpose == 'Year-end' ? item.NoOfMonthsLable : `${item.DurationMonths} Months`, existingDurationEmpCount + this.getEmpCount(item));
+              var existingDurationEmpCount = durationMap.get(item.Purpose == 'Year-end' ? '12 Months' : `${item.DurationMonths} Months`);
+              durationMap.set(item.Purpose == 'Year-end' ? '12 Months' : `${item.DurationMonths} Months`, existingDurationEmpCount + this.getEmpCount(item));
               this.purposeDurationMap.set(item.Purpose, durationMap);
             } else {
               // add duration
-              durationMap.set(item.Purpose == 'Year-end' ? item.NoOfMonthsLable : `${item.DurationMonths} Months`, this.getEmpCount(item));
+              durationMap.set(item.Purpose == 'Year-end' ? '12 Months' : `${item.DurationMonths} Months`, this.getEmpCount(item));
               this.purposeDurationMap.set(item.Purpose, durationMap);
             }
           } else {
             // add purpose
             var durationMap = new Map<string, number>();
-            durationMap.set(item.Purpose == 'Year-end' ? item.NoOfMonthsLable : `${item.DurationMonths} Months`, this.getEmpCount(item));
+            durationMap.set(item.Purpose == 'Year-end' ? '12 Months' : `${item.DurationMonths} Months`, this.getEmpCount(item));
             this.purposeDurationMap.set(item.Purpose, durationMap);
           }
         });
