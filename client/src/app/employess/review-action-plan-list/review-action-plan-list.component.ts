@@ -14,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { PerfAppService } from '../../services/perf-app.service';
 import { ThemeService } from '../../services/theme.service';
+import * as moment from 'moment';
 import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-review-action-plan-list',
@@ -56,6 +57,9 @@ export class ReviewActionPlanListComponent implements OnInit {
   managerReporteesDataRecords:any;
   tSReporteesData: any;
 
+  evaluationsYears: any = [];
+  currentEvaluationYear: any = "";
+
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     private route: ActivatedRoute,
@@ -68,7 +72,11 @@ export class ReviewActionPlanListComponent implements OnInit {
     public translate: TranslateService) { 
 
 
-      this.loginUser=this.authService.getCurrentUser();
+    this.loginUser = this.authService.getCurrentUser();
+    this.getEmployeeEvaluationYears();
+    this.currentOrganization = this.loginUser.Organization;
+    let orgStartEnd = this.getOrganizationStartAndEndDates();
+    this.currentEvaluationYear = orgStartEnd.start.format("YYYY");
     }
 
     showGuidance(){
@@ -258,13 +266,59 @@ public onAsTSGridRowClick(e) {
   public getRowHeight = function (params) {
     return 34;
   };
-  
+
+  getEmployeeEvaluationYears() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetEmployeeEvaluationYears",
+      this.perfApp.requestBody = { 'empId': this.loginUser._id }
+    this.perfApp.CallAPI().subscribe(evaluationYears => {
+      this.evaluationsYears = evaluationYears;
+    }, error => {
+      this.snack.error(error.error.message);
+    });
+  }
+
+
+  getOrganizationStartAndEndDates() {
+    let Organization = this.currentOrganization;
+    let { StartMonth, EndMonth, EvaluationPeriod } = Organization;
+    StartMonth = parseInt(StartMonth);
+    let currentMoment = moment();
+    let evaluationStartMoment;
+    let evaluationEndMoment
+    if (EvaluationPeriod === "FiscalYear") {
+      var currentMonth = parseInt(currentMoment.format('M'));
+      console.log(`${currentMonth} <= ${StartMonth}`)
+      if (currentMonth <= StartMonth) {
+        evaluationStartMoment = moment().month(StartMonth - 1).startOf('month').subtract(1, 'years');
+        evaluationEndMoment = moment().month(StartMonth - 2).endOf('month');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      } else {
+        evaluationStartMoment = moment().month(StartMonth - 1).startOf('month');
+        evaluationEndMoment = moment().month(StartMonth - 2).endOf('month').add(1, 'years');
+        console.log(`${evaluationStartMoment.format("MM DD,YYYY")} = ${evaluationEndMoment.format("MM DD,YYYY")}`);
+      }
+    } else if (EvaluationPeriod === "CalendarYear") {
+      evaluationStartMoment = moment().startOf('month');
+      evaluationEndMoment = moment().month(0).endOf('month').add(1, 'years');
+    }
+    return {
+      start: evaluationStartMoment,
+      end: evaluationStartMoment
+    }
+  }
+
+
+  loadKpisByYear(selectedYear) {
+    this.currentEvaluationYear = selectedYear;
+    this.GetReporteeKpiRelesedDetails();
+  }
 
 
 GetReporteeKpiRelesedDetails(){
   this.perfApp.route="app";
   this.perfApp.method="GetReporteeReleasedKpiForm",
- this.perfApp.requestBody = { id: this.loginUser._id }
+    this.perfApp.requestBody = { id: this.loginUser._id, currentEvaluation: this.currentEvaluationYear }
   this.perfApp.CallAPI().subscribe(c=>{
     
     
