@@ -31,6 +31,7 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
   evaluationForm: any = {};
   employeeCompetencyList: any;
   RatingList: any;
+  appendix: any;
   public PeerScoreCard: any;
   DirectReporteeScoreCard: any;
   public performanceGoalsRowData: any[];
@@ -53,11 +54,24 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
     this.getAllDevGoalsDetails();
     this.getAllStrengthDetails();
     this.getFinalRating();
+    this.getAppendix();
+  }
+
+  getAppendix() {
+    this.perfApp.route = "evaluation";
+    this.perfApp.method = "GetAppendix",
+      this.perfApp.requestBody = { clientId: this.currentOrganization._id };
+    this.perfApp.CallAPI().subscribe(c => {
+      console.log('getAppendix : ', c);
+      if (c) {
+        this.appendix = c;
+      }
+    })
   }
 
   async printPage() {
     const clonedDoc = document.getElementById('pdfBody');
-    await html2PDF(clonedDoc, 
+    await html2PDF(clonedDoc,
       {
         // onclone: function (clonedDoc) {
         //   console.log('before: ',clonedDoc);
@@ -66,28 +80,28 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
         //     clonedDoc.getElementById('card').style.height = 'auto';
         //     console.log('after: ',clonedDoc);
         // },
-      
-      jsPDF: {
-        format: 'a4',
-      },
-      // imageType: 'image/jpeg',
-      // watermark: {
-      //   src: 'assets/img/brand/Optimal_Assessments_logo88x75.jpg',
-      //   handler({ pdf, imgNode, pageNumber, totalPageNumber }) {
-      //     const props = pdf.getImageProperties(imgNode);
-      //     // do something...
-      //     pdf.addImage(imgNode, 'JPG', 0, 0, 30, 30);
-      //   },
-      // },
-      imageQuality: 1,
-      margin: {
-        top: 50,
-        right: 25,
-        bottom: 50,
-        left: 25,
-      },
-      output: './pdf/generate.pdf'
-    });
+
+        jsPDF: {
+          format: 'a4',
+        },
+        // imageType: 'image/jpeg',
+        // watermark: {
+        //   src: 'assets/img/brand/Optimal_Assessments_logo88x75.jpg',
+        //   handler({ pdf, imgNode, pageNumber, totalPageNumber }) {
+        //     const props = pdf.getImageProperties(imgNode);
+        //     // do something...
+        //     pdf.addImage(imgNode, 'JPG', 0, 0, 30, 30);
+        //   },
+        // },
+        imageQuality: 1,
+        margin: {
+          top: 50,
+          right: 25,
+          bottom: 50,
+          left: 25,
+        },
+        output: './pdf/generate.pdf'
+      });
   }
 
   getAllKPIs() {
@@ -307,10 +321,10 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
   }
 
 
-  getRatingText(value){
+  getRatingText(value) {
     debugger
-    if (this.RatingList && this.RatingList.length>0)
-    return " -" +this.RatingList.find(e=> e.value== value).Text;
+    if (this.RatingList && this.RatingList.length > 0)
+      return " -" + this.RatingList.find(e => e.value == value).Text;
     else return "";
   }
 
