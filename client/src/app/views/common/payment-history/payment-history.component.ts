@@ -5,6 +5,7 @@ import * as moment from 'moment/moment';
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificationService } from '../../../services/notification.service';
 import { Router ,ActivatedRoute} from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-payment-history',
@@ -48,6 +49,7 @@ export class PaymentHistoryComponent implements OnInit {
     TOTAL_PAYABLE_AMOUNT:0
   };
   popupHeading:any="";
+  currentUser:any;
 
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
   public PaymentGridOptions: GridOptions = {
@@ -56,7 +58,11 @@ export class PaymentHistoryComponent implements OnInit {
   constructor(
     private perfApp: PerfAppService,
     private activatedRoute: ActivatedRoute,
-    private notification: NotificationService,) { }
+    private notification: NotificationService,
+    public authService: AuthService,) {
+      this.currentUser = this.authService.getCurrentUser();
+      this.currentOrganization = this.authService.getOrganization();
+     }
 
   ngOnInit(): void {
     this.onloadParams();
@@ -121,6 +127,23 @@ export class PaymentHistoryComponent implements OnInit {
       }
     }
   }
+  sendEmail(){
+    let requestBody:any = {};
+    requestBody.currentUser = this.currentUser;
+    requestBody.paymentModel = this.paymentModel;
+    requestBody.paymentStructure = this.paymentStructure;
+    requestBody.organization = this.currentOrganization;
+    requestBody.paymentSummary = this.paymentSummary;
+    console.log(requestBody);
+    this.perfApp.route = "payments";
+    this.perfApp.method = "info/email";
+    this.perfApp.requestBody = requestBody;
+    this.perfApp.CallAPI().subscribe(paymentRelease => {
+      if(paymentRelease){
+        this.notification.success(`Email sent to ${this.currentUser.Email}`);
+      }
+    });
+  }
 
   findInitialPayments(paymentReleaseId){
     /*let _requestBody={
@@ -172,7 +195,7 @@ export class PaymentHistoryComponent implements OnInit {
       DUE_AMOUNT = DUE_AMOUNT.$numberDecimal;
       TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
       TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
-
+      
       this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status,DurationMonths};
       this.paymentModel.paymentreleaseId = this.paymentReleaseData._id;
       this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
