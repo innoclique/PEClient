@@ -132,7 +132,7 @@ export class CopiesToComponent implements OnInit {
   }
 
   async pdfView(e) {
-    if (e.event.target !== undefined && e.data.RowData.evStatus=='Evaluation Complete') {
+    if (e.event.target !== undefined && e.data.evStatus=='Evaluation Complete') {
       this.currentRowItem = e.data.RowData;
       this.empSelected = await this.authService.FindUserById(this.currentRowItem._id).subscribe(c => {
         if (c) {

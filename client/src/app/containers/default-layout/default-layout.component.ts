@@ -95,6 +95,8 @@ public oneAtATime: boolean = true;
   removeHtmlTags(joiningDate) {
     let s= new RemoveHtml().transform(joiningDate).replace(/\s+/g, " ");
    s=  s.replace('Please click here to login and review.',"")
+   s=  s.replace('please click here to login and review.',"")
+   s=  s.replace('Please click here to make the changes.',"")
    s=  s.replace('To view details click here to login',"")
    s=  s.replace('To view details, click here',"")
    s=  s.replace('To login click here',"")
@@ -257,20 +259,34 @@ public oneAtATime: boolean = true;
         }
 
      
+          if (this.user.SelectedRoles.indexOf('EM') > -1 || this.user.SelectedRoles.indexOf('EA') > -1
+            || this.user.SelectedRoles.indexOf('TS') > -1) {
+            navigationMenu.push(
+              {
+
+                "IsActive": true,
+                "url": "/employee/review-perf-goals-list",
+                "name": "Performance Goal Review",
+                "code": "KPISetting",
+                "icon": "icon-wrench"
+
+              }
+            )
+          }
 
           if (this.user.SelectedRoles.indexOf('EM') > -1 || this.user.SelectedRoles.indexOf('TS') > -1) {
             navigationMenu.push(
              
 
-   {
+  //  {
           
-    "IsActive": true,
-    "url": "/employee/review-perf-goals-list",
-    "name": "Performance Goal Review",
-    "code": "KPISetting",
-    "icon": "icon-wrench"
+  //   "IsActive": true,
+  //   "url": "/employee/review-perf-goals-list",
+  //   "name": "Performance Goal Review",
+  //   "code": "KPISetting",
+  //   "icon": "icon-wrench"
     
-  },
+  // },
   {
 
     "IsActive": true,

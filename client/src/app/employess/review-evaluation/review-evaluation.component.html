@@ -342,7 +342,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text">Comments</span>
                   </div>
-                  <textarea maxlength="2000" formControlName="ThirdSignatoryComments"
+                  <textarea  [readonly]="isReqRevClicked" maxlength="2000" formControlName="ThirdSignatoryComments"
                             class="form-control"></textarea>
 
                 </div>
@@ -357,7 +357,7 @@
               <div class="form-group">
                 <div class="form-check">
 
-                  <input *ngIf="!isReqRevDisabled"
+                  <input *ngIf="!isReqRevDisabled" (change)="tsReqRevisionCheck($event)"
                          formControlName="TSReqRevision" class="form-check-input" type="checkbox">
 
                   <input disabled *ngIf="isReqRevDisabled"
@@ -370,13 +370,13 @@
               </div>
             </div>
             <ng-container *ngIf="seletedTabRole==='TS'">
-             <div class="col-md-6" *ngIf='isReqRevDisabled  && !showManagerSubmit'>
+             <div class="col-md-6" *ngIf='isReqRevDisabled  || isReqRevClicked'>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text ">Revision Comments</span>
                         </div>
-                        <textarea maxlength="2000" formControlName="ThirdSignatoryRevComments"
+                        <textarea [readonly]="isReqRevDisabled" maxlength="2000" formControlName="ThirdSignatoryRevComments"
                             class="form-control"></textarea>
 
                     </div>
@@ -385,7 +385,7 @@
           </ng-container>
 
           <ng-container *ngIf="seletedTabRole==='Manager'">
-            <div class="col-md-6" *ngIf='isReqRevDisabled && !showThirdSignatorySubmit && !showManagerSubmit'>
+            <div class="col-md-6" *ngIf='isReqRevDisabled && !showThirdSignatorySubmit '>
                <div class="form-group">
                    <div class="input-group">
                        <div class="input-group-prepend">

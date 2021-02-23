@@ -43,8 +43,8 @@ export class RollevaluationComponent implements OnInit {
 
   public monthList = ["", "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December"]
-  kpiForList: string[] = ['Employee', 'Manager'];
-  // kpiForList: string[] = ['Employee', 'Manager', 'EA'];
+  // kpiForList: string[] = ['Employee', 'Manager'];
+  kpiForList: string[] = ['Employee', 'Manager', 'EA'];
   modelsList: any[];
   config = {
     backdrop: true,
@@ -1759,7 +1759,9 @@ export class RollevaluationComponent implements OnInit {
     let list = this.evaluationForm.value.Employees;
     var body: any;
     if (list && list.length > 0) {
-      body = list.map(x => { return { EmployeeId: x.row._id, Company: this.currentOrganization._id, EvaluationDuration: this.durationOptionSelected, EvaluationType: this.evaluationType } })
+      body = list.map(x => { return { EmployeeId: x.row._id, Company: this.currentOrganization._id, 
+        KPIFor:this.evaluationForm.value.KPIFor, EvaluationDuration: this.durationOptionSelected, EvaluationType: this.evaluationType } 
+      })
 
     }
     this.perfApp.method = "ReleaseKpiForm";
