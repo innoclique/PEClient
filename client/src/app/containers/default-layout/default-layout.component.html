@@ -73,7 +73,7 @@
                        <div class="text-truncate font-weight-bold">
                          <!-- <span class="fa fa-exclamation text-danger"></span>  -->
                          {{c.Subject}}</div>
-                       <div class="small text-muted text-truncate">{{removeHtmlTags(c.Template)}}</div>
+                       <div *ngIf="!groupval.isOpen" class="small text-muted text-truncate">{{removeHtmlTags(c.Template)}}</div>
                      </div>
 
                    </a>

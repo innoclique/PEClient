@@ -310,7 +310,7 @@ export class KpiAddComponent implements OnInit {
     this.perfApp.requestBody.Owner = this.ownerInfo._id;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
     this.perfApp.requestBody.EvaluationYear = this.currentEvaluationYear;
-    this.perfApp.requestBody.ManagerId = this.loginUser._id;//this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id;
+    this.perfApp.requestBody.ManagerId = this.ownerInfo.Manager._id;
 
 
     

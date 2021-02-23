@@ -66,6 +66,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   isContentOpen: boolean = false;
   @ViewChild('evTabset') tabset: TabsetComponent;
   isReqRevDisabled=false;
+  isReqRevClicked=false;
   currentEmpName: any;
   isPdfView:boolean = false;
   currentOrganization: any;
@@ -877,15 +878,16 @@ this.saveFinalRating(false)
   }
 
   
-  // tsReqRevisionCheck(value) {
+  tsReqRevisionCheck(value) {
     
-  //   if (value.target.value=='on') {
-  //     this.FinalRatingForm.controls['FRReqRevision'].setValue(true);
-  //   } else {
-     
-  //     this.FinalRatingForm.controls['FRReqRevision'].setValue(false);
-  //   }
-  // }
+    if (value.target.checked) {
+      this.isReqRevClicked=true
+       this.FinalRatingForm.controls['ThirdSignatoryComments'].setValue("");
+    } else {
+      this.isReqRevClicked=false;
+       //this.FinalRatingForm.controls['ThirdSignatoryComments'].setValue(false);
+    }
+  }
 
   
   cancelFinalRating() {

@@ -57,6 +57,7 @@ export class ReviewPerfGoalsListComponent implements OnInit {
 
   managerReporteesDataRecords:any;
   tSReporteesData: any;
+  eaReporteesData: any;
   evaluationsYears:any=[];
   currentEvaluationYear:any="";
 
@@ -132,6 +133,7 @@ export class ReviewPerfGoalsListComponent implements OnInit {
 
   //  this.managerReporteesDataRecords=[...this.managerReporteesData,...this.managerReporteesKpiRelData]
     this.GetTSReporteeKpiRelesedDetails();
+    this.GetEAReporteeKpiRelesedDetails();
   }
 
 
@@ -153,10 +155,18 @@ export class ReviewPerfGoalsListComponent implements OnInit {
       cellRenderer: (data) => {
 
         var returnString = '';
+debugger
+        if(data && data.data && 
+         ( (data.data.ReleasedKpis && data.data.ReleasedKpis.KPIFor=="Manager") || (data.data.RowData.Evaluation) )){
+          returnString += ` <i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i> `
+        } else {
+          returnString += ` <i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+          font-size: 17px;  opacity: 0.65;  "    data-action-type="addKPI" title="You Do Not Have Permission"></i> `
+        }
+
         returnString += `
         
-        <i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i> 
         
         <i class="cui-wrench" style="cursor:pointer; padding: 7px 20px 0 0;
         font-size: 17px;"   data-action-type="reviewKPI" title="Review Performance Goal"></i>
@@ -231,7 +241,8 @@ public onEmpGridRowClick(e) {
           this.reviewEvalForm('reviewEval','Manager');
           break;
         case "addKPI":
-          this.addKpiForm();
+          this.addKpiForm( (this.currentRowItem.ReleasedKpis && this.currentRowItem.ReleasedKpis.KPIFor=="Manager") 
+          ||  ( this.currentRowItem.Evaluation) );
           break;
         case "draftGoal":
           this.reviewEvalDraftForm('reviewEval','Manager');
@@ -292,9 +303,9 @@ public onAsTSGridRowClick(e) {
 
   
 
-  addKpiForm() {
+  addKpiForm(flag) {
 
-
+   if(flag)
     this.router.navigate(['em/add-kpi', { action: 'add', ownerId: this.currentRowItem._id,currentEvaluationYear:this.currentEvaluationYear  }], { skipLocationChange: true });
 
   }
@@ -329,6 +340,7 @@ let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).len
          NoOfKpis: row.KpiList.length,
          NoOfSignOff:row.KpiList.length-unSubmitedCount,
          NoOfDevGoals: row.GoalList.length,
+         ReleasedKpis: row.ReleasedKpis,
          pgDraftGoals: row.pgDraftGoals?row.pgDraftGoals.length:0,
         // FRStatus: evaluation ?evaluation.FinalRating.Status:'',
        
@@ -386,6 +398,91 @@ let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff && e.ManagerSignOff.s
 
 
 
+
+
+
+public onEAGridRowClick(e) {
+  if (e.event.target !== undefined) {
+    this.currentRowItem = e.data.RowData;;
+  debugger
+    let actionType = e.event.target.getAttribute("data-action-type");
+    switch (actionType) {
+    
+        case "addKPI":
+          this.addKpiForm(this.currentRowItem.ReleasedKpis && this.currentRowItem.ReleasedKpis.KPIFor=="EA");
+          break;
+        case "draftGoal":
+          this.reviewEvalDraftForm('reviewEval','Manager');
+          break;
+      
+     
+      default:
+    }
+  }
+}
+
+
+
+public eaColumnDefs = [
+  {headerName: 'Employee', field: 'Name', sortable: true, filter: true,
+  // cellRenderer: (data) => {
+  //   return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
+  // }
+},
+ {
+    headerName: 'Review/Modify', field: '', autoHeight: true, suppressSizeToFit: true,
+    cellRenderer: (data) => {
+
+      var returnString = '';
+      returnString += `
+      
+      <i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+      font-size: 17px;"   data-action-type="addKPI" title="Add Performance Goal"></i> 
+      
+
+      `;
+
+      return returnString;
+    }
+  }
+];
+
+
+
+
+
+
+
+GetEAReporteeKpiRelesedDetails(){
+  if(this.loginUser.SelectedRoles.includes('EA')){
+  this.perfApp.route="app";
+  this.perfApp.method="GetEAReporteeReleasedKpiForm",
+  this.perfApp.requestBody = { id: this.loginUser._id , orgId: this.loginUser.Organization._id ,
+    currentEvaluation:this.currentEvaluationYear}
+  this.perfApp.CallAPI().subscribe(c=>{
+    
+    
+    this.eaReporteesData=c.map(row=> {
+      
+
+    //  let flatarray=row.Evaluation.flat()
+// let evaluation=flatarray.find(x=>x.Status==='Active')
+// let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==false).length;
+        return  {
+          Name:row.FirstName+' '+row.LastName,
+          NoOfKpis: row.KpiList.length,
+          // NoOfSignOff:row.KpiList.length-unSubmitedCount,
+          // NoOfDevGoals: row.GoalList.length,
+        // FRStatus: evaluation ?evaluation.FinalRating.Status:'',
+
+        RowData:row
+        }
+    }
+    )
+  })
+
+}
+}
 
 
 }

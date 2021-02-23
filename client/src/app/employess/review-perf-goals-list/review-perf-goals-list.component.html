@@ -52,6 +52,24 @@
                 </ag-grid-angular>
 
               </tab>
+
+
+              <tab *ngIf="loginUser?.SelectedRoles?.includes('EA')" >
+    
+                <ng-template tabHeading><i class="icon-hand-rock"></i>As Evalution Administrator</ng-template>
+               
+                <ag-grid-angular style="width: 100;; height: 440px;" 
+                class="ag-theme-alpine" [rowData]="eaReporteesData"
+                  [columnDefs]="eaColumnDefs"
+                  [pagination]="true"
+                  (gridReady)="onTsGridReady($event)"
+                   [getRowHeight]="getRowHeight"  [enableBrowserTooltips]="true" 
+                (gridSizeChanged)="onGridSizeChanged($event)"      
+                  [paginationPageSize]="10"
+                   (rowClicked)="onEAGridRowClick($event)" >
+                </ag-grid-angular>
+
+              </tab>
             
               
             </tabset>
