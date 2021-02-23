@@ -487,8 +487,8 @@ export class KpiSetupComponent implements OnInit {
 
   editKpiForm(currentRowItem: any) {
    
-
-      this.router.navigate(['employee/kpi-setting',{action:'edit',id:this.currentRowItem._id,isFinalSignoff:this.isSignOffDisabled}],{ skipLocationChange: true });
+    let selectedYear = this.empEvaluationsYears.find(ey => ey.value == this.selectedEvaluationYr);
+    this.router.navigate(['employee/kpi-setting', { action: 'edit', id: this.currentRowItem._id, isFinalSignoff: this.isSignOffDisabled, currentEvaluation: this.selectedEvaluationYr, currentEvaluationPeriod: selectedYear.label}],{ skipLocationChange: true });
       
   }
 
@@ -569,8 +569,9 @@ submitAllKPIs(showMsg) {
   )
 }
 
-  createKpi(){
-    this.router.navigate(['employee/kpi-setting',{isFinalSignoff:this.isSignOffDisabled,currentEvaluation:this.selectedEvaluationYr}],{ skipLocationChange: true });
+  createKpi() {
+    let selectedYear = this.empEvaluationsYears.find(ey => ey.value == this.selectedEvaluationYr);
+    this.router.navigate(['employee/kpi-setting', { isFinalSignoff: this.isSignOffDisabled, currentEvaluation: this.selectedEvaluationYr, currentEvaluationPeriod: selectedYear.label}],{ skipLocationChange: true });
     
   }
 
