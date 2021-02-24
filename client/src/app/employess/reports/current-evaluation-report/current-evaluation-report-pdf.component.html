@@ -3,7 +3,7 @@
 </div> -->
 <!-- <div id="pdfBody"     [ngStyle]="{'visibility':isReport ? 'visible' : 'hidden','overflow':isReport?'visible':'hidden','height':isReport?'auto':'0'}"
     class="card"> -->
-    <div id="pdfBody" class="pdfBody">
+<div id="pdfBody" class="pdfBody">
     <div style="text-align: center;" class="card-header">
         Evaluation Report - {{getEVPeriod()}} - {{loginUser?.FirstName}} {{loginUser?.LastName}}
         <div class="form-group form-actions pull-right m-0">
@@ -96,7 +96,7 @@
                         {{performanceGoal.yearEndManagerComments}}
                     </td>
                     <td>
-                        {{performanceGoal.score}} {{ performanceGoal.score ? getRatingText(performanceGoal.score) :'' }} 
+                        {{performanceGoal.score}} {{ performanceGoal.score ? getRatingText(performanceGoal.score) :'' }}
                     </td>
                 </tr>
             </table>
@@ -129,10 +129,11 @@
                                         {{question.label}}
                                     </td>
                                     <td>
-                                      {{finalRating.Manager.IsSubmitted ? question.value : ''}} {{ finalRating.Manager.IsSubmitted ? getRatingText(question.value) :'' }} 
+                                        {{finalRating.Manager.IsSubmitted ? question.value : ''}} {{
+                                        finalRating.Manager.IsSubmitted ? getRatingText(question.value) :'' }}
                                     </td>
                                     <td *ngIf="i==0" [attr.rowspan]="i">
-                                      {{finalRating.Manager.IsSubmitted ? c.comments : ''}}
+                                        {{finalRating.Manager.IsSubmitted ? c.comments : ''}}
                                     </td>
                                 </tr>
                             </table>
@@ -284,6 +285,19 @@
     <div class="card-header">
         Final Rating
     </div>
+    <div class="col-md-12">
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <th style="color: black;font-weight: 600;  text-align: center; ">CODE OF CONDUCT</th>
+        </thead>
+        <tr>
+            <td>
+                My signature below represents my continued commitment to adhere to the ___________Code of Conduct
+            </td>
+        </tr>
+    </table>
+</div>
+
     <div class="card-body">
         <div class="grid-metadata-wrapper ">
             <div class="grid-metadata-header" *ngIf="finalRating.Manager">
@@ -306,7 +320,8 @@
                 <div class="col-lg-12 pull-left"><span>
                         Manager Rating :
                     </span>
-                    <label>{{finalRating.Manager.YearEndRating}} {{ finalRating.Manager.YearEndRating ? getRatingText(finalRating.Manager.YearEndRating) :'' }}</label>
+                    <label>{{finalRating.Manager.YearEndRating}} {{ finalRating.Manager.YearEndRating ?
+                        getRatingText(finalRating.Manager.YearEndRating) :'' }}</label>
                 </div>
 
                 <div class="col-lg-12 pull-left" *ngIf="finalRating.Manager"><span>
@@ -322,9 +337,92 @@
                 <div class="col-lg-6 pull-left"><span>
                         SubmittedOn :
                     </span>
-                 <label>{{finalRating.Manager.IsSubmitted ? finalRating.Manager.SubmittedOn : ''}}</label>
+                    <label>{{finalRating.Manager.IsSubmitted ? finalRating.Manager.SubmittedOn : ''}}</label>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <th style="color: black;font-weight: 600;  text-align: center; ">APPENDIX</th>
+                </thead>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        A critical leadership responsibility is to evaluate and coach employee performance. The
+                        performance evaluation is a key component of employee development and demonstrates our Vision
+                        and Values in action.
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="color: black;font-weight: 600;">
+            In completing the evaluation, please observe the following principles:
+        </div>
+        <div class="col-md-12">
+        <div style="text-align: center;" class="col-md-12 ">
+            <table class="table ">
+                <tr *ngFor="let principle of appendix.principles">
+                    <td>
+                        {{principle.principle}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <table class="table table-bordered ">
+                <tr>
+                    <td>
+                        Using the rating scale indicated, select the rating for each element that best reflects the
+                        Employee’s
+                        performance or skill level against established standards. Supporting comments are key
+                        elements of the evaluation.
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-12">
+                <table class="table table-bordered ">
+                    <thead class="thead-light">
+                        <th style="color: black;font-weight: 600;  text-align: center; ">Overall Rating</th>
+                        <th style="color: black;font-weight: 600;  text-align: center; ">Definition</th>
+                    </thead>
+                    <tr *ngFor="let ratingScore of appendix.ratingScores">
+                        <td>
+                            {{ratingScore.Text}}
+                        </td>
+                        <td>
+                            {{ratingScore.definition}}
+                        </td>
+                    </tr>
+                </table>
+                </div>
+                <div class="col-md-12">
+                <table class="table table-bordered ">
+                    <thead class="thead-light">
+                        <th style="color: black;font-weight: 600;  text-align: center; ">JOB LEVEL</th>
+                        <th style="color: black;font-weight: 600;  text-align: center; ">OBJECTIVES</th>
+                        <th style="color: black;font-weight: 600;  text-align: center; ">CORE RESPONSIBILITIES</th>
+                    </thead>
+                    <tr *ngFor="let jobLevelConfig of appendix.jobLevelConfigs">
+                        <td>
+                            {{jobLevelConfig.jobLevelName}}
+                        </td>
+                        <td>
+                            {{jobLevelConfig.objectives}}
+                        </td>
+                        <td>
+                            {{jobLevelConfig.coreResponsibilities}}
+                        </td>
+                    </tr>
+                </table>
+                </div>
         </div>
     </div>
 </div>

@@ -6,6 +6,7 @@ import { AuthService } from './../../../../../services/auth.service';
 import RefData from "../../../../psa/reports/data/refData";
 import ReportTemplates from '../../../../psa/reports/data/reports-templates';
 import { ReportsService } from '../../../../../services/reports.service';
+import { PerfAppService } from '../../../../../services/perf-app.service';
 
 @Component({
   selector: 'app-reports',
@@ -23,10 +24,13 @@ export class CSAEvaluationsSummary {
   currentOrganization: any;
   detailCellRenderer: any;
   frameworkComponents: any;
+  rangeList: any[] = [];
+  public rangeValue: any;
   constructor(
     public authService: AuthService,
     public reportService: ReportsService,
     public router: Router,
+    private perfApp: PerfAppService,
     private activatedRoute: ActivatedRoute, ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
@@ -39,7 +43,15 @@ export class CSAEvaluationsSummary {
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
+    let rangeOptions = {
+      UsageType: this.currentOrganization.UsageType ? this.currentOrganization.UsageType : "License",
+      "Type": "Range"
+    }
+
+    this.getRangeList(rangeOptions);
     this.getEvaluationsSummary();
+
+   
   }
 
   public headerHeightSetter(event) {
@@ -47,7 +59,6 @@ export class CSAEvaluationsSummary {
     var height = ReportTemplates.headerHeightGetter() + padding;
     this.api.setHeaderHeight(height);
     this.api.resetRowHeights();
-    this.api.sizeColumnsToFit();
     this.api.sizeColumnsToFit();
   }
   getEvaluationsSummary() {
@@ -64,12 +75,17 @@ export class CSAEvaluationsSummary {
     });
 
   }
+  
 
   getCSAEvaluationsSummaryColumnDefs() {
     return [
       { headerName: 'Evaluation Period', field: 'evaluationPeriod' },
       { headerName: 'Evaluations Type', field: 'evaluationsType' },
-      { headerName: '# of Evaluations', field: 'evaluationsCount', type: 'rightAligned', },
+      { headerName: '# of Evaluations', field: 'evaluationsCount',
+        cellRenderer: (data) => {
+          return `<span title= Range:${this.rangeValue ? this.rangeValue.Range : ''}>${data.value}</span>`
+        }
+},
     ];
   }
 
@@ -81,6 +97,7 @@ export class CSAEvaluationsSummary {
       evaluationsType: RefData.evaluationTypes[0],
       evaluationsCount: evaluationSummary.data,
     });
+    this.rangeValue = this.rangeList.find(rangObj => rangObj._id == this.currentOrganization.Range);
     this.rowData = rowData;
   }
 
@@ -109,6 +126,18 @@ export class CSAEvaluationsSummary {
 
   onQuickFilterChanged($event: any) {
     this.api.setQuickFilter($event.target.value);
+  }
+
+  getRangeList(options) {
+    let ClientType = this.currentOrganization.ClientType ;
+    options['ClientType'] = ClientType;
+
+    this.perfApp.route = "payments";
+    this.perfApp.method = "range/list";
+    this.perfApp.requestBody = options;
+    this.perfApp.CallAPI().subscribe(_rangeList => {
+      this.rangeList = _rangeList;
+    });
   }
 
 }

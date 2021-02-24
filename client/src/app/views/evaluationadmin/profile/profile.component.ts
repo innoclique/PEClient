@@ -248,6 +248,11 @@ export class ProfileComponent implements OnInit {
         if (this.isDraftEmployee) {
           this.snack.success(this.translate.instant(`Profile has been successfully saved`));
         } else {
+          //update firstName and lastname in localstorag after submit
+          var userFromLocalStorage = JSON.parse(localStorage.getItem("User"));
+          userFromLocalStorage.FirstName = this.empForm.value.FirstName;
+          userFromLocalStorage.LastName = this.empForm.value.LastName;
+          this.authService.setLSObject('User', userFromLocalStorage);
           this.snack.success(this.translate.instant(`Profile has been successfully updated`));
         }
 

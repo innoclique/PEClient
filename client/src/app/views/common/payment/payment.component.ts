@@ -67,9 +67,10 @@ export class PaymentComponent implements OnInit {
   isNoNeededVisible:Boolean = false;
   public clientData: any = []
   selectedRangeValue: any;
+  adhokPaymentLink:any="#/csa/adhoc-payment";
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
-
   public taxToolTip;
+  isClientDropdownEnable:Boolean=false;
 
   constructor(
     public router: Router,
@@ -98,6 +99,7 @@ export class PaymentComponent implements OnInit {
     //this.paymentModel.Organization = this.currentOrganization.Name;
     this.findInitialPayments(this.currentOrganization._id);
     if(this.currentUser.Organization.ClientType === "Reseller"){
+      this.adhokPaymentLink = "#/rsa/adhoc-payment";
       this.isReseller = true;
       this.isNoNeededVisible = true;
       //this.getClients();
@@ -111,6 +113,7 @@ export class PaymentComponent implements OnInit {
   }
 
   getClients() {
+    this.clientData = [];
     this.perfApp.route = "app";
     this.perfApp.method = "GetAllOrganizationsForReseller",
     this.perfApp.requestBody = { 'companyId': this.currentOrganization._id }
@@ -146,11 +149,16 @@ export class PaymentComponent implements OnInit {
     this.isInitialPayment=false;
     this.isNoNeededVisible=false;
     this.newPurchase = false;
+    this.isClientDropdownEnable=false;
     
     if(paymentOption!=""){
 
       this.isActiveDateDisabled=false;
       this.isPaymentFrequencyDisabled=false;
+      if(this.currentUser.Organization.ClientType === "Reseller"){
+        this.isReseller = true;
+      }
+
       switch (paymentOption) {
         case 'initial_pay':
           if(this.paymentReleaseData){
@@ -159,7 +167,7 @@ export class PaymentComponent implements OnInit {
             this.isActiveDateDisabled=true;
             this.isPaymentFrequencyDisabled=true;
             if(this.currentUser.Organization.ClientType === "Reseller"){
-              this.isReseller = true;
+              
               this.isNoNeededReadOnly = true;
               this.isNoNeededVisible = true;
             }
@@ -187,18 +195,21 @@ export class PaymentComponent implements OnInit {
           }
           break;
         case 'adhoc_pay':
-          if(this.isinitialPaymentDone){
+          if(this.isinitialPaymentDone && !this.isReseller){
             this.isAdhocpayment=true;
             this.findAdhocPayments(this.currentOrganization._id,"Adhoc");
             if(this.paymentReleaseData.Range)
               this.selectedRangeValue = this.paymentReleaseData.Range;
+          }else if(this.isinitialPaymentDone && this.isReseller){
+            this.isAdhocpayment=true;
+            this.isClientDropdownEnable=true;
+            this.getClients();
           }else{
             this.notification.error('Adhoc will be available after initial payment done.');
           }
           break;
         case 'client_renewal_pay':
           if(this.isinitialPaymentDone){
-            this.isReseller = true;
             this.getClients();
           }else{
             this.notification.error('Renewal will be available after initial payment done.')
@@ -425,97 +436,17 @@ export class PaymentComponent implements OnInit {
   clientOrgnizationDetails(selectedOrgnization){
     console.log("On Select Organization")
     console.log(selectedOrgnization);
-    this.useageTypeEmployee=false;
-    this.paymentModel.RangeId="";
-    this.paymentModel.Range="";
-    this.paymentModel.NoOfEmployees=0;
-  
-    this.isReseller = false;
-    this.paymentModel.NoNeeded=0;
-  
-    this.paymentStructure=null;
-    this.paymentScale=null;
-    this.paymentSummary=null;
-    //this.isRangeSelectVisible=false;
-    //this.isRangeSelectBox=true;
-    this.isRenewalPayment = false;
-    if(selectedOrgnization!=""){
-      this.isNoNeededVisible = false;
-      this.isRenewalPayment = true;
-      this.selectedOrganizationObj = this.clientData.find(org=>org._id==selectedOrgnization);
-      console.log(`selected org : ${JSON.stringify(this.selectedOrganizationObj)}`);
-      this.getTaxInfo(this.selectedOrganizationObj.State);
-      if(this.selectedOrganizationObj.UsageType && this.selectedOrganizationObj.UsageType==="License"){
-        //this.isRangeSelectVisible=true;
-        //this.isRangeSelectBox=false;
-      }
-      //=>Range List
-      let rangeOptions={
-        ClientType:this.selectedOrganizationObj.ClientType,
-        UsageType:this.selectedOrganizationObj.UsageType || "License",
-        "Type" : "Range"
-      } 
-      this.getRangeList(rangeOptions);
-      //=> End
-      let _requestBody={
-        Organization:selectedOrgnization,
-        Status:'Draft',
-        Type:'Initial'
-      }
-      this.perfApp.route = "payments";
-      this.perfApp.method = "release/organization";
-      this.perfApp.requestBody = _requestBody;
-      this.perfApp.CallAPI().subscribe(paymentRelease => {
-        if(!paymentRelease){
-          this.loadOrganizationDefaultData();
-        }else{
-          let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = paymentRelease;
-          let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = paymentRelease;
-          
-          COST_PER_PA = COST_PER_PA.$numberDecimal;
-          COST_PER_MONTH = COST_PER_MONTH.$numberDecimal;
-          DISCOUNT_PA_PAYMENT = DISCOUNT_PA_PAYMENT.$numberDecimal;
-          TOTAL_AMOUNT = TOTAL_AMOUNT.$numberDecimal;
-          COST_PER_MONTH_ANNUAL_DISCOUNT = COST_PER_MONTH_ANNUAL_DISCOUNT.$numberDecimal;
-
-          let {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT} = paymentRelease;
-
-          DUE_AMOUNT = DUE_AMOUNT.$numberDecimal;
-          TAX_AMOUNT = TAX_AMOUNT.$numberDecimal;
-          TOTAL_PAYABLE_AMOUNT = TOTAL_PAYABLE_AMOUNT.$numberDecimal;
-
-          this.paymentModel = {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,NoOfEmployees,NoNeeded,Status};
-          if(this.selectedOrganizationObj.UsageType=="License"){
-          this.paymentModel.RangeId = RangeId;
-          this.paymentModel.Range = Range;
-          }
-          if(this.selectedOrganizationObj.UsageType=="Employees"){
-            this.useageTypeEmployee=true;
-            this.paymentModel.Range = Range;
-          }
-          if(this.selectedOrganizationObj.ClientType === "Reseller"){
-            this.isReseller=true;
-            if(this.paymentModel.UsageType==="Employees"){
-              this.useageTypeEmployee=true;
-              //this.isRangeSelectVisible=false;
-              //this.isRangeSelectBox=true;
-              //rangeOptions.UsageType="Employees";
-            }
-          }
-          this.paymentModel.paymentreleaseId = paymentRelease._id;
-          this.paymentStructure = {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT};
-          this.paymentSummary = {DUE_AMOUNT,TAX_AMOUNT,TOTAL_PAYABLE_AMOUNT};
-          
-        }
-      });
-      
-    }else{
-      if(this.currentUser.Organization.ClientType === "Reseller"){
-        this.isReseller = true;
-        this.isNoNeededVisible = true;
+    this.findAdhocPayments(selectedOrgnization,"Adhoc");
+    if(this.paymentReleaseData){
+      if(this.paymentReleaseData.Range)
+      this.selectedRangeValue = this.paymentReleaseData.Range;
+      this.useageTypeEmployee=false;
+      if(this.paymentReleaseData.UsageType==="Employees"){
+        this.useageTypeEmployee=true;
       }
     }
-    this.paymentModel.Organization = this.currentUser.Organization._id;
+    
+        
 }
 
   orgnizationDetails(){

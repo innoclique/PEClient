@@ -6,7 +6,16 @@
         
         <h3 class="wow fadeIn" data-wow-delay="0.2s">Adhoc Payment</h3>
         <div class="release_method_space">
-            
+          <div class="row m-b15" *ngIf="isReseller">
+            <div class="col-lg-12">
+              <label>Organisation</label>
+              <select [(ngModel)]="paymentModel.Organization"  class="form-control" >
+                <option value="">Select Organisation</option>
+                <option *ngFor="let item of clientList" [value]="item._id">{{item.Name}}</option>
+              </select>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+          </div>
           <div class="row m-b15">
             <div class="col-lg-6">
               <label>Usage type</label>
@@ -53,14 +62,14 @@
           </div>
           
 
-          <div class="row m-b15">
+          <!--<div class="row m-b15">
             <div class="col-lg-6" *ngIf="isReseller">
               <label>#s needed</label>
               <input type="text"  class="form-control" [(ngModel)]="paymentModel.NoNeeded" />
             </div>
             
             
-          </div>
+          </div>-->
           
         </div>
         <div class="release_cost_list release_method_list">

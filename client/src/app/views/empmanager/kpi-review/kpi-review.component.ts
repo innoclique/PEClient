@@ -17,8 +17,10 @@ import { ThemeService } from '../../../services/theme.service';
 import { AlertComponent } from '../../../shared/alert/alert.component';
 import { Constants } from '../../../shared/AppConstants';
 import { CustomValidators } from '../../../shared/custom-validators';
+import html2PDF from 'jspdf-html2canvas';
 import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
 import * as moment from 'moment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-kpi-review-manager',
@@ -86,6 +88,11 @@ actor:any;
   currentOrganization: any;
   draftGoals:Boolean = false;
   currentEvaluationYear:any;
+  public index:any;
+  indexcolor:any;
+  index1:any;
+  base64data: any;
+
   constructor(private fb: FormBuilder,
     private authService: AuthService,
     public router: Router,
@@ -93,6 +100,7 @@ actor:any;
     public dialog: MatDialog,
     public themeService: ThemeService,
     private snack: NotificationService,
+    private http: HttpClient,
     private modalService: BsModalService,
     private perfApp: PerfAppService,
     public translate: TranslateService) {
@@ -292,7 +300,7 @@ actor:any;
   }
 
   ngOnInit(): void {
-    
+    this.index1=0;
     this.initApicallsForKpi();
 
     this.initKPIForm()
@@ -351,6 +359,60 @@ actor:any;
 
 
 
+
+  
+getBase64(){
+
+  this.http.get('/assets/img/_pdf_generate.pdf', { responseType: 'blob' })
+  .subscribe(res => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      this. base64data = reader.result;                
+          console.log("sgsggjsr onsonsnos ykvvrsgsggjsr",this.base64data);
+    }
+
+    reader.readAsDataURL(res); 
+   // this. base64data = res;   
+    console.log("sgsggjsr onsonsnos",res);
+  });
+
+}
+
+
+  async convertPage() {
+    const clonedDoc = document.getElementById('pdfBody');
+    await html2PDF(clonedDoc, 
+      {
+        // onclone: function (clonedDoc) {
+        //   console.log('before: ',clonedDoc);
+        //     clonedDoc.getElementById('card').style.visibility = 'visible';
+        //     clonedDoc.getElementById('card').style.overflow = 'visible';
+        //     clonedDoc.getElementById('card').style.height = 'auto';
+        //     console.log('after: ',clonedDoc);
+        // },
+      
+      jsPDF: {
+        format: 'a4',
+      },
+      // imageType: 'image/jpeg',
+      // watermark: {
+      //   src: 'assets/img/brand/Optimal_Assessments_logo88x75.jpg',
+      //   handler({ pdf, imgNode, pageNumber, totalPageNumber }) {
+      //     const props = pdf.getImageProperties(imgNode);
+      //     // do something...
+      //     pdf.addImage(imgNode, 'JPG', 0, 0, 30, 30);
+      //   },
+      // },
+      imageQuality: 1,
+      margin: {
+        top: 50,
+        right: 25,
+        bottom: 50,
+        left: 25,
+      },
+      output: './pdf/generate.pdf',
+    });
+  }
 
 
   get f() {
@@ -519,6 +581,9 @@ if (this.accessingFrom == "reviewEvaluation"  && this.kpiForm.get('ManagerScore'
   return;
 }
 
+// this.convertPage();
+// this.getBase64();
+
     this.perfApp.route = "app";
     this.perfApp.method = "UpdateKpiDataById";
     this.perfApp.requestBody = {};
@@ -531,6 +596,7 @@ if (this.accessingFrom == "reviewEvaluation"  && this.kpiForm.get('ManagerScore'
     //this.perfApp.requestBody.IsManaFTSubmited = this.kpiForm.get('ManagerFTSubmitedOn').value ? false:true;
     this.perfApp.requestBody.Action='Review' ;
     this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
+    this.perfApp.requestBody.KpiBase64data = this.base64data;
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c) {
@@ -938,6 +1004,14 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
 this.msSelText="";
   }
 
+  currentKpi(index){
+
+    this.index1=index
+     this.kpiDetails=  this.empKPIData[this.index1];
+     this.initKPIForm();
+     this.currentKpiId=this.kpiDetails._id;
+     
+   }
   nextKpi(){
 
    this.selIndex=this.selIndex+1;

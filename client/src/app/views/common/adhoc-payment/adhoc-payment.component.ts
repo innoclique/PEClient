@@ -62,7 +62,7 @@ export class AdhocPaymentComponent implements OnInit {
   isinitialPaymentDone:Boolean=false;
   isCheckout:Boolean=false;
   isOtherText:Boolean=false;
-
+  clientList:any=[];
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
 
   constructor(
@@ -75,6 +75,10 @@ export class AdhocPaymentComponent implements OnInit {
     ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
+    if(this.currentUser.Organization.ClientType === "Reseller"){
+      this.isReseller = true;
+      this.getClients();
+    }
    }
 
   ngOnInit(): void {
@@ -83,6 +87,14 @@ export class AdhocPaymentComponent implements OnInit {
     //this.paymentModel.Organization = this.currentOrganization.Name;
     this.getTaxInfo(this.currentOrganization.State);
     this.findInitialPayments(this.currentOrganization._id);
+  }
+  getClients() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetAllOrganizationsForReseller",
+    this.perfApp.requestBody = { 'companyId': this.currentOrganization._id }
+    this.perfApp.CallAPI().subscribe(clientList => {
+      this.clientList = clientList
+    })
   }
   getTaxInfo(State){
     console.log("getTaxInfo")
@@ -304,7 +316,8 @@ export class AdhocPaymentComponent implements OnInit {
     if(this.isOtherText){
       this.paymentModel.Purpose = this.otherTextValue
     }
-    this.paymentModel.Organization=this.currentOrganization._id;
+    if(!this.isReseller)
+      this.paymentModel.Organization=this.currentOrganization._id;
     this.paymentModel.Status="Pending";
     let requestBody:any={...this.paymentModel,...this.paymentStructure,...this.paymentSummary};
     requestBody.RangeId=this.paymentScale?this.paymentScale._id:this.paymentModel.RangeId;

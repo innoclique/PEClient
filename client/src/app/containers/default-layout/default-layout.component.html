@@ -22,11 +22,10 @@
       <a class="nav-link" href="#"><i class="icon-bell"></i><span class="badge badge-pill badge-danger">5</span></a>
     </li> -->
     <li class="nav-item dropdown" dropdown placement="bottom right">
-      
-      <a class="nav-link" data-toggle="langdropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
-        <i class="fa fa-envelope" title="Send us an email"></i> 
-      </a>
+      <a href="mailto:support@ageistech.com"><i class="fa fa-envelope" title="Send us an email" style="margin-top:2px;"></i></a> 
+     
     </li>
+    
 
     <li class="nav-item dropdown" dropdown placement="bottom right">
       
@@ -74,7 +73,7 @@
                        <div class="text-truncate font-weight-bold">
                          <!-- <span class="fa fa-exclamation text-danger"></span>  -->
                          {{c.Subject}}</div>
-                       <div class="small text-muted text-truncate">{{removeHtmlTags(c.Template)}}</div>
+                       <div *ngIf="!groupval.isOpen" class="small text-muted text-truncate">{{removeHtmlTags(c.Template)}}</div>
                      </div>
 
                    </a>
@@ -120,8 +119,8 @@
         <img src="assets/img/avatars/emp.png" class="img-avatar" alt="admin@bootstrapmaster.com"/>
         <span class="user-info">
           <small>Welcome,</small> <br>
-         {{user?.FirstName}} {{ user?.LastName}}
-      </span>
+          {{userObj?.FirstName}} {{ userObj?.LastName}}
+        </span>
       </a>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
         <div class="dropdown-header text-center"><strong>Account</strong></div>

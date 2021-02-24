@@ -637,6 +637,7 @@ export class CreateClientComponent implements OnInit {
     if (this.clientForm.invalid  && this.isSaveAsDraftClicked==false ) {
       return;
     }
+    let clientEmail = this.clientForm.get("Email").value;
     const organization = this.prepareOrgData();
     console.log('updating client',organization)
     this.perfApp.route = "app";
@@ -653,7 +654,7 @@ export class CreateClientComponent implements OnInit {
 
 
       if (!this.clientFormData.IsDraft) {
-        this.router.navigate(['psa/payment-release', { email: this.clientFormData.Email }], { skipLocationChange: true });
+        this.router.navigate(['psa/payment-release', { email: clientEmail }], { skipLocationChange: true });
       } else {
         this.navToList();
       }

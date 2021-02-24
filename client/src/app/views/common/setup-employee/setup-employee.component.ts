@@ -557,7 +557,8 @@ callEmpApi(){
 if(!this.perfApp.requestBody.ThirdSignatory) delete this.perfApp.requestBody.ThirdSignatory;
 if(!this.perfApp.requestBody.CopiesTo) delete this.perfApp.requestBody.CopiesTo;
 if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
-
+  let empFirstName = this.empForm.value.FirstName;
+  let empLastName = this.empForm.value.LastName;
   this.perfApp.CallAPI().subscribe(c=>{
 
     if (c.message==Constants.SuccessText) {
@@ -565,6 +566,13 @@ if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
       if (this.isDraftEmployee) {
         this.snack.success(this.translate.instant(`The employee has been successfully saved.`));
       } else {
+        if (this.loginUser._id == this.currentRowItem._id) {
+          //update firstName and lastname in localstorage after submit
+          var userFromLocalStorage = JSON.parse(localStorage.getItem("User"));
+          userFromLocalStorage.FirstName = empFirstName;
+          userFromLocalStorage.LastName = empLastName;
+          this.authService.setLSObject('User', userFromLocalStorage);
+        }
         this.snack.success(this.translate.instant(`The employee has been successfully ${this.currentAction == 'create' ? 'added' : 'updated'}.`));
       }
       this.getEmployees();

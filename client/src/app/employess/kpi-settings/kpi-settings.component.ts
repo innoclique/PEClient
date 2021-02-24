@@ -76,7 +76,7 @@ accessingFrom:any;
   isFinalSignoffDone=false;
 
   currentEvaluation:any;
-
+  currentEvaluationPeriod: any;
 
 
   constructor(private fb: FormBuilder,
@@ -105,8 +105,10 @@ accessingFrom:any;
      }
      if (params['currentEvaluation']) {
       this.currentEvaluation = params['currentEvaluation'];
-      
      }
+      if (params['currentEvaluationPeriod']) {
+        this.currentEvaluationPeriod = params['currentEvaluationPeriod'];
+      }
     });
     this.findPgSignoff();
     //this.initApicallsForKpi();
@@ -644,7 +646,7 @@ conformSubmitKpis(){
       // this.setWeighting(c.filter(item => item.IsDraft === false).length);
       debugger
      // if (this.currentAction =='create')
-        this.setWeighting(c.filter(item => item.IsDraft === false).length, this.currentAction);
+      this.setWeighting(c.filter(item => item.IsDraft === false && item.EvaluationYear == this.currentEvaluation ).length, this.currentAction);
       if (c && c.length > 0) {
         if (this.accessingFrom=='currEvaluation') {
           if (c.filter(e=>e.IsSubmitedKPIs).length==0) {
@@ -978,8 +980,12 @@ debugger
 public monthList = ["","January", "February", "March", "April", "May", "June", "July",
 "August", "September", "October", "November", "December"];
   
-getEVPeriod(){
-  return ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
+  getEVPeriod() {
+    if (this.currentEvaluationPeriod) {
+      return this.currentEvaluationPeriod;
+    } else {
+      return ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
+    }
     }
 
 
