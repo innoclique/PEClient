@@ -4,6 +4,7 @@ import { MonerisService } from '../../../services/moneris.service';
 import { Router ,ActivatedRoute} from '@angular/router';
 import { PerfAppService } from '../../../services/perf-app.service';
 import { NotificationService } from '../../../services/notification.service';
+import { environment } from '../../../../environments/environment';
 
 declare const monerisCheckout: any;
 var loginUser:any;
@@ -22,7 +23,7 @@ export class PaymentGatewayComponent implements OnInit {
   appInputparams:any={};
   transactionId:any;
   currentOrganization:any;
-  url = 'https://gatewayt.moneris.com/chkt/js/chkt_v1.00.js';
+  url = environment.MONERIS_JSLIB_SRC;
 
   constructor(
     public authService: AuthService,
@@ -118,12 +119,12 @@ loadPaymentPage(ticket){
   console.log(' ticket : ',ticket);
   var myCheckout = new monerisCheckout();
   myCheckout.setCheckoutDiv('moneris-checkout');
-  myCheckout.setMode("qa");
+  myCheckout.setMode(environment.MONERIES_ENVIRONMENT);
   myCheckout.startCheckout(ticket);
   myCheckout.setCallback("page_loaded", this.initiateTransactionHistory);
-  myCheckout.setCallback("payment_receipt", this.paymentReceipt);
+  //myCheckout.setCallback("payment_receipt", this.paymentReceipt);
   myCheckout.setCallback("cancel_transaction", this.initiateTransactionHistory);
-  //myCheckout.setCallback("payment_complete", this.initiateTransaction);
+  myCheckout.setCallback("payment_complete", this.initiateTransaction);
   myCheckout.setCallback("error_event", this.initiateTransactionHistory);
 }
 initiateTransactionHistory(response){
@@ -176,26 +177,43 @@ paymentReceipt(response){
 
 initiateTransaction(response){
   console.log("inside:initiateTransaction")
-  let transactionRequest:any={
+  response = JSON.parse(response);
+  if(response && response.response_code=="001"){
+    let transactionRequest:any={
+      UserId:loginUser._id,
+      PaymentReleaseId:payment_releaseId,
+      Amount:payable_Amount,
+      TransactionResponse:response,
+      Organization:loginorganization._id,
+      Status : "Success"
+    }
+    console.log(transactionRequest);
+    perfApp1.route = "transactions";
+    perfApp1.method = "add",
+    perfApp1.requestBody = transactionRequest
+    perfApp1.CallAPI().subscribe(c => {
+    //this.transactionId = c._id;
+    });
+  }else{
+    
+    let transactionHistoryRequest:any={
     UserId:loginUser._id,
     PaymentReleaseId:payment_releaseId,
     Amount:payable_Amount,
-    TransactionResponse:response,
+    TransactionResponse:JSON.parse(response),
     Organization:loginorganization._id,
   }
-  if(response && response.success){
-    transactionRequest.Status = "Success";
-  }else{
-    transactionRequest.Status = "Fail";
+  
+  perfApp1.route = "transactions";
+  perfApp1.method = "history/add",
+  perfApp1.requestBody = transactionHistoryRequest
+  perfApp1.CallAPI().subscribe(c => {
+   console.log(c);
+  });
   }
   
-  console.log(transactionRequest);
-  perfApp1.route = "transactions";
-  perfApp1.method = "add",
-  perfApp1.requestBody = transactionRequest
-  perfApp1.CallAPI().subscribe(c => {
-   //this.transactionId = c._id;
-  });
+  
+  
 }
 
 paymentComplete(data){
