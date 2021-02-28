@@ -43,8 +43,8 @@
     <li class="nav-item dropdown app-noty-main"  dropdown placement="bottom right">
       
       
-      <a class="nav-link"  data-toggle="langdropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
-        <i class="icon-envelope-letter"></i><span class="badge badge-pill badge-info">{{unReadCount==0?'':unReadCount}}</span>
+      <a class="nav-link"  style="cursor: pointer;"  data-toggle="langdropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+        <i class="fa fa-bell"></i><span class="badge badge-pill badge-info">{{unReadCount==0?'':unReadCount}}</span>
       </a>
 
       <div aria-labelledby="simple-dropdown"  (click)="$event.stopPropagation()"  *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-xlg"
