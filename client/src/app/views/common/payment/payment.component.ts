@@ -54,7 +54,7 @@ export class PaymentComponent implements OnInit {
     TOTAL_PAYABLE_AMOUNT:0
   };
   selectedOrganizationObj:any;
-  isActiveDateDisabled:Boolean=false;
+  isActiveDateDisabled:Boolean=true;
   isPaymentFrequencyDisabled:Boolean=false;
   paymentReleaseData:any;
   isinitialPaymentDone:Boolean=false;
@@ -150,16 +150,17 @@ export class PaymentComponent implements OnInit {
     this.isNoNeededVisible=false;
     this.newPurchase = false;
     this.isClientDropdownEnable=false;
+    this.isActiveDateDisabled = true;
     
     if(paymentOption!=""){
 
-      this.isActiveDateDisabled=false;
+      //this.isActiveDateDisabled=false;
       this.isPaymentFrequencyDisabled=false;
       if(this.currentUser.Organization.ClientType === "Reseller"){
         this.isReseller = true;
       }
 
-      switch (paymentOption) {
+      switch (paymentOption) {  
         case 'initial_pay':
           if(this.paymentReleaseData){
             this.isInitialPayment=true;
@@ -178,6 +179,7 @@ export class PaymentComponent implements OnInit {
           break;
         case 'renewal_pay':
           if(this.isinitialPaymentDone){
+            this.isActiveDateDisabled = false;
             this.isRenewalPayment = true;
             let rangeOptions={
               ClientType:this.currentOrganization.ClientType,
@@ -210,6 +212,7 @@ export class PaymentComponent implements OnInit {
           break;
         case 'client_renewal_pay':
           if(this.isinitialPaymentDone){
+            this.isActiveDateDisabled = false;
             this.getClients();
           }else{
             this.notification.error('Renewal will be available after initial payment done.')
@@ -217,6 +220,7 @@ export class PaymentComponent implements OnInit {
           break;
         case 'new_purchase':
           if(this.isinitialPaymentDone){
+            this.isActiveDateDisabled = false;
             this.paymentModel.Range="";
             this.isReseller = true;
             this.newPurchase = true;
@@ -476,7 +480,6 @@ export class PaymentComponent implements OnInit {
         this.paymentStructure.CD_PER_MONTH=(COST_PER_MONTH*NoNeeded).toFixed(2);
         this.paymentStructure.CD_PER_MONTH_DISCOUNT=(COST_PER_MONTH_ANNUAL_DISCOUNT*NoNeeded).toFixed(2);
       }
-      
   }
 
   loadOrganizationDefaultData(){
