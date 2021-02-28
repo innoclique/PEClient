@@ -170,6 +170,8 @@
                                 <div [formGroup]="FinalRatingForm" class="card col-lg-12 pt-3">
                                   <section>
                                     <h3>Employee Review</h3>
+                                    <p style="padding: 5px 0 5px; font-size:13px">Your evaluation will be submitted to your manager for their rating. You will receive an email when they have submitted the final rating, for your sign-off.</p>
+
                                     <div class="form-group row">
 
                                       <div class="col-md-8 ">
@@ -375,7 +377,7 @@
 
 
                                     <div class="form-group row">
-                                      <div class="col-md-4">
+                                      <div *ngIf="showTSSignoffFields" class="col-md-4">
                                         <div class="input-group">
 
                                           <div class="input-group-prepend w-52">
@@ -385,7 +387,7 @@
                                                  name="ThirdSignatorySignOff">
                                         </div>
                                       </div>
-                                      <div *ngIf="!showThirdSignatorySubmit" class="col-md-4">
+                                      <div *ngIf="showTSSignoffFields" class="col-md-4">
                                         <div class="input-group">
                                           <div class="input-group-prepend">
                                             <span class="input-group-text"> Signed-off On:</span>

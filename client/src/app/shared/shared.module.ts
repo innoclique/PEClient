@@ -22,13 +22,15 @@ import { DateAgoPipe } from '../pipes/DateAgoPipe';
 import { RemoveHtml } from '../pipes/RemoveHtml';
 import { TimeAgoPipe } from '../pipes/TimeAgoPipe';
 import { LoaderComponent } from './loader/loader.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 
 @NgModule({
   declarations: [ 
     LoginComponent, 
-    ForgotPasswordComponent, 
+    ForgotPasswordComponent,
+    ChangePasswordComponent,
     ResetPasswordComponent,
     AlertComponent,
     MatSpinnerOverlayComponent,

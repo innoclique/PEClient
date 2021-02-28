@@ -70,6 +70,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   currentEmpName: any;
   isPdfView:boolean = false;
   currentOrganization: any;
+  showTSSignoffFields: boolean = false;
   
   config = {
     backdrop: true,
@@ -241,7 +242,9 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
           }
           this.FRReqRevision = reqrev;
  
-
+          if (res1.FinalRating.ThirdSignatory.IsSubmitted && res1.FinalRating.Status == "ThirdSignatory Submitted") {
+            this.showTSSignoffFields = true;
+          }
 
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {

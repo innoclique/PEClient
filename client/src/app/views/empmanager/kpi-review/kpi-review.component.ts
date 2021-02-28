@@ -134,7 +134,7 @@ actor:any;
   findPgSignoff(){
     console.log(this.loginUser)
     let orgStartEnd = this.getOrganizationStartAndEndDates();
-    let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let EvaluationYear = this.currentEvaluationYear;
     let {Manager,Organization} = this.loginUser;
     let options = {
       EvaluationYear,
@@ -151,7 +151,8 @@ actor:any;
         this.getClientConfiguation();
       }else{
         let {FinalSignoff, SignOff, ManagerSignOff}  = result;
-        this.isFinalSignoffDone=FinalSignoff;
+        this.isFinalSignoffDone = FinalSignoff;
+        this.isEmployeePgSignoff = true;
         if(ManagerSignOff.submited){
           this.isSignOffDisabled=true;
         }else{

@@ -11,12 +11,14 @@ import { ResetPasswordComponent } from './shared/reset-password/reset-password.c
 import { LoginComponent } from './shared/login/login.component';
 import {LogoutComponent} from './shared/logout/logout.component'
 import { AuthGuardService } from './services/auth-guard.service';
+import { ChangePasswordComponent } from './shared/change-password/change-password.component';
 
 export const routes: Routes = [
   // { path: '', component: AppComponent, data: { title: 'First Component' } },
   // { path: 'login', component: LoginComponent, data: { title: 'Second Component' }},
   { path: 'forgotPassword', component: ForgotPasswordComponent, data: { title: '' }},
-  { path: 'resetPassword', component: ResetPasswordComponent, data: { title: '' }},
+  { path: 'resetPassword', component: ResetPasswordComponent, data: { title: '' } },
+  { path: 'changePassword', component: ChangePasswordComponent, data: { title: '' } },
   {
     path: '',
     redirectTo: 'login',

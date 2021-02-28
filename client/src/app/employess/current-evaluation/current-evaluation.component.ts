@@ -64,6 +64,7 @@ export class CurrentEvaluationComponent implements OnInit {
   isThirdSignatorySubmitted = false;
   public isValidForm = false;
   public empEvStatus = "";
+  showTSSignoffFields: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -170,6 +171,10 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
           this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1.FinalRating.ThirdSignatory.SubmittedOn))
           this.isReqRevDisabled = res1.FinalRating.FRReqRevision;
           this.isThirdSignatorySubmitted = res1.FinalRating.ThirdSignatory.IsSubmitted;
+
+          if (res1.FinalRating.ThirdSignatory.IsSubmitted && res1.FinalRating.Status == "ThirdSignatory Submitted") {
+            this.showTSSignoffFields = true;
+          }
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
           debugger

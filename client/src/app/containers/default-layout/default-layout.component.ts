@@ -70,7 +70,9 @@ public oneAtATime: boolean = true;
     
   }
 
-  
+  onChangePassword() {
+    this.router.navigate(['changePassword']);
+  }
 
   getAllEmpNotifications() {
     this.perfApp.route = "notifications";
