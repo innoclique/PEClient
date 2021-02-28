@@ -15,13 +15,43 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AlertDialog } from '../../../Models/AlertDialog';
 
 
+import { ThemeService } from '../../../services/theme.service';
+
+import { TranslateService } from '@ngx-translate/core';
+import { CustomValidators } from '../../../shared/custom-validators';
+
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
+
+import { Constants } from '../../../shared/AppConstants';
+
 @Component({
   selector: 'app-rollevaluation',
   templateUrl: './rollevaluation.component.html',
   styleUrls: ['./rollevaluation.component.css']
 })
 export class RollevaluationComponent implements OnInit {
+  
+  public empForm: FormGroup;
+  empDetails: any={IsActive:'true'}
+  currentAction='create';
+  cscData:any=undefined;
+  departments=[];
+  jobRoles=[];
+  appRoles: any=[];
+  jobLevels: any;
+  loginUser: any;
+  countyFormReset: boolean;
+  isRoleChanged: boolean;
 
+  isDraftEmployee: boolean;
+  
+  filteredOptions: Observable<any[]>;
+  filteredOptionsTS: Observable<any[]>;
+  filteredOptionsDR: Observable<any[]>;
+public currentOrganization:any={}
+  submitClicked=false;
+  show=false;
   public evaluationForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
@@ -37,7 +67,7 @@ export class RollevaluationComponent implements OnInit {
   evaluationDuration: any[];
   competencyMappingRowdata: any;
 
-  public currentOrganization: any;
+  // public currentOrganization: any;
   currentUser: any;
   isViewCompetencies: boolean = false;
 
@@ -103,6 +133,7 @@ export class RollevaluationComponent implements OnInit {
     force: true,
     suppressFlash: false
   };
+  peersListData=[];
   onEmpGridReady(params) {
     this.EmpGridOptions.api = params.api; // To access the grids API
   }
@@ -578,7 +609,14 @@ export class RollevaluationComponent implements OnInit {
     private modalService: BsModalService,
     public authService: AuthService,
     public router: Router,
-    public activatedRoute: ActivatedRoute) {
+    public activatedRoute: ActivatedRoute,private fb: FormBuilder,
+    
+    private route: ActivatedRoute,
+  
+    public themeService: ThemeService,
+    
+    private snack: NotificationService,
+    public translate: TranslateService) {
 
   }
   employeesList$Memory: any[] = [];
@@ -589,6 +627,13 @@ export class RollevaluationComponent implements OnInit {
   competencyDropdownSettings: any = {}
   directReporteeDropdownSettings: any = {}
   public peerDropdownSettings: any = {};
+
+  get f(){
+    return this.empForm.controls;
+  }
+  get f1() {
+    return this.evaluationForm.controls;
+  }
   ngOnInit(): void {
     this.alert=new AlertDialog()
     this.currentUser = this.authService.getCurrentUser();
@@ -667,10 +712,559 @@ export class RollevaluationComponent implements OnInit {
       itemsShowLimit: 3,
       allowSearchFilter: true
     };
+
+    this.currentOrganization = this.authService.getOrganization();
+    this.loginUser=this.authService.getCurrentUser();
+    this.getEmployees();
+    this.getManagersEmps();
+    this.getThirdSignatoryEmps();
+   this.getAllDepartments();
+
+   this.initEmpForm()
+
+   this.alert = new AlertDialog();
+  }
+
+
+  initEmpForm() {
+    this.empForm = this.fb.group({
+      Email: [this.empDetails.Email?this.empDetails.Email:'', [Validators.required, Validators.email]],
+      LastName: [this.empDetails.LastName?this.empDetails.LastName:'', Validators.compose([
+        Validators.required,
+        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+        Validators.minLength(1)])
+      ],
+      MiddleName: [this.empDetails.MiddleName?this.empDetails.MiddleName:'', Validators.compose([
+        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+      ])
+      ],
+      EmployeeId: [this.empDetails.EmployeeId?this.empDetails.EmployeeId:'', Validators.compose([
+        CustomValidators.patternValidator(/(?=.*[()#-])/, { hasEmpIdSplChars: true }, 'hasEmpIdSplChars')
+      
+      ])
+      ],
+      FirstName: [this.empDetails.FirstName?this.empDetails.FirstName:'', Validators.compose([
+        Validators.required,
+        CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
+        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+
+        Validators.minLength(2)])
+      ],
+
+      Title: [this.empDetails.Title?this.empDetails.Title:'', Validators.compose([
+        Validators.required,
+        Validators.minLength(2)])
+      ],
+
+
+      Address: [this.empDetails.Address?this.empDetails.Address:'Not Applicable', Validators.compose([
+        Validators.required, Validators.minLength(4),
+        CustomValidators.patternValidator(/(?=.*[#)&.(-:/])/, { hasAddressSplChars: true }, 'hasAddressSplChars'),
+      ])
+      ],
+
+      PhoneNumber: [this.empDetails.PhoneNumber?this.empDetails.PhoneNumber:'Not Applicable', Validators.compose([
+         Validators.minLength(10),
+        // CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      ])],
+      ExtNumber: [this.empDetails.ExtNumber?this.empDetails.ExtNumber:'Not Applicable', Validators.compose([
+        Validators.minLength(2),
+      // CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      ])],
+      AltPhoneNumber: [this.empDetails.AltPhoneNumber?this.empDetails.AltPhoneNumber:'Not Applicable', Validators.compose([
+        Validators.minLength(10),
+      //  CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      ])],
+      MobileNumber: [this.empDetails.MobileNumber?this.empDetails.MobileNumber:'Not Applicable', Validators.compose([
+        Validators.minLength(10),
+       // CustomValidators.patternValidator(/((?=.*\d)(?=.*[-]))/, { hasPhoneSplChars: true }, 'hasPhoneSplChars'),
+      ])],
+      IsActive: [this.empDetails.IsActive+'',[Validators.required] ],
+      IsSubmit: ['false'],
+      IsDraft: ['false'],
+      JobLevel: [this.empDetails.JobLevel?this.empDetails.JobLevel:null,[Validators.required] ],
+      JobRole: [this.empDetails.JobRole?this.empDetails.JobRole:'',[Validators.required] ],
+      Department: [this.empDetails.Department?this.empDetails.Department:'',[Validators.required] ],
+      ApplicationRole: [this.empDetails.ApplicationRole?this.empDetails.ApplicationRole:null,[Validators.required] ],
+      ThirdSignatory: [this.empDetails.ThirdSignatory?this.empDetails.ThirdSignatory:'',],
+      CopiesTo: [this.empDetails.CopiesTo?this.empDetails.CopiesTo:'', ],
+      Manager: [this.empDetails.Manager?this.empDetails.Manager:'',[Validators.required]],
+      Country: [this.empDetails.Country?this.empDetails.Country:'Not Applicable',],
+      State: [this.empDetails.State?this.empDetails.State:'Not Applicable',],
+      City: [this.empDetails.City?this.empDetails.City:'Not Applicable',],
+      JoiningDate: [this.empDetails.JoiningDate?new Date (this.empDetails.JoiningDate):'',[Validators.required]],
+      RoleEffFrom: [''],
+      ZipCode: [this.empDetails.ZipCode?this.empDetails.ZipCode:'Not Applicable', Validators.compose([
+        Validators.required,
+        CustomValidators.patternValidator(/[^A-Za-z0-9\s]+/g, { isInValidZip: true }, 'isInValidZip'),
+        Validators.minLength(5)
+      ])
+      ],
+
+
+    });
+  }
+  saveCreateEmployee(){
+    
+    if(this.empForm.get('FirstName').value=="" || this.empForm.get('Email').value==""){
+    if(this.empForm.get('FirstName').value=="" && this.empForm.get('Email').value==""){
+
+      this.snack.error(this.translate.instant('First Name, Email is mandatory'));
+      return
+    }
+    if(this.empForm.get('FirstName').value==""){
+      this.snack.error(this.translate.instant('First Name is mandatory'));
+      return
+    }
+    if(this.empForm.get('Email').value==""){
+      this.snack.error(this.translate.instant('Email is mandatory'));
+      return
+    }
+    
+  }
+
+    this.empForm.patchValue({ IsDraft: 'true' });
+    this.isDraftEmployee = true;
+    this.saveEmployee();
+
+    //this.alert.Title = "Alert";
+    //this.alert.Content = "Are you sure you want to add this employee?"
+    //this.alert.ShowCancelButton = true;
+    //this.alert.ShowConfirmButton = true;
+    //this.alert.CancelButtonText = "Cancel";
+    //this.alert.ConfirmButtonText = "Ok";
+
+    //const dialogConfig = new MatDialogConfig()
+    //dialogConfig.disableClose = true;
+    //dialogConfig.autoFocus = true;
+    //dialogConfig.data = this.alert;
+    //dialogConfig.height = "300px";
+    //dialogConfig.maxWidth = '100%';
+    //dialogConfig.minWidth = '40%';
+
+    //var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    //dialogRef.afterClosed().subscribe(resp => {
+    //  if (resp=='yes') {
+    //    this.saveEmployee();
+    //  }
+    //  else{
+
+    //  }
+    //})
+
+  }
+
+  
+
+  submitCreateEmployee(){
+this.submitClicked=true;
+    if (!this.empForm.valid) {
+        return;    
+      }else{
+        if (!this.empForm.get('PhoneNumber').value &&  !this.empForm.get('AltPhoneNumber').value
+         && !this.empForm.get('MobileNumber').value) {
+          this.snack.error(this.translate.instant('Please provide at least one contact (PhoneNumber, AltPhoneNumber, MobileNumber )'));
+          return;    
+        }
+      }
+  
+    this.empForm.patchValue({IsSubmit: 'true' });
+    this.empForm.patchValue({ IsDraft: 'false' });
+    this.isDraftEmployee = false;
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to add this employee?"
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '100%';
+    dialogConfig.minWidth = '40%';
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp=='yes') {
+        this.saveEmployee();
+      }
+      else{
+
+      }
+    })
+  }
+  
+  
+  saveEmployee(){
+    this.perfApp.route="app";
+    this.perfApp.method= this.currentAction=='create'?"CreateEmployee":"UpdateEmployee",
+    
+    // this.empForm.patchValue({ThirdSignatory: this.empForm.get('ThirdSignatory').value?
+    //   this.empForm.get('ThirdSignatory').value._id : ''});
+    //   this.empForm.patchValue({CopiesTo: this.empForm.get('CopiesTo').value?
+    //   this.empForm.get('CopiesTo').value._id : ''});
+    //   this.empForm.patchValue({Manager: this.empForm.get('Manager').value?
+    //   this.empForm.get('Manager').value._id : ''});
+  
+   
+    
+    this.perfApp.requestBody=this.empForm.value; //fill body object with form 
+    
+    // if (this.currentAction=='edit') {
+    //   this.perfApp.requestBody._id=this.currentRowItem._id; 
+    //   this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
+    // }else{
+
+
+      if(this.perfApp.requestBody.ThirdSignatory)  this.perfApp.requestBody.ThirdSignatory = this.perfApp.requestBody.ThirdSignatory._id;
+      if(this.perfApp.requestBody.CopiesTo)  this.perfApp.requestBody.CopiesTo=this.perfApp.requestBody.CopiesTo._id;
+      if(this.perfApp.requestBody.Manager)  this.perfApp.requestBody.Manager=this.perfApp.requestBody.Manager._id;
+
+      this.perfApp.requestBody.CreatedBy=this.loginUser._id;
+      this.perfApp.requestBody.Organization=this.currentOrganization?this.currentOrganization._id:null ;
+      this.perfApp.requestBody.UpdatedBy=this.loginUser._id;
+      this.perfApp.requestBody.ParentUser=this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id;
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=false;
+     // let roleCode= this.appRoles.filter(e=>e._id==this.perfApp.requestBody.ApplicationRole[0])[0];
+      let selectedRoles= [];
+     if( this.perfApp.requestBody.ApplicationRole){
+      this.perfApp.requestBody.ApplicationRole.forEach(element => {
+            this.appRoles.filter(e=>
+          {if (e._id==element)  selectedRoles.push( e.RoleCode)} )
+            
+      });
+    }
+      this.perfApp.requestBody.Role='EO';
+      this.perfApp.requestBody.SelectedRoles=selectedRoles;
+      this.perfApp.requestBody.RoleEffFrom= this.perfApp.requestBody.JoiningDate;
+    // }
+    
+    this.callEmpApi();
+   
+  }
+  
+  callEmpApi(){
+  
+  if(!this.perfApp.requestBody.ThirdSignatory) delete this.perfApp.requestBody.ThirdSignatory;
+  if(!this.perfApp.requestBody.CopiesTo) delete this.perfApp.requestBody.CopiesTo;
+  if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
+  
+    this.perfApp.CallAPI().subscribe(c=>{
+  
+      if (c.message == Constants.SuccessText) {
+        this.submitClicked = false;
+
+        if (this.isDraftEmployee) {
+          this.snack.success(this.translate.instant(`The employee has been successfully saved.`));
+      } else {
+          this.snack.success(this.translate.instant(`
+          The employee has been successfully ${this.currentAction == 'create' ? 'added' : 'updated'}.`));
+      }
+      this.listData();
+        // this.getEmployees();
+        // this.closeForm();
+        // this.showSpinner = false;
+        this.empForm.reset();
+        this.onCancle();
+     this.getEmployees();
+       // this.router.navigate(['ea/setup-employee']);
+
+
+      }
+          
+        }, error => {
+          if (error.error.message === Constants.EvaluationAdminNotFound) {
+            this.openEvaluationAdminNotFoundDialog()
+          }else{
+            this.snack.error(this.translate.instant(`Employee not ${this.currentAction == 'create' ? 'added' : 'updated'}, please try again`));
+      
+          } 
+      
+      
+        });  
+  
+  }
+  
+  
+   /**To alert user for duplicate sessions */
+   openEvaluationAdminNotFoundDialog() {
+    this.alert.Title = "Alert";
+    this.alert.Content = "We found that Evaluation Administrator not created. Do you want to continue ?";
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+      this.perfApp.requestBody.IgnoreEvalAdminCreated=true;
+      this.callEmpApi();
+     } else {
+       
+     }
+    })
   }
 
 
 
+
+
+
+  private _normalizeValue(value: string): string {
+    return value.toLowerCase().replace(/\s/g, '');
+  }
+  
+  
+  displayFn(user: any): string {
+    return user && user.FirstName ? user.FirstName : '';
+  }
+  
+  private _filter(name: string): any[] {
+    const filterValue = this._normalizeValue(name);
+  
+    return this.employeeDropDownData.filter(option => this._normalizeValue(option.FirstName).includes(filterValue) );
+  }
+  
+  private _filterDR(name: string): any[] {
+    const filterValue = this._normalizeValue(name);
+  
+    return this.employeeDirReportData.filter(option => this._normalizeValue(option.FirstName).includes(filterValue) );
+  } 
+  private _filterTD(name: string): any[] {
+    const filterValue = this._normalizeValue(name);
+  
+    return this.employeeThirdSigData.filter(option => this._normalizeValue(option.FirstName).includes(filterValue) );
+  }
+  
+  
+  
+  onCSCSelect(data){
+  this.empForm.patchValue({City:data.City.name});
+  this.empForm.patchValue({Country:data.Country.name});
+  this.empForm.patchValue({State:data.State.name});
+  var add=""
+   add= `${data.City.name?data.City.name+",":""}
+   ${data.State.name?data.State.name+",":""}
+    ${data.Country.name?data.Country.name:""}
+   `
+  //  if(data.City.name)
+  
+  }
+
+  public employeeData :any
+  public employeeDropDownData :any[]=[]
+  public employeeThirdSigData :any[]=[]
+  public employeeDirReportData :any[]=[]
+  getManagersEmps(){
+    this.perfApp.route="app";
+    this.perfApp.method="GetManagers",
+    this.perfApp.requestBody = { companyId: this.currentOrganization._id }
+    // this.perfApp.requestBody={'parentId':this.loginUser.ParentUser?this.loginUser.ParentUser:this.loginUser._id}
+    this.perfApp.CallAPI().subscribe(c=>{
+      
+      console.log('lients data',c);
+      if(c && c.length>0){
+        
+        this.employeeDirReportData=c;
+        this.filteredOptionsDR = this.empForm.controls['Manager'].valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value :  value? value.FirstName:""),
+          map(name => name ? this._filterDR(name) : this.employeeDirReportData.slice())
+        );
+      }
+     
+       
+    })
+
+  }
+
+
+
+  getThirdSignatoryEmps(){
+    this.perfApp.route="app";
+    this.perfApp.method="GetThirdSignatorys",
+    this.perfApp.requestBody = { companyId: this.currentOrganization._id }
+
+    this.perfApp.CallAPI().subscribe(c=>{
+      
+      console.log('lients data',c);
+      if(c && c.length>0){
+
+
+        this.employeeThirdSigData=c;
+       
+      
+        this.filteredOptionsTS = this.empForm.controls['ThirdSignatory'].valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value? value.FirstName:""),
+          map(name => name ? this._filterTD(name) : this.employeeThirdSigData.slice())
+        );
+
+      }
+     
+       
+    })
+
+  }
+
+
+
+  
+
+  
+  onDepartmentChange(event){
+
+    var depts= this.departments.filter(f=>f.DeptName== event.target.value)[0];
+ this.jobRoles=depts.JobRoles;
+}
+  
+getAllDepartments(){
+  this.perfApp.route="app";
+  this.perfApp.method="GetEmpSetupBasicData",
+  this.perfApp.requestBody={industry:this.authService.getOrganization().Industry}
+  this.perfApp.CallAPI().subscribe(c=>{
+    
+    console.log('CLIENTS DATA',c);
+    if(c){
+      this.departments=c.Industries[0].Department;
+    //  this.jobRoles=c.JobRoles;
+      this.appRoles=c.AppRoles;
+      this.jobLevels=c.JobLevels;
+      console.log('CLIENT JOB ROLES',this.appRoles);
+
+      this.appRoles.filter(e=>{
+        if(e.RoleName=="ClientSuperAdmin"){
+e.RoleName="Client Super Admin"
+        }
+      }
+
+
+      )
+
+      this.appRoles.filter(e=>{ 
+        if (e.RoleName=="Employee") {
+          this.empForm.patchValue({ApplicationRole: [e._id] });
+        }   
+        
+      } )
+    }
+  })
+}
+keyPressNumbersDecimal(event) {
+  var charCode = (event.which) ? event.which : event.keyCode;
+ if(charCode >= 48 && charCode <= 57) {
+    return true
+    
+  }else if(charCode == 45){
+return true;
+  }
+
+  else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
+
+keyPressNumbers(event) {
+  var charCode = (event.which) ? event.which : event.keyCode;
+ if(charCode >= 48 && charCode <= 57) {
+    return true
+    
+  }else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
+keyPressNumbersZip(event) {
+  var charCode = (event.which) ? event.which : event.keyCode;
+  console.log(charCode)
+ if(charCode >= 48 && charCode <= 57) {
+    return true
+    
+  }
+  else if(charCode >= 97 && charCode <= 122){
+    return true
+      }
+     else if(charCode>=65 && charCode<=90){
+      return true
+    }
+  else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
+keyPressEmail(event) {
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode >= 97 && charCode <= 122){
+    return true;
+
+  } else if(charCode>=65 && charCode<=90){
+    return true;
+
+  }    if(charCode >= 48 && charCode <= 57) {
+    return true
+    
+  }else if(charCode == 46 || charCode == 64){
+return true;
+  }
+  else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
+
+
+
+keyPressAlphaAndPeriod(event) {
+  debugger
+  var charCode = (event.which) ? event.which : event.keyCode;
+  if (charCode >= 97 && charCode <= 122){
+    return true;
+
+  } else if(charCode>=65 && charCode<=90){
+    return true;
+
+  }  else if(charCode == 46){
+return true;
+  }
+  else 
+  
+  {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
 
   initForm() {
     this.evaluationForm = this.formBuilder.group({
@@ -689,9 +1283,7 @@ export class RollevaluationComponent implements OnInit {
     this.evaluationForm.controls["EvaluationPeriod"].setValue(this.currentOrganization.EvaluationPeriod);
     this.evaluationForm.controls["EvaluationDuration"].setValue(this.currentOrganization.EvaluationDuration);
   }
-  get f() {
-    return this.evaluationForm.controls;
-  }
+  
   formattedPeers: any = []
   getEmployees() {
     this.perfApp.route = "app";
@@ -760,7 +1352,28 @@ export class RollevaluationComponent implements OnInit {
       this.selectePeersViewRef = this.modalService.show(this.selectePeersView, this.config);
     })
   }
+listData(){
+  this.perfApp.route = "app";
+  this.perfApp.method = "GetPeers",
+    //this.perfApp.requestBody = { 'parentId': this.currentUser.ParentUser ? this.currentUser.ParentUser : this.currentUser._id,'id':this.selectedEmployee._id }    
+    this.perfApp.requestBody = { company: this.currentOrganization._id, id: this.selectedEmployee._id }
+  this.perfApp.CallAPI().subscribe(c => {
+    console.log('employeed data', c);
+    this.formattedPeers = [];
+      if (c && c.length > 0) {
+        c.map(x => {
+          var _f: any = {};
+          _f.EmployeeId = x._id;
+          _f.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
+            this.formattedPeers.push(_f);
+        });
 
+        this.peersList = c;
+        console.log('formated peers data', this.formattedPeers);
+      }
+    this.peersListData=c
+  }) 
+}
   submitEvaluation() {
     if (this.selectedEmployeeList.length > this.getEvaluationsAvailable()) {
       this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
@@ -1609,7 +2222,21 @@ export class RollevaluationComponent implements OnInit {
   }
 
 
+   myFunction() {
+    var x = document.getElementById("myDIV");
+  
+      x.style.display = "block";
+    
+   
+  }
 
+  onCancle(){
+    var x = document.getElementById("myDIV");
+    
+      x.style.display = "none";
+   
+    
+  }
   addToGrid() {
     if (this.selectedEmployees.length === 0) {
       this.notification.error('At least one employee must be selected.')
