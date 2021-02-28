@@ -52,7 +52,6 @@ export class PaymentReleaseComponent implements OnInit {
   rangeList:Array<any>;
   isRangeSelectVisible:Boolean=false;
   isRangeSelectBox:Boolean=true;
-  
   public taxToolTip;
 
   constructor(
@@ -66,7 +65,6 @@ export class PaymentReleaseComponent implements OnInit {
     ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
-
     if (this.currentOrganization && this.currentOrganization.Country == "Canada") {
       this.taxToolTip = "For Canadian clients, tax is applied based on the province and will include applicable GST/HST/PST.";
     } else {
@@ -155,6 +153,9 @@ usageOnchange(){
   }
   this.getRangeList(rangeOptions);
 }
+
+
+
   orgnizationDetails(selectedOrgnization){
     console.log("On Select Organization")
     console.log(selectedOrgnization);
@@ -171,12 +172,19 @@ usageOnchange(){
     this.paymentSummary=null;
     this.isRangeSelectVisible=false;
     this.isRangeSelectBox=true;
-  
     if(selectedOrgnization!=""){
-      
       this.selectedOrganizationObj = this.organizationList.find(org=>org._id==selectedOrgnization);
       console.log(this.selectedOrganizationObj);
-      this.getTaxInfo(this.selectedOrganizationObj.State);
+      let _releaseRequestBody={
+        Organization:selectedOrgnization,
+        Type:"Initial"
+      }
+      this.perfApp.route = "payments";
+      this.perfApp.method = "release/organization";
+      this.perfApp.requestBody = _releaseRequestBody;
+      this.perfApp.CallAPI().subscribe(paymentRelease => {
+        if(!paymentRelease){
+          this.getTaxInfo(this.selectedOrganizationObj.State);
       if(this.selectedOrganizationObj.UsageType && this.selectedOrganizationObj.UsageType==="License"){
         this.isRangeSelectVisible=true;
         this.isRangeSelectBox=false;
@@ -258,7 +266,10 @@ usageOnchange(){
           
         }
       });
-      
+        }else{
+          this.notification.error('Payment has been released');
+        }
+      });
     }
   }
   

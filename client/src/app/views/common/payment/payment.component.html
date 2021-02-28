@@ -305,14 +305,14 @@
   <h5 class="wow fadeIn" data-wow-delay="0.2s">Costing Details</h5>
   <div class="wow fadeIn" data-wow-delay="0.4s"><img src="assets/payments/costing_img.png"  alt="img"></div>
   <div class="payment_right_blue wow fadeIn" data-wow-delay="0.6s">
-    <h6>{{paymentStructure?paymentStructure.CD_PER_MONTH_DISCOUNT:0}} <small>per month</small></h6>
+    <h6>{{paymentSummary?paymentSummary.CD_PER_MONTH_DISCOUNT:0}} <small>per month</small></h6>
     <span *ngIf="paymentModel.UsageType=='Employees'">Cost per employee per month (annual discount)</span>
     <span *ngIf="paymentModel.UsageType=='License'">Cost per month (annual discount)</span>
   </div>
   <div class="payment_right_blue payment_right_white wow fadeIn" data-wow-delay="0.8s">
-    <h6>{{paymentStructure?paymentStructure.CD_PER_MONTH:0}} <small>per month</small></h6>
-    <span *ngIf="paymentModel.UsageType=='Employees'">Cost per employee per Month</span>
-    <span *ngIf="paymentModel.UsageType=='License'">Cost per Month</span>
+    <h6>{{paymentSummary?paymentSummary.CD_PER_MONTH:0}} <small>per month</small></h6>
+    <span *ngIf="paymentModel.UsageType=='Employees'">Cost per employee per Month (monthly payment)</span>
+    <span *ngIf="paymentModel.UsageType=='License'">Cost per Month (monthly payment)</span>
   </div>
   <div class="payment_info_links">
     <!--<h5 class="wow fadeIn" data-wow-delay="1.2s">Information Links</h5>-->
