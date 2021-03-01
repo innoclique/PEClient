@@ -79,7 +79,7 @@ accessingFrom:any;
 
   currentEvaluation:any;
   currentEvaluationPeriod: any;
-
+  isEmployeePgSignoff = false;
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -565,7 +565,7 @@ this.toggleSelection(c,null);
   findPgSignoff(){
     console.log(this.loginUser)
     let orgStartEnd = this.getOrganizationStartAndEndDates();
-    let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let EvaluationYear = this.currentEvaluation;
     let {Manager,Organization} = this.loginUser;
     let options = {
       EvaluationYear,
@@ -579,18 +579,17 @@ this.toggleSelection(c,null);
     this.perfApp.CallAPI().subscribe(result => {
      debugger
       if(!result){
-
+        this.isEmployeePgSignoff = false;
       }else{
         let {FinalSignoff, SignOff, ManagerSignOff}  = result;
         this.isFinalSignoffDone=FinalSignoff;
-        
+        this.isEmployeePgSignoff = true;
       }
 
       this.initApicallsForKpi();
       
     })
   }
-
 
   getAllKpiBasicData() {
     this.perfApp.route = "app";
