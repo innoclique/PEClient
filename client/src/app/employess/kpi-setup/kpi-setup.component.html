@@ -58,13 +58,35 @@
   <div class="modal-body">
     <div class="modal-content no_bdr">
         <div class="container clearfix" style="height: 200px;   overflow-y: auto;">
-          <ul class="timeline clearfix">
+          <!-- <ul class="timeline clearfix">
             <li   [ngClass]="{ 'active' : last }"  *ngFor="let t of currentRowItem.tracks;let i=index;let last = last">
               <span>{{t.comment}}</span>
               <div class="clear"></div>
               <i *ngIf="!last"></i>
             </li>
-          </ul>          
+          </ul>           -->
+
+          <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th><b>Action By </b></th>
+                    <th> <b>Action </b></th>
+                    <th> <b>Action On</b></th>
+                    <th> <b>Values</b></th>
+                </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let h of kpiHistoryData">
+              <tr>
+                <td>{{h.CreatedBy.FirstName }} {{ h.CreatedBy.LastName}}</td>
+                <td>{{h.Action}}</td>
+                <td>{{h.CreatedOn | date:'short'}}</td>
+                <td>{{h.formatedValues}}</td>
+              </tr>
+            </ng-container>
+            </tbody>
+        </table>
+        
         </div>
       <div class="modal-footer m-auto" style="border-top:none;">
         <button type="button" (click)="trackViewRef.hide()" class="btn btn-primary pull-right"

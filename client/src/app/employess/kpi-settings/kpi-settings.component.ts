@@ -17,6 +17,7 @@ import { CustomValidators } from '../../shared/custom-validators';
 import ReportTemplates from '../../views/psa/reports/data/reports-templates';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-kpi-settings',
@@ -38,6 +39,7 @@ export class KpiSettingsComponent implements OnInit {
   public alert: AlertDialog;
   appScores: any = [];
   kpiStatus: any = [];
+  kpiHistoryData: any = [];
   coachingRemDays: any = [];
   @Input()
   currentAction = 'create';
@@ -130,35 +132,123 @@ accessingFrom:any;
     this.alert = new AlertDialog();
   }
 
-  trackKpi() {
+
+
+async  getKpiHistory() {
+
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetKpisHistoryByKpiId",
+      this.perfApp.requestBody = { 'kpiId': this.currentKpiId }
+  await  this.perfApp.CallAPI().subscribe(c => {
+     if (c) {
+
+      const data= c.map(e=>{
+        e.formatedValues=` Status: ${e.KpiData.Status || 'N/A' },
+        Manager Score: ${e.KpiData.ManagerScore || 'N/A'},
+        Target Completion Date: ${new DatePipe('en-US').transform(e.KpiData.TargetCompletionDate, 'MM-dd-yyyy')}`
+        return e;
+      })
+       
+
+        this.kpiHistoryData=data;
+     }
+  
+    }
+    
+    , error => {
+  
+      this.snack.error(error.error.message);
+  
+    }
+    
+    )
+  }
+
+  async  trackKpi() {
+    this.kpiHistoryData=[]; 
+
+   await this.getKpiHistory();
+
 
     this.trackViewRef = this.modalService.show(this.kpiTrackView, this.config);
   }
 
   DenyAllSignOffKpis() {
 
-  this.perfApp.route = "app";
-  this.perfApp.method = "DenyAllEmployeeSignOffKpis",
-    this.perfApp.requestBody = { 'empId': this.loginUser._id }
-  this.perfApp.CallAPI().subscribe(c => {
-   if (c) {
-    this.snack.success(c.message);
-    this.snack.success(c.message);
-    this.router.navigate(['employee/kpi-setup']);
-   }
-
-  }
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = `Are you sure you want to deny the performance goals`;
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
   
-  , error => {
-
-    this.snack.error(error.error.message);
-
-  }
   
-  )
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+
+      this.perfApp.route = "app";
+      this.perfApp.method = "DenyAllEmployeeSignOffKpis",
+        this.perfApp.requestBody = { 'empId': this.loginUser._id }
+      this.perfApp.CallAPI().subscribe(c => {
+       if (c) {
+        this.snack.success(c.message);
+        this.snack.success(c.message);
+        this.router.navigate(['employee/kpi-setup']);
+       }
+    
+      }
+      
+      , error => {
+    
+        this.snack.error(error.error.message);
+    
+      }
+      
+      )
+
+    } else {
+       
+     }
+    })
+  
+
+  
 }
 
   submitAllSignoffKPIs() {
+
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = `Are you sure you want to allow the performance goals`;
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
 
     this.perfApp.route = "app";
     this.perfApp.method = "SubmitAllSignOffKpis",
@@ -179,6 +269,13 @@ accessingFrom:any;
     }
     
     )
+
+
+  } else {
+       
+  }
+ })
+
   }
 
 
@@ -514,7 +611,7 @@ this.toggleSelection(c,null);
             let {Employees} = c.evaluation;
             let empFinalRatingSelfSignoff = Employees.find(employee=>employee._id==this.loginUser._id);
             if(empFinalRatingSelfSignoff)
-              this.isEmpFRSignOff = empFinalRatingSelfSignoff.FinalRating.Self.SignOff.length > 0;
+              this.isEmpFRSignOff = empFinalRatingSelfSignoff.FinalRating.Self.SignOff.length > 0 || empFinalRatingSelfSignoff.FinalRating.Self.IsSubmitted;
             this.showManagerScore = empFinalRatingSelfSignoff.FinalRating.Manager.IsSubmitted;
           }
           debugger
