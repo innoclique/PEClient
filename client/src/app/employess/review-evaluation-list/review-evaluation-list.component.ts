@@ -144,7 +144,7 @@ export class ReviewEvaluationListComponent implements OnInit {
         font-size: 17px;"   data-action-type="reviewEval" title="Review final rating"></i>
 
         <i class="cui-map" style="cursor:pointer; padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="viewReport" title="view Evaluation Report"></i>
+        font-size: 17px;  ${data.data.FRStatus!='Evaluation Complete'?'opacity: 0.65;':''}  "   data-action-type="viewReport" title="  ${data.data.FRStatus!='Evaluation Complete'? 'Evaluation Not Yet Completed': 'View Evaluation Report' } "></i>
         `;
         return returnString;
       }
@@ -178,7 +178,7 @@ export class ReviewEvaluationListComponent implements OnInit {
       font-size: 17px;"   data-action-type="reviewEval" title="Review final rating"></i>
 
       <i class="cui-map" style="cursor:pointer; padding: 7px 20px 0 0;
-      font-size: 17px;"   data-action-type="viewReport" title="View Evaluation Report"></i>
+      font-size: 17px;  ${data.data.FRStatus!='Evaluation Complete'?'opacity: 0.65;':''}  "   data-action-type="viewReport" title="  ${data.data.FRStatus!='Evaluation Complete'? 'Evaluation Not Yet Completed': 'View Evaluation Report' } "  > </i>
       `;
         return returnString;
       }
@@ -343,6 +343,7 @@ export class ReviewEvaluationListComponent implements OnInit {
 
  async pdfView(){
     
+  if (this.currentRowItem.FRStatus=='Evaluation Complete') {
   this.empSelected = await this.authService.FindUserById(this.currentRowItem._id).subscribe(c => {
       if(c){
         console.log('user by id pdf view:::',c);
@@ -355,6 +356,7 @@ export class ReviewEvaluationListComponent implements OnInit {
         this.snack.error(error.error.message);
       }
     );
+  }
     
   }
 

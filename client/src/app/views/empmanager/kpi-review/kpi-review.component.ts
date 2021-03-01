@@ -1,7 +1,7 @@
 
 
 
-import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,6 +21,8 @@ import html2PDF from 'jspdf-html2canvas';
 import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
 import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-kpi-review-manager',
@@ -75,6 +77,7 @@ actor:any;
   isEmployeePgSignoff:boolean = false;
   isSignOffDisabled=false;
   isFinalSignoffDone=false;
+  kpiHistoryData: any = [];
 
   
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
@@ -134,7 +137,7 @@ actor:any;
   findPgSignoff(){
     console.log(this.loginUser)
     let orgStartEnd = this.getOrganizationStartAndEndDates();
-    let EvaluationYear = orgStartEnd.start.format("YYYY");
+    let EvaluationYear = this.currentEvaluationYear;
     let {Manager,Organization} = this.loginUser;
     let options = {
       EvaluationYear,
@@ -151,7 +154,8 @@ actor:any;
         this.getClientConfiguation();
       }else{
         let {FinalSignoff, SignOff, ManagerSignOff}  = result;
-        this.isFinalSignoffDone=FinalSignoff;
+        this.isFinalSignoffDone = FinalSignoff;
+        this.isEmployeePgSignoff = true;
         if(ManagerSignOff.submited){
           this.isSignOffDisabled=true;
         }else{
@@ -361,7 +365,7 @@ actor:any;
 
 
   
-getBase64(){
+  getBase64(){
 
   this.http.get('/assets/img/_pdf_generate.pdf', { responseType: 'blob' })
   .subscribe(res => {
@@ -374,13 +378,18 @@ getBase64(){
     reader.readAsDataURL(res); 
    // this. base64data = res;   
     console.log("sgsggjsr onsonsnos",res);
-  });
+ });
 
 }
 
 
+
   async convertPage() {
+
+
+
     const clonedDoc = document.getElementById('pdfBody');
+    let sg;
     await html2PDF(clonedDoc, 
       {
         // onclone: function (clonedDoc) {
@@ -390,6 +399,11 @@ getBase64(){
         //     clonedDoc.getElementById('card').style.height = 'auto';
         //     console.log('after: ',clonedDoc);
         // },
+        html2canvas: {
+          scrollX: 0,
+          scrollY: -window.scrollY,
+        },
+        
       
       jsPDF: {
         format: 'a4',
@@ -411,7 +425,18 @@ getBase64(){
         left: 25,
       },
       output: './pdf/generate.pdf',
+      success: function(pdf) {
+        debugger
+      //  pdf.save(this.output);
+      //  sg   = pdf.output('datauri');
+       sg   = pdf.output('datauristring');
+      //  sg   = pdf.output('blob');
+
+
+     }
     });
+
+    return sg
   }
 
 
@@ -474,6 +499,28 @@ getBase64(){
 
   submitSignoffAllKpiById() {
 
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = `Are you sure you want to allow the performance goals`;
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+
     this.perfApp.route = "app";
     this.perfApp.method = "SubmitSignoffKpisByManager",
     this.perfApp.requestBody.empId = this.currentEmpId;
@@ -496,10 +543,40 @@ getBase64(){
     }
     
     )
+
+
+
+  } else {
+       
+  }
+ })
+
   }
 
   submitKpiById() {
 
+
+    
+    this.alert.Title = "Alert";
+    this.alert.Content = `Are you sure you want to allow the performance goals`;
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
     this.perfApp.route = "app";
     this.perfApp.method = "SubmitKpisByManager",
     this.perfApp.requestBody.kpi = this.currentKpiId;
@@ -523,10 +600,41 @@ getBase64(){
     }
     
     )
+
+  } else {
+       
+  }
+ })
+
   }
 
+
+  
   denyAllPg(){
     let isActive=false;
+
+
+    this.alert.Title = "Alert";
+    this.alert.Content = `Are you sure you want to deny the performance goals`;
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+
     this.perfApp.route = "app";
     this.perfApp.method = "DenyAllSignoffKpis";
     this.perfApp.requestBody = {};
@@ -540,10 +648,41 @@ getBase64(){
           
       }
     })
+
+
+  } else {
+       
+  }
+ })
+
   }
 
 
+
   denyKPI() {
+
+
+    this.alert.Title = "Alert";
+    this.alert.Content = `Are you sure you want to deny the performance goals`;
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+
     this.perfApp.route = "app";
     this.perfApp.method = "UpdateKpiDataById";
     this.perfApp.requestBody = {};
@@ -562,15 +701,20 @@ getBase64(){
       }
     })
 
+
+  } else {
+       
+  }
+ })
+
   }
 
 
 
-  
 
 
   
-  submitReview() {
+ async submitReview() {
 if(this.accessingFrom=="reviewEvaluation" && this.unSubmitedCount>0){
 this.snack.error("Please submit performance goals")
 return
@@ -581,8 +725,7 @@ if (this.accessingFrom == "reviewEvaluation"  && this.kpiForm.get('ManagerScore'
   return;
 }
 
-// this.convertPage();
-// this.getBase64();
+  this.base64data= await this.convertPage();
 
     this.perfApp.route = "app";
     this.perfApp.method = "UpdateKpiDataById";
@@ -1028,7 +1171,7 @@ this.msSelText="";
     this.currentKpiId=this.kpiDetails._id;
   }
 
-  
+
    /**To alert user for submit kpis */
    openConfirmSubmitKpisDialog() {
     this.alert.Title = "Alert";
@@ -1116,8 +1259,41 @@ this.onCancle();
   }
 
   
+
   
-trackKpi() {
+async  getKpiHistory() {
+
+  this.perfApp.route = "app";
+  this.perfApp.method = "GetKpisHistoryByKpiId",
+    this.perfApp.requestBody = { 'kpiId': this.currentKpiId }
+await  this.perfApp.CallAPI().subscribe(c => {
+   if (c) {
+
+    const data= c.map(e=>{
+      e.formatedValues=` Status: ${e.KpiData.Status || 'N/A' },
+      Manager Score: ${e.KpiData.ManagerScore || 'N/A'},
+      Target Completion Date: ${new DatePipe('en-US').transform(e.KpiData.TargetCompletionDate, 'MM-dd-yyyy')}`
+      return e;
+    })
+     
+
+      this.kpiHistoryData=data;
+   }
+
+  }
+  
+  , error => {
+
+    this.snack.error(error.error.message);
+
+  }
+  
+  )
+}
+  
+async trackKpi() {
+  this.kpiHistoryData=[];
+  await this.getKpiHistory();
 
   this.trackViewRef = this.modalService.show(this.kpiTrackView, this.config);
 }

@@ -43,8 +43,8 @@
     <li class="nav-item dropdown app-noty-main"  dropdown placement="bottom right">
       
       
-      <a class="nav-link"  data-toggle="langdropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
-        <i class="icon-envelope-letter"></i><span class="badge badge-pill badge-info">{{unReadCount==0?'':unReadCount}}</span>
+      <a class="nav-link"  style="cursor: pointer;"  data-toggle="langdropdown" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+        <i class="fa fa-bell"></i><span class="badge badge-pill badge-info">{{unReadCount==0?'':unReadCount}}</span>
       </a>
 
       <div aria-labelledby="simple-dropdown"  (click)="$event.stopPropagation()"  *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-xlg"
@@ -124,10 +124,11 @@
       </a>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
         <div class="dropdown-header text-center"><strong>Account</strong></div>
-        <a class="dropdown-item" *ngIf="user.Role != 'PSA' && user.Role != 'RSA'" (click)="gotoProfile()"><i class="fa fa-user"></i> Profile</a>
+        <!-- Commenting below to disable profile update feature temporarily-->
+        <!--<a class="dropdown-item" *ngIf="user.Role != 'PSA' && user.Role != 'RSA'" (click)="gotoProfile()"><i class="fa fa-user"></i> Profile</a>-->
         <a class="dropdown-item" *ngIf="user.Role == 'CSA' || user.Role == 'RSA'" (click)="gotoOrgProfile()"><i class="fa fa-user"></i>Organization Profile</a>
+        <a class="dropdown-item" (click)="onChangePassword()"><i class="fa fa-user"></i>Change Password</a>
         <!--<a class="dropdown-item" (click)="gotoMessages()"><i class="fa fa-envelope-o"></i> Messages<span class="badge badge-success">42</span></a>-->
-
 
         <div class="divider"></div>
 
