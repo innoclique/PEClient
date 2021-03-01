@@ -67,12 +67,22 @@ export class CSAEvaluationsSummary {
 
     let reqBody: any = {
       orgId: orgId,
-      reportType: 'EVALUATIONS_SUMMARY'
+      reportType: 'CLIENT_PURCHASE_HISTORY'
     };
     this.reportService.getReport(reqBody).subscribe(apiResponse => {
       console.log('EVALUATIONS_SUMMARY : ', apiResponse);
       this.createRowData(apiResponse);
     });
+
+    // console.log('clientId : ', clientId)
+    // let reqBody: any = {
+    //   orgId: clientId,
+    //   reportType: 'CLIENT_PURCHASE_HISTORY'
+    // };
+    // this.reportService.getReport(reqBody).subscribe(apiResponse => {
+    //   console.log('CLIENT_PURCHASE_HISTORY : ', apiResponse);
+    //   this.createRowData(apiResponse);
+    // });
 
   }
   
@@ -83,7 +93,8 @@ export class CSAEvaluationsSummary {
       { headerName: 'Evaluations Type', field: 'evaluationsType' },
       { headerName: '# of Evaluations', field: 'evaluationsCount',
         cellRenderer: (data) => {
-          return `<span title= Range:${this.rangeValue ? this.rangeValue.Range : ''}>${data.value}</span>`
+          console.log(' data ::: ',data);
+          return `<span title= Range:${data.data.range}>${data.value}</span>`
         }
 },
     ];
@@ -92,12 +103,38 @@ export class CSAEvaluationsSummary {
   createRowData(evaluationSummary: any) {
     const rowData: any[] = [];
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    rowData.push({
-      evaluationPeriod: ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth,this.currentOrganization.EndMonth),
-      evaluationsType: RefData.evaluationTypes[0],
-      evaluationsCount: evaluationSummary.data,
-    });
+   
     this.rangeValue = this.rangeList.find(rangObj => rangObj._id == this.currentOrganization.Range);
+    for (let payment of evaluationSummary.clientInfo.paymentReleases) {
+      var employeesCount = 0;
+      var licencesCount = 0;
+      var isLicenseCount:boolean = false;
+      if (payment.UsageType === 'License') {
+        if (payment.Type != 'Adhoc') {
+          licencesCount = payment.Range.substring(payment.Range.indexOf('-')+1,payment.Range.length);
+          isLicenseCount = true;
+        } else {
+          employeesCount = employeesCount + payment.NoOfEmployees;
+        }
+      } else {
+        employeesCount = employeesCount + payment.NoOfEmployees;
+      }
+      // rowData.push({
+      //   evaluationPeriod: ReportTemplates.getEvaluationPeriod(apiResponse.clientInfo.Organization.StartMonth, apiResponse.clientInfo.Organization.EndMonth),
+      //   purchasedOn: new DatePipe('en-US').transform(payment.Paymentdate, 'MM-dd-yyyy'),
+      //   evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Type,
+      //   licPurchasesCount: isLicenseCount?licencesCount:employeesCount,
+      //   paymentReleaseId: payment._id,
+      //   amount: Number(payment.TOTAL_PAYABLE_AMOUNT)?parseFloat(payment.TOTAL_PAYABLE_AMOUNT):parseFloat(payment.TOTAL_PAYABLE_AMOUNT.$numberDecimal),
+      // });
+      rowData.push({
+        evaluationPeriod: ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth,this.currentOrganization.EndMonth),
+        evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Type,
+        evaluationsCount: isLicenseCount?licencesCount:employeesCount,
+        range:payment.Range
+      });
+    }
+    console.log(' rowData : ',rowData);
     this.rowData = rowData;
   }
 
