@@ -1998,7 +1998,7 @@ listData(){
           if (this.initializeFormFor === 'kpionly') {
             return '';
           } else {
-            return `${data.data.Model}`
+            return `${data.data.Model.Name}`
           }
         },
       },
@@ -2256,8 +2256,10 @@ listData(){
 
       x.Model = this.modelsList.find(x => x._id === this.selectedModel);
     })
+
+    this.selectedEmployeeList=[];
     this.selectedEmployees.forEach(element => {
-      if (this.selectedEmployeeList.indexOf(element) < 0) {
+      if (  this.selectedEmployeeList.findIndex(e=>e._id==element._id)    < 0) {
         this.selectedEmployeeList.push(element);
       }
     });

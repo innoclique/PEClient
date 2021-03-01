@@ -38,6 +38,7 @@ export class KpiSetupComponent implements OnInit {
   isEmployeePgSignoff:boolean = false;
   finalSignoffDate:Date;
   selectedEvaluationYr:any="";
+  kpiHistoryData: any = [];
 
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
   config = {
@@ -373,14 +374,46 @@ export class KpiSetupComponent implements OnInit {
           this.trackKpi();
           break;
         case "AllowPg":
-          this.allowPg();
+          this.conformAllowDenyPg('allow');
           break;
         case "DenyPg":
-          this.denyPg();
+          this.conformAllowDenyPg('deny');
           break;
         default:
       }
     }
+  }
+
+
+  
+   
+   conformAllowDenyPg(value) {
+    this.alert.Title = "Alert";
+    this.alert.Content = `Are you sure you want to ${value} the performance goals`;
+    this.alert.ShowCancelButton = true;
+    this.alert.ShowConfirmButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+  
+  
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+  
+  
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+     if (resp=='yes') {
+    if (value=='allow')       this.allowPg();
+    else  if (value=='deny')  this.denyPg();
+     } else {
+       
+     }
+    })
   }
 
   allowPg(){
@@ -400,6 +433,11 @@ export class KpiSetupComponent implements OnInit {
   
 
   denyPg(){
+
+
+
+
+
     let isActive=false;
     this.perfApp.route = "app";
     this.perfApp.method = "UpdateKpiDataById";
@@ -419,7 +457,42 @@ export class KpiSetupComponent implements OnInit {
     })
   }
 
-  trackKpi() {
+
+
+
+  async  getKpiHistory() {
+
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetKpisHistoryByKpiId",
+      this.perfApp.requestBody = { 'kpiId': this.currentRowItem._id }
+  await  this.perfApp.CallAPI().subscribe(c => {
+     if (c) {
+
+      const data= c.map(e=>{
+        e.formatedValues=` Status: ${e.KpiData.Status || 'N/A' },
+        Manager Score: ${e.KpiData.ManagerScore || 'N/A'},
+        Target Completion Date: ${new DatePipe('en-US').transform(e.KpiData.TargetCompletionDate, 'MM-dd-yyyy')}`
+        return e;
+      })
+       
+
+        this.kpiHistoryData=data;
+     }
+  
+    }
+    
+    , error => {
+  
+      this.snack.error(error.error.message);
+  
+    }
+    
+    )
+  }
+
+  async trackKpi() {
+    this.kpiHistoryData=[];
+    await this.getKpiHistory();
 
       this.trackViewRef = this.modalService.show(this.kpiTrackView, this.config);
   }
