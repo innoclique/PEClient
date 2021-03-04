@@ -21,7 +21,7 @@ export class LoaderInterceptor implements HttpInterceptor {
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse |
     HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
-    this.loaderService.show();
+   
     // this.loginUser = this.authService.getCurrentUser();
     // console.log(`[${dateStr}] : ${this.loginUser.Email} is accessing ${req.url} from ${window.location.pathname}`);
     var activity = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
@@ -41,6 +41,11 @@ export class LoaderInterceptor implements HttpInterceptor {
       this.perfApp.CallAPI().subscribe(apiResponse => {
         console.log('logged user activity ');
       });
+    }
+
+    // Disabled spinner for interval api calls
+    if (req.url.indexOf('notifications') == -1 && req.url.indexOf('useractivity') == -1) {
+      this.loaderService.show();
     }
 
     return next.handle(req).pipe(

@@ -9,6 +9,7 @@ import { Constants } from '../AppConstants';
 import { AlertDialog } from '../../Models/AlertDialog';
 import { AlertComponent } from '../../shared/alert/alert.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-change-password',
@@ -36,7 +37,8 @@ export class ChangePasswordComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public dialog: MatDialog,
-    private snack: NotificationService) { }
+    private snack: NotificationService,
+    private location: Location) { }
 
   ngOnInit(): void {
 
@@ -197,7 +199,8 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['dashboard']);
+   // this.router.navigate(['dashboard']);
+    this.location.back();
   }
 
 
