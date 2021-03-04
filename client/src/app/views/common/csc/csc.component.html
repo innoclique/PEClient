@@ -51,7 +51,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text redStar">City</span>
                 </div>
-                <input  autocomplete="disabled" type="text" class="form-control" [readonly]="f.State.invalid?true:false"  placeholder="Search for a City" 
+                <input  autocomplete="disabled" type="text" class="form-control" [readonly]="f.State.invalid?true:false"  placeholder="Enter City" 
                 [formControl]="f.City"       (focusin)="checkIsStateSelected()"
                 formControlName="City" name="City" (change)="onCitySelected($event) "
                 [ngClass]="{ 'is-invalid': (f.City.touched  || showValidateMsg) &&  f.City.invalid }" required>
