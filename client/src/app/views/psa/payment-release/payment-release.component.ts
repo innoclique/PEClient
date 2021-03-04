@@ -52,6 +52,7 @@ export class PaymentReleaseComponent implements OnInit {
   rangeList:Array<any>;
   isRangeSelectVisible:Boolean=false;
   isRangeSelectBox:Boolean=true;
+  overridePriceList:Array<any>;
   public taxToolTip;
 
   constructor(
@@ -119,6 +120,9 @@ export class PaymentReleaseComponent implements OnInit {
         }
       });
   }
+
+  
+
   getTaxInfo(State){
     console.log("getTaxInfo")
     let options={
@@ -154,7 +158,20 @@ usageOnchange(){
   this.getRangeList(rangeOptions);
 }
 
-
+getOverridePriceScale(){
+  let options:any = {};
+  options.Organization = this.selectedOrganizationObj._id;
+  options.ClientType = this.selectedOrganizationObj.ClientType;
+  if(this.selectedOrganizationObj.UsageType){
+    options.UsageType = this.selectedOrganizationObj.UsageType;
+  }
+  this.perfApp.route = "payments";
+  this.perfApp.method = "override/price/scale";
+  this.perfApp.requestBody = options;
+  this.perfApp.CallAPI().subscribe(_overridePriceList => {
+    this.overridePriceList = _overridePriceList;
+  });
+}
 
   orgnizationDetails(selectedOrgnization){
     console.log("On Select Organization")
@@ -175,6 +192,7 @@ usageOnchange(){
     if(selectedOrgnization!=""){
       this.selectedOrganizationObj = this.organizationList.find(org=>org._id==selectedOrgnization);
       console.log(this.selectedOrganizationObj);
+      this.getOverridePriceScale();
       let _releaseRequestBody={
         Organization:selectedOrgnization,
         Type:"Initial"
@@ -189,12 +207,14 @@ usageOnchange(){
         this.isRangeSelectVisible=true;
         this.isRangeSelectBox=false;
       }
+      
       //=>Range List
       let rangeOptions={
         ClientType:this.selectedOrganizationObj.ClientType,
         UsageType:this.selectedOrganizationObj.UsageType || "License",
         "Type" : "Range"
       } 
+
       this.getRangeList(rangeOptions);
 
       if (this.selectedOrganizationObj && this.selectedOrganizationObj.Country == "Canada") {
@@ -325,8 +345,16 @@ usageOnchange(){
   }
   onSelectRange(selectedObj:any){
     if(selectedObj && selectedObj!=""){
-      let selectedRange = this.rangeList.find(range=>range._id==selectedObj)
+      let selectedRange = this.rangeList.find(range=>range._id==selectedObj);
       this.paymentScale=selectedRange;
+      if(this.overridePriceList && this.overridePriceList.length>0){
+        let UsageType = this.paymentModel.UsageType;
+        let overridePayment = this.overridePriceList.find(op=>op.UsageType==UsageType&&op.Range==selectedRange.Range);
+        if(overridePayment){
+          this.paymentScale.Cost = overridePayment.Cost;
+          this.paymentScale.Discount = overridePayment.Discount;
+        }
+      }
       this.paymentScale.Tax = this.stateTax;
       this.paymentModel.Range = this.paymentScale._id;
       this.setPaymentBreakup();
