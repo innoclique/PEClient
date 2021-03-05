@@ -233,16 +233,16 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="form-group form-actions pull-right" style="margin: 5px;">
+            <div class="form-group form-actions pull-right" style="margin-top: 5px;margin-left:1rem">
                 <button class="btn btn-sm btn-primary" data-toggle="modal"  (click)="myFunction()">Add New Employee</button>
               </div>
-              <div class="modal-body" style="  max-height: 100%;
-            overflow-y: auto;">
-
-                <div id="myDIV" style="display:none">
-                    <form  autocomplete="off"  [formGroup]="empForm"  novalidate="" class="ng-untouched ng-pristine ng-valid">
+              <div id="myDIV" style="display:none">
+                <div style="border:solid">
+              <div class="modal-body" style="max-height: 100%;
+            overflow-y: auto;">   
+                    <form  autocomplete="off"  [formGroup]="empForm"  novalidate="" class="ng-untouched ng-pristine ng-valid" >
                 
-                        <div class="row">
+                        <div class="row" style="margin-top:10px;">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -775,11 +775,12 @@
                       
                       </form>
                     </div>
+                  </div>
             </div>
             <div class="modal-body"  style="  max-height: 100%;
             overflow-y: auto;">
                 <form autocomplete="off" novalidate="" class="ng-untouched ng-pristine ng-valid">
-                    <div class="form-group row">
+                    <div class="form-group row" style="margin-top: 10px;">
                         <div class="col-md-12">
                             <div>
                                 <div class="form-group">

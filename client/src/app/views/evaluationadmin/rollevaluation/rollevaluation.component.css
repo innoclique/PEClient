@@ -10,3 +10,11 @@
   ::ng-deep .ag-center-cols-container{
     width:inherit !important;
   }
+  .modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding-right: 1rem !important ;
+    padding-left: 1rem !important ;
+    padding-top: 0rem !important ;
+    padding-bottom: 0rem !important ;
+}
