@@ -1,0 +1,218 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          Request Peer/Direct Report Rating
+        </div>
+        <div class="card-body">
+          <div style="width:75%; margin: 0 auto;">
+            <div style="margin-top: 2%;">
+              <div class="form-check form-check-inline">
+                <input [checked]="selectedReport==='peers'" (change)="changeReportSelection('peers')"
+                       class="form-check-input" type="radio" name="initializeForm" id="inlineRadio1"
+                       value="peers">
+                <label class="form-check-label" for="inlineRadio1">Peers</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input [checked]="selectedReport==='directReport'" (change)="changeReportSelection('directReport')" class="form-check-input" type="radio"
+                       name="initializeForm" id="inlineRadio2" value="directReport">
+                <label class="form-check-label" for="inlineRadio2">Direct Reports</label>
+              </div>
+            </div>
+            <div style="margin-top: 3%;">
+              <hr />
+              <ng-container *ngTemplateOutlet="selectedReport==='peers' ? selectePeersView : selecteDirectReporteeView">
+              </ng-container>
+            </div>
+          </div>
+          <div style="margin-top: 3%">
+            <hr />
+            <app-request-rating-list></app-request-rating-list>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #selectePeersView
+             aria-hidden="true">
+  <div>
+    <form autocomplete="off" novalidate="" class="ng-untouched ng-pristine ng-valid">
+      <div class="form-group row">
+        <div class="col-md-12">
+          <div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text  redStar">Employees</span>
+                </div>
+
+                <ng-multiselect-dropdown style="width: 75%;" name="Employees" [disabled]="false"
+                                         [placeholder]="'Select Employee'" [data]="formattedPeers"
+                                         [settings]="peerDropdownSettings" [(ngModel)]="selectedEmployeePeers"
+                                         (onSelect)="onPeerSelect($event)" (onDeSelect)="onPeerDeSelect($event)"
+                                         (onSelectAll)="onSelectAllPeers($event)"
+                                         (onDeSelectAll)="onDeSelectAllPeers($event)">
+                </ng-multiselect-dropdown>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text redStar">Competency</span>
+              </div>
+              <ng-multiselect-dropdown style="width: 70%;" name="peersCompetencyList"
+                                       [disabled]="false" [placeholder]="'Select Competency'"
+                                       [data]="this.peersCompetencyList" [settings]="competencyDropdownSettings"
+                                       [(ngModel)]="currentPeerCompetencyList"
+                                       (onSelect)="onSelectPeersCompetency($event)"
+                                       (onSelectAll)="onSelectAllPeersCompetency($event)"
+                                       (onDeSelect)="onPeerCompetencyDeSelect($event)"
+                                       (onDeSelectAll)="onDeSelectAllPeerCompetencies($event)">
+              </ng-multiselect-dropdown>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="form-group row">
+
+        <div class="col-md-9">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text ">Message</span>
+              </div>
+              <textarea class="form-control" [(ngModel)]="PeersCompetencyMessage"
+                        name="PeersCompetencyMessage"></textarea>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <input type="button" style="margin-top: 9px;" class="btn btn-primary"
+                 (click)="addPeerCompetencyMapping()" value="+">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <ag-grid-angular style="width: 100; height: 200px;" class="ag-theme-alpine"
+                           [rowData]="peerCompetencyMappingRowdata" [gridOptions]="peersForEmpGridOptions"
+                           [getRowHeight]="getRowHeight" [enableBrowserTooltips]="true"
+                           [pagination]="true" [paginationPageSize]="10" (gridReady)="onPeersGridReady($event)"
+                           (rowClicked)="onPeersRowClicked($event)">
+          </ag-grid-angular>
+        </div>
+      </div>
+    </form>
+
+    <div *ngIf="errorOnSave" class="form-group row">
+      <div class="alert alert-danger">
+        <strong>Error:</strong> {{errorMessage}}
+      </div>
+
+    </div>
+    <hr />
+    <div style="margin-left: 85%;">
+      <button type="button" class="btn btn-primary" (click)="savePeers()">Save</button>
+      <button type="button" class="btn btn-secondary" #closeModal (click)="closePeersModel()">Close</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #selecteDirectReporteeView aria-hidden="true">
+  <div>
+    <form autocomplete="off" novalidate="" class="ng-untouched ng-pristine ng-valid">
+      <div class="form-group row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text  redStar">Employees</span>
+              </div>
+              <ng-multiselect-dropdown style="width: 75%;" name="EmployeeDirectreportee"
+                                       [disabled]="false" [placeholder]="'Select Employee'"
+                                       [data]="currentEmployeeDirectReportees"
+                                       [(ngModel)]="selectedEmployeeDirectReportees"
+                                       [settings]="directReporteeDropdownSettings"
+                                       (onSelect)="onDirectReporteeSelect($event)"
+                                       (onDeSelect)="onDirectReporteeDeSelect($event)"
+                                       (onSelectAll)="onSelectAllDirectReportee($event)"
+                                       (onDeSelectAll)="onDeSelectAllDirectReportee($event)">
+              </ng-multiselect-dropdown>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text redStar">Competency</span>
+              </div>
+              <ng-multiselect-dropdown style="width:70%;" name="directReporteeCompetencyList"
+                                       [disabled]="false" [placeholder]="'Select Competency'"
+                                       [data]="directReporteeCompetencyList" [settings]="competencyDropdownSettings"
+                                       [(ngModel)]="seletedDirectReporteeCompetencyList"
+                                       (onSelect)="onSelectDirectReporteeCompetency($event)"
+                                       (onSelectAll)="onSelectAllDirectReporteeCompetency"
+                                       (onDeSelect)="onDeSelectDirectReporteeCompetency($event)"
+                                       (onDeSelectAll)="onDeSelectAllDirectReporteeCompetency($event)">
+              </ng-multiselect-dropdown>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-9">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text ">Message</span>
+              </div>
+              <textarea name="directReporteeCompetencyMessage" class="form-control"
+                        [(ngModel)]="directReporteeCompetencyMessage"></textarea>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <input type="button" style="margin-top: 9px;" class="btn btn-primary"
+                 (click)="addDRCompetencyMapping()" value="+">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <ag-grid-angular style="width: 100; height: 200px;" class="ag-theme-alpine"
+                           [rowData]="drCompetencyMappingRowdata||[]"
+                           [gridOptions]="directReporteesOfEmpGridOptions" [pagination]="true"
+                           [paginationPageSize]="10" (gridReady)="onDirectReporteeGridReady($event)"
+                           (rowClicked)="onDirectReporteeGridRowClicked($event)">
+          </ag-grid-angular>
+        </div>
+      </div>
+    </form>
+
+    <div *ngIf="errorOnSave" class="form-group row">
+      <div class="alert alert-danger">
+        <strong>Error:</strong> {{errorMessage}}
+      </div>
+    </div>
+    <div style="margin-left: 85%;">
+      <button type="button" class="btn btn-primary" (click)="saveDirectReportees()">Save</button>
+      <button type="button" class="btn btn-secondary" #closeModal (click)="closeDrModel()">Close</button>
+    </div>
+  </div>
+</ng-template>
+

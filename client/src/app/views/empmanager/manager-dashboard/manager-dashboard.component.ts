@@ -21,7 +21,7 @@ export class ManagerDashboardComponent implements OnInit {
       let actionlinks=''
              actionlinks= `
             
-             <a data-action-type="doevaluationreview" href="javascript:void(0)">View</> |  <a data-action-type="doevaluationreview" href="javascript:void(0)">Sign-off</a> | <a href="javascript:void(0)">Request Peer Review<a/>
+             <a data-action-type="doevaluationreview" href="javascript:void(0)">View</> |  <a data-action-type="doevaluationreview" href="javascript:void(0)">Sign-off</a> | <a data-action-type="dorequestreview" href="javascript:void(0)" (click)='onRequestPeerReview()'>Request Peer Review<a/>
              
              `
             return actionlinks
@@ -101,7 +101,10 @@ export class ManagerDashboardComponent implements OnInit {
           this.doReview();
           break;
         case "doevaluationreview":
-          this.reviewEvalForm('reviewEval','Manager');
+          this.reviewEvalForm('reviewEval', 'Manager');
+          break;
+        case 'dorequestreview':
+          this.onRequestPeerReview();
           break;
         default:
       }
@@ -120,6 +123,8 @@ export class ManagerDashboardComponent implements OnInit {
   ], { skipLocationChange: true });
 }
 
-
+  onRequestPeerReview() {
+    this.router.navigate(['em/request-rating']);
+  }
 
 }
