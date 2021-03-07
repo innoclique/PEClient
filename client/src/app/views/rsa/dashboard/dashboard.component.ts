@@ -3,6 +3,8 @@ import {RsaService} from '../../../services/rsa.service';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
 import * as pluginAnnotations from 'chartjs-plugin-annotation';
+import { environment } from '../../../../environments/environment';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,14 +12,54 @@ import * as pluginAnnotations from 'chartjs-plugin-annotation';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardRSAComponent implements OnInit {
-
+  clientSummaryByUsage: string[];
+  yearsList: string[] = [];
+chartTypeInput:string;
+clientSummaryByStatus: string[];
   dashboardData:any;
+  clientSummaryUsageForm = new FormControl();
+  clientSummaryStatusForm = new FormControl();
   constructor(public rsaService:RsaService) { 
+    this.yearsList = this.loadXAxisYears();
     this.rsaService.rsaDashboard().subscribe(apiResponse => {
       this.dashboardData = apiResponse;
     });
   }
-
+  loadXAxisYears(){
+    let startYear = environment.START_YEAR;
+    let endYear = new Date().getFullYear();
+    let step=1;
+    let years=[];
+    for(let i = startYear; i <= endYear; i += step){
+        years.push(i);
+    }
+    return years;
+  }
+  clientSummaryByUsageChanged(chartType,userType){
+    this.chartTypeInput=chartType;
+    switch (chartType) {
+      case 'CLIENT_SUMMARY':
+          if (this.clientSummaryUsageForm.value.length < 5) {
+            this.clientSummaryByUsage = this.clientSummaryUsageForm.value;
+          } else {
+            this.clientSummaryUsageForm.setValue(this.clientSummaryByUsage);
+          }
+        break;
+      case 'STATUS':
+        if(userType == 'Client'){
+          if (this.clientSummaryStatusForm.value.length < 5) {
+            this.clientSummaryByStatus = this.clientSummaryStatusForm.value;
+          } else {
+            this.clientSummaryStatusForm.setValue(this.clientSummaryByStatus);
+          }
+          break;
+        }
+    
+      default:
+        break;
+    }
+    
+  }
   ngOnInit(): void {
   }
 
