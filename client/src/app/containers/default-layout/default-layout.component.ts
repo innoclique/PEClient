@@ -691,6 +691,9 @@ public oneAtATime: boolean = true;
 
       }
 
+      // if(this.user.Permissions.length>0)
+      // this.navItems = this.navItems.concat(this.user.Permissions);
+
         return  this.navItems; 
       }
     }
