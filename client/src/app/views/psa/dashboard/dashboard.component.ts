@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
   yearsList: string[] = [];
   chartTypeInput:string;
   constructor() { 
-    this.yearsList = this.loadXAxisYears();;
+    this.yearsList = this.loadXAxisYears();
   }
   ngOnInit(): void {
   }
