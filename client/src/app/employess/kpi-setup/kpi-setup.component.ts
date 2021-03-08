@@ -38,6 +38,7 @@ export class KpiSetupComponent implements OnInit {
   isEmployeePgSignoff:boolean = false;
   finalSignoffDate:Date;
   selectedEvaluationYr:any="";
+  isEmpFRSignOff=false;
   kpiHistoryData: any = [];
 
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
@@ -91,6 +92,7 @@ export class KpiSetupComponent implements OnInit {
     this.isKpiActivated=false;
     this.selectedEvaluationYr=evaluationYear;
     this.getAllKpis();
+    this.getAllKpiBasicData();
   }
   findPgSignoff(){
     let orgStartEnd = this.getOrganizationStartAndEndDates();
@@ -294,8 +296,8 @@ export class KpiSetupComponent implements OnInit {
           actionlinks= `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="EF" title="Edit Performance Goal" ></i>    
           
-          <i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-          font-size: 17px;"   data-action-type="deActiveKPI" title="Deactivate Performance Goal"></i>
+          ${this.isEmpFRSignOff?" " : ` <i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;  font-size: 17px;"   data-action-type="deActiveKPI" title="Deactivate Performance Goal"></i> `}
+          
          
           <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>    
@@ -312,8 +314,11 @@ export class KpiSetupComponent implements OnInit {
           font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>   
           `
         }else{
-          actionlinks= `<i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
-          font-size: 17px;"   data-action-type="activeKPI" title="activate Performance Goal"></i>       
+          actionlinks= `
+
+          ${this.isEmpFRSignOff?" " : ` <i class="cui-circle-check font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+                                          font-size: 17px;"   data-action-type="activeKPI" title="activate Performance Goal"></i>  `}
+                
         
           <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>   
@@ -414,6 +419,35 @@ export class KpiSetupComponent implements OnInit {
        
      }
     })
+  }
+
+
+  
+  getAllKpiBasicData() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetKpiSetupBasicData";
+    this.perfApp.requestBody = { 'empId': this.loginUser._id ,
+    'orgId':this.authService.getOrganization()._id,
+    currentEvaluation:this.selectedEvaluationYr
+  }
+      this.perfApp.CallAPI().subscribe(c => {
+
+        if (c) {
+
+          // this.appScores = c.KpiScore;
+          // this.kpiStatus = c.KpiStatus;
+          // this.coachingRemDays = c.coachingRem;
+          // this.currEvaluation = c.evaluation;
+          if(c.evaluation){
+            let {Employees} = c.evaluation;
+            let empFinalRatingSelfSignoff = Employees.find(employee=>employee._id==this.loginUser._id);
+            if(empFinalRatingSelfSignoff)
+              this.isEmpFRSignOff = empFinalRatingSelfSignoff.FinalRating.Self.SignOff.length > 0 || empFinalRatingSelfSignoff.FinalRating.Self.IsSubmitted;
+            // this.showManagerScore = empFinalRatingSelfSignoff.FinalRating.Manager.IsSubmitted;
+          }
+          
+        }
+      })
   }
 
   allowPg(){
