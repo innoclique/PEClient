@@ -64,6 +64,7 @@ export class AdhocPaymentComponent implements OnInit {
   isOtherText:Boolean=false;
   clientList:any=[];
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
+  public licensePeriod: any;
 
   constructor(
     public router: Router,
@@ -173,7 +174,8 @@ export class AdhocPaymentComponent implements OnInit {
       this.refreshForm();
     }
   }
-  loadDuration(){
+  loadDuration() {
+    this.licensePeriod = this.getActivationPeriod();
     this.getPaymentReleaseCost();
   }
 
@@ -256,7 +258,8 @@ export class AdhocPaymentComponent implements OnInit {
     this.paymentSummary = this.paymentCaluculationService.CaluculatePaymentSummary(this.paymentStructure,options,this.paymentScale);
   }
 
-  onChangeFrequency(){
+  onChangeFrequency() {
+    this.licensePeriod = this.getActivationPeriod();
     if(this.paymentScale){
       this.getPaymentSummary();
     }
@@ -279,6 +282,7 @@ export class AdhocPaymentComponent implements OnInit {
 
   }
   public onActivationDate(event): void {
+    this.licensePeriod = this.getActivationPeriod();
     if(this.paymentModel.Organization!=""){
       this.orgnizationDetails();
     }
@@ -352,5 +356,38 @@ export class AdhocPaymentComponent implements OnInit {
   loadPriceListPage(){
     this.router.navigate(['psa/price-list'],{ skipLocationChange: true });
   }
+
+
+  private getActivationPeriod() {
+    let aDate = moment(this.paymentModel.ActivationDate, 'YYYY/MM/DD');
+    let duration = Number(this.paymentModel.DurationMonths);
+    let StartMonth = parseInt(aDate.format('M'));
+    let day = aDate.format('D');
+    let activationYear = aDate.format('YYYY');
+    let EndMonth = this.months[StartMonth - 1 + duration] ;
+    return this.months[StartMonth - 1] + " " + activationYear + " to " + EndMonth.substring(0, 3) + " " + this.getYearEnd(EndMonth.substring(0, 3));
+  }
+
+  private getYearStart(month: string) {
+    if (this.months.indexOf(month) > new Date().getMonth()) {
+      var currentYear: string = (new Date().getFullYear() - 1).toString();
+      return currentYear;
+    } else {
+      var currentYear: string = new Date().getFullYear().toString();
+      return currentYear;
+    }
+  }
+
+  private getYearEnd(month: string) {
+    if (this.months.indexOf(month) >= new Date().getMonth()) {
+      var currentYear: string = new Date().getFullYear().toString();
+      return currentYear;
+    } else {
+      var currentYear: string = (new Date().getFullYear() + 1).toString();
+      return currentYear;
+    }
+  }
+  private months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+    "Aug", "Sep", "Oct", "Nov", "Dec"];
   
 }
