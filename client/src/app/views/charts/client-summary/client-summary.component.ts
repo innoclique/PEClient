@@ -20,13 +20,9 @@ selectedYears:any=[];
 currentOrganization:any;
 chartYears:any;
 @Input() set onselectChartType(chartType: any) {
-  console.log("inside:onselectChartType@@");
-  console.log(this.clientSummaryBarChartLabels);
-  console.log(this.chartYears)
   if(chartType){
     this.chartTypeInput = chartType;
   }
-  
  }
  @Input() set onSelectYears(years: any) {
   console.log("inside:OnSelectYears@@");
@@ -182,61 +178,28 @@ public barChartColors: Color[] = [
               id: 'y-axis-0',
               position: 'left',
             },
-            /*{
-              id: 'y-axis-1',
-              position: 'right',
-              gridLines: {
-                color: 'rgba(255,0,0,0.3)',
-              },
-              ticks: {
-                fontColor: 'red',
-              }
-            }*/
+            
           ]
         },
-        /*annotation: {
-          annotations: [
-            {
-              type: 'line',
-              mode: 'vertical',
-              scaleID: 'x-axis-0',
-              value: 'March',
-              borderColor: 'orange',
-              borderWidth: 2,
-              label: {
-                enabled: true,
-                fontColor: 'orange',
-                content: 'LineAnno'
-              }
-            },
-          ],
-        },*/
+        
       };
       this.barChartColors = [
-        { // grey
-          backgroundColor: 'rgba(148,159,177,0.2)',
-          borderColor: 'rgba(148,159,177,1)',
-          pointBackgroundColor: 'rgba(148,159,177,1)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-        },
-        { // dark grey
-          backgroundColor: 'rgba(77,83,96,0.2)',
-          borderColor: 'rgba(77,83,96,1)',
-          pointBackgroundColor: 'rgba(77,83,96,1)',
-          pointBorderColor: '#fff',
+        { 
+          backgroundColor: 'rgba(10,86,152,0.2)', 
+          borderColor: 'rgba(10,86,152,1)',
+           pointBackgroundColor: 'rgba(10,86,152,1)', 
+           pointBorderColor: '#fff', 
+           pointHoverBackgroundColor: '#fff', 
+           pointHoverBorderColor: 'rgba(10,86,152,0.8)' 
+          },
+        { 
+          backgroundColor: 'rgba(87,166,79,0.2)', 
+           borderColor: 'rgba(87,166,79,1)', 
+           pointBackgroundColor: 'rgba(87,166,79,1)', 
+           pointBorderColor: '#fff',
           pointHoverBackgroundColor: '#fff',
           pointHoverBorderColor: 'rgba(77,83,96,1)'
-        },
-        { // red
-          backgroundColor: 'rgba(255,0,0,0.3)',
-          borderColor: 'red',
-          pointBackgroundColor: 'rgba(148,159,177,1)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-        }
+          }
       ];
       this.clientSummaryBarChartLegend= true;
       this.clientSummaryBarChartType = 'line';
@@ -258,61 +221,27 @@ public barChartColors: Color[] = [
               id: 'y-axis-0',
               position: 'left',
             },
-            /*{
-              id: 'y-axis-1',
-              position: 'right',
-              gridLines: {
-                color: 'rgba(255,0,0,0.3)',
-              },
-              ticks: {
-                fontColor: 'red',
-              }
-            }*/
           ]
         },
-        /*annotation: {
-          annotations: [
-            {
-              type: 'line',
-              mode: 'vertical',
-              scaleID: 'x-axis-0',
-              value: 'March',
-              borderColor: 'orange',
-              borderWidth: 2,
-              label: {
-                enabled: true,
-                fontColor: 'orange',
-                content: 'LineAnno'
-              }
-            },
-          ],
-        },*/
+        
       };
       this.barChartColors = [
-        { // grey
-          backgroundColor: 'rgba(148,159,177,0.2)',
-          borderColor: 'rgba(148,159,177,1)',
-          pointBackgroundColor: 'rgba(148,159,177,1)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-        },
-        { // dark grey
-          backgroundColor: 'rgba(77,83,96,0.2)',
-          borderColor: 'rgba(77,83,96,1)',
-          pointBackgroundColor: 'rgba(77,83,96,1)',
-          pointBorderColor: '#fff',
+        { 
+          backgroundColor: 'rgba(10,86,152,0.2)', 
+          borderColor: 'rgba(10,86,152,1)',
+           pointBackgroundColor: 'rgba(10,86,152,1)', 
+           pointBorderColor: '#fff', 
+           pointHoverBackgroundColor: '#fff', 
+           pointHoverBorderColor: 'rgba(10,86,152,0.8)' 
+          },
+        { 
+          backgroundColor: 'rgba(87,166,79,0.2)', 
+           borderColor: 'rgba(87,166,79,1)', 
+           pointBackgroundColor: 'rgba(87,166,79,1)', 
+           pointBorderColor: '#fff',
           pointHoverBackgroundColor: '#fff',
           pointHoverBorderColor: 'rgba(77,83,96,1)'
-        },
-        { // red
-          backgroundColor: 'rgba(255,0,0,0.3)',
-          borderColor: 'red',
-          pointBackgroundColor: 'rgba(148,159,177,1)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-        }
+          }
       ];
       this.clientSummaryBarChartLegend= true;
       this.clientSummaryBarChartType = 'line';
@@ -356,46 +285,52 @@ public barChartColors: Color[] = [
   getClientSummaryChatData(chartType,chartYears){
     console.log(chartYears);
     console.log(chartType);
-    let {Organization,_id} = this.loginUser;
-    let orgId = Organization._id;
-    let reqBody:any = {
-      orgId:orgId,
-      years:chartYears,
-      chartType:chartType,
-      userType:this.userType 
-    };
-    this.chartService.chartSummary(reqBody).subscribe(apiResponse => {
-      console.log(apiResponse)
-      let {ClientSummary,Evaluation} = apiResponse;
-      if(this.chartTypeInput==='CLIENT_SUMMARY'){
-        let {usage} =ClientSummary;
-        this.clientSummaryBarChartData=usage.chartDataSets;
-        this.clientSummaryBarChartLabels=usage.Label;
-      }else if(this.chartTypeInput==='STATUS'){
-        let {status} =ClientSummary;
-        this.clientSummaryBarChartData=status.chartDataSets;
-        this.clientSummaryBarChartLabels=status.Label;
-      }else if(this.chartTypeInput === 'EVALUATION_SUMMARY'){
-        let {summary} =Evaluation;
-        this.clientSummaryBarChartData=summary.chartDataSets;
-        this.clientSummaryBarChartLabels=summary.Label;
-      }
-      
-    });
+    if(this.loginUser){
+      let {Organization,_id} = this.loginUser;
+      let orgId = Organization._id;
+      let reqBody:any = {
+        orgId:orgId,
+        years:chartYears,
+        chartType:chartType,
+        userType:this.userType 
+      };
+      this.chartService.chartSummary(reqBody).subscribe(apiResponse => {
+        console.log(apiResponse)
+        let {ClientSummary,Evaluation} = apiResponse;
+        if(this.chartTypeInput==='CLIENT_SUMMARY'){
+          let {usage} =ClientSummary;
+          this.clientSummaryBarChartData=usage.chartDataSets;
+          this.clientSummaryBarChartLabels=usage.Label;
+        }else if(this.chartTypeInput==='STATUS'){
+          let {status} =ClientSummary;
+          this.clientSummaryBarChartData=status.chartDataSets;
+          this.clientSummaryBarChartLabels=status.Label;
+        }else if(this.chartTypeInput === 'EVALUATION_SUMMARY'){
+          let {summary} =Evaluation;
+          this.clientSummaryBarChartData=summary.chartDataSets;
+          this.clientSummaryBarChartLabels=summary.Label;
+        }
+        
+      });
+    }
+    
   }
 
   lastYears(){
     let back = 4;
     let year;
-    console.log("this.loginUser.UserType")
-    if(this.loginUser.Role === "PSA" || this.loginUser.Role==="RSA"){
-      year = new Date().getFullYear();
-    }else{
-      let orgStartEnd = this.getOrganizationStartAndEndDates();
-      let EvaluationYear = orgStartEnd.start.format("YYYY");
-      year = parseInt(EvaluationYear);
+    console.log("this.loginUser.UserType");
+    if(this.loginUser){
+      if(this.loginUser && this.loginUser.Role === "PSA" || this.loginUser.Role==="RSA"){
+        year = new Date().getFullYear();
+      }else{
+        let orgStartEnd = this.getOrganizationStartAndEndDates();
+        let EvaluationYear = orgStartEnd.start.format("YYYY");
+        year = parseInt(EvaluationYear);
+      }
+      return Array.from({length: back}, (v, i) => year - back + i + 1);
     }
-    return Array.from({length: back}, (v, i) => year - back + i + 1);
+    return [];
   }
   getOrganizationStartAndEndDates(){
     if(this.currentOrganization){

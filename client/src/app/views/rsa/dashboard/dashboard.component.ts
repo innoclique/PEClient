@@ -19,6 +19,7 @@ clientSummaryByStatus: string[];
   dashboardData:any;
   clientSummaryUsageForm = new FormControl();
   clientSummaryStatusForm = new FormControl();
+  
   constructor(public rsaService:RsaService) { 
     this.yearsList = this.loadXAxisYears();
     this.rsaService.rsaDashboard().subscribe(apiResponse => {
