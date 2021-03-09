@@ -301,7 +301,7 @@ export class SetupclientComponent implements OnInit {
       ])],
       Phone: [null, Validators.compose([
         Validators.required, Validators.maxLength(13),
-        Validators.pattern("^[0-9]{2}-[0-9]{10}$")
+        //Validators.pattern("^[0-9]{2}-[0-9]{10}$")
       ])],
       PhoneExt: [null, Validators.compose([
          Validators.maxLength(5),
@@ -340,7 +340,8 @@ export class SetupclientComponent implements OnInit {
       AdminEmail: ['', [Validators.required, Validators.email]],
       AdminPhone: [null, Validators.compose([
         Validators.required, Validators.maxLength(13),
-        Validators.pattern("^[0-9]{2}-[0-9]{10}$")
+        Validators.minLength(10),
+       // Validators.pattern("^[0-9]{2}-[0-9]{10}$")
       ])],
       SameAsAdmin: [false, []],
       contactPersonForm: this.formBuilder.group({
@@ -360,7 +361,8 @@ export class SetupclientComponent implements OnInit {
         ContactPersonEmail: ['', [Validators.required, Validators.email]],
         ContactPersonPhone: [null, Validators.compose([
           Validators.required, Validators.maxLength(13),
-          Validators.pattern("^[0-9]{2}-[0-9]{10}$")
+          Validators.minLength(10),
+          // Validators.pattern("^[0-9]{2}-[0-9]{10}$")
         ])]
       }),
       CoachingReminder: ['', []],
@@ -644,7 +646,8 @@ export class SetupclientComponent implements OnInit {
     ContactPersonEmail: ['', [Validators.required, Validators.email]],
     ContactPersonPhone: ['', Validators.compose([
       Validators.required, Validators.maxLength(13),
-      Validators.pattern("^[0-9]{2}-[0-9]{10}$")
+      Validators.minLength(10),
+      // Validators.pattern("^[0-9]{2}-[0-9]{10}$")
     ])]
   }
   resetForm() {

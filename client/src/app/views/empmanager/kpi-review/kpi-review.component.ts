@@ -287,6 +287,7 @@ actor:any;
       console.log(result);
       if (result) {
         this.snack.success(this.translate.instant(`The performance goals have been submitted successfully and your sign-off registered.`));
+        this.onCancle();
       }
       if(this.unSubmitedCount!=0){
         this.submitAllKPIs(false)

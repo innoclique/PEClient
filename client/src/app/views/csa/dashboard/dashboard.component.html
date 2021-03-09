@@ -13,9 +13,22 @@
               <div class="box col-lg-6">
                 <div class="box_in">
                   <div style="height: 250px; width: 100%;">
-                    <h2 class="bg-blue">Evaluation Summary</h2>
-                  
-                  <app-client-summary [chartTypeInput]="'EVALUATION_SUMMARY'" [userType]="'Client'"></app-client-summary>
+                    <div class="bg-blue clearfix">
+                      <div class="col-lg-8 pull-left">
+                        <h2 class="no_bg">Evaluation Summary</h2>
+                      </div>
+                      <div class="col-lg-4 pull-left" style="margin-top: 8px;">
+                        <mat-form-field class="mat-select">
+                          <mat-label>Select</mat-label>
+                        <mat-select (selectionChange)="clientSummaryByUsageChanged('EVALUATION_SUMMARY','Client')" [formControl]="evaluationSummaryForm"
+                            
+                            multiple >
+                          <mat-option *ngFor="let year of yearsList" [value]="year.value">{{year.label}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <app-client-summary [chartTypeInput]="'EVALUATION_SUMMARY'" [userType]="'Client'" [onselectChartType]="chartTypeInput" [onSelectYears]="evaluationSummary"></app-client-summary>
                   </div>
                   <a  href="#/csa/reports/evaluationsSummary" class="box_in_btns_view">Evaluation Summary &#8594;</a>
                   <div class="clear"></div>

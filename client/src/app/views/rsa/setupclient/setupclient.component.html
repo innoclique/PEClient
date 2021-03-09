@@ -114,8 +114,9 @@
                       [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Phone.errors }" formControlName="Phone" required>
                     <div *ngIf="isFormSubmitted  && f.Phone.errors" class="invalid-feedback">
                       <div *ngIf="f.Phone.errors.required">Phone or Mobile number is mandatory.</div>
-                      <div *ngIf="f.Phone.errors.pattern">Phone can accept only 0-9 and - format should be
-                        (01-1234567890).</div>
+                      <div *ngIf="f.Phone.errors.minlength">Phone Number must be at least 10 characters  </div>
+                      <!-- <div *ngIf="f.Phone.errors.pattern">Phone can accept only 0-9 and - format should be
+                        (01-1234567890).</div> -->
                     </div>
                   </div>
                 </div>
@@ -301,8 +302,9 @@
                       formControlName="AdminPhone">
                     <div *ngIf="isFormSubmitted && f.AdminPhone.errors" class="invalid-feedback">
                       <div *ngIf="f.AdminPhone.errors.required">Admin Phone is mandatory</div>
-                      <div *ngIf="f.AdminPhone.errors.pattern">Phone can accept only 0-9 and - format should be
-                        (01-1234567890).</div>
+                      <div *ngIf="f.AdminPhone.errors.minlength">Phone Number must be at least 10 characters  </div>
+                      <!-- <div *ngIf="f.AdminPhone.errors.pattern">Phone can accept only 0-9 and - format should be
+                        (01-1234567890).</div> -->
                     </div>
                   </div>
                 </div>
@@ -410,8 +412,9 @@
                       <div *ngIf="!f.SameAsAdmin.value && isFormSubmitted &&  a.ContactPersonPhone.errors"
                         class="invalid-feedback">
                         <div *ngIf="a.ContactPersonPhone.errors.required">Contact Person Phone is mandatory</div>
-                        <div *ngIf="a.ContactPersonPhone.errors.pattern">Phone can accept only 0-9 and - format should be
-                          (01-1234567890).</div>
+                        <div *ngIf="a.ContactPersonPhone.errors.minlength">Phone Number must be at least 10 characters  </div>
+                        <!-- <div *ngIf="a.ContactPersonPhone.errors.pattern">Phone can accept only 0-9 and - format should be
+                          (01-1234567890).</div> -->
                       </div>
                     </div>
                   </div>

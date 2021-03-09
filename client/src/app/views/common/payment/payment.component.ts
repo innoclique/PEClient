@@ -9,6 +9,7 @@ import { NotificationService } from '../../../services/notification.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AlertDialog } from '../../../Models/AlertDialog';
 import { AlertComponent } from '../../../shared/alert/alert.component';
+import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
 
 @Component({
   selector: 'app-payment',
@@ -70,7 +71,8 @@ export class PaymentComponent implements OnInit {
   adhokPaymentLink:any="#/csa/adhoc-payment";
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
   public taxToolTip;
-  isClientDropdownEnable:Boolean=false;
+  isClientDropdownEnable: Boolean = false;
+  public licensePeriod: any;
 
   constructor(
     public router: Router,
@@ -173,6 +175,7 @@ export class PaymentComponent implements OnInit {
               this.isNoNeededVisible = true;
             }
             this.selectedRangeValue = this.paymentReleaseData.Range;
+            this.licensePeriod = this.getActivationPeriod();
           }else{
             this.notification.error("Initial payment was not found.")
           }
@@ -453,7 +456,13 @@ export class PaymentComponent implements OnInit {
         
 }
 
-  orgnizationDetails(){
+  orgnizationDetails(isOnLoad = true) {
+      if (!isOnLoad) {
+        this.paymentReleaseData.ActivationDate = this.paymentModel.ActivationDate;
+      } else {
+        this.paymentReleaseData.ActivationDate = this.paymentReleaseData.ActivationDate;
+      }
+
       let {Organization,isAnnualPayment,NoOfMonthsLable,NoOfMonths,UsageType,ActivationDate,Range,RangeId,NoOfEmployees,NoNeeded,Status} = this.paymentReleaseData;
       this.checkoutActivationDate = moment(ActivationDate).format("MM/DD/YYYY");
       let {COST_PER_PA,COST_PER_MONTH,DISCOUNT_PA_PAYMENT,TOTAL_AMOUNT,COST_PER_MONTH_ANNUAL_DISCOUNT} = this.paymentReleaseData;
@@ -591,15 +600,17 @@ export class PaymentComponent implements OnInit {
     console.log(`inside:getPaymentSummary:noOfMonths = ${noOfMonths}`)
     let options={noOfMonths,isAnnualPayment:this.paymentModel.isAnnualPayment,NoNeeded,NoOfEmployees};
     this.paymentSummary = this.paymentCaluculationService.CaluculatePaymentSummary(this.paymentStructure,options,this.paymentScale);
-    this.paymentStructure.CD_PER_MONTH=this.paymentStructure.COST_PER_MONTH;
-    this.paymentStructure.CD_PER_MONTH_DISCOUNT=this.paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT;
+    this.paymentSummary.CD_PER_MONTH=this.paymentStructure.COST_PER_MONTH;
+    this.paymentSummary.CD_PER_MONTH_DISCOUNT=this.paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT;
     if(this.currentUser.Organization.ClientType === "Reseller" && NoNeeded!=0){
-      this.paymentStructure.CD_PER_MONTH=(this.paymentStructure.COST_PER_MONTH*NoNeeded).toFixed(2);
-      this.paymentStructure.CD_PER_MONTH_DISCOUNT=(this.paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT*NoNeeded).toFixed(2);
+      this.paymentSummary.CD_PER_MONTH=(this.paymentStructure.COST_PER_MONTH*NoNeeded).toFixed(2);
+      this.paymentSummary.CD_PER_MONTH_DISCOUNT=(this.paymentStructure.COST_PER_MONTH_ANNUAL_DISCOUNT*NoNeeded).toFixed(2);
     }
+    
   }
 
-  onChangeFrequency(){
+  onChangeFrequency() {
+    this.licensePeriod = this.getActivationPeriod();
     if(this.paymentScale){
       this.getPaymentSummary();
     }
@@ -632,8 +643,9 @@ export class PaymentComponent implements OnInit {
     };
   }
   public onActivationDate(event): void {
+    this.licensePeriod = this.getActivationPeriod();
     if(this.paymentModel.Organization!=""){
-      this.orgnizationDetails();
+      this.orgnizationDetails(false);
     }
   }
   checkout(){
@@ -771,4 +783,43 @@ export class PaymentComponent implements OnInit {
     }
   }
 
+  private getActivationPeriod() {
+    let aDate = moment(this.paymentModel.ActivationDate, 'YYYY/MM/DD');
+
+    let StartMonth = parseInt(aDate.format('M'));
+    let day = aDate.format('D');
+    let activationYear = aDate.format('YYYY');
+    // For reseller there is no end month, so calculating with NoOfMonths
+    let duration = Number(this.paymentModel.NoOfMonths);
+    let currentEndMonth = StartMonth - 1 + duration;
+    if (currentEndMonth > 11) {
+      currentEndMonth = currentEndMonth - 12;
+    }
+    let calEndMonth = this.months[currentEndMonth];
+
+    let EndMonth = this.currentOrganization.EndMonth ? this.currentOrganization.EndMonth : calEndMonth;
+    return this.months[StartMonth - 1] + " " + activationYear + " to " + EndMonth.substring(0, 3) + " " + this.getYearEnd(EndMonth.substring(0, 3));
+  }
+
+  private getYearStart(month: string) {
+    if (this.months.indexOf(month) > new Date().getMonth()) {
+      var currentYear: string = (new Date().getFullYear() - 1).toString();
+      return currentYear;
+    } else {
+      var currentYear: string = new Date().getFullYear().toString();
+      return currentYear;
+    }
+  }
+
+  private getYearEnd(month: string) {
+    if (this.months.indexOf(month) > new Date().getMonth()) {
+      var currentYear: string = new Date().getFullYear().toString();
+      return currentYear;
+    } else {
+      var currentYear: string = (new Date().getFullYear() + 1).toString();
+      return currentYear;
+    }
+  }
+  private months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July",
+    "Aug", "Sep", "Oct", "Nov", "Dec"];
 }

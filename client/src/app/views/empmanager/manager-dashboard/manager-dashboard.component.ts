@@ -87,6 +87,12 @@ export class ManagerDashboardComponent implements OnInit {
     let payload:any={userId:_id,orgId:orgId,type:'EM'}
     this.emService.directReports(payload).subscribe(apiResponse => {
       this.directReportsRowData = apiResponse.list;
+
+      if (this.directReportsRowData.length > 0) {
+        this.directReportsRowData.map(row => {
+          row.lastRating = row.lastRating == '' ? 'N/A' : row.lastRating
+        });
+      }
     });
   }
 
