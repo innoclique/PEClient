@@ -789,7 +789,15 @@ export class PaymentComponent implements OnInit {
     let StartMonth = parseInt(aDate.format('M'));
     let day = aDate.format('D');
     let activationYear = aDate.format('YYYY');
-    let EndMonth = this.currentOrganization.EndMonth;
+    // For reseller there is no end month, so calculating with NoOfMonths
+    let duration = Number(this.paymentModel.NoOfMonths);
+    let currentEndMonth = StartMonth - 1 + duration;
+    if (currentEndMonth > 11) {
+      currentEndMonth = currentEndMonth - 12;
+    }
+    let calEndMonth = this.months[currentEndMonth];
+
+    let EndMonth = this.currentOrganization.EndMonth ? this.currentOrganization.EndMonth : calEndMonth;
     return this.months[StartMonth - 1] + " " + activationYear + " to " + EndMonth.substring(0, 3) + " " + this.getYearEnd(EndMonth.substring(0, 3));
   }
 
@@ -804,7 +812,7 @@ export class PaymentComponent implements OnInit {
   }
 
   private getYearEnd(month: string) {
-    if (this.months.indexOf(month) >= new Date().getMonth()) {
+    if (this.months.indexOf(month) > new Date().getMonth()) {
       var currentYear: string = new Date().getFullYear().toString();
       return currentYear;
     } else {
