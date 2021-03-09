@@ -11,11 +11,14 @@
                     <h2 class="no_bg">Client Summary - By usages</h2>
                   </div>
                   <div class="col-lg-4 pull-left" style="margin-top: 8px;">
+                    <mat-form-field class="mat-select">
+                      <mat-label>Select</mat-label>
                     <mat-select (selectionChange)="clientSummaryByUsageChanged('CLIENT_SUMMARY','Client')" [formControl]="clientSummaryUsageForm"
-                    class="form-control"
+                    
                     multiple >
                     <mat-option *ngFor="let year of yearsList" [value]="year">{{year}}</mat-option>
                   </mat-select>
+                  </mat-form-field>
                   </div>
                 </div>
                 <app-client-summary [chartTypeInput]="'CLIENT_SUMMARY'" [userType]="'Client'" [onselectChartType]="chartTypeInput" [onSelectYears]="clientSummaryByUsage"></app-client-summary>
@@ -28,11 +31,14 @@
                     <h2 class="no_bg">Client Summary - Status</h2>
                   </div>
                   <div class="col-lg-4 pull-left" style="margin-top: 8px;">
+                    <mat-form-field class="mat-select">
+                      <mat-label>Select</mat-label>
                     <mat-select (selectionChange)="clientSummaryByUsageChanged('STATUS','Client')" [formControl]="clientSummaryStatusForm"
-                        class="form-control"
+                        
                         multiple >
                       <mat-option *ngFor="let year of yearsList" [value]="year">{{year}}</mat-option>
                     </mat-select>
+                    </mat-form-field>
                   </div>
                 </div>
                 <app-client-summary [chartTypeInput]="'STATUS'" [userType]="'Client'" [onselectChartType]="chartTypeInput" [onSelectYears]="clientSummaryByStatus"></app-client-summary>

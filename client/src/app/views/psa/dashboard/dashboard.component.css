@@ -8,3 +8,7 @@
 .no_bg {
     background: none !important;
 }
+
+.mat-select {
+    width:130px !important;
+}

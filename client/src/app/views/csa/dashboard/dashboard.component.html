@@ -18,11 +18,14 @@
                         <h2 class="no_bg">Evaluation Summary</h2>
                       </div>
                       <div class="col-lg-4 pull-left" style="margin-top: 8px;">
+                        <mat-form-field class="mat-select">
+                          <mat-label>Select</mat-label>
                         <mat-select (selectionChange)="clientSummaryByUsageChanged('EVALUATION_SUMMARY','Client')" [formControl]="evaluationSummaryForm"
-                            class="form-control"
+                            
                             multiple >
                           <mat-option *ngFor="let year of yearsList" [value]="year.value">{{year.label}}</mat-option>
                         </mat-select>
+                        </mat-form-field>
                       </div>
                     </div>
                     <app-client-summary [chartTypeInput]="'EVALUATION_SUMMARY'" [userType]="'Client'" [onselectChartType]="chartTypeInput" [onSelectYears]="evaluationSummary"></app-client-summary>
