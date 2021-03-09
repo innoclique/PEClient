@@ -349,7 +349,7 @@ let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).len
          NoOfDevGoals: row.GoalList.length,
          ReleasedKpis: row.ReleasedKpis,
          pgDraftGoals: row.pgDraftGoals?row.pgDraftGoals.length:0,
-         isEmpSignOffed: this.OriginalcurrentEvaluationYear==this.currentEvaluationYear &&row.Evaluation && row.Evaluation.length>0 && row.Evaluation[0].FinalRating.Self.SignOff ?true:false,
+         isEmpSignOffed: this.OriginalcurrentEvaluationYear==this.currentEvaluationYear &&row.Evaluation && row.Evaluation.length>0 && row.Evaluation[0].FinalRating.Self.SubmittedOn ?true:false,
        
         RowData:row
       }
