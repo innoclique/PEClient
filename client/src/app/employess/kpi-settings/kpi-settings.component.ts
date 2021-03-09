@@ -610,7 +610,7 @@ this.toggleSelection(c,null);
             let {Employees} = c.evaluation;
             let empFinalRatingSelfSignoff = Employees.find(employee=>employee._id==this.loginUser._id);
             if(empFinalRatingSelfSignoff)
-              this.isEmpFRSignOff = empFinalRatingSelfSignoff.FinalRating.Self.SignOff.length > 0 || empFinalRatingSelfSignoff.FinalRating.Self.IsSubmitted;
+              this.isEmpFRSignOff = empFinalRatingSelfSignoff.FinalRating.Self.SubmittedOn!=null || empFinalRatingSelfSignoff.FinalRating.Self.IsSubmitted;
             this.showManagerScore = empFinalRatingSelfSignoff.FinalRating.Manager.IsSubmitted;
           }
           debugger

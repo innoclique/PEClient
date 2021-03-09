@@ -16,9 +16,9 @@
                         (click)="submitAllSignoffKPIs()">
                         Allow
                       </button>&nbsp;
-                      <button *ngIf="kpiDetails?.IsActive" class="btn btn-sm btn-primary"  (click)="confirmActiveDeActiveKPI(false)" title="Deactivate Performance Goal">Deactivate</button>&nbsp;
+                      <button *ngIf="kpiDetails?.IsActive  && !isEmpFRSignOff" class="btn btn-sm btn-primary"  (click)="confirmActiveDeActiveKPI(false)" title="Deactivate Performance Goal">Deactivate</button>&nbsp;
 
-                    <button *ngIf="!kpiDetails?.IsActive" class="btn btn-sm btn-primary"  (click)="confirmActiveDeActiveKPI(true)" title="Active Performance Goal">Active</button>&nbsp;
+                    <button *ngIf="!kpiDetails?.IsActive  && !isEmpFRSignOff" class="btn btn-sm btn-primary"  (click)="confirmActiveDeActiveKPI(true)" title="Active Performance Goal">Active</button>&nbsp;
                       <button class="btn btn-sm btn-primary"  (click)="trackKpi()"  title="Track Performance Goal" >Track</button>&nbsp;
                       &nbsp;<i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
                     </div>

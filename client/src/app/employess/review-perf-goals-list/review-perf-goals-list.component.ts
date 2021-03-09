@@ -60,6 +60,7 @@ export class ReviewPerfGoalsListComponent implements OnInit {
   eaReporteesData: any;
   evaluationsYears:any=[];
   currentEvaluationYear:any="";
+  OriginalcurrentEvaluationYear:any="";
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -78,6 +79,7 @@ export class ReviewPerfGoalsListComponent implements OnInit {
       this.currentOrganization = this.loginUser.Organization;
       let orgStartEnd = this.getOrganizationStartAndEndDates();
       this.currentEvaluationYear = orgStartEnd.start.format("YYYY");
+      this.OriginalcurrentEvaluationYear = orgStartEnd.start.format("YYYY");
     }
     showGuidance(){
       window.location.href=this.kpiGuidance;
@@ -156,6 +158,7 @@ export class ReviewPerfGoalsListComponent implements OnInit {
 
         var returnString = '';
 debugger
+if(data.data.isEmpSignOffed==false){
         if(data && data.data && 
          ( (data.data.ReleasedKpis && data.data.ReleasedKpis.KPIFor=="Manager")
          || (data.data.ReleasedKpis && data.data.ReleasedKpis.KPIFor=="Employee")
@@ -166,6 +169,8 @@ debugger
           returnString += ` <i class="icon-plus font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;  opacity: 0.65;  "    data-action-type="addKPI" title="You Do Not Have Permission"></i> `
         }
+
+      }
 
         returnString += `
         
@@ -335,7 +340,7 @@ GetReporteeKpiRelesedDetails(){
     this.managerReporteesKpiRelData=c.map(row=> {
     //  let flatarray=row.Evaluation.flat()
 //let evaluation=flatarray.find(x=>x.Status==='Active')
-
+debugger
 let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).length;
      return  {
          Name:row.FirstName+' '+row.LastName,
@@ -344,7 +349,7 @@ let unSubmitedCount=row.KpiList.filter(e=>e.ManagerSignOff.submited ==false).len
          NoOfDevGoals: row.GoalList.length,
          ReleasedKpis: row.ReleasedKpis,
          pgDraftGoals: row.pgDraftGoals?row.pgDraftGoals.length:0,
-        // FRStatus: evaluation ?evaluation.FinalRating.Status:'',
+         isEmpSignOffed: this.OriginalcurrentEvaluationYear==this.currentEvaluationYear &&row.Evaluation && row.Evaluation.length>0 && row.Evaluation[0].FinalRating.Self.SubmittedOn ?true:false,
        
         RowData:row
       }

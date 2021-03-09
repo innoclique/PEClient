@@ -816,9 +816,10 @@ p											{  font-size:15px; line-height:21px; font-weight:400; color:#717171;
     .release_method_buttons {
     display : block;
     float : right;
-    position : absolute;
+/*  position : absolute; */
     bottom : 20px;
     right : 0;
+    margin-top: 4%;
     }
     .release_buttons_cancel {
     font-size : 14px;

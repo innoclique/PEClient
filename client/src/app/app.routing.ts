@@ -18,7 +18,6 @@ export const routes: Routes = [
   // { path: 'login', component: LoginComponent, data: { title: 'Second Component' }},
   { path: 'forgotPassword', component: ForgotPasswordComponent, data: { title: '' }},
   { path: 'resetPassword', component: ResetPasswordComponent, data: { title: '' } },
-  { path: 'changePassword', component: ChangePasswordComponent, data: { title: '' } },
   {
     path: '',
     redirectTo: 'login',
@@ -127,7 +126,8 @@ export const routes: Routes = [
         },
         loadChildren:()=>import('./views/final-rating/final-rating.module').then(m=>m.FinalRatingModule),
         
-      }
+      },
+      { path: 'changePassword', component: ChangePasswordComponent, data: { title: 'test' } }
     ]
   },
   // { path: '**', component: P404Component }
