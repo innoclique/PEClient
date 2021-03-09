@@ -37,6 +37,38 @@ chartYears:any;
   }
     
  }
+ 
+ @Input() set onSelectRevenue(years: any) {
+  console.log("inside:onSelectRevenue:"+this.chartTypeInput);
+  if(years && years.length>0){
+    if(this.chartTypeInput === 'PSA_CLIENT_REVENUE'){
+      this.getClientRevenueSummary("PURCHASE_SUMMARY",years[0]);
+    }else if(this.chartTypeInput === 'PSA_RESELLER_REVENUE'){
+      this.getClientRevenueSummary("RESELLER_PURCHASE_SUMMARY",years[0]);
+    }
+  }else{
+    let currentYear = new Date().getFullYear();
+    if(this.chartTypeInput === 'PSA_CLIENT_REVENUE'){
+    this.getClientRevenueSummary("PURCHASE_SUMMARY",currentYear);
+    }else if(this.chartTypeInput === 'PSA_RESELLER_REVENUE'){
+      this.getClientRevenueSummary("RESELLER_PURCHASE_SUMMARY",currentYear);
+    }
+  }
+  
+  /*if(years && years.length>0){
+    this.clientSummaryBarChartLabels= years.toString().split(",");
+    this.chartYears = years;
+    this.getClientSummaryChatData(this.chartTypeInput,this.chartYears);
+  }else{
+    this.clientSummaryBarChartLabels= this.lastYears().toString().split(",");
+    this.chartYears = this.lastYears();
+    this.getClientSummaryChatData(this.chartTypeInput,this.chartYears);
+  } */
+ }
+ /**
+  * this.getClientRevenueSummary("PURCHASE_SUMMARY");
+    this.getClientRevenueSummary("RESELLER_PURCHASE_SUMMARY");
+  */
 /**
  * =========Start===========
  * Client Summary - by Usage chat
@@ -248,16 +280,17 @@ public barChartColors: Color[] = [
     }
 
     this.getClientSummaryChatData(this.chartTypeInput,this.chartYears);
-    this.getClientRevenueSummary("PURCHASE_SUMMARY");
-    this.getClientRevenueSummary("RESELLER_PURCHASE_SUMMARY");
+    let currentYear = new Date().getFullYear();
+    this.getClientRevenueSummary("PURCHASE_SUMMARY",currentYear);
+    this.getClientRevenueSummary("RESELLER_PURCHASE_SUMMARY",currentYear);
   }
-  getClientRevenueSummary(reportType){
+  getClientRevenueSummary(reportType,selectedYear){
     let {Organization,_id} = this.loginUser;
     let orgId = Organization._id;
     let revenueSummaryOptions:any={};
     revenueSummaryOptions.orgId=orgId;
     revenueSummaryOptions.reportType=reportType;
-    revenueSummaryOptions.year=new Date().getFullYear();
+    revenueSummaryOptions.year=selectedYear;
     
     this.perfApp.route = "reports";
     //this.perfApp.method = "reports",
