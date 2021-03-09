@@ -88,11 +88,10 @@ export class KpiSetupComponent implements OnInit {
     });
   }
 
-  loadKpisByYear(evaluationYear){
+ async loadKpisByYear(evaluationYear){
     this.isKpiActivated=false;
     this.selectedEvaluationYr=evaluationYear;
-    this.getAllKpis();
-    this.getAllKpiBasicData();
+  await  this.getAllKpiBasicData();
   }
   findPgSignoff(){
     let orgStartEnd = this.getOrganizationStartAndEndDates();
@@ -423,14 +422,14 @@ export class KpiSetupComponent implements OnInit {
 
 
   
-  getAllKpiBasicData() {
+  async  getAllKpiBasicData() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetKpiSetupBasicData";
     this.perfApp.requestBody = { 'empId': this.loginUser._id ,
     'orgId':this.authService.getOrganization()._id,
     currentEvaluation:this.selectedEvaluationYr
   }
-      this.perfApp.CallAPI().subscribe(c => {
+   await   this.perfApp.CallAPI().subscribe(c => {
 
         if (c) {
 
@@ -442,9 +441,11 @@ export class KpiSetupComponent implements OnInit {
             let {Employees} = c.evaluation;
             let empFinalRatingSelfSignoff = Employees.find(employee=>employee._id==this.loginUser._id);
             if(empFinalRatingSelfSignoff)
-              this.isEmpFRSignOff = empFinalRatingSelfSignoff.FinalRating.Self.SignOff.length > 0 || empFinalRatingSelfSignoff.FinalRating.Self.IsSubmitted;
+              this.isEmpFRSignOff = empFinalRatingSelfSignoff.FinalRating.Self.SubmittedOn || empFinalRatingSelfSignoff.FinalRating.Self.IsSubmitted;
             // this.showManagerScore = empFinalRatingSelfSignoff.FinalRating.Manager.IsSubmitted;
           }
+
+          this.getAllKpis();
           
         }
       })
