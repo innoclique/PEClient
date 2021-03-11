@@ -753,6 +753,8 @@ public currentOrganization:any={}
   }
 
   openPeerView() {
+    console.log("this.selectedEmployee.EmployeeRow.peerCompetenceMapping");
+    console.log(this.selectedEmployee.EmployeeRow.peerCompetenceMapping);
     if (this.selectedEmployee.EmployeeRow.peerCompetenceMapping) {
       this.peerCompetencyMappingRowdata = [];
       this.selectedEmployee.Peers=[];
@@ -1089,6 +1091,61 @@ public currentOrganization:any={}
       this.directReporteesOfEmpGridOptions.api.setRowData(rowData);
     }
   }
+
+  loadManagerSelectedDR() {
+    let requestBody = {
+      EmpId:this.selectedEmployee.Employee._id,
+      EvaluationYear:this.selectedEmployee.EvaluationRow.EvaluationYear,
+      "IsDraft" : false,
+    }
+    this.perfApp.route = "em";
+    this.perfApp.method = "find/request/peer-direct";
+    this.perfApp.requestBody = requestBody;
+    this.perfApp.CallAPI().subscribe(drRequestList => {
+       if(drRequestList){
+         let {DirectReportees} = drRequestList;
+        var rowData: any = [];
+        for(var i=0;i<DirectReportees.length;i++){
+          let drRequestObj = DirectReportees[i];
+          let {EmployeeId,displayTemplate,message,Competencies} = drRequestObj;
+          let drEmpData = this.drCompetencyMappingRowdata.find(p=>p.peer.EmployeeId === EmployeeId);
+          if(drEmpData){
+            let matchedIndex = this.drCompetencyMappingRowdata.findIndex(p=>p.peer.EmployeeId === EmployeeId);
+            console.log(drEmpData);
+            let _empCompetencies = drEmpData.competencies;
+            for(var j=0;j<Competencies.length;j++){
+              let competencyObj = Competencies[j];
+              let foundCompetency = _empCompetencies.find(ec=>ec._id == competencyObj._id);
+              if(foundCompetency){
+                console.log("Inside:Slice:")
+                let sliceObj = Competencies.splice(j,1);
+                console.log(sliceObj);
+              }
+            };
+            console.log(Competencies);
+            if(Competencies && Competencies.length>0){
+              drEmpData.competencies=_empCompetencies.concat(Competencies);
+              this.drCompetencyMappingRowdata[matchedIndex] = drEmpData;
+            }
+          }else{
+            this.drCompetencyMappingRowdata.push({
+              peer: {EmployeeId,displayTemplate},
+              competencies: Competencies,
+              message:message || ""
+            })
+          }
+        };
+        
+        if (this.directReporteesOfEmpGridOptions.api) {
+          this.directReporteesOfEmpGridOptions.api.setRowData(this.drCompetencyMappingRowdata);
+        }
+       }
+    }, error => {
+      console.log('error while adding eval', error)
+      this.notification.error(error.error.message)
+    })
+  }
+  
   updateDRCompetencyUIMapping() {
     for (let index = 0; index < this.selectedEmployee.DirectReportees.length; index++) {
       let directReportee = this.selectedEmployee.DirectReportees[index];
@@ -1292,7 +1349,6 @@ public currentOrganization:any={}
     this.PeersCompetencyMessage = "";
     var rowData: any = [];
     for (let mapping in this.peerCompetencyUIMapping) {
-      
       rowData.push({
         peer: this.peerCompetencyUIMapping[mapping].peer,
         competencies: this.peerCompetencyUIMapping[mapping].competencies,
@@ -1304,6 +1360,61 @@ public currentOrganization:any={}
     if (this.peersForEmpGridOptions.api) {
       this.peersForEmpGridOptions.api.setRowData(rowData);
     }
+  }
+
+  loadManagerSelectedPeer() {
+    let requestBody = {
+      EmpId:this.selectedEmployee.Employee._id,
+      EvaluationYear:this.selectedEmployee.EvaluationRow.EvaluationYear,
+      "IsDraft" : false,
+    }
+    this.perfApp.route = "em";
+    this.perfApp.method = "find/request/peer-direct";
+    this.perfApp.requestBody = requestBody;
+    this.perfApp.CallAPI().subscribe(peerRequestList => {
+       if(peerRequestList){
+         let {Peer} = peerRequestList;
+        var rowData: any = [];
+        for(var i=0;i<Peer.length;i++){
+          let peerRequestObj = Peer[i];
+          let {EmployeeId,displayTemplate,message,Competencies} = peerRequestObj;
+          console.log(this.peerCompetencyMappingRowdata,null,5)
+          let peerEmpData = this.peerCompetencyMappingRowdata.find(p=>p.peer.EmployeeId === EmployeeId);
+          if(peerEmpData){
+            let matchedIndex = this.peerCompetencyMappingRowdata.findIndex(p=>p.peer.EmployeeId === EmployeeId);
+            console.log(peerEmpData);
+            let _empCompetencies = peerEmpData.competencies;
+            for(var j=0;j<Competencies.length;j++){
+              let competencyObj = Competencies[j];
+              let foundCompetency = _empCompetencies.find(ec=>ec._id == competencyObj._id);
+              if(foundCompetency){
+                console.log("Inside:Slice:")
+                let sliceObj = Competencies.splice(j,1);
+                console.log(sliceObj);
+              }
+            };
+            console.log(Competencies);
+            if(Competencies && Competencies.length>0){
+              peerEmpData.competencies=_empCompetencies.concat(Competencies);
+              this.peerCompetencyMappingRowdata[matchedIndex] = peerEmpData;
+            }
+          }else{
+            this.peerCompetencyMappingRowdata.push({
+              peer: {EmployeeId,displayTemplate},
+              competencies: Competencies,
+              message:message || ""
+            })
+          }
+        };
+        
+        if (this.peersForEmpGridOptions.api) {
+          this.peersForEmpGridOptions.api.setRowData(this.peerCompetencyMappingRowdata);
+        }
+       }
+    }, error => {
+      console.log('error while adding eval', error)
+      this.notification.error(error.error.message)
+    })
   }
 
   public viewCompetencyGridOptions: GridOptions = {
@@ -1413,7 +1524,7 @@ public currentOrganization:any={}
     dialogRef.afterClosed().subscribe(resp => {
       if (resp == 'yes') {
         this.selectedEmployee.Peers = [];
-
+        let existedPeerList = this.selectedEmployee.EmployeeRow.peerCompetenceMapping;
         for (let mapping of this.peerCompetencyMappingRowdata) {
           var mappingInOldFormat = {};
           mappingInOldFormat['EmployeeId'] = mapping.peer.EmployeeId;
@@ -1421,7 +1532,10 @@ public currentOrganization:any={}
           mappingInOldFormat['PeersCompetencyMessage'] = mapping.message;
           mappingInOldFormat['PeersCompetencyList'] = mapping.competencies;
           mappingInOldFormat['peerCompetenceMapping'] = mapping;
-          this.selectedEmployee.Peers.push(mappingInOldFormat);
+          let peerObj = existedPeerList.find(p=>p.peer.EmployeeId == mapping.peer.EmployeeId && p.competencies.length == mapping.competencies.length);
+          if(!peerObj){
+            this.selectedEmployee.Peers.push(mappingInOldFormat);
+          }
         }
         this.selectedEmployee['peerCompetenceMapping'] = this.peerCompetencyMappingRowdata;
 
