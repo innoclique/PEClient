@@ -47,7 +47,8 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text redStar">Select Industry</span>
                     </div>
-                    <select (change)="onIndustryChange($event)"
+                    <!-- <select (change)="onIndustryChange($event)" -->
+                      <select 
                       [ngClass]="{ 'is-invalid':isFormSubmitted &&  f.Industry.errors }" formControlName="Industry"
                       class="form-control">
                       <option value="" disabled selected>Select Industry</option>
