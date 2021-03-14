@@ -1538,8 +1538,12 @@ public currentOrganization:any={}
           }
         }
         this.selectedEmployee['peerCompetenceMapping'] = this.peerCompetencyMappingRowdata;
-
-        this.UpdatePeers();
+        if(this.selectedEmployee.Peers && this.selectedEmployee.Peers.length>0){
+          this.UpdatePeers();
+        }else{
+          this.refresh();
+        }
+        //this.UpdatePeers();
       } else {
 
       }
