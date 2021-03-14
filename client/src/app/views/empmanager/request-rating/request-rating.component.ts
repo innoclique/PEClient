@@ -1,14 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { GridApi, GridOptions } from 'ag-grid-community';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AuthService } from '../../../services/auth.service';
 
 import { NotificationService } from '../../../services/notification.service';
 import { PerfAppService } from '../../../services/perf-app.service';
-import ReportTemplates from'../../../views/psa/reports/data/reports-templates';
+import ReportTemplates from '../../../views/psa/reports/data/reports-templates';
 import { AlertDialog } from '../../../Models/AlertDialog';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AlertComponent } from '../../../shared/alert/alert.component';
@@ -62,23 +62,29 @@ export class RequestRatingComponent implements OnInit {
   directReporteeDropdownSettings: any = {}
   currentPeerCompetencyList: any = [];
   peerDropdownSettings: any = {};
-  selectedEmployeeDirectReporteeMappings:any = [];
-  peerCompetencyMappingRowdata:any = [];
-  drCompetencyUIMapping:any = {};
-  drCompetencyMappingRowdata:any = [];
+  selectedEmployeeDirectReporteeMappings: any = [];
+  peerCompetencyMappingRowdata: any = [];
+  drCompetencyUIMapping: any = {};
+  drCompetencyMappingRowdata: any = [];
   competencyMappingRowdata: any;
   isViewCompetencies: boolean = false;
   selectedReport: string = 'peers';
-  
+  selectedEmployeeId: string;
+  selectedEmployeePeersCollection: any = {};
+  selectedEmployeeDirectReporteesCollection: any = {};
+  selectedSavedEmployee: any = {};
+  disableSubmittedRecord: boolean = false;
+
   kpiList: any = [];
   gridRefreshParams = {
     force: true,
     suppressFlash: false
   };
   public peerCompetencyUIMapping: any = {};
-  
-  public monthList = ["","January", "February", "March", "April", "May", "June", "July",
-  "August", "September", "October", "November", "December"]
+  public currentEvaluationYear: any;
+
+  public monthList = ["", "January", "February", "March", "April", "May", "June", "July",
+    "August", "September", "October", "November", "December"]
   constructor(
     private formBuilder: FormBuilder,
     private perfApp: PerfAppService,
@@ -87,9 +93,14 @@ export class RequestRatingComponent implements OnInit {
     public authService: AuthService,
     public router: Router,
     public dialog: MatDialog,
+    private activatedRoute: ActivatedRoute
   ) {
 
-
+    this.activatedRoute.params.subscribe(params => {
+      if (params) {
+        this.selectedEmployeeId = params['empId'];
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -97,7 +108,7 @@ export class RequestRatingComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     this.getEvaluationList();
-    //    this.getIndustries();
+    this.getEmployeeCurrentEvaluation();
 
     this.getEmployees();
     this.dropdownSettings = {
@@ -138,15 +149,11 @@ export class RequestRatingComponent implements OnInit {
     };
   }
 
-  public EmpGridOptions: GridOptions = {
-    columnDefs: this.getGridColumnsForEmp(),
-    api: new GridApi()
-  }
   public rowSelection = 'multiple';
   public isRowSelectable(rowNode) {
-    return  rowNode.data ? rowNode.data.Type ==='K'?true:false:false
+    return rowNode.data ? rowNode.data.Type === 'K' ? true : false : false
   }
-  public getRowNodeId (data) {    
+  public getRowNodeId(data) {
     return data.Employee._id;
   };
   public EmpKpiGridOptions: GridOptions = {
@@ -167,14 +174,14 @@ export class RequestRatingComponent implements OnInit {
           x.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
             x.row = _f;
         });
-        
+
       }
     })
   }
   getGridColumnsForEmpKpi() {
     return [
       {
-        headerName: 'Employee', suppressSizeToFit:true, sortable: true, filter: true,
+        headerName: 'Employee', suppressSizeToFit: true, sortable: true, filter: true,
 
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee[0].FirstName}-${data.data.Employee[0].LastName}</span>` }
       },
@@ -200,8 +207,8 @@ export class RequestRatingComponent implements OnInit {
             return `${data.data.Manager.Name} `
           }
         }
-
       },
+
 
       {
         headerName: "Review/Modify",
@@ -217,148 +224,7 @@ export class RequestRatingComponent implements OnInit {
     ];
 
   }
-  
-  getGridColumnsForEmp() {
-    return [
-      {
-        headerName: 'Employee',checkboxSelection: true, sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
-        // checkboxSelection: true,
-        cellRenderer: (data) => {
-          
-          if (data.data.Type == "K") {
-            return `  
-           ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
-          } else {
-            return `  <input   data-action-type="orgView" title="Evaluation for the employee has already been rolled-out." type="checkbox" disabled  >
-            ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
-          }
 
-          //return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</span>` 
-        }
-      },
-      {
-        headerName: 'Evaluation Released On', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
-        cellRenderer: (data) => {
-          if (!data.data.Type) {
-            if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
-            return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
-          }else{
-            return `N/A`;
-          }
-          
-        }
-      },
-      {
-        headerName: 'Performance Goals Released On', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
-        cellRenderer: (data) => {
-          if (data.data.Type === "K") {
-            if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
-            return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
-          }else if(data.data.EvaluationRow.kpiFormCreatedOn){
-            return new DatePipe('en-US').transform(data.data.EvaluationRow.kpiFormCreatedOn, 'MM-dd-yyyy')
-          }else if (!data.data.Type) {
-            if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
-            return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
-          }else{
-            return `N/A`;
-          }
-          
-        }
-      },
-      // {
-      //   headerName: 'Type', sortable: true, width:100,wrapText: true, autoHeight: true,  filter: true,
-      //   cellRenderer: (data) => { return "Regular" }
-      // },
-      {
-        headerName: 'Evaluation Period', sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
-        cellRenderer: (data) => {
-          if (this.getNested(data.data.EvaluationRow, 'EvaluationPeriod')) // true
-            return this.getEVPeriod(data.data.EvaluationRow);
-            else{
-              return `N/A`;
-            }
-        }
-      },
-      {
-        headerName: 'Evaluation Duration', sortable: true, width:180,wrapText: true, autoHeight: true,  filter: true,
-        cellRenderer: (data) => {
-          if (this.getNested(data.data.EvaluationRow, 'EvaluationDuration')) {
-            return data.data.EvaluationRow.EvaluationDuration
-          }else{
-            return `N/A`;
-          }
-        }
-      },
-      {
-        headerName: 'Model', field: '', sortable: true, width:100,wrapText: true, autoHeight: true,  filter: true,
-        cellRenderer: (data) => {
-          if (this.getNested(data.data.EmployeeRow, 'Model', 'Name')) {
-            return data.data.EmployeeRow.Model.Name
-          }else{
-            return `N/A`;
-          }
-        }
-      },
-      {
-        headerName: 'Manager', field: '', sortable: true, width:120, wrapText: true, autoHeight: true, filter: true,
-        cellRenderer: (data) => {
-          if (this.getNested(data.data.Employee, 'Manager', 'FirstName')) {
-            return `${data.data.Employee.Manager.FirstName} ${data.data.Employee.Manager.LastName}`
-          }else{
-            return `N/A`;
-          }
-        }
-
-      },
-
-      {
-        headerName: 'Peers', field: '', sortable: false, width:100, wrapText: true, autoHeight: true,  filter: false,
-        cellRenderer: (data) => {
-          
-          if (this.getNested(data.data.EmployeeRow, 'Peers')){
-            return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.peerCompetenceMapping.length}</span>`
-          }else{
-            return 'N/A';
-          }
-          
-        }
-      },
-      {
-        headerName: 'Direct Report(s)', field: '', width:180, wrapText: true, autoHeight: true,sortable: false, filter: false,
-        
-        cellRenderer: (data) => {
-          if (this.getNested(data.data.EmployeeRow, 'DirectReportees')){
-            return `<span style="color:blue;cursor:pointer;" data-action-type="chooseDirectReports">${data.data.EmployeeRow.drCompetenceMapping.length}</span>`
-          }else{
-            return 'N/A';
-          }
-          
-        }
-      },
-
-       {
-         headerName: "Review/Modify",
-         width:130,
-         suppressMenu: true,
-         Sorting: false,
-         cellRenderer: (data) => {
-           
-
-           return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-             font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
-             `
-           }
-         }
-       
-    ];
-
-  }
-
-  gotoCreateEvaluation() {
-    var selectedRows = this.EmpGridOptions.api.getSelectedRows();
-    //debugger
-    this.router.navigate(['ea/rollout', { allKpi: selectedRows.length>0,list:selectedRows.map(x=>x.Employee._id) }], { skipLocationChange: true });
-  }
   public columnDefs = [
     {
       headerName: 'Employee(s)', field: '', sortable: true, filter: true,
@@ -385,7 +251,7 @@ export class RequestRatingComponent implements OnInit {
       suppressSizeToFit: true,
       Sorting: false,
       cellRenderer: (data) => {
-        
+
         return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="edit" title="Edit Form"></i> `
         //}
@@ -399,31 +265,30 @@ export class RequestRatingComponent implements OnInit {
     this.perfApp.method = "GetEvaluations",
       this.perfApp.requestBody = { clientId: this.authService.getOrganization()._id }
     this.perfApp.CallAPI().subscribe(c => {
-      
+
       if (c) {
         this.selectedEmployeesList = [];
         c.map(row => {
-          if(row.Type==='K'){
-            if(row.Employee[0].HasActiveEvaluation!=='Yes'){
-            this.selectedEmployeesList.push({
-              Type:row.Type,
-              EmployeeRow: row.Employee[0],
-              EvaluationRow: row,
-              Peers: [],
-              DirectReportees: [],
-              Model: 'N/A',
-              Employee: row.Employee[0],
-              PeersCompetencyMessage: 'N/A',
-              DirectReporteeComptencyMessage: 'N/A',
-              PeersCompetencyList: [],
-              DirectReporteeCompetencyList: []
-            });
-          }
-          
-        }else{
-          var _f = Object.assign({}, row);
-          row.Employees.map(x => {
-            var _e = Object.assign({}, x);            
+          if (row.Type === 'K') {
+            if (row.Employee[0].HasActiveEvaluation !== 'Yes') {
+              this.selectedEmployeesList.push({
+                Type: row.Type,
+                EmployeeRow: row.Employee[0],
+                EvaluationRow: row,
+                Peers: [],
+                DirectReportees: [],
+                Model: 'N/A',
+                Employee: row.Employee[0],
+                PeersCompetencyMessage: 'N/A',
+                DirectReporteeComptencyMessage: 'N/A',
+                PeersCompetencyList: [],
+                DirectReporteeCompetencyList: []
+              });
+            }
+          } else {
+            var _f = Object.assign({}, row);
+            row.Employees.map(x => {
+              var _e = Object.assign({}, x);
               this.selectedEmployeesList.push({
                 EmployeeRow: _e,
                 EvaluationRow: _f,
@@ -436,83 +301,59 @@ export class RequestRatingComponent implements OnInit {
                 PeersCompetencyList: x.PeersCompetencyList,
                 DirectReporteeCompetencyList: x.DirectReporteeCompetencyList
               });
-                      })
-          
-        }
+            })
+
+          }
         })
-        
+
       }
-      console.table(this.selectedEmployeesList)
-      this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
+      this.selectedEmployee = this.selectedEmployeesList.find(emp => emp.Employee._id == this.selectedEmployeeId);
+      this.selectedModel = this.selectedEmployee.Model;
+      this.getPeersForEmployees();
+      this.getDirectReportees();
+      this.getCompetencyList();
     })
   }
 
-  onEmpGridReady(params) {
-    //debugger
-    this.EmpGridOptions.api = params.api; // To access the grids API
-    // params.api.sizeColumnsToFit();
-  }
-  public onEmpRowClicked(e) {
-    if (e.event.target !== undefined) {
-      let data = e.data;
-      //this.currentRowItem = data.RowData;
-      this.selectedEmployee = e.data;
-      
-      let actionType = e.event.target.getAttribute("data-action-type");
-      switch (actionType) {
-        // case "deleteEmp":
-        //   return this.toggleSelection(this.selectedEmployee);
-        case "chooseDirectReports":
-          return this.openDirectReporteesView();
-        case "choosePeers":
-          return this.openPeerView();
-        case "deleteEmp":
-          return this.deleteEmpFromList();
-        case "changeModel":
-          return this.changeModel(data);
-
-      }
-    }
-  }
-  changeModel(data:any) {
-    var selectedRows = this.EmpGridOptions.api.getSelectedRows();
-    let selectedEvaluation={};
-    selectedEvaluation['EvaluationRow'] = data.EvaluationRow;
-    selectedEvaluation['Manager']=data.EmployeeRow.Manager;
-    selectedEvaluation['empId']=data.EmployeeRow._id._id;
-    this.router.navigate(['ea/rollout', {editEvaluation:JSON.stringify(selectedEvaluation), rollEvaluationEdit:true,allKpi: selectedRows.length>0,list:selectedRows.map(x=>x.Employee._id) }], { skipLocationChange: true });
-    }
   openDirectReporteesView() {
-    //debugger
-    
-      // this.directReporteeCompetencyMessage = this.selectedEmployee.DirectReportees[0].DirectReporteeComptencyMessage;
-      // this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees || [];
-      this.selectedEmployeeDirectReporteeMappings = this.selectedEmployee.DirectReportees || [];
-      this.directReporteeCompetencyMessage = "";
-      this.selectedEmployeeDirectReportees = [];
-      this.selectedEmployee.DirectReportees = [];
-      this.currentEmployeeSelectedDirectReportees = [];
-      this.seletedDirectReporteeCompetencyList = [];
-      this.directReporteeCompetencyMessage = "";
-      this.drCompetencyMappingRowdata = [];
-      this.drCompetencyUIMapping = {};
-      this.drCompetencyMappingRowdata = this.selectedEmployee.EmployeeRow.drCompetenceMapping;
-       if (this.selectedEmployee.EmployeeRow.drCompetenceMapping && this.selectedEmployee.EmployeeRow.drCompetenceMapping.length > 0) {
-      for(let mapping of this.drCompetencyMappingRowdata){
-        this.drCompetencyUIMapping[mapping.directReportee.EmployeeId] = mapping;
-      }
-     }
-    this.selectedModel = this.selectedEmployee.Model;
-    this.getDirectReportees();
-    this.getCompetencyList();
+    if (this.selectedSavedEmployee && !this.selectedSavedEmployee.IsDraft) {
+      this.selectedSavedEmployee.DirectReportees = [];
+    }
+
+    this.selectedEmployeeDirectReporteeMappings = this.selectedEmployee.DirectReportees || [];
+    this.directReporteeCompetencyMessage = "";
+    this.selectedEmployeeDirectReportees = [];
+    this.currentEmployeeSelectedDirectReportees = [];
+    this.seletedDirectReporteeCompetencyList = [];
+    this.directReporteeCompetencyMessage = "";
+    this.drCompetencyMappingRowdata = [];
+    this.drCompetencyUIMapping = {};
+    this.drCompetencyMappingRowdata = this.selectedSavedEmployee.DirectReportees;
+    for (let mapping of this.drCompetencyMappingRowdata) {
+      this.drCompetencyUIMapping[mapping.EmployeeId] = {};
+      this.drCompetencyUIMapping[mapping.EmployeeId].directReportee = mapping;
+      this.drCompetencyUIMapping[mapping.EmployeeId].competencies = mapping.Competencies;
+      this.drCompetencyUIMapping[mapping.EmployeeId].message = '';
+    }
+
+    var rowData: any = [];
+    for (let mapping in this.drCompetencyUIMapping) {
+      rowData.push({
+        directReportee: this.drCompetencyUIMapping[mapping].directReportee,
+        competencies: this.drCompetencyUIMapping[mapping].competencies,
+        message: this.drCompetencyUIMapping[mapping].message
+      });
+    }
+    this.drCompetencyMappingRowdata = rowData;
+
   }
- 
+
   getPeersForEmployees() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetPeers",
       this.perfApp.requestBody = { company: this.currentOrganization._id, id: this.selectedEmployee.Employee._id }
     this.perfApp.CallAPI().subscribe(c => {
-      
+
       this.formattedPeers = [];
       if (c && c.length > 0) {
         c.map(x => {
@@ -521,50 +362,45 @@ export class RequestRatingComponent implements OnInit {
           _f.displayTemplate = `${x.FirstName}-${x.LastName}-${x.Email}`,
             this.formattedPeers.push(_f);
         });
-        //debugger
         this.peersList = c;
-        
+
       }
-      this.selectePeersViewRef = this.modalService.show(this.selectePeersView, this.config);
     })
   }
 
   openPeerView() {
-    if (this.selectedEmployee.EmployeeRow.peerCompetenceMapping) {
+    if (this.selectedSavedEmployee) {
       this.peerCompetencyMappingRowdata = [];
-      this.selectedEmployee.Peers=[];
+      if (!this.selectedSavedEmployee.IsDraft) {
+        this.selectedSavedEmployee.Peer = [];
+      }
+
       this.PeersCompetencyMessage = "";
       this.selectedEmployeePeers = [];
       this.currentPeerCompetencyList = [];
       this.selectedPeersCompetencyList = [];
-      this.peerCompetencyMappingRowdata = this.selectedEmployee.EmployeeRow.peerCompetenceMapping;
-      for(let mapping of this.peerCompetencyMappingRowdata){
-        this.peerCompetencyUIMapping[mapping.peer.EmployeeId] = mapping;
+      this.peerCompetencyMappingRowdata = this.selectedSavedEmployee.Peer;
+      for (let mapping of this.peerCompetencyMappingRowdata) {
+        this.peerCompetencyUIMapping[mapping.EmployeeId] = {};
+        this.peerCompetencyUIMapping[mapping.EmployeeId].peer = mapping;
+        this.peerCompetencyUIMapping[mapping.EmployeeId].competencies = mapping.Competencies;
+        this.peerCompetencyUIMapping[mapping.EmployeeId].message = '';
       }
+
+      var rowData: any = [];
+      for (let mapping in this.peerCompetencyUIMapping) {
+
+        rowData.push({
+          peer: this.peerCompetencyUIMapping[mapping].peer,
+          competencies: this.peerCompetencyUIMapping[mapping].competencies,
+          message: this.peerCompetencyUIMapping[mapping].message
+        });
+      }
+
+      this.peerCompetencyMappingRowdata = rowData;
     }
-    // this.PeersCompetencyMessage = this.selectedEmployee.Peers[0] ? this.selectedEmployee.Peers[0].PeersCompetencyMessage : "";
-    // this.selectedEmployeePeers = this.selectedEmployee.Peers || [];
-    //  this.currentPeerCompetencyList = this.selectedEmployee.Peers[0].PeersCompetencyList;
-
-    //this.PeersCompetencyMessage = this.selectedEmployee.PeersCompetencyMessage;      
-    //this.selectedEmployeePeers = this.selectedEmployee.Peers||[];    
-
-    this.selectedModel = this.selectedEmployee.Model;
-    // this.currentPeerCompetencyList = this.selectedEmployee.Peers[0] ? this.selectedEmployee.Peers[0].PeersCompetencyList : [];
-
-    this.getPeersForEmployees();
-    this.getCompetencyList();
   }
 
-  public deleteEmpFromList() {
-    //debugger
-    var _index = this.selectedEmployees.indexOf(this.selectedEmployee);
-    this.selectedEmployees.splice(_index, 1)
-    _index = this.selectedEmployeesList.indexOf(this.selectedEmployee);
-    this.selectedEmployeesList.splice(_index, 1);
-    this.EmpGridOptions.api.setRowData(this.selectedEmployeesList);
-
-  }
   getCompetencyList() {
     var modelId = "";
     if (this.selectedModel instanceof Object) {
@@ -608,7 +444,6 @@ export class RequestRatingComponent implements OnInit {
     this.perfApp.route = "evaluation"
     this.perfApp.CallAPI().subscribe(x => {
       this.notification.success('Evaluation Updated Successfully.')
-      // this.router.navigate(['ea/evaluation-list'])
       this.refresh();
     }, error => {
 
@@ -617,54 +452,23 @@ export class RequestRatingComponent implements OnInit {
     })
 
   }
-  UpdatePeers() {
-    this.perfApp.method = "UpdatePeers";
-    this.perfApp.requestBody = {
-      EvaluationId: this.selectedEmployee.EvaluationRow._id,
-      EmployeeId: this.selectedEmployee.Employee._id,
-      Peers: this.selectedEmployee.Peers,
-      peerCompetenceMapping: this.selectedEmployee.peerCompetenceMapping,
-      PeersCompetencyMessage: this.selectedEmployee.PeersCompetencyMessage,
-      PeersCompetencyList: this.selectedEmployee.PeersCompetencyList
-    }
-    this.perfApp.route = "evaluation"
-    this.perfApp.CallAPI().subscribe(x => {
-      this.notification.success('Evaluation Updated Successfully.')
-      
-      var rowNode = this.EmpGridOptions.api.getRowNode(this.selectedEmployee.Employee._id);
-      //debugger
-      var newdata=rowNode.data;
-      newdata.Peers=this.selectedEmployee.Peers;
-      rowNode.setData(newdata);     
-      this.EmpGridOptions.api.refreshCells(this.gridRefreshParams);
-      this.refresh();
-      
-    }, error => {
-      this.closePeersModel();
-      console.log('error while adding eval', error)
-      this.notification.error(error.error.message)
-    })
 
-  }
   refresh(): void {
     window.location.reload();
-}
+  }
   updateEvaluation() {
     //debugger
     const _evform = this.evaluationForm.value;
     this.evaluationForm.value.CreatedBy = this.currentUser._id;
     this.evaluationForm.value.Company = this.currentOrganization._id;
 
-    // this.setEmployeeIds();
-    //this.setModelIds();
-    //this.currentEvaluationForm.Employees=this.evaluationForm.value.Employees;
     this.evaluationForm.value.Employees = this.selectedEmployees;
-    
+
     this.perfApp.method = "UpdateEvaluationForm";
     this.perfApp.requestBody = this.currentEvaluationForm;
     this.perfApp.route = "evaluation"
     this.perfApp.CallAPI().subscribe(x => {
-      
+
       this.notification.success('Evaluation Updated Successfully.')
       this.router.navigate(['ea/evaluation-list'])
     }, error => {
@@ -687,7 +491,7 @@ export class RequestRatingComponent implements OnInit {
   public seletedDirectReporteeCompetencyList: any = [];
 
   onItemSelect(item: any) {
-    
+
     this.selectedEmployees.push(item.row);
   }
   onSelectAllEmployees(items: any) {
@@ -696,7 +500,7 @@ export class RequestRatingComponent implements OnInit {
     items.map(x => {
       this.selectedEmployees.push(x.row);
     })
-    
+
   }
   onEmployeeDeSelect(item: any) {
     var _position = this.selectedEmployees.indexOf(item);
@@ -719,7 +523,7 @@ export class RequestRatingComponent implements OnInit {
     return [
       {
         headerName: 'Peer', sortable: true, filter: true,
-        cellRenderer: (data) => {return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.peer.displayTemplate}</span>` }
+        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.peer.displayTemplate}</span>` }
       },
       {
         headerName: 'Competencies', field: '', sortable: false, filter: false,
@@ -733,46 +537,29 @@ export class RequestRatingComponent implements OnInit {
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
-          
+
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deletePeer" title="Delete Peer"></i>
           <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="viewPeerCompetencyMapping" title="View Competencies"></i> 
           `
-          //}
         }
       }
-      // {
-      //   headerName: 'Peer', sortable: true,width:300, filter: true, suppressSizeToFit: true, 
-      //   cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.displayTemplate}</span>` }
-      // },
 
-      // {
-      //   headerName: "Review/Modify",
-      //   // suppressMenu: true,
-      //   // suppressSizeToFit: true, 
-      //   Sorting: false,
-      //   cellRenderer: (data) => {
-      //     console.log('column data', data)
-      //     return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-      //     font-size: 17px;"   data-action-type="deletePeer" title="Delete Peer"></i> `
-      //     //}
-      //   }
-      // }
     ];
 
   }
 
   closeDrModel() {
-    this.selecteDirectReporteeViewRef.hide();
     this.selectedEmployee = {};
     this.currentEmployeeSelectedDirectReportees = [];
+    this.navigateBacktoDashboard();
   }
   getDirectReporteeGridCols() {
     return [
       {
         headerName: 'Direct Report(s)', sortable: true, filter: true,
-        cellRenderer: (data) => {return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.directReportee.displayTemplate}</span>` }
+        cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.directReportee.displayTemplate}</span>` }
       },
       {
         headerName: 'Competencies', field: '', sortable: false, filter: false,
@@ -786,7 +573,7 @@ export class RequestRatingComponent implements OnInit {
         suppressMenu: true,
         Sorting: false,
         cellRenderer: (data) => {
-          
+
           return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
           font-size: 17px;"   data-action-type="deleteDirectReportee" title="Delete Reportee"></i>
           <i class="icon-eye" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -796,25 +583,6 @@ export class RequestRatingComponent implements OnInit {
         }
       }
     ];
-    // return [
-    //   {
-    //     headerName: 'Direct Report(s)', sortable: true, filter: true,
-    //     cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="">${data.data.displayTemplate}</span>` }
-    //   },
-
-    //   {
-    //     headerName: "Review/Modify",
-    //     suppressMenu: true,
-    //     Sorting: false,
-    //     cellRenderer: (data) => {
-    //       console.log('column data', data)
-    //       return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
-    //       font-size: 17px;"   data-action-type="deleteDirectReportee" title="Delete Reportee"></i> `
-    //       //}
-    //     }
-    //   }
-    // ];
-
   }
   onDirectReporteeGridReady(params) {
     //debugger
@@ -838,8 +606,6 @@ export class RequestRatingComponent implements OnInit {
     }
   }
   async addDRCompetencyMapping() {
-    // this.currentEmployeeSelectedDirectReportees = [];
-    // this.selectedEmployeeDirectReportees = []
     if (!this.selectedEmployee.DirectReportees || this.selectedEmployee.DirectReportees.length === 0) {
       this.notification.error('At least one direct reports must be selected');
       return;
@@ -894,21 +660,9 @@ export class RequestRatingComponent implements OnInit {
 
 
   deleteDirectReportee() {
-    var _p = this.drCompetencyMappingRowdata.indexOf(this.currentDirectReportee);
-    this.drCompetencyMappingRowdata.splice(_p, 1);
-    this.directReporteesOfEmpGridOptions.api.setRowData(this.drCompetencyMappingRowdata);
-  }
-  saveDirectReportees() {
-   
-    //debugger
-    // this.selectedEmployee.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
-    // this.selectedEmployee.DirectReportsCompetency = this.seletedDirectReporteeCompetencyList;
-    // this.selectedEmployee.DirectReportees.map(element => {
-    //   element.DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
-    //   element.DirectReporteeCompetencyList = this.seletedDirectReporteeCompetencyList;
-    // });
+
     this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to add the direct reports?";
+    this.alert.Content = "Are you sure you want to delete the record ?";
     this.alert.ShowConfirmButton = true;
     this.alert.ShowCancelButton = true;
     this.alert.CancelButtonText = "Cancel";
@@ -927,26 +681,66 @@ export class RequestRatingComponent implements OnInit {
     var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(resp => {
       if (resp == 'yes') {
-        this.selectedEmployee.DirectReportees = [];
-        for (let mapping of this.drCompetencyMappingRowdata) {
-          var mappingInOldFormat = {};
-          mappingInOldFormat['EmployeeId'] = mapping.directReportee.EmployeeId;
-          mappingInOldFormat['displayTemplate'] = mapping.directReportee.displayTemplate;
-          mappingInOldFormat['DirectReporteeComptencyMessage'] = mapping.message;
-          mappingInOldFormat['DirectReporteeCompetencyList'] = mapping.competencies;
-          mappingInOldFormat['drCompetenceMapping'] = mapping;
-          this.selectedEmployee.DirectReportees.push(mappingInOldFormat);
-        }
-        this.selectedEmployee['drCompetenceMapping'] = this.drCompetencyMappingRowdata;
-        // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
-        // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
-        // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
-        this.updateDirectReporteesOfEmployee();
-        this.closeDrModel();
+        var _p = this.drCompetencyMappingRowdata.indexOf(this.currentDirectReportee);
+        this.drCompetencyMappingRowdata.splice(_p, 1);
+        this.directReporteesOfEmpGridOptions.api.setRowData(this.drCompetencyMappingRowdata);
       } else {
 
       }
     })
+  }
+
+  saveDirectReportees(isDraft) {
+    if (this.drCompetencyMappingRowdata.length === 0) {
+      this.notification.error('Please add at least one direct reportee to request review');
+      return;
+    }
+
+    if (this.drCompetencyMappingRowdata && this.drCompetencyMappingRowdata.length !== 0) {
+      this.selectedEmployee.DirectReportees = [];
+      this.selectedEmployeeDirectReporteesCollection = {};
+      this.selectedEmployeeDirectReporteesCollection['Employees'] = [];
+      this.selectedEmployeeDirectReporteesCollection['Competencies'] = [];
+      for (let mapping of this.drCompetencyMappingRowdata) {
+        this.selectedEmployeeDirectReporteesCollection['Employees'].push(mapping.peer);
+      }
+      this.selectedEmployeeDirectReporteesCollection['Competencies'] = this.drCompetencyMappingRowdata[0].competencies[0];
+      this.selectedEmployeeDirectReporteesCollection['IsDraft'] = isDraft;
+      this.selectedEmployeeDirectReporteesCollection['EmployeeId'] = this.selectedEmployeeId;
+      this.selectedEmployeeDirectReporteesCollection['CreatedBy'] = this.currentUser._id
+      this.selectedEmployeeDirectReporteesCollection['Type'] = 'DirectReportees';
+      this.selectedEmployeeDirectReporteesCollection['EvaluationYear'] = this.currentEvaluationYear;
+      if (!isDraft) {
+        this.alert.Title = "Alert";
+        this.alert.Content = "Are you sure you want to add the direct reports to request review?";
+        this.alert.ShowConfirmButton = true;
+        this.alert.ShowCancelButton = true;
+        this.alert.CancelButtonText = "Cancel";
+        this.alert.ConfirmButtonText = "Continue";
+
+
+        const dialogConfig = new MatDialogConfig()
+        dialogConfig.disableClose = true;
+        dialogConfig.autoFocus = true;
+        dialogConfig.data = this.alert;
+        dialogConfig.height = "300px";
+        dialogConfig.maxWidth = '40%';
+        dialogConfig.minWidth = '40%';
+
+
+        var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+        dialogRef.afterClosed().subscribe(resp => {
+          if (resp == 'yes') {
+            this.selectedEmployee['drCompetenceMapping'] = this.drCompetencyMappingRowdata;
+            this.saveDirectReporteesApi(isDraft);
+          } else {
+
+          }
+        })
+      } else {
+        this.saveDirectReporteesApi(isDraft);
+      }
+    }
   }
 
 
@@ -962,24 +756,14 @@ export class RequestRatingComponent implements OnInit {
     if (!this.selectedEmployee.Peers) {
       this.selectedEmployee.Peers = [];
     }
-    //var _f=  Object.assign({}, item.row);
     this.selectedEmployee.Peers.push(item);
-    // if (this.peersForEmpGridOptions.api) {
-    //   this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
-    // }
   }
+
   onSelectAllPeers(items: any) {
-    //debugger
-    //this.selectedEmployees = items;
     if (!this.selectedEmployee.Peers) {
       this.selectedEmployee.Peers = [];
     }
     this.selectedEmployee.Peers = items;
-    // items.map(x => {
-    //   var _f = Object.assign({}, x.row);
-    //   this.selectedEmployee.Peers.push(x);
-    // })
-    // this.selectedEmployeePeers = this.selectedEmployee.Peers
     if (this.peersForEmpGridOptions.api) {
       this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
     }
@@ -990,33 +774,46 @@ export class RequestRatingComponent implements OnInit {
   };
 
   deletePeer() {
-    // var _p = this.selectedEmployee.Peers.indexOf(this.currentPeer);
-    // this.selectedEmployee.Peers.splice(_p, 1);
-    // if (this.peersForEmpGridOptions.api) {
-    //   this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
-    // }
-    // this.selectedEmployeePeers = [...this.selectedEmployee.Peers]
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to delete the record ?";
+    this.alert.ShowConfirmButton = true;
+    this.alert.ShowCancelButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
 
-    var _p = this.peerCompetencyMappingRowdata.indexOf(this.currentPeer);
-    this.peerCompetencyMappingRowdata.splice(_p, 1);
-    if (this.peersForEmpGridOptions.api) {
-      this.peersForEmpGridOptions.api.setRowData(this.peerCompetencyMappingRowdata);
-    }
-    
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        var _p = this.peerCompetencyMappingRowdata.indexOf(this.currentPeer);
+        this.peerCompetencyMappingRowdata.splice(_p, 1);
+        if (this.peersForEmpGridOptions.api) {
+          this.peersForEmpGridOptions.api.setRowData(this.peerCompetencyMappingRowdata);
+        }
+      } else {
+
+      }
+    })
+   
+
   }
 
-  populateCompetencies(){
-    // var _p = this.selectedEmployee.Peers.indexOf(this.currentPeer);
-    // this.selectedEmployee.Peers.splice(_p, 1);
-    // if (this.peersForEmpGridOptions.api) {
-    //   this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
-    // }
+  populateCompetencies() {
     this.currentPeerCompetencyList = this.currentPeer.peerCompetenceMapping.competencies;
-    this.competencyDropdownSettings.itemsShowLimit =this.currentPeer.peerCompetenceMapping.competencies.length;
- }
+    this.competencyDropdownSettings.itemsShowLimit = this.currentPeer.peerCompetenceMapping.competencies.length;
+  }
 
-  onPeerDeSelect(item: any) {    
-    var _position = this.selectedEmployee.Peers.findIndex(x=>x.EmployeeId===item.EmployeeId);
+  onPeerDeSelect(item: any) {
+    var _position = this.selectedEmployee.Peers.findIndex(x => x.EmployeeId === item.EmployeeId);
     this.selectedEmployee.Peers.splice(_position, 1);
     // this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
   }
@@ -1025,17 +822,18 @@ export class RequestRatingComponent implements OnInit {
     // this.peersForEmpGridOptions.api.setRowData(this.selectedEmployee.Peers);
   }
 
-  onPeerCompetencyDeSelect(item){
+  onPeerCompetencyDeSelect(item) {
     var _position = this.selectedPeersCompetencyList.indexOf(item);
     this.selectedPeersCompetencyList.splice(_position, 1);
   }
-  onDeSelectAllPeerCompetencies(items){
+  onDeSelectAllPeerCompetencies(items) {
     this.selectedPeersCompetencyList = [];
   }
   closePeersModel() {
-    this.selectePeersViewRef.hide();
+    // this.selectePeersViewRef.hide();
     this.selectedEmployee = {};
     this.selectedEmployeePeers = [];
+    this.navigateBacktoDashboard();
   }
   public onPeersRowClicked(e) {
     //debugger
@@ -1063,22 +861,22 @@ export class RequestRatingComponent implements OnInit {
     }
 
     await this.updatePeerCompetencyUIMapping();
-    
+
     this.selectedEmployee.Peers = [];
-    this.selectedEmployeePeers =[];
-    this.currentPeerCompetencyList =[];
+    this.selectedEmployeePeers = [];
+    this.currentPeerCompetencyList = [];
     this.selectedPeersCompetencyList = [];
     this.PeersCompetencyMessage = "";
     var rowData: any = [];
     for (let mapping in this.peerCompetencyUIMapping) {
-      
+
       rowData.push({
         peer: this.peerCompetencyUIMapping[mapping].peer,
         competencies: this.peerCompetencyUIMapping[mapping].competencies,
-        message:this.peerCompetencyUIMapping[mapping].message
+        message: this.peerCompetencyUIMapping[mapping].message
       });
     }
-    
+
     this.peerCompetencyMappingRowdata = rowData;
     if (this.peersForEmpGridOptions.api) {
       this.peersForEmpGridOptions.api.setRowData(rowData);
@@ -1103,6 +901,7 @@ export class RequestRatingComponent implements OnInit {
   onViewCompetencyGridReady(params) {
 
     this.viewCompetencyGridOptions.api = params.api;
+    params.api.sizeColumnsToFit();
   }
 
   viewCompetencies(user: any, competencies: any) {
@@ -1133,14 +932,14 @@ export class RequestRatingComponent implements OnInit {
       let peer = this.selectedEmployee.Peers[index];
       var key = peer.EmployeeId;
       var value: any = {};
-        value['peer'] = peer;
-        value['message'] = this.PeersCompetencyMessage;
+      value['peer'] = peer;
+      value['message'] = this.PeersCompetencyMessage;
       if (this.peerCompetencyUIMapping && this.peerCompetencyUIMapping[peer.EmployeeId]) {
         var c = this.selectedPeersCompetencyList.concat(this.peerCompetencyUIMapping[peer.EmployeeId].competencies);
         var d = c.filter((thing, i, arr) => {
           return arr.indexOf(arr.find(t => t._id === thing._id)) === i;
         });
-       
+
         value['competencies'] = d;
         this.peerCompetencyUIMapping[key] = value;
       } else {
@@ -1152,64 +951,57 @@ export class RequestRatingComponent implements OnInit {
       }
     }
   }
-  savePeers() {
-    //debugger
-    // if (this.currentPeerCompetencyList.length === 0) {
-    //   this.notification.error('Please select at least one  Competency');
-    //   return;
-    // }
-    // if (!this.selectedEmployee.Peers || this.selectedEmployee.Peers.length < 2) {
-    //   this.notification.error('Peers should be minimum two members');
-    //   return;
-    // }
-    // this.selectedEmployee.PeersCompetencyMessage = this.PeersCompetencyMessage;
-    // this.selectedEmployee.PeersPeersCompetencyList = this.currentPeerCompetencyList;
+  savePeers(isDraft) {
 
+    if (this.peerCompetencyMappingRowdata.length === 0) {
+      this.notification.error('Please add at least one peer to request review');
+      return;
+    }
 
-    // this.selectedEmployee.Peers.map(element => {
-    //   element.PeersCompetencyMessage = this.PeersCompetencyMessage;
-    //   element.PeersCompetencyList = this.currentPeerCompetencyList;
-    // });
-
-    this.alert.Title = "Alert";
-    this.alert.Content = "Are you sure you want to add peers for review?";
-    this.alert.ShowConfirmButton = true;
-    this.alert.ShowCancelButton = true;
-    this.alert.CancelButtonText = "Cancel";
-    this.alert.ConfirmButtonText = "Continue";
-
-
-    const dialogConfig = new MatDialogConfig()
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = this.alert;
-    dialogConfig.height = "300px";
-    dialogConfig.maxWidth = '40%';
-    dialogConfig.minWidth = '40%';
-
-
-    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(resp => {
-      if (resp == 'yes') {
-        this.selectedEmployee.Peers = [];
-
-        for (let mapping of this.peerCompetencyMappingRowdata) {
-          var mappingInOldFormat = {};
-          mappingInOldFormat['EmployeeId'] = mapping.peer.EmployeeId;
-          mappingInOldFormat['displayTemplate'] = mapping.peer.displayTemplate;
-          mappingInOldFormat['PeersCompetencyMessage'] = mapping.message;
-          mappingInOldFormat['PeersCompetencyList'] = mapping.competencies;
-          mappingInOldFormat['peerCompetenceMapping'] = mapping;
-          this.selectedEmployee.Peers.push(mappingInOldFormat);
-        }
-        this.selectedEmployee['peerCompetenceMapping'] = this.peerCompetencyMappingRowdata;
-
-        this.UpdatePeers();
-      } else {
-
+    if (this.peerCompetencyMappingRowdata && this.peerCompetencyMappingRowdata.length !== 0) {
+      this.selectedEmployeePeersCollection = {};
+      this.selectedEmployeePeersCollection['Employees'] = [];
+      this.selectedEmployeePeersCollection['Competencies'] = [];
+      for (let mapping of this.peerCompetencyMappingRowdata) {
+        this.selectedEmployeePeersCollection['Employees'].push(mapping.peer);
       }
-    })
-   
+      this.selectedEmployeePeersCollection['Competencies'] = this.peerCompetencyMappingRowdata[0].competencies[0];
+      this.selectedEmployeePeersCollection['IsDraft'] = isDraft;
+      this.selectedEmployeePeersCollection['EmployeeId'] = this.selectedEmployeeId;
+      this.selectedEmployeePeersCollection['CreatedBy'] = this.currentUser._id
+      this.selectedEmployeePeersCollection['Type'] = 'Peer';
+      this.selectedEmployeePeersCollection['EvaluationYear'] = this.currentEvaluationYear;
+
+      if (!isDraft) {
+        this.alert.Title = "Alert";
+        this.alert.Content = "Are you sure you want to add peers for review request?";
+        this.alert.ShowConfirmButton = true;
+        this.alert.ShowCancelButton = true;
+        this.alert.CancelButtonText = "Cancel";
+        this.alert.ConfirmButtonText = "Continue";
+
+
+        const dialogConfig = new MatDialogConfig()
+        dialogConfig.disableClose = true;
+        dialogConfig.autoFocus = true;
+        dialogConfig.data = this.alert;
+        dialogConfig.height = "300px";
+        dialogConfig.maxWidth = '40%';
+        dialogConfig.minWidth = '40%';
+
+
+        var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+        dialogRef.afterClosed().subscribe(resp => {
+          if (resp == 'yes') {
+            this.saveRequestPeersApi(isDraft);
+          } else {
+
+          }
+        })
+      } else {
+        this.saveRequestPeersApi(isDraft);
+      }
+    }
   }
 
   onDeSelectDirectReporteeCompetency(item) {
@@ -1232,7 +1024,7 @@ export class RequestRatingComponent implements OnInit {
 
   }
   onSelectDirectReporteeCompetency(item) {
-   // this.seletedDirectReporteeCompetencyList.push(item)
+    // this.seletedDirectReporteeCompetencyList.push(item)
   }
 
   public getDirectReportees(): void {
@@ -1249,8 +1041,6 @@ export class RequestRatingComponent implements OnInit {
           this.currentEmployeeDirectReportees.push(_f);
       });
 
-      // this.currentEmployeeDirectReportees = x;
-      this.selecteDirectReporteeViewRef = this.modalService.show(this.selecteDirectReporteeView, this.config)
     }, error => {
       console.log('error while adding eval', error)
 
@@ -1264,10 +1054,6 @@ export class RequestRatingComponent implements OnInit {
     }
     this.selectedEmployee.DirectReportees.push(item);
     this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees
-    // if (this.directReporteesOfEmpGridOptions.api) {
-    //   //debugger
-    //   this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
-    // }
   }
   onSelectAllDirectReportee(items: any) {
     //this.selectedEmployees = items;
@@ -1276,22 +1062,14 @@ export class RequestRatingComponent implements OnInit {
     }
     this.selectedEmployee.DirectReportees = items;
     this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees
-    
-    // if (this.directReporteesOfEmpGridOptions.api) {
-    //   this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
-    // }
   }
 
   onDirectReporteeDeSelect(item: any) {
-    //debugger
-    var _position = this.selectedEmployee.DirectReportees.findIndex(x=>x.EmployeeId===item.EmployeeId);   
+    var _position = this.selectedEmployee.DirectReportees.findIndex(x => x.EmployeeId === item.EmployeeId);
     this.selectedEmployee.DirectReportees.splice(_position, 1);
-    // this.directReporteesOfEmpGridOptions.api.setRowData(this.selectedEmployee.DirectReportees)
   }
   onDeSelectAllDirectReportee(items) {
-    //debugger
     this.selectedEmployee.DirectReportees = []
-    // this.directReporteesOfEmpGridOptions.api.setRowData([])
 
   }
   //#endregion
@@ -1308,24 +1086,122 @@ export class RequestRatingComponent implements OnInit {
 
 
   onGridSizeChanged(params) {
-   // params.api.sizeColumnsToFit();
-}
-  
-  getEVPeriod(evRow){
-    return ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
-    // let year= new Date (evRow.CreatedDate);
-    // if (this.currentOrganization.EvaluationPeriod === 'FiscalYear') {
-    // return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) }'${year.getFullYear().toString().substring(2)} To ${this.currentOrganization.EndMonth.substring(0, 3)}' 
-    // ${this.currentOrganization.StartMonth=='1' ? year.getFullYear().toString().substring(2) :(year.getFullYear()+1).toString().substring(2)}`
-    // }else{
-    //   return `${this.monthList[ this.currentOrganization.StartMonth].substring(0, 3) }'${year.getFullYear().toString().substring(2)} To ${this.currentOrganization.EndMonth.substring(0, 3)}'${year.getFullYear().toString().substring(2)}`
+    // params.api.sizeColumnsToFit();
+  }
 
-    // }
+  getEVPeriod(evRow) {
+    return ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth, this.currentOrganization.EndMonth);
   }
 
   changeReportSelection(value) {
     this.selectedReport = value;
+
+    if (this.selectedReport == 'peers') {
+      this.openPeerView();
+    } else if (this.selectedReport == 'directReport') {
+      this.openDirectReporteesView();
+    }
   }
 
+
+  saveRequestPeersApi(isDraft) {
+    this.perfApp.route = "em/request/peer-direct";
+    this.perfApp.method = "reports/save";
+    this.perfApp.requestBody = this.selectedEmployeePeersCollection;
+    this.perfApp.CallAPI().subscribe(x => {
+      if (isDraft) {
+        this.notification.success('Peers review request saved successfully.');
+      } else {
+        this.notification.success('Peers review request submitted successfully.');
+      }
+    }, error => {
+      this.notification.error(error.error.message)
+    })
+
+  }
+
+  saveDirectReporteesApi(isDraft) {
+    this.perfApp.route = "em/request/peer-direct";
+    this.perfApp.method = "reports/save";
+    this.perfApp.requestBody = this.selectedEmployeeDirectReporteesCollection;
+    this.perfApp.CallAPI().subscribe(x => {
+      if (isDraft) {
+        this.notification.success('Direct Reportees review request saved successfully.');
+      } else {
+        this.notification.success('Direct Reportees review request submitted successfully.');
+      }
+    }, error => {
+      this.notification.error(error.error.message)
+    })
+
+  }
+
+  getPeerDirectSelectedEmployee() {
+    this.perfApp.route = "em/find/employee/peer-direct";
+    this.perfApp.method = "reports",
+      this.perfApp.requestBody = {
+        "EvaluationYear": this.currentEvaluationYear,
+        "EmpId": this.selectedEmployeeId,
+        "owner": this.currentUser._id
+      }
+    this.perfApp.CallAPI().subscribe(c => {
+
+      if (c) {
+        this.selectedSavedEmployee = c;
+        this.selectedSavedEmployee.IsDraft = true;
+        if (!this.selectedSavedEmployee.IsDraft) {
+          this.disableSubmittedRecord = true;
+        } else {
+          this.disableSubmittedRecord = false;
+        }
+      } else {
+        this.selectedSavedEmployee.Peers = [];
+        this.selectedSavedEmployee.DirectReportees = [];
+      }
+
+      this.changeReportSelection('peers');
+    })
+  }
+
+  getEmployeeCurrentEvaluation() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetEmployeeCurrentEvaluation",
+      this.perfApp.requestBody = {
+        'empId': this.selectedEmployeeId,
+        'orgId': this.currentOrganization._id
+      }
+    this.perfApp.CallAPI().subscribe(evaluationYear => {
+      this.currentEvaluationYear = evaluationYear;
+      this.getPeerDirectSelectedEmployee();
+    })
+  }
+
+  navigateBacktoDashboard() {
+    this.alert.Title = "Alert";
+    this.alert.Content = "Are you sure you want to exit?";
+    this.alert.ShowConfirmButton = true;
+    this.alert.ShowCancelButton = true;
+    this.alert.CancelButtonText = "Cancel";
+    this.alert.ConfirmButtonText = "Continue";
+
+
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.alert;
+    dialogConfig.height = "300px";
+    dialogConfig.maxWidth = '40%';
+    dialogConfig.minWidth = '40%';
+
+
+    var dialogRef = this.dialog.open(AlertComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(resp => {
+      if (resp == 'yes') {
+        this.router.navigate(['dashboard']);
+      } else {
+
+      }
+    })
+  }
 
 }

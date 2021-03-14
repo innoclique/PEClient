@@ -30,7 +30,7 @@
                       <span class="input-group-text  redStar">Employees</span>
                     </div>
 
-                    <ng-multiselect-dropdown style="width: 75%;" name="Employees" [disabled]="false"
+                    <ng-multiselect-dropdown style="width: 75%;" name="Employees" [disabled]="true"
                                              [placeholder]="'Select Employee'" [data]="formattedPeers"
                                              [settings]="peerDropdownSettings" [(ngModel)]="selectedEmployeePeers"
                                              (onSelect)="onPeerSelect($event)" (onDeSelect)="onPeerDeSelect($event)"
@@ -52,7 +52,7 @@
                     <span class="input-group-text redStar">Competency</span>
                   </div>
                   <ng-multiselect-dropdown style="width: 70%;" name="peersCompetencyList"
-                                           [disabled]="false" [placeholder]="'Select Competency'"
+                                           [disabled]="true" [placeholder]="'Select Competency'"
                                            [data]="this.peersCompetencyList" [settings]="competencyDropdownSettings"
                                            [(ngModel)]="currentPeerCompetencyList"
                                            (onSelect)="onSelectPeersCompetency($event)"
@@ -74,14 +74,14 @@
                     <span class="input-group-text ">Message</span>
                   </div>
                   <textarea class="form-control" [(ngModel)]="PeersCompetencyMessage"
-                            name="PeersCompetencyMessage"></textarea>
+                            name="PeersCompetencyMessage" readonly></textarea>
 
                 </div>
               </div>
             </div>
             <div class="col-md-3">
               <input type="button" style="margin-top: 9px;" class="btn btn-primary"
-                     (click)="addPeerCompetencyMapping()" value="+">
+                     (click)="addPeerCompetencyMapping()" value="+" disabled>
             </div>
           </div>
           <div class="form-group row">
@@ -104,7 +104,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="savePeers()">Save</button>
+        <!--<button type="button" class="btn btn-primary" (click)="savePeers()">Save</button>-->
         <button type="button" class="btn btn-secondary" #closeModal (click)="closePeersModel()">Close</button>
 
       </div>
@@ -132,7 +132,7 @@
                     <span class="input-group-text  redStar">Employees</span>
                   </div>
                   <ng-multiselect-dropdown style="width: 75%;" name="EmployeeDirectreportee"
-                                           [disabled]="false" [placeholder]="'Select Employee'"
+                                           [disabled]="true" [placeholder]="'Select Employee'"
                                            [data]="currentEmployeeDirectReportees"
                                            [(ngModel)]="selectedEmployeeDirectReportees"
                                            [settings]="directReporteeDropdownSettings"
@@ -154,7 +154,7 @@
                     <span class="input-group-text redStar">Competency</span>
                   </div>
                   <ng-multiselect-dropdown style="width:70%;" name="directReporteeCompetencyList"
-                                           [disabled]="false" [placeholder]="'Select Competency'"
+                                           [disabled]="true" [placeholder]="'Select Competency'"
                                            [data]="directReporteeCompetencyList" [settings]="competencyDropdownSettings"
                                            [(ngModel)]="seletedDirectReporteeCompetencyList"
                                            (onSelect)="onSelectDirectReporteeCompetency($event)"
@@ -176,14 +176,14 @@
                     <span class="input-group-text ">Message</span>
                   </div>
                   <textarea name="directReporteeCompetencyMessage" class="form-control"
-                            [(ngModel)]="directReporteeCompetencyMessage"></textarea>
+                            [(ngModel)]="directReporteeCompetencyMessage" readonly></textarea>
 
                 </div>
               </div>
             </div>
             <div class="col-md-3">
               <input type="button" style="margin-top: 9px;" class="btn btn-primary"
-                     (click)="addDRCompetencyMapping()" value="+">
+                     (click)="addDRCompetencyMapping()" value="+" disabled>
             </div>
           </div>
           <div class="form-group row">
@@ -206,7 +206,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="saveDirectReportees()">Save</button>
+        <!--<button type="button" class="btn btn-primary" (click)="saveDirectReportees()">Save</button>-->
         <button type="button" class="btn btn-secondary" #closeModal (click)="closeDrModel()">Close</button>
 
       </div>
