@@ -127,10 +127,18 @@ export class CurrentEvaluationReportPdfComponent implements OnInit {
     console.log('inside createPerformanceGoalsRowData :::: ');
     console.log(this.performanceGoals);
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    //Get Kpis
     for (let i = 0; i < this.performanceGoals.length; i++) {
+      let kpiArr = [];
+      this.performanceGoals[i].MeasurementCriteria.forEach(mc => {
+        kpiArr.push(mc.measureId.Name);
+      })
+
+      let kpiArrString = kpiArr.length > 0 ? kpiArr.toString() : 'N/A';
+
       rowData.push({
         goal: this.performanceGoals[i].Kpi,
-        kpi: this.performanceGoals[i].Kpi,
+        kpi: kpiArrString,
         weighting: this.performanceGoals[i].Weighting,
         targetCompletion: new Date(this.performanceGoals[i].TargetCompletionDate).toLocaleDateString(undefined, options),
         yearEndComments: this.performanceGoals[i].YearEndComments,

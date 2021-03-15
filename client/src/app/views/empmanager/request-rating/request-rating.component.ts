@@ -308,6 +308,8 @@ export class RequestRatingComponent implements OnInit {
 
       }
       this.selectedEmployee = this.selectedEmployeesList.find(emp => emp.Employee._id == this.selectedEmployeeId);
+      this.selectedEmployee.Peers = [];
+      this.selectedEmployee.DirectReportees = [];
       this.selectedModel = this.selectedEmployee.Model;
       this.getPeersForEmployees();
       this.getDirectReportees();
@@ -704,7 +706,8 @@ export class RequestRatingComponent implements OnInit {
       for (let mapping of this.drCompetencyMappingRowdata) {
         this.selectedEmployeeDirectReporteesCollection['Employees'].push(mapping.directReportee);
       }
-      this.selectedEmployeeDirectReporteesCollection['Competencies'] = this.drCompetencyMappingRowdata[0].competencies[0];
+      let lastIndex = this.drCompetencyMappingRowdata.length - 1;
+      this.selectedEmployeeDirectReporteesCollection['Competencies'] = this.drCompetencyMappingRowdata[lastIndex].competencies;
       this.selectedEmployeeDirectReporteesCollection['IsDraft'] = isDraft;
       this.selectedEmployeeDirectReporteesCollection['EmployeeId'] = this.selectedEmployeeId;
       this.selectedEmployeeDirectReporteesCollection['CreatedBy'] = this.currentUser._id
@@ -965,7 +968,8 @@ export class RequestRatingComponent implements OnInit {
       for (let mapping of this.peerCompetencyMappingRowdata) {
         this.selectedEmployeePeersCollection['Employees'].push(mapping.peer);
       }
-      this.selectedEmployeePeersCollection['Competencies'] = this.peerCompetencyMappingRowdata[0].competencies[0];
+      let lastIndex = this.peerCompetencyMappingRowdata.length - 1;
+      this.selectedEmployeePeersCollection['Competencies'] = this.peerCompetencyMappingRowdata[lastIndex].competencies;
       this.selectedEmployeePeersCollection['IsDraft'] = isDraft;
       this.selectedEmployeePeersCollection['EmployeeId'] = this.selectedEmployeeId;
       this.selectedEmployeePeersCollection['CreatedBy'] = this.currentUser._id

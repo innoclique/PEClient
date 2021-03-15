@@ -10,8 +10,8 @@ export class NotificationService {
 
   config: MatSnackBarConfig = {
     duration: 10000,
-    horizontalPosition: 'center',
-    verticalPosition: 'bottom'    
+    horizontalPosition: 'right',
+    verticalPosition: 'top'    
   }
 
   success(msg:string) {

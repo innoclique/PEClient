@@ -3,426 +3,450 @@
 </div> -->
 <!-- <div id="pdfBody"     [ngStyle]="{'visibility':isReport ? 'visible' : 'hidden','overflow':isReport?'visible':'hidden','height':isReport?'auto':'0'}"
     class="card"> -->
-<div id="pdfBody" class="pdfBody">
+  <div id="pdfBody" class="pdfBody">
     <div style="text-align: center;" class="card-header">
-        Evaluation Report - {{getEVPeriod()}} - {{loginUser?.FirstName}} {{loginUser?.LastName}}
-        <div class="form-group form-actions pull-right m-0">
-            <i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print"
-                style="font-size:21px;color:red"></i>
-        </div>
+      Evaluation Report - {{getEVPeriod()}} - {{loginUser?.FirstName}} {{loginUser?.LastName}}
+      <div class="form-group form-actions pull-right m-0">
+        <i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print"
+           style="font-size:21px;color:red"></i>
+      </div>
     </div>
     <div class="card-header">
-        Employee Information
+      Employee Information
     </div>
     <div class="card-body">
-        <div class="grid-metadata-wrapper">
-            <div class="grid-metadata-header">
+      <div class="grid-metadata-wrapper">
+        <div class="grid-metadata-header">
 
-                <div class="col-lg-4 pull-left"><span>
-                        Evaluation Period :
-                    </span>
-                    <label>{{getEVPeriod()}}</label>
-                </div>
-                <div class="col-lg-4 pull-left"><span>
-                        Title :
-                    </span>
-                    <label>{{loginUser?.Title}}</label>
-                </div>
-                <div class="col-lg-4 pull-left"><span>
-                        Department :
-                    </span>
-                    <label>{{loginUser?.Department}}</label>
-                </div>
-                <div class="col-lg-4 pull-left"><span>
-                        Length of Service :
-                    </span>
-                    <label>{{ loginUser?.JoiningDate| dateAgo}}</label>
-                </div>
-                <div class="col-lg-4 pull-left"><span>
-                        Manager :
-                    </span>
-                    <label>{{loginUser?.Manager? loginUser?.Manager?.FirstName:'NA'}}</label>
-                </div>
-                <div class="col-lg-4 pull-left"><span>
-                        Length of Time in Current Role :
-                    </span>
-                    <label>{{ loginUser?.RoleEffFrom | dateAgo}}</label>
-                </div>
-                <div class="col-lg-4 pull-left"><span>
-                        Leadership Role :
-                    </span>
-                    <label>{{loginUser?.DirectReports?'Yes':'No'}}</label>
-                </div>
-                <div class="col-lg-4 pull-left"><span>
-                        Job Level :
-                    </span>
-                    <label>{{loginUser?.JobLevel?.JobLevelName}}</label>
-                </div>
-            </div>
+          <div class="col-lg-4 pull-left">
+            <span>
+              Evaluation Period :
+            </span>
+            <label>{{getEVPeriod()}}</label>
+          </div>
+          <div class="col-lg-4 pull-left">
+            <span>
+              Title :
+            </span>
+            <label>{{loginUser?.Title}}</label>
+          </div>
+          <div class="col-lg-4 pull-left">
+            <span>
+              Department :
+            </span>
+            <label>{{loginUser?.Department}}</label>
+          </div>
+          <div class="col-lg-4 pull-left">
+            <span>
+              Length of Service :
+            </span>
+            <label>{{ loginUser?.JoiningDate| dateAgo}}</label>
+          </div>
+          <div class="col-lg-4 pull-left">
+            <span>
+              Manager :
+            </span>
+            <label>{{loginUser?.Manager? loginUser?.Manager?.FirstName:'NA'}}</label>
+          </div>
+          <div class="col-lg-4 pull-left">
+            <span>
+              Length of Time in Current Role :
+            </span>
+            <label>{{ loginUser?.RoleEffFrom | dateAgo}}</label>
+          </div>
+          <div class="col-lg-4 pull-left">
+            <span>
+              Leadership Role :
+            </span>
+            <label>{{loginUser?.DirectReports?'Yes':'No'}}</label>
+          </div>
+          <div class="col-lg-4 pull-left">
+            <span>
+              Job Level :
+            </span>
+            <label>{{loginUser?.JobLevel?.JobLevelName}}</label>
+          </div>
         </div>
+      </div>
     </div>
     <div class="card-header">
-        Performance Goals
+      Performance Goals
     </div>
     <div class="card-body">
-        <div style="width: 100%;">
-            <table class="table table-bordered">
-                <tr class="thead-light">
-                    <th style="color: black;font-weight: 600;">Goal</th>
-                    <th style="color: black;font-weight: 600;">KPI</th>
-                    <th style="color: black;font-weight: 600;">Target Completion</th>
-                    <th style="color: black;font-weight: 600;">Weighting</th>
-                    <th style="color: black;font-weight: 600;">Year-end Comments</th>
-                    <th style="color: black;font-weight: 600;">Manager Comments</th>
-                    <th style="color: black;font-weight: 600;">Score</th>
-                </tr>
-                <tr *ngFor="let performanceGoal of performanceGoalsRowData">
-                    <td>
-                        {{performanceGoal.goal}}
-                    </td>
-                    <td>
-                        {{performanceGoal.kpi}}
-                    </td>
-                    <td>
-                        {{performanceGoal.targetCompletion}}
-                    </td>
-                    <td>
-                        {{performanceGoal.weighting}}
-                    </td>
-                    <td>
-                        {{performanceGoal.yearEndComments}}
-                    </td>
-                    <td>
-                        {{performanceGoal.yearEndManagerComments}}
-                    </td>
-                    <td>
-                        {{performanceGoal.score}} {{ performanceGoal.score ? getRatingText(performanceGoal.score) :'' }}
-                    </td>
-                </tr>
-            </table>
-        </div>
+      <div style="width: 100%;">
+        <table class="table table-bordered">
+          <tr class="thead-light">
+            <th style="color: black;font-weight: 600;">Goal</th>
+            <th style="color: black;font-weight: 600;">KPI</th>
+            <th style="color: black;font-weight: 600;">Target Completion</th>
+            <th style="color: black;font-weight: 600;">Weighting</th>
+            <th style="color: black;font-weight: 600;">Year-end Comments</th>
+            <th style="color: black;font-weight: 600;">Manager Comments</th>
+            <th style="color: black;font-weight: 600;">Score</th>
+          </tr>
+          <tr *ngFor="let performanceGoal of performanceGoalsRowData">
+            <td>
+              {{performanceGoal.goal}}
+            </td>
+            <td>
+              {{performanceGoal.kpi}}
+            </td>
+            <td>
+              {{performanceGoal.targetCompletion}}
+            </td>
+            <td>
+              {{performanceGoal.weighting}}
+            </td>
+            <td>
+              {{performanceGoal.yearEndComments ? performanceGoal.yearEndComments : 'N/A'}}
+            </td>
+            <td>
+              {{performanceGoal.yearEndManagerComments ? performanceGoal.yearEndManagerComments : 'N/A'}}
+            </td>
+            <td>
+              {{performanceGoal.score}} {{ performanceGoal.score ? getRatingText(performanceGoal.score) :'' }}
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
     <div class="card-header">
-        Competencies
+      Competencies
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-12">
-                <table *ngFor="let c of competencyQuestionsList; let j = index" class="table table-bordered">
-                    <tr class="thead-light">
-                        <th style="color: black;font-weight: 600;">
-                            <span>{{c.CompetenyName}}</span>
-                            <span class="badge badge-secondary float-right pull-right avgScore">Overall Rating :
-                                {{c.CompetencyAvgRating||0}}</span>
-                        </th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table class="table table-bordered">
-                                <thead class="thead-light">
-                                    <th style="color: black;font-weight: 600;">Competency</th>
-                                    <th style="color: black;font-weight: 600;">Rating</th>
-                                    <th style="color: black;font-weight: 600;">Comments</th>
-                                </thead>
-                                <tr *ngFor="let question of c.Questions; let i = index">
-                                    <td>
-                                        {{question.label}}
-                                    </td>
-                                    <td>
-                                        {{finalRating.Manager.IsSubmitted ? question.value : ''}} {{
-                                        finalRating.Manager.IsSubmitted ? getRatingText(question.value) :'' }}
-                                    </td>
-                                    <td *ngIf="i==0" [attr.rowspan]="i">
-                                        {{finalRating.Manager.IsSubmitted ? c.comments : ''}}
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+      <div class="row">
+        <div class="col-md-12">
+          <table *ngFor="let c of competencyQuestionsList; let j = index" class="table table-bordered">
+            <tr class="thead-light">
+              <th style="color: black;font-weight: 600;">
+                <span>{{c.CompetenyName}}</span>
+                <span class="badge badge-secondary float-right pull-right avgScore">
+                  Overall Rating :
+                  {{c.CompetencyAvgRating||0}}
+                </span>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <table class="table table-bordered">
+                  <thead class="thead-light">
+                  <th style="color: black;font-weight: 600;">Competency</th>
+                  <th style="color: black;font-weight: 600;">Rating</th>
+                  <th style="color: black;font-weight: 600;">Comments</th>
+                  </thead>
+                  <tr *ngFor="let question of c.Questions; let i = index">
+                    <td>
+                      {{question.label}}
+                    </td>
+                    <td>
+                      {{finalRating.Manager.IsSubmitted ? question.value : ''}} {{
+                                        finalRating.Manager.IsSubmitted ? getRatingText(question.value) :''
+                      }}
+                    </td>
+                    <td *ngIf="i==0" [attr.rowspan]="i">
+                      {{finalRating.Manager.IsSubmitted ? c.comments : ''}}
+                    </td>
+                  </tr>
                 </table>
-            </div>
+              </td>
+            </tr>
+          </table>
         </div>
-        <div class="clearfix"></div>
-        <div class="row">
-            <div class="col-md-6">
-                <ul class="list-group">
-                    <li class="list-group-item active">
-                        Peer Review List
-                    </li>
-                </ul>
-                <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length>0"
-                    class="list-group">
-                    <li class="list-group-item list-group-item-action list-group-item-info"
-                        *ngFor="let peer of PeerScoreCard?.PeerList">
-                        {{peer.FirstName}} {{peer.LastName}}
-                    </li>
-                </ul>
-                <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length===0"
-                    class="list-group">
-                    <li class="list-group-item list-group-item-action list-group-item-info">
-                        <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span>
-                    </li>
-                </ul>
+      </div>
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="list-group">
+            <li class="list-group-item active">
+              Peer Review List
+            </li>
+          </ul>
+          <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length>0"
+              class="list-group">
+            <li class="list-group-item list-group-item-action list-group-item-info"
+                *ngFor="let peer of PeerScoreCard?.PeerList">
+              {{peer.FirstName}} {{peer.LastName}}
+            </li>
+          </ul>
+          <ul *ngIf="PeerScoreCard && PeerScoreCard.PeerList && PeerScoreCard.PeerList.length===0"
+              class="list-group">
+            <li class="list-group-item list-group-item-action list-group-item-info">
+              <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span>
+            </li>
+          </ul>
 
-            </div>
-            <div class="col-md-6">
-                <ul class="list-group">
-                    <li class="list-group-item active">
-                        Direct Report Review List
-                    </li>
-                </ul>
-                <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0"
-                    class="list-group">
-                    <li class="list-group-item list-group-item-action list-group-item-info"
-                        *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">
-                        {{dr.FirstName}} {{dr.LastName}}
-                    </li>
-                </ul>
-                <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length===0"
-                    class="list-group">
-                    <li class="list-group-item list-group-item-action list-group-item-info">
-                        <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span>
-                    </li>
-                </ul>
-            </div>
         </div>
-        <div class="clearfix"></div>
+        <div class="col-md-6">
+          <ul class="list-group">
+            <li class="list-group-item active">
+              Direct Report Review List
+            </li>
+          </ul>
+          <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length>0"
+              class="list-group">
+            <li class="list-group-item list-group-item-action list-group-item-info"
+                *ngFor="let dr of DirectReporteeScoreCard?.DirectReporteesList">
+              {{dr.FirstName}} {{dr.LastName}}
+            </li>
+          </ul>
+          <ul *ngIf="DirectReporteeScoreCard && DirectReporteeScoreCard.DirectReporteesList && DirectReporteeScoreCard.DirectReporteesList.length===0"
+              class="list-group">
+            <li class="list-group-item list-group-item-action list-group-item-info">
+              <span><i class="icon-info  icons font-1xl d-block "> No Review Requested</i> </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="clearfix"></div>
     </div>
     <div class="card-header">
-        Developmental Goals
+      Developmental Goals
     </div>
     <div class="card-body">
-        <div class="col-md-12">
-            <table *ngFor="let goal of devGoalsRowData; let j = index" class="table table-bordered">
-                <tr class="thead-light">
-                    <th style="color: black;font-weight: 600;">
-                        <span>Development Goal : </span>
-                        <span>{{goal.DevGoal}}</span>
-                    </th>
-                </tr>
-                <tr class="thead-light">
-                    <th style="color: black;font-weight: 600;">
-                        <span>Performance Goal : </span>
-                        <span>{{goal.Kpi}}</span>
-                    </th>
-                </tr>
-                <tr class="thead-light">
-                    <th style="color: black;font-weight: 600;">
-                        <span>Desired Outcomes : </span>
-                        <span>{{goal.DesiredOutcomes}}</span>
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        <table class="table table-bordered">
-                            <thead class="thead-light">
-                                <th style="color: black;font-weight: 600;">Action Step</th>
-                                <th style="color: black;font-weight: 600;">Progress Indicators</th>
-                                <th style="color: black;font-weight: 600;">Barriers</th>
-                                <th style="color: black;font-weight: 600;">Target Date</th>
-                                <th style="color: black;font-weight: 600;">Other Participants</th>
-                                <th style="color: black;font-weight: 600;">Status</th>
-                            </thead>
-                            <tr *ngFor="let goalActionItem of goal.GoalActionItems; let i = index">
-                                <td>
-                                    {{goalActionItem.ActionStep}}
-                                </td>
-                                <td>
-                                    {{goalActionItem.ProgressIndicators}}
-                                </td>
-                                <td>
-                                    {{goalActionItem.Barriers}}
-                                </td>
-                                <td>
-                                    {{goalActionItem.TargetDate}}
-                                </td>
-                                <td>
-                                    {{goalActionItem.OtherParticipants}}
-                                </td>
-                                <td>
-                                    {{goalActionItem.Status}}
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="card-header">
-        Strengths
-    </div>
-    <div class="card-body">
-        <div class="col-md-12">
-            <table class="table table-bordered">
+      <div class="col-md-12">
+        <table *ngFor="let goal of devGoalsRowData; let j = index" class="table table-bordered">
+          <tr class="thead-light">
+            <th style="color: black;font-weight: 600;">
+              <span>Development Goal : </span>
+              <span>{{goal.DevGoal}}</span>
+            </th>
+          </tr>
+          <tr class="thead-light">
+            <th style="color: black;font-weight: 600;">
+              <span>Performance Goal : </span>
+              <span>{{goal.Kpi}}</span>
+            </th>
+          </tr>
+          <tr class="thead-light">
+            <th style="color: black;font-weight: 600;">
+              <span>Desired Outcomes : </span>
+              <span>{{goal.DesiredOutcomes}}</span>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <table class="table table-bordered">
                 <thead class="thead-light">
-                    <th style="color: black;font-weight: 600;">Strength</th>
-                    <th style="color: black;font-weight: 600;">Leverage</th>
-                    <th style="color: black;font-weight: 600;">Benefit(Self)</th>
-                    <th style="color: black;font-weight: 600;">Benefit(Team)</th>
-                    <th style="color: black;font-weight: 600;">Progress Comments</th>
+                <th style="color: black;font-weight: 600;">Action Step</th>
+                <th style="color: black;font-weight: 600;">Progress Indicators</th>
+                <th style="color: black;font-weight: 600;">Barriers</th>
+                <th style="color: black;font-weight: 600;">Target Date</th>
+                <th style="color: black;font-weight: 600;">Other Participants</th>
+                <th style="color: black;font-weight: 600;">Status</th>
                 </thead>
-                <tr *ngFor="let strength of strengths">
-                    <td>
-                        {{strength.Strength}}
-                    </td>
-                    <td>
-                        {{strength.Leverage}}
-                    </td>
-                    <td>
-                        {{strength.SelfBenifit}}
-                    </td>
-                    <td>
-                        {{strength.TeamBenifit}}
-                    </td>
-                    <td>
-                        {{strength.ProgressComments}}
-                    </td>
+                <tr *ngFor="let goalActionItem of goal.GoalActionItems; let i = index">
+                  <td>
+                    {{goalActionItem.ActionStep}}
+                  </td>
+                  <td>
+                    {{goalActionItem.ProgressIndicators}}
+                  </td>
+                  <td>
+                    {{goalActionItem.Barriers}}
+                  </td>
+                  <td>
+                    {{goalActionItem.TargetDate}}
+                  </td>
+                  <td>
+                    {{goalActionItem.OtherParticipants}}
+                  </td>
+                  <td>
+                    {{goalActionItem.Status}}
+                  </td>
                 </tr>
-            </table>
-        </div>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
     <div class="card-header">
-        Final Rating
+      Strengths
+    </div>
+    <div class="card-body">
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <thead class="thead-light">
+          <th style="color: black;font-weight: 600;">Strength</th>
+          <th style="color: black;font-weight: 600;">Leverage</th>
+          <th style="color: black;font-weight: 600;">Benefit(Self)</th>
+          <th style="color: black;font-weight: 600;">Benefit(Team)</th>
+          <th style="color: black;font-weight: 600;">Progress Comments</th>
+          </thead>
+          <tr *ngFor="let strength of strengths">
+            <td>
+              {{strength.Strength}}
+            </td>
+            <td>
+              {{strength.Leverage}}
+            </td>
+            <td>
+              {{strength.SelfBenifit}}
+            </td>
+            <td>
+              {{strength.TeamBenifit}}
+            </td>
+            <td>
+              {{strength.ProgressComments}}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="card-header">
+      Final Rating
+    </div>
+
+
+    <div class="card-body">
+      <div class="grid-metadata-wrapper ">
+        <div class="grid-metadata-header" *ngIf="finalRating.Manager">
+          <div class="col-lg-12 pull-left" *ngIf="finalRating.Self">
+            <span>
+              Comments :
+            </span>
+            <label>{{finalRating.Self.YearEndComments}}</label>
+          </div>
+          <div class="col-lg-6 pull-left">
+            <span>
+              Employee Sign-Off :
+            </span>
+            <label>{{ finalRating.Self.SignOff}}</label>
+          </div>
+          <div class="col-lg-6 pull-left">
+            <span>
+              SubmittedOn :
+            </span>
+            <label>{{finalRating.Self.IsSubmitted ? finalRating.Self.SubmittedOn : ''}}</label>
+          </div>
+
+          <div class="col-lg-12 pull-left">
+            <span>
+              Manager Rating :
+            </span>
+            <label>
+              {{finalRating.Manager.YearEndRating}} {{
+ finalRating.Manager.YearEndRating ?
+                        getRatingText(finalRating.Manager.YearEndRating) :''
+              }}
+            </label>
+          </div>
+
+          <div class="col-lg-12 pull-left" *ngIf="finalRating.Manager">
+            <span>
+              Manager Comments :
+            </span>
+            <label>{{finalRating.Manager.YearEndComments}}</label>
+          </div>
+          <div class="col-lg-6 pull-left">
+            <span>
+              Manager Sign-Off :
+            </span>
+            <label> {{ finalRating.Manager.SignOff}}</label>
+          </div>
+          <div class="col-lg-6 pull-left">
+            <span>
+              SubmittedOn :
+            </span>
+            <label>{{finalRating.Manager.IsSubmitted ? finalRating.Manager.SubmittedOn : ''}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <thead class="thead-light">
+          <th style="color: black;font-weight: 600;  text-align: center; ">Sign-off text</th>
+          </thead>
+          <tr>
+            <td>
+              My signature below represents my continued commitment to adhere to the ___________Code of Conduct
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <thead class="thead-light">
+          <th style="color: black;font-weight: 600;  text-align: center; ">APPENDIX</th>
+          </thead>
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              A critical leadership responsibility is to evaluate and coach employee performance. The
+              performance evaluation is a key component of employee development and demonstrates our Vision
+              and Values in action.
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div style="color: black;font-weight: 600;">
+        In completing the evaluation, please observe the following principles:
+      </div>
+      <div class="col-md-12">
+        <div style="text-align: center;" class="col-md-12 ">
+          <table class="table ">
+            <tr *ngFor="let principle of appendix.principles">
+              <td>
+                {{principle.principle}}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-12">
+          <table class="table table-bordered ">
+            <tr>
+              <td>
+                Using the rating scale indicated, select the rating for each element that best reflects the
+                Employee’s
+                performance or skill level against established standards. Supporting comments are key
+                elements of the evaluation.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!--<div class="col-md-12">
+      <table class="table table-bordered ">
+        <thead class="thead-light">
+        <th style="color: black;font-weight: 600;  text-align: center; ">Overall Rating</th>
+        <th style="color: black;font-weight: 600;  text-align: center; ">Definition</th>
+        </thead>
+        <tr *ngFor="let ratingScore of appendix.ratingScores">
+          <td>
+            {{ratingScore.Text}}
+          </td>
+          <td>
+            {{ratingScore.definition}}
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="col-md-12">
-    <table class="table table-bordered">
+      <table class="table table-bordered ">
         <thead class="thead-light">
-            <th style="color: black;font-weight: 600;  text-align: center; ">CODE OF CONDUCT</th>
+        <th style="color: black;font-weight: 600;  text-align: center; ">JOB LEVEL</th>
+        <th style="color: black;font-weight: 600;  text-align: center; ">OBJECTIVES</th>
+        <th style="color: black;font-weight: 600;  text-align: center; ">CORE RESPONSIBILITIES</th>
         </thead>
-        <tr>
-            <td>
-                My signature below represents my continued commitment to adhere to the ___________Code of Conduct
-            </td>
+        <tr *ngFor="let jobLevelConfig of appendix.jobLevelConfigs">
+          <td>
+            {{jobLevelConfig.jobLevelName}}
+          </td>
+          <td>
+            {{jobLevelConfig.objectives}}
+          </td>
+          <td>
+            {{jobLevelConfig.coreResponsibilities}}
+          </td>
         </tr>
-    </table>
-</div>
-
-    <div class="card-body">
-        <div class="grid-metadata-wrapper ">
-            <div class="grid-metadata-header" *ngIf="finalRating.Manager">
-                <div class="col-lg-12 pull-left" *ngIf="finalRating.Self"><span>
-                        Comments :
-                    </span>
-                    <label>{{finalRating.Self.YearEndComments}}</label>
-                </div>
-                <div class="col-lg-6 pull-left"><span>
-                        Employee Sign-Off :
-                    </span>
-                    <label>{{ finalRating.Self.SignOff}}</label>
-                </div>
-                <div class="col-lg-6 pull-left"><span>
-                        SubmittedOn :
-                    </span>
-                    <label>{{finalRating.Self.IsSubmitted ? finalRating.Self.SubmittedOn : ''}}</label>
-                </div>
-
-                <div class="col-lg-12 pull-left"><span>
-                        Manager Rating :
-                    </span>
-                    <label>{{finalRating.Manager.YearEndRating}} {{ finalRating.Manager.YearEndRating ?
-                        getRatingText(finalRating.Manager.YearEndRating) :'' }}</label>
-                </div>
-
-                <div class="col-lg-12 pull-left" *ngIf="finalRating.Manager"><span>
-                        Manager Comments :
-                    </span>
-                    <label>{{finalRating.Manager.YearEndComments}}</label>
-                </div>
-                <div class="col-lg-6 pull-left"><span>
-                        Manager Sign-Off :
-                    </span>
-                    <label> {{ finalRating.Manager.SignOff}}</label>
-                </div>
-                <div class="col-lg-6 pull-left"><span>
-                        SubmittedOn :
-                    </span>
-                    <label>{{finalRating.Manager.IsSubmitted ? finalRating.Manager.SubmittedOn : ''}}</label>
-                </div>
-            </div>
-        </div>
+      </table>
+    </div>-->
+      </div>
     </div>
-    <div class="card-header">
-    </div>
-    <div class="card-body">
-        <div class="col-md-12">
-            <table class="table table-bordered">
-                <thead class="thead-light">
-                    <th style="color: black;font-weight: 600;  text-align: center; ">APPENDIX</th>
-                </thead>
-                <tr>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>
-                        A critical leadership responsibility is to evaluate and coach employee performance. The
-                        performance evaluation is a key component of employee development and demonstrates our Vision
-                        and Values in action.
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div style="color: black;font-weight: 600;">
-            In completing the evaluation, please observe the following principles:
-        </div>
-        <div class="col-md-12">
-        <div style="text-align: center;" class="col-md-12 ">
-            <table class="table ">
-                <tr *ngFor="let principle of appendix.principles">
-                    <td>
-                        {{principle.principle}}
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="col-md-12">
-            <table class="table table-bordered ">
-                <tr>
-                    <td>
-                        Using the rating scale indicated, select the rating for each element that best reflects the
-                        Employee’s
-                        performance or skill level against established standards. Supporting comments are key
-                        elements of the evaluation.
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="col-md-12">
-                <table class="table table-bordered ">
-                    <thead class="thead-light">
-                        <th style="color: black;font-weight: 600;  text-align: center; ">Overall Rating</th>
-                        <th style="color: black;font-weight: 600;  text-align: center; ">Definition</th>
-                    </thead>
-                    <tr *ngFor="let ratingScore of appendix.ratingScores">
-                        <td>
-                            {{ratingScore.Text}}
-                        </td>
-                        <td>
-                            {{ratingScore.definition}}
-                        </td>
-                    </tr>
-                </table>
-                </div>
-                <div class="col-md-12">
-                <table class="table table-bordered ">
-                    <thead class="thead-light">
-                        <th style="color: black;font-weight: 600;  text-align: center; ">JOB LEVEL</th>
-                        <th style="color: black;font-weight: 600;  text-align: center; ">OBJECTIVES</th>
-                        <th style="color: black;font-weight: 600;  text-align: center; ">CORE RESPONSIBILITIES</th>
-                    </thead>
-                    <tr *ngFor="let jobLevelConfig of appendix.jobLevelConfigs">
-                        <td>
-                            {{jobLevelConfig.jobLevelName}}
-                        </td>
-                        <td>
-                            {{jobLevelConfig.objectives}}
-                        </td>
-                        <td>
-                            {{jobLevelConfig.coreResponsibilities}}
-                        </td>
-                    </tr>
-                </table>
-                </div>
-        </div>
-    </div>
-</div>
+  </div>

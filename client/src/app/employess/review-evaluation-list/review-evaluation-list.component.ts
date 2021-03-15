@@ -341,23 +341,41 @@ export class ReviewEvaluationListComponent implements OnInit {
     this.isPdfView = false;
   }
 
- async pdfView(){
+ //async pdfView(){
     
-  if (this.currentRowItem.FRStatus=='Evaluation Complete') {
-  this.empSelected = await this.authService.FindUserById(this.currentRowItem._id).subscribe(c => {
-      if(c){
-        console.log('user by id pdf view:::',c);
-        this.empSelected = c;
-        this.currentOrganization = this.authService.getOrganization();
-        this.isPdfView = true;
-      }
+ // if (this.currentRowItem.FRStatus=='Evaluation Complete') {
+ // this.empSelected = await this.authService.FindUserById(this.currentRowItem._id).subscribe(c => {
+ //     if(c){
+ //       console.log('user by id pdf view:::',c);
+ //       this.empSelected = c;
+ //       this.currentOrganization = this.authService.getOrganization();
+ //       this.isPdfView = true;
+ //     }
+ //   }
+ //     , error => {
+ //       this.snack.error(error.error.message);
+ //     }
+ //   );
+ // }
+    
+ //}
+
+  async pdfView() {
+    if (this.currentRowItem.FRStatus == 'Evaluation Complete') {
+      this.perfApp.route = "app";
+      this.perfApp.method = "GetEmployeeDataById",
+      this.perfApp.requestBody = { id: this.currentRowItem._id }
+      this.empSelected = await this.perfApp.CallAPI().subscribe(c => {
+        if (c) {
+          console.log('user by id pdf view:::', c);
+          this.empSelected = c;
+          this.currentOrganization = this.authService.getOrganization();
+          this.isPdfView = true;
+        }
+      }, error => {
+          this.snack.error(error.error.message);
+      })
     }
-      , error => {
-        this.snack.error(error.error.message);
-      }
-    );
-  }
-    
   }
 
 

@@ -17,7 +17,6 @@ export class ManagerDashboardComponent implements OnInit {
   currentOrganization: any;
   empEvaluationYear: any = '';
   selectedEmployeesList: any[] = [];
-  requestPeerClass: any = 'unSubmitted';
   dataLoaded: boolean = false;
 
   evaluationsColumnDefs = [
