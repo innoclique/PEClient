@@ -15,7 +15,6 @@ import { ThemeService } from '../../../services/theme.service';
 import { AlertComponent } from '../../../shared/alert/alert.component';
 import { Constants } from '../../../shared/AppConstants';
 import { CustomValidators } from '../../../shared/custom-validators';
-import { EventEmitterService } from '../../../services/event-emitter.service';
 
 @Component({
   selector: 'app-setup-employee',
@@ -68,13 +67,9 @@ export class SetupEmployeeComponent implements OnInit {
     private modalService: BsModalService,
     private snack: NotificationService,
     private perfApp: PerfAppService,
-    public translate: TranslateService,
-    public eventEmitterService: EventEmitterService) {
+    public translate: TranslateService) {
 
-    this.eventEmitterService.getSelectedEmp().subscribe(data => {
-      // Todo: assign data to a variable
-      this.editEmpForm(data.Employee);
-    })
+    
   }
 
 
@@ -95,10 +90,7 @@ export class SetupEmployeeComponent implements OnInit {
    this.initEmpForm()
 
     this.alert = new AlertDialog();
-    this.eventEmitterService.search.subscribe(value => {
-      //some code here
-      console.log(value);
-    });
+   
   }
 
 
