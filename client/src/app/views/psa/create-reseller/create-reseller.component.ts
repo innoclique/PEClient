@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -18,7 +18,7 @@ import { AlertDialog } from '../../../Models/AlertDialog';
   templateUrl: './create-reseller.component.html',
   styleUrls: ['./create-reseller.component.css']
 })
-export class CreateResellerComponent implements OnInit {
+export class CreateResellerComponent implements OnInit,DoCheck {
 
   public alert = new AlertDialog();
   public clientForm: FormGroup;
@@ -69,6 +69,11 @@ export class CreateResellerComponent implements OnInit {
   navToList() {
     this.router.navigate(['psa/list',{'activeTab':1}]);
   }
+  ngDoCheck(): void {
+    if(this.clientForm.get("SameAsAdmin").value==true)
+  this.sameAsContactOnChange({target:{checked:true}});
+  }
+
   ngOnInit(): void {
     this.subscription.add(this.activatedRoute.params.subscribe(params => {      
       if(params['id']){
@@ -113,7 +118,6 @@ export class CreateResellerComponent implements OnInit {
         Validators.required,
         Validators.pattern("^[a-zA-Z0-9#\\&\\-()/._, :]+$"),
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
         Validators.minLength(2),
         Validators.maxLength(500)])
       ],

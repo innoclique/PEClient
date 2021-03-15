@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -17,7 +17,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
   templateUrl: './client-setup.component.html',
   styleUrls: ['./client-setup.component.css']
 })
-export class ClientSetupComponent implements OnInit {
+export class ClientSetupComponent implements OnInit,DoCheck {
 
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
@@ -168,6 +168,12 @@ export class ClientSetupComponent implements OnInit {
   gotoResellerCreate(){
     this.router.navigate(['/psa/setup-reseller'])
   }
+
+  ngDoCheck(): void {
+    if(this.clientForm.get("SameAsAdmin").value==true)
+  this.sameAsContactOnChange({target:{checked:true}});
+  }
+
   ngOnInit(): void {
     this.getAllBasicData();
     this.getClients();
@@ -192,7 +198,7 @@ export class ClientSetupComponent implements OnInit {
       Name: [null, Validators.compose([
         Validators.required,
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
+        
         Validators.minLength(2)])
       ],
       Industry: ['', [Validators.required]],

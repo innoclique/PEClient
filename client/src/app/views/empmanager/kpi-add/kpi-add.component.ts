@@ -181,7 +181,7 @@ export class KpiAddComponent implements OnInit {
 
       Kpi: [this.kpiDetails.Kpi ? this.kpiDetails : '', Validators.compose([
         Validators.required, Validators.minLength(2),
-        CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
+        CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplCharsNew: true }, 'hasKPISplCharsNew'),
       ])
       ],
       TargetCompletionDate: [this.kpiDetails.TargetCompletionDate ? new Date(this.kpiDetails.TargetCompletionDate) : '', [Validators.required]],

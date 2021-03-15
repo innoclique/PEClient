@@ -663,6 +663,28 @@ public oneAtATime: boolean = true;
             "icon": "icon-star"
         },
     
+
+        {
+          "IsActive": true,
+          "url": "/csa/payments",
+          "name": "Payments",
+          "code": "Payments",
+          "icon": "icon-star",
+          "children": [{
+            "IsActive": true,
+            "url": "/csa/payments",
+            "name": "Make Payment",
+            "code": "Make Payment",
+            "icon": "icon-settings"
+          },
+          {
+            "IsActive": true,
+            "url": "/csa/adhoc-payment",
+            "name": "Adhoc Payment",
+            "code": "adhocPayment",
+            "icon": "icon-settings"
+          }]
+        },
  
     {
       "IsActive": true,

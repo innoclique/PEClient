@@ -88,7 +88,6 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                   <div *ngIf=" isFormSubmitted  && f.Name.errors" class="invalid-feedback">
                     <div *ngIf="f.Name.errors.required">Organization Name is mandatory</div>
                     <div *ngIf="f.Name.errors.minlength">Organization Name must be at least 2 characters </div>
-                    <div *ngIf="f.Name.errors.hasFirstCharNum">First character should be character </div>
                     <div *ngIf="f.Name.errors.hasNameSplChars">Allowed special characters are (.,-,(,),:) </div>
                   </div>
 
