@@ -94,6 +94,7 @@ export class CreateClientComponent implements OnInit {
     }));
 
     this.initForm();
+    this.models
     this.getAllBasicData();
     // this.getIndustries();
     this.sameAsContactChange();
@@ -129,7 +130,8 @@ export class CreateClientComponent implements OnInit {
       } 
       // this.models=c.EvaluationModels
       // if(c.EvaluationModels[0] =="")  // Commenting this line for generating complete models list instead of only selected models //
-      this.getModels();
+      // this.getModels();
+      this.models;
     }, error => {
       this.notification.error('something went wrong')
       console.error(error);
@@ -613,6 +615,8 @@ export class CreateClientComponent implements OnInit {
           this.appScores = c.KpiScore;
           this.kpiStatus = c.KpiStatus;
           this.coachingRemDays = c.coachingRem;
+          this.models=c.Models;
+          console.log("models",this.models)
           
         }
       })
