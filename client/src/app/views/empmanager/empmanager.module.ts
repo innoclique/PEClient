@@ -21,10 +21,12 @@ import { SharedModule } from '../../shared/shared.module';
 import { KpiAddComponent } from './kpi-add/kpi-add.component';
 import { DevgoalReviewComponent } from './devgoal-review/devgoal-review.component';
 import { StrengthReviewComponent } from './strength-review/strength-review.component';
-
+import { RequestRatingComponent } from './request-rating/request-rating.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { RequestRatingListComponent } from './request-rating-list/request-rating-list.component';
 
 @NgModule({
-  declarations: [KpiReviewListComponent, KpiReviewComponent, ManagerDashboardComponent,KpiAddComponent, DevgoalReviewComponent, StrengthReviewComponent],
+  declarations: [KpiReviewListComponent, KpiReviewComponent, ManagerDashboardComponent, KpiAddComponent, DevgoalReviewComponent, StrengthReviewComponent, RequestRatingComponent, RequestRatingListComponent],
   imports: [
     CommonModule,
     EmpmanagerRoutingModule,
@@ -34,6 +36,7 @@ import { StrengthReviewComponent } from './strength-review/strength-review.compo
     MatAutocompleteModule,
     MatCheckboxModule,
     MatDatepickerModule,
+    NgMultiSelectDropDownModule,
     TooltipModule.forRoot(),
     MatInputModule,
     HttpClientModule,
@@ -44,6 +47,6 @@ import { StrengthReviewComponent } from './strength-review/strength-review.compo
     ModalModule.forRoot(),
     SharedModule
   ],
-  exports:[ManagerDashboardComponent,KpiReviewComponent,DevgoalReviewComponent,StrengthReviewComponent]
+  exports: [ManagerDashboardComponent, KpiReviewComponent, DevgoalReviewComponent, StrengthReviewComponent, RequestRatingComponent, RequestRatingListComponent]
 })
 export class EmpmanagerModule { }

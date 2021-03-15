@@ -4,6 +4,7 @@ import { KpiAddComponent } from './kpi-add/kpi-add.component';
 import { KpiReviewListComponent } from './kpi-review-list/kpi-review-list.component';
 import { KpiReviewComponent } from './kpi-review/kpi-review.component';
 import { ManagerDashboardComponent } from './manager-dashboard/manager-dashboard.component';
+import { RequestRatingComponent } from './request-rating/request-rating.component';
 
 const routes: Routes = [
   {
@@ -45,7 +46,11 @@ const routes: Routes = [
           title: 'Review'
         }
       },
-
+      {
+        path: 'request-rating',
+        component: RequestRatingComponent,
+        data: { title: 'Request Rating' }
+      }
     
 
      

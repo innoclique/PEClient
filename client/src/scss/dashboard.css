@@ -1179,3 +1179,13 @@ padding: 10px 15px;width: 100%; resize:none; min-height: 100px;}
     margin-right: 0;
     border-right: 1px solid #7dc4f2;
 }
+
+.unSubmitted {
+  cursor: pointer;
+}
+
+.submitted {
+  cursor: pointer;
+  color: #ff8e8e !important;
+}
+

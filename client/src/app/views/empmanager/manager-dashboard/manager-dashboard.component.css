@@ -1,0 +1,13 @@
+.unSubmitted{
+  cursor: pointer;
+  padding: 7px 20px 0 0;
+  font-size: 17px;
+}
+
+.submitted {
+  cursor: pointer;
+  padding: 7px 20px 0 0;
+  font-size: 17px;
+  color:red;
+}
+
