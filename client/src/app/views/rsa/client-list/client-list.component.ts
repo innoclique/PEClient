@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GridOptions } from 'ag-grid-community';
@@ -13,7 +13,7 @@ import { CustomValidators } from '../../../shared/custom-validators';
   templateUrl: './client-list.component.html',
   styleUrls: ['./client-list.component.css']
 })
-export class ClientListComponent implements OnInit {
+export class ClientListComponent implements OnInit ,DoCheck{
 
 
   public clientForm: FormGroup;
@@ -102,6 +102,12 @@ export class ClientListComponent implements OnInit {
   gotoCreate() {
     this.router.navigate(['rsa/setup-clients'])
   }
+
+  ngDoCheck(): void {
+  //   if(this.clientForm.get("SameAsAdmin").value==true)
+  // this.sameAsContactChange({target:{checked:true}});
+  }
+
   ngOnInit(): void {
     this.getAllBasicData();
     this.getClients();

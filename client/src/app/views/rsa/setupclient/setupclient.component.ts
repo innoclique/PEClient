@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -20,7 +20,7 @@ import { CustomValidators } from '../../../shared/custom-validators';
   templateUrl: './setupclient.component.html',
   styleUrls: ['./setupclient.component.css']
 })
-export class SetupclientComponent implements OnInit {
+export class SetupclientComponent implements OnInit,DoCheck {
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
   public isFormSubmitted = false;
@@ -224,6 +224,12 @@ export class SetupclientComponent implements OnInit {
    // this.clientForm.patchValue({ Address: add });
 
   }
+
+  ngDoCheck(): void {
+    if(this.clientForm.get("SameAsAdmin").value==true)
+  this.onSameAsContactChange({target:{checked:true}});
+  }
+
   ngOnInit(): void {
     this.subscription.add(this.activatedRoute.params.subscribe(params => {
       
@@ -290,7 +296,6 @@ export class SetupclientComponent implements OnInit {
         Validators.required,
         Validators.pattern("^[a-zA-Z0-9#\\&\\-()/._,: ]+$"),
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
         Validators.minLength(2),
         Validators.maxLength(500)])
       ],

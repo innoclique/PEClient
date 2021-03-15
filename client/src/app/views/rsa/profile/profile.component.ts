@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +16,7 @@ import { CustomValidators } from '../../../shared/custom-validators';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit,DoCheck {
 
   public alert = new AlertDialog();
   public clientForm: FormGroup;
@@ -67,6 +67,12 @@ export class ProfileComponent implements OnInit {
   navToList() {
     this.router.navigate(['rsa/dashboard']);
   }
+  ngDoCheck(): void {
+    if(this.clientForm.get("SameAsAdmin").value==true)
+  this.sameAsContactOnChange({target:{checked:true}});
+  }
+
+
   ngOnInit(): void {
     this.getClientDataById();
 
@@ -137,7 +143,6 @@ export class ProfileComponent implements OnInit {
         Validators.required,
         Validators.pattern("^[a-zA-Z0-9#\\&\\-()/._, :]+$"),
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
         Validators.minLength(2),
         Validators.maxLength(500)])
       ],

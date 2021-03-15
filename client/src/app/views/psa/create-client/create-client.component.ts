@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DoCheck, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,7 +18,7 @@ import { AlertDialog } from '../../../Models/AlertDialog';
   templateUrl: './create-client.component.html',
   styleUrls: ['./create-client.component.css']
 })
-export class CreateClientComponent implements OnInit {
+export class CreateClientComponent implements OnInit,DoCheck {
   public alert: AlertDialog;
   public clientForm: FormGroup;
   public contactPersonForm: FormGroup;
@@ -112,6 +112,12 @@ export class CreateClientComponent implements OnInit {
     this.getRangeList(rangeOptions);
     this.alert = new AlertDialog();
   }
+
+  ngDoCheck(): void {
+    if(this.clientForm.get("SameAsAdmin").value==true)
+  this.onSameAsAdminChange({target:{checked:true}});
+  }
+
   getClientDataById() {
     this.perfApp.route = "app";
     this.perfApp.method = "GetOrganizationDataById",
@@ -148,7 +154,6 @@ export class CreateClientComponent implements OnInit {
         Validators.required,
         Validators.pattern("^[a-zA-Z0-9#\\&\\-()/._,: ]+$"),
         CustomValidators.patternValidator(/(?=.*[).(-:])/, { hasNameSplChars: true }, 'hasNameSplChars'),
-        CustomValidators.patternValidator(/^[a-zA-Z]{1}/, { hasFirstCharNum: true }, 'hasFirstCharNum'),
         Validators.minLength(2),
         Validators.maxLength(500)])
       ],

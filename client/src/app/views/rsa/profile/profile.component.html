@@ -23,7 +23,6 @@
                       <div *ngIf="f.Name.errors.required">Organization name is mandatory.</div>
                       <div *ngIf="f.Name.errors.maxlength">Organization name can be 500 characters long.</div>
                       <div *ngIf="f.Name.errors.minlength">Organization name must be at least 2 characters </div>
-                      <div *ngIf="f.Name.errors.hasFirstCharNum">First character should be character </div>
                       <div *ngIf="f.Name.errors.pattern">Allowed special characters are (.,-,(,),&,#,:,/) </div>
                     </div>
 
