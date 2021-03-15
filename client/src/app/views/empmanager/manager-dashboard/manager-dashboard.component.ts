@@ -14,6 +14,12 @@ export class ManagerDashboardComponent implements OnInit {
   currentRowItem: any;
   dashboardData: any;
   loginUser: any;
+  currentOrganization: any;
+  empEvaluationYear: any = '';
+  selectedEmployeesList: any[] = [];
+  requestPeerClass: any = 'unSubmitted';
+  dataLoaded: boolean = false;
+
   evaluationsColumnDefs = [
     { headerName: 'Name', width: '100px', field: 'name', sortable: true },
     { headerName: 'Status', width: '180px', field: 'status', sortable: true },
@@ -23,7 +29,7 @@ export class ManagerDashboardComponent implements OnInit {
         let actionlinks = ''
         actionlinks = `
             
-             <a data-action-type="doevaluationreview" href="javascript:void(0)">View</> |  <a data-action-type="doevaluationreview" href="javascript:void(0)">Sign-off</a> | <a data-action-type="dorequestreview" href="javascript:void(0)" (click)='onRequestPeerReview()'>Request Peer Review<a/>
+             <a data-action-type="doevaluationreview" href="javascript:void(0)">View</> |  <a data-action-type="doevaluationreview" href="javascript:void(0)">Sign-off</a> | <a data-action-type="dorequestreview" href="javascript:void(0)" class=${this.getCssStyle(data)} (click)='onRequestPeerReview()'>Request Peer Review<a/>
              
              `
         return actionlinks
@@ -65,11 +71,12 @@ export class ManagerDashboardComponent implements OnInit {
 
 
   constructor(private router: Router, public emService: EmService, private authService: AuthService, private perfApp: PerfAppService) {
-
+    this.loginUser = this.authService.getCurrentUser();
+    this.currentOrganization = this.authService.getOrganization();
+    this.getEmployeeCurrentEvaluation();
   }
 
   ngOnInit(): void {
-    this.loginUser = this.authService.getCurrentUser();
     this.loadDashboard();
     this.loadDirectReports();
   }
@@ -140,5 +147,51 @@ export class ManagerDashboardComponent implements OnInit {
   onRequestPeerReview() {
     this.router.navigate(['em/request-rating', { empId: this.currentRowItem.employeeId }]);
   }
+
+  getEvaluationList() {
+    this.perfApp.route = "em/request/peer-direct";
+    this.perfApp.method = "reports/list",
+      this.perfApp.requestBody = {
+        "EvaluationYear": this.empEvaluationYear,
+        "owner": this.loginUser._id
+      }
+    this.perfApp.CallAPI().subscribe(c => {
+
+      if (c) {
+        let submittedRecords = c.filter(record => record.IsDraft == false);
+        this.selectedEmployeesList = submittedRecords;
+      }
+      this.dataLoaded = true;
+    },
+      error => {
+        this.dataLoaded = true;
+      }
+    )
+  }
+
+  
+//Todo: Move the getEmployeeCurrentEvaluation service call to resolver in future to wait till complete data is loaded
+  getEmployeeCurrentEvaluation() {
+    this.perfApp.route = "app";
+    this.perfApp.method = "GetEmployeeCurrentEvaluation",
+      this.perfApp.requestBody = {
+        'empId': this.loginUser._id,
+        'orgId': this.currentOrganization._id
+      }
+    this.perfApp.CallAPI().subscribe(evaluationYear => {
+      this.empEvaluationYear = evaluationYear;
+      this.getEvaluationList();
+    })
+  }
+
+  getCssStyle(rowData) {
+    let isSubmittedRequest = this.selectedEmployeesList.findIndex(emp => emp.EmployeeId._id == rowData.data.employeeId);
+    if (isSubmittedRequest > -1) {
+      return 'submitted';
+    } else {
+      return 'unSubmitted';
+    }
+  }
+
 
 }

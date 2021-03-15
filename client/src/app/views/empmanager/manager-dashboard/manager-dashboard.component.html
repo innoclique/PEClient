@@ -14,13 +14,22 @@
                   <div class="box_in">
                     <h2 class="bg-blue">Current Evaluation Progress</h2>
 
-                    <ag-grid-angular
+                    <ag-grid-angular *ngIf="dataLoaded"
                                      style="width: 495px; height: 240px;"
                                      class="ag-theme-alpine"
                                      [rowData]="evaluationsRowData"
                                      [columnDefs]="evaluationsColumnDefs"
-                                     (rowClicked)="onGridRowClick($event)"
-                                     >
+                                     (rowClicked)="onGridRowClick($event)">
+                    </ag-grid-angular>
+
+                    <!--Show table with empty data till data is loaded
+                    Todo: Move the getEmployeeCurrentEvaluation service call to resolver in future to wait till complete data is loaded-->
+                    <ag-grid-angular *ngIf="!dataLoaded"
+                                     style="width: 495px; height: 240px;"
+                                     class="ag-theme-alpine"
+                                     [rowData]="[]"
+                                     [columnDefs]="evaluationsColumnDefs"
+                                     (rowClicked)="onGridRowClick($event)">
                     </ag-grid-angular>
 
                   </div>

@@ -276,7 +276,8 @@ export class RequestRatingListComponent implements OnInit {
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c) {
-        this.selectedEmployeesList = c;
+        let submittedRecords = c.filter(record => record.IsDraft == false);
+        this.selectedEmployeesList = submittedRecords;
       }
 
       this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);

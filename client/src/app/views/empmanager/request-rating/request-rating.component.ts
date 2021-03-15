@@ -702,7 +702,7 @@ export class RequestRatingComponent implements OnInit {
       this.selectedEmployeeDirectReporteesCollection['Employees'] = [];
       this.selectedEmployeeDirectReporteesCollection['Competencies'] = [];
       for (let mapping of this.drCompetencyMappingRowdata) {
-        this.selectedEmployeeDirectReporteesCollection['Employees'].push(mapping.peer);
+        this.selectedEmployeeDirectReporteesCollection['Employees'].push(mapping.directReportee);
       }
       this.selectedEmployeeDirectReporteesCollection['Competencies'] = this.drCompetencyMappingRowdata[0].competencies[0];
       this.selectedEmployeeDirectReporteesCollection['IsDraft'] = isDraft;
@@ -1114,6 +1114,7 @@ export class RequestRatingComponent implements OnInit {
       } else {
         this.notification.success('Peers review request submitted successfully.');
       }
+      this.refresh();
     }, error => {
       this.notification.error(error.error.message)
     })
@@ -1130,6 +1131,7 @@ export class RequestRatingComponent implements OnInit {
       } else {
         this.notification.success('Direct Reportees review request submitted successfully.');
       }
+      this.refresh();
     }, error => {
       this.notification.error(error.error.message)
     })
@@ -1148,7 +1150,6 @@ export class RequestRatingComponent implements OnInit {
 
       if (c) {
         this.selectedSavedEmployee = c;
-        this.selectedSavedEmployee.IsDraft = true;
         if (!this.selectedSavedEmployee.IsDraft) {
           this.disableSubmittedRecord = true;
         } else {
