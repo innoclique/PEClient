@@ -122,10 +122,14 @@
 
     </div>
     <!--<hr />-->
-    <div style="margin-left: 75%;">
-      <button type="button" class="btn btn-primary" (click)="savePeers(true)" [disabled]="disableSubmittedRecord">Save</button>
-      <button type="button" class="btn btn-primary" (click)="savePeers(false)" [disabled]="disableSubmittedRecord">Submit</button>
-      <button type="button" class="btn btn-secondary" (click)="closePeersModel()">Cancel</button>
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4"></div>
+      <div class="col-md-4" style="text-align:right">
+        <button type="button" class="btn btn-primary" (click)="savePeers(true)" [disabled]="disableSubmittedRecord">Save</button>
+        <button type="button" class="btn btn-primary" (click)="savePeers(false)" [disabled]="disableSubmittedRecord">Submit</button>
+        <button type="button" class="btn btn-secondary" (click)="closePeersModel()">Cancel</button>
+      </div>
     </div>
   </div>
 </ng-template>
@@ -211,10 +215,14 @@
       </div>
     </div>
     <!--<hr />-->
-    <div style="margin-left: 75%;">
-      <button type="button" class="btn btn-primary" (click)="saveDirectReportees(true)" [disabled]="disableSubmittedRecord">Save</button>
-      <button type="button" class="btn btn-primary" (click)="saveDirectReportees(false)" [disabled]="disableSubmittedRecord">Submit</button>
-      <button type="button" class="btn btn-secondary" #closeModal (click)="closeDrModel()">Cancel</button>
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4"></div>
+      <div class="col-md-4" style="text-align:right">
+        <button type="button" class="btn btn-primary" (click)="saveDirectReportees(true)" [disabled]="disableSubmittedRecord">Save</button>
+        <button type="button" class="btn btn-primary" (click)="saveDirectReportees(false)" [disabled]="disableSubmittedRecord">Submit</button>
+        <button type="button" class="btn btn-secondary" #closeModal (click)="closeDrModel()">Cancel</button>
+      </div>
     </div>
   </div>
 </ng-template>

@@ -1186,6 +1186,6 @@ padding: 10px 15px;width: 100%; resize:none; min-height: 100px;}
 
 .submitted {
   cursor: pointer;
-  color: #ff8e8e !important;
+  color: rgba(87,166,79,1) !important;
 }
 
