@@ -78,6 +78,7 @@ export class EvaluationslistComponent implements OnInit {
   directReporteeDropdownSettings: any = {}
   currentPeerCompetencyList: any = [];
   existedPeerList: any = [];
+  existedDRList: any = [];
   peerDropdownSettings: any = {};
   selectedEmployeeDirectReporteeMappings:any = [];
   peerCompetencyMappingRowdata:any = [];
@@ -1092,6 +1093,7 @@ public currentOrganization:any={}
   }
 
   loadManagerSelectedDR() {
+    this.existedDRList = [...this.drCompetencyMappingRowdata];
     let requestBody = {
       EmpId:this.selectedEmployee.Employee._id,
       EvaluationYear:this.selectedEmployee.EvaluationRow.EvaluationYear,
@@ -1107,9 +1109,9 @@ public currentOrganization:any={}
         for(var i=0;i<DirectReportees.length;i++){
           let drRequestObj = DirectReportees[i];
           let {EmployeeId,displayTemplate,message,Competencies} = drRequestObj;
-          let drEmpData = this.drCompetencyMappingRowdata.find(p=>p.peer.EmployeeId === EmployeeId);
+          let drEmpData = this.drCompetencyMappingRowdata.find(p=>p.directReportee.EmployeeId === EmployeeId);
           if(drEmpData){
-            let matchedIndex = this.drCompetencyMappingRowdata.findIndex(p=>p.peer.EmployeeId === EmployeeId);
+            let matchedIndex = this.drCompetencyMappingRowdata.findIndex(p=>p.directReportee.EmployeeId === EmployeeId);
             console.log(drEmpData);
             let _empCompetencies = drEmpData.competencies;
             for(var j=0;j<Competencies.length;j++){
@@ -1126,7 +1128,7 @@ public currentOrganization:any={}
             }
           }else{
             this.drCompetencyMappingRowdata.push({
-              peer: {EmployeeId,displayTemplate},
+              directReportee: {EmployeeId,displayTemplate},
               competencies: Competencies,
               message:message || ""
             })
@@ -1210,14 +1212,22 @@ public currentOrganization:any={}
           mappingInOldFormat['DirectReporteeComptencyMessage'] = mapping.message;
           mappingInOldFormat['DirectReporteeCompetencyList'] = mapping.competencies;
           mappingInOldFormat['drCompetenceMapping'] = mapping;
+          let drObj = this.existedDRList.find(p=>p.directReportee.EmployeeId == mapping.directReportee.EmployeeId && p.competencies.length == mapping.competencies.length);
+          if(!drObj){
+            this.selectedEmployee.Peers.push(mappingInOldFormat);
+          }
           this.selectedEmployee.DirectReportees.push(mappingInOldFormat);
         }
         this.selectedEmployee['drCompetenceMapping'] = this.drCompetencyMappingRowdata;
         // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReportees = this.selectedEmployee.DirectReportees;
         // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeComptencyMessage = this.directReporteeCompetencyMessage;
         // this.selectedEmployees.find(x => x._id === this.selectedEmployee._id).DirectReporteeCompetencyList = this.directReporteeCompetencyList;
-        this.updateDirectReporteesOfEmployee();
-        this.closeDrModel();
+        if(this.selectedEmployee.DirectReportees && this.selectedEmployee.DirectReportees.length>0){
+          this.updateDirectReporteesOfEmployee();
+          this.closeDrModel();
+        }else{
+          this.refresh();
+        }
       } else {
 
       }
