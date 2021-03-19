@@ -10,6 +10,7 @@ import { ReportsService } from '../../../../../services/reports.service';
 import { DatePipe } from '@angular/common';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PerfAppService } from '../../../../../services/perf-app.service';
+import { PaymentCaluculationService } from '../../../../../services/payment-caluculation.service';
 
 @Component({
   selector: 'app-reports',
@@ -59,10 +60,12 @@ export class CSAPaymentSummary {
     TAX_AMOUNT:0,
     TOTAL_PAYABLE_AMOUNT:0
   };
+  paymentCurrency: any = '';
   constructor(
     private perfApp: PerfAppService,
     public authService: AuthService,
     public reportService: ReportsService,
+    public paymentCaluculationService: PaymentCaluculationService,
     public router: Router,
     private activatedRoute: ActivatedRoute, ) {
     this.currentUser = this.authService.getCurrentUser();
@@ -89,6 +92,7 @@ export class CSAPaymentSummary {
     this.api.setHeaderHeight(height);
     this.api.resetRowHeights();
     this.api.sizeColumnsToFit();
+    this.api.refreshHeader();
   }
 
   getPurchaseHistoryInfo(clientId) {
@@ -172,7 +176,12 @@ closeForm(){
       { headerName: 'Evaluation Period', field: 'evaluationPeriod', },
       { headerName: 'Evaluations Type', field: 'evaluationsType', },
       { headerName: '# of Evaluations', field: 'licPurchasesCount', type: 'rightAligned', },
-      { headerName: 'Amount(CAD)', field: 'amount', type: 'rightAligned', valueFormatter: params => params.data.amount.toFixed(2) },
+      {
+        headerName: 'Amount', headerValueGetter: (params) => {
+          return `Amount${this.paymentCurrency}`;
+        }, field: 'amount', type: 'rightAligned', valueFormatter: params => params.data.amount.toFixed(2)
+
+      },
     ];
   }
 
@@ -185,6 +194,11 @@ closeForm(){
       'usageType': apiResponse.clientInfo.Organization.UsageType,
       'evaluationsType': apiResponse.clientInfo.Organization.EvaluationPeriod,
     };
+
+
+    this.paymentCurrency = this.paymentCaluculationService.getCurrencyType(apiResponse.clientInfo.Organization.Country);
+    this.paymentCurrency = this.paymentCurrency ? '(' + this.paymentCurrency + ')' : '';
+    
     var totalExpenditure = 0;
     // console.log('inside createHistoryData : ');
     var options = { year: 'numeric', month: '2-digit', day: '2-digit' };

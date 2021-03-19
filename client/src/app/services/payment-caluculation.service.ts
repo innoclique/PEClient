@@ -134,4 +134,16 @@ export class PaymentCaluculationService {
     paymentSummary.TOTAL_PAYABLE_AMOUNT = Number(_TOTAL_PAYABLE_AMOUNT).toFixed(2);
     return paymentSummary;
   }
+
+  getCurrencyType(countryName) {
+    let currencyType: string = '';
+    if (countryName === 'Canada') {
+      currencyType = 'CAD';
+    } else {
+      currencyType = 'USD';
+    }
+
+    return currencyType;
+  }
+
 }

@@ -474,7 +474,8 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
     this.managerCompetencyList = this.evaluationForm.ManagerCompetencies.Manager.Competencies;
     this.showCompetencySubmitForManager = !this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted;
     this.showReviewRating = this.evaluationForm.ManagerCompetencies.Manager.CompetencySubmitted;
-    this.disableManagerSubmit = !this.evaluationForm.Competencies.Employee.CompetencySubmitted;
+   // this.disableManagerSubmit = !this.evaluationForm.Competencies.Employee.CompetencySubmitted; 
+    this.disableManagerSubmit = !this.evaluationForm.FinalRating.Self.IsSubmitted; // Disable manager's competencies submit if employee is not submitted Evaluation
    // console.log('this.managerCompetencyForm.value', this.managerCompetencyForm.value)
    this.managerCompetencyQuestionsList=[];
    this.managerCompetencyList.forEach(element => {

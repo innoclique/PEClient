@@ -70,8 +70,8 @@ export class DevgoalReviewComponent implements OnInit {
 
   currentRowItem: any;
   currentOrganization: any={};
-  showDevGoalsForm=true;
-  
+  showDevGoalsForm=false;
+  showLoading = true;
  
   constructor(private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -375,10 +375,11 @@ getAllDevGoalsDetails() {
     this.perfApp.requestBody = { 'empId': this.currentEmpId,
     'fetchAll':true,'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
-
+    this.showLoading = false;
+    this.showDevGoalsForm = true;
     if (c && c.length > 0) {
       this.empDevGoalsData = c;
-
+      
 
 
       this.filteredOptionsDevGoals = this.goalsBuildForm.controls['DevGoal'].valueChanges
@@ -406,7 +407,7 @@ getAllDevGoalsDetails() {
 
     }
     else{
-        
+      this.showLoading = false;
       if (this.accessingFrom=='reviewEvaluation' || this.accessingFrom=='reviewActionPlan') {
         this.showDevGoalsForm=false;
       }

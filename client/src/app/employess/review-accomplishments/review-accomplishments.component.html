@@ -239,7 +239,7 @@
         </div>
 
         <ng-template class="col-md-12" #noRecordsFound>
-            <h3 class="heading-with-margin">No Accomplishments Found</h3>
+          <h3 class="heading-with-margin">{{showLoading ? 'Loading...' : 'No Accomplishments Found'}}</h3>
         </ng-template>
     </div>
 </div>

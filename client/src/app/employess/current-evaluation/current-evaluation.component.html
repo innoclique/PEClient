@@ -6,13 +6,13 @@
                     Performance Evaluation
                 </div> 
                 <div class="card-body"> -->
-                    <div *ngIf="!evaluationForm && !isPdfView">
-                        <h5>No Active Evaluation</h5>
+                    <div *ngIf="!isValidForm && !isPdfView">
+                      <h3 class="heading-with-margin">{{showLoading ? 'Loading...' : 'No Active Evaluation'}}</h3>
                     </div>
                     <div class="container-fluid">
                         
                       <div class="row">
-                          <div class="col-md-7"></div>
+                          <div class="col-md-6"></div>
                           <div *ngIf="isValidForm" class="input-group-prepend col-md-4" style="margin-left:1px;margin-bottom: 10px;">
                               <span class="input-group-text" style="border-right:none;border-radius: 0px;width:auto">Select Evaluation Year</span>
                               <select  class="form-control" style="border-radius: 0px; width:auto" [(ngModel)]="yearSelected" name="Year" required (ngModelChange)="getTabsData($event)" >
@@ -21,7 +21,7 @@
                               </select>
                       
                           </div>
-                          <div [ngClass]="isValidForm ? 'col-md-1' : 'col-md-5'">
+                          <div [ngClass]="isValidForm ? 'col-md-2' : 'col-md-5'">
                               <div _ngcontent-fha-c25="" class="reports-buttons pull-right">
                                 <div  style="margin-right:10px;display:inline-flex">
                                   <button *ngIf="showManagerRating && isCompetencyTabActive" title="view Rating Report" (click)="openCompetencyReport()" ngcontent-fha-c25=""
