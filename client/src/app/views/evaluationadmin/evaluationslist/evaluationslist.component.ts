@@ -567,11 +567,22 @@ public currentOrganization:any={}
          suppressMenu: true,
          Sorting: false,
          cellRenderer: (data) => {
-           
-
-           return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+           if(data && data.data && data.data.EmployeeRow && data.data.EmployeeRow.Status && data.data.EmployeeRow.Status.Percentage){
+            if(data.data.EmployeeRow.Status.Percentage>5){
+              return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
+              font-size: 17px;" ></i>
+              `
+            }else{
+              return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
              font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
              `
+            }
+          }else{
+            return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+            font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
+            `
+          }
+           
            }
          }
        
