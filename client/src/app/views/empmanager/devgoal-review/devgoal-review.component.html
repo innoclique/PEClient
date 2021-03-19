@@ -180,7 +180,7 @@
     
             </div>
             <ng-template class="col-md-12"  #noRecordsFound>
-              <h3 class="heading-with-margin">No Development Goals Found</h3>
+              <h3 class="heading-with-margin">{{showLoading ? 'Loading...' : 'No Development Goals Found'}}</h3>
           </ng-template>
         </div>
     </div>

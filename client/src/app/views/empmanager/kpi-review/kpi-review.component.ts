@@ -56,7 +56,7 @@ actor:any;
   accessingFrom:any;
 
   showKpiForm=false;
-
+  showLoading = true;
 
 
   filteredOptionsTS: Observable<any[]>;
@@ -992,7 +992,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
         if(this.scoreUnSubmitedCount==0)
         this.authService.setManagerPGSubmitStatus("true");
         this.empKPIData = c;
-
+        this.showLoading = false;
         if (this.accessingFrom=='reviewEvaluation') {
           if (c.filter(e=>e.ManagerSignOff && e.ManagerSignOff.submited ==true).length==0) {
             this.showKpiForm  =false;
@@ -1023,7 +1023,7 @@ this.snack.success(this.translate.instant(`KPI added Successfully`));
           this.showKpiForm=true;
 
       }else{
-        
+        this.showLoading = false;
         if (this.accessingFrom=='reviewEvaluation' || this.accessingFrom=='kpiReview') {
           this.showKpiForm=false;
         }

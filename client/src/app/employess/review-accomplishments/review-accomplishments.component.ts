@@ -63,7 +63,8 @@ accessingFrom:any;
   msSelText="";
   msSelVal="";
   currEvaluation: any;
-  showKpiForm=true;
+  showKpiForm = false;
+  showLoading = true;
   isEmpFRSignOff=false;
   isFirstTimeCreateing=false;
 
@@ -295,13 +296,13 @@ accessingFrom:any;
       'orgId':this.authService.getOrganization()._id,
         "reqFrom":'review'}
     this.perfApp.CallAPI().subscribe(c => {
-
-     
+      this.showLoading = false;
+      
       if (c && c.length > 0) {
        
         this.empKPIData = c;
       
-
+        this.showKpiForm = true;
 
 
       
@@ -320,7 +321,7 @@ accessingFrom:any;
           
 
       }else{
-        
+        this.showLoading = false;
           this.showKpiForm=false;
         
       }

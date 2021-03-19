@@ -58,7 +58,8 @@ export class StrengthReviewComponent implements OnInit {
 
   currentRowItem: any;
   currentOrganization: any={};
-  showDevGoalsForm=true;
+  showDevGoalsForm = false;
+  showLoading = true;
   strengthId:any;
   
  
@@ -167,9 +168,11 @@ getAllStrengthDetails() {
     this.perfApp.requestBody = { 'empId': this.currentEmpId,
     'fetchAll':true,'orgId':this.authService.getOrganization()._id}
   this.perfApp.CallAPI().subscribe(c => {
+    this.showLoading = false;
+    this.showDevGoalsForm = true;
     if (c && c.length > 0) {
       this.empDevGoalsData = c;
-
+     
 
 
       this.filteredOptionsDevGoals = this.strengthBuildForm.controls['Strength'].valueChanges
@@ -207,7 +210,7 @@ getAllStrengthDetails() {
 
     }
     else{
-        
+      this.showLoading = false;
       if (this.accessingFrom=='reviewEvaluation' || this.accessingFrom=='reviewActionPlan') {
         this.showDevGoalsForm=false;
       }

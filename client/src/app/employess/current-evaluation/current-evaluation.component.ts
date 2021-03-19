@@ -63,6 +63,7 @@ export class CurrentEvaluationComponent implements OnInit {
   isReqRevDisabled = false;
   isThirdSignatorySubmitted = false;
   public isValidForm = false;
+  showLoading = true;
   public empEvStatus = "";
   showTSSignoffFields: boolean = false;
 
@@ -130,6 +131,7 @@ export class CurrentEvaluationComponent implements OnInit {
     forkJoin(
       this.getCurrentEvaluationDetails(val).pipe(catchError(error => of({ error: error, isError: true })))      
     ).subscribe(([res1]) => {
+      this.showLoading = false;
       if (res1 && !res1.isError) {
         this.evaluationForm = res1;
         this.isValidForm = true;
@@ -191,7 +193,12 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
         this.evaluationForm = null;
         this.isValidForm = false;
       }
-    });
+    },
+      error => {
+        this.showLoading = false;
+      }
+
+    );
 
   }
   getCurrentEvaluationDetails(val:any) {
