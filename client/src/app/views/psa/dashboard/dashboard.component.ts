@@ -61,14 +61,14 @@ export class DashboardComponent implements OnInit {
           break;
         }
       case 'PSA_CLIENT_REVENUE':
-        if (this.clientRevenueForm.value) {
-          this.clientRevenue = [this.clientRevenueForm.value];
+        if (this.clientRevenueForm.value.length < 2) {
+          this.clientRevenue = this.clientRevenueForm.value;
         } else {
           this.clientRevenueForm.setValue(this.clientRevenue);
         }
       case 'PSA_RESELLER_REVENUE':
-          if (this.resellerRevenueForm.value) {
-            this.resellerRevenue = [this.resellerRevenueForm.value];
+          if (this.resellerRevenueForm.value.length < 2) {
+            this.resellerRevenue = this.resellerRevenueForm.value;
           } else {
             this.resellerRevenueForm.setValue(this.resellerRevenue);
           }
