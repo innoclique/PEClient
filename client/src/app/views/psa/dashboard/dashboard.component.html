@@ -98,7 +98,7 @@
                       <mat-label>Select</mat-label>
                     <mat-select (selectionChange)="clientSummaryByUsageChanged('PSA_CLIENT_REVENUE','Client')" [formControl]="clientRevenueForm"
                         
-                        multiple >
+                         >
                       <mat-option *ngFor="let year of yearsList" [value]="year">{{year}}</mat-option>
                     </mat-select>
                     </mat-form-field>
@@ -123,7 +123,7 @@
                     <mat-label>Select</mat-label>
                   <mat-select (selectionChange)="clientSummaryByUsageChanged('PSA_RESELLER_REVENUE','Reseller')" [formControl]="resellerRevenueForm"
                       
-                      multiple >
+                       >
                     <mat-option *ngFor="let year of yearsList" [value]="year">{{year}}</mat-option>
                   </mat-select>
                   </mat-form-field>
