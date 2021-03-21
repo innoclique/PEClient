@@ -154,7 +154,7 @@ public oneAtATime: boolean = true;
             }
           };
           if(this.user.SelectedRoles.indexOf("EA") !== -1){
-            dashboard.url = "/ea/dashboard";
+            dashboard.url = "/dashboard";
           }
           
         navigationMenu.push(

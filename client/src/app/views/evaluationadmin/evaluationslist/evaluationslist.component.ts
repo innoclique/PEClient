@@ -17,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CustomValidators } from '../../../shared/custom-validators';
 import { Constants } from '../../../shared/AppConstants';
 import { Observable } from 'rxjs';
+import { stringify } from 'querystring';
 @Component({
   selector: 'app-evaluationslist',
   templateUrl: './evaluationslist.component.html',
@@ -98,7 +99,7 @@ export class EvaluationslistComponent implements OnInit {
   
   cscData:any=undefined;
 
-
+  selectedEmployeesListMemory: any[] = [];
   
 
   
@@ -446,102 +447,102 @@ public currentOrganization:any={}
   getGridColumnsForEmp() {
     return [
       {
-        headerName: 'Employee',checkboxSelection: true, sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
+        headerName: 'Employee', field: 'Employee', checkboxSelection: true, sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
         // checkboxSelection: true,
         cellRenderer: (data) => {
           
           if (data.data.Type == "K") {
             return `  
-           ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
+           ${data.data.Employee}`
           } else {
             return `  <input   data-action-type="orgView" title="Evaluation for the employee has already been rolled-out." type="checkbox" disabled  >
-            ${data.data.Employee.FirstName}-${data.data.Employee.LastName}`
+            ${data.data.Employee}`
           }
 
           //return `<span style="color:blue;cursor:pointer" data-action-type="orgView">${data.data.Employee.FirstName}-${data.data.Employee.LastName}</span>` 
         }
       },
       {
-        headerName: 'Evaluation Released On', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
-        cellRenderer: (data) => {
-          if (!data.data.Type) {
-            if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
-            return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
-          }else{
-            return `N/A`;
-          }
+        headerName: 'Evaluation Released On', field: 'EvaluationReleasedOn' , sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
+       // cellRenderer: (data) => {
+          //if (!data.data.Type) {
+          //  if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
+          //  return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
+          //}else{
+          //  return `N/A`;
+          //}
           
-        }
+        //}
       },
       {
-        headerName: 'Performance Goals Released On', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
-        cellRenderer: (data) => {
-          if (data.data.Type === "K") {
-            if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
-            return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
-          }else if(data.data.EvaluationRow.kpiFormCreatedOn){
-            return new DatePipe('en-US').transform(data.data.EvaluationRow.kpiFormCreatedOn, 'MM-dd-yyyy')
-          }else if (!data.data.Type) {
-            if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
-            return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
-          }else{
-            return `N/A`;
-          }
+        headerName: 'Performance Goals Released On', field: 'PerformanceGoalsReleasedOn', sortable: true, width:150, wrapText: true, autoHeight: true, filter: true,
+        //cellRenderer: (data) => {
+        //  if (data.data.Type === "K") {
+        //    if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
+        //    return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
+        //  }else if(data.data.EvaluationRow.kpiFormCreatedOn){
+        //    return new DatePipe('en-US').transform(data.data.EvaluationRow.kpiFormCreatedOn, 'MM-dd-yyyy')
+        //  }else if (!data.data.Type) {
+        //    if (this.getNested(data.data.EvaluationRow, 'CreatedDate')) // true
+        //    return new DatePipe('en-US').transform(data.data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
+        //  }else{
+        //    return `N/A`;
+        //  }
           
-        }
+        //}
       },
       // {
       //   headerName: 'Type', sortable: true, width:100,wrapText: true, autoHeight: true,  filter: true,
       //   cellRenderer: (data) => { return "Regular" }
       // },
       {
-        headerName: 'Evaluation Period', sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
-        cellRenderer: (data) => {
-          if (this.getNested(data.data.EvaluationRow, 'EvaluationPeriod')) // true
-            return this.getEVPeriod(data.data.EvaluationRow);
-            else{
-              return `N/A`;
-            }
-        }
+        headerName: 'Evaluation Period', field: 'EvaluationPeriod', sortable: true, width:180, wrapText: true, autoHeight: true, filter: true,
+        //cellRenderer: (data) => {
+        //  if (this.getNested(data.data.EvaluationRow, 'EvaluationPeriod')) // true
+        //    return this.getEVPeriod(data.data.EvaluationRow);
+        //    else{
+        //      return `N/A`;
+        //    }
+        //}
       },
       {
-        headerName: 'Evaluation Duration', sortable: true, width:180,wrapText: true, autoHeight: true,  filter: true,
-        cellRenderer: (data) => {
-          if (this.getNested(data.data.EvaluationRow, 'EvaluationDuration')) {
-            return data.data.EvaluationRow.EvaluationDuration
-          }else{
-            return `N/A`;
-          }
-        }
+        headerName: 'Evaluation Duration', field: 'EvaluationDuration', sortable: true, width:180,wrapText: true, autoHeight: true,  filter: true,
+        //cellRenderer: (data) => {
+        //  if (this.getNested(data.data.EvaluationRow, 'EvaluationDuration')) {
+        //    return data.data.EvaluationRow.EvaluationDuration
+        //  }else{
+        //    return `N/A`;
+        //  }
+        //}
       },
       {
-        headerName: 'Model', field: '', sortable: true, width:100,wrapText: true, autoHeight: true,  filter: true,
-        cellRenderer: (data) => {
-          if (this.getNested(data.data.EmployeeRow, 'Model', 'Name')) {
-            return data.data.EmployeeRow.Model.Name
-          }else{
-            return `N/A`;
-          }
-        }
+        headerName: 'Model', field: 'Model', sortable: true, width:100,wrapText: true, autoHeight: true,  filter: true,
+        //cellRenderer: (data) => {
+        //  if (this.getNested(data.data.EmployeeRow, 'Model', 'Name')) {
+        //    return data.data.EmployeeRow.Model.Name
+        //  }else{
+        //    return `N/A`;
+        //  }
+        //}
       },
       {
-        headerName: 'Manager', field: '', sortable: true, width:120, wrapText: true, autoHeight: true, filter: true,
-        cellRenderer: (data) => {
-          if (this.getNested(data.data.Employee, 'Manager', 'FirstName')) {
-            return `${data.data.Employee.Manager.FirstName} ${data.data.Employee.Manager.LastName}`
-          }else{
-            return `N/A`;
-          }
-        }
+        headerName: 'Manager', field: 'Manager', sortable: true, width:120, wrapText: true, autoHeight: true, filter: true,
+        //cellRenderer: (data) => {
+        //  if (this.getNested(data.data.Employee, 'Manager', 'FirstName')) {
+        //    return `${data.data.Employee.Manager.FirstName} ${data.data.Employee.Manager.LastName}`
+        //  }else{
+        //    return `N/A`;
+        //  }
+        //}
 
       },
 
       {
-        headerName: 'Peers', field: '', sortable: false, width:100, wrapText: true, autoHeight: true,  filter: false,
+        headerName: 'Peers', field: 'Peers', sortable: false, width:100, wrapText: true, autoHeight: true,  filter: false,
         cellRenderer: (data) => {
           
           if (this.getNested(data.data.EmployeeRow, 'Peers')){
-            return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.EmployeeRow.peerCompetenceMapping.length}</span>`
+            return `<span style="color:blue;cursor:pointer;" data-action-type="choosePeers">${data.data.Peers}</span>`
           }else{
             return 'N/A';
           }
@@ -549,11 +550,11 @@ public currentOrganization:any={}
         }
       },
       {
-        headerName: 'Direct Report(s)', field: '', width:180, wrapText: true, autoHeight: true,sortable: false, filter: false,
+        headerName: 'Direct Report(s)', field: 'DirectReport', width:180, wrapText: true, autoHeight: true,sortable: false, filter: false,
         
         cellRenderer: (data) => {
           if (this.getNested(data.data.EmployeeRow, 'DirectReportees')){
-            return `<span style="color:blue;cursor:pointer;" data-action-type="chooseDirectReports">${data.data.EmployeeRow.drCompetenceMapping.length}</span>`
+            return `<span style="color:blue;cursor:pointer;" data-action-type="chooseDirectReports">${data.data.DirectReport}</span>`
           }else{
             return 'N/A';
           }
@@ -668,6 +669,36 @@ public currentOrganization:any={}
         
       }
       console.table(this.selectedEmployeesList)
+
+      this.selectedEmployeesListMemory = JSON.parse(JSON.stringify(this.selectedEmployeesList))
+
+      this.selectedEmployeesList = this.selectedEmployeesList.map(emp => {
+        let evReleasedOn = this.getEVReleasedOn(emp);
+        let pgReleasedOn = this.getPGReleasedOn(emp);
+        let evPeriod = this.getEvaluationPeriod(emp);
+        let evDuration = this.getEvaluationDuration(emp);
+        let evModel = this.getModel(emp);
+        let evManager = this.getManager(emp);
+        let evPeers = this.getPeers(emp);
+        let evDirectReport = this.getDirectReports(emp);
+        let evType = emp.Type ? emp.Type : undefined;
+
+        return {
+          id: emp.Employee ? emp.Employee._id : '',
+          Type: evType,
+          Employee: `${emp.Employee.FirstName}-${emp.Employee.LastName}`,
+          EvaluationReleasedOn: evReleasedOn,
+          PerformanceGoalsReleasedOn: pgReleasedOn,
+          EvaluationPeriod: evPeriod,
+          EvaluationDuration: evDuration,
+          Model: evModel,
+          Manager: evManager,
+          Peers: evPeers,
+          DirectReport: evDirectReport,
+          EmployeeRow: emp.EmployeeRow
+        }
+    })
+
       this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
     })
   }
@@ -681,7 +712,8 @@ public currentOrganization:any={}
     if (e.event.target !== undefined) {
       let data = e.data;
       //this.currentRowItem = data.RowData;
-      this.selectedEmployee = e.data;
+      let selectedEmp = this.selectedEmployeesListMemory.find(empRow => empRow.Employee._id == e.data.id);
+      this.selectedEmployee = selectedEmp ? selectedEmp : e.data;
       
       let actionType = e.event.target.getAttribute("data-action-type");
       switch (actionType) {
@@ -694,7 +726,7 @@ public currentOrganization:any={}
         case "deleteEmp":
           return this.deleteEmpFromList();
         case "changeModel":
-          return this.changeModel(data);
+          return this.changeModel(selectedEmp);
 
       }
     }
@@ -2055,7 +2087,77 @@ public currentOrganization:any={}
      `
     //  if(data.City.name)
     
+  }
+
+  getEVReleasedOn(data) {
+    if (!data.Type) {
+      if (this.getNested(data.EvaluationRow, 'CreatedDate')) // true
+        return new DatePipe('en-US').transform(data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
+    } else {
+      return `N/A`;
     }
-   
+  }
+
+  getPGReleasedOn(data) {
+    if (data.Type === "K") {
+      if (this.getNested(data.EvaluationRow, 'CreatedDate')) // true
+        return new DatePipe('en-US').transform(data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
+    } else if (data.EvaluationRow.kpiFormCreatedOn) {
+      return new DatePipe('en-US').transform(data.EvaluationRow.kpiFormCreatedOn, 'MM-dd-yyyy')
+    } else if (!data.Type) {
+      if (this.getNested(data.EvaluationRow, 'CreatedDate')) // true
+        return new DatePipe('en-US').transform(data.EvaluationRow.CreatedDate, 'MM-dd-yyyy')
+    } else {
+      return `N/A`;
+    }
+  }
+
+  getEvaluationPeriod(data) {
+    if (this.getNested(data.EvaluationRow, 'EvaluationPeriod')) { // true
+      return this.getEVPeriod(data.EvaluationRow);
+    } else {
+      return `N/A`;
+    }
+  }
+
+  getEvaluationDuration(data) {
+    if (this.getNested(data.EvaluationRow, 'EvaluationDuration')) {
+      return data.EvaluationRow.EvaluationDuration
+    } else {
+      return `N/A`;
+    }
+  }
+
+  getModel(data) {
+    if (this.getNested(data.EmployeeRow, 'Model', 'Name')) {
+      return data.EmployeeRow.Model.Name
+    } else {
+      return `N/A`;
+    }
+  }
+
+  getManager(data) {
+    if (this.getNested(data.Employee, 'Manager', 'FirstName')) {
+      return `${data.Employee.Manager.FirstName} ${data.Employee.Manager.LastName}`
+    } else {
+      return `N/A`;
+    }
+  }
+
+  getPeers(data) {
+    if (this.getNested(data.EmployeeRow, 'Peers')) {
+      return data.EmployeeRow.peerCompetenceMapping.length;
+    } else {
+      return 'N/A';
+    }
+  }
+
+  getDirectReports(data) {
+    if (this.getNested(data.EmployeeRow, 'DirectReportees')) {
+      return data.EmployeeRow.drCompetenceMapping.length;
+    } else {
+      return 'N/A';
+    }
+  }
   
 }
