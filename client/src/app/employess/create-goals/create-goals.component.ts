@@ -119,7 +119,7 @@ this.alert = new AlertDialog();
         Validators.required, Validators.minLength(2),
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
       ])],
-      evaluationType:[this.goalDetails.Kpi?this.goalDetails.Kpi.EvaluationId.Type:null],
+//       evaluationType:[this.goalDetails.Kpi?this.goalDetails.Kpi.EvaluationId.Type:null],
       Kpi: [this.goalDetails.Kpi ? this.goalDetails.Kpi : null],
       MakePrivate: [this.goalDetails.MakePrivate ],
       IsDraft: [this.goalDetails.IsDraft ? 'true' : 'false'],
