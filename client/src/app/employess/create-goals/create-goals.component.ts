@@ -60,6 +60,8 @@ accessingFrom:any;
   currentOrganization: any={};
   showDevGoalsForm=true;
   currentEvaluation:any="";
+  isPrevEvalGoal:Boolean = false;
+  currEvalId:String;
  
   constructor(private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -117,6 +119,7 @@ this.alert = new AlertDialog();
         Validators.required, Validators.minLength(2),
         CustomValidators.patternValidator(/(?=.*[#)&.(-:/?])/, { hasKPISplChars: true }, 'hasKPISplChars'),
       ])],
+      evaluationType:[this.goalDetails.Kpi?this.goalDetails.Kpi.EvaluationId.Type:null],
       Kpi: [this.goalDetails.Kpi ? this.goalDetails.Kpi : null],
       MakePrivate: [this.goalDetails.MakePrivate ],
       IsDraft: [this.goalDetails.IsDraft ? 'true' : 'false'],
@@ -422,7 +425,7 @@ getAllDevGoalsDetails() {
 
     if (c && c.length > 0) {
       this.empDevGoalsData = c;
-
+      this.currEvalId = c[0].Kpi.EvaluationId._id;
       if (this.accessingFrom=='currEvaluation'){
       if (this.accessingFrom=='currEvaluation' && this.empDevGoalsData.filter(e=>e.IsGoalSubmited).length==0) {
         this.showDevGoalsForm  =false;
@@ -445,7 +448,9 @@ getAllDevGoalsDetails() {
           this.currentDevGoalId=this.currentDevGoalId ? this.currentDevGoalId:this.empDevGoalsData[0]._id;
           this.goalDetails=  this.empDevGoalsData.filter(e=> e._id== this.currentDevGoalId)[0];
           this.selIndex=  this.empDevGoalsData.findIndex(e=> e._id== this.currentDevGoalId);
-
+        if(this.currEvalId != this.goalDetails.Kpi.EvaluationId._id){
+          this.isPrevEvalGoal = true;
+        }
        this.initDevGoalForm();
           // if (!this.kpiDetails.ViewedByEmpOn && this.kpiDetails.ManagerSignOff) {
           //   this.updateKpiAsViewed();
@@ -745,6 +750,12 @@ nextKpi(){
 
   this.selIndex=this.selIndex+1;
    this.goalDetails=  this.empDevGoalsData[this.selIndex];
+  console.log(this.currEvalId , this.goalDetails.Kpi.EvaluationId._id,'this.currEvalId');
+   if(this.currEvalId != this.goalDetails.Kpi.EvaluationId._id){
+    this.isPrevEvalGoal = true;
+  }else{
+    this.isPrevEvalGoal = false;
+  }
    this.initDevGoalForm();
    this.currentDevGoalId=this.goalDetails._id;
  }
@@ -753,6 +764,12 @@ nextKpi(){
 
    this.selIndex=this.selIndex-1;
    this.goalDetails=  this.empDevGoalsData[this.selIndex];
+    console.log(this.currEvalId ,this.goalDetails.Kpi.EvaluationId._id, 'this.currEvalId');
+   if(this.currEvalId != this.goalDetails.Kpi.EvaluationId._id){
+    this.isPrevEvalGoal = true;
+  }else{
+    this.isPrevEvalGoal = false;
+  }
    this.initDevGoalForm();
    this.currentDevGoalId=this.goalDetails._id;
  }
