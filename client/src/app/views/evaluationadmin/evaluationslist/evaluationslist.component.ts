@@ -567,8 +567,17 @@ public currentOrganization:any={}
          suppressMenu: true,
          Sorting: false,
          cellRenderer: (data) => {
-           
-
+           if(data && data.data && data.data.EmployeeRow && data.data.EmployeeRow.Status){
+            if(data.data.EmployeeRow.Status.Percentage>5){
+              return `<i class="icon-ban" style="cursor:pointer ;padding: 7px 20px 0 0;
+              font-size: 17px;"    title="Not allowed to change"></i>
+              `
+            }else{
+              return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+             font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
+             `
+            }
+          }
            return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
              font-size: 17px;"   data-action-type="changeModel" title="Change Model"></i>
              `
