@@ -33,7 +33,7 @@ coming soon
                 <div class="box_goalsetting clearfix">
                   <h2 class="col-xs-6">Performance Goals<span>{{currentEvaluation?.KPI_Status?currentEvaluation.KPI_Status:'N/A'}}</span></h2>
                   <h2 class="col-xs-6">Evaluation<span>{{currentEvaluationProgressTitle}}</span></h2>
-                  <h2 class="col-xs-6">Action Plan<span>N/A</span></h2>
+                  <h2 class="col-xs-6">Action Plan<span>{{currentEvaluation?.ActionPlan_Status?currentEvaluation.ActionPlan_Status:'N/A'}}</span></h2>
                 </div> 
                 <div *ngIf="(currentEvaluationProgress!=0)" class="box_in_btns">
                   <a  href="#/employee/current-evaluation" class="box_in_btns_view">View Evaluation &#8594;</a>

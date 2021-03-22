@@ -518,7 +518,7 @@ return
   this.perfApp.requestBody.DevGoal = this.perfApp.requestBody.DevGoal.DevGoal?
                                   this.perfApp.requestBody.DevGoal.DevGoal :this.perfApp.requestBody.DevGoal;
   this.perfApp.requestBody.devGoalId = this.goalDetails._id?  this.goalDetails._id : '';
- // sg todo
+ // sg 
   //this.perfApp.requestBody.EvaluationId = this.currEvaluation._id;
 
 
@@ -526,9 +526,8 @@ return
   this.perfApp.requestBody.Kpi = this.perfApp.requestBody.Kpi?  this.perfApp.requestBody.Kpi._id :null;
   this.perfApp.requestBody.GoalActionItems = this.goalsItemRows.length>0? this.goalsItemRows :null;
   this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
-//   this.perfApp.requestBody.CreatedYear = this.currentEvaluation
-  this.perfApp.requestBody.CreatedYear = this.perfApp.requestBody.Kpi.EvaluationYear
-  // this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id; sg todo
+  this.perfApp.requestBody.CreatedYear = this.currentEvaluation
+  // this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id; sg 
 
   if (this.goalsBuildForm.get('IsDraft').value=='true') {
     this.perfApp.requestBody.Action = 'Draft';
