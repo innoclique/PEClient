@@ -41,6 +41,7 @@ export class KpiSettingsComponent implements OnInit {
   kpiStatus: any = [];
   kpiHistoryData: any = [];
   coachingRemDays: any = [];
+  currEvalId: String;
   @Input()
   currentAction = 'create';
   isAllSelected = false;
@@ -50,7 +51,7 @@ export class KpiSettingsComponent implements OnInit {
   scoreUnSubmitedCount=0;
   unSubmitedCount = 0;
   showManagerScore = false;
-
+isPrevEvalKpi = false;
   filteredOptionsKPI: Observable<any[]>;
   public empKPIData: any[] = []
   // public selectedKPIItems :any[]=[]
@@ -744,6 +745,7 @@ conformSubmitKpis(){
      // if (this.currentAction =='create')
       this.setWeighting(c.filter(item => item.IsDraft === false && item.EvaluationYear == this.currentEvaluation ).length, this.currentAction);
       if (c && c.length > 0) {
+          this.currEvalId = c[0].EvaluationId._id;
         if (this.accessingFrom=='currEvaluation') {
           if (c.filter(e=>e.IsSubmitedKPIs).length==0) {
             this.showKpiForm  =false;
@@ -772,7 +774,9 @@ this.authService.setIsPGSubmitStatus("true");
             this.currentKpiId=this.currentKpiId ? this.currentKpiId:this.empKPIData[0]._id;
             this.kpiDetails=  this.empKPIData.filter(e=> e._id== this.currentKpiId)[0];
             this.selIndex=  this.empKPIData.findIndex(e=> e._id== this.currentKpiId);
-
+          if(this.kpiDetails.EvaluationId._id!=this.currEvalId){
+                      this.isPrevEvalKpi = true;
+                    }
 
             if (!this.kpiDetails.ViewedByEmpOn && this.kpiDetails.ManagerSignOff.SignOffBy) {
               this.updateKpiAsViewed();
@@ -1040,6 +1044,11 @@ this.msSelText="";
     debugger
    this.selIndex=this.selIndex+1;
     this.kpiDetails=  this.empKPIData[this.selIndex];
+    if(this.kpiDetails.EvaluationId._id!=this.currEvalId){
+      this.isPrevEvalKpi = true;
+    }else{
+      this.isPrevEvalKpi = false;
+    }
     this.initKPIForm();
     this.currentKpiId=this.kpiDetails._id;
   }
@@ -1048,6 +1057,11 @@ this.msSelText="";
 debugger
     this.selIndex=this.selIndex-1;
     this.kpiDetails=  this.empKPIData[this.selIndex];
+     if(this.kpiDetails.EvaluationId._id!=this.currEvalId){
+      this.isPrevEvalKpi = true;
+    }else{
+      this.isPrevEvalKpi = false;
+    }
     this.initKPIForm();
     this.currentKpiId=this.kpiDetails._id;
   }
