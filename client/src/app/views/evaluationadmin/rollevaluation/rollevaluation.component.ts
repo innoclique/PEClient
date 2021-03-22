@@ -1390,7 +1390,8 @@ listData(){
       this.isFormSubmitted = true;
       console.log('inside submit:::', this.selectedEmployee, this.selectedEmployeeList);
 
-
+      this.getActivationDate();
+      
       for (let emp of this.selectedEmployeeList) {
         if (emp.peerCompetenceMapping) {
           emp.Peers = [];
@@ -1645,6 +1646,41 @@ listData(){
     this.peersForEmpGridOptions.api = params.api;
   }
 
+  getActivationDate() {
+    console.log('inside getActivationDate::::');
+    var available = 0;
+    if (this.purposeDurationMap && this.purposeDurationMap.get(this.evaluationType) && this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected)) {
+      available = this.purposeDurationMap.get(this.evaluationType).get(this.durationOptionSelected);
+      console.log(' available : ',available ,this.evaluationType , this.durationOptionSelected);
+    }
+    var rolledOut = this.getEvaluationsRolledOut();
+    console.log(' rolledOut : ',rolledOut);
+    var arrayActivationDates = [];
+    var arrayIndex =0;
+    this.availableEvaluations.forEach(item => {
+      console.log(" current item : ",item.Purpose , item.DurationMonths);
+      if (item.Purpose && item.DurationMonths &&  this.evaluationType == item.Purpose && item.DurationMonths+' Months' == this.durationOptionSelected) {
+        console.log('emp count : ',this.getEmpCount(item));
+        console.log(' item.ActivationDate: ',item.ActivationDate);
+        var empCount = this.getEmpCount(item);
+        empCount = arrayIndex+empCount
+        while(arrayIndex< empCount){
+          arrayActivationDates.push(item.ActivationDate);
+          arrayIndex++;
+        }
+      }
+    });
+    arrayActivationDates.sort(function(a,b){
+      return new Date(a).getTime() - new Date(b).getTime();
+      });
+    console.log('arrayActivationDates : ',arrayActivationDates);
+    
+    for(let emp of this.selectedEmployeeList){
+     emp.ActivationDate = arrayActivationDates[rolledOut];
+     rolledOut++;
+    }
+  }
+  
   getEmpCount(item: any) {
     console.log('inside getEmpCount : ', item);
     if (item.Type == 'Adhoc' || item.UsageType != 'License') {
