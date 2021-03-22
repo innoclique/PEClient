@@ -749,7 +749,11 @@ public currentOrganization:any={}
     this.router.navigate(['ea/rollout', {editEvaluation:JSON.stringify(selectedEvaluation), rollEvaluationEdit:true,allKpi: selectedRows.length>0,list:selectedRows.map(x=>x.Employee._id) }], { skipLocationChange: true });
     }
   openDirectReporteesView() {
-    //debugger
+    // debugger
+    if (this.selectedEmployee.EmployeeRow.FinalRating.Manager.SubmittedOn) { 
+      this.snack.error('Manager has submitted Final Rating, so adding of Peers/Direct Reports is not allowed');
+      return;
+     }
     
       // this.directReporteeCompetencyMessage = this.selectedEmployee.DirectReportees[0].DirectReporteeComptencyMessage;
       // this.selectedEmployeeDirectReportees = this.selectedEmployee.DirectReportees || [];
@@ -796,6 +800,12 @@ public currentOrganization:any={}
   }
 
   openPeerView() {
+if (this.selectedEmployee.EmployeeRow.FinalRating.Manager.SubmittedOn){
+  this.snack.error('Manager has submitted Final Rating, so adding of Peers/Direct Reports is not allowed');
+   return; 
+  }
+
+
     if (this.selectedEmployee.EmployeeRow.peerCompetenceMapping) {
       this.peerCompetencyMappingRowdata = [];
       this.selectedEmployee.Peers=[];

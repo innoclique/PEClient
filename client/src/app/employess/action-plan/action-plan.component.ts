@@ -366,7 +366,7 @@ trackKpi() {
 
 
 editKpiForm(currentRowItem: any) {
-  this.router.navigate(['employee/dev-goal',{action:'edit',id:this.currentRowItem._id}],{ skipLocationChange: true });
+  this.router.navigate(['employee/dev-goal',{action:'edit',id:this.currentRowItem._id,currentEvaluation:this.currentEvaluationYear}],{ skipLocationChange: true });
  }
 
 

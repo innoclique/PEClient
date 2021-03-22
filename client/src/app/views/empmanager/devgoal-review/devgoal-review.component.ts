@@ -497,7 +497,7 @@ this.perfApp.requestBody.IsDraftByManager = this.goalsBuildForm.get('IsDraftByMa
  
   this.perfApp.requestBody.UpdatedBy = this.loginUser._id;
   this.perfApp.requestBody.empId = this.currentEmpId;
-  // this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id; sg todo 
+  // this.perfApp.requestBody.ManagerId = this.loginUser.Manager._id; sg  
   this.perfApp.requestBody.Action = 'Review';
   // if (this.goalsBuildForm.get('IsDraft').value=='true') {
   //   this.perfApp.requestBody.Action = 'Draft';

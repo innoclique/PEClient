@@ -3,6 +3,7 @@ import { EmService } from '../../../services/em.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PerfAppService } from '../../../services/perf-app.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-manager-dashboard',
@@ -69,7 +70,8 @@ export class ManagerDashboardComponent implements OnInit {
   directReportsRowData = [];
 
 
-  constructor(private router: Router, public emService: EmService, private authService: AuthService, private perfApp: PerfAppService) {
+  constructor(private router: Router, private snack: NotificationService,
+    public emService: EmService, private authService: AuthService, private perfApp: PerfAppService) {
     this.loginUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
     this.getEmployeeCurrentEvaluation();
@@ -144,6 +146,11 @@ export class ManagerDashboardComponent implements OnInit {
   }
 
   onRequestPeerReview() {
+if (this.currentRowItem.IsManagerFRSubmited) {
+  this.snack.error('Manager has submitted Final Rating, so adding of Peers/Direct Reports is not allowed');
+  return;
+}
+
     this.router.navigate(['em/request-rating', { empId: this.currentRowItem.employeeId }]);
   }
 
