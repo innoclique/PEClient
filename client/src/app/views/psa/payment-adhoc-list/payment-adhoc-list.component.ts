@@ -8,6 +8,8 @@ import { Router ,ActivatedRoute} from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AlertDialog } from '../../../Models/AlertDialog';
 import { AlertComponent } from '../../../shared/alert/alert.component';
+import { PaymentCaluculationService } from '../../../services/payment-caluculation.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-payment-adhoc-list',
@@ -54,13 +56,19 @@ export class PaymentAdhocListComponent implements OnInit {
   currentOrganization:any={};
   isActionButtonEnabled:Boolean=false;
   paymentDate:any;
+  currentUser:any;
+  paymentCurrency:any
   constructor(
     private perfApp: PerfAppService,
     private notification: NotificationService,
     public router: Router,
     public dialog: MatDialog,
+    public paymentCaluculationService: PaymentCaluculationService,
+    public authService: AuthService,
     ) {
-    
+      this.currentUser = this.authService.getCurrentUser();
+      this.currentOrganization = this.authService.getOrganization();
+      this.paymentCurrency = this.paymentCaluculationService.getCurrencyType(this.currentOrganization.Country);
    }
 
   ngOnInit(): void {

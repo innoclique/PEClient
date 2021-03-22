@@ -6,7 +6,7 @@ import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
 import { NotificationService } from '../../../services/notification.service';
 import { Router ,ActivatedRoute} from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
-
+import { PaymentCaluculationService } from '../../../services/payment-caluculation.service';
 @Component({
   selector: 'app-payment-history',
   templateUrl: './payment-history.component.html',
@@ -50,7 +50,7 @@ export class PaymentHistoryComponent implements OnInit {
   };
   popupHeading:any="";
   currentUser:any;
-
+  paymentCurrency:any;
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
   public PaymentGridOptions: GridOptions = {
     columnDefs: this.getColDef()      
@@ -59,9 +59,11 @@ export class PaymentHistoryComponent implements OnInit {
     private perfApp: PerfAppService,
     private activatedRoute: ActivatedRoute,
     private notification: NotificationService,
+    public paymentCaluculationService: PaymentCaluculationService,
     public authService: AuthService,) {
       this.currentUser = this.authService.getCurrentUser();
       this.currentOrganization = this.authService.getOrganization();
+      this.paymentCurrency = this.paymentCaluculationService.getCurrencyType(this.currentOrganization.Country);
      }
 
   ngOnInit(): void {

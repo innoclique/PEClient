@@ -65,7 +65,30 @@ export class AdhocPaymentComponent implements OnInit {
   clientList:any=[];
   @ViewChild("payment_Summary", { static: true }) emoModal: ModalDirective;
   public licensePeriod: any;
-
+  paymentCurrency:any;
+  durationListObj:any=[
+    {
+    value:"1",
+    label:"1 Months"
+    },
+    {
+    value:"2",
+    label:"2 Months"
+    },
+    {
+      value:"3",
+      label:"3 Months"
+    },
+    {
+      value:"6",
+      label:"6 Months"
+    },
+    {
+      value:"0",
+      label:"# of months to end of year"
+    }
+];
+  durationList:any=this.durationListObj;
   constructor(
     public router: Router,
     public authService: AuthService,
@@ -76,6 +99,7 @@ export class AdhocPaymentComponent implements OnInit {
     ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
+    this.paymentCurrency = this.paymentCaluculationService.getCurrencyType(this.currentOrganization.Country);
     if(this.currentUser.Organization.ClientType === "Reseller"){
       this.isReseller = true;
       this.getClients();
@@ -347,7 +371,14 @@ export class AdhocPaymentComponent implements OnInit {
     }else{
       this.isOtherText=false;
     }
-    
+    if(optionVal === "New Employees"){
+      this.durationList=[{
+        value:"0",
+      label:"# of months to end of year"
+      }]
+    }else{
+      this.durationList=this.durationListObj;
+    }
   }
   loadPaymentHistory(){
     this.router.navigate(['csa/payment-history',{Organization:this.currentOrganization._id}],{ skipLocationChange: true });

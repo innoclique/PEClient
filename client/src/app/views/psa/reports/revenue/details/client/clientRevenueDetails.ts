@@ -10,7 +10,7 @@ import { AuthService } from '../../../../../../services/auth.service';
 import { PerfAppService } from '../../../../../../services/perf-app.service';
 import { ReportsService } from '../../../../../../services/reports.service';
 import ReportTemplates from '../../../data/reports-templates';
-
+import { PaymentCaluculationService } from '../../../../../../services/payment-caluculation.service';
 @Component({
   selector: 'app-reports',
   templateUrl: './clientRevenueDetails.html'
@@ -63,14 +63,18 @@ export class ClientRevenueDetails {
     TOTAL_PAYABLE_AMOUNT:0
   };
   subscription: Subscription = new Subscription();
+  paymentCurrency:any;
   constructor(
     private perfApp: PerfAppService,
     public authService: AuthService,
     public reportService: ReportsService,
     public router: Router,
-    private activatedRoute: ActivatedRoute, ) {
+    private activatedRoute: ActivatedRoute,
+    public paymentCaluculationService: PaymentCaluculationService, 
+    ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
+    this.paymentCurrency = this.paymentCaluculationService.getCurrencyType(this.currentOrganization.Country);
     this.gridOptions = <GridOptions>{};
     this.gridOptions = {
       columnDefs: this.getClientRevenueDetailsColumnDefs(),

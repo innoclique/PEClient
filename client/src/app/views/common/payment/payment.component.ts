@@ -73,7 +73,7 @@ export class PaymentComponent implements OnInit {
   public taxToolTip;
   isClientDropdownEnable: Boolean = false;
   public licensePeriod: any;
-
+  paymentCurrency:any;
   constructor(
     public router: Router,
     public authService: AuthService,
@@ -86,7 +86,7 @@ export class PaymentComponent implements OnInit {
     this.currentOrganization = this.authService.getOrganization();
     console.log("====this.currentOrganization==");
     console.log(this.currentOrganization)
-
+    this.paymentCurrency = this.paymentCaluculationService.getCurrencyType(this.currentOrganization.Country);
     if (this.currentOrganization && this.currentOrganization.Country == "Canada") {
       this.taxToolTip = "For Canadian clients, tax is applied based on the province and will include applicable GST/HST/PST.";
     } else {
