@@ -96,10 +96,10 @@
                               <h6>
                                 Summary
                                 <strong *ngIf="paymentModel && paymentModel.UsageType === 'Employees' ">
-                                  Amount due is cost per employee per year <{{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}}> * number of employees <{{paymentModel ? paymentModel.NoOfEmployees : 0}}> + taxes. In case of monthly payments - <{{ paymentStructure ? paymentStructure.COST_PER_MONTH : 0}}> per month is payable on 1st of each month
+                                  Amount due is cost per employee per year {{paymentCurrency}} {{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}} * number of employees <{{paymentModel ? paymentModel.NoOfEmployees : 0}}> + taxes. In case of monthly payments - <{{ paymentStructure ? paymentStructure.COST_PER_MONTH : 0}}> per month is payable on 1st of each month
                                 </strong>
                                 <strong *ngIf="paymentModel && paymentModel.UsageType === 'License' ">
-                                  Amount payable is cost per year, after discount, <{{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}}> + taxes
+                                  Amount payable is cost per year, after discount, {{paymentCurrency}} {{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}} + taxes
                                 </strong>
                               </h6>
                               <div class="clear"></div>

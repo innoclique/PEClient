@@ -54,7 +54,7 @@ export class PaymentReleaseComponent implements OnInit {
   isRangeSelectBox:Boolean=true;
   overridePriceList:Array<any>;
   public taxToolTip;
-
+  paymentCurrency:any;
   constructor(
     public router: Router,
     public authService: AuthService,
@@ -66,6 +66,7 @@ export class PaymentReleaseComponent implements OnInit {
     ) {
     this.currentUser = this.authService.getCurrentUser();
     this.currentOrganization = this.authService.getOrganization();
+    this.paymentCurrency = this.paymentCaluculationService.getCurrencyType(this.currentOrganization.Country);
     if (this.currentOrganization && this.currentOrganization.Country == "Canada") {
       this.taxToolTip = "For Canadian clients, tax is applied based on the province and will include applicable GST/HST/PST.";
     } else {
