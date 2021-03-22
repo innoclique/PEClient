@@ -40,6 +40,7 @@ export class KpiSetupComponent implements OnInit {
   selectedEvaluationYr:any="";
   isEmpFRSignOff=false;
   kpiHistoryData: any = [];
+  currEvalId:string;
 
   @ViewChild('kpiTrack', { static: true }) kpiTrackView: TemplateRef<any>;
   config = {
@@ -269,6 +270,7 @@ export class KpiSetupComponent implements OnInit {
       }
     },
     { headerName: 'Target Completion', field: 'TargetCompletionDate', suppressSizeToFit: true,  sortable: true, filter: true },
+    { headerName: 'Evaluation Type', field: 'evaluationType', minWidth:200,  sortable: true, filter: true },
     { headerName: 'Draft', field: 'IsDraft',  sortable: true, filter: true },
     { headerName: 'Status', field: 'Status',  sortable: true, filter: true },
     { headerName: 'Submitted', field: 'IsSubmitedKPIs',   sortable: true, filter: true },
@@ -276,6 +278,7 @@ export class KpiSetupComponent implements OnInit {
       headerName: 'Review/Modify', field: '',  autoHeight: true,  suppressSizeToFit: true,
       cellRenderer: (data) => {
  let actionlinks=''
+ if(data.data.RowData.EvaluationId._id==this.currEvalId){
        if (data.data.RowData.IsActive) {
          let rowData = data.data.RowData;
          let {ManagerSignOff,IsDraft,isFinalSignoff} = rowData;
@@ -326,6 +329,12 @@ export class KpiSetupComponent implements OnInit {
         }
         
        }
+   }else{
+        actionlinks= `
+        <i class="cui-layers icons font-1xl" style="cursor:pointer ;padding: 7px 20px 0 0;
+        font-size: 17px;"   data-action-type="Track" title="Track Performance Goal" ></i>   
+        `
+      }
 
       //  actionlinks=  actionlinks+`
       //  <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
@@ -699,6 +708,7 @@ submitAllKPIs(showMsg) {
     this.perfApp.CallAPI().subscribe(c => {
 
       if (c && c.length > 0) {
+        this.currEvalId = c[0].EvaluationId._id;
 this.unSubmitedCount=c.filter(e=>e.IsSubmitedKPIs==false && e.IsDraft==false ).length;
 this.submitedCount=c.filter(e=>e.IsSubmitedKPIs==true && e.IsDraft==false ).length;  
 this.scoreUnSubmitedCount=c.filter(e=>e.Score=="" && e.IsDraft==false && e.IsActive==true ).length;
@@ -710,6 +720,7 @@ this.authService.setIsPGSubmitStatus("true");
 
         return {
           Name: row.Kpi,
+          evaluationType:row.EvaluationId.EvaluationType,
           TargetCompletionDate: new DatePipe('en-US').transform(row.TargetCompletionDate, 'MM-dd-yyyy'),
           IsDraft: row.IsDraft?'Yes':'No',
           YearEndComments: row.YearEndComments,
