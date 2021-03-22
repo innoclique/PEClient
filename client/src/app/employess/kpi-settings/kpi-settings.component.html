@@ -16,9 +16,9 @@
                         (click)="submitAllSignoffKPIs()">
                         Allow
                       </button>&nbsp;
-                      <button *ngIf="kpiDetails?.IsActive  && !isEmpFRSignOff" class="btn btn-sm btn-primary"  (click)="confirmActiveDeActiveKPI(false)" title="Deactivate Performance Goal">Deactivate</button>&nbsp;
+                      <button *ngIf="kpiDetails?.IsActive  && !isEmpFRSignOff &&!isPrevEvalKpi" class="btn btn-sm btn-primary"  (click)="confirmActiveDeActiveKPI(false)" title="Deactivate Performance Goal">Deactivate</button>&nbsp;
 
-                    <button *ngIf="!kpiDetails?.IsActive  && !isEmpFRSignOff" class="btn btn-sm btn-primary"  (click)="confirmActiveDeActiveKPI(true)" title="Active Performance Goal">Active</button>&nbsp;
+                    <button *ngIf="!kpiDetails?.IsActive  && !isEmpFRSignOff &&!isPrevEvalKpi" class="btn btn-sm btn-primary"  (click)="confirmActiveDeActiveKPI(true)" title="Active Performance Goal">Active</button>&nbsp;
                       <button class="btn btn-sm btn-primary"  (click)="trackKpi()"  title="Track Performance Goal" >Track</button>&nbsp;
                       &nbsp;<i (click)="printPage()" title="Print" class="fa fa-file-pdf-o hide-print" style="font-size:21px;color:red"></i>
                     </div>
@@ -402,7 +402,7 @@
 
                         </div>
 
-                        <div *ngIf="!showAllowSignoff && currentAction != 'view' && !isEmpFRSignOff" class="form-group form-actions pull-right">
+                        <div *ngIf="!showAllowSignoff && currentAction != 'view' && !isEmpFRSignOff  &&!isPrevEvalKpi" class="form-group form-actions pull-right">
                             <button *ngIf="accessingFrom!='currEvaluation' " class="btn btn-sm btn-primary" (click)="onCancle()" >Cancel</button>&nbsp;
                             <button *ngIf="f?.IsDraft?.value=='true' || currentAction == 'create' " class="btn btn-sm btn-primary" (click)="draftKpi()" >Save</button>&nbsp;
                             <button  *ngIf="currentAction == 'edit' && f?.IsDraft?.value=='false' " class="btn btn-sm btn-primary" (click)="submitKpi('u')" >Update</button>
