@@ -48,6 +48,7 @@ export class ActionPlanComponent implements OnInit {
   employeeEvaluationYear:any="";
   currentEvaluationYear:any="";
   allowActionPlan:any=false;
+  currEvalId:string;
   
 
 
@@ -159,6 +160,7 @@ export class ActionPlanComponent implements OnInit {
         return `<a href="/" onclick="return false;"   data-action-type="VF">${data.value}</a>`
        }
       } ,
+      { headerName: 'Evaluation Type', field: 'Kpi.EvaluationId.EvaluationType' , tooltipField: 'Type of the Evaluation', minWidth:200},
        { headerName: 'Desired Outcomes', field: 'DesiredOutcomes' , tooltipField: 'DesiredOutcomes'},
        { headerName: '# of Action Steps', field: 'GoalActionItems' , tooltipField: 'GoalActionItems',
        cellRenderer: (data) => {
@@ -180,14 +182,15 @@ export class ActionPlanComponent implements OnInit {
          suppressMenu: true,
          Sorting: false,
          
-         template: `
-         
-         <i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
-        font-size: 17px;"   data-action-type="EDG" title="Edit Goal" ></i>     
-        
-                
-        `
-   
+       cellRenderer: (data) => {
+           if(this.currEvalId==data.data.Kpi.EvaluationId._id){
+              return `<i class="icon-pencil" style="cursor:pointer ;padding: 7px 20px 0 0;
+           font-size: 17px;"   data-action-type="EDG" title="Edit Goal" ></i>     
+           `
+           }else{
+            return '';
+          }
+         }
        }
    
    
@@ -280,7 +283,9 @@ getAllDevGoalsDetails() {
     this.unSubmitedCount=c.filter(e=>e.IsGoalSubmited==false && e.IsDraft==false ).length;
     this.addedGoalCount= c.filter(e=>e.IsDraft==false ).length;
       this.devGoalRecords=c;
-    
+    if(c && c.length > 0){
+  this.currEvalId = c[0].Kpi.EvaluationId._id;
+}
 
   }
   
