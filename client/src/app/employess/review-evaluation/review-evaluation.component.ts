@@ -71,7 +71,9 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   isPdfView:boolean = false;
   currentOrganization: any;
   showTSSignoffFields: boolean = false;
-  
+  isEmployeeSignoff: boolean = false;
+  isManagerSignoff: boolean = false;
+
   config = {
     backdrop: true,
     ignoreBackdropClick: true,
@@ -212,6 +214,7 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
           this.showEmployeeSubmit = !res1.FinalRating.Self.IsSubmitted;
           this.showRevisionCommentSection = res1.FinalRating.Self.IsSubmitted;
           this.empRevRequest = res1.FinalRating.FRReqRevision;
+          this.isEmployeeSignoff = (res1.FinalRating.Self.IsSubmitted && res1.FinalRating.Self.SignOff != '') ? true : false;
 
           this.FinalRatingForm.controls["ManagerComments"].setValue(res1.FinalRating.Manager.YearEndComments)
           this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1.FinalRating.Manager.YearEndRating)
@@ -223,7 +226,7 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
           this.FinalRatingForm.controls["ManagerRevComments"].setValue(res1.FinalRating.Manager.RevComments)
           this.FinalRatingForm.controls["ManagerReqRevision"].setValue(res1.FinalRating.Manager.ReqRevision)
 
-
+          this.isManagerSignoff = (res1.FinalRating.Manager.IsSubmitted && res1.FinalRating.Manager.SignOff != '') ? true : false;
           
           this.FinalRatingForm.controls["ThirdSignatoryComments"].setValue(res1.FinalRating.ThirdSignatory.YearEndComments)
           this.FinalRatingForm.controls["ThirdSignatoryRevComments"].setValue(res1.FinalRating.ThirdSignatory.RevComments)
@@ -286,7 +289,7 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
           this.FinalRatingForm.controls["EmployeeSignOff"].setValue(res1["Employees"][0]["FinalRating"].Self.SignOff)
           this.FinalRatingForm.controls["EmployeeSubmittedOn"].setValue(this.datePipe.transform(res1["Employees"][0]["FinalRating"].Self.SubmittedOn))
           this.showEmployeeSubmit = !res1["Employees"][0]["FinalRating"].Self.IsSubmitted;
-
+          this.isEmployeeSignoff = (res1.FinalRating.Self.IsSubmitted && res1.FinalRating.Self.SignOff != '') ? true : false;
 
           this.FinalRatingForm.controls["ManagerComments"].setValue(res1["Employees"][0]["FinalRating"].Manager.YearEndComments)
           this.FinalRatingForm.controls["ManagerOverallRating"].setValue(res1["Employees"][0]["FinalRating"].Manager.YearEndRating)
@@ -298,7 +301,7 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
           this.FinalRatingForm.controls["ManagerRevComments"].setValue(res1["Employees"][0]["FinalRating"].Manager.RevComments)
           this.FinalRatingForm.controls["ManagerReqRevision"].setValue(res1["Employees"][0]["FinalRating"].Manager.ReqRevision)
 
-
+          this.isManagerSignoff = (res1.FinalRating.Manager.IsSubmitted && res1.FinalRating.Manager.SignOff != '') ? true : false;
           
           this.FinalRatingForm.controls["ThirdSignatoryComments"].setValue(res1["Employees"][0]["FinalRating"].ThirdSignatory.YearEndComments)
           this.FinalRatingForm.controls["ThirdSignatoryRevComments"].setValue(res1["Employees"][0]["FinalRating"].ThirdSignatory.RevComments)

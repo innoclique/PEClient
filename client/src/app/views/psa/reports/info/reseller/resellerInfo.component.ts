@@ -115,8 +115,8 @@ export class ResellerInfoComponent {
             { headerName: 'Reseller', field: 'reSellerName', tooltipField: 'reSellerName', minWidth: 200 },
             { headerName: 'Reseller Since', field: 'year', minWidth: 50 },
             { headerName: 'Active', field: 'active', minWidth: 50 },
-            { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 220, type: 'rightAligned' },
-            { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 300, type: 'rightAligned' },
+          { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 220, cellStyle: { 'text-align': 'right' } },
+          { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 300, cellStyle: { 'text-align': 'right' } },
             {
                 headerName: "Review/Modify", sorting: false, filter: false, onCellClicked: this.gotoClients.bind(this),
                 cellRenderer: (data) => {

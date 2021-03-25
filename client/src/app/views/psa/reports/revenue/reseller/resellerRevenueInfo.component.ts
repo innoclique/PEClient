@@ -110,7 +110,7 @@ export class ResellerRevenueInfoComponent {
         return [
             { headerName: 'Reseller', field: 'reSellerName', },
             { headerName: 'Active', field: 'active', },
-            { headerName: 'Revenue (CAD)', field: 'purchasesCount', type: 'rightAligned'},
+          { headerName: 'Revenue (CAD)', field: 'purchasesCount', cellStyle: { 'text-align': 'right' }},
             { headerName: 'Payment Type', field: 'paymentTypes', },
             {
                 headerName: "Review/Modify", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoResellerRevenueDetails.bind(this),
