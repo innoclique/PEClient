@@ -621,6 +621,18 @@ export class CreateClientComponent implements OnInit,DoCheck {
           this.kpiStatus = c.KpiStatus;
           this.coachingRemDays = c.coachingRem;
           this.models=c.Models;
+          if(this.currentRecord && this.currentRecord.EvaluationModels){
+            this.models = this.models.map(m=>{
+              let {Name} = m;
+              let isRecordExist = this.currentRecord.EvaluationModels.find(em=>em==Name);
+              if(isRecordExist){
+                return {...m,isDisabled:true}
+              }else{
+                return {...m,isDisabled:false}
+              }
+            })
+          }
+          console.log(this.currentRecord);
           console.log("models",this.models)
           
         }
