@@ -130,8 +130,8 @@ export class ClientInfoComponent {
             { headerName: 'Usage Type', field: 'usageType', minWidth: 130 },
             { headerName: 'Evaluations Type', field: 'evaluationsType', minWidth: 150 },
             { headerName: 'Evaluation Period', field: 'evaluationPeriod', minWidth: 150 },
-            { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 150, type: 'rightAligned' },
-            { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 150, type: 'rightAligned' },
+          { headerName: '#s Purchased (License)', field: 'licPurchasesCount', minWidth: 150, cellStyle: { 'text-align': 'right' } },
+          { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', minWidth: 150, cellStyle: { 'text-align': 'right' } },
             {
                 headerName: "Review/Modify", suppressSizeToFit: true, filter: false, sorting: false, onCellClicked: this.gotoPurchaseHistory.bind(this),
                 cellRenderer: (data) => {

@@ -345,7 +345,7 @@ public currentOrganization:any={}
     return  rowNode.data ? rowNode.data.Type ==='K'?true:false:false
   }
   public getRowNodeId (data) {    
-    return data.Employee._id;
+    return data.id;
   };
   public EmpKpiGridOptions: GridOptions = {
     columnDefs: this.getGridColumnsForEmpKpi(),
@@ -708,7 +708,7 @@ public currentOrganization:any={}
         }
     })
 
-      this.EmpGridOptions.api.setRowData(this.selectedEmployeeList);
+      this.EmpGridOptions.api.setRowData(this.selectedEmployeesList);
     })
   }
 
@@ -813,6 +813,7 @@ if (this.selectedEmployee.EmployeeRow.FinalRating.Manager.SubmittedOn){
       this.selectedEmployeePeers = [];
       this.currentPeerCompetencyList = [];
       this.selectedPeersCompetencyList = [];
+      this.peerCompetencyUIMapping = {};
       this.peerCompetencyMappingRowdata = this.selectedEmployee.EmployeeRow.peerCompetenceMapping;
       for(let mapping of this.peerCompetencyMappingRowdata){
         this.peerCompetencyUIMapping[mapping.peer.EmployeeId] = mapping;

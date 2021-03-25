@@ -5,67 +5,63 @@
 }
 
 .breadcrumb {
-    background-color: #0063af !important;
+  background-color: #0063af !important;
 }
+
 .breadcrumb li a {
-    color: #fff !important;
+  color: #fff !important;
 }
-.breadcrumb li  {
+
+.breadcrumb li {
   visibility: hidden !important;
 }
 
 .nav-tabs .nav-link.active {
-
   background-color: #c8ced3 !important;
 }
 
 .form-control.is-invalid {
-    background-image: none !important;
+  background-image: none !important;
 }
 
 // @media (min-width: 992px)
 .modal-xlg {
-    max-width: 950px;
+  max-width: 950px;
 }
 
-.redStar:after
-{
-    color: red;
-    content: "\00a0*";
+.redStar:after {
+  color: red;
+  content: "\00a0*";
 }
 
 .autoc-border {
-    border: 1px solid #ddd !important;
-    width: 62%;
+  border: 1px solid #ddd !important;
+  width: 62%;
 }
-.autoc-border:focus,.mat-focus-indicator:focus {
-    outline:none
-    
+
+.autoc-border:focus, .mat-focus-indicator:focus {
+  outline: none
 }
 
 .mat-datepicker-toggle {
-
-    position: absolute;
-    right: 1px;
-    top: -3px;
+  position: absolute;
+  right: 1px;
+  top: -3px;
 }
 
 .mat-date-class .mat-datepicker-toggle {
-
   position: absolute;
   right: 7px;
   top: 10px;
 }
 
-.mat-dialog-container{
-
-    padding: 0 !important;
+.mat-dialog-container {
+  padding: 0 !important;
 }
 
 
 .view-only {
- pointer-events: none !important;
-
+  pointer-events: none !important;
 }
 
 .sel-kpi {
@@ -74,121 +70,133 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 4px 10px;
-  display:block;
+  display: block;
   margin: 0 0px 10px 0;
   background: #f5f5f7;
-  
 }
 
 
 .all-events {
-    pointer-events: all !important;
-   
-   }
+  pointer-events: all !important;
+}
+
 .user-info {
-    max-width: 100px;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: left;
-    vertical-align: top;
-    line-height: 15px;
-    position: relative;
+  max-width: 100px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  vertical-align: top;
+  line-height: 15px;
+  position: relative;
 }
 
 
-// For track 
+// For track
 
-  
-.timeline{
-    counter-reset: year 0;
-    position: relative;
-  }
 
-  
-  .timeline li{
-    list-style: none;
-    /* float: left;
+.timeline {
+  counter-reset: year 0;
+  position: relative;
+}
+
+
+.timeline li {
+  list-style: none;
+  /* float: left;
     width: 33.3333%; */
-    position: relative;clear: both;
-    display: block;
-    text-align: center;
-    text-transform: uppercase;
-    font-family: 'Dosis', sans-serif;
-    width: 100%;
-    margin:10px 0 60px 3px; float: none;
-    
-  }
-  
-  /* ul:nth-child(1){
+  position: relative;
+  clear: both;
+  display: block;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'Dosis', sans-serif;
+  width: 100%;
+  margin: 10px 0 60px 3px;
+  float: none;
+}
+
+/* ul:nth-child(1){
     color: #4caf50;
   } */
-  
-  .timeline li:before{
-    counter-increment: year;
-    content: counter(year);
-    width: 40px;
-    height: 40px;
-    border: 3px solid #4caf50;
-    border-radius: 50%;
-    display: block;
-    text-align: center;
-    line-height: 35px;
-    /* margin: 0 auto 10px auto; */
-    background: "drop-down1" #F1F1F1;
-    color: #000;
-    transition: all ease-in-out .3s;
-    cursor: pointer; float:left;
-  }
 
-  .timeline li span {font-size: 14px; float: left; padding: 12px 0 0 20px;}
-  .timeline li i        { width:15px; height: 17px;display: block; 
-    background: url(../assets/img/drop-down.png)  no-repeat 0 0;position: relative;
-    left: 12px;
-    top: 52px;}
+.timeline li:before {
+  counter-increment: year;
+  content: counter(year);
+  width: 40px;
+  height: 40px;
+  border: 3px solid #4caf50;
+  border-radius: 50%;
+  display: block;
+  text-align: center;
+  line-height: 35px;
+  /* margin: 0 auto 10px auto; */
+  background: "drop-down1" #F1F1F1;
+  color: #000;
+  transition: all ease-in-out .3s;
+  cursor: pointer;
+  float: left;
+}
 
+.timeline li span {
+  font-size: 14px;
+  float: left;
+  padding: 12px 0 0 20px;
+}
 
-    
-  .timeline li:after{
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    background-color: grey;
-    top: 25px;
-    left: -50%;
-    z-index: -999;
-    transition: all ease-in-out .3s;
-   
-  }
-  
-  .timeline li:first-child:after{
-    content: none;
-  }
-  .timeline li.active{
-    color: #555555;
-  }
-  .timeline li.active:before{
-    background: #4caf50;
-    color: #F1F1F1;
-  }
-  
-  .timeline li.active + li:after{
-    background: #4caf50;
-  }
+.timeline li i {
+  width: 15px;
+  height: 17px;
+  display: block;
+  background: url(../assets/img/drop-down.png) no-repeat 0 0;
+  position: relative;
+  left: 12px;
+  top: 52px;
+}
 
 
 
-  ul.approval  > li{
-    padding: 0.30rem !important;
-    font-weight: bolder !important;
-    text-transform: uppercase !important;
-  }
+.timeline li:after {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: grey;
+  top: 25px;
+  left: -50%;
+  z-index: -999;
+  transition: all ease-in-out .3s;
+}
+
+.timeline li:first-child:after {
+  content: none;
+}
+
+.timeline li.active {
+  color: #555555;
+}
+
+.timeline li.active:before {
+  background: #4caf50;
+  color: #F1F1F1;
+}
+
+.timeline li.active + li:after {
+  background: #4caf50;
+}
 
 
-  .sidebar .nav-link {
-    padding: 0.75rem 0.3rem;
-  }
+
+ul.approval > li {
+  padding: 0.30rem !important;
+  font-weight: bolder !important;
+  text-transform: uppercase !important;
+}
+
+
+.sidebar .nav-link {
+  padding: 0.75rem 0.3rem;
+}
 
 
 // New Styles added as part of UI Fixes --- GOVIND
@@ -226,7 +234,8 @@
 
 .nav-tabs .nav-item {
   background: #eff4f9;
-  border-radius: 4px;border-right:1px solid #ddd;
+  border-radius: 4px;
+  border-right: 1px solid #ddd;
 }
 
 .nav-link {
@@ -370,7 +379,7 @@ accordion .panel-default {
   padding-top: 6px;
 }
 
-.grid-metadata-wrapper  {
+.grid-metadata-wrapper {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -396,7 +405,13 @@ accordion .panel-default {
   font-weight: 500;
   // float: left;
 }
+
 .sidebar .nav-dropdown-items {
   margin-left: 30px !important;
+}
 
+#header-center-table {
+  .ag-header-cell-label {
+    justify-content: center;
+  }
 }

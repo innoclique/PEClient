@@ -112,11 +112,11 @@ export class ClientRevenueInfoComponent {
 
     getPsaClientRevenueInfoColumnDefs() {
         return [
-            { headerName: 'Client', field: 'name' },
+          { headerName: 'Client', field: 'name' },
             { headerName: 'Active', field: 'active' },
             { headerName: 'Usage Type', field: 'usageType' },
             { headerName: 'Evaluations Type', field: 'evaluationsType', minWidth: 200 },
-            { headerName: 'Revenue (CAD)', field: 'purchasesCount', type: 'rightAligned', valueFormatter: params => params.data.purchasesCount.toFixed(2) },
+            { headerName: 'Revenue (CAD)', field: 'purchasesCount', type: 'leftAligned', cellStyle: { 'text-align': 'right' }, valueFormatter: params => params.data.purchasesCount.toFixed(2) },
             { headerName: 'Payment Type', field: 'paymentTypes' },
             {
                 headerName: "Review/Modify", filter: false, sorting: false, onCellClicked: this.gotoClientRevenueDetails.bind(this),
