@@ -181,8 +181,8 @@ closeForm(){
         cellRenderer: (data) => { return `<span style="color:blue;cursor:pointer" data-action-type="viewPayment">${data.value}</span>` }
       }, 
       { headerName: 'Evaluations Type', field: 'evaluationsType' },
-      { headerName: '#s Purchased', field: 'licPurchasesCount', type: 'leftAligned' } ,
-      { headerName: 'Amount (CAD)', field: 'amount', type: 'leftAligned', valueFormatter: params => params.data.amount.toFixed(2) },
+      { headerName: '#s Purchased', field: 'licPurchasesCount', type: 'leftAligned', cellStyle: { 'text-align': 'right' } } ,
+      { headerName: 'Amount (CAD)', field: 'amount', type: 'leftAligned', cellStyle: { 'text-align': 'right' }, valueFormatter: params => params.data.amount.toFixed(2) },
     ];
   }
 

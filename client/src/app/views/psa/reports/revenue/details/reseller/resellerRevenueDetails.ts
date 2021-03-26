@@ -78,8 +78,8 @@ export class ResellerRevenueDetails {
     return [
       { headerName: 'Date of Purchase', field: 'purchasedOn' },
       // { headerName: 'Usage Type', field: 'usageType' },
-      { headerName: 'Revenue(Licenses)(CAD)', field: 'licPurchasesCount', type: 'leftAligned', valueFormatter: params => params.data.licPurchasesCount.toFixed(2) },
-      { headerName: 'Revenue(Employees)(CAD)', field: 'empPurchasesCount', type: 'leftAligned', valueFormatter: params => params.data.empPurchasesCount.toFixed(2) },
+      { headerName: 'Revenue(Licenses)(CAD)', field: 'licPurchasesCount', type: 'leftAligned', cellStyle: { 'text-align': 'right' }, valueFormatter: params => params.data.licPurchasesCount.toFixed(2) },
+      { headerName: 'Revenue(Employees)(CAD)', field: 'empPurchasesCount', type: 'leftAligned', cellStyle: { 'text-align': 'right' }, valueFormatter: params => params.data.empPurchasesCount.toFixed(2) },
     ];
   }
 
