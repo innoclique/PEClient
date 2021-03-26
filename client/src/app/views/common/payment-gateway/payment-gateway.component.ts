@@ -31,6 +31,7 @@ export class PaymentGatewayComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private perfApp: PerfAppService,
     private notification: NotificationService,
+    public router: Router
     ) {
       perfApp1=this.perfApp;
       this.loadScript();
@@ -224,4 +225,17 @@ paymentComplete(data){
   //this.initiateTransactionHistory(data);
 }
 
+  navigateToDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
+
+  navigateToPayments() {
+    let currentRoute: string = window.location.hash;
+    let routeSplit: any[] = currentRoute ? currentRoute.split('#') : [];
+    if (routeSplit.length > 0) {
+      this.router.navigate([routeSplit[1]]);
+    } else {
+      window.location.reload();
+    }
+  }
 }
