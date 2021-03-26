@@ -73,6 +73,7 @@ export class ReviewEvaluationComponent implements OnInit,AfterViewInit {
   showTSSignoffFields: boolean = false;
   isEmployeeSignoff: boolean = false;
   isManagerSignoff: boolean = false;
+  showRequestRevision: boolean = true;
 
   config = {
     backdrop: true,
@@ -249,6 +250,12 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
             this.showTSSignoffFields = true;
           }
 
+          if (res1.FinalRating.ThirdSignatory.SignOff && !res1.FinalRating.FRReqRevision) {
+            this.showRequestRevision = false;
+          } else {
+            this.showRequestRevision = true;
+          }
+
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
           this.PeerScoreCard = res1.PeerScoreCard;
@@ -315,6 +322,12 @@ this.empEvStatus=res1.Employee_Evaluation.Status.Status;
           this.FinalRatingForm.controls["ThirdSignatorySubmittedOn"].setValue(this.datePipe.transform(res1["Employees"][0]["FinalRating"].ThirdSignatory.SubmittedOn))
           this.showThirdSignatorySubmit = !res1["Employees"][0]["FinalRating"].ThirdSignatory.IsSubmitted;
 
+
+          if (res1.FinalRating.ThirdSignatory.SignOff && !res1.FinalRating.FRReqRevision) {
+            this.showRequestRevision = false;
+          } else {
+            this.showRequestRevision = true;
+          }
         }
         if (res1 && Object.keys(res1.PeerScoreCard).length > 0) {
           this.PeerScoreCard = res1.PeerScoreCard;
