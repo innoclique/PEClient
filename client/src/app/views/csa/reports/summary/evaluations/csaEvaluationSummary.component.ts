@@ -129,7 +129,7 @@ export class CSAEvaluationsSummary {
       // });
       rowData.push({
         evaluationPeriod: ReportTemplates.getEvaluationPeriod(this.currentOrganization.StartMonth,this.currentOrganization.EndMonth),
-        evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Type,
+        evaluationsType: payment.Type === 'Initial' || payment.Type === 'Renewal' ? 'Year - end' : payment.Purpose,
         evaluationsCount: isLicenseCount?licencesCount:employeesCount,
         range:payment.Range
       });

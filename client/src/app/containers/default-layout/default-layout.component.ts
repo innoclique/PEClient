@@ -571,7 +571,7 @@ public oneAtATime: boolean = true;
 
       // FOR SELECTED USER CSA
 
-      if(this.user.SelectedRoles.indexOf('CSA') > -1){
+      if(this.user.Role==='EO' && this.user.SelectedRoles.indexOf('CSA') > -1){
         localStorage.setItem("currentUser", "CSA")
         let dashboard = {
           "IsActive": true,

@@ -18,7 +18,7 @@ export class SnGuardService implements CanActivate {
     debugger
    if(!this.loginUser.Manager){
 
-    this.snack.error('Please update manager for this user and login again');
+    this.snack.error('Please update manager for this user.');
     return false;
    }
     // if (!this.auth.Islogin()) {
