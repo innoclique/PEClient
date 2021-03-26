@@ -76,8 +76,8 @@ export class ClientPurchaseHistory {
     return [
       { headerName: 'Date of Purchase', field: 'purchasedOn' },
       { headerName: 'Type of Evaluation', field: 'evaluationsType' },
-      { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', type: 'rightAligned', },
-      { headerName: '#s Purchased (License)', field: 'licPurchasesCount', type: 'rightAligned', },
+      { headerName: '#s Purchased (Employees)', field: 'empPurchasesCount', cellStyle: { 'text-align': 'right' } },
+      { headerName: '#s Purchased (License)', field: 'licPurchasesCount', cellStyle: { 'text-align': 'right' } },
     ];
   }
 
