@@ -557,6 +557,7 @@ saveEmployee(){
 
 callEmpApi(){
 
+  let manager = this.perfApp.requestBody.Manager;
 if(!this.perfApp.requestBody.ThirdSignatory) delete this.perfApp.requestBody.ThirdSignatory;
 if(!this.perfApp.requestBody.CopiesTo) delete this.perfApp.requestBody.CopiesTo;
 if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
@@ -571,10 +572,14 @@ if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
       } else {
         if (this.loginUser._id == this.currentRowItem._id) {
           //update firstName and lastname in localstorage after submit
-          var userFromLocalStorage = JSON.parse(localStorage.getItem("User"));
-          userFromLocalStorage.FirstName = empFirstName;
-          userFromLocalStorage.LastName = empLastName;
-          this.authService.setLSObject('User', userFromLocalStorage);
+          // var userFromLocalStorage = JSON.parse(localStorage.getItem("User"));
+          // userFromLocalStorage.FirstName = empFirstName;
+          // userFromLocalStorage.LastName = empLastName;
+          // if(userFromLocalStorage.Manager !== manager) userFromLocalStorage.Manager= manager;
+          // this.authService.setLSObject('User', userFromLocalStorage);
+
+          this.GetEmployeeDetailsByIdOnEmpUpdate();
+
         }
         this.snack.success(this.translate.instant(`The employee has been successfully ${this.currentAction == 'create' ? 'added' : 'updated'}.`));
       }
@@ -594,6 +599,22 @@ if(!this.perfApp.requestBody.Manager) delete this.perfApp.requestBody.Manager;
     
       });  
 
+}
+
+
+
+async GetEmployeeDetailsByIdOnEmpUpdate() {
+  this.perfApp.route = "app";
+  this.perfApp.method = "GetEmployeeDataByIdOnEmpUpdate",
+    this.perfApp.requestBody = { id:  this.loginUser._id }
+    this.perfApp.CallAPI().subscribe(x => {
+
+      this.authService.setLSObject('User', x);
+
+    }, error => {
+      console.log('error', error)
+    this.snack.error('something went wrong')
+    })
 }
 
 

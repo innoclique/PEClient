@@ -146,7 +146,7 @@ public currentOrganization:any={}
   onSelectAllEmployees(items: any) {
     //this.selectedEmployees = items;
     if (items.length > this.getEvaluationsAvailable()) {
-      this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
+      this.notification.error(`No more evaluations for this type are available to be rolled-out.`);
       return;
     }
     this.selectedEmployees = [];
@@ -1376,7 +1376,8 @@ listData(){
 }
   submitEvaluation() {
     if (this.selectedEmployeeList.length > this.getEvaluationsAvailable()) {
-      this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
+      // this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
+      this.notification.error(`No more evaluations for this type are available to be rolled-out.`);
       return;
     }
 
@@ -2280,7 +2281,7 @@ listData(){
     }
 
     if (this.selectedEmployees.length + this.selectedEmployeeList.length > this.getEvaluationsAvailable()) {
-      this.notification.error(`only ${this.getEvaluationsAvailable()} allowed to rollout`)
+      this.notification.error(`No more evaluations for this type are available to be rolled-out.`);
       return;
     }
 
