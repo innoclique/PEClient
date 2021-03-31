@@ -92,7 +92,6 @@ export class CSAPaymentSummary {
     this.api.setHeaderHeight(height);
     this.api.resetRowHeights();
     this.api.sizeColumnsToFit();
-    this.api.refreshHeader();
   }
 
   getPurchaseHistoryInfo(clientId) {
@@ -175,11 +174,11 @@ closeForm(){
       // { headerName: 'Payment Date', field: 'purchasedOn' },
       { headerName: 'Evaluation Period', field: 'evaluationPeriod', },
       { headerName: 'Evaluations Type', field: 'evaluationsType', },
-      { headerName: '# of Evaluations', field: 'licPurchasesCount', type: 'rightAligned', },
+      { headerName: '# of Evaluations', field: 'licPurchasesCount', cellStyle: { 'text-align': 'right' } },
       {
         headerName: 'Amount', headerValueGetter: (params) => {
           return `Amount${this.paymentCurrency}`;
-        }, field: 'amount', type: 'rightAligned', valueFormatter: params => params.data.amount.toFixed(2)
+        }, field: 'amount', cellStyle: { 'text-align': 'right' }, valueFormatter: params => params.data.amount.toFixed(2)
 
       },
     ];

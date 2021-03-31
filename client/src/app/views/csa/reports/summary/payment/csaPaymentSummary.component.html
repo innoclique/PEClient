@@ -30,7 +30,7 @@
               <span>
                 Total Expenditure {{paymentCurrency}}:
               </span>
-              <label> {{clientRow.totalExpenditure}}</label>
+              <label> {{clientRow.totalExpenditure ? clientRow.totalExpenditure.toFixed(2) : '-'}}</label>
             </div>
             </div>
           </div>
