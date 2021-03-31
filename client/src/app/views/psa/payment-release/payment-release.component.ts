@@ -17,7 +17,8 @@ import { AlertComponent } from '../../../shared/alert/alert.component';
 export class PaymentReleaseComponent implements OnInit {
   public alert= new AlertDialog();
   stateTax:any;
-  organizationList:any;
+  organizationList: any;
+  public licensePeriod: any;
   currentUser:any;
   currentOrganization:any;
   paymentModel:any={
@@ -342,6 +343,9 @@ getOverridePriceScale(){
       };
       this.getPaymentReleaseCost(paymentReleaseOptions);
     }
+
+    this.licensePeriod = this.getActivationPeriod();
+
       
   }
   onSelectRange(selectedObj:any){
@@ -457,7 +461,8 @@ getOverridePriceScale(){
     
   }
 
-  onChangeFrequency(){
+  onChangeFrequency() {
+    this.licensePeriod = this.getActivationPeriod();
     if(this.paymentScale){
       this.getPaymentSummary();
     }
@@ -480,6 +485,7 @@ getOverridePriceScale(){
 
   }
   public onActivationDate(event): void {
+    this.licensePeriod = this.getActivationPeriod();
     if(this.paymentModel.Organization!=""){
       this.orgnizationDetails(this.paymentModel.Organization);
     }
@@ -617,5 +623,46 @@ getOverridePriceScale(){
   loadPriceListPage(){
     this.router.navigate(['psa/price-list'],{ skipLocationChange: true });
   }
+
+
+  private getActivationPeriod() {
+    let aDate = moment(this.paymentModel.ActivationDate, 'YYYY/MM/DD');
+
+    let StartMonth = parseInt(aDate.format('M'));
+    let day = aDate.format('D');
+    let activationYear = aDate.format('YYYY');
+    // For reseller there is no end month, so calculating with NoOfMonths
+    let duration = Number(this.paymentModel.NoOfMonths);
+    let currentEndMonth = StartMonth - 1 + duration;
+    if (currentEndMonth > 11) {
+      currentEndMonth = currentEndMonth - 12;
+    }
+    let calEndMonth = this.months[currentEndMonth];
+
+    let EndMonth = this.currentOrganization.EndMonth ? this.currentOrganization.EndMonth : calEndMonth;
+    return this.months[StartMonth - 1] + " " + activationYear + " to " + EndMonth.substring(0, 3) + " " + this.getYearEnd(EndMonth.substring(0, 3));
+  }
+
+  private getYearStart(month: string) {
+    if (this.months.indexOf(month) > new Date().getMonth()) {
+      var currentYear: string = (new Date().getFullYear() - 1).toString();
+      return currentYear;
+    } else {
+      var currentYear: string = new Date().getFullYear().toString();
+      return currentYear;
+    }
+  }
+
+  private getYearEnd(month: string) {
+    if (this.months.indexOf(month) > new Date().getMonth()) {
+      var currentYear: string = new Date().getFullYear().toString();
+      return currentYear;
+    } else {
+      var currentYear: string = (new Date().getFullYear() + 1).toString();
+      return currentYear;
+    }
+  }
+  private months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+    "Aug", "Sep", "Oct", "Nov", "Dec"];
   
 }

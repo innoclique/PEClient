@@ -1,18 +1,26 @@
-<div *ngFor="let role of selectedRoles">
-  <div *ngIf="role=='CSA'">
-    <app-csa-dashboard></app-csa-dashboard>
+<ng-container *ngIf="!selectedRoles">
+  <div>
+    <h3 class="heading-with-margin">Loading...</h3>
   </div>
-  <div *ngIf="role=='EO'">
-    <employee-dashboard></employee-dashboard>
+</ng-container>
+
+<ng-container *ngIf="selectedRoles">
+  <div *ngFor="let role of selectedRoles">
+    <div *ngIf="role=='CSA'">
+      <app-csa-dashboard></app-csa-dashboard>
+    </div>
+    <div *ngIf="role=='EO'">
+      <employee-dashboard></employee-dashboard>
+    </div>
+    <div *ngIf="role=='EA'">
+      <app-eadashboard></app-eadashboard>
+    </div>
+    <div *ngIf="role=='EM'">
+      <app-manager-dashboard></app-manager-dashboard>
+    </div>
+    <div *ngIf="role=='TS'">
+      <third-sign-dashboard></third-sign-dashboard>
+    </div>
   </div>
-  <div *ngIf="role=='EA'">
-    <app-eadashboard></app-eadashboard>
-  </div>
-  <div *ngIf="role=='EM'">
-    <app-manager-dashboard></app-manager-dashboard>
-  </div>
-  <div *ngIf="role=='TS'">
-    <third-sign-dashboard></third-sign-dashboard>
-  </div>
-</div>
+</ng-container>
 
