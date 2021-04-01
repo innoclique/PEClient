@@ -822,4 +822,29 @@ export class PaymentComponent implements OnInit {
   }
   private months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July",
     "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  public getSummaryText() {
+    let paymentCostPerMonth = 0;
+    let noOfEmp = 0;
+    let totalCalValueNo = 0;
+    let totalCalValueStr = '';
+    if (this.paymentSummary && this.paymentSummary.CD_PER_MONTH) {
+      paymentCostPerMonth = this.paymentSummary.CD_PER_MONTH;
+      paymentCostPerMonth = typeof (paymentCostPerMonth) == 'string' ? parseFloat(paymentCostPerMonth) : paymentCostPerMonth;
+    }
+    if (this.paymentModel && this.paymentModel.NoOfEmployees) {
+      noOfEmp = this.paymentModel.NoOfEmployees;
+    }
+
+    if (this.paymentModel.UsageType === 'License') {
+      let paymentCostPerMonthStr = paymentCostPerMonth.toFixed(2);
+      return paymentCostPerMonthStr;
+    } else {
+      totalCalValueNo = paymentCostPerMonth * noOfEmp;
+      totalCalValueStr = totalCalValueNo.toFixed(2);
+      return totalCalValueStr;
+    }
+
+  }
+
 }

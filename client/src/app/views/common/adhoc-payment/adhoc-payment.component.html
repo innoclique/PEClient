@@ -166,12 +166,12 @@
                   <strong *ngIf="paymentModel && paymentModel.UsageType === 'Employees' ">
                     Amount due is cost per employee per year {{paymentCurrency}} {{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}} * number of employees <{{paymentModel ? paymentModel.NoOfEmployees : 0}}> + taxes. In case of monthly payments - <{{ paymentStructure ? paymentStructure.COST_PER_MONTH : 0}}> per month is payable on 1st of each month.
                      <br>
-                     <strong *ngIf="!paymentModel.isAnnualPayment"><br>{{paymentCurrency}} {{paymentStructure ? paymentStructure.COST_PER_MONTH.toFixed(2) * paymentModel.NoOfEmployees : 0}} + taxes payable each month from {{ licensePeriod }}.</strong>
+                     <strong *ngIf="!paymentModel.isAnnualPayment"><br>{{paymentCurrency}} {{paymentStructure ? getSummaryText() : 0}} + taxes payable each month from {{ licensePeriod }}.</strong>
                     </strong>
                   <strong *ngIf="paymentModel && paymentModel.UsageType === 'License' ">
                     Amount payable is cost per year, after discount, {{paymentCurrency}} {{paymentStructure ? paymentStructure.TOTAL_AMOUNT : 0}} + taxes.
                     <br>
-                    <strong *ngIf="!paymentModel.isAnnualPayment"><br>{{paymentCurrency}} {{paymentStructure ? paymentStructure.COST_PER_MONTH.toFixed(2) * paymentModel.NoOfEmployees: 0}} + taxes payable each month from {{ licensePeriod }}.</strong>
+                    <strong *ngIf="!paymentModel.isAnnualPayment"><br>{{paymentCurrency}} {{paymentStructure ? getSummaryText() : 0}} + taxes payable each month from {{ licensePeriod }}.</strong>
                     </strong>
                 </h6>
                 <div class="clear"></div>
