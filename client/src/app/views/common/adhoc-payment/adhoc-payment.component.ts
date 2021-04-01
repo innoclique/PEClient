@@ -420,5 +420,25 @@ export class AdhocPaymentComponent implements OnInit {
   }
   private months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
     "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  public getSummaryText() {
+    let paymentCostPerMonth = 0;
+    let noOfEmp = 0;
+    let totalCalValueNo = 0;
+    let totalCalValueStr = '';
+    if (this.paymentStructure && this.paymentStructure.COST_PER_MONTH) {
+      paymentCostPerMonth = this.paymentStructure.COST_PER_MONTH;
+      paymentCostPerMonth = typeof (paymentCostPerMonth) == 'string' ? parseFloat(paymentCostPerMonth) : paymentCostPerMonth;
+    }
+    if (this.paymentModel && this.paymentModel.NoOfEmployees) {
+      noOfEmp = this.paymentModel.NoOfEmployees;
+    }
+
+    totalCalValueNo = paymentCostPerMonth * noOfEmp;
+    totalCalValueStr = totalCalValueNo.toFixed(2);
+
+    return totalCalValueStr;
+
+  }
   
 }
